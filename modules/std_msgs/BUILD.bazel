@@ -1,0 +1,277 @@
+
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Imports
+
+load("@ros//:defs.bzl", "ros_interface", "ros_package")
+
+# Interfaces
+
+ros_interface(
+    name = "msg__Bool",
+    src = "msg/Bool.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Byte",
+    src = "msg/Byte.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__ByteMultiArray",
+    src = "msg/ByteMultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+ros_interface(
+    name = "msg__Char",
+    src = "msg/Char.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__ColorRGBA",
+    src = "msg/ColorRGBA.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Empty",
+    src = "msg/Empty.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Float32",
+    src = "msg/Float32.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Float32MultiArray",
+    src = "msg/Float32MultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+ros_interface(
+    name = "msg__Float64",
+    src = "msg/Float64.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Float64MultiArray",
+    src = "msg/Float64MultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+ros_interface(
+    name = "msg__Header",
+    src = "msg/Header.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@builtin_interfaces//:msg__Time",
+    ],
+)
+
+ros_interface(
+    name = "msg__Int16",
+    src = "msg/Int16.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Int16MultiArray",
+    src = "msg/Int16MultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+ros_interface(
+    name = "msg__Int32",
+    src = "msg/Int32.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Int32MultiArray",
+    src = "msg/Int32MultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+ros_interface(
+    name = "msg__Int64",
+    src = "msg/Int64.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Int64MultiArray",
+    src = "msg/Int64MultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+ros_interface(
+    name = "msg__Int8",
+    src = "msg/Int8.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Int8MultiArray",
+    src = "msg/Int8MultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+ros_interface(
+    name = "msg__MultiArrayDimension",
+    src = "msg/MultiArrayDimension.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__MultiArrayLayout",
+    src = "msg/MultiArrayLayout.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayDimension",
+    ],
+)
+
+ros_interface(
+    name = "msg__String",
+    src = "msg/String.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__UInt16",
+    src = "msg/UInt16.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__UInt16MultiArray",
+    src = "msg/UInt16MultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+ros_interface(
+    name = "msg__UInt32",
+    src = "msg/UInt32.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__UInt32MultiArray",
+    src = "msg/UInt32MultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+ros_interface(
+    name = "msg__UInt64",
+    src = "msg/UInt64.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__UInt64MultiArray",
+    src = "msg/UInt64MultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+ros_interface(
+    name = "msg__UInt8",
+    src = "msg/UInt8.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__UInt8MultiArray",
+    src = "msg/UInt8MultiArray.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__MultiArrayLayout",
+    ],
+)
+
+# Package
+
+ros_package(
+    name = "std_msgs",
+    interfaces = [
+        ":msg__Bool",
+        ":msg__Byte",
+        ":msg__ByteMultiArray",
+        ":msg__Char",
+        ":msg__ColorRGBA",
+        ":msg__Empty",
+        ":msg__Float32",
+        ":msg__Float32MultiArray",
+        ":msg__Float64",
+        ":msg__Float64MultiArray",
+        ":msg__Header",
+        ":msg__Int16",
+        ":msg__Int16MultiArray",
+        ":msg__Int32",
+        ":msg__Int32MultiArray",
+        ":msg__Int64",
+        ":msg__Int64MultiArray",
+        ":msg__Int8",
+        ":msg__Int8MultiArray",
+        ":msg__MultiArrayDimension",
+        ":msg__MultiArrayLayout",
+        ":msg__String",
+        ":msg__UInt16",
+        ":msg__UInt16MultiArray",
+        ":msg__UInt32",
+        ":msg__UInt32MultiArray",
+        ":msg__UInt64",
+        ":msg__UInt64MultiArray",
+        ":msg__UInt8",
+        ":msg__UInt8MultiArray",
+    ],
+)

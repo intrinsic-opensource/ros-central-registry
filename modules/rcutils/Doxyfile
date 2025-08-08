@@ -1,0 +1,45 @@
+# All settings not listed here will use the Doxygen default values.
+
+PROJECT_NAME           = "rcutils"
+PROJECT_NUMBER         = master
+PROJECT_BRIEF          = "C API providing common utilities and data structures."
+
+INPUT                  = CONTRIBUTING.md README.md QUALITY_DECLARATION.md ./include
+EXCLUDE_PATTERNS       = */stdatomic_helper/*
+USE_MDFILE_AS_MAINPAGE = README.md
+RECURSIVE              = YES
+OUTPUT_DIRECTORY       = doc_output
+
+EXTRACT_ALL            = YES
+SORT_MEMBER_DOCS       = NO
+
+GENERATE_LATEX         = NO
+
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_NAMED
+EXCLUDE_SYMBOLS        += RCUTILS_LOG
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_ONCE_NAMED
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_ONCE
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_CONDITION_NAMED
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_EXPRESSION_NAMED
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_EXPRESSION
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_FUNCTION_NAMED
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_FUNCTION
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_SKIPFIRST_NAMED
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_SKIPFIRST
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_THROTTLE_NAMED
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_THROTTLE
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_SKIPFIRST_THROTTLE_NAMED
+EXCLUDE_SYMBOLS        += RCUTILS_LOG_SKIPFIRST_THROTTLE
+PREDEFINED             += RCUTILS_PUBLIC=
+PREDEFINED             += RCUTILS_PUBLIC_TYPE=
+PREDEFINED             += RCUTILS_WARN_UNUSED=
+PREDEFINED             += RCUTILS_ENABLE_FAULT_INJECTION=
+PREDEFINED             += DOXYGEN_ONLY
+
+# Tag files that do not exist will produce a warning and cross-project linking will not work.
+TAGFILES += "../../../doxygen_tag_files/cppreference-doxygen-web.tag.xml=http://en.cppreference.com/w/"
+# Uncomment to generate tag files for cross-project linking.
+#GENERATE_TAGFILE = "../../../doxygen_tag_files/rcutils.tag"

@@ -1,0 +1,216 @@
+
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Imports
+
+load("@ros//:defs.bzl", "ros_interface", "ros_package")
+
+# Interfaces
+
+ros_interface(
+    name = "srv__DescribeParameters",
+    src = "srv/DescribeParameters.srv",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__ParameterDescriptor",
+    ],
+)
+
+ros_interface(
+    name = "msg__FloatingPointRange",
+    src = "msg/FloatingPointRange.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "srv__GetLoggerLevels",
+    src = "srv/GetLoggerLevels.srv",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__LoggerLevel",
+    ],
+)
+
+ros_interface(
+    name = "srv__GetParameterTypes",
+    src = "srv/GetParameterTypes.srv",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "srv__GetParameters",
+    src = "srv/GetParameters.srv",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__ParameterValue",
+    ],
+)
+
+ros_interface(
+    name = "msg__IntegerRange",
+    src = "msg/IntegerRange.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "srv__ListParameters",
+    src = "srv/ListParameters.srv",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__ListParametersResult",
+    ],
+)
+
+ros_interface(
+    name = "msg__ListParametersResult",
+    src = "msg/ListParametersResult.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Log",
+    src = "msg/Log.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@builtin_interfaces//:msg__Time",
+    ],
+)
+
+ros_interface(
+    name = "msg__LoggerLevel",
+    src = "msg/LoggerLevel.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__Parameter",
+    src = "msg/Parameter.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__ParameterValue",
+    ],
+)
+
+ros_interface(
+    name = "msg__ParameterDescriptor",
+    src = "msg/ParameterDescriptor.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__FloatingPointRange",
+        ":msg__IntegerRange",
+    ],
+)
+
+ros_interface(
+    name = "msg__ParameterEvent",
+    src = "msg/ParameterEvent.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__Parameter",
+        "@builtin_interfaces//:msg__Time",
+    ],
+)
+
+ros_interface(
+    name = "msg__ParameterEventDescriptors",
+    src = "msg/ParameterEventDescriptors.msg",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__ParameterDescriptor",
+    ],
+)
+
+ros_interface(
+    name = "msg__ParameterType",
+    src = "msg/ParameterType.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "msg__ParameterValue",
+    src = "msg/ParameterValue.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "srv__SetLoggerLevels",
+    src = "srv/SetLoggerLevels.srv",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__LoggerLevel",
+        ":msg__SetLoggerLevelsResult",
+    ],
+)
+
+ros_interface(
+    name = "msg__SetLoggerLevelsResult",
+    src = "msg/SetLoggerLevelsResult.msg",
+    visibility = ["//visibility:public"],
+)
+
+ros_interface(
+    name = "srv__SetParameters",
+    src = "srv/SetParameters.srv",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__Parameter",
+        ":msg__SetParametersResult",
+    ],
+)
+
+ros_interface(
+    name = "srv__SetParametersAtomically",
+    src = "srv/SetParametersAtomically.srv",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":msg__Parameter",
+        ":msg__SetParametersResult",
+    ],
+)
+
+ros_interface(
+    name = "msg__SetParametersResult",
+    src = "msg/SetParametersResult.msg",
+    visibility = ["//visibility:public"],
+)
+
+# Package
+
+ros_package(
+    name = "rcl_interfaces",
+    interfaces = [
+        ":msg__FloatingPointRange",
+        ":msg__IntegerRange",
+        ":msg__ListParametersResult",
+        ":msg__Log",
+        ":msg__LoggerLevel",
+        ":msg__Parameter",
+        ":msg__ParameterDescriptor",
+        ":msg__ParameterEvent",
+        ":msg__ParameterEventDescriptors",
+        ":msg__ParameterType",
+        ":msg__ParameterValue",
+        ":msg__SetLoggerLevelsResult",
+        ":msg__SetParametersResult",
+        ":srv__DescribeParameters",
+        ":srv__GetLoggerLevels",
+        ":srv__GetParameterTypes",
+        ":srv__GetParameters",
+        ":srv__ListParameters",
+        ":srv__SetLoggerLevels",
+        ":srv__SetParameters",
+        ":srv__SetParametersAtomically",
+    ],
+)

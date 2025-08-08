@@ -1,0 +1,23 @@
+module(
+    name = "ros",
+    version = "rolling-2025-07-16",
+    compatibility_level = 1,
+)
+
+bazel_dep(name = "rules_python", version = "1.5.1")
+
+# LINT uncrustify/noble,now 0.78.1+dfsg1-1 amd64 [installed,auto-removable]
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.12",
+    is_default = True,
+)
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "pip_ros",
+    python_version = "3.12",
+    requirements_lock = "requirements_lock.txt",
+)
+use_repo(pip, "pip_ros")

@@ -1,0 +1,47 @@
+
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+RosInterfaceInfo = provider(
+    "Provides info for interface code generation.",
+    fields = {
+        "src": "The source file defining an interface.",
+        "deps": "The interfaces on which this interface depends.",
+    }
+)
+
+def _ros_interface_impl(ctx):
+    return RosInterfaceInfo(
+        src = ctx.file.src,
+        deps = [
+            dep[RosInterfaceInfo] for dep in ctx.attr.deps
+        ]
+    )
+
+ros_interface = rule(
+    implementation = _ros_interface_impl,
+    attrs = {
+        "src": attr.label(
+            allow_single_file = [
+                ".idl",
+                ".msg",
+                ".srv",
+                ".action"
+            ],
+            mandatory = True,
+        ),
+        "deps": attr.label_list(providers = [RosInterfaceInfo]),
+    },
+    provides = [RosInterfaceInfo],
+)
