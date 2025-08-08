@@ -1,13 +1,13 @@
-# A ROS2 bzlmod workspace
+# Small demo for ROS C message generation using aspects
 
-Checkout code:
-
-```
-git clone https://github.com/asymingt/ros_bazel
-```
-
-Make sure you have initialized the submodules:
+Clone the repo:
 
 ```
-git submodule update --init --recursive
+git clone https://github.com/asymingt/bazel_ros_demo.git
+```
+
+Build a C target that links against compiled ROS messages.
+
+```
+bazel build //:example_ros_c
 ```
