@@ -16,24 +16,11 @@
 # Package information
         
 module(
-    name = "rosidl_generator_cpp",
-    version = "5.0.0",
+    name = "std_srvs",
+    version = "5.8.1",
     compatibility_level = 1,
 )
 
 # Dependencies
 
-bazel_dep(name = "rules_cc", version = "0.1.4")
-bazel_dep(name = "rules_python", version = "1.5.1")
-
-bazel_dep(name = "ament_index_python", version = "0.0.0")
-bazel_dep(name = "rcutils", version = "0.0.0")
 bazel_dep(name = "ros", version = "0.0.0")
-bazel_dep(name = "rosidl_adapter", version = "0.0.0")
-bazel_dep(name = "rosidl_cli", version = "0.0.0")
-bazel_dep(name = "rosidl_generator_c", version = "0.0.0")
-bazel_dep(name = "rosidl_generator_type_description", version = "0.0.0")
-bazel_dep(name = "rosidl_parser", version = "0.0.0")
-bazel_dep(name = "rosidl_pycommon", version = "0.0.0")
-bazel_dep(name = "rosidl_runtime_cpp", version = "5.0.0")
-bazel_dep(name = "rosidl_typesupport_interface", version = "5.0.0")

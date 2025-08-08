@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>rosidl_generator_py</name>
+  <version>0.25.0</version>
+  <description>Generate the ROS interfaces in Python.</description>
+
+  <maintainer email="dharini@openrobotics.org">Dharini Dutia</maintainer>
+  <maintainer email="sloretz@openrobotics.org">Shane Loretz</maintainer>
+
+  <license>Apache License 2.0</license>
+
+  <author email="dthomas@osrfoundation.org">Dirk Thomas</author>
+  <author>Esteve Fernandez</author>
+  <author email="michel@ekumenlabs.com">Michel Hidalgo</author>
+  <author>Mikael Arguedas</author>
+
+  <build_depend>rosidl_runtime_c</build_depend>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <build_export_depend>rmw</build_export_depend>
+
+  <buildtool_export_depend>ament_cmake</buildtool_export_depend>
+  <buildtool_export_depend>ament_index_python</buildtool_export_depend>
+  <buildtool_export_depend>rosidl_generator_c</buildtool_export_depend>
+  <buildtool_export_depend>rosidl_pycommon</buildtool_export_depend>
+  <buildtool_export_depend>rosidl_typesupport_c</buildtool_export_depend>
+  <buildtool_export_depend>rosidl_typesupport_interface</buildtool_export_depend>
+
+  <!-- TODO: The following 'exec_depend's are only needed in downstream tests,
+       so ideally a 'test_export_depend' (similar to 'build_export_depend') would be used.
+       Since that feature doesn't exist yet, they are 'exec_depend'-ed.
+       See https://github.com/ros2/rosidl_python/pull/199 -->
+  <exec_depend>ament_cmake_cppcheck</exec_depend>
+  <exec_depend>ament_cmake_cpplint</exec_depend>
+  <exec_depend>ament_cmake_flake8</exec_depend>
+  <exec_depend>ament_cmake_pep257</exec_depend>
+  <exec_depend>ament_cmake_uncrustify</exec_depend>
+
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>rosidl_cli</exec_depend>
+  <exec_depend>rosidl_generator_c</exec_depend>
+  <exec_depend>rosidl_parser</exec_depend>
+  <exec_depend>rosidl_runtime_c</exec_depend>
+  <exec_depend>rpyutils</exec_depend>
+
+  <test_depend>ament_cmake_pytest</test_depend>
+  <test_depend>ament_index_python</test_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>python3-numpy</test_depend>
+  <test_depend>python3-pytest</test_depend>
+  <test_depend>rmw</test_depend>
+  <test_depend>rosidl_cmake</test_depend>
+
+  <!--
+  Bloom does not support group_depend so entries below duplicate the group rosidl_typesupport_c_packages.
+  -->
+  <test_depend>rosidl_typesupport_introspection_c</test_depend>
+  <test_depend>rosidl_typesupport_fastrtps_c</test_depend>
+  <!-- end of group dependencies added for bloom -->
+  <test_depend>rosidl_generator_c</test_depend>
+  <test_depend>rosidl_generator_cpp</test_depend>
+  <test_depend>rosidl_parser</test_depend>
+  <test_depend>rosidl_typesupport_c</test_depend>
+  <test_depend>rpyutils</test_depend>
+  <test_depend>test_interface_files</test_depend>
+
+  <member_of_group>rosidl_generator_packages</member_of_group>
+  <member_of_group>rosidl_runtime_packages</member_of_group>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

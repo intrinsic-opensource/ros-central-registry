@@ -28,9 +28,7 @@ filegroup(
 # Template used for per-package visibility header generation.
 filegroup(
     name = "visibility_control_template",
-    srcs = [
-        "resource/rosidl_generator_cpp__visibility_control.hpp.in",
-    ],
+    srcs = ["resource/rosidl_generator_cpp__visibility_control.hpp.in"],
     visibility = ["//visibility:public"],
 )
 
@@ -43,6 +41,7 @@ py_library(
         "@ament_index_python",
         "@rcutils",
         "@rosidl_cli",
+        "@rosidl_generator_c",
         "@rosidl_generator_type_description",
         "@rosidl_parser",
         "@rosidl_pycommon",
