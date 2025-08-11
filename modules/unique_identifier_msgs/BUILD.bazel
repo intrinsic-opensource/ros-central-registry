@@ -32,4 +32,5 @@ ros_package(
     interfaces = [
         ":msg__UUID",
     ],
+    visibility = ["//visibility:public"],
 )

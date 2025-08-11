@@ -35,4 +35,5 @@ ros_package(
     interfaces = [
         ":msg__ServiceEventInfo",
     ],
+    visibility = ["//visibility:public"],
 )

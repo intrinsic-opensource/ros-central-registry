@@ -213,4 +213,5 @@ ros_package(
         ":srv__SetParameters",
         ":srv__SetParametersAtomically",
     ],
+    visibility = ["//visibility:public"],
 )

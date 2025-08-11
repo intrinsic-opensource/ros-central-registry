@@ -66,4 +66,5 @@ ros_package(
         ":msg__GoalStatusArray",
         ":srv__CancelGoal",
     ],
+    visibility = ["//visibility:public"],
 )

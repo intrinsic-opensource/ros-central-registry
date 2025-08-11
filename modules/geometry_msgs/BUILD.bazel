@@ -341,4 +341,5 @@ ros_package(
         ":msg__Wrench",
         ":msg__WrenchStamped",
     ],
+    visibility = ["//visibility:public"],
 )

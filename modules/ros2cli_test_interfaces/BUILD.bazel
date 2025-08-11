@@ -70,4 +70,5 @@ ros_package(
         ":msg__ShortVaried",
         ":msg__ShortVariedNested",
     ],
+    visibility = ["//visibility:public"],
 )

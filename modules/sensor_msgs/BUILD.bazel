@@ -337,7 +337,5 @@ ros_package(
         ":msg__TimeReference",
         ":srv__SetCameraInfo",
     ],
-    tests = [
-        "test_sensor_msgs",
-    ],
+    visibility = ["//visibility:public"],
 )

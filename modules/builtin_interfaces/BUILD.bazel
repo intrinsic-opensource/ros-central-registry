@@ -39,4 +39,5 @@ ros_package(
         ":msg__Duration",
         ":msg__Time",
     ],
+    visibility = ["//visibility:public"],
 )

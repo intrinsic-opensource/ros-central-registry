@@ -171,3 +171,27 @@ cc_test(
     visibility = ["//visibility:public"],
 )
 
+
+ros_package(
+    name = "test_msgs",
+    interfaces = [
+        ":msg__Arrays",
+        ":msg__BasicTypes",
+        ":msg__BoundedPlainSequences",
+        ":msg__BoundedSequences",
+        ":msg__Constants",
+        ":msg__Defaults",
+        ":msg__Empty",
+        ":msg__MultiNested",
+        ":msg__Nested",
+        ":msg__Strings",
+        ":msg__UnboundedSequences",
+        ":msg__WStrings",
+        ":srv__Arrays",
+        ":srv__BasicTypes",
+        ":srv__Empty",
+        ":action__Fibonacci"
+    ],
+    visibility = ["//visibility:public"],
+)
+

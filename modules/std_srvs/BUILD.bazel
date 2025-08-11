@@ -46,4 +46,5 @@ ros_package(
         ":srv__SetBool",
         ":srv__Trigger",
     ],
+    visibility = ["//visibility:public"],
 )
