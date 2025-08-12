@@ -13,7 +13,13 @@
 # limitations under the License.
 
 load("//ros:data.bzl", _ros_data = "ros_data")
-load("//ros:interface.bzl", _RosInterfaceInfo = "RosInterfaceInfo", _ros_interface = "ros_interface")
+load("//ros:interface.bzl",
+    _idl_tuple_from_path = "idl_tuple_from_path",
+    _message_info_from_target = "message_info_from_target",
+    _ros_interface = "ros_interface",
+    _RosInterfaceInfo = "RosInterfaceInfo",
+    _type_description_tuple_from_path = "type_description_tuple_from_path",
+)
 load("//ros:package.bzl", _ros_package = "ros_package")
 
 RosInterfaceInfo = _RosInterfaceInfo
@@ -22,4 +28,7 @@ ros_data = _ros_data
 ros_interface = _ros_interface
 ros_package = _ros_package
 
+message_info_from_target = _message_info_from_target
+idl_tuple_from_path = _idl_tuple_from_path
+type_description_tuple_from_path = _type_description_tuple_from_path
 
