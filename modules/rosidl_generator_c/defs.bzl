@@ -32,6 +32,14 @@ C_GENERATOR_TEMPLATES_SRCS = [
     "detail/{}__type_support.c",
 ]
 
+# C_TYPESUPPORT_TEMPLATE_SRCS = [
+#     "{}__type_support.c",
+# ]
+
+# C_TYPESUPPORT_TEMPLATE_SRCS = [
+#     "{}__type_support.c",
+# ]
+
 # This would be better expressed as a regex operation, but unfortunately Bazel's
 # starlark language does not yet support this, and so it would require a module.
 # Fore xample: https://github.com/magnetde/starlark-re/tree/master

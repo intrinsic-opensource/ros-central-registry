@@ -21,7 +21,8 @@ py_library(
     name = "rosidl_pycommon",
     srcs = glob(["rosidl_pycommon/**/*.py"]),
     deps = [
-        "@ros//python:empy"
+        "@ros//python:empy",
+        "@rosidl_parser"
     ],
     visibility = ["//visibility:public"],
 )

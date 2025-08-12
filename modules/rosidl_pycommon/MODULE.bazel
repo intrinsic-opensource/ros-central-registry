@@ -26,3 +26,4 @@ module(
 bazel_dep(name = "rules_python", version = "1.5.1")
 
 bazel_dep(name = "ros", version = "0.0.0")
+bazel_dep(name = "rosidl_parser", version = "5.0.0")

@@ -146,12 +146,12 @@ c_ros_library(
 cc_test(
     name = "test_action_typesupport_c_builds",
     srcs = ["test/test_c_type_support.cpp"],
-    cxxopts = [
-        "-Wall",
-        "-Wextra",
-        "-Wpedantic",
-        "-std=gnu++17",
-    ],
+    # cxxopts = [
+    #     "-Wall",
+    #     "-Wextra",
+    #     "-Wpedantic",
+    #     "-std=gnu++17",
+    # ],
     deps = [
         "@googletest//:gtest",
         "@googletest//:gtest_main",
@@ -170,12 +170,12 @@ cc_ros_library(
 cc_test(
     name = "test_action_typesupport_cpp_builds",
     srcs = ["test/test_cpp_type_support.cpp"],
-    cxxopts = [
-        "-Wall",
-        "-Wextra",
-        "-Wpedantic",
-        "-std=gnu++17",
-    ],
+    # cxxopts = [
+    #     "-Wall",
+    #     "-Wextra",
+    #     "-Wpedantic",
+    #     "-std=gnu++17",
+    # ],
     deps = [
         "@googletest//:gtest",
         "@googletest//:gtest_main",
