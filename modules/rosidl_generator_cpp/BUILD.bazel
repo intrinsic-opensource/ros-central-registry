@@ -46,7 +46,6 @@ py_library(
         "@rosidl_parser",
         "@rosidl_pycommon",
     ],
-    #data = [":resources"],
     visibility = ["//visibility:public"],
 )
 

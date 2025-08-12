@@ -14,96 +14,22 @@
 # limitations under the License.
 
 load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
-load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
-load("@ros//:defs.bzl", "RosInterfaceInfo", "idl_tuple_from_path", "message_info_from_target", "type_description_tuple_from_path")
-load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_ros_aspect")
+load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
+load("@ros//:defs.bzl", "RosInterfaceInfo")
+load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_ros_aspect", "generate_sources", "generate_cc_info")
+load("@rosidl_generator_c//:defs.bzl", "RosCBindingsInfo", "c_idl_aspect")
 load("@rosidl_generator_type_description//:defs.bzl", "RosTypeDescriptionInfo", "type_description_idl_aspect")
 
-def _get_stem(path):
-    return path.basename[:-len(path.extension) - 1]
-
-def _generate_source(
-    ctx,
-    executable,
-    mnemonic,
-    input_idls,
-    input_type_descriptions,
-    input_templates,
-    templates_hdrs,
-    templates_srcs,
-    template_visibility_control = None,
-    additional = []
-):
-    # Get information about this package
-    package_name = ctx.label.repo_name.removesuffix("+")
-    message_type, message_name, message_code = message_info_from_target(ctx.label.name)
-
-    # The first output file is the JSON file used as args to the generator.
-    input_args = ctx.actions.declare_file(
-        "{}/{}_{}_{}.json".format(package_name, message_type, message_name, mnemonic))
-
-    # Prepare hdrs and srcs lists for output.
-    output_hdrs = [
-        ctx.actions.declare_file(
-            "{}/{}/{}".format(package_name, message_type, t.format(message_code))
-        ) for t in templates_hdrs
+RosCcBindingsInfo = provider(
+    "Encapsulates C++ information generated for an underlying ROS message.", 
+    fields = [
+        "cc_info",
+        "deps"
     ]
-    output_srcs = [
-        ctx.actions.declare_file(
-            "{}/{}/{}".format(package_name, message_type, t.format(message_code))
-        ) for t in templates_srcs
-    ]
-
-    # Write the generator query
-    ctx.actions.write(
-        input_args,
-        json.encode(
-            struct(
-                package_name = package_name,
-                idl_tuples = [idl_tuple_from_path(idl.path) for idl in input_idls],
-                output_dir = input_args.dirname,
-                template_dir = input_templates[0].dirname,
-                type_description_tuples = [type_description_tuple_from_path(idl.path)
-                    for idl in input_type_descriptions],
-                target_dependencies = [],
-            )
-        )
-    )
-
-    # Pass the query through the generator
-    ctx.actions.run(
-        inputs = input_idls + input_type_descriptions + input_templates + [input_args],
-        outputs = output_hdrs + output_srcs,
-        executable = executable,
-        arguments = ["--generator-arguments-file={}".format(input_args.path)] + additional,
-        mnemonic = mnemonic,
-        progress_message = "Running {} for {}".format(mnemonic, ctx.label.name),
-    )
-
-    # Optionally include 
-    if template_visibility_control:
-        output_c_visibility_control_stem = _get_stem(template_visibility_control)
-        output_c_visibility_control_h = ctx.actions.declare_file(
-            "{}/msg/{}".format(package_name, output_c_visibility_control_stem)
-        )
-        ctx.actions.expand_template(
-            template = template_visibility_control,
-            output = output_c_visibility_control_h,
-            substitutions = {
-                "@PROJECT_NAME@": package_name,
-                "@PROJECT_NAME_UPPER@": package_name.upper(),
-            },
-        )
-        output_hdrs.append(output_c_visibility_control_h)
-
-    # Return the headers and sources
-    return output_hdrs, output_srcs
-
+)
 
 def _cc_idl_aspect_impl(target, ctx):
     #print("C_IDL: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
-    package_name = ctx.label.repo_name.removesuffix("+")
-    message_type, message_name, message_code = message_info_from_target(ctx.label.name)
 
     # Collect all IDLs and JSON files required to generate the language bindings.
     input_idls = [target[RosIdlInfo].idl]
@@ -115,7 +41,7 @@ def _cc_idl_aspect_impl(target, ctx):
             input_type_descriptions.extend(dep[RosTypeDescriptionInfo].deps.to_list())
 
     # Generate the C++ bindings
-    cc_hdrs, cc_srcs = _generate_source(
+    cc_hdrs, cc_srcs, cc_include_dir = generate_sources(
         ctx = ctx,
         executable = ctx.executable._cc_generator,
         mnemonic = "CcGeneration",
@@ -134,7 +60,7 @@ def _cc_idl_aspect_impl(target, ctx):
     )
 
     # Generate the type support library
-    cc_typesupport_hdrs, cc_typesupport_srcs = _generate_source(
+    cc_typesupport_hdrs, cc_typesupport_srcs, _ = generate_sources(
         ctx = ctx,
         executable = ctx.executable._cc_typesupport_generator,
         mnemonic = "CcTypeSupportGeneration",
@@ -148,7 +74,7 @@ def _cc_idl_aspect_impl(target, ctx):
     )
 
     # Generate the type support library for introspection
-    cc_typesupport_introspection_hdrs, cc_typesupport_introspection_srcs = _generate_source(
+    cc_typesupport_introspection_hdrs, cc_typesupport_introspection_srcs, _ = generate_sources(
         ctx = ctx,
         executable = ctx.executable._cc_typesupport_introspection_generator,
         mnemonic = "CcTypeSupportIntrospectionGeneration",
@@ -160,59 +86,37 @@ def _cc_idl_aspect_impl(target, ctx):
         template_visibility_control = None,
     )
 
-    # Collect the generated source code.
-    output_hdrs = cc_hdrs + cc_typesupport_hdrs + cc_typesupport_introspection_hdrs
-    output_srcs = cc_srcs + cc_typesupport_srcs + cc_typesupport_introspection_srcs
+    # These deps will all have CcInfo providers. We need to combine the library
+    # dependencies with the C generated headers and C++ generated headers.
+    cc_info_deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep]       
+    cc_info_deps.append(target[RosCBindingsInfo].cc_info)
+    for dep in ctx.rule.attr.deps:
+        if RosCBindingsInfo in dep:
+            cc_info_deps.extend([d for d in dep[RosCBindingsInfo].deps.to_list()])
+        if RosCcBindingsInfo in dep:
+            cc_info_deps.extend([d for d in dep[RosCcBindingsInfo].deps.to_list()])
 
-    # These deps will all have CcInfo providers.
-    deps = ctx.attr._cc_deps + ctx.rule.attr.deps
-
-    # Query for the current CC toolchain and feature set.
-    cc_toolchain = find_cc_toolchain(ctx)
-    feature_configuration = cc_common.configure_features(
+    # Merge headers, sources and deps into a CcInfo provider.
+    cc_info = generate_cc_info(
         ctx = ctx,
-        cc_toolchain = cc_toolchain,
-        requested_features = ctx.features,
-        unsupported_features = ctx.disabled_features,
+        name = "{}_cc".format(ctx.label.name),
+        hdrs = cc_hdrs + cc_typesupport_hdrs + cc_typesupport_introspection_hdrs,
+        srcs = cc_srcs + cc_typesupport_srcs + cc_typesupport_introspection_srcs,
+        include_dirs = [cc_include_dir],
+        deps = cc_info_deps,
     )
-
-    # Get a compilation context.
-    compilation_context, compilation_outputs = cc_common.compile(
-        name = ctx.label.name,
-        actions = ctx.actions,
-        feature_configuration = feature_configuration,
-        cc_toolchain = cc_toolchain,
-        srcs = output_srcs,
-        public_hdrs = output_hdrs,
-        compilation_contexts = [
-            dep[CcInfo].compilation_context for dep in deps if CcInfo in dep
-        ]
-    )
-
-    # Get a linking context.
-    if output_srcs:
-        linking_context, _ = cc_common.create_linking_context_from_compilation_outputs(
-            name = ctx.label.name,
-            actions = ctx.actions,
-            feature_configuration = feature_configuration,
-            cc_toolchain = cc_toolchain,
-            compilation_outputs = compilation_outputs,
-            linking_contexts = [
-                dep[CcInfo].linking_context for dep in deps if CcInfo in dep
-            ],
-        )
-    else:
-        linking_context = cc_common.merge_linking_contexts(
-            linking_contexts = [
-                dep[CcInfo].linking_context for dep in deps if CcInfo in dep
-            ]
-        )
 
     # Return a CcInfo provider for the aspect.
     return [
-        CcInfo(
-            compilation_context = compilation_context,
-            linking_context = linking_context,
+        RosCcBindingsInfo(
+            cc_info = cc_info,
+            deps = depset(
+                direct = [cc_info],
+                transitive = [
+                    dep[RosCcBindingsInfo].deps
+                        for dep in ctx.rule.attr.deps if RosCcBindingsInfo in dep
+                ],
+            )
         )
     ]
 
@@ -276,24 +180,29 @@ cc_idl_aspect = aspect(
                 Label("@rosidl_typesupport_introspection_cpp"),
             ],
             providers = [CcInfo],
-        ),
-        
+        ),  
     },
     required_providers = [RosInterfaceInfo],
     required_aspect_providers = [
         [RosIdlInfo],
-        [RosTypeDescriptionInfo]
+        [RosTypeDescriptionInfo],
+        [RosCBindingsInfo],
     ],
-    provides = [CcInfo],
+    provides = [RosCcBindingsInfo],
 )
 
 def _cc_ros_library_impl(ctx):
-    cc_info = cc_common.merge_cc_infos(
-        direct_cc_infos = [
-            dep[CcInfo] for dep in ctx.attr.deps
-        ],
-    )
-    return [cc_info]
+    direct_cc_infos = []
+    for dep in ctx.attr.deps:
+        if RosCBindingsInfo in dep:
+            direct_cc_infos.extend(dep[RosCBindingsInfo].deps.to_list())
+        if RosCcBindingsInfo in dep:
+            direct_cc_infos.extend(dep[RosCcBindingsInfo].deps.to_list())
+    return [
+        cc_common.merge_cc_infos(
+            direct_cc_infos = direct_cc_infos
+        )
+    ]
 
 cc_ros_library = rule(
     implementation = _cc_ros_library_impl,
@@ -302,7 +211,8 @@ cc_ros_library = rule(
             aspects = [
                 idl_ros_aspect,              # RosIdlInfo <- RosInterfaceInfo
                 type_description_idl_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
-                cc_idl_aspect,               # CcInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
+                c_idl_aspect,                # RosCBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
+                cc_idl_aspect,               # RosCcBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
             ],
             providers = [RosInterfaceInfo],
             allow_files = False,

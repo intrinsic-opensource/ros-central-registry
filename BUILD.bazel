@@ -45,6 +45,7 @@ c_ros_library(
     name = "example_ros_c_msgs",
     deps = [
         "@sensor_msgs//:msg__CompressedImage",
+        #"@std_msgs//:msg__String",
     ],
 )
 
@@ -59,6 +60,7 @@ cc_ros_library(
     name = "example_ros_cc_msgs",
     deps = [
         "@sensor_msgs//:msg__CompressedImage",
+        #"@std_msgs//:msg__String",
     ],
 )
 
