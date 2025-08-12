@@ -10,7 +10,7 @@ include_parts = [package_name] + list(interface_path.parents[0].parts) + [
 include_base = '/'.join(include_parts)
 
 header_files = [
-    'cstddef',
+    'stddef.h',
     'rosidl_runtime_c/message_type_support_struct.h',
     include_base + '__struct.h',
     include_base + '__type_support.h',

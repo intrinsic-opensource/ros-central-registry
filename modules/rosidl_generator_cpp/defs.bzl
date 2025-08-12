@@ -19,15 +19,86 @@ load("@ros//:defs.bzl", "RosInterfaceInfo", "idl_tuple_from_path", "message_info
 load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_ros_aspect")
 load("@rosidl_generator_type_description//:defs.bzl", "RosTypeDescriptionInfo", "type_description_idl_aspect")
 
-CPP_GENERATOR_TEMPLATES_HDRS = [
-    "{}.hpp",
-    "detail/{}__builder.hpp",
-    "detail/{}__struct.hpp",
-    "detail/{}__traits.hpp",
-    "detail/{}__type_support.hpp",
-]
+def _get_stem(path):
+    return path.basename[:-len(path.extension) - 1]
 
-CPP_GENERATOR_TEMPLATES_SRCS = []
+def _generate_source(
+    ctx,
+    executable,
+    mnemonic,
+    input_idls,
+    input_type_descriptions,
+    input_templates,
+    templates_hdrs,
+    templates_srcs,
+    template_visibility_control = None,
+    additional = []
+):
+    # Get information about this package
+    package_name = ctx.label.repo_name.removesuffix("+")
+    message_type, message_name, message_code = message_info_from_target(ctx.label.name)
+
+    # The first output file is the JSON file used as args to the generator.
+    input_args = ctx.actions.declare_file(
+        "{}/{}_{}_{}.json".format(package_name, message_type, message_name, mnemonic))
+
+    # Prepare hdrs and srcs lists for output.
+    output_hdrs = [
+        ctx.actions.declare_file(
+            "{}/{}/{}".format(package_name, message_type, t.format(message_code))
+        ) for t in templates_hdrs
+    ]
+    output_srcs = [
+        ctx.actions.declare_file(
+            "{}/{}/{}".format(package_name, message_type, t.format(message_code))
+        ) for t in templates_srcs
+    ]
+
+    # Write the generator query
+    ctx.actions.write(
+        input_args,
+        json.encode(
+            struct(
+                package_name = package_name,
+                idl_tuples = [idl_tuple_from_path(idl.path) for idl in input_idls],
+                output_dir = input_args.dirname,
+                template_dir = input_templates[0].dirname,
+                type_description_tuples = [type_description_tuple_from_path(idl.path)
+                    for idl in input_type_descriptions],
+                target_dependencies = [],
+            )
+        )
+    )
+
+    # Pass the query through the generator
+    ctx.actions.run(
+        inputs = input_idls + input_type_descriptions + input_templates + [input_args],
+        outputs = output_hdrs + output_srcs,
+        executable = executable,
+        arguments = ["--generator-arguments-file={}".format(input_args.path)] + additional,
+        mnemonic = mnemonic,
+        progress_message = "Running {} for {}".format(mnemonic, ctx.label.name),
+    )
+
+    # Optionally include 
+    if template_visibility_control:
+        output_c_visibility_control_stem = _get_stem(template_visibility_control)
+        output_c_visibility_control_h = ctx.actions.declare_file(
+            "{}/msg/{}".format(package_name, output_c_visibility_control_stem)
+        )
+        ctx.actions.expand_template(
+            template = template_visibility_control,
+            output = output_c_visibility_control_h,
+            substitutions = {
+                "@PROJECT_NAME@": package_name,
+                "@PROJECT_NAME_UPPER@": package_name.upper(),
+            },
+        )
+        output_hdrs.append(output_c_visibility_control_h)
+
+    # Return the headers and sources
+    return output_hdrs, output_srcs
+
 
 def _cc_idl_aspect_impl(target, ctx):
     #print("C_IDL: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
@@ -43,80 +114,58 @@ def _cc_idl_aspect_impl(target, ctx):
         if RosTypeDescriptionInfo in dep:
             input_type_descriptions.extend(dep[RosTypeDescriptionInfo].deps.to_list())
 
-    # Collect templates
-    input_templates = ctx.attr._interface_templates[DefaultInfo].files.to_list()
-
-    # Collect tuples
-    idl_tuples = [idl_tuple_from_path(idl.path) for idl in input_idls]
-    type_description_tuples = [type_description_tuple_from_path(idl.path)
-        for idl in input_type_descriptions]
-
-    # The first output file is the JSON file used as args to the generator.
-    input_args = ctx.actions.declare_file(
-        "{}/{}_{}_c.json".format(package_name, message_type, message_name))
-    ctx.actions.write(
-        input_args,
-        json.encode(
-            struct(
-                package_name = package_name,
-                idl_tuples = idl_tuples,
-                output_dir = input_args.dirname,
-                template_dir = input_templates[0].dirname,
-                type_description_tuples = type_description_tuples,
-                target_dependencies = [],
-            )
-        )
-    )
-    
-    # Iterate over all the IDLs included in the bundle required for this
-    # target, and make sure we have declared output files for each one.
-    output_hdrs = []
-    output_srcs = []
-    for idl in input_idls:
-        for template in CPP_GENERATOR_TEMPLATES_HDRS:
-            generated_file = "{}/{}/{}".format(
-                package_name,
-                message_type,
-                template.format(message_code),
-            )
-            output_hdrs.append(ctx.actions.declare_file(generated_file))
-        for template in CPP_GENERATOR_TEMPLATES_SRCS:
-            generated_file = "{}/{}/{}".format(
-                package_name,
-                message_type,
-                template.format(message_code),
-            )
-            output_srcs.append(ctx.actions.declare_file(generated_file))
-
-    # Run the action to generate the files
-    ctx.actions.run(
-        inputs = input_idls + input_type_descriptions + input_templates + [input_args],
-        outputs = output_hdrs + output_srcs,
-        executable = ctx.executable._rosidl_generator,
-        arguments = ["--generator-arguments-file={}".format(input_args.path)],
-        mnemonic = "IdlAndTypeDescriptionToCpp",
-        progress_message = "Generating C files for {}".format(ctx.label.name),
+    # Generate the C++ bindings
+    cc_hdrs, cc_srcs = _generate_source(
+        ctx = ctx,
+        executable = ctx.executable._cc_generator,
+        mnemonic = "CcGeneration",
+        input_idls = input_idls,
+        input_type_descriptions = input_type_descriptions,
+        input_templates = ctx.attr._cc_templates[DefaultInfo].files.to_list(),
+        templates_hdrs = [
+            "{}.hpp",
+            "detail/{}__builder.hpp",
+            "detail/{}__struct.hpp",
+            "detail/{}__traits.hpp",
+            "detail/{}__type_support.hpp",
+        ],
+        templates_srcs = [],
+        template_visibility_control = ctx.file._cc_visibility_template,
     )
 
-    # Generate a visibility header for packages.
-    visibility_control_h = ctx.actions.declare_file(
-        "{}/msg/rosidl_generator_cpp__visibility_control.hpp".format(package_name)
+    # Generate the type support library
+    cc_typesupport_hdrs, cc_typesupport_srcs = _generate_source(
+        ctx = ctx,
+        executable = ctx.executable._cc_typesupport_generator,
+        mnemonic = "CcTypeSupportGeneration",
+        input_idls = input_idls,
+        input_type_descriptions = input_type_descriptions,
+        input_templates = ctx.attr._cc_typesupport_templates[DefaultInfo].files.to_list(),
+        templates_hdrs = [],
+        templates_srcs = ["{}__type_support.cpp"],
+        template_visibility_control = None,
+        additional = ["--typesupports=rosidl_typesupport_introspection_cpp"]
     )
-    ctx.actions.expand_template(
-        template = ctx.attr._visibility_control_template[DefaultInfo].files.to_list()[0],
-        output = visibility_control_h,
-        substitutions = {
-            "@PROJECT_NAME@": package_name,
-            "@PROJECT_NAME_UPPER@": package_name.upper(),
-        },
-    )
-    output_hdrs.append(visibility_control_h)
 
-    # Collect all cc deps
-    deps = ctx.rule.attr.deps + [
-        ctx.attr._rosidl_runtime_cpp,
-        ctx.attr._rosidl_typesupport_interface
-    ]
+    # Generate the type support library for introspection
+    cc_typesupport_introspection_hdrs, cc_typesupport_introspection_srcs = _generate_source(
+        ctx = ctx,
+        executable = ctx.executable._cc_typesupport_introspection_generator,
+        mnemonic = "CcTypeSupportIntrospectionGeneration",
+        input_idls = input_idls,
+        input_type_descriptions = input_type_descriptions,
+        input_templates = ctx.attr._cc_typesupport_introspection_templates[DefaultInfo].files.to_list(),
+        templates_hdrs = ["detail/{}__rosidl_typesupport_introspection_cpp.hpp"],
+        templates_srcs = ["detail/{}__type_support.cpp"],
+        template_visibility_control = None,
+    )
+
+    # Collect the generated source code.
+    output_hdrs = cc_hdrs + cc_typesupport_hdrs + cc_typesupport_introspection_hdrs
+    output_srcs = cc_srcs + cc_typesupport_srcs + cc_typesupport_introspection_srcs
+
+    # These deps will all have CcInfo providers.
+    deps = ctx.attr._cc_deps + ctx.rule.attr.deps
 
     # Query for the current CC toolchain and feature set.
     cc_toolchain = find_cc_toolchain(ctx)
@@ -141,9 +190,8 @@ def _cc_idl_aspect_impl(target, ctx):
     )
 
     # Get a linking context.
-    libraries = []
     if output_srcs:
-        linking_context, linking_outputs = cc_common.create_linking_context_from_compilation_outputs(
+        linking_context, _ = cc_common.create_linking_context_from_compilation_outputs(
             name = ctx.label.name,
             actions = ctx.actions,
             feature_configuration = feature_configuration,
@@ -153,11 +201,6 @@ def _cc_idl_aspect_impl(target, ctx):
                 dep[CcInfo].linking_context for dep in deps if CcInfo in dep
             ],
         )
-        library_to_link = linking_outputs.library_to_link
-        if library_to_link and library_to_link.static_library:
-            libraries.append(library_to_link.static_library)
-        if library_to_link and library_to_link.pic_static_library:
-            libraries.append(library_to_link.pic_static_library)
     else:
         linking_context = cc_common.merge_linking_contexts(
             linking_contexts = [
@@ -179,24 +222,62 @@ cc_idl_aspect = aspect(
     attr_aspects = ["deps"],
     fragments = ["cpp"],
     attrs = {
-        "_rosidl_generator": attr.label(
-            default = Label("//:rosidl_generator"),
+        #########################################################################
+        # Code generation #######################################################
+        #########################################################################
+        
+        "_cc_generator": attr.label(
+            default = Label("//:cli"),
             executable = True,
             cfg = "exec",
         ),
-        "_interface_templates": attr.label(
+        "_cc_templates": attr.label(
             default = Label("//:interface_templates"),
         ),
-        "_visibility_control_template": attr.label(
-            default = Label("//:visibility_control_template"),
+        "_cc_visibility_template": attr.label(
+            default = Label("//:resource/rosidl_generator_cpp__visibility_control.hpp.in"),
             allow_single_file = True,
         ),
-        "_rosidl_runtime_cpp": attr.label(
-            default = Label("@rosidl_runtime_cpp"),
+
+        #########################################################################
+        # Type support generation ###############################################
+        #########################################################################
+        
+        "_cc_typesupport_generator": attr.label(
+            default = Label("@rosidl_typesupport_cpp//:cli"),
+            executable = True,
+            cfg = "exec",
         ),
-        "_rosidl_typesupport_interface": attr.label(
-            default = Label("@rosidl_typesupport_interface"),
+        "_cc_typesupport_templates": attr.label(
+            default = Label("@rosidl_typesupport_cpp//:interface_templates"),
         ),
+
+        #########################################################################
+        # Introspection type support generation #################################
+        #########################################################################
+        
+        "_cc_typesupport_introspection_generator": attr.label(
+            default = Label("@rosidl_typesupport_introspection_cpp//:cli"),
+            executable = True,
+            cfg = "exec",
+        ),
+        "_cc_typesupport_introspection_templates": attr.label(
+            default = Label("@rosidl_typesupport_introspection_cpp//:interface_templates"),
+        ),
+
+        #########################################################################
+        # Dependencies ##########################################################
+        #########################################################################
+        
+        "_cc_deps": attr.label_list(
+            default = [
+                Label("@rosidl_runtime_cpp"),
+                Label("@rosidl_typesupport_cpp"),
+                Label("@rosidl_typesupport_introspection_cpp"),
+            ],
+            providers = [CcInfo],
+        ),
+        
     },
     required_providers = [RosInterfaceInfo],
     required_aspect_providers = [

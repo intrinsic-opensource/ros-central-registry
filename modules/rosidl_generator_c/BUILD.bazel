@@ -26,11 +26,8 @@ filegroup(
 )
 
 # Template used for per-package visibility header generation.
-filegroup(
-    name = "visibility_control_template",
-    srcs = [
-        "resource/rosidl_generator_c__visibility_control.h.in",
-    ],
+exports_files(
+    srcs = ["resource/rosidl_generator_c__visibility_control.h.in"],
     visibility = ["//visibility:public"],
 )
 
@@ -47,14 +44,13 @@ py_library(
         "@rosidl_parser",
         "@rosidl_pycommon",
     ],
-    #data = [":resources"],
     visibility = ["//visibility:public"],
 )
 
 # The py_binary target does not accept files without the .py or .py3 suffix.
 # This rule simply renames the file to make it usable.
 genrule(
-    name = "rosidl_generator_rename",
+    name = "cli_rename",
     srcs = ["bin/rosidl_generator_c"],
     outs = ["bin/rosidl_generator_c.py"],
     cmd = "cp $(location :bin/rosidl_generator_c) $(location :bin/rosidl_generator_c.py)",
@@ -63,7 +59,7 @@ genrule(
 # This makes the setup script executable, and ensures that eny downstream
 # consumers of this script bring in the correct dependencies.
 py_binary(
-    name = "rosidl_generator",
+    name = "cli",
     srcs = [":bin/rosidl_generator_c.py"],
     main = ":bin/rosidl_generator_c.py",
     python_version = "PY3",

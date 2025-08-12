@@ -53,7 +53,7 @@ py_library(
 # The py_binary target does not accept files without the .py or .py3 suffix.
 # This rule simply renames the file to make it usable.
 genrule(
-    name = "rosidl_generator_rename",
+    name = "cli_rename",
     srcs = ["bin/rosidl_generator_cpp"],
     outs = ["bin/rosidl_generator_cpp.py"],
     cmd = "cp $(location :bin/rosidl_generator_cpp) $(location :bin/rosidl_generator_cpp.py)",
@@ -62,7 +62,7 @@ genrule(
 # This makes the setup script executable, and ensures that eny downstream
 # consumers of this script bring in the correct dependencies.
 py_binary(
-    name = "rosidl_generator",
+    name = "cli",
     srcs = [":bin/rosidl_generator_cpp.py"],
     main = ":bin/rosidl_generator_cpp.py",
     python_version = "PY3",

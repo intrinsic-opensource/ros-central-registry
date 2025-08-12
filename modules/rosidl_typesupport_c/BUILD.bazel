@@ -17,6 +17,7 @@
 
 load("@ros//:defs.bzl", "ros_package")
 load("@ros//python:defs.bzl", "py_pytest")
+load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
 filegroup(
@@ -25,30 +26,46 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-py_library(
+# C library
+
+cc_library(
     name = "rosidl_typesupport_c",
+    srcs = glob(["src/**/*.c"]),
+    hdrs = glob(["include/**/*.h"]),
+    deps = [
+        "@rosidl_runtime_c"
+    ],
+    includes = ["include"],
+    visibility = ["//visibility:public"],
+)
+
+# Python library
+
+py_library(
+    name = "rosidl_typesupport_c_py",
     srcs = glob(["rosidl_typesupport_c/**/*.py"]),
     deps = [
         "@ament_index_python",
         "@rosidl_cli",
         "@rosidl_pycommon",
+        "@rosidl_generator_c",
     ],
     visibility = ["//visibility:public"],
 )
 
 genrule(
-    name = "rosidl_generator_rename",
+    name = "cli_rename",
     srcs = ["bin/rosidl_typesupport_c"],
     outs = ["bin/rosidl_typesupport_c.py"],
     cmd = "cp $(location :bin/rosidl_typesupport_c) $(location :bin/rosidl_typesupport_c.py)",
 )
 
 py_binary(
-    name = "rosidl_typesupport",
+    name = "cli",
     srcs = [":bin/rosidl_typesupport_c.py"],
     main = ":bin/rosidl_typesupport_c.py",
     python_version = "PY3",
-    deps = [":rosidl_typesupport_c"],
+    deps = [":rosidl_typesupport_c_py"],
     visibility = ["//visibility:public"],
 )
 
@@ -57,7 +74,7 @@ py_pytest(
     srcs = ["test/test_cli_extension.py"],
     python_version = "PY3",
     data = ["test/msg/Test.msg"],
-    deps = [":rosidl_typesupport_c"],
+    deps = [":rosidl_typesupport_c_py"],
 )
 
 ros_package(
