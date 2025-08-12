@@ -50,6 +50,9 @@ load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
     ros_interface(
         name = "srv__{}".format(srv),
         src = "@test_interface_files//:srv/{}.srv".format(srv),
+        deps = [
+            "@service_msgs//:msg__ServiceEventInfo",
+        ],
         visibility = ["//visibility:public"],
     )
     for srv in [
@@ -65,6 +68,13 @@ load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
     ros_interface(
         name = "action__{}".format(action),
         src = "@test_interface_files//:action/{}.action".format(action),
+        deps = [
+            "@action_msgs//:msg__GoalInfo",
+            "@action_msgs//:msg__GoalStatus",
+            "@action_msgs//:msg__GoalStatusArray",
+            "@action_msgs//:srv__CancelGoal",
+            "@service_msgs//:msg__ServiceEventInfo",
+        ],
         visibility = ["//visibility:public"],
     )
     for action in [
@@ -75,22 +85,27 @@ load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
 ros_interface(
     name = "msg__Builtins",
     src = "msg/Builtins.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@builtin_interfaces//:msg__Duration",
         "@builtin_interfaces//:msg__Time",
     ],
+    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "action__NestedMessage",
     src = "action/NestedMessage.action",
-    visibility = ["//visibility:public"],
     deps = [
-        ":msg__Builtins",
+        "@action_msgs//:msg__GoalInfo",
+        "@action_msgs//:msg__GoalStatus",
+        "@action_msgs//:msg__GoalStatusArray",
+        "@action_msgs//:srv__CancelGoal",
         "@builtin_interfaces//:msg__Time",
+        "@service_msgs//:msg__ServiceEventInfo",
         "@test_msgs//:msg__BasicTypes",
+        ":msg__Builtins",
     ],
+    visibility = ["//visibility:public"],
 )
 
 # Targets

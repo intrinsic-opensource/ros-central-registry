@@ -14,10 +14,9 @@
 
 load("//ros:data.bzl", _ros_data = "ros_data")
 load("//ros:interface.bzl", _RosInterfaceInfo = "RosInterfaceInfo", _ros_interface = "ros_interface")
-load("//ros:package.bzl", _RosPackageInfo= "RosPackageInfo", _ros_package = "ros_package")
+load("//ros:package.bzl", _ros_package = "ros_package")
 
 RosInterfaceInfo = _RosInterfaceInfo
-RosPackageInfo = _RosPackageInfo
 
 ros_data = _ros_data
 ros_interface = _ros_interface

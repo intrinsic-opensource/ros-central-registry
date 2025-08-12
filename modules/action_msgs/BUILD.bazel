@@ -24,6 +24,7 @@ ros_interface(
     src = "srv/CancelGoal.srv",
     visibility = ["//visibility:public"],
     deps = [
+        "@service_msgs//:msg__ServiceEventInfo",
         ":msg__GoalInfo",
     ],
 )
