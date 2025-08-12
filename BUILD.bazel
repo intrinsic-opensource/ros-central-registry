@@ -22,6 +22,8 @@ load("@rules_cc//cc:defs.bzl", "cc_binary")
 idl_ros_library(
     name = "example_ros_idl",
     deps = [
+        "@std_msgs//:msg__String",
+        "@geometry_msgs//:msg__PoseStamped",
         "@ros2cli_test_interfaces//:msg__ShortVariedMultiNested",
         "@ros2cli_test_interfaces//:srv__ShortVariedMultiNested",
         "@ros2cli_test_interfaces//:action__ShortVariedMultiNested"
@@ -31,6 +33,8 @@ idl_ros_library(
 type_description_ros_library(
     name = "example_ros_type_description",
     deps = [
+        "@std_msgs//:msg__String",
+        "@geometry_msgs//:msg__PoseStamped",
         "@ros2cli_test_interfaces//:msg__ShortVariedMultiNested",
         "@ros2cli_test_interfaces//:srv__ShortVariedMultiNested",
         "@ros2cli_test_interfaces//:action__ShortVariedMultiNested"

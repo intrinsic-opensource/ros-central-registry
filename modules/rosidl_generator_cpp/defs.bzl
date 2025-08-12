@@ -75,30 +75,39 @@ def _cc_idl_aspect_impl(target, ctx):
     package_name = ctx.label.repo_name.removesuffix("+")
     message_type, message_name, message_code = message_info_from_target(ctx.label.name)
 
-    # Collect inputs
-    input_idls = target[RosIdlInfo].idls
-    input_type_descriptions = target[RosTypeDescriptionInfo].files
-    input_interface_templates = ctx.attr._interface_templates[DefaultInfo].files
+    # Collect all IDLs and JSON files required to generate the language bindings.
+    input_idls = [target[RosIdlInfo].idl]
+    input_type_descriptions = [target[RosTypeDescriptionInfo].json]
+    for dep in ctx.rule.attr.deps:
+        if RosIdlInfo in dep:
+            input_idls.extend(dep[RosIdlInfo].deps.to_list())
+        if RosTypeDescriptionInfo in dep:
+            input_type_descriptions.extend(dep[RosTypeDescriptionInfo].deps.to_list())
+
+    # Collect templates
+    input_templates = ctx.attr._interface_templates[DefaultInfo].files.to_list()
 
     # Collect tuples
     idl_tuples = [idl_tuple_from_path(idl.path) for idl in input_idls]
     type_description_tuples = [type_description_tuple_from_path(idl.path)
-        for idl in input_type_descriptions.to_list()]
+        for idl in input_type_descriptions]
 
     # The first output file is the JSON file used as args to the generator.
-    json_file = ctx.actions.declare_file(
+    input_args = ctx.actions.declare_file(
         "{}/{}_{}_c.json".format(package_name, message_type, message_name))
-    json_data = json.encode(
-        struct(
-            package_name = package_name,
-            idl_tuples = idl_tuples,
-            output_dir = json_file.dirname,
-            template_dir = input_interface_templates.to_list()[0].dirname,
-            type_description_tuples = type_description_tuples,
-            target_dependencies = [],
+    ctx.actions.write(
+        input_args,
+        json.encode(
+            struct(
+                package_name = package_name,
+                idl_tuples = idl_tuples,
+                output_dir = input_args.dirname,
+                template_dir = input_templates[0].dirname,
+                type_description_tuples = type_description_tuples,
+                target_dependencies = [],
+            )
         )
     )
-    ctx.actions.write(json_file, json_data)
     
     # Iterate over all the IDLs included in the bundle required for this
     # target, and make sure we have declared output files for each one.
@@ -122,12 +131,10 @@ def _cc_idl_aspect_impl(target, ctx):
 
     # Run the action to generate the files
     ctx.actions.run(
-        inputs = input_idls + input_type_descriptions.to_list() + input_interface_templates.to_list() + [json_file],
+        inputs = input_idls + input_type_descriptions + input_templates + [input_args],
         outputs = output_hdrs + output_srcs,
         executable = ctx.executable._rosidl_generator,
-        arguments = [
-            "--generator-arguments-file={}".format(json_file.path),
-        ],
+        arguments = ["--generator-arguments-file={}".format(input_args.path)],
         mnemonic = "IdlAndTypeDescriptionToCpp",
         progress_message = "Generating C files for {}".format(ctx.label.name),
     )

@@ -24,9 +24,14 @@ RosInterfaceInfo = provider(
 def _ros_interface_impl(ctx):
     return RosInterfaceInfo(
         src = ctx.file.src,
-        deps = [
-            dep[RosInterfaceInfo] for dep in ctx.attr.deps
-        ]
+        deps = depset(
+            direct = [
+                dep[RosInterfaceInfo].src for dep in ctx.attr.deps
+            ],
+            transitive = [
+                dep[RosInterfaceInfo].deps for dep in ctx.attr.deps
+            ],
+        )
     )
 
 ros_interface = rule(
@@ -34,7 +39,6 @@ ros_interface = rule(
     attrs = {
         "src": attr.label(
             allow_single_file = [
-                ".idl",
                 ".msg",
                 ".srv",
                 ".action"

@@ -14,29 +14,9 @@
 
 load("@ros//python:defs.bzl", "py_pytest")
 load("@rules_python//python:defs.bzl", "py_library", "py_binary")
-load(":defs.bzl", "idl_ros_library")
 
 # Export the aspect for converting ROS interfaces to IDLs.
 exports_files(["defs.bzl"])
-
-# We need these additional IDLs when a service is called for type information.
-idl_ros_library(
-    name = "service_idls",
-    deps = [
-        "@service_msgs//:msg__ServiceEventInfo",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-# We need these additional IDLs when an action is called for type information.
-idl_ros_library(
-    name = "action_idls",
-    deps = [
-        "@service_msgs//:msg__ServiceEventInfo",
-        "@unique_identifier_msgs//:msg__UUID",
-    ],
-    visibility = ["//visibility:public"],
-)
 
 # This is the python library that does the bulk of the work for converting
 # the .msg, .srv, .action files to the generic .idl representation.

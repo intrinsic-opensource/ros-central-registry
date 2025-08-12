@@ -48,6 +48,7 @@ ros_interface(
     src = "srv/ShortVariedMultiNested.srv",
     visibility = ["//visibility:public"],
     deps = [
+        "@service_msgs//:msg__ServiceEventInfo",
         ":msg__ShortVariedNested",
     ],
 )
@@ -57,6 +58,11 @@ ros_interface(
     src = "action/ShortVariedMultiNested.action",
     visibility = ["//visibility:public"],
     deps = [
+        "@service_msgs//:msg__ServiceEventInfo",
+        "@action_msgs//:msg__GoalInfo",
+        "@action_msgs//:msg__GoalStatus",
+        "@action_msgs//:msg__GoalStatusArray",
+        "@action_msgs//:srv__CancelGoal",
         ":msg__ShortVariedNested",
     ],
 )
