@@ -73,7 +73,6 @@ load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
             "@action_msgs//:msg__GoalStatus",
             "@action_msgs//:msg__GoalStatusArray",
             "@action_msgs//:srv__CancelGoal",
-            "@service_msgs//:msg__ServiceEventInfo",
         ],
         visibility = ["//visibility:public"],
     )
@@ -101,7 +100,6 @@ ros_interface(
         "@action_msgs//:msg__GoalStatusArray",
         "@action_msgs//:srv__CancelGoal",
         "@builtin_interfaces//:msg__Time",
-        "@service_msgs//:msg__ServiceEventInfo",
         "@test_msgs//:msg__BasicTypes",
         ":msg__Builtins",
     ],
