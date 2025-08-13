@@ -16,21 +16,17 @@
 RosInterfaceInfo = provider(
     "Provides info for interface code generation.",
     fields = {
-        "src": "The source file defining an interface.",
-        "deps": "The interfaces on which this interface depends.",
+        "srcs": "The source defining an interface.",
     }
 )
 
 def _ros_interface_impl(ctx):
     return RosInterfaceInfo(
-        src = ctx.file.src,
-        deps = depset(
-            direct = [
-                dep[RosInterfaceInfo].src for dep in ctx.attr.deps
-            ],
+        srcs = depset(
+            direct = [ctx.file.src],
             transitive = [
-                dep[RosInterfaceInfo].deps for dep in ctx.attr.deps
-            ],
+                dep[RosInterfaceInfo].srcs for dep in ctx.attr.deps
+            ]
         )
     )
 

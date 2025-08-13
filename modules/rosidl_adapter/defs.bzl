@@ -42,7 +42,11 @@ def _generate(ctx, executable, package_name, src, dst, mnemonic):
 def _idl_adapter_aspect_impl(target, ctx):
     #print("IDL_ROS: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
     package_name = target.label.workspace_name.removesuffix("+")
-    src = target[RosInterfaceInfo].src
+
+    # The last element of the traversal order of the message depset is the current element.
+    src = target[RosInterfaceInfo].srcs.to_list()[-1]
+
+    # Now, were going to transform the source file (msg, srv, action) to an IDL.
     idl = ctx.actions.declare_file(
         "{package_name}/{interface_type}/{interface_name}.idl".format(
             package_name = package_name,
