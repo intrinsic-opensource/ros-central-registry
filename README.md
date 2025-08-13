@@ -1,8 +1,10 @@
-# Small demo for ROS C and C++ message generation using aspects
+# Overview
 
 This repo is meant to illustrate work in progress towards a new Bazel build system for ROS in which there is a Bazel Module for each ROS package. A good chunk of the implementation is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) repository.
 
-# Demo showing ROS messages being transformed to C and C++ bindings
+The ROS packages in the `modules` folder are snapshots from a rolling release, augmented with Bazel build files in a way that lends itself towards a `source.json` file format submitted to a central registry. For now, version numbers have no meaning because this project used local overrides.
+
+# Demo of C and C++ messages
 
 Clone the repo:
 
