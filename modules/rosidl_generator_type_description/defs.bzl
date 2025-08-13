@@ -21,8 +21,7 @@ TYPE_DESCRIPTION_GENERATOR_TEMPLATES = ["{}.json"]
 RosTypeDescriptionInfo = provider(
     "Encapsulates type description information generated for an underlying IDL.", 
     fields = [
-        "json",
-        "deps",
+        "jsons",
     ]
 )
 
@@ -84,12 +83,7 @@ def _type_decription_idl_aspect_impl(target, ctx):
     # However, generating the single file above requires that we generate IDLs
     # and JSONs for all message that this one depends on. THe way to do this
     # is to recursively call up the tree storing depsets as we go...
-    input_idls = [target[RosIdlInfo].idl]
-    for dep in ctx.rule.attr.deps:
-        if RosIdlInfo in dep:
-            input_idls.extend(dep[RosIdlInfo].deps.to_list())
-
-    # Input IDLs are for the target and all its dependencies.
+    input_idls = target[RosIdlInfo].idls.to_list()
     input_templates = ctx.attr._rosidl_templates[DefaultInfo].files.to_list()
 
     # Now add this package's IDL
@@ -129,11 +123,10 @@ def _type_decription_idl_aspect_impl(target, ctx):
     # Collect all of the sources from the dependencies.
     return [
         RosTypeDescriptionInfo(
-            json = output_json,
-            deps = depset(
+            jsons = depset(
                 direct = [output_json],
                 transitive = [
-                    dep[RosTypeDescriptionInfo].deps
+                    dep[RosTypeDescriptionInfo].jsons
                         for dep in ctx.rule.attr.deps
                             if RosTypeDescriptionInfo in dep],
             ),
@@ -160,10 +153,11 @@ type_description_idl_aspect = aspect(
 )
 
 def _type_description_ros_library_impl(ctx):
+    files = []
+    for dep in ctx.attr.deps:
+        files.extend(dep[RosTypeDescriptionInfo].jsons.to_list())
     return [
-        DefaultInfo(files = depset([
-            dep[RosTypeDescriptionInfo].json for dep in ctx.attr.deps
-        ])),
+        DefaultInfo(files = depset(files)),
     ]
 
 type_description_ros_library = rule(

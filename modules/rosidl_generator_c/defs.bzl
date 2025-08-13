@@ -23,20 +23,14 @@ RosCBindingsInfo = provider(
     "Encapsulates C information generated for an underlying ROS message.", 
     fields = [
         "cc_info",
-        "deps",
     ]
 )
 def _c_idl_aspect_impl(target, ctx):
     #print("C_IDL: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
 
     # Collect all IDLs and JSON files required to generate the language bindings.
-    input_idls = [target[RosIdlInfo].idl]
-    input_type_descriptions = [target[RosTypeDescriptionInfo].json]
-    for dep in ctx.rule.attr.deps:
-        if RosIdlInfo in dep:
-            input_idls.extend(dep[RosIdlInfo].deps.to_list())
-        if RosTypeDescriptionInfo in dep:
-            input_type_descriptions.extend(dep[RosTypeDescriptionInfo].deps.to_list())
+    input_idls = target[RosIdlInfo].idls.to_list()
+    input_type_descriptions = target[RosTypeDescriptionInfo].jsons.to_list()
 
     # Generate the C bindings
     c_hdrs, c_srcs, c_include_dir = generate_sources(
@@ -90,7 +84,7 @@ def _c_idl_aspect_impl(target, ctx):
     cc_info_deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
     for dep in ctx.rule.attr.deps:
         if RosCBindingsInfo in dep:
-            cc_info_deps.extend([d for d in dep[RosCBindingsInfo].deps.to_list()])
+            cc_info_deps.extend([d for d in dep[RosCBindingsInfo].cc_info.to_list()])
     
     # Merge headers, sources and deps into a CcInfo provider.
     cc_info = generate_cc_info(
@@ -105,11 +99,10 @@ def _c_idl_aspect_impl(target, ctx):
     # Return a CcInfo provider for the aspect.
     return [
         RosCBindingsInfo(
-            cc_info = cc_info,
-            deps = depset(
+            cc_info = depset(
                 direct = [cc_info],
                 transitive = [
-                    dep[RosCBindingsInfo].deps
+                    dep[RosCBindingsInfo].cc_info
                         for dep in ctx.rule.attr.deps if RosCBindingsInfo in dep
                 ],
             )
@@ -194,7 +187,7 @@ c_idl_aspect = aspect(
 def _c_ros_library_impl(ctx):
     direct_cc_infos = []
     for dep in ctx.attr.deps:
-        direct_cc_infos.extend(dep[RosCBindingsInfo].deps.to_list())
+        direct_cc_infos.extend(dep[RosCBindingsInfo].cc_info.to_list())
     return [
         cc_common.merge_cc_infos(
             direct_cc_infos = direct_cc_infos

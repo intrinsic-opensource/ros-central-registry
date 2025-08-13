@@ -20,8 +20,7 @@ load("@ros//:defs.bzl", "RosInterfaceInfo")
 RosIdlInfo = provider(
     "Encapsulates IDL information generated for an underlying ROS message.", 
     fields = [
-        "idl",
-        "deps"
+        "idls",
     ]
 )
 
@@ -44,29 +43,27 @@ def _idl_adapter_aspect_impl(target, ctx):
     #print("IDL_ROS: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
     package_name = target.label.workspace_name.removesuffix("+")
     src = target[RosInterfaceInfo].src
-    dst = ctx.actions.declare_file(
+    idl = ctx.actions.declare_file(
         "{package_name}/{interface_type}/{interface_name}.idl".format(
             package_name = package_name,
             interface_type = src.extension,
             interface_name = src.basename[:-len(src.extension) - 1]
         )
     )
-    extra = []
     if src.extension == 'msg':
-        _generate(ctx, ctx.executable._msg2idl, package_name, src, dst, "IdlFromMsg")
+        _generate(ctx, ctx.executable._msg2idl, package_name, src, idl, "IdlFromMsg")
     elif src.extension == 'srv':
-        _generate(ctx, ctx.executable._srv2idl, package_name, src, dst, "IdlFromSrv")
+        _generate(ctx, ctx.executable._srv2idl, package_name, src, idl, "IdlFromSrv")
     elif src.extension == 'action':
-        _generate(ctx, ctx.executable._action2idl, package_name, src, dst, "IdlFromAction")
+        _generate(ctx, ctx.executable._action2idl, package_name, src, idl, "IdlFromAction")
     else:
         fail('Unknown file extension: ' + src.extension)
     return [
         RosIdlInfo(
-            idl = dst,
-            deps = depset(
-                direct = [dst],
+            idls = depset(
+                direct = [idl],
                 transitive = [
-                    dep[RosIdlInfo].deps for dep in ctx.rule.attr.deps if RosIdlInfo in dep
+                    dep[RosIdlInfo].idls for dep in ctx.rule.attr.deps if RosIdlInfo in dep
                 ],
             )
         ),
@@ -99,8 +96,11 @@ idl_ros_aspect = aspect(
 )
 
 def _idl_ros_library_impl(ctx):
+    files = []
+    for dep in ctx.attr.deps:
+        files.extend(dep[RosIdlInfo].idls.to_list())
     return [
-        DefaultInfo(files = depset([dep[RosIdlInfo].idl for dep in ctx.attr.deps])),
+        DefaultInfo(files = depset(files)),
     ]
 
 idl_ros_library = rule(
