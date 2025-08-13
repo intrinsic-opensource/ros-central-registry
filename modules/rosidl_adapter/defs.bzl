@@ -152,7 +152,6 @@ def message_info_from_target(target):
     message_type = target[:index]
     message_name = target[index+2:]
     message_code = _snake_case_from_pascal_case(message_name)
-    #print("{} :: {} :: {}".format(message_type, message_name, message_code))
     return message_type, message_name, message_code
 
 def idl_tuple_from_path(path):

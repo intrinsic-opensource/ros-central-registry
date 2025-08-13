@@ -14,7 +14,8 @@
 # limitations under the License.
 
 load("@ros//:defs.bzl", "RosInterfaceInfo")
-load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_ros_aspect")
+load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_ros_aspect",
+    "message_info_from_target", "idl_tuple_from_path")
 
 TYPE_DESCRIPTION_GENERATOR_TEMPLATES = ["{}.json"]
 
@@ -24,41 +25,6 @@ RosTypeDescriptionInfo = provider(
         "jsons",
     ]
 )
-
-# This would be better expressed as a regex operation, but unfortunately Bazel's
-# starlark language does not yet support this, and so it would require a module.
-# For example: https://github.com/magnetde/starlark-re/tree/master
-# https://github.com/ros2/rosidl/blob/humble/rosidl_cmake/cmake/string_camel_case_to_lower_case_underscore.cmake
-def _snake_case_from_pascal_case(pascal_case):
-    result = ""
-    pascal_case_padded = " " + pascal_case + " "
-    for i in range(len(pascal_case)):
-        prev_char, char, next_char = pascal_case_padded[i:i + 3].elems()
-        if char.isupper() and next_char.islower() and prev_char != " ":
-            # Insert an underscore before any upper case letter which is not
-            # followed by another upper case letter.
-            result += "_"
-        elif char.isupper() and (prev_char.islower() or prev_char.isdigit()):
-            # Insert an underscore before any upper case letter which is
-            # preseded by a lower case letter or number.
-            result += "_"
-        result += char.lower()
-    return result
-
-def message_info_from_target(target):
-    index = target.find("__")
-    if index < 0:
-        fail("Target interface {} appears malformed".format(target))
-    message_type = target[:index]
-    message_name = target[index+2:]
-    message_code = _snake_case_from_pascal_case(message_name)
-    #print("{} :: {} :: {}".format(message_type, message_name, message_code))
-    return message_type, message_name, message_code
-
-def idl_tuple_from_path(path):
-    idl_parts = path.split("/")
-    idl_tuple = "/".join(idl_parts[:-2]) + ":" + idl_parts[-2] + "/" + idl_parts[-1]
-    return idl_tuple
 
 def pkg_name_and_base_from_path(path):
     package_parts = path.split("/")
