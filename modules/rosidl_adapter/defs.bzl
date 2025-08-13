@@ -75,7 +75,7 @@ def _idl_adapter_aspect_impl(target, ctx):
 
 # IDL aspect runs along the deps property to generate IDLs for each RosInterface,
 # through one of the three cli tools, producing a ROS IDL for each one.
-idl_ros_aspect = aspect(
+idl_aspect = aspect(
     implementation = _idl_adapter_aspect_impl,
     attr_aspects = ["deps"],
     attrs = {
@@ -111,7 +111,7 @@ idl_ros_library = rule(
     implementation = _idl_ros_library_impl,
     attrs = {
         "deps": attr.label_list(
-            aspects = [idl_ros_aspect],
+            aspects = [idl_aspect],
             providers = [RosInterfaceInfo],
             allow_files = False,
         ),

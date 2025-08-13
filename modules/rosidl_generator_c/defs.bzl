@@ -16,8 +16,8 @@
 load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
-load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_ros_aspect", "generate_sources", "generate_cc_info")
-load("@rosidl_generator_type_description//:defs.bzl", "RosTypeDescriptionInfo", "type_description_idl_aspect")
+load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect", "generate_sources", "generate_cc_info")
+load("@rosidl_generator_type_description//:defs.bzl", "RosTypeDescriptionInfo", "type_description_aspect")
 
 RosCBindingsInfo = provider(
     "Encapsulates C information generated for an underlying ROS message.", 
@@ -25,7 +25,7 @@ RosCBindingsInfo = provider(
         "cc_info",
     ]
 )
-def _c_idl_aspect_impl(target, ctx):
+def _c_aspect_impl(target, ctx):
     #print("C_IDL: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
 
     # Collect all IDLs and JSON files required to generate the language bindings.
@@ -109,8 +109,8 @@ def _c_idl_aspect_impl(target, ctx):
         )
     ]
 
-c_idl_aspect = aspect(
-    implementation = _c_idl_aspect_impl,
+c_aspect = aspect(
+    implementation = _c_aspect_impl,
     toolchains = use_cc_toolchain(),
     attr_aspects = ["deps"],
     fragments = ["cpp"],
@@ -199,9 +199,9 @@ c_ros_library = rule(
     attrs = {
         "deps": attr.label_list(
             aspects = [
-                idl_ros_aspect,              # RosIdlInfo <- RosInterfaceInfo
-                type_description_idl_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
-                c_idl_aspect,                # CcInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
+                idl_aspect,              # RosIdlInfo <- RosInterfaceInfo
+                type_description_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
+                c_aspect,                # CcInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
             ],
             providers = [RosInterfaceInfo],
             allow_files = False,

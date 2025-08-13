@@ -14,7 +14,7 @@
 # limitations under the License.
 
 load("@ros//:defs.bzl", "RosInterfaceInfo")
-load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_ros_aspect",
+load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect",
     "message_info_from_target", "idl_tuple_from_path")
 
 TYPE_DESCRIPTION_GENERATOR_TEMPLATES = ["{}.json"]
@@ -100,7 +100,7 @@ def _type_decription_idl_aspect_impl(target, ctx):
     ]
 
 
-type_description_idl_aspect = aspect(
+type_description_aspect = aspect(
     implementation = _type_decription_idl_aspect_impl,
     attr_aspects = ["deps"],
     attrs = {
@@ -131,8 +131,8 @@ type_description_ros_library = rule(
     attrs = {
         "deps": attr.label_list(
             aspects = [
-                idl_ros_aspect,                 # idl  <- ros aspect [STEP 1]
-                type_description_idl_aspect,    # json <- idl aspect [STEP 2]
+                idl_aspect,                 # idl  <- ros aspect [STEP 1]
+                type_description_aspect,    # json <- idl aspect [STEP 2]
             ],
             providers = [RosInterfaceInfo],
             allow_files = False,

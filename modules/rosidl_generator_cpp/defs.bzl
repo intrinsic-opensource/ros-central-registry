@@ -16,9 +16,9 @@
 load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
-load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_ros_aspect", "generate_sources", "generate_cc_info")
-load("@rosidl_generator_c//:defs.bzl", "RosCBindingsInfo", "c_idl_aspect")
-load("@rosidl_generator_type_description//:defs.bzl", "RosTypeDescriptionInfo", "type_description_idl_aspect")
+load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect", "generate_sources", "generate_cc_info")
+load("@rosidl_generator_c//:defs.bzl", "RosCBindingsInfo", "c_aspect")
+load("@rosidl_generator_type_description//:defs.bzl", "RosTypeDescriptionInfo", "type_description_aspect")
 
 RosCcBindingsInfo = provider(
     "Encapsulates C++ information generated for an underlying ROS message.", 
@@ -27,7 +27,7 @@ RosCcBindingsInfo = provider(
     ]
 )
 
-def _cc_idl_aspect_impl(target, ctx):
+def _cc_aspect_impl(target, ctx):
     #print("C_IDL: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
 
     # Collect all IDLs and JSON files required to generate the language bindings.
@@ -111,8 +111,8 @@ def _cc_idl_aspect_impl(target, ctx):
         )
     ]
 
-cc_idl_aspect = aspect(
-    implementation = _cc_idl_aspect_impl,
+cc_aspect = aspect(
+    implementation = _cc_aspect_impl,
     toolchains = use_cc_toolchain(),
     attr_aspects = ["deps"],
     fragments = ["cpp"],
@@ -200,10 +200,10 @@ cc_ros_library = rule(
     attrs = {
         "deps": attr.label_list(
             aspects = [
-                idl_ros_aspect,              # RosIdlInfo <- RosInterfaceInfo
-                type_description_idl_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
-                c_idl_aspect,                # RosCBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
-                cc_idl_aspect,               # RosCcBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
+                idl_aspect,              # RosIdlInfo <- RosInterfaceInfo
+                type_description_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
+                c_aspect,                # RosCBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
+                cc_aspect,               # RosCcBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
             ],
             providers = [RosInterfaceInfo],
             allow_files = False,
