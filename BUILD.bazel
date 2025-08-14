@@ -17,7 +17,11 @@ load("@rosidl_adapter//:defs.bzl", "idl_ros_library")
 load("@rosidl_generator_type_description//:defs.bzl", "type_description_ros_library")
 load("@rosidl_generator_c//:defs.bzl", "c_ros_library")
 load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
+load("@rosidl_generator_py//:defs.bzl", "py_ros_library")
+load("@rosidl_generator_rs//:defs.bzl", "rust_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_python//python:defs.bzl", "py_binary")
+load("@rules_rust//rust:defs.bzl", "rust_binary")
 
 idl_ros_library(
     name = "example_ros_idl",
@@ -41,6 +45,8 @@ type_description_ros_library(
     ],
 )
 
+# C
+
 c_ros_library(
     name = "example_ros_c_msgs",
     deps = [
@@ -56,6 +62,8 @@ cc_binary(
     visibility = ["//visibility:public"],
 )
 
+# C++
+
 cc_ros_library(
     name = "example_ros_cc_msgs",
     deps = [
@@ -68,5 +76,37 @@ cc_binary(
     name = "example_ros_cc",
     srcs = ["src/example_ros.cc"],
     deps = [":example_ros_cc_msgs"],
+    visibility = ["//visibility:public"],
+)
+
+# Python
+
+py_ros_library(
+    name = "example_ros_py_msgs",
+    deps = [
+        "@sensor_msgs//:msg__CompressedImage",
+    ],
+)
+
+py_binary(
+    name = "example_ros_py",
+    srcs = ["src/example_ros.py"],
+    deps = [":example_ros_py_msgs"],
+    visibility = ["//visibility:public"],
+)
+
+# Rust
+
+rust_ros_library(
+    name = "example_ros_rust_msgs",
+    deps = [
+        "@sensor_msgs//:msg__CompressedImage",
+    ],
+)
+
+rust_binary(
+    name = "example_ros_rust",
+    srcs = ["src/example_ros.rs"],
+    deps = [":example_ros_rust_msgs"],
     visibility = ["//visibility:public"],
 )

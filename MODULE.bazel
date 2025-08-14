@@ -21,14 +21,10 @@ module(
 
 # Python
 
+bazel_dep(name = "hermetic_cc_toolchain", version = "3.1.0")
 bazel_dep(name = "rules_cc", version = "0.1.4")
 bazel_dep(name = "rules_python", version = "1.5.1")
-
-python = use_extension("@rules_python//python/extensions:python.bzl", "python")
-python.toolchain(
-    python_version = "3.12",
-    is_default = True,
-)
+bazel_dep(name = "rules_rust", version = "0.63.0")
 
 # Modules
 
@@ -42,12 +38,15 @@ bazel_dep(name = "rosidl_adapter", version = "0.0.0")
 bazel_dep(name = "rosidl_cli", version = "0.0.0")
 bazel_dep(name = "rosidl_generator_c", version = "0.0.0")
 bazel_dep(name = "rosidl_generator_cpp", version = "0.0.0")
+bazel_dep(name = "rosidl_generator_py", version = "0.0.0")
+bazel_dep(name = "rosidl_generator_rs", version = "0.0.0")
 bazel_dep(name = "rosidl_generator_type_description", version = "0.0.0")
 bazel_dep(name = "rosidl_parser", version = "0.0.0")
 bazel_dep(name = "rosidl_pycommon", version = "0.0.0")
 bazel_dep(name = "rosidl_runtime_c", version = "0.0.0")
 bazel_dep(name = "rosidl_runtime_cpp", version = "0.0.0")
 bazel_dep(name = "rosidl_runtime_py", version = "0.0.0")
+bazel_dep(name = "rosidl_runtime_rs", version = "0.0.0")
 bazel_dep(name = "rosidl_typesupport_interface", version = "0.0.0")
 bazel_dep(name = "rosidl_typesupport_c", version = "0.0.0")
 bazel_dep(name = "rosidl_typesupport_cpp", version = "0.0.0")
@@ -77,12 +76,15 @@ local_path_override(module_name = "rosidl_adapter", path = "./modules/rosidl_ada
 local_path_override(module_name = "rosidl_cli", path = "./modules/rosidl_cli")
 local_path_override(module_name = "rosidl_generator_c", path = "./modules/rosidl_generator_c")
 local_path_override(module_name = "rosidl_generator_cpp", path = "./modules/rosidl_generator_cpp")
+local_path_override(module_name = "rosidl_generator_py", path = "./modules/rosidl_generator_py")
+local_path_override(module_name = "rosidl_generator_rs", path = "./modules/rosidl_generator_rs")
 local_path_override(module_name = "rosidl_generator_type_description", path = "./modules/rosidl_generator_type_description")
 local_path_override(module_name = "rosidl_parser", path = "./modules/rosidl_parser")
 local_path_override(module_name = "rosidl_pycommon", path = "./modules/rosidl_pycommon")
 local_path_override(module_name = "rosidl_runtime_c", path = "./modules/rosidl_runtime_c")
 local_path_override(module_name = "rosidl_runtime_cpp", path = "./modules/rosidl_runtime_cpp")
 local_path_override(module_name = "rosidl_runtime_py", path = "./modules/rosidl_runtime_py")
+local_path_override(module_name = "rosidl_runtime_rs", path = "./modules/rosidl_runtime_rs")
 local_path_override(module_name = "rosidl_typesupport_interface", path = "./modules/rosidl_typesupport_interface")
 local_path_override(module_name = "rosidl_typesupport_c", path = "./modules/rosidl_typesupport_c")
 local_path_override(module_name = "rosidl_typesupport_cpp", path = "./modules/rosidl_typesupport_cpp")
@@ -101,3 +103,16 @@ local_path_override(module_name = "std_srvs", path = "./modules/std_srvs")
 local_path_override(module_name = "test_interface_files", path = "./modules/test_interface_files")
 local_path_override(module_name = "test_msgs", path = "./modules/test_msgs")
 local_path_override(module_name = "unique_identifier_msgs", path = "./modules/unique_identifier_msgs")
+
+# Toolchain configuration
+
+toolchains = use_extension("@hermetic_cc_toolchain//toolchain:ext.bzl", "toolchains")
+use_repo(toolchains, "zig_sdk")
+
+# Python configuration
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.12",
+    is_default = True,
+)

@@ -119,11 +119,23 @@ type_description_aspect = aspect(
 )
 
 def _type_description_ros_library_impl(ctx):
-    files = []
-    for dep in ctx.attr.deps:
-        files.extend(dep[RosTypeDescriptionInfo].jsons.to_list())
     return [
-        DefaultInfo(files = depset(files)),
+        RosTypeDescriptionInfo(
+            jsons = depset(
+                transitive = [
+                    dep[RosTypeDescriptionInfo].jsons
+                        for dep in ctx.attr.deps if RosTypeDescriptionInfo in dep
+                ]
+            )
+        ),
+        DefaultInfo(
+            files = depset(
+                transitive = [
+                    dep[RosTypeDescriptionInfo].jsons
+                        for dep in ctx.attr.deps if RosTypeDescriptionInfo in dep
+                ]
+            )
+        ),
     ]
 
 type_description_ros_library = rule(
@@ -138,6 +150,6 @@ type_description_ros_library = rule(
             allow_files = False,
         ),
     },
-    #provides = [CcInfo],
+    provides = [RosTypeDescriptionInfo, DefaultInfo],
 )
 

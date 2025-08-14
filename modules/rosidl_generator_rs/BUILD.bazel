@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,11 +28,11 @@ filegroup(
 # This is the python library that does the bulk of the work for converting
 # the .msg, .srv, .action files to the generic .idl representation.
 py_library(
-    name = "rosidl_generator_py",
-    srcs = glob(["rosidl_generator_py/**/*.py"]),
+    name = "rosidl_generator_rs",
+    srcs = glob(["rosidl_generator_rs/**/*.py"]),
     deps = [
         "@ament_index_python",
-        "@rpyutils",
+        "@rcutils",
         "@rosidl_cli",
         "@rosidl_generator_c",
         "@rosidl_generator_type_description",
@@ -47,18 +46,18 @@ py_library(
 # This rule simply renames the file to make it usable.
 genrule(
     name = "cli_rename",
-    srcs = ["bin/rosidl_generator_py"],
-    outs = ["bin/rosidl_generator_py.py"],
-    cmd = "cp $(location :bin/rosidl_generator_py) $(location :bin/rosidl_generator_py.py)",
+    srcs = ["bin/rosidl_generator_rs"],
+    outs = ["bin/rosidl_generator_rs.py"],
+    cmd = "cp $(location :bin/rosidl_generator_rs) $(location :bin/rosidl_generator_rs.py)",
 )
 
 # This makes the setup script executable, and ensures that eny downstream
 # consumers of this script bring in the correct dependencies.
 py_binary(
     name = "cli",
-    srcs = [":bin/rosidl_generator_py.py"],
-    main = ":bin/rosidl_generator_py.py",
+    srcs = [":bin/rosidl_generator_rs.py"],
+    main = ":bin/rosidl_generator_rs.py",
     python_version = "PY3",
-    deps = [":rosidl_generator_py"],
+    deps = [":rosidl_generator_rs"],
     visibility = ["//visibility:public"],
 )

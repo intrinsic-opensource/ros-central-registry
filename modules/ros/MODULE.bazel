@@ -4,9 +4,8 @@ module(
     compatibility_level = 1,
 )
 
+bazel_dep(name = "rules_cc", version = "0.1.4")
 bazel_dep(name = "rules_python", version = "1.5.1")
-
-# LINT uncrustify/noble,now 0.78.1+dfsg1-1 amd64 [installed,auto-removable]
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(

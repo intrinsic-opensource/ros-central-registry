@@ -1,0 +1,21 @@
+# Expose the numpy C headers
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_python//python:pip.bzl", "whl_filegroup")
+
+whl_filegroup(
+    name = "numpy_includes",
+    pattern = "numpy/core/include/numpy",
+    whl = "@pip_ros//numpy:whl",
+    visibility = ["//visibility:private"],
+)
+
+cc_library(
+    name = "numpy",
+    hdrs = [":numpy_includes"],
+    includes = ["numpy_includes/numpy/core/include"],
+    deps = [
+        "@rules_python//python/cc:current_py_cc_headers"
+    ],
+    visibility = ["//visibility:public"],
+)

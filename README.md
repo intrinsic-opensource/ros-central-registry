@@ -23,3 +23,9 @@ Build a C++ target that links against ROS messages.
 ```
 bazel build //:example_ros_cc
 ```
+
+Build a Python target that links against ROS messages.
+
+```
+bazel build //:example_ros_py
+```

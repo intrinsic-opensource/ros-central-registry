@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,15 +28,6 @@ py_library(
         "@ros//python:pyyaml",
     ],
     visibility = ["//visibility:public"],
-)
-
-# This makes the setup script executable, and ensures that eny downstream
-# consumers of this script bring in the correct dependencies.
-py_binary(
-    name = "setup",
-    srcs = ["setup.py"],
-    deps = ["@ros//python:setuptools"],
-    visibility = ["//visibility:private"],
 )
 
 # All functional tests.

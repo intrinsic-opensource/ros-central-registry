@@ -100,11 +100,23 @@ idl_aspect = aspect(
 )
 
 def _idl_ros_library_impl(ctx):
-    files = []
-    for dep in ctx.attr.deps:
-        files.extend(dep[RosIdlInfo].idls.to_list())
     return [
-        DefaultInfo(files = depset(files)),
+        RosIdlInfo(
+            idls = depset(
+                transitive = [
+                    dep[RosIdlInfo].idls
+                        for dep in ctx.attr.deps if RosIdlInfo in dep
+                ]
+            )
+        ),
+        DefaultInfo(
+            files = depset(
+                transitive = [
+                    dep[RosIdlInfo].idls
+                        for dep in ctx.attr.deps if RosIdlInfo in dep
+                ]
+            )
+        ),
     ]
 
 idl_ros_library = rule(
@@ -116,7 +128,7 @@ idl_ros_library = rule(
             allow_files = False,
         ),
     },
-    provides = [DefaultInfo],
+    provides = [RosIdlInfo, DefaultInfo],
 )
 
 # Reusable tooling.
@@ -178,22 +190,35 @@ def generate_sources(
 ):
     # Get information about this package
     package_name = ctx.label.repo_name.removesuffix("+")
+    package_version = "0.0.0"
     message_type, message_name, message_code = message_info_from_target(ctx.label.name)
 
     # The first output file is the JSON file used as args to the generator.
     input_args = ctx.actions.declare_file(
-        "{}/{}_{}_{}.json".format(package_name, message_type, message_name, mnemonic))
+        "{package_name}/{mnemonic}.json".format(
+            package_name=package_name,
+            mnemonic=mnemonic
+        )
+    )
 
     # Prepare hdrs and srcs lists for output.
     output_hdrs = [
         ctx.actions.declare_file(
-            "{}/{}/{}".format(package_name, message_type, t.format(message_code))
-        ) for t in templates_hdrs
+            template.format(
+                package_name=package_name,
+                message_type=message_type,
+                message_code=message_code,
+            )
+        ) for template in templates_hdrs
     ]
     output_srcs = [
         ctx.actions.declare_file(
-            "{}/{}/{}".format(package_name, message_type, t.format(message_code))
-        ) for t in templates_srcs
+            template.format(
+                package_name=package_name,
+                message_type=message_type,
+                message_code=message_code,
+            )
+        ) for template in templates_srcs
     ]
 
     # Write the generator query
@@ -202,6 +227,7 @@ def generate_sources(
         json.encode(
             struct(
                 package_name = package_name,
+                package_version = package_version,
                 idl_tuples = [idl_tuple_from_path(idl.path) for idl in input_idls],
                 output_dir = input_args.dirname,
                 template_dir = input_templates[0].dirname,
@@ -226,7 +252,11 @@ def generate_sources(
     if template_visibility_control:
         output_c_visibility_control_stem = _get_stem(template_visibility_control)
         output_c_visibility_control_h = ctx.actions.declare_file(
-            "{}/msg/{}".format(package_name, output_c_visibility_control_stem)
+            "{package_name}/msg/{output_c_visibility_control_stem}".format(
+                package_name=package_name,
+                message_name=message_name,
+                output_c_visibility_control_stem=output_c_visibility_control_stem
+            )
         )
         ctx.actions.expand_template(
             template = template_visibility_control,
@@ -289,5 +319,17 @@ def generate_cc_info(ctx, name, hdrs, srcs, include_dirs = [], deps = []):
         compilation_context = compilation_context,
         linking_context = linking_context,
     )
-    return cc_info
+
+    # Get the output shared object.
+    linking_outputs = cc_common.link(
+        actions = ctx.actions,
+        feature_configuration = feature_configuration,
+        cc_toolchain = cc_toolchain,
+        compilation_outputs = compilation_outputs,
+        linking_contexts = [dep.linking_context for dep in deps] ,
+        name = "{}_s__{}".format(name, "rosidl_typesupport_c"),
+        output_type = "dynamic_library",
+    )
+
+    return cc_info, compilation_outputs, linking_outputs
     

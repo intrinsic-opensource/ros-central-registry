@@ -14,7 +14,6 @@
 # limitations under the License.
 
 load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
-load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect", "generate_sources", "generate_cc_info")
 load("@rosidl_generator_c//:defs.bzl", "RosCBindingsInfo", "c_aspect")
@@ -23,7 +22,8 @@ load("@rosidl_generator_type_description//:defs.bzl", "RosTypeDescriptionInfo", 
 RosCcBindingsInfo = provider(
     "Encapsulates C++ information generated for an underlying ROS message.", 
     fields = [
-        "cc_info",
+        "cc_infos",
+        "cc_files",
     ]
 )
 
@@ -43,11 +43,11 @@ def _cc_aspect_impl(target, ctx):
         input_type_descriptions = input_type_descriptions,
         input_templates = ctx.attr._cc_templates[DefaultInfo].files.to_list(),
         templates_hdrs = [
-            "{}.hpp",
-            "detail/{}__builder.hpp",
-            "detail/{}__struct.hpp",
-            "detail/{}__traits.hpp",
-            "detail/{}__type_support.hpp",
+            "{package_name}/{message_type}/{message_code}.hpp",
+            "{package_name}/{message_type}/detail/{message_code}__builder.hpp",
+            "{package_name}/{message_type}/detail/{message_code}__struct.hpp",
+            "{package_name}/{message_type}/detail/{message_code}__traits.hpp",
+            "{package_name}/{message_type}/detail/{message_code}__type_support.hpp",
         ],
         templates_srcs = [],
         template_visibility_control = ctx.file._cc_visibility_template,
@@ -62,7 +62,7 @@ def _cc_aspect_impl(target, ctx):
         input_type_descriptions = input_type_descriptions,
         input_templates = ctx.attr._cc_typesupport_templates[DefaultInfo].files.to_list(),
         templates_hdrs = [],
-        templates_srcs = ["{}__type_support.cpp"],
+        templates_srcs = ["{package_name}/{message_type}/{message_code}__type_support.cpp"],
         template_visibility_control = None,
         additional = ["--typesupports=rosidl_typesupport_introspection_cpp"]
     )
@@ -75,45 +75,54 @@ def _cc_aspect_impl(target, ctx):
         input_idls = input_idls,
         input_type_descriptions = input_type_descriptions,
         input_templates = ctx.attr._cc_typesupport_introspection_templates[DefaultInfo].files.to_list(),
-        templates_hdrs = ["detail/{}__rosidl_typesupport_introspection_cpp.hpp"],
-        templates_srcs = ["detail/{}__type_support.cpp"],
+        templates_hdrs = ["{package_name}/{message_type}/detail/{message_code}__rosidl_typesupport_introspection_cpp.hpp"],
+        templates_srcs = ["{package_name}/{message_type}/detail/{message_code}__type_support.cpp"],
         template_visibility_control = None,
     )
 
     # These deps will all have CcInfo providers. We need to combine the library
     # dependencies with the C generated headers and C++ generated headers.
-    cc_info_deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep] 
-    cc_info_deps.extend([d for d in target[RosCBindingsInfo].cc_info.to_list()])
+    deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep] 
+    deps.extend([d for d in target[RosCBindingsInfo].cc_infos.to_list()])
     for dep in ctx.rule.attr.deps:
         if RosCcBindingsInfo in dep:
-            cc_info_deps.extend([d for d in dep[RosCcBindingsInfo].cc_info.to_list()])
+            deps.extend([d for d in dep[RosCcBindingsInfo].cc_infos.to_list()])
 
     # Merge headers, sources and deps into a CcInfo provider.
-    cc_info = generate_cc_info(
+    hdrs = cc_hdrs + cc_typesupport_hdrs + cc_typesupport_introspection_hdrs
+    srcs = cc_srcs + cc_typesupport_srcs + cc_typesupport_introspection_srcs
+    cc_info, _, _ = generate_cc_info(
         ctx = ctx,
         name = "{}_cc".format(ctx.label.name),
-        hdrs = cc_hdrs + cc_typesupport_hdrs + cc_typesupport_introspection_hdrs,
-        srcs = cc_srcs + cc_typesupport_srcs + cc_typesupport_introspection_srcs,
+        hdrs = hdrs,
+        srcs = srcs,
         include_dirs = [cc_include_dir],
-        deps = cc_info_deps,
+        deps = deps,
     )
 
     # Return a CcInfo provider for the aspect.
     return [
         RosCcBindingsInfo(
-            cc_info = depset(
+            cc_infos = depset(
                 direct = [cc_info],
                 transitive = [
-                    dep[RosCcBindingsInfo].cc_info
+                    dep[RosCcBindingsInfo].cc_infos
                         for dep in ctx.rule.attr.deps if RosCcBindingsInfo in dep
                 ],
-            )
+            ),
+            cc_files = depset(
+                direct = hdrs + srcs,
+                transitive = [
+                    dep[RosCcBindingsInfo].cc_files
+                        for dep in ctx.rule.attr.deps if RosCcBindingsInfo in dep
+                ],
+            ),
         )
     ]
 
 cc_aspect = aspect(
     implementation = _cc_aspect_impl,
-    toolchains = use_cc_toolchain(),
+    toolchains = ["@rules_cc//cc:toolchain_type"],
     attr_aspects = ["deps"],
     fragments = ["cpp"],
     attrs = {
@@ -183,16 +192,25 @@ cc_aspect = aspect(
 )
 
 def _cc_ros_library_impl(ctx):
-    direct_cc_infos = []
+    cc_infos = []
     for dep in ctx.attr.deps:
         if RosCBindingsInfo in dep:
-            direct_cc_infos.extend(dep[RosCBindingsInfo].cc_info.to_list())
+            cc_infos.extend(dep[RosCBindingsInfo].cc_infos.to_list())
         if RosCcBindingsInfo in dep:
-            direct_cc_infos.extend(dep[RosCcBindingsInfo].cc_info.to_list())
+            cc_infos.extend(dep[RosCcBindingsInfo].cc_infos.to_list())
     return [
-        cc_common.merge_cc_infos(
-            direct_cc_infos = direct_cc_infos
-        )
+        cc_common.merge_cc_infos(direct_cc_infos = cc_infos), # <--- CcInfo
+        DefaultInfo(
+            files = depset(
+                transitive = [
+                    dep[RosCBindingsInfo].cc_files
+                        for dep in ctx.attr.deps if RosCBindingsInfo in dep
+                ] + [
+                    dep[RosCcBindingsInfo].cc_files
+                        for dep in ctx.attr.deps if RosCcBindingsInfo in dep
+                ]
+            )
+        ),
     ]
 
 cc_ros_library = rule(
@@ -209,6 +227,6 @@ cc_ros_library = rule(
             allow_files = False,
         ),
     },
-    provides = [CcInfo],
+    provides = [CcInfo, DefaultInfo],
 )
 
