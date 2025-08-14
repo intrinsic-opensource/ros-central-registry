@@ -102,14 +102,10 @@ cc_library(
         "-std=gnu11",
     ],
     defines = [
-        "RCUTILS_BUILDING_DLL",
         "RCUTILS_ENABLE_FAULT_INJECTION",
         "ROS_PACKAGE_NAME=rcutils",
         "_GNU_SOURCE",
         "rcutils_EXPORTS",
-    ],
-    linkopts = [
-        "-ldl",
     ],
     visibility = ["//visibility:public"],
 )
