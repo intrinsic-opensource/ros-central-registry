@@ -1,0 +1,43 @@
+// SPDX-FileCopyrightText: 2016 Philippe Proulx <pproulx@efficios.com>
+// SPDX-License-Identifier: CC-BY-4.0
+//
+tracef(3)
+=========
+:object-type: macro
+
+
+NAME
+----
+tracef - LTTng-UST printf(3)-like interface
+
+
+SYNOPSIS
+--------
+[verse]
+*#include <lttng/tracef.h>*
+
+[verse]
+#define *tracef*('fmt', ...)
+
+Link with `-llttng-ust -llttng-ust-common`.
+
+
+DESCRIPTION
+-----------
+The `tracef()` macro is part of version{nbsp}0 of the LTTng-UST API (see
+the ``Compatibility with previous APIs'' section of man:lttng-ust(3)).
+
+Prefer using man:lttng_ust_tracef(3) which is part of version{nbsp}1 of
+the API and has the `lttng_ust_` namespace.
+
+include::common-footer.txt[]
+
+include::common-copyrights.txt[]
+
+include::common-authors.txt[]
+
+
+SEE ALSO
+--------
+man:lttng_ust_tracef(3),
+man:lttng_ust_vtracef(3)

@@ -92,15 +92,6 @@ cc_library(
     includes = [
         "include",
     ],
-    copts = [
-        "-Wall",
-        "-Wconversion",
-        "-Wextra",
-        "-Wno-sign-conversion",
-        "-Wpedantic",
-        "-fPIC",
-        "-std=gnu11",
-    ],
     defines = [
         "RCUTILS_ENABLE_FAULT_INJECTION",
         "ROS_PACKAGE_NAME=rcutils",

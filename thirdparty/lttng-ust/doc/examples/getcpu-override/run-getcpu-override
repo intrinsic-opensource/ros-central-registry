@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# SPDX-FileCopyrightText: 2023 EfficiOS, Inc
+#
+# SPDX-License-Identifier: MIT
+
+# launch with: run-getcpu-override progname args
+
+DIR=$(dirname "$0")
+DIR=$(readlink -f "$DIR")
+
+LTTNG_UST_GETCPU_PLUGIN="$DIR/lttng-ust-getcpu-override-example.so" "${@}"

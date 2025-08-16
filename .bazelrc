@@ -1,0 +1,1 @@
+test --sandbox_default_allow_network=false

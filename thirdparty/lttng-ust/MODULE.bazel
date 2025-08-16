@@ -1,0 +1,10 @@
+module(
+    name = "lttng-ust",
+    version = "2.14.0",
+    compatibility_level = 1,
+)
+
+bazel_dep(name = "rules_foreign_cc", version = "0.15.0")
+bazel_dep(name = "liburcu", version = "0.15.3")
+
+local_path_override(module_name = "liburcu", path = "../liburcu")

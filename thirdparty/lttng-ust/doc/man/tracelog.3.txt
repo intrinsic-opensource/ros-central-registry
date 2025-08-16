@@ -1,0 +1,45 @@
+// SPDX-FileCopyrightText: 2016 Philippe Proulx <pproulx@efficios.com>
+// SPDX-License-Identifier: CC-BY-4.0
+//
+tracelog(3)
+===========
+:object-type: macro
+
+
+NAME
+----
+tracelog - LTTng-UST printf(3)-like interface with a log level
+
+
+SYNOPSIS
+--------
+[verse]
+*#include <lttng/tracelog.h>*
+
+[verse]
+#define *tracelog*('level', 'fmt', ...)
+
+Link with `-llttng-ust -llttng-ust-common`.
+
+
+DESCRIPTION
+-----------
+The `tracelog()` macro is part of version{nbsp}0 of the LTTng-UST API
+(see the ``Compatibility with previous APIs'' section of
+man:lttng-ust(3)).
+
+Prefer using man:lttng_ust_tracelog(3) which is part of version{nbsp}1
+of the API and has the `lttng_ust_` namespace.
+
+
+include::common-footer.txt[]
+
+include::common-copyrights.txt[]
+
+include::common-authors.txt[]
+
+
+SEE ALSO
+--------
+man:lttng_ust_tracelog(3),
+man:lttng_ust_vtracelog(3)

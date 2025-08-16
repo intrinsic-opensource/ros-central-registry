@@ -26,15 +26,10 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-exports_files(
-    srcs = ["resource/rosidl_typesupport_introspection_c__visibility_control.h.in"],
-    visibility = ["//visibility:public"],
-)
-
 cc_library(
     name = "rosidl_typesupport_introspection_cpp",
-    srcs = glob(["src/**/*.cpp"]),
-    hdrs = glob(["include/**/*.h", "include/**/*.hpp"]),
+    srcs = glob(["src/**"]),
+    hdrs = glob(["include/**"]),
     includes = ["include"],
     visibility = ["//visibility:public"],
 )

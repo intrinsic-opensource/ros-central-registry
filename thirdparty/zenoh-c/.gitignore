@@ -1,0 +1,87 @@
+# Build
+target
+
+# Cargo
+#Cargo.lock
+
+# vscode
+.vscode 
+out
+
+# IntelliJ / CLion 
+.idea 
+cmake-build-debug
+cmake-build-release 
+build
+zenohc.pc
+
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+.cache
+
+# Platform dependent generated files
+include/zenoh_configure.h
+include/zenoh_opaque.h
+
+# Build resources
+.build_resources*
+src/opaque_types/mod.rs
+
+# CMake
+CMakeFiles/
+debug/
+release/
+
+# Bazel
+bazel-*
+MODULE.bazel.lock

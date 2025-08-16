@@ -1,0 +1,615 @@
+
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Imports
+
+load("@ros//:defs.bzl", "ros_package")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+# ROS C/C++ libraries
+
+cc_library(
+    name = "rmw",
+    srcs = glob(["src/**"]),
+    hdrs = glob(["include/**"]),
+    includes = ["include"],
+    defines = [
+        "RCUTILS_ENABLE_FAULT_INJECTION",
+        "ROS_PACKAGE_NAME=rmw",
+        "rmw_EXPORTS",
+    ],
+    deps = [
+        "@rcutils",
+        "@rosidl_runtime_c",
+    ],
+)
+
+# ROS C/C++ tests
+
+[
+    cc_test(
+        name = test,
+        srcs = [
+            "test/time_bomb_allocator_testing_utils.h",
+            "test/{}.cpp".format(test),
+        ],
+        # linkstatic = True,
+        deps = [
+            ":rmw",
+            "@googletest//:gtest",
+            "@googletest//:gtest_main",
+            # "@osrf_testing_tools_cpp",
+            # "@osrf_testing_tools_cpp//:memory_tools",
+            "@rcutils",
+            "@rosidl_runtime_c",
+        ],
+    )
+    for test in [
+        "test_allocators",
+        "test_convert_rcutils_ret_to_rmw_ret",
+        "test_discovery_options",
+        "test_enclave",
+        "test_event",
+        "test_init",
+        "test_init_options",
+        "test_message_sequence",
+    ]
+]
+
+
+
+# ros_cc_test(
+#     name = "test_names_and_types",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_names_and_types.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@osrf_testing_tools_cpp",
+#         "@osrf_testing_tools_cpp//:memory_tools",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_network_flow_endpoint",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_network_flow_endpoint.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@osrf_testing_tools_cpp",
+#         "@osrf_testing_tools_cpp//:memory_tools",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_network_flow_endpoint_array",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_network_flow_endpoint_array.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@osrf_testing_tools_cpp",
+#         "@osrf_testing_tools_cpp//:memory_tools",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_publisher_options",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_publisher_options.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_qos_string_conversions",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_qos_string_conversions.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_sanity_checks",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_sanity_checks.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_security_options",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_security_options.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_serialized_message",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_serialized_message.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@osrf_testing_tools_cpp",
+#         "@osrf_testing_tools_cpp//:memory_tools",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_subscription_content_filter_options",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_subscription_content_filter_options.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_subscription_options",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_subscription_options.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_time",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_time.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_topic_endpoint_info",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_topic_endpoint_info.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@osrf_testing_tools_cpp",
+#         "@osrf_testing_tools_cpp//:memory_tools",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_topic_endpoint_info_array",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_topic_endpoint_info_array.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@osrf_testing_tools_cpp",
+#         "@osrf_testing_tools_cpp//:memory_tools",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_types",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_types.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_validate_full_topic_name",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_validate_full_topic_name.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_validate_namespace",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_validate_namespace.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-lpthread",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_validate_node_name",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_validate_node_name.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         ":rmw",
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rosidl_runtime_c",
+#     ],
+# )
+
+# # Package
+
+# ros_package(
+#     name = "rmw",
+#     libraries = [
+#         "rmw",
+#     ],
+#     tests = [
+#         "test_allocators",
+#         "test_convert_rcutils_ret_to_rmw_ret",
+#         "test_discovery_options",
+#         "test_enclave",
+#         "test_event",
+#         "test_init",
+#         "test_init_options",
+#         "test_message_sequence",
+#         "test_names_and_types",
+#         "test_network_flow_endpoint",
+#         "test_network_flow_endpoint_array",
+#         "test_publisher_options",
+#         "test_qos_string_conversions",
+#         "test_sanity_checks",
+#         "test_security_options",
+#         "test_serialized_message",
+#         "test_subscription_content_filter_options",
+#         "test_subscription_options",
+#         "test_time",
+#         "test_topic_endpoint_info",
+#         "test_topic_endpoint_info_array",
+#         "test_types",
+#         "test_validate_full_topic_name",
+#         "test_validate_namespace",
+#         "test_validate_node_name",
+#     ],
+# )

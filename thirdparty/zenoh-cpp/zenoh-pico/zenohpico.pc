@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: zenohpico
+Description: 
+URL: 
+Version: 1.2.20250212dev
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lzenohpico

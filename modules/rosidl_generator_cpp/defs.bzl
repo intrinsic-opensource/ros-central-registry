@@ -54,20 +54,6 @@ def _cc_aspect_impl(target, ctx):
         template_visibility_control = ctx.file._cc_visibility_template,
     )
 
-    # Generate the type support library
-    cc_typesupport_hdrs, cc_typesupport_srcs, _ = generate_sources(
-        ctx = ctx,
-        executable = ctx.executable._cc_typesupport_generator,
-        mnemonic = "CcTypeSupportGeneration",
-        input_idls = input_idls,
-        input_type_descriptions = input_type_descriptions,
-        input_templates = ctx.attr._cc_typesupport_templates[DefaultInfo].files.to_list(),
-        templates_hdrs = [],
-        templates_srcs = ["{}__type_support.cpp"],
-        template_visibility_control = None,
-        additional = ["--typesupports=rosidl_typesupport_introspection_cpp"]
-    )
-
     # Generate the type support library for introspection
     cc_typesupport_introspection_hdrs, cc_typesupport_introspection_srcs, _ = generate_sources(
         ctx = ctx,
@@ -81,6 +67,19 @@ def _cc_aspect_impl(target, ctx):
         template_visibility_control = None,
     )
 
+    # Generate the type support library for fastrtps
+    cc_typesupport_fastrtps_hdrs, cc_typesupport_fastrtps_srcs, _ = generate_sources(
+        ctx = ctx,
+        executable = ctx.executable._cc_typesupport_fastrtps_generator,
+        mnemonic = "CcTypeSupportFastRTPSGeneration",
+        input_idls = input_idls,
+        input_type_descriptions = input_type_descriptions,
+        input_templates = ctx.attr._cc_typesupport_fastrtps_templates[DefaultInfo].files.to_list(),
+        templates_hdrs = ["detail/{}__rosidl_typesupport_fastrtps_cpp.hpp"],
+        templates_srcs = ["detail/dds_fastrtps/{}__type_support.cpp"],
+        template_visibility_control = ctx.file._cc_typesupport_fastrtps_visibility_template,
+    )
+
     # These deps will all have CcInfo providers. We need to combine the library
     # dependencies with the C generated headers and C++ generated headers.
     cc_info_deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep] 
@@ -90,8 +89,8 @@ def _cc_aspect_impl(target, ctx):
             cc_info_deps.extend([d for d in dep[RosCcBindingsInfo].cc_infos.to_list()])
 
     # Merge headers, sources and deps into a CcInfo provider.
-    hdrs = cc_hdrs + cc_typesupport_hdrs + cc_typesupport_introspection_hdrs
-    srcs = cc_srcs + cc_typesupport_srcs + cc_typesupport_introspection_srcs
+    hdrs = cc_hdrs + cc_typesupport_introspection_hdrs + cc_typesupport_fastrtps_hdrs
+    srcs = cc_srcs + cc_typesupport_introspection_srcs + cc_typesupport_fastrtps_srcs
     cc_info = generate_cc_info(
         ctx = ctx,
         name = "{}_cc".format(ctx.label.name),
@@ -145,19 +144,6 @@ cc_aspect = aspect(
         ),
 
         #########################################################################
-        # Type support generation ###############################################
-        #########################################################################
-        
-        "_cc_typesupport_generator": attr.label(
-            default = Label("@rosidl_typesupport_cpp//:cli"),
-            executable = True,
-            cfg = "exec",
-        ),
-        "_cc_typesupport_templates": attr.label(
-            default = Label("@rosidl_typesupport_cpp//:interface_templates"),
-        ),
-
-        #########################################################################
         # Introspection type support generation #################################
         #########################################################################
         
@@ -171,13 +157,30 @@ cc_aspect = aspect(
         ),
 
         #########################################################################
+        # FastRTPS type support generation ######################################
+        #########################################################################
+        
+        "_cc_typesupport_fastrtps_generator": attr.label(
+            default = Label("@rosidl_typesupport_fastrtps_cpp//:cli"),
+            executable = True,
+            cfg = "exec",
+        ),
+        "_cc_typesupport_fastrtps_templates": attr.label(
+            default = Label("@rosidl_typesupport_fastrtps_cpp//:interface_templates"),
+        ),
+        "_cc_typesupport_fastrtps_visibility_template": attr.label(
+            default = Label("@rosidl_typesupport_fastrtps_cpp//:resource/rosidl_typesupport_fastrtps_cpp__visibility_control.h.in"),
+            allow_single_file = True,
+        ),
+
+        #########################################################################
         # Dependencies ##########################################################
         #########################################################################
         
         "_cc_deps": attr.label_list(
             default = [
                 Label("@rosidl_runtime_cpp"),
-                Label("@rosidl_typesupport_cpp"),
+                Label("@rosidl_typesupport_fastrtps_cpp"),
                 Label("@rosidl_typesupport_introspection_cpp"),
             ],
             providers = [CcInfo],

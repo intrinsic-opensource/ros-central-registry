@@ -1,0 +1,22 @@
+// SPDX-FileCopyrightText: 2016 Philippe Proulx <pproulx@efficios.com>
+// SPDX-License-Identifier: CC-BY-4.0
+//
+COPYRIGHTS
+----------
+This {object-type} is part of the LTTng-UST project.
+
+This {object-type} is distributed under the
+http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html[GNU Lesser
+General Public License, version 2.1]. See the
+https://github.com/lttng/lttng-ust/blob/v{lttng_version}/COPYING[`COPYING`] file
+for more details.
+
+
+THANKS
+------
+Thanks to Ericsson for funding this work, providing real-life use cases,
+and testing.
+
+Special thanks to Michel Dagenais and the
+http://www.dorsal.polymtl.ca/[DORSAL laboratory] at École Polytechnique
+de Montréal for the LTTng journey.

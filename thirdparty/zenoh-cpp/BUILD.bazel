@@ -1,0 +1,39 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+load(":tools.bzl", "multi_test")
+
+cc_library(
+    name = "zenoh-cpp",
+    hdrs = glob(["include/**"]),
+    includes = ["include"],
+    defines = ["ZENOHCXX_ZENOHC"],
+    cxxopts = ["-Wsign-compare"],
+    deps = ["@zenoh-c"],
+    visibility = ["//visibility:public"],
+)
+
+multi_test(
+    size = "small",
+    names = [
+        "build/warnings",
+        "universal/bytes",
+        "universal/closures",
+        "universal/details",
+        "universal/network/keyexpr",
+        "universal/network/liveliness",
+        "universal/network/pub_sub",
+        "universal/network/queryable_get",
+        "universal/serialization",
+        "zenohc/advanced_pub_sub",
+        "zenohc/config",
+        "zenohc/shm_api",
+    ],
+    cxxopts = [
+        "-Wno-parentheses",
+        "-Wno-sign-compare",
+        "-Wno-unused-variable"
+    ],
+    deps = [
+        ":zenoh-cpp",
+    ],
+)

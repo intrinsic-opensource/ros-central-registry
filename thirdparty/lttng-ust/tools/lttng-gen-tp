@@ -1,0 +1,315 @@
+#!/usr/bin/env python
+#
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# Copyright (C) 2012 Yannick Brosseau <yannick.brosseau@gmail.com>
+
+from __future__ import print_function
+import sys
+import getopt
+import re
+import os
+import subprocess
+
+
+class Usage(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+
+class HeaderFile:
+    HEADER_TPL = """
+#undef LTTNG_UST_TRACEPOINT_PROVIDER
+#define LTTNG_UST_TRACEPOINT_PROVIDER {providerName}
+
+#undef LTTNG_UST_TRACEPOINT_INCLUDE
+#define LTTNG_UST_TRACEPOINT_INCLUDE "./{headerFilename}"
+
+#if !defined({includeGuard}) || defined(LTTNG_UST_TRACEPOINT_HEADER_MULTI_READ)
+#define {includeGuard}
+
+#include <lttng/tracepoint.h>
+
+"""
+    FOOTER_TPL = """
+#endif /* {includeGuard} */
+
+#include <lttng/tracepoint-event.h>
+"""
+
+    def __init__(self, filename, template):
+        self.outputFilename = filename
+        self.template = template
+
+    def write(self):
+        outputFile = open(self.outputFilename, "w")
+        # Include guard macro will be created by uppercasing the filename and
+        # replacing all non alphanumeric characters with '_'
+        includeGuard = re.sub('[^0-9a-zA-Z]', '_', self.outputFilename.upper())
+
+        outputFile.write(HeaderFile.HEADER_TPL.format(providerName=self.template.domain,
+                                           includeGuard=includeGuard,
+                                           headerFilename=self.outputFilename))
+        outputFile.write(self.template.text)
+        outputFile.write(HeaderFile.FOOTER_TPL.format(includeGuard=includeGuard))
+        outputFile.close()
+
+
+class CFile:
+    FILE_TPL = """
+#define LTTNG_UST_TRACEPOINT_CREATE_PROBES
+/*
+ * The header containing our LTTNG_UST_TRACEPOINT_EVENTs.
+ */
+#define LTTNG_UST_TRACEPOINT_DEFINE
+#include "{headerFilename}"
+"""
+
+    def __init__(self, filename, template):
+        self.outputFilename = filename
+        self.template = template
+
+    def write(self):
+        outputFile = open(self.outputFilename, "w")
+
+        headerFilename = self.outputFilename
+        if headerFilename.endswith(".c"):
+            headerFilename = headerFilename[:-2] + ".h"
+
+        outputFile.write(CFile.FILE_TPL.format(
+                                           headerFilename=headerFilename))
+        outputFile.close()
+
+
+class ObjFile:
+    def __init__(self, filename, template):
+        self.outputFilename = filename
+        self.template = template
+
+    def _detectCC(self):
+        cc = ""
+        if 'CC' in os.environ:
+            cc = os.environ['CC']
+            try:
+                subprocess.call(cc.split(),
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+            except OSError as msg:
+                print("Invalid CC environment variable")
+                cc = ""
+
+        else:
+            # Try c first, if that fails try gcc
+            try:
+                useCC = True
+                subprocess.call("cc",
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+            except OSError as msg:
+                useCC = False
+            if useCC:
+                cc = "cc"
+
+            else:
+                try:
+                    useGCC = True
+                    subprocess.call("gcc",
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE)
+                except OSError as msg:
+                    useGCC = False
+                if useGCC:
+                    cc = "gcc"
+        return cc
+
+    def write(self):
+        cFilename = self.outputFilename
+        if cFilename.endswith(".o"):
+            cFilename = cFilename[:-2] + ".c"
+
+        cc = self._detectCC()
+        if cc == "":
+            raise RuntimeError("No C Compiler detected")
+        if 'CPPFLAGS' in os.environ:
+            cppflags = " " + os.environ['CPPFLAGS']
+        else:
+            cppflags = ""
+        if 'CFLAGS' in os.environ:
+            cflags = " " + os.environ['CFLAGS']
+        else:
+            cflags = ""
+
+        command = cc + " -c" + cppflags + cflags + " -I. -o " + self.outputFilename + " " + cFilename
+        if verbose:
+            print("Compile command: " + command)
+        subprocess.call(command.split())
+
+
+class TemplateFile:
+    def __init__(self, filename):
+        self.domain = ""
+        self.inputFilename = filename
+        self.parseTemplate()
+
+    def parseTemplate(self):
+        f = open(self.inputFilename, "r")
+
+        self.text = f.read()
+
+        # Remove # comments (from input and output file) but keep
+        # #include in the output file
+        removeComments = re.compile("#[^include].*$", flags=re.MULTILINE)
+        self.text = removeComments.sub("", self.text)
+        # Remove #include directive from the parsed text
+        removePreprocess = re.compile("#.*$", flags=re.MULTILINE)
+        noPreprocess = removePreprocess.sub("", self.text)
+        # Remove // comments
+        removeLineComment = re.compile(r"//.*$", flags=re.MULTILINE)
+        nolinecomment = removeLineComment.sub("", noPreprocess)
+        # Remove all spaces and lines
+        cleantext = re.sub(r"\s*", "", nolinecomment)
+        # Remove multine C style comments
+        nocomment = re.sub(r"/\*.*?\*/", "", cleantext)
+        entries = re.split("^LTTNG_UST_TRACEPOINT_.*?", nocomment)
+
+        for entry in entries:
+            if entry != '':
+                decomp = re.findall(r"(\w*?)\((\w*?),(\w*?),", entry)
+                typea = decomp[0][0]
+                domain = decomp[0][1]
+                name = decomp[0][2]
+
+                if self.domain == "":
+                    self.domain = domain
+                else:
+                    if self.domain != domain:
+                        print("Warning: different domain provided (%s,%s)" % (self.domain, domain))
+
+
+verbose = False
+
+usage = """
+ lttng-gen-tp - Generate the LTTng-UST header and source based on a simple template
+
+ usage: lttng-gen-tp TEMPLATE_FILE [-o OUTPUT_FILE][-o OUTPUT_FILE]
+
+ If no OUTPUT_FILE is given, the .h and .c file will be generated.
+ (The basename of the template file with be used for the generated file.
+  for example sample.tp will generate sample.h, sample.c and sample.o)
+
+ When using the -o option, the OUTPUT_FILE must end with either .h, .c or .o
+ The -o option can be repeated multiple times.
+
+ The template file must contains LTTNG_UST_TRACEPOINT_EVENT and LTTNG_UST_TRACEPOINT_LOGLEVEL
+ as per defined in the lttng/tracepoint.h file.
+ See the lttng-ust(3) man page for more details on the format.
+"""
+
+
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv
+
+    try:
+        try:
+            opts, args = getopt.gnu_getopt(argv[1:], "ho:av", ["help", "verbose"])
+        except getopt.error as msg:
+            raise Usage(msg)
+
+    except Usage as err:
+        print(err.msg, file=sys.stderr)
+        print("for help use --help", file=sys.stderr)
+        return 2
+
+    outputNames = []
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            print(usage)
+            return(0)
+        if o in ("-o", ""):
+            outputNames.append(a)
+        if o in ("-a", ""):
+            all = True
+        if o in ("-v", "--verbose"):
+            global verbose
+            verbose = True
+    try:
+        if len(args) == 0:
+            raise Usage("No template file given")
+
+    except Usage as err:
+        print(err.msg, file=sys.stderr)
+        print("for help use --help", file=sys.stderr)
+        return 2
+
+    doCFile = None
+    doHeader = None
+    doObj = None
+    headerFilename = None
+    cFilename = None
+    objFilename = None
+
+    if len(outputNames) > 0:
+        if len(args) > 1:
+            print("Cannot process more than one input if you specify an output")
+            return(3)
+
+        for outputName in outputNames:
+            if outputName[-2:] == ".h":
+                doHeader = True
+                headerFilename = outputName
+            elif outputName[-2:] == ".c":
+                doCFile = True
+                cFilename = outputName
+            elif outputName[-2:] == ".o":
+                doObj = True
+                objFilename = outputName
+            else:
+                print("output file type unsupported")
+                return(4)
+    else:
+        doHeader = True
+        doCFile = True
+        doObj = True
+
+    # process arguments
+    for arg in args:
+        if arg[-3:] != ".tp":
+                print(arg + " does not end in .tp. Skipping.")
+                continue
+
+        tpl = None
+        try:
+            tpl = TemplateFile(arg)
+        except IOError as args:
+            print("Cannot read input file " + args.filename + " " + args.strerror)
+            return -1
+        try:
+            if doHeader:
+                if headerFilename:
+                    curFilename = headerFilename
+                else:
+                    curFilename = re.sub(r"\.tp$", ".h", arg)
+                doth = HeaderFile(curFilename, tpl)
+                doth.write()
+            if doCFile:
+                if cFilename:
+                    curFilename = cFilename
+                else:
+                    curFilename = re.sub(r"\.tp$", ".c", arg)
+                dotc = CFile(curFilename, tpl)
+                dotc.write()
+            if doObj:
+                if objFilename:
+                    curFilename = objFilename
+                else:
+                    curFilename = re.sub(r"\.tp$", ".o", arg)
+                dotobj = ObjFile(curFilename, tpl)
+                dotobj.write()
+        except IOError as args:
+            print("Cannot write output file " + args.filename + " " + args.strerror)
+            return -1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

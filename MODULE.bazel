@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,21 +18,26 @@ module(
     compatibility_level = 1,
 )
 
-# Python
+# System
 
+bazel_dep(name = "hermetic_cc_toolchain", version = "4.0.1")
 bazel_dep(name = "rules_cc", version = "0.1.4")
 bazel_dep(name = "rules_python", version = "1.5.1")
+bazel_dep(name = "rules_rust", version = "0.63.0")
 
-python = use_extension("@rules_python//python/extensions:python.bzl", "python")
-python.toolchain(
-    python_version = "3.12",
-    is_default = True,
-)
+# Third party
 
-# Modules
+bazel_dep(name = "liburcu", version = "0.0.0")
+bazel_dep(name = "lttng-ust", version = "0.0.0")
+bazel_dep(name = "mimick", version = "0.0.0")
+bazel_dep(name = "zenoh-c", version = "0.0.0")
+bazel_dep(name = "zenoh-cpp", version = "0.0.0")
+
+# ROS
 
 bazel_dep(name = "ament_index_cpp", version = "0.0.0")
 bazel_dep(name = "ament_index_python", version = "0.0.0")
+bazel_dep(name = "osrf_testing_tools_cpp", version = "0.0.0")
 bazel_dep(name = "rcutils", version = "0.0.0")
 bazel_dep(name = "rcpputils", version = "0.0.0")
 bazel_dep(name = "rpyutils", version = "0.0.0")
@@ -51,8 +55,11 @@ bazel_dep(name = "rosidl_runtime_py", version = "0.0.0")
 bazel_dep(name = "rosidl_typesupport_interface", version = "0.0.0")
 bazel_dep(name = "rosidl_typesupport_c", version = "0.0.0")
 bazel_dep(name = "rosidl_typesupport_cpp", version = "0.0.0")
+bazel_dep(name = "rosidl_typesupport_fastrtps_c", version = "0.0.0")
+bazel_dep(name = "rosidl_typesupport_fastrtps_cpp", version = "0.0.0")
 bazel_dep(name = "rosidl_typesupport_introspection_c", version = "0.0.0")
 bazel_dep(name = "rosidl_typesupport_introspection_cpp", version = "0.0.0")
+bazel_dep(name = "rmw", version = "0.0.0")
 
 bazel_dep(name = "action_msgs", version = "2.4.1")
 bazel_dep(name = "builtin_interfaces", version = "2.4.1")
@@ -67,8 +74,17 @@ bazel_dep(name = "test_interface_files", version = "0.14.1")
 bazel_dep(name = "test_msgs", version = "2.4.1")
 bazel_dep(name = "unique_identifier_msgs", version = "2.8.0")
 
+# Overrides
+
+local_path_override(module_name = "liburcu", path = "./thirdparty/liburcu")
+local_path_override(module_name = "lttng-ust", path = "./thirdparty/lttng-ust")
+local_path_override(module_name = "mimick", path = "./thirdparty/mimick")
+local_path_override(module_name = "zenoh-c", path = "./thirdparty/zenoh-c")
+local_path_override(module_name = "zenoh-cpp", path = "./thirdparty/zenoh-cpp")
+
 local_path_override(module_name = "ament_index_cpp", path = "./modules/ament_index_cpp")
 local_path_override(module_name = "ament_index_python", path = "./modules/ament_index_python")
+local_path_override(module_name = "osrf_testing_tools_cpp", path = "./modules/osrf_testing_tools_cpp")
 local_path_override(module_name = "rcutils", path = "./modules/rcutils")
 local_path_override(module_name = "rcpputils", path = "./modules/rcpputils")
 local_path_override(module_name = "rpyutils", path = "./modules/rpyutils")
@@ -86,6 +102,8 @@ local_path_override(module_name = "rosidl_runtime_py", path = "./modules/rosidl_
 local_path_override(module_name = "rosidl_typesupport_interface", path = "./modules/rosidl_typesupport_interface")
 local_path_override(module_name = "rosidl_typesupport_c", path = "./modules/rosidl_typesupport_c")
 local_path_override(module_name = "rosidl_typesupport_cpp", path = "./modules/rosidl_typesupport_cpp")
+local_path_override(module_name = "rosidl_typesupport_fastrtps_c", path = "./modules/rosidl_typesupport_fastrtps_c")
+local_path_override(module_name = "rosidl_typesupport_fastrtps_cpp", path = "./modules/rosidl_typesupport_fastrtps_cpp")
 local_path_override(module_name = "rosidl_typesupport_introspection_c", path = "./modules/rosidl_typesupport_introspection_c")
 local_path_override(module_name = "rosidl_typesupport_introspection_cpp", path = "./modules/rosidl_typesupport_introspection_cpp")
 
@@ -101,3 +119,22 @@ local_path_override(module_name = "std_srvs", path = "./modules/std_srvs")
 local_path_override(module_name = "test_interface_files", path = "./modules/test_interface_files")
 local_path_override(module_name = "test_msgs", path = "./modules/test_msgs")
 local_path_override(module_name = "unique_identifier_msgs", path = "./modules/unique_identifier_msgs")
+local_path_override(module_name = "rmw", path = "./modules/rmw")
+
+# Toolchain configuration
+
+# This breaks cc_test: https://github.com/ziglang/zig/issues/19699
+# toolchains = use_extension("@hermetic_cc_toolchain//toolchain:ext.bzl", "toolchains")
+# use_repo(toolchains, "zig_sdk")
+# register_toolchains(
+#     "@zig_sdk//toolchain:linux_amd64_gnu.2.37",
+#     "@zig_sdk//toolchain:linux_arm64_gnu.2.37",
+# )
+
+# Python configuration
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.12",
+    is_default = True,
+)
