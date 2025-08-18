@@ -1,0 +1,256 @@
+
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Imports
+
+load("@ros//:defs.bzl", "ros_interface")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# Interfaces
+
+ros_interface(
+    name = "msg__Gid",
+    src = "msg/Gid.msg",
+)
+
+ros_interface(
+    name = "msg__NodeEntitiesInfo",
+    src = "msg/NodeEntitiesInfo.msg",
+    deps = [
+        ":msg__Gid",
+    ],
+)
+
+ros_interface(
+    name = "msg__ParticipantEntitiesInfo",
+    src = "msg/ParticipantEntitiesInfo.msg",
+    deps = [
+        ":msg__Gid",
+        ":msg__NodeEntitiesInfo",
+    ],
+)
+
+cc_ros_library(
+    name = "cc_msgs",
+    deps = [
+        ":msg__Gid",
+        ":msg__NodeEntitiesInfo",
+        ":msg__ParticipantEntitiesInfo",
+    ],
+)
+
+# Libraries
+
+cc_library(
+    name = "rmw_dds_common",
+    srcs = glob(["src/**/*.cpp"]),
+    hdrs = glob([
+        "include/**/*.h",
+        "include/**/*.hpp"
+    ]),
+    includes = ["include"],
+    defines = [
+        "RCUTILS_ENABLE_FAULT_INJECTION",
+        "RMW_DDS_COMMON_BUILDING_LIBRARY",
+        "ROS_PACKAGE_NAME=rmw_dds_common",
+        "rmw_dds_common_library_EXPORTS",
+    ],
+    deps = [
+        "@rcpputils",
+        "@rcutils",
+        "@rmw",
+        "@rmw_security_common",
+        "@rosidl_runtime_c",
+        "@rosidl_runtime_cpp",
+        ":cc_msgs",
+    ],
+)
+
+# ROS C/C++ binaries
+
+cc_test(
+    name = "benchmark_graph_cache",
+    srcs = ["test/benchmark/benchmark_graph_cache.cpp"],
+    includes = ["include"],
+    deps = [
+        "@google_benchmark//:benchmark_main",
+        "@osrf_testing_tools_cpp//:memory_tools",
+        "@performance_test_fixture",
+        "@rcutils",
+        "@rmw",
+        "@rmw_security_common",
+        "@rosidl_runtime_c",
+        "@rosidl_runtime_cpp",
+        ":rmw_dds_common",
+    ],
+    timeout = "short"
+)
+
+[
+    cc_test(
+        name = test,
+        visibility = ["//visibility:public"],
+        srcs = [
+            "test/allocator_testing_utils.h",
+            "test/" + test + ".cpp"
+        ],
+        deps = [
+            "@googletest//:gtest",
+            "@googletest//:gtest_main",
+            "@osrf_testing_tools_cpp//:memory_tools",
+            "@rcpputils",
+            "@rcutils",
+            "@rmw",
+            "@rmw_security_common",
+            "@rosidl_runtime_c",
+            "@rosidl_runtime_cpp",
+            ":rmw_dds_common",
+        ],
+        timeout = "short"
+    )
+    for test in [
+        "test_gid_utils",
+        "test_graph_cache",
+        "test_qos",
+        "test_time_utils",
+    ]
+]
+
+# ros_cc_test(
+#     name = "test_graph_cache",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_graph_cache.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw_dds_common",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@osrf_testing_tools_cpp",
+#         "@osrf_testing_tools_cpp//:memory_tools",
+#         "@rcutils",
+#         "@rmw",
+#         "@rmw_security_common",
+#         "@rosidl_runtime_c",
+#         "@rosidl_runtime_cpp",
+#         "librmw_dds_common.so",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_qos",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_qos.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw_dds_common",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@osrf_testing_tools_cpp",
+#         "@osrf_testing_tools_cpp//:memory_tools",
+#         "@rcpputils",
+#         "@rcutils",
+#         "@rmw",
+#         "@rmw_security_common",
+#         "@rosidl_runtime_c",
+#         "@rosidl_runtime_cpp",
+#         "librmw_dds_common.so",
+#     ],
+# )
+
+# ros_cc_test(
+#     name = "test_time_utils",
+#     visibility = ["//visibility:public"],
+#     srcs = [
+#         "test/test_time_utils.cpp",
+#     ],
+#     cxxopts = [
+#         "-Wall",
+#         "-Wextra",
+#         "-Wpedantic",
+#         "-std=gnu++17",
+#     ],
+#     defines = [
+#         "RCUTILS_ENABLE_FAULT_INJECTION",
+#         "ROS_PACKAGE_NAME=rmw_dds_common",
+#     ],
+#     linkopts = [
+#         "-ldl",
+#         "-pthread",
+#     ],
+#     deps = [
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcutils",
+#         "@rmw",
+#         "@rmw_security_common",
+#         "@rosidl_runtime_c",
+#         "@rosidl_runtime_cpp",
+#         "librmw_dds_common.so",
+#     ],
+# )
+
+# # Package
+
+# ros_package(
+#     name = "rmw_dds_common",
+#     interfaces = [
+#         ":msg__Gid",
+#         ":msg__NodeEntitiesInfo",
+#         ":msg__ParticipantEntitiesInfo",
+#     ],
+#     libraries = [
+#         "rmw_dds_common_library",
+#     ],
+#     binaries = [
+#         "benchmark_graph_cache",
+#     ],
+#     tests = [
+#         "test_gid_utils",
+#         "test_graph_cache",
+#         "test_qos",
+#         "test_time_utils",
+#     ],
+# )
