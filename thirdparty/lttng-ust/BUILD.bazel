@@ -1,5 +1,7 @@
 load("@rules_foreign_cc//foreign_cc:defs.bzl", "configure_make")
 
+package(default_visibility = ["//visibility:public"])
+
 LIBRARY_TARGETS = [
     "lttng-ust-common",
     "lttng-ust-ctl",
@@ -14,10 +16,13 @@ LIBRARY_TARGETS = [
     "lttng-ust",
 ]
 
+EXECUTABLE_TARGETS = [
+    "lttng-gen-tp"
+]
+
 filegroup(
     name = "all",
     srcs = glob(["**"], exclude=["BUILD.bazel", "MODULE.bazel"]),
-    visibility = ["//visibility:public"],
 )
 
 configure_make(
@@ -33,26 +38,47 @@ configure_make(
     deps = [
         "@liburcu",
     ],
-    out_binaries = ["lttng-gen-tp"],
+    out_binaries = EXECUTABLE_TARGETS,
     out_shared_libs = ["lib" + lib + ".so" for lib in LIBRARY_TARGETS],
-    visibility = ["//visibility:public"],
 )
 
-filegroup(
-    name = "lttng-gen-tp",
-    output_group = "lttng-gen-tp",
-    srcs = [":lttng-ust-project"],
-)
+# Extract the binaries
+
+# [
+#     filegroup(
+#         name = pkg + "_bin",
+#         output_group = pkg,
+#         srcs = [":lttng-ust-project"],
+#     ) 
+#     for pkg in EXECUTABLE_TARGETS
+# ]
+
+# [
+#     cc_binary(
+#         name = pkg,
+#         srcs = [":" + pkg + "_bin"],
+#     )
+#     for pkg in EXECUTABLE_TARGETS
+# ]
+
+# Extract the executables
 
 [
     filegroup(
-        name = pkg,
+        name = pkg + "_lib",
         output_group = "lib" + pkg + ".so",
         srcs = [":lttng-ust-project"],
     )
     for pkg in LIBRARY_TARGETS
 ]
 
+[
+    cc_library(
+        name = pkg,
+        srcs = [":" + pkg + "_lib"],
+    )
+    for pkg in LIBRARY_TARGETS
+]
 
 
 

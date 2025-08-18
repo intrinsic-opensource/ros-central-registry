@@ -27,6 +27,7 @@ bazel_dep(name = "rules_rust", version = "0.63.0")
 
 # Third party
 
+bazel_dep(name = "fastdds", version = "3.2.2")
 bazel_dep(name = "liburcu", version = "0.0.0")
 bazel_dep(name = "lttng-ust", version = "0.0.0")
 bazel_dep(name = "mimick", version = "0.0.0")
@@ -45,6 +46,8 @@ bazel_dep(name = "rpyutils", version = "0.0.0")
 bazel_dep(name = "ros", version = "0.0.0")
 bazel_dep(name = "rosidl_adapter", version = "0.0.0")
 bazel_dep(name = "rosidl_cli", version = "0.0.0")
+bazel_dep(name = "rosidl_dynamic_typesupport", version = "0.0.0")
+bazel_dep(name = "rosidl_dynamic_typesupport_fastrtps", version = "0.0.0")
 bazel_dep(name = "rosidl_generator_c", version = "0.0.0")
 bazel_dep(name = "rosidl_generator_cpp", version = "0.0.0")
 bazel_dep(name = "rosidl_generator_type_description", version = "0.0.0")
@@ -63,6 +66,9 @@ bazel_dep(name = "rosidl_typesupport_introspection_cpp", version = "0.0.0")
 bazel_dep(name = "rmw", version = "0.0.0")
 bazel_dep(name = "rmw_security_common", version = "0.0.0")
 bazel_dep(name = "rmw_dds_common", version = "0.0.0")
+bazel_dep(name = "rmw_fastrtps_cpp", version = "0.0.0")
+bazel_dep(name = "rmw_fastrtps_shared_cpp", version = "0.0.0")
+bazel_dep(name = "tracetools", version = "0.0.0")
 
 bazel_dep(name = "action_msgs", version = "2.4.1")
 bazel_dep(name = "builtin_interfaces", version = "2.4.1")
@@ -79,6 +85,7 @@ bazel_dep(name = "unique_identifier_msgs", version = "2.8.0")
 
 # Overrides
 
+local_path_override(module_name = "fastdds", path = "./thirdparty/fastdds")
 local_path_override(module_name = "liburcu", path = "./thirdparty/liburcu")
 local_path_override(module_name = "lttng-ust", path = "./thirdparty/lttng-ust")
 local_path_override(module_name = "mimick", path = "./thirdparty/mimick")
@@ -95,6 +102,8 @@ local_path_override(module_name = "rpyutils", path = "./modules/rpyutils")
 local_path_override(module_name = "ros", path = "./modules/ros")
 local_path_override(module_name = "rosidl_adapter", path = "./modules/rosidl_adapter")
 local_path_override(module_name = "rosidl_cli", path = "./modules/rosidl_cli")
+local_path_override(module_name = "rosidl_dynamic_typesupport", path = "./modules/rosidl_dynamic_typesupport")
+local_path_override(module_name = "rosidl_dynamic_typesupport_fastrtps", path = "./modules/rosidl_dynamic_typesupport_fastrtps")
 local_path_override(module_name = "rosidl_generator_c", path = "./modules/rosidl_generator_c")
 local_path_override(module_name = "rosidl_generator_cpp", path = "./modules/rosidl_generator_cpp")
 local_path_override(module_name = "rosidl_generator_type_description", path = "./modules/rosidl_generator_type_description")
@@ -126,6 +135,9 @@ local_path_override(module_name = "unique_identifier_msgs", path = "./modules/un
 local_path_override(module_name = "rmw", path = "./modules/rmw")
 local_path_override(module_name = "rmw_security_common", path = "./modules/rmw_security_common")
 local_path_override(module_name = "rmw_dds_common", path = "./modules/rmw_dds_common")
+local_path_override(module_name = "rmw_fastrtps_cpp", path = "./modules/rmw_fastrtps_cpp")
+local_path_override(module_name = "rmw_fastrtps_shared_cpp", path = "./modules/rmw_fastrtps_shared_cpp")
+local_path_override(module_name = "tracetools", path = "./modules/tracetools")
 
 # Toolchain configuration
 

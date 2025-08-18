@@ -1,0 +1,48 @@
+# All settings not listed here will use the Doxygen default values.
+
+PROJECT_NAME           = "tracetools"
+PROJECT_NUMBER         = rolling
+PROJECT_BRIEF          = "Tracing tools and instrumentation for ROS 2"
+
+INPUT                  = ./include
+EXCLUDE                = ./include/tracetools/tp_call.h
+
+RECURSIVE              = YES
+OUTPUT_DIRECTORY       = doc_output
+
+EXTRACT_ALL            = YES
+SORT_MEMBER_DOCS       = NO
+
+GENERATE_LATEX         = NO
+
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = NO
+PREDEFINED             = \
+    "TRACETOOLS_LOCAL=" \
+    "TRACETOOLS_PUBLIC=" \
+    "TRACETOOLS_PUBLIC_TYPE=" \
+    "DOXYGEN_ONLY"
+
+EXCLUDE_SYMBOLS        = \
+    "_GET_MACRO" \
+    "_TRACEPOINT_NOARGS" \
+    "_TRACEPOINT_ARGS" \
+    "_DO_TRACEPOINT_NOARGS" \
+    "_DO_TRACEPOINT_ARGS" \
+    "_DECLARE_TRACEPOINT_NOARGS" \
+    "_DECLARE_TRACEPOINT_ARGS" \
+    "_GET_MACRO_TRACEPOINT" \
+    "_GET_MACRO_DO_TRACEPOINT" \
+    "_GET_MACRO_DECLARE_TRACEPOINT" \
+    "_DECLARE_TRACEPOINT" \
+    "TRACETOOLS_TRACEPOINT" \
+    "TRACETOOLS_TRACEPOINT_ENABLED" \
+    "TRACETOOLS_DO_TRACEPOINT" \
+    "tracetools::detail*"
+
+# Tag files that do not exist will produce a warning and cross-project linking will not work.
+TAGFILES += "../../../../../doxygen_tag_files/cppreference-doxygen-web.tag.xml=http://en.cppreference.com/w/"
+# Uncomment to generate tag files for cross-project linking.
+#   (path relative to workspace dir: doxygen_tag_files/$PACKAGE_NAME.tag)
+#GENERATE_TAGFILE = "../../../../../doxygen_tag_files/tracetools.tag"

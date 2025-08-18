@@ -16,7 +16,7 @@
 # Package information
         
 module(
-    name = "rmw_fastrtps_cpp",
+    name = "rmw_fastrtps_shared_cpp",
     version = "9.4.1",
     compatibility_level = 1,
 )
@@ -27,17 +27,13 @@ bazel_dep(name = "rules_cc", version = "0.1.4")
 
 bazel_dep(name = "fastcdr", version = "2.2.2")
 bazel_dep(name = "fastdds", version = "3.1.1.bcr.1")
-
 bazel_dep(name = "osrf_testing_tools_cpp", version = "2.3.0")
 bazel_dep(name = "rcpputils", version = "2.14.2")
 bazel_dep(name = "rcutils", version = "7.0.0")
 bazel_dep(name = "rmw_dds_common", version = "4.0.0")
-bazel_dep(name = "rmw_fastrtps_shared_cpp", version = "9.4.1")
+bazel_dep(name = "rmw_security_common", version = "7.9.0")
 bazel_dep(name = "rmw", version = "7.9.0")
-bazel_dep(name = "rosidl_dynamic_typesupport_fastrtps", version = "9.4.1")
-bazel_dep(name = "rosidl_dynamic_typesupport", version = "9.4.1")
-bazel_dep(name = "rosidl_runtime_c", version = "9.4.1")
-bazel_dep(name = "rosidl_typesupport_fastrtps_c", version = "9.4.1")
-bazel_dep(name = "rosidl_typesupport_fastrtps_cpp", version = "9.4.1")
-bazel_dep(name = "test_msgs", version = "2.4.1")
+bazel_dep(name = "rosidl_dynamic_typesupport", version = "7.9.0")
+bazel_dep(name = "rosidl_typesupport_introspection_c", version = "7.9.0")
+bazel_dep(name = "rosidl_typesupport_introspection_cpp", version = "7.9.0")
 bazel_dep(name = "tracetools", version = "8.8.0")
