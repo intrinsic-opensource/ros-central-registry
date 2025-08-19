@@ -90,8 +90,8 @@ cc_library(
         "-fPIC",
         "-std=gnu++17",
     ],
-    defines = [
-        "ROS_PACKAGE_NAME=rcpputils",
+    local_defines = [
+        "ROS_PACKAGE_NAME=\\\"rcpputils\\\"",
     ],
     deps = [
         "@rcutils"

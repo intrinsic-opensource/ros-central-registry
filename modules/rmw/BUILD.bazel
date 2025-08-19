@@ -27,14 +27,15 @@ cc_library(
     srcs = glob(["src/**"]),
     hdrs = glob(["include/**"]),
     includes = ["include"],
-    defines = [
+    local_defines = [
         "RCUTILS_ENABLE_FAULT_INJECTION",
-        "ROS_PACKAGE_NAME=rmw",
+        "ROS_PACKAGE_NAME=\\\"rmw\\\"",
         "rmw_EXPORTS",
     ],
     deps = [
         "@rcutils",
         "@rosidl_runtime_c",
+        "@rosidl_dynamic_typesupport",
     ],
 )
 
@@ -85,40 +86,3 @@ cc_library(
         "test_validate_node_name",
     ]
 ]
-
-
-# # Package
-
-# ros_package(
-#     name = "rmw",
-#     libraries = [
-#         "rmw",
-#     ],
-#     tests = [
-#         "test_allocators",
-#         "test_convert_rcutils_ret_to_rmw_ret",
-#         "test_discovery_options",
-#         "test_enclave",
-#         "test_event",
-#         "test_init",
-#         "test_init_options",
-#         "test_message_sequence",
-#         "test_names_and_types",
-#         "test_network_flow_endpoint",
-#         "test_network_flow_endpoint_array",
-#         "test_publisher_options",
-#         "test_qos_string_conversions",
-#         "test_sanity_checks",
-#         "test_security_options",
-#         "test_serialized_message",
-#         "test_subscription_content_filter_options",
-#         "test_subscription_options",
-#         "test_time",
-#         "test_topic_endpoint_info",
-#         "test_topic_endpoint_info_array",
-#         "test_types",
-#         "test_validate_full_topic_name",
-#         "test_validate_namespace",
-#         "test_validate_node_name",
-#     ],
-# )

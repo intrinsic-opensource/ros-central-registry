@@ -92,9 +92,9 @@ cc_library(
     includes = [
         "include",
     ],
-    defines = [
+    local_defines = [
         "RCUTILS_ENABLE_FAULT_INJECTION",
-        "ROS_PACKAGE_NAME=rcutils",
+        "ROS_PACKAGE_NAME=\\\"rcutils\\\"",
         "_GNU_SOURCE",
         "rcutils_EXPORTS",
     ],

@@ -282,9 +282,9 @@ ros_interface(
 #         "-Wpedantic",
 #         "-std=gnu++17",
 #     ],
-#     defines = [
+#     local_defines = [
 #         "RCUTILS_ENABLE_FAULT_INJECTION",
-#         "ROS_PACKAGE_NAME=sensor_msgs",
+#         "ROS_PACKAGE_NAME=\\\"sensor_msgs\\\"",
 #     ],
 #     linkopts = [
 #         "-ldl",

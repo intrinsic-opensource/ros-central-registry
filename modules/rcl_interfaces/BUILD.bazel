@@ -15,74 +15,79 @@
 
 # Imports
 
-load("@ros//:defs.bzl", "ros_interface", "ros_package")
+load("@ros//:defs.bzl", "ros_interface")
+
+package(default_visibility = ["//visibility:public"])
 
 # Interfaces
 
 ros_interface(
     name = "srv__DescribeParameters",
     src = "srv/DescribeParameters.srv",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__ParameterDescriptor",
+        # Services have implicit deps
+        "@service_msgs//:msg__ServiceEventInfo",
     ],
 )
 
 ros_interface(
     name = "msg__FloatingPointRange",
     src = "msg/FloatingPointRange.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "srv__GetLoggerLevels",
     src = "srv/GetLoggerLevels.srv",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__LoggerLevel",
+        # Services have implicit deps
+        "@service_msgs//:msg__ServiceEventInfo",
     ],
 )
 
 ros_interface(
     name = "srv__GetParameterTypes",
     src = "srv/GetParameterTypes.srv",
-    visibility = ["//visibility:public"],
+    deps = [
+        # Services have implicit deps
+        "@service_msgs//:msg__ServiceEventInfo",
+    ],
 )
 
 ros_interface(
     name = "srv__GetParameters",
     src = "srv/GetParameters.srv",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__ParameterValue",
+        # Services have implicit deps
+        "@service_msgs//:msg__ServiceEventInfo",
     ],
 )
 
 ros_interface(
     name = "msg__IntegerRange",
     src = "msg/IntegerRange.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "srv__ListParameters",
     src = "srv/ListParameters.srv",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__ListParametersResult",
+        # Services have implicit deps
+        "@service_msgs//:msg__ServiceEventInfo",
     ],
 )
 
 ros_interface(
     name = "msg__ListParametersResult",
     src = "msg/ListParametersResult.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Log",
     src = "msg/Log.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@builtin_interfaces//:msg__Time",
     ],
@@ -91,13 +96,11 @@ ros_interface(
 ros_interface(
     name = "msg__LoggerLevel",
     src = "msg/LoggerLevel.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Parameter",
     src = "msg/Parameter.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__ParameterValue",
     ],
@@ -106,7 +109,6 @@ ros_interface(
 ros_interface(
     name = "msg__ParameterDescriptor",
     src = "msg/ParameterDescriptor.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__FloatingPointRange",
         ":msg__IntegerRange",
@@ -116,7 +118,6 @@ ros_interface(
 ros_interface(
     name = "msg__ParameterEvent",
     src = "msg/ParameterEvent.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Parameter",
         "@builtin_interfaces//:msg__Time",
@@ -126,7 +127,6 @@ ros_interface(
 ros_interface(
     name = "msg__ParameterEventDescriptors",
     src = "msg/ParameterEventDescriptors.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__ParameterDescriptor",
     ],
@@ -135,83 +135,52 @@ ros_interface(
 ros_interface(
     name = "msg__ParameterType",
     src = "msg/ParameterType.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__ParameterValue",
     src = "msg/ParameterValue.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "srv__SetLoggerLevels",
     src = "srv/SetLoggerLevels.srv",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__LoggerLevel",
         ":msg__SetLoggerLevelsResult",
+        # Services have implicit deps
+        "@service_msgs//:msg__ServiceEventInfo",
     ],
 )
 
 ros_interface(
     name = "msg__SetLoggerLevelsResult",
     src = "msg/SetLoggerLevelsResult.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "srv__SetParameters",
     src = "srv/SetParameters.srv",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Parameter",
         ":msg__SetParametersResult",
+        # Services have implicit deps
+        "@service_msgs//:msg__ServiceEventInfo",
     ],
 )
 
 ros_interface(
     name = "srv__SetParametersAtomically",
     src = "srv/SetParametersAtomically.srv",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Parameter",
         ":msg__SetParametersResult",
+        # Services have implicit deps
+        "@service_msgs//:msg__ServiceEventInfo",
     ],
 )
 
 ros_interface(
     name = "msg__SetParametersResult",
     src = "msg/SetParametersResult.msg",
-    visibility = ["//visibility:public"],
-)
-
-# Package
-
-ros_package(
-    name = "rcl_interfaces",
-    interfaces = [
-        ":msg__FloatingPointRange",
-        ":msg__IntegerRange",
-        ":msg__ListParametersResult",
-        ":msg__Log",
-        ":msg__LoggerLevel",
-        ":msg__Parameter",
-        ":msg__ParameterDescriptor",
-        ":msg__ParameterEvent",
-        ":msg__ParameterEventDescriptors",
-        ":msg__ParameterType",
-        ":msg__ParameterValue",
-        ":msg__SetLoggerLevelsResult",
-        ":msg__SetParametersResult",
-        ":srv__DescribeParameters",
-        ":srv__GetLoggerLevels",
-        ":srv__GetParameterTypes",
-        ":srv__GetParameters",
-        ":srv__ListParameters",
-        ":srv__SetLoggerLevels",
-        ":srv__SetParameters",
-        ":srv__SetParametersAtomically",
-    ],
-    visibility = ["//visibility:public"],
 )

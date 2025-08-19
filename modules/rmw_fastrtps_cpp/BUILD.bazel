@@ -26,8 +26,8 @@ cc_library(
     hdrs = glob(["include/**/*.hpp", "include/**/*.h"]),
     srcs = glob(["src/**/*.hpp", "src/**/*.cpp"]),
     includes = ["include"],
-    defines = [
-        "ROS_PACKAGE_NAME=rmw_fastrtps_cpp",
+    local_defines = [
+        "ROS_PACKAGE_NAME=\\\"rmw_fastrtps_cpp\\\"",
     ],
     deps = [
         "@fastcdr",

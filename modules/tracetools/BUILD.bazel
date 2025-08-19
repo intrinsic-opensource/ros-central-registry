@@ -54,8 +54,8 @@ cc_library(
         "include/**/*.hpp"
     ]),
     includes = ["include"],
-    defines = [
-        "ROS_PACKAGE_NAME=tracetools",
+    local_defines = [
+        "ROS_PACKAGE_NAME=\\\"tracetools\\\"",
         "tracetools_EXPORTS",
     ],
     deps = [

@@ -64,10 +64,10 @@ cc_library(
         "include/**/*.hpp"
     ]),
     includes = ["include"],
-    defines = [
+    local_defines = [
         "RCUTILS_ENABLE_FAULT_INJECTION",
         "RMW_DDS_COMMON_BUILDING_LIBRARY",
-        "ROS_PACKAGE_NAME=rmw_dds_common",
+        "ROS_PACKAGE_NAME=\\\"rmw_dds_common\\\"",
         "rmw_dds_common_library_EXPORTS",
     ],
     deps = [

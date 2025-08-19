@@ -29,9 +29,8 @@ cc_library(
         "-fPIC",
         "-std=gnu++17",
     ],
-    defines = [
-        "AMENT_INDEX_CPP_BUILDING_DLL",
-        "ament_index_cpp_EXPORTS",
+    local_defines = [
+        "ROS_PACKAGE_NAME=\\\"ament_index_cpp\\\"",
     ],
     deps = ["@rules_cc//cc/runfiles"],
     visibility = ["//visibility:public"],

@@ -1,0 +1,63 @@
+name: Test libstatistics_collector
+on:
+  pull_request:
+  push:
+    branches:
+      - rolling
+  schedule:
+    # Run every hour. This helps detect flakiness,
+    # and broken external dependencies.
+    - cron:  '0 * * * *'
+
+jobs:
+  build_and_test_ubuntu:
+    runs-on: ubuntu-latest
+    container:
+      image: rostooling/setup-ros-docker:ubuntu-noble-latest
+    steps:
+    - uses: ros-tooling/action-ros-ci@v0.4
+      with:
+        package-name: libstatistics_collector
+        colcon-defaults: |
+          {
+            "build": {
+              "mixin": [
+                "coverage-gcc"
+              ]
+            }
+          }
+        target-ros2-distro: rolling
+    - uses: codecov/codecov-action@v5.4.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ros_ws/lcov/total_coverage.info
+        flags: unittests
+        name: codecov-umbrella
+        yml: ./codecov.yml
+        fail_ci_if_error: false
+    - uses: actions/upload-artifact@v4
+      with:
+        name: colcon-logs-${{ matrix.os }}
+        path: ros_ws/log
+
+  build_and_test_asan:
+    runs-on: ubuntu-latest
+    container:
+      image: rostooling/setup-ros-docker:ubuntu-noble-latest
+    steps:
+    - uses: ros-tooling/action-ros-ci@v0.4
+      with:
+        colcon-defaults: |
+          {
+            "build": {
+              "mixin": [
+                "asan-gcc"
+              ]
+            }
+          }
+        package-name: libstatistics_collector
+        target-ros2-distro: rolling
+    - uses: actions/upload-artifact@v4
+      with:
+        name: colcon-logs-ubuntu-asan
+        path: ros_ws/log

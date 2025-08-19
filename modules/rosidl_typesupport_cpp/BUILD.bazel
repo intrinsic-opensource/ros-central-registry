@@ -34,7 +34,9 @@ cc_library(
         "@rcpputils",
         "@rosidl_typesupport_c",
     ],
-    defines = ["ROS_PACKAGE_NAME=rosidl_typesupport_cpp"],
+    local_defines = [
+        "ROS_PACKAGE_NAME=\\\"rosidl_typesupport_cpp\\\""
+    ],
     includes = ["include"],
     visibility = ["//visibility:public"],
 )
