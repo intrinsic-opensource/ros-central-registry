@@ -85,7 +85,6 @@ bazel_dep(name = "unique_identifier_msgs", version = "2.8.0")
 
 # Overrides
 
-local_path_override(module_name = "fastdds", path = "./thirdparty/fastdds")
 local_path_override(module_name = "liburcu", path = "./thirdparty/liburcu")
 local_path_override(module_name = "lttng-ust", path = "./thirdparty/lttng-ust")
 local_path_override(module_name = "mimick", path = "./thirdparty/mimick")
