@@ -80,6 +80,22 @@ def _cc_aspect_impl(target, ctx):
         template_visibility_control = ctx.file._cc_typesupport_fastrtps_visibility_template,
     )
 
+    # Generate the type support library for protobuf
+    cc_typesupport_protobuf_hdrs, cc_typesupport_protobuf_srcs, _ = generate_sources(
+        ctx = ctx,
+        executable = ctx.executable._cc_typesupport_protobuf_generator,
+        mnemonic = "CcTypeSupportProtobufGeneration",
+        input_idls = input_idls,
+        input_type_descriptions = input_type_descriptions,
+        input_templates = ctx.attr._cc_typesupport_protobuf_templates[DefaultInfo].files.to_list(),
+        templates_hdrs = [
+            "{}__rosidl_typesupport_protobuf_cpp.hpp",
+            "{}__typeadapter_protobuf_cpp.hpp",
+        ],
+        templates_srcs = ["detail/protobuf_cpp/{}__type_support.cpp"],
+        template_visibility_control = ctx.file._cc_typesupport_protobuf_visibility_template,
+    )
+
     # These deps will all have CcInfo providers. We need to combine the library
     # dependencies with the C generated headers and C++ generated headers.
     cc_info_deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep] 
@@ -89,8 +105,8 @@ def _cc_aspect_impl(target, ctx):
             cc_info_deps.extend([d for d in dep[RosCcBindingsInfo].cc_infos.to_list()])
 
     # Merge headers, sources and deps into a CcInfo provider.
-    hdrs = cc_hdrs + cc_typesupport_introspection_hdrs + cc_typesupport_fastrtps_hdrs
-    srcs = cc_srcs + cc_typesupport_introspection_srcs + cc_typesupport_fastrtps_srcs
+    hdrs = cc_hdrs + cc_typesupport_introspection_hdrs + cc_typesupport_fastrtps_hdrs + cc_typesupport_protobuf_hdrs
+    srcs = cc_srcs + cc_typesupport_introspection_srcs + cc_typesupport_fastrtps_srcs + cc_typesupport_protobuf_srcs
     cc_info = generate_cc_info(
         ctx = ctx,
         name = "{}_cc".format(ctx.label.name),
@@ -174,6 +190,23 @@ cc_aspect = aspect(
         ),
 
         #########################################################################
+        # Protobuf type support generation ######################################
+        #########################################################################
+        
+        "_cc_typesupport_protobuf_generator": attr.label(
+            default = Label("@rosidl_typesupport_protobuf_cpp//:cli"),
+            executable = True,
+            cfg = "exec",
+        ),
+        "_cc_typesupport_protobuf_templates": attr.label(
+            default = Label("@rosidl_typesupport_protobuf_cpp//:interface_templates"),
+        ),
+        "_cc_typesupport_protobuf_visibility_template": attr.label(
+            default = Label("@rosidl_typesupport_protobuf_cpp//:resource/rosidl_typesupport_protobuf_cpp__visibility_control.h.in"),
+            allow_single_file = True,
+        ),
+
+        #########################################################################
         # Dependencies ##########################################################
         #########################################################################
         
@@ -182,6 +215,7 @@ cc_aspect = aspect(
                 Label("@rosidl_runtime_cpp"),
                 Label("@rosidl_typesupport_fastrtps_cpp"),
                 Label("@rosidl_typesupport_introspection_cpp"),
+                Label("@rosidl_typesupport_protobuf_cpp"),
             ],
             providers = [CcInfo],
         ),  

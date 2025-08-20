@@ -31,7 +31,7 @@
 @#######################################################################
 @
 @{
-from rosidl_cmake import convert_camel_case_to_lower_case_underscore
+from rosidl_pycommon import convert_camel_case_to_lower_case_underscore
 from rosidl_typesupport_protobuf import *
 
 include_directives = set()

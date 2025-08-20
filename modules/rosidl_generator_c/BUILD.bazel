@@ -15,6 +15,8 @@
 load("@ros//:defs.bzl", "ros_data")
 load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
+package(default_visibility = ["//visibility:public"])
+
 # Export the aspect for converting ROS interfaces to IDLs.
 exports_files(["defs.bzl"])
 
@@ -22,13 +24,11 @@ exports_files(["defs.bzl"])
 filegroup(
     name = "interface_templates",
     srcs = glob(["resource/**/*.em"]),
-    visibility = ["//visibility:public"],
 )
 
 # Template used for per-package visibility header generation.
 exports_files(
     srcs = ["resource/rosidl_generator_c__visibility_control.h.in"],
-    visibility = ["//visibility:public"],
 )
 
 # This is the python library that does the bulk of the work for converting
@@ -44,7 +44,6 @@ py_library(
         "@rosidl_parser",
         "@rosidl_pycommon",
     ],
-    visibility = ["//visibility:public"],
 )
 
 # The py_binary target does not accept files without the .py or .py3 suffix.
@@ -64,5 +63,4 @@ py_binary(
     main = ":bin/rosidl_generator_c.py",
     python_version = "PY3",
     deps = [":rosidl_generator_c"],
-    visibility = ["//visibility:public"],
 )

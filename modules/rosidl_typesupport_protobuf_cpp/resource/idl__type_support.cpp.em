@@ -32,7 +32,7 @@
 @
 @{
 from rosidl_typesupport_protobuf import typesupport_header, ros_message_header
-from rosidl_cmake import convert_camel_case_to_lower_case_underscore
+from rosidl_pycommon import convert_camel_case_to_lower_case_underscore
 
 include_directives = set()
 forward_declared_types = set()

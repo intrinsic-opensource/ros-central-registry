@@ -16,7 +16,7 @@
 #
 # ================================= Apache 2.0 =================================
 
-from rosidl_cmake import convert_camel_case_to_lower_case_underscore
+from rosidl_pycommon import convert_camel_case_to_lower_case_underscore
 
 # A postfix for the protobuf package name / the c++ namespace
 PROTO_PACKAGE_POSTFIX = 'pb'

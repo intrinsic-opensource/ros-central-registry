@@ -20,7 +20,7 @@
 @# Included from rosidl_typesupport_protobuf_c/resource/idl__type_support.c.em
 @{
 import rosidl_parser.parser as rosidl
-from rosidl_cmake import convert_camel_case_to_lower_case_underscore
+from rosidl_pycommon import convert_camel_case_to_lower_case_underscore
 from rosidl_parser.definition import *
 from rosidl_typesupport_protobuf import *
 

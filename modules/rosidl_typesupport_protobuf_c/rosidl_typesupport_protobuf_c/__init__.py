@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from rosidl_cmake import generate_files
+from rosidl_pycommon import generate_files
 
 
 def generate_typesupport_protobuf_c(generator_arguments_file):
     mapping = {
         'idl__rosidl_typesupport_protobuf_c.hpp.em': '%s__rosidl_typesupport_protobuf_c.hpp',
-        'idl__type_support.cpp.em': 'detail/%s__type_support.cpp',
+        'idl__type_support.cpp.em': 'detail/protobuf_c/%s__type_support.cpp',
     }
     generate_files(generator_arguments_file, mapping)
