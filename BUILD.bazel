@@ -20,12 +20,16 @@ load("@rosidl_generator_c//:defs.bzl", "c_ros_library")
 load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 
+package(default_visibility = ["//visibility:public"])
+
 # proto_ros_library(
 #     name = "example_ros_proto",
 #     deps = [
 #         "@std_msgs//:msg__String",
 #     ]
 # )
+
+# Intermediary artifact examples
 
 idl_ros_library(
     name = "example_ros_idl",
@@ -49,6 +53,8 @@ type_description_ros_library(
     ],
 )
 
+# C examples
+
 c_ros_library(
     name = "example_ros_c_msgs",
     deps = [
@@ -63,6 +69,15 @@ cc_binary(
     visibility = ["//visibility:public"],
 )
 
+cc_binary(
+    name = "example_proto_c",
+    srcs = ["src/example_proto.c"],
+    deps = [":example_ros_c_msgs"],
+    visibility = ["//visibility:public"],
+)
+
+# C++ examples
+
 cc_ros_library(
     name = "example_ros_cc_msgs",
     deps = [
@@ -73,6 +88,13 @@ cc_ros_library(
 cc_binary(
     name = "example_ros_cc",
     srcs = ["src/example_ros.cc"],
+    deps = [":example_ros_cc_msgs"],
+    visibility = ["//visibility:public"],
+)
+
+cc_binary(
+    name = "example_proto_cc",
+    srcs = ["src/example_proto.cc"],
     deps = [":example_ros_cc_msgs"],
     visibility = ["//visibility:public"],
 )

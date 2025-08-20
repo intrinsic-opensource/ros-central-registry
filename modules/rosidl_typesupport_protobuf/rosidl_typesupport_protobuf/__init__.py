@@ -94,11 +94,11 @@ def typesupport_header(package_name, interface_path):
 
 
 def visibility_control_header(package_name):
-    return f'{package_name}/{_TYPE_SUPPORT_NAME}__visibility_control.h'
+    return f'{package_name}/msg/{_TYPE_SUPPORT_NAME}__visibility_control.h'
 
 
 def adapter_visibility_control_header(package_name):
-    return f'{package_name}/rosidl_adapter_proto__visibility_control.h'
+    return f'{package_name}/msg/rosidl_adapter_proto__visibility_control.h'
 
 
 def ros_type_namespace(package_name, interface_path):
