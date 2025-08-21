@@ -17,6 +17,7 @@ load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect", "generate_sources", "generate_cc_info")
+load("@rosidl_adapter_proto//:defs.bzl", "RosProtoInfo", "proto_aspect")
 load("@rosidl_generator_type_description//:defs.bzl", "RosTypeDescriptionInfo", "type_description_aspect")
 
 RosCBindingsInfo = provider(
@@ -96,12 +97,14 @@ def _c_aspect_impl(target, ctx):
     # These deps will all have CcInfo providers.
     deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
     for dep in ctx.rule.attr.deps:
+        if RosProtoInfo in dep:
+            deps.extend([d for d in dep[RosProtoInfo].cc_infos.to_list()])
         if RosCBindingsInfo in dep:
             deps.extend([d for d in dep[RosCBindingsInfo].cc_infos.to_list()])
     
     # Merge headers, sources and deps into a CcInfo provider.
-    hdrs = c_hdrs + c_typesupport_introspection_hdrs + c_typesupport_fastrtps_hdrs # + c_typesupport_protobuf_hdrs
-    srcs = c_srcs + c_typesupport_introspection_srcs + c_typesupport_fastrtps_srcs # + c_typesupport_protobuf_srcs
+    hdrs = c_hdrs + c_typesupport_introspection_hdrs + c_typesupport_fastrtps_hdrs #+ c_typesupport_protobuf_hdrs
+    srcs = c_srcs + c_typesupport_introspection_srcs + c_typesupport_fastrtps_srcs #+ c_typesupport_protobuf_srcs
     cc_info = generate_cc_info(
         ctx = ctx,
         name = "{}_c".format(ctx.label.name),
@@ -224,6 +227,7 @@ c_aspect = aspect(
     required_aspect_providers = [
         [RosIdlInfo],
         [RosTypeDescriptionInfo],
+        [RosProtoInfo]
     ],
     provides = [RosCBindingsInfo],
 )
@@ -250,6 +254,7 @@ c_ros_library = rule(
         "deps": attr.label_list(
             aspects = [
                 idl_aspect,              # RosIdlInfo <- RosInterfaceInfo
+                proto_aspect,            # RosProtoInfo <- RosIdlInfo
                 type_description_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
                 c_aspect,                # CcInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
             ],

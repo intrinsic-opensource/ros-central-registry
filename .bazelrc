@@ -3,3 +3,6 @@ common --registry=https://bcr.bazel.build --registry=file:///%workspace%/registr
 
 # Don't allow etsts to access the network by default. 
 test --sandbox_default_allow_network=false
+
+# Build everything with C++1
+build --cxxopt=-std=c++17

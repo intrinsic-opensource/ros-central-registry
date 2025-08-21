@@ -33,7 +33,7 @@
 #endif
 
 
-inline bool HasFile(const google::protobuf::FileDescriptorSet & fset_, const std::string & fname_)
+inline bool HasFile(const google::protobuf::FileDescriptorSet & fset_, const std::basic_string_view<char> fname_)
 {
   for (auto findex = 0; findex < fset_.file_size(); ++findex) {
     if (fset_.file(findex).name() == fname_) {

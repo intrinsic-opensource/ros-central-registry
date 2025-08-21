@@ -17,6 +17,7 @@ load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect", "generate_sources", "generate_cc_info")
+load("@rosidl_adapter_proto//:defs.bzl", "RosProtoInfo", "proto_aspect")
 load("@rosidl_generator_c//:defs.bzl", "RosCBindingsInfo", "c_aspect")
 load("@rosidl_generator_type_description//:defs.bzl", "RosTypeDescriptionInfo", "type_description_aspect")
 
@@ -99,6 +100,7 @@ def _cc_aspect_impl(target, ctx):
     # These deps will all have CcInfo providers. We need to combine the library
     # dependencies with the C generated headers and C++ generated headers.
     cc_info_deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep] 
+    cc_info_deps.extend([d for d in target[RosProtoInfo].cc_infos.to_list()])
     cc_info_deps.extend([d for d in target[RosCBindingsInfo].cc_infos.to_list()])
     for dep in ctx.rule.attr.deps:
         if RosCcBindingsInfo in dep:
@@ -224,6 +226,7 @@ cc_aspect = aspect(
     required_aspect_providers = [
         [RosIdlInfo],
         [RosTypeDescriptionInfo],
+        [RosProtoInfo],
         [RosCBindingsInfo],
     ],
     provides = [RosCcBindingsInfo],
@@ -258,6 +261,7 @@ cc_ros_library = rule(
             aspects = [
                 idl_aspect,              # RosIdlInfo <- RosInterfaceInfo
                 type_description_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
+                proto_aspect,            # RosProtoInfo <- RosIdlInfo
                 c_aspect,                # RosCBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
                 cc_aspect,               # RosCcBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
             ],

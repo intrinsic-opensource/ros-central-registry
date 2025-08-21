@@ -69,12 +69,12 @@ def _proto_aspect_impl(target, ctx):
     arguments = [
         '--proto_path={}'.format("/".join(p.dirname.split("/")[:-2])) for p in proto_files
     ] + [
-        "--proto_path=.",
-        "--cpp_out=dllexport_decl=ROSIDL_ADAPTER_PROTO_PUBLIC__{}:.".format(package_name),
-        output_proto.path
+        "--proto_path={}".format("/".join(output_proto.dirname.split("/")[:-2])),
+        "--cpp_out={}".format("/".join(output_proto.path.split("/")[:-3])),
+        "/".join(output_proto.path.split("/")[-3:])
     ]
     ctx.actions.run(
-        executable = ctx.executable._protoc,
+        executable = ctx.executable._proto_compiler,
         arguments = arguments,
         inputs = proto_files + [output_proto],
         outputs = [output_proto_h, output_proto_cc],
@@ -83,7 +83,7 @@ def _proto_aspect_impl(target, ctx):
     )
 
     # These deps will all have CcInfo providers.
-    deps = []
+    deps = [dep[CcInfo] for dep in ctx.attr._proto_deps if CcInfo in dep]
     for dep in ctx.rule.attr.deps:
         if RosProtoInfo in dep:
             deps.extend([d for d in dep[RosProtoInfo].cc_infos.to_list()])
@@ -132,23 +132,42 @@ proto_aspect = aspect(
     fragments = ["cpp"],
     toolchains = use_cc_toolchain(),
     attrs = {
+        #########################################################################
+        # Proto generation ######################################################
+        #########################################################################
+        
         "_proto_generator": attr.label(
             default = Label("//:cli"),
             executable = True,
             cfg = "exec",
         ),
+        
         "_proto_templates": attr.label(
             default = Label("//:interface_templates"),
         ),
+        
         "_proto_visibility_template": attr.label(
             default = Label("//:resource/rosidl_adapter_proto__visibility_control.h.in"),
             allow_single_file = True,
         ),
-        "_protoc": attr.label(
+        
+        #########################################################################
+        # C++ bindings ##########################################################
+        #########################################################################
+
+        "_proto_compiler": attr.label(
             default = Label("@protobuf//:protoc"),
             executable = True,
             cfg = "exec"
         ),
+
+        "_proto_deps": attr.label_list(
+            default = [
+                Label("@protobuf"),
+            ],
+            providers = [CcInfo],
+        ),
+
     },
     required_providers = [RosInterfaceInfo],
     required_aspect_providers = [RosIdlInfo],
@@ -159,6 +178,7 @@ def _proto_ros_library_impl(ctx):
     files = []
     for dep in ctx.attr.deps:
         files.extend(dep[RosProtoInfo].protos.to_list())
+        files.extend(dep[RosProtoInfo].cc_files.to_list())
     return [
         DefaultInfo(files = depset(files)),
     ]
