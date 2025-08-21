@@ -174,11 +174,16 @@ def generate_sources(
     templates_hdrs,
     templates_srcs,
     template_visibility_control = None,
-    additional = []
+    additional = [],
+    message_is_pascal_case = True
 ):
     # Get information about this package
     package_name = ctx.label.repo_name.removesuffix("+")
     message_type, message_name, message_code = message_info_from_target(ctx.label.name)
+
+    # Some message generation retains the message case.
+    if not message_is_pascal_case:
+        message_code = message_name
 
     # The first output file is the JSON file used as args to the generator.
     input_args = ctx.actions.declare_file(

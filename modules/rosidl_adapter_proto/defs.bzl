@@ -16,7 +16,7 @@
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect",
-    "message_info_from_target", "idl_tuple_from_path", "generate_cc_info")
+    "message_info_from_target", "idl_tuple_from_path", "generate_sources", "generate_cc_info")
 
 RosProtoInfo = provider(
     "Encapsulates protobuf information generated for an underlying IDL.", 
@@ -38,52 +38,18 @@ def _proto_aspect_impl(target, ctx):
     package_name = ctx.label.repo_name.removesuffix("+")
     message_type, message_name, message_code = message_info_from_target(ctx.label.name)
 
-    # This is the single file we'll be generating as part of this aspect call.
-    output_proto = ctx.actions.declare_file("{}/{}/{}.proto".format(package_name, message_type, message_name))
-    output_proto_h = ctx.actions.declare_file("{}/{}/{}.pb.h".format(package_name, message_type, message_name))
-    output_proto_cc = ctx.actions.declare_file("{}/{}/{}.pb.cc".format(package_name, message_type, message_name))
-
-    # However, generating the single file above requires that we generate IDLs
-    # and JSONs for all message that this one depends on. THe way to do this
-    # is to recursively call up the tree storing depsets as we go...
-    input_idls = target[RosIdlInfo].idls.to_list()
-    input_templates = ctx.attr._interface_templates[DefaultInfo].files.to_list()
-
-    # Now add this package's IDL
-    idl_tuples = []
-    include_paths = {}
-    for idl in input_idls:
-        msg_package_name, msg_package_base = pkg_name_and_base_from_path(idl.path)
-        include_paths[msg_package_name] = msg_package_base
-        idl_tuples.append(idl_tuple_from_path(idl.path))
-
-    # The first output file is the JSON file used as args to the generator.
-    input_args = ctx.actions.declare_file(
-        "{}/{}_{}_IdlToProtobuf.json".format(package_name, message_type, message_name))
-
-    # Generate the request.
-    ctx.actions.write(
-        input_args,
-        json.encode(
-            struct(
-                package_name = package_name,
-                idl_tuples = idl_tuples,
-                output_dir = input_args.dirname,
-                template_dir = input_templates[0].dirname,
-                include_paths = ["{}:{}".format(k,v) for k, v in include_paths.items()],
-                target_dependencies = [],
-            )
-        )
-    )
-
-    # Call rosidl_adapter_proto CLI to generate the proto file from the IDL file.
-    ctx.actions.run(
-        inputs = input_idls + input_templates + [input_args],
-        outputs = [output_proto],
-        executable = ctx.executable._cli,
-        arguments = ["--generator-arguments-file={}".format(input_args.path)],
-        mnemonic = "IdlToProto",
-        progress_message = "Generating proto files for {}".format(ctx.label.name),
+    # Generate the C++ bindings
+    proto_hdrs, proto_srcs, proto_include_dir = generate_sources(
+        ctx = ctx,
+        executable = ctx.executable._proto_generator,
+        mnemonic = "IdlToProtobuf",
+        input_idls = target[RosIdlInfo].idls.to_list(),
+        input_type_descriptions = [],
+        input_templates = ctx.attr._proto_templates[DefaultInfo].files.to_list(),
+        templates_hdrs = [],
+        templates_srcs = ["{}.proto"],
+        template_visibility_control = ctx.file._proto_visibility_template,
+        message_is_pascal_case = False,
     )
 
     # Aggregate all proto paths together, so that a dependent proto can find its parents.
@@ -95,6 +61,11 @@ def _proto_aspect_impl(target, ctx):
 
     # Call protoc to generate the C++ files from the proto file. We'd normally do this
     # in a separate rule, but we need the typesupport aspects to be able to generate it.
+    output_proto = proto_srcs[0]
+    output_proto_h = ctx.actions.declare_file(
+        "{}/{}/{}.pb.h".format(package_name, message_type, message_name))
+    output_proto_cc = ctx.actions.declare_file(
+        "{}/{}/{}.pb.cc".format(package_name, message_type, message_name))
     arguments = [
         '--proto_path={}'.format("/".join(p.dirname.split("/")[:-2])) for p in proto_files
     ] + [
@@ -121,11 +92,9 @@ def _proto_aspect_impl(target, ctx):
     cc_info = generate_cc_info(
         ctx = ctx,
         name = "{}_proto".format(ctx.label.name),
-        hdrs = [output_proto_h],
+        hdrs = proto_hdrs + [output_proto_h],
         srcs = [output_proto_cc],
-        include_dirs = [
-            input_args.dirname.split("/")[:-1]
-        ],
+        include_dirs = [proto_include_dir],
         deps = deps,
     )
 
@@ -163,22 +132,22 @@ proto_aspect = aspect(
     fragments = ["cpp"],
     toolchains = use_cc_toolchain(),
     attrs = {
-        "_protoc": attr.label(
-            default = Label("@protobuf//:protoc"),
-            executable = True,
-            cfg = "exec"
-        ),
-        "_cli": attr.label(
+        "_proto_generator": attr.label(
             default = Label("//:cli"),
             executable = True,
             cfg = "exec",
         ),
-        "_interface_templates": attr.label(
+        "_proto_templates": attr.label(
             default = Label("//:interface_templates"),
         ),
-        "_visibility_template": attr.label(
+        "_proto_visibility_template": attr.label(
             default = Label("//:resource/rosidl_adapter_proto__visibility_control.h.in"),
             allow_single_file = True,
+        ),
+        "_protoc": attr.label(
+            default = Label("@protobuf//:protoc"),
+            executable = True,
+            cfg = "exec"
         ),
     },
     required_providers = [RosInterfaceInfo],
