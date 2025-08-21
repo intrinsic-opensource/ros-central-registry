@@ -66,7 +66,6 @@ cc_binary(
     name = "example_ros_c",
     srcs = ["src/example_ros.c"],
     deps = [":example_ros_c_msgs"],
-    visibility = ["//visibility:public"],
 )
 
 # C++ examples
@@ -82,7 +81,6 @@ cc_binary(
     name = "example_ros_cc",
     srcs = ["src/example_ros.cc"],
     deps = [":example_ros_cc_msgs"],
-    visibility = ["//visibility:public"],
 )
 
 # Protobuf examples
@@ -91,5 +89,4 @@ cc_binary(
     name = "example_proto_cc",
     srcs = ["src/example_proto.cc"],
     deps = [":example_ros_cc_msgs"],
-    visibility = ["//visibility:public"],
 )
