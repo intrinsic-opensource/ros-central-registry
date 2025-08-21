@@ -23,9 +23,11 @@ module(
 
 # Dependencies
 
+bazel_dep(name = "rules_cc", version = "0.1.4")
 bazel_dep(name = "rules_python", version = "1.5.1")
 bazel_dep(name = "protobuf", version = "32.0")
 
 bazel_dep(name = "ros", version = "0.0.0")
+bazel_dep(name = "rosidl_adapter", version = "0.0.0")
 bazel_dep(name = "rosidl_pycommon", version = "0.0.0")
 bazel_dep(name = "rosidl_parser", version = "0.0.0")

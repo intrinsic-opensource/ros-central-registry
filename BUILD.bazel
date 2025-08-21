@@ -14,20 +14,13 @@
 # limitations under the License.
 
 load("@rosidl_adapter//:defs.bzl", "idl_ros_library")
-#load("@rosidl_adapter_proto//:defs.bzl", "proto_ros_library")
+load("@rosidl_adapter_proto//:defs.bzl", "proto_ros_library")
 load("@rosidl_generator_type_description//:defs.bzl", "type_description_ros_library")
 load("@rosidl_generator_c//:defs.bzl", "c_ros_library")
 load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 package(default_visibility = ["//visibility:public"])
-
-# proto_ros_library(
-#     name = "example_ros_proto",
-#     deps = [
-#         "@std_msgs//:msg__String",
-#     ]
-# )
 
 # Intermediary artifact examples
 
@@ -51,6 +44,15 @@ type_description_ros_library(
         "@ros2cli_test_interfaces//:srv__ShortVariedMultiNested",
         "@ros2cli_test_interfaces//:action__ShortVariedMultiNested"
     ],
+)
+
+# Protobuf examples
+
+proto_ros_library(
+    name = "example_ros_proto",
+    deps = [
+        "@sensor_msgs//:msg__CompressedImage",
+    ]
 )
 
 # C examples

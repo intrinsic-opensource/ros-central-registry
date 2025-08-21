@@ -1,2 +1,5 @@
+# Augment the BCR with a few of our own modules. 
 common --registry=https://bcr.bazel.build --registry=file:///%workspace%/registry
+
+# Don't allow etsts to access the network by default. 
 test --sandbox_default_allow_network=false

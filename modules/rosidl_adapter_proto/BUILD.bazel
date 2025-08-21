@@ -15,8 +15,22 @@
 load("@ros//python:defs.bzl", "py_pytest")
 load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
+package(default_visibility = ["//visibility:public"])
+
 # Export the aspect for converting ROS interfaces to IDLs.
 exports_files(["defs.bzl"])
+
+# These are the templates used for per-message header and source generation.
+filegroup(
+    name = "interface_templates",
+    srcs = glob(["resource/*.em"]),
+)
+
+# Template used for per-package visibility header generation.
+filegroup(
+    name = "visibility_control_template",
+    srcs = ["resource/rosidl_adapter_proto__visibility_control.h.in"],
+)
 
 # This is the python library that does the bulk of the work for converting
 # the .msg, .srv, .action files to the generic .idl representation.
@@ -27,7 +41,6 @@ py_library(
     deps = [
         "@rosidl_pycommon",
     ],
-    visibility = ["//visibility:public"],
 )
 
 # The py_binary target does not accept files without the .py or .py3 suffix.
