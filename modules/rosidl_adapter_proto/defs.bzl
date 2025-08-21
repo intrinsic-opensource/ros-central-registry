@@ -178,7 +178,7 @@ def _proto_ros_library_impl(ctx):
     files = []
     for dep in ctx.attr.deps:
         files.extend(dep[RosProtoInfo].protos.to_list())
-        files.extend(dep[RosProtoInfo].cc_files.to_list())
+        # files.extend(dep[RosProtoInfo].cc_files.to_list())
     return [
         DefaultInfo(files = depset(files)),
     ]

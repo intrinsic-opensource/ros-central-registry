@@ -96,6 +96,7 @@ def _c_aspect_impl(target, ctx):
 
     # These deps will all have CcInfo providers.
     deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
+    deps.extend([d for d in target[RosProtoInfo].cc_infos.to_list()])
     for dep in ctx.rule.attr.deps:
         if RosProtoInfo in dep:
             deps.extend([d for d in dep[RosProtoInfo].cc_infos.to_list()])
@@ -103,8 +104,8 @@ def _c_aspect_impl(target, ctx):
             deps.extend([d for d in dep[RosCBindingsInfo].cc_infos.to_list()])
     
     # Merge headers, sources and deps into a CcInfo provider.
-    hdrs = c_hdrs + c_typesupport_introspection_hdrs + c_typesupport_fastrtps_hdrs #+ c_typesupport_protobuf_hdrs
-    srcs = c_srcs + c_typesupport_introspection_srcs + c_typesupport_fastrtps_srcs #+ c_typesupport_protobuf_srcs
+    hdrs = c_hdrs + c_typesupport_introspection_hdrs + c_typesupport_fastrtps_hdrs + c_typesupport_protobuf_hdrs
+    srcs = c_srcs + c_typesupport_introspection_srcs + c_typesupport_fastrtps_srcs + c_typesupport_protobuf_srcs
     cc_info = generate_cc_info(
         ctx = ctx,
         name = "{}_c".format(ctx.label.name),

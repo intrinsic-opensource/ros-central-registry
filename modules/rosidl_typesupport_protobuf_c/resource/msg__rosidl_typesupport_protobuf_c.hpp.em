@@ -29,7 +29,8 @@ system_header_files = [
 header_files = [ 
     "rosidl_typesupport_cpp/message_type_support.hpp",
     ros_message_header_c(package_name, interface_path),
-    ros_message_header(package_name, interface_path),
+    # Why would we ask for C++ headers here?
+    # ros_message_header(package_name, interface_path),
     visibility_control_header(package_name),
     "rosidl_typesupport_interface/macros.h",
     protobuf_message_header(package_name, interface_path)
