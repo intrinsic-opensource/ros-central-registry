@@ -120,6 +120,13 @@ py_binary(
     for interface_name in INTERFACES
 ]
 
+# Bypass a circular dependency with rosidl_adapter_proto.
+cc_library(
+    name = "type_adapter",
+    hdrs = ["include/rclcpp/type_adapter.hpp"],
+    includes = ["include"],
+)
+
 cc_library(
     name = "rclcpp",
     srcs = glob(["src/**/*.hpp"]) + [

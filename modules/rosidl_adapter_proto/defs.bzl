@@ -164,6 +164,8 @@ proto_aspect = aspect(
         "_proto_deps": attr.label_list(
             default = [
                 Label("@protobuf"),
+                Label("@rclcpp//:type_adapter"),
+                Label("@rmw"),
             ],
             providers = [CcInfo],
         ),
