@@ -90,3 +90,12 @@ cc_binary(
     srcs = ["src/example_proto.cc"],
     deps = [":example_ros_cc_msgs"],
 )
+
+# TF2 examples
+
+proto_ros_library(
+    name = "example_tf2_proto",
+    deps = [
+        "@tf2_msgs//:msg__TFMessage",
+    ],
+)
