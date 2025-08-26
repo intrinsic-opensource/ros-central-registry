@@ -1,6 +1,6 @@
-#include "sensor_msgs/msg/compressed_image__typeadapter_protobuf_cpp.hpp"
+#include "sensor_msgs/msg/CompressedImage.pb.h"
 
-int main(int arg, char* argv[]) {
-    sensor_msgs::msg::pb::CompressedImage msg;
-    return 0;
+int main() {
+  sensor_msgs::msg::CompressedImage msg;
+  return 0;
 }
