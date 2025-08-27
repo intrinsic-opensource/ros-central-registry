@@ -54,15 +54,35 @@ proto_ros_library(
     ]
 )
 
+# beardsworth.proto -> oh wait, I want a CompressedImage 
+
+proto_library(
+    name = "beardsworth_proto",
+    #srcs = ["beardsworth.proto"],
+    deps = [":example_proto_msgs"],
+)
+
+cc_proto_library(
+    name = "beardsworth_cc_proto",
+    deps = [":beardsworth_proto"],
+)
+
+
 cc_proto_library(
     name = "example_proto_msgs_cc",
     deps = [":example_proto_msgs"],
 )
 
+filegroup(
+    name='libfoo',
+    srcs=[':example_proto_msgs_cc'],
+    output_group = 'dynamic_library'
+)
+
 cc_binary(
     name = "example_proto_cc",
     srcs = ["src/example_proto.cc"],
-    deps = [":example_proto_msgs_cc"],
+    deps = [":example_proto_msgs_cc", ":beardsworth_cc_proto"],
 )
 
 # # C examples
