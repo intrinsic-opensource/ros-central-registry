@@ -209,12 +209,21 @@ proto_aspect = aspect(
 )
 
 def _proto_ros_library_impl(ctx):
+    # Generate a flattened ProtoInfo with virtual sources.
     proto_info, _ = _merge_proto_infos(
-            ctx = ctx,
-            name = ctx.label.name,
-            deps = ctx.attr.deps
-        )
-    return [proto_info]
+        ctx = ctx,
+        name = ctx.label.name,
+        deps = ctx.attr.deps
+    )
+
+    # Generate a DefaultInfo containing all proto files.
+    proto_files = []
+    for dep in ctx.attr.deps:
+        if RosProtoInfo in dep:
+            proto_files.extend(dep[RosProtoInfo].protos.to_list())
+    default_info = DefaultInfo(files = depset(proto_files))
+
+    return [proto_info, default_info]
 
 proto_ros_library = rule(
     implementation = _proto_ros_library_impl,
@@ -230,6 +239,6 @@ proto_ros_library = rule(
             allow_files = False,
         ),
     },
-    provides = [ProtoInfo],
+    provides = [ProtoInfo, DefaultInfo],
 )
 
