@@ -15,7 +15,6 @@
 
 load("@protobuf//bazel/common:proto_common.bzl", "proto_common")
 load("@protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
-load("@protobuf//bazel/private:cc_proto_support.bzl", "cc_proto_compile_and_link")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect",

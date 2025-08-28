@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@protobuf//bazel/private:cc_proto_aspect.bzl", "cc_proto_aspect")
+load("@protobuf//bazel/private:bazel_cc_proto_library.bzl", "cc_proto_aspect")
 load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
@@ -94,9 +94,11 @@ def _c_aspect_impl(target, ctx):
 
     # These deps will all have CcInfo providers.
     deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
-    deps.append(target[CcInfo])
+    if CcInfo in target:
+        deps.append(target[CcInfo])
     for dep in ctx.rule.attr.deps:
-        deps.append(dep[CcInfo])
+        if CcInfo in dep: 
+            deps.append(dep[CcInfo])
         if RosCBindingsInfo in dep:
             deps.extend([d for d in dep[RosCBindingsInfo].cc_infos.to_list()])
     
@@ -136,7 +138,7 @@ c_aspect = aspect(
     implementation = _c_aspect_impl,
     toolchains = use_cc_toolchain(),
     attr_aspects = ["deps"],
-    fragments = ["cpp"],
+    fragments = ["proto", "cpp"],
     attrs = {
         #########################################################################
         # Code generation #######################################################
@@ -253,9 +255,9 @@ c_ros_library = rule(
         "deps": attr.label_list(
             aspects = [
                 idl_aspect,              # RosIdlInfo <- RosInterfaceInfo
+                type_description_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
                 proto_aspect,            # {ProtoInfo, RosProtoInfo} <- RosIdlInfo
                 cc_proto_aspect,         # CcInfo <- ProtoInfo                
-                type_description_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
                 c_aspect,                # RosCBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
             ],
             providers = [RosInterfaceInfo],

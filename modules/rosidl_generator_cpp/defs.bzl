@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@protobuf//bazel/private:cc_proto_aspect.bzl", "cc_proto_aspect")
+load("@protobuf//bazel/private:bazel_cc_proto_library.bzl", "cc_proto_aspect")
 load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
@@ -100,11 +100,13 @@ def _cc_aspect_impl(target, ctx):
 
     # These deps will all have CcInfo providers. We need to combine the library
     # dependencies with the C generated headers and C++ generated headers.
-    cc_info_deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep] + target[CcInfo]
-    cc_info_deps.extend([d for d in target[RosCBindingsInfo].cc_infos.to_list()])
+    deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep]
+    if CcInfo in target:
+        deps.append(target[CcInfo])
+    deps.extend([d for d in target[RosCBindingsInfo].cc_infos.to_list()])
     for dep in ctx.rule.attr.deps:
         if RosCcBindingsInfo in dep:
-            cc_info_deps.extend([d for d in dep[RosCcBindingsInfo].cc_infos.to_list()])
+            deps.extend([d for d in dep[RosCcBindingsInfo].cc_infos.to_list()])
 
     # Merge headers, sources and deps into a CcInfo provider.
     hdrs = cc_hdrs + cc_typesupport_introspection_hdrs + cc_typesupport_fastrtps_hdrs + cc_typesupport_protobuf_hdrs
@@ -115,7 +117,7 @@ def _cc_aspect_impl(target, ctx):
         hdrs = hdrs,
         srcs = srcs,
         include_dirs = [cc_include_dir],
-        deps = cc_info_deps,
+        deps = deps,
     )
 
     # Return a CcInfo provider for the aspect.
@@ -142,7 +144,7 @@ cc_aspect = aspect(
     implementation = _cc_aspect_impl,
     toolchains = use_cc_toolchain(),
     attr_aspects = ["deps"],
-    fragments = ["cpp"],
+    fragments = ["proto", "cpp"],
     attrs = {
         #########################################################################
         # Code generation #######################################################
