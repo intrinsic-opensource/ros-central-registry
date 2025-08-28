@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@protobuf//bazel/private:cc_proto_aspect.bzl", "cc_proto_aspect")
 load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
@@ -28,9 +29,6 @@ RosCBindingsInfo = provider(
     ]
 )
 def _c_aspect_impl(target, ctx):
-    #print("C_IDL: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
-
-    # Collect all IDLs and JSON files required to generate the language bindings.
     input_idls = target[RosIdlInfo].idls.to_list()
     input_type_descriptions = target[RosTypeDescriptionInfo].jsons.to_list()
 
@@ -96,10 +94,9 @@ def _c_aspect_impl(target, ctx):
 
     # These deps will all have CcInfo providers.
     deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
-    deps.extend([d for d in target[RosProtoInfo].cc_infos.to_list()])
+    deps.append(target[CcInfo])
     for dep in ctx.rule.attr.deps:
-        if RosProtoInfo in dep:
-            deps.extend([d for d in dep[RosProtoInfo].cc_infos.to_list()])
+        deps.append(dep[CcInfo])
         if RosCBindingsInfo in dep:
             deps.extend([d for d in dep[RosCBindingsInfo].cc_infos.to_list()])
     
@@ -228,7 +225,8 @@ c_aspect = aspect(
     required_aspect_providers = [
         [RosIdlInfo],
         [RosTypeDescriptionInfo],
-        [RosProtoInfo]
+        [ProtoInfo],
+        [CcInfo],
     ],
     provides = [RosCBindingsInfo],
 )
@@ -255,9 +253,10 @@ c_ros_library = rule(
         "deps": attr.label_list(
             aspects = [
                 idl_aspect,              # RosIdlInfo <- RosInterfaceInfo
-                proto_aspect,            # RosProtoInfo <- RosIdlInfo
+                proto_aspect,            # {ProtoInfo, RosProtoInfo} <- RosIdlInfo
+                cc_proto_aspect,         # CcInfo <- ProtoInfo                
                 type_description_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
-                c_aspect,                # CcInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
+                c_aspect,                # RosCBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
             ],
             providers = [RosInterfaceInfo],
             allow_files = False,

@@ -15,59 +15,62 @@
 
 load("@protobuf//bazel/common:proto_common.bzl", "proto_common")
 load("@protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
+load("@protobuf//bazel/private:cc_proto_support.bzl", "cc_proto_compile_and_link")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect",
     "message_info_from_target", "idl_tuple_from_path", "generate_sources", "generate_cc_info")
 
-def _merge_proto_infos(ctx, workspace_root, descriptor_set, srcs = [], deps = []):
-    """Merge multiple ProtoInfo providers into one."""
+RosProtoInfo = provider(
+    "Encapsulates protobuf information generated for an underlying IDL.", 
+    fields = [
+        "protos",
+    ]
+)
 
-    # Symlink the proto files relative to the workspace root
-    virtual_srcs = [src for src in srcs]
-    for dep in deps:
-        if ProtoInfo in dep:
-            for src in dep[ProtoInfo].transitive_sources.to_list():
-                rel_path = "/".join(src.path.split("/")[-3:])
-                if workspace_root != "":
-                    rel_path = "{}/{}".format(workspace_root, rel_path)
-                virtual_src = ctx.actions.declare_file(rel_path)
-                ctx.actions.symlink(output = virtual_src, target_file = src)
-                virtual_srcs.append(virtual_src)
-
-    # Create the provider. Note the deps are gone,
-    proto_info = ProtoInfo(
-        srcs = virtual_srcs,
-        deps = [],
-        descriptor_set = descriptor_set,
-        workspace_root = workspace_root,
+def _flatten_proto_info(ctx, proto, descriptor_set, deps, workspace_root, proto_path):    
+    # Use the depset data structure to deduplicate the proto_infos from the whole dep tree.
+    protos = depset(
+        transitive = [
+            dep[RosProtoInfo].protos for dep in deps if RosProtoInfo in dep
+        ]
     )
 
-    # Generate the descriptor_set for the provider.
-    proto_common.compile(
-        actions = ctx.actions,
-        proto_info = proto_info,
-        proto_lang_toolchain_info = ctx.toolchains["@protobuf//bazel/private:proto_toolchain_type"].proto,
-        generated_files = [descriptor_set],
-    )
-
-    # Return the merged provider.
-    return proto_info
+    # Rewrite all srcs to be relative to the current workspace_root. This is a necessary step in
+    # order for the `ProtoInfo` to work with the `cc_proto_aspect` to generate a CcInfo provider.
+    virtual_srcs = []
+    for dep_proto in protos.to_list():
+        virtual_proto = ctx.actions.declare_file(
+            dep_proto.short_path.replace("..", "external").replace(dep_proto.owner.workspace_root, proto_path))
+        ctx.actions.symlink(output = virtual_proto, target_file = dep_proto)
+        virtual_srcs.append(virtual_proto)
     
+    # Return a new list of ProtoInfo with direct sources.
+    return ProtoInfo(
+        srcs = virtual_srcs,                        # eg. external/builtin_interfaces+/virtual_imports/msg__Time/builtin_interfaces/msg/Time.proto
+        descriptor_set = descriptor_set,            # eg. external/builtin_interfaces+/virtual_imports/msg__Time/builtin_interfaces/msg/Time.descriptor-set.bin
+        workspace_root = ctx.label.workspace_root,  # eg. external/builtin_interfaces+
+        proto_path = proto_path,                    # eg. _virtual_imports/msg__Time
+        bin_dir = ctx.bin_dir.path,                 # Required for virtual paths
+        deps = [],                                  # Empty, because we are intentionally flattening.
+    )
 
 def _proto_aspect_impl(target, ctx):
-    #print("TYPE_DESCRIPTION_IDL: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
     package_name = ctx.label.repo_name.removesuffix("+")
     message_type, message_name, message_code = message_info_from_target(ctx.label.name)
+    target_name = target.label.name
 
     # These are all the bits and pieces produced by this aspect to generate ProtoInfo and CcInfo.
-    output_proto = ctx.actions.declare_file(
+    proto = ctx.actions.declare_file(
         "{}/{}/{}.proto".format(package_name, message_type, message_name))
-    output_descriptor = ctx.actions.declare_file(
-        "{}/{}/{}-descriptor-set.proto.bin".format(package_name, message_type, message_name))
+    descriptor_set = ctx.actions.declare_file(
+        "{}/{}/{}.bin".format(package_name, message_type, message_name))
+
+    # We are going to use a target-name prefixed workspace to avoid symlink collisions.
+    proto_path = "_virtual_imports/{}".format(target_name)
 
     # Call the idl_adapter_proto python tool to transform the IDL collection into a proto collection.
-    proto_hdrs, proto_srcs, proto_include_dir = generate_sources(
+    _, protos, proto_include_dir = generate_sources(
         ctx = ctx,
         executable = ctx.executable._proto_generator,
         mnemonic = "IdlToProtobuf",
@@ -80,18 +83,38 @@ def _proto_aspect_impl(target, ctx):
         message_is_pascal_case = False,
     )
 
-    # Collect all proto sources into one collection. This is not efficient, but we
-    # have to do it to make sure they are all relative to the same workspace_root.
-    proto_info = _merge_proto_infos(
+    # Flatten our depset of protos into direct source. Not efficient, but it works.
+    proto_info = _flatten_proto_info(
         ctx = ctx,
-        workspace_root = target.label.workspace_root,
-        descriptor_set = output_descriptor,
-        srcs = [output_proto],
+        proto = proto,
+        descriptor_set = descriptor_set,
         deps = ctx.rule.attr.deps,
+        workspace_root = ctx.label.workspace_root,
+        proto_path = proto_path,
     )
-   
-    # Collect all of the sources from the dependencies.
-    return [proto_info]
+
+    # Create the descriptor for this specific proto.
+    proto_toolchain = ctx.toolchains["@protobuf//bazel/private:proto_toolchain_type"]
+    proto_common.compile(
+        actions = ctx.actions,
+        proto_info = proto_info,
+        proto_lang_toolchain_info = proto_toolchain.proto,
+        generated_files = [descriptor_set],
+    )
+
+    # Return the RosProtoInfo provider.
+    return [
+        RosProtoInfo(
+            protos = depset(
+                direct = [proto],
+                transitive = [
+                    dep[RosProtoInfo].protos
+                        for dep in ctx.rule.attr.deps if RosProtoInfo in dep
+                ],
+            ),
+        ),
+        proto_info
+    ]
 
 proto_aspect = aspect(
     implementation = _proto_aspect_impl,
@@ -114,21 +137,46 @@ proto_aspect = aspect(
     },
     required_providers = [RosInterfaceInfo],
     required_aspect_providers = [RosIdlInfo],
-    provides = [ProtoInfo],
+    provides = [RosProtoInfo, ProtoInfo],
 )
 
 def _proto_ros_library_impl(ctx):
-    proto_info = _merge_proto_infos(
+    # We are going to use a target-name prefixed workspace to avoid symlink collisions.
+    proto_path = "_virtual_imports/{}".format(ctx.label.name)
+
+    # Since there are no direct srcs, the content of the descriptor set does not matter.
+    virtual_proto = ctx.actions.declare_file(proto_path + "/dummy.proto")
+    ctx.actions.write(virtual_proto, "")
+    virtual_descriptor_set = ctx.actions.declare_file(proto_path + "/dummy.bin")
+
+    # Create a ProtoInfo for this aspect. We have to append the target name to the
+    # workspace root in order to prevent dep chains from colliding on symlinks.
+    proto_info = _flatten_proto_info(
         ctx = ctx,
-        workspace_root = ctx.label.workspace_root,
-        descriptor_set = ctx.actions.declare_file(ctx.label.name + "-descriptor-set.proto.bin"),
+        proto = virtual_proto,
+        descriptor_set = virtual_descriptor_set,
         deps = ctx.attr.deps,
+        workspace_root = ctx.label.workspace_root,
+        proto_path = proto_path,
     )
+
+    # Create the descriptor for this specific proto.
+    proto_toolchain = ctx.toolchains["@protobuf//bazel/private:proto_toolchain_type"]
+    proto_common.compile(
+        actions = ctx.actions,
+        proto_info = proto_info,
+        proto_lang_toolchain_info = proto_toolchain.proto,
+        generated_files = [virtual_descriptor_set],
+    )
+
+    # Return the ProtoInfo for downstream users to use.
     return [proto_info]
 
 proto_ros_library = rule(
     implementation = _proto_ros_library_impl,
-    toolchains = ["@protobuf//bazel/private:proto_toolchain_type"],
+    toolchains = [
+        "@protobuf//bazel/private:proto_toolchain_type"
+    ],
     attrs = {
         "deps": attr.label_list(
             aspects = [
