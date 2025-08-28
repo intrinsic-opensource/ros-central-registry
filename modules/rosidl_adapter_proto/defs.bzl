@@ -24,8 +24,6 @@ RosProtoInfo = provider(
     "Encapsulates protobuf information generated for an underlying IDL.", 
     fields = [
         "protos",
-        "cc_files",
-        "cc_infos",
     ]
 )
 
@@ -158,20 +156,6 @@ def _proto_aspect_impl(target, ctx):
                 direct = srcs,
                 transitive = [
                     dep[RosProtoInfo].protos
-                        for dep in ctx.rule.attr.deps if RosProtoInfo in dep
-                ],
-            ),
-            cc_files = depset(
-                direct = [output_proto_h, output_proto_cc],
-                transitive = [
-                    dep[RosProtoInfo].cc_files
-                        for dep in ctx.rule.attr.deps if RosProtoInfo in dep
-                ],
-            ),
-            cc_infos = depset(
-                direct = [cc_info],
-                transitive = [
-                    dep[RosProtoInfo].cc_infos
                         for dep in ctx.rule.attr.deps if RosProtoInfo in dep
                 ],
             ),

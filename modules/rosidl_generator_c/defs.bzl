@@ -17,7 +17,7 @@ load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect", "generate_sources", "generate_cc_info")
-load("@rosidl_adapter_proto//:defs.bzl", "RosProtoInfo", "proto_aspect")
+load("@rosidl_adapter_proto//:defs.bzl", "proto_aspect")
 load("@rosidl_generator_type_description//:defs.bzl", "RosTypeDescriptionInfo", "type_description_aspect")
 
 RosCBindingsInfo = provider(
@@ -96,10 +96,10 @@ def _c_aspect_impl(target, ctx):
 
     # These deps will all have CcInfo providers.
     deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
-    deps.extend([d for d in target[RosProtoInfo].cc_infos.to_list()])
+    deps.append(target[CcInfo])
     for dep in ctx.rule.attr.deps:
-        if RosProtoInfo in dep:
-            deps.extend([d for d in dep[RosProtoInfo].cc_infos.to_list()])
+        if CcInfo in dep:
+            deps.append(dep[CcInfo])
         if RosCBindingsInfo in dep:
             deps.extend([d for d in dep[RosCBindingsInfo].cc_infos.to_list()])
     
@@ -230,7 +230,7 @@ c_aspect = aspect(
     required_aspect_providers = [
         [RosIdlInfo],
         [RosTypeDescriptionInfo],
-        [RosProtoInfo]
+        [CcInfo]
     ],
     provides = [RosCBindingsInfo],
 )
@@ -257,9 +257,9 @@ c_ros_library = rule(
         "deps": attr.label_list(
             aspects = [
                 idl_aspect,              # RosIdlInfo <- RosInterfaceInfo
-                proto_aspect,            # RosProtoInfo <- RosIdlInfo
+                proto_aspect,            # {ProtoInfo, CcInfo} <- RosIdlInfo
                 type_description_aspect, # RosTypeDescriptionInfo <- RosIdlInfo
-                c_aspect,                # CcInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
+                c_aspect,                # RosCBindingsInfo <- {RosIdlInfo, CcInfo, RosTypeDescriptionInfo}
             ],
             providers = [RosInterfaceInfo],
             allow_files = False,
