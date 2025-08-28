@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@protobuf//bazel/common:proto_common.bzl", "proto_common")
+load("@protobuf//bazel/private:cc_proto_support.bzl", "cc_proto_compile_and_link")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("@ros//:defs.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect",
@@ -27,19 +29,78 @@ RosProtoInfo = provider(
     ]
 )
 
-def pkg_name_and_base_from_path(path):
-    package_parts = path.split("/")
-    package_name = package_parts[-3]
-    package_base = "/".join(package_parts[:-2])
-    return package_name, package_base
+def _merge_proto_infos(ctx, name, deps, srcs = []):
+    # Generating a ProtoInfo is not straightforward. There are some important limitations
+    # that make it hard for an aspect to produce a ProtoInfo. You can see more info here:
+    #
+    #    https://github.com/protocolbuffers/protobuf/issues/23255
+    #
+    # So, as a compromise, what we will do is collect the dependency tree of .proto files
+    # here and symlink them into a virtual directory, making them all direct sources to
+    # a single ProtoInfo. This will allow a downstream consumer to use this target as a
+    # dependency to `cc_proto_library` to generate bindings for another context.
+
+    # Use the depset data structure to deduplicate the proto_infos from the whole dep tree.
+    proto_files = depset(
+        transitive = [
+            dep[RosProtoInfo].protos for dep in deps if RosProtoInfo in dep
+        ]
+    ).to_list() + srcs
+
+    # We are going to use a target-name prefixed workspace to avoid symlink collisions.
+    # The name _virtual_imports/<target> is a specific structure that is supported by
+    # the ProtInfo constructor when using veirtual sources!
+    proto_path = "_virtual_imports/{}".format(name)
+
+    # Create a new descriptor file for the ProtoInfo, which we'll compile on demand.
+    descriptor_set = ctx.actions.declare_file("{}/{}".format(proto_path, "proto.bin"))
+
+    # Symlink all protos into a common path to use as direct dependencies. This is a
+    # requirement for the protobuf engine to function as expected.
+    virtual_srcs = []
+    for proto in proto_files:
+        normalized_path = proto.short_path.replace("..", "external")
+        src = ctx.actions.declare_file(
+            normalized_path.replace(proto.owner.workspace_root, proto_path))
+        ctx.actions.symlink(output = src, target_file = proto)
+        virtual_srcs.append(src)
+
+    # Construct the ProtoInfo to be returned. Note that at this point we have no deps. We
+    # have effectively flattened the tree. This should be OK because cc_proto_library is
+    # written to only accept one value in deps = [], so there is no chance of collision.
+    proto_info = ProtoInfo(
+        srcs = virtual_srcs,
+        descriptor_set = descriptor_set, 
+        workspace_root = ctx.label.workspace_root,
+        proto_path = proto_path, 
+        bin_dir = ctx.bin_dir.path,
+        deps = [],
+    )
+    
+    # Create the descriptor for the proto_info. This is a binary blob capturing all the
+    # tpy information contained in the proto collection. Ideally we'd have depsets of
+    # this and protos in the aspect, and merge at each node. However, the cc_proto_aspect
+    # does not seem to be called when we do this.
+    proto_toolchain = ctx.toolchains["@protobuf//bazel/private:proto_toolchain_type"]
+    proto_common.compile(
+        actions = ctx.actions,
+        proto_info = proto_info,
+        proto_lang_toolchain_info = proto_toolchain.proto,
+        generated_files = [descriptor_set],
+    )
+
+    # Return a flattened ProtoInfo with virtual sources. We also return the proto path
+    # so that if we pass this proto_info to a proto compiler we know where the output
+    # artifacts will end up being written.
+    return proto_info, proto_path
+
 
 def _proto_aspect_impl(target, ctx):
-    #print("TYPE_DESCRIPTION_IDL: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
     package_name = ctx.label.repo_name.removesuffix("+")
     message_type, message_name, message_code = message_info_from_target(ctx.label.name)
 
-    # Generate the C++ bindings
-    proto_hdrs, proto_srcs, proto_include_dir = generate_sources(
+    # Generate the .proto file for the current mode.
+    hdrs, srcs, proto_include_dir = generate_sources(
         ctx = ctx,
         executable = ctx.executable._proto_generator,
         mnemonic = "IdlToProtobuf",
@@ -52,57 +113,49 @@ def _proto_aspect_impl(target, ctx):
         message_is_pascal_case = False,
     )
 
-    # Aggregate all proto paths together, so that a dependent proto can find its parents.
-    proto_files = []
-    for dep in ctx.rule.attr.deps:
-        if RosProtoInfo in dep:
-            for proto in dep[RosProtoInfo].protos.to_list():
-                proto_files.append(proto)
-
-    # Call protoc to generate the C++ files from the proto file. We'd normally do this
-    # in a separate rule, but we need the typesupport aspects to be able to generate it.
-    output_proto = proto_srcs[0]
-    output_proto_h = ctx.actions.declare_file(
-        "{}/{}/{}.pb.h".format(package_name, message_type, message_name))
-    output_proto_cc = ctx.actions.declare_file(
-        "{}/{}/{}.pb.cc".format(package_name, message_type, message_name))
-    arguments = [
-        '--proto_path={}'.format("/".join(p.dirname.split("/")[:-2])) for p in proto_files
-    ] + [
-        "--proto_path={}".format("/".join(output_proto.dirname.split("/")[:-2])),
-        "--cpp_out={}".format("/".join(output_proto.path.split("/")[:-3])),
-        "/".join(output_proto.path.split("/")[-3:])
-    ]
-    ctx.actions.run(
-        executable = ctx.executable._proto_compiler,
-        arguments = arguments,
-        inputs = proto_files + [output_proto],
-        outputs = [output_proto_h, output_proto_cc],
-        mnemonic = "ProtoCompile",
-        progress_message = "Calling protoc to compile {}".format(ctx.label.name),
+    # Generate a flattened ProtoInfo for this specific target. Note that the collected
+    # .proto files will be symlinked into a virtual workspace named by this target.
+    proto_info, proto_path = _merge_proto_infos(
+        ctx = ctx,
+        name = target.label.name,
+        srcs = srcs,
+        deps = ctx.rule.attr.deps,
     )
 
-    # These deps will all have CcInfo providers.
-    deps = [dep[CcInfo] for dep in ctx.attr._proto_deps if CcInfo in dep]
-    for dep in ctx.rule.attr.deps:
-        if RosProtoInfo in dep:
-            deps.extend([d for d in dep[RosProtoInfo].cc_infos.to_list()])
+    # The files that are produced by the proto compiler will end up relative to the
+    # proto_path specified in the proto_info. So, let's expect them there...
+    output_proto_h = ctx.actions.declare_file(
+        "{}/{}/{}/{}.pb.h".format(proto_path, package_name, message_type, message_name))
+    output_proto_cc = ctx.actions.declare_file(
+        "{}/{}/{}/{}.pb.cc".format(proto_path, package_name, message_type, message_name))
 
-    # Merge headers, sources and deps into a CcInfo provider.
-    cc_info = generate_cc_info(
+    # Create the C++ interface for this specific proto
+    proto_toolchain = ctx.toolchains["@protobuf//bazel/private:cc_toolchain_type"].proto
+    proto_common.compile(
+        actions = ctx.actions,
+        proto_info = proto_info,
+        proto_lang_toolchain_info = proto_toolchain,
+        generated_files = [output_proto_h, output_proto_cc],
+        experimental_output_files = "multiple",
+    )
+    deps = []
+    if proto_toolchain.runtime:
+        deps = [proto_toolchain.runtime]
+    deps.extend(getattr(ctx.rule.attr, "deps", []))
+    cc_info, libraries, temps = cc_proto_compile_and_link(
         ctx = ctx,
-        name = "{}_proto".format(ctx.label.name),
-        hdrs = proto_hdrs + [output_proto_h],
-        srcs = [output_proto_cc],
-        include_dirs = [proto_include_dir],
         deps = deps,
+        sources = [output_proto_cc],
+        headers = [output_proto_h],
+        textual_hdrs = hdrs,
+        strip_include_prefix = proto_path,
     )
 
     # Collect all of the sources from the dependencies.
     return [
         RosProtoInfo(
             protos = depset(
-                direct = [output_proto],
+                direct = srcs,
                 transitive = [
                     dep[RosProtoInfo].protos
                         for dep in ctx.rule.attr.deps if RosProtoInfo in dep
@@ -123,70 +176,50 @@ def _proto_aspect_impl(target, ctx):
                 ],
             ),
         ),
+        proto_info,
+        cc_info
     ]
 
 
 proto_aspect = aspect(
     implementation = _proto_aspect_impl,
     attr_aspects = ["deps"],
-    fragments = ["cpp"],
-    toolchains = use_cc_toolchain(),
+    fragments = ["proto", "cpp"],
+    toolchains = use_cc_toolchain() + [
+        "@protobuf//bazel/private:proto_toolchain_type",
+        "@protobuf//bazel/private:cc_toolchain_type",
+    ],
     attrs = {
-        #########################################################################
-        # Proto generation ######################################################
-        #########################################################################
-        
         "_proto_generator": attr.label(
             default = Label("//:cli"),
             executable = True,
             cfg = "exec",
         ),
-        
         "_proto_templates": attr.label(
             default = Label("//:interface_templates"),
         ),
-        
         "_proto_visibility_template": attr.label(
             default = Label("//:resource/rosidl_adapter_proto__visibility_control.h.in"),
             allow_single_file = True,
         ),
-        
-        #########################################################################
-        # C++ bindings ##########################################################
-        #########################################################################
-
-        "_proto_compiler": attr.label(
-            default = Label("@protobuf//:protoc"),
-            executable = True,
-            cfg = "exec"
-        ),
-
-        "_proto_deps": attr.label_list(
-            default = [
-                Label("@protobuf"),
-                Label("@rclcpp//:type_adapter"),
-                Label("@rmw"),
-            ],
-            providers = [CcInfo],
-        ),
-
     },
     required_providers = [RosInterfaceInfo],
     required_aspect_providers = [RosIdlInfo],
-    provides = [RosProtoInfo],
+    provides = [RosProtoInfo, ProtoInfo, CcInfo],
 )
 
 def _proto_ros_library_impl(ctx):
-    files = []
-    for dep in ctx.attr.deps:
-        files.extend(dep[RosProtoInfo].protos.to_list())
-        # files.extend(dep[RosProtoInfo].cc_files.to_list())
-    return [
-        DefaultInfo(files = depset(files)),
-    ]
+    proto_info, _ = _merge_proto_infos(
+            ctx = ctx,
+            name = ctx.label.name,
+            deps = ctx.attr.deps
+        )
+    return [proto_info]
 
 proto_ros_library = rule(
     implementation = _proto_ros_library_impl,
+    fragments = ["proto"],
+    toolchains = ["@protobuf//bazel/private:proto_toolchain_type"],
     attrs = {
         "deps": attr.label_list(
             aspects = [
@@ -197,6 +230,6 @@ proto_ros_library = rule(
             allow_files = False,
         ),
     },
-    provides = [DefaultInfo],
+    provides = [ProtoInfo],
 )
 

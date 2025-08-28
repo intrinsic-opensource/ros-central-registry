@@ -219,6 +219,8 @@ c_aspect = aspect(
                 Label("@rosidl_typesupport_fastrtps_c"),
                 Label("@rosidl_typesupport_protobuf_c"),
                 Label("@rosidl_typesupport_introspection_c"),
+                Label("@rclcpp//:type_adapter"),
+                Label("@rmw"),        
             ],
             providers = [CcInfo],
         ),
