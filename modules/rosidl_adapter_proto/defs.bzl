@@ -47,7 +47,7 @@ def _merge_proto_infos(ctx, name, deps, srcs = []):
 
     # We are going to use a target-name prefixed workspace to avoid symlink collisions.
     # The name _virtual_imports/<target> is a specific structure that is supported by
-    # the ProtInfo constructor when using veirtual sources!
+    # the ProtoInfo constructor when using vertual sources!
     proto_path = "_virtual_imports/{}".format(name)
 
     # Create a new descriptor file for the ProtoInfo, which we'll compile on demand.
@@ -127,7 +127,11 @@ def _proto_aspect_impl(target, ctx):
     output_proto_cc = ctx.actions.declare_file(
         "{}/{}/{}/{}.pb.cc".format(proto_path, package_name, message_type, message_name))
 
-    # Create the C++ interface for this specific proto
+    # Create the C++ interface for this specific proto. You might think that doing this
+    # here is a bit strange, because if this target exports a ProtoInfo, then any rule
+    # requiring C++ bindings should be able to tack on cc_proto_aspect from @protobuf
+    # to get these generated. However, for some reason this does not work. So, since we
+    # have an active protobuf import, we'll replicate what cc_proto_aspect does...
     proto_toolchain = ctx.toolchains["@protobuf//bazel/private:cc_toolchain_type"].proto
     proto_common.compile(
         actions = ctx.actions,
