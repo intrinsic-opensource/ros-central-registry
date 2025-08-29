@@ -93,7 +93,9 @@ def _cc_aspect_impl(target, ctx):
             "{}__rosidl_typesupport_protobuf_cpp.hpp",
             "{}__typeadapter_protobuf_cpp.hpp",
         ],
-        templates_srcs = ["detail/protobuf_cpp/{}__type_support.cpp"],
+        templates_srcs = [
+            "detail/protobuf_cpp/{}__type_support.cpp",
+        ],
         template_visibility_control = ctx.file._cc_typesupport_protobuf_visibility_template,
     )
 
@@ -104,6 +106,9 @@ def _cc_aspect_impl(target, ctx):
     for dep in ctx.rule.attr.deps:
         if RosCcBindingsInfo in dep:
             cc_info_deps.extend([d for d in dep[RosCcBindingsInfo].cc_infos.to_list()])
+    for dep in ctx.rule.attr.deps:
+        if CcInfo in dep:
+            cc_info_deps.append(dep[CcInfo])
 
     # Merge headers, sources and deps into a CcInfo provider.
     hdrs = cc_hdrs + cc_typesupport_introspection_hdrs + cc_typesupport_fastrtps_hdrs + cc_typesupport_protobuf_hdrs
@@ -234,8 +239,6 @@ cc_aspect = aspect(
 def _cc_ros_library_impl(ctx):
     cc_infos = []
     for dep in ctx.attr.deps:
-        if RosCBindingsInfo in dep:
-            cc_infos.extend(dep[RosCBindingsInfo].cc_infos.to_list())
         if RosCcBindingsInfo in dep:
             cc_infos.extend(dep[RosCcBindingsInfo].cc_infos.to_list())
     return [
@@ -243,9 +246,6 @@ def _cc_ros_library_impl(ctx):
         DefaultInfo(
             files = depset(
                 transitive = [
-                    dep[RosCBindingsInfo].cc_files
-                        for dep in ctx.attr.deps if RosCBindingsInfo in dep
-                ] + [
                     dep[RosCcBindingsInfo].cc_files
                         for dep in ctx.attr.deps if RosCcBindingsInfo in dep
                 ]

@@ -36,7 +36,10 @@ cc_library(
     srcs = glob(["src/**"]),
     hdrs = glob(["include/**"]),
     includes = ["include"],
-    deps = ["@rcutils"],
+    deps = [
+        "@fastcdr",
+        "@rcutils"
+    ],
     visibility = ["//visibility:public"],
 )
 

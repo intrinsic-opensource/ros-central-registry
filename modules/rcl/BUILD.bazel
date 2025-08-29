@@ -73,7 +73,7 @@ cc_library(
         # "@rcutils",
         # "@rmw_implementation",
         "@rmw",
-        # "@rosidl_runtime_c",
+        "@rosidl_runtime_c",
         # "@rosidl_runtime_cpp",
         "@tracetools",
     ],
