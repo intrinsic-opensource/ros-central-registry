@@ -33,9 +33,12 @@ filegroup(
 
 cc_library(
     name = "rosidl_typesupport_c",
-    srcs = glob(["src/**/*.c"]),
+    srcs = glob(["src/**/*.c", "src/**/*.cpp", "src/**/*.hpp"]),
     hdrs = glob(["include/**/*.h"]),
-    deps = ["@rosidl_runtime_c"],
+    deps = [
+        "@rcpputils",
+        "@rosidl_runtime_c"
+    ],
     includes = ["include"],
 )
 

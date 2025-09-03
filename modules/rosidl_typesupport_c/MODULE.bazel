@@ -28,6 +28,7 @@ bazel_dep(name = "rules_python", version = "1.5.1")
 
 bazel_dep(name = "ament_index_python", version = "0.0.0")
 bazel_dep(name = "rcutils", version = "0.0.0")
+bazel_dep(name = "rcpputils", version = "0.0.0")
 bazel_dep(name = "ros", version = "0.0.0")
 bazel_dep(name = "rosidl_adapter", version = "0.0.0")
 bazel_dep(name = "rosidl_cli", version = "0.0.0")
