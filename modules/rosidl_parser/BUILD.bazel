@@ -18,6 +18,8 @@
 load("@ros//python:defs.bzl", "py_pytest")
 load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
+package(default_visibility = ["//visibility:public"])
+
 # This is the python library that does the bulk of the work for converting
 # the .msg, .srv, .action files to the generic .idl representation.
 py_library(
@@ -28,7 +30,6 @@ py_library(
         "rosidl_parser/**/*.typed"
     ]),
     deps = ["@ros//python:lark"],
-    visibility = ["//visibility:public"],
 )
 
 # All functional tests.

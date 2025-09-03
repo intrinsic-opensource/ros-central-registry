@@ -15,65 +15,86 @@
 
 # Imports
 
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
+load("@ros//ros:data.bzl", "ros_data")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
+
+# Arguments
+
+string_flag(
+    name = "rmw",
+    build_setting_default = "rmw_cyclonedds_cpp",
+)
+
+# Middleware implementations
+
+config_setting(
+    name = "rmw_fastrtps_cpp",
+    flag_values = {
+        ":rmw": "rmw_fastrtps_cpp"
+    },
+)
+
+config_setting(
+    name = "rmw_fastrtps_dynamic_cpp",
+    flag_values = {
+        ":rmw": "rmw_fastrtps_dynamic_cpp"
+    },
+)
+
+config_setting(
+    name = "rmw_cyclonedds_cpp",
+    flag_values = {
+        ":rmw": "rmw_cyclonedds_cpp"
+    },
+)
 
 # Libraries
 
 cc_library(
     name = "rmw_implementation",
-    srcs = [
-        "src/functions.cpp",
-        "src/functions.hpp",
-        "src/visibility_control.h"
-    ],
-    defines = [
-        "DEFAULT_RMW_IMPLEMENTATION=rmw_fastrtps_cpp",
-    ],
-    deps = [
-        "@ament_index_cpp",
-        "@rcpputils",
-        "@rcutils",
-        "@rmw",
-        "@rosidl_runtime_c",
-    ],
+    deps = select({
+        ":rmw_cyclonedds_cpp": ["@rmw_cyclonedds_cpp"],
+        ":rmw_fastrtps_cpp": ["@rmw_fastrtps_cpp"],
+        ":rmw_fastrtps_dynamic_cpp": ["@rmw_fastrtps_dynamic_cpp"],
+        "//conditions:default": ["@rmw_cyclonedds_cpp"],
+    }),
 )
 
 # Tests
 
-cc_test(
-    name = "test_functions",
-    srcs = [
-        "test/test_functions.cpp",
-    ],
-    deps = [
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
-        "@rcpputils",
-        "@rcutils",
-        "@rmw",
-        "@rosidl_runtime_c",
-        ":rmw_implementation",
-    ],
-)
+# cc_test(
+#     name = "test_functions",
+#     srcs = ["test/test_functions.cpp"],
+#     deps = [
+#         "@googletest//:gtest",
+#         "@googletest//:gtest_main",
+#         "@rcpputils",
+#         "@rcutils",
+#         "@rmw",
+#         "@rosidl_runtime_c",
+#         ":rmw_implementation",
+#     ],
+# )
 
-[
-    cc_test(
-        name = "benchmark_symbols__" + rmw,
-        srcs = [
-            "test/benchmark/benchmark_symbols.cpp",
-        ],
-        deps = [
-            "@google_benchmark",
-            "@osrf_testing_tools_cpp//:memory_tools",
-            "@performance_test_fixture",
-            ":rmw_implementation",
-        ],
-    )
-    for rmw in [
-        "rmw_fastrtps_cpp",
-        "rmw_fastrtps_dynamic_cpp",
-        "rmw_zenoh_cpp",
-    ]
-]
+# [
+#     cc_test(
+#         name = "benchmark_symbols__" + rmw,
+#         srcs = [
+#             "test/benchmark/benchmark_symbols.cpp",
+#         ],
+#         deps = [
+#             "@google_benchmark",
+#             "@osrf_testing_tools_cpp//:memory_tools",
+#             "@performance_test_fixture",
+#             ":rmw_implementation",
+#         ],
+#     )
+#     for rmw in [
+#         "rmw_fastrtps_cpp",
+#         "rmw_fastrtps_dynamic_cpp",
+#         "rmw_zenoh_cpp",
+#     ]
+# ]

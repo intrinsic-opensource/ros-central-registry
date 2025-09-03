@@ -23,14 +23,19 @@ module(
 
 # Dependencies
 
+bazel_dep(name = "bazel_skylib", version = "1.8.1")
 bazel_dep(name = "google_benchmark", version = "1.9.4")
 bazel_dep(name = "googletest", version = "1.17.0")
 bazel_dep(name = "rules_cc", version = "0.1.4")
+bazel_dep(name = "ros", version = "0.0.0")
 
 bazel_dep(name = "ament_index_cpp", version = "0.4.0")
 bazel_dep(name = "rcpputils", version = "2.14.2")
 bazel_dep(name = "rcutils", version = "7.0.0")
 bazel_dep(name = "rmw", version = "7.9.0")
+bazel_dep(name = "rmw_cyclonedds_cpp", version = "7.9.0")
+bazel_dep(name = "rmw_fastrtps_cpp", version = "7.9.0")
+bazel_dep(name = "rmw_fastrtps_dynamic_cpp", version = "7.9.0")
 bazel_dep(name = "rosidl_runtime_c", version = "9.4.1")
 
 # bazel_dep(name = "performance_test_fixture", version = "0.4.0")

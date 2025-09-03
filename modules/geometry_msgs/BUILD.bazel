@@ -17,12 +17,13 @@
 
 load("@ros//:defs.bzl", "ros_interface", "ros_package")
 
+package(default_visibility = ["//visibility:public"])
+
 # Interfaces
 
 ros_interface(
     name = "msg__Accel",
     src = "msg/Accel.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Vector3",
     ],
@@ -31,7 +32,6 @@ ros_interface(
 ros_interface(
     name = "msg__AccelStamped",
     src = "msg/AccelStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Accel",
         "@std_msgs//:msg__Header",
@@ -41,7 +41,6 @@ ros_interface(
 ros_interface(
     name = "msg__AccelWithCovariance",
     src = "msg/AccelWithCovariance.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Accel",
     ],
@@ -50,7 +49,6 @@ ros_interface(
 ros_interface(
     name = "msg__AccelWithCovarianceStamped",
     src = "msg/AccelWithCovarianceStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__AccelWithCovariance",
         "@std_msgs//:msg__Header",
@@ -60,7 +58,6 @@ ros_interface(
 ros_interface(
     name = "msg__Inertia",
     src = "msg/Inertia.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@geometry_msgs//:msg__Vector3",
     ],
@@ -69,7 +66,6 @@ ros_interface(
 ros_interface(
     name = "msg__InertiaStamped",
     src = "msg/InertiaStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Inertia",
         "@std_msgs//:msg__Header",
@@ -79,19 +75,16 @@ ros_interface(
 ros_interface(
     name = "msg__Point",
     src = "msg/Point.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Point32",
     src = "msg/Point32.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__PointStamped",
     src = "msg/PointStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Point",
         "@std_msgs//:msg__Header",
@@ -101,7 +94,6 @@ ros_interface(
 ros_interface(
     name = "msg__Polygon",
     src = "msg/Polygon.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Point32",
     ],
@@ -110,7 +102,6 @@ ros_interface(
 ros_interface(
     name = "msg__PolygonInstance",
     src = "msg/PolygonInstance.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@geometry_msgs//:msg__Polygon",
     ],
@@ -119,7 +110,6 @@ ros_interface(
 ros_interface(
     name = "msg__PolygonInstanceStamped",
     src = "msg/PolygonInstanceStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@geometry_msgs//:msg__PolygonInstance",
         "@std_msgs//:msg__Header",
@@ -129,7 +119,6 @@ ros_interface(
 ros_interface(
     name = "msg__PolygonStamped",
     src = "msg/PolygonStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Polygon",
         "@std_msgs//:msg__Header",
@@ -139,7 +128,6 @@ ros_interface(
 ros_interface(
     name = "msg__Pose",
     src = "msg/Pose.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Point",
         ":msg__Quaternion",
@@ -149,7 +137,6 @@ ros_interface(
 ros_interface(
     name = "msg__PoseArray",
     src = "msg/PoseArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Pose",
         "@std_msgs//:msg__Header",
@@ -159,7 +146,6 @@ ros_interface(
 ros_interface(
     name = "msg__PoseStamped",
     src = "msg/PoseStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Pose",
         "@std_msgs//:msg__Header",
@@ -169,7 +155,6 @@ ros_interface(
 ros_interface(
     name = "msg__PoseWithCovariance",
     src = "msg/PoseWithCovariance.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Pose",
     ],
@@ -178,7 +163,6 @@ ros_interface(
 ros_interface(
     name = "msg__PoseWithCovarianceStamped",
     src = "msg/PoseWithCovarianceStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__PoseWithCovariance",
         "@std_msgs//:msg__Header",
@@ -188,13 +172,11 @@ ros_interface(
 ros_interface(
     name = "msg__Quaternion",
     src = "msg/Quaternion.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__QuaternionStamped",
     src = "msg/QuaternionStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Quaternion",
         "@std_msgs//:msg__Header",
@@ -204,7 +186,6 @@ ros_interface(
 ros_interface(
     name = "msg__Transform",
     src = "msg/Transform.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Quaternion",
         ":msg__Vector3",
@@ -214,7 +195,6 @@ ros_interface(
 ros_interface(
     name = "msg__TransformStamped",
     src = "msg/TransformStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Transform",
         "@std_msgs//:msg__Header",
@@ -224,7 +204,6 @@ ros_interface(
 ros_interface(
     name = "msg__Twist",
     src = "msg/Twist.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Vector3",
     ],
@@ -233,7 +212,6 @@ ros_interface(
 ros_interface(
     name = "msg__TwistStamped",
     src = "msg/TwistStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Twist",
         "@std_msgs//:msg__Header",
@@ -243,7 +221,6 @@ ros_interface(
 ros_interface(
     name = "msg__TwistWithCovariance",
     src = "msg/TwistWithCovariance.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Twist",
     ],
@@ -252,7 +229,6 @@ ros_interface(
 ros_interface(
     name = "msg__TwistWithCovarianceStamped",
     src = "msg/TwistWithCovarianceStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__TwistWithCovariance",
         "@std_msgs//:msg__Header",
@@ -262,13 +238,11 @@ ros_interface(
 ros_interface(
     name = "msg__Vector3",
     src = "msg/Vector3.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Vector3Stamped",
     src = "msg/Vector3Stamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Vector3",
         "@std_msgs//:msg__Header",
@@ -278,7 +252,6 @@ ros_interface(
 ros_interface(
     name = "msg__VelocityStamped",
     src = "msg/VelocityStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Twist",
         "@std_msgs//:msg__Header",
@@ -288,7 +261,6 @@ ros_interface(
 ros_interface(
     name = "msg__Wrench",
     src = "msg/Wrench.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Vector3",
     ],
@@ -297,7 +269,6 @@ ros_interface(
 ros_interface(
     name = "msg__WrenchStamped",
     src = "msg/WrenchStamped.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__Wrench",
         "@std_msgs//:msg__Header",
@@ -341,5 +312,4 @@ ros_package(
         ":msg__Wrench",
         ":msg__WrenchStamped",
     ],
-    visibility = ["//visibility:public"],
 )

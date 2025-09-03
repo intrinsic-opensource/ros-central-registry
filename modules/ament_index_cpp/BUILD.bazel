@@ -17,6 +17,8 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
+package(default_visibility = ["//visibility:public"])
+
 cc_library(
     name = "ament_index_cpp",
     srcs = glob(["src/**/*.cpp"]),
@@ -33,12 +35,10 @@ cc_library(
         "ROS_PACKAGE_NAME=\\\"ament_index_cpp\\\"",
     ],
     deps = ["@rules_cc//cc/runfiles"],
-    visibility = ["//visibility:public"],
 )
 
 cc_test(
     name = "ament_index_cpp_utest",
-    visibility = ["//visibility:public"],
     srcs = ["test/utest.cpp"],
     data = glob([
         "test/prefix1/**",

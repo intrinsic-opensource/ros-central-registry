@@ -17,12 +17,13 @@
 
 load("@ros//:defs.bzl", "ros_interface", "ros_package")
 
+package(default_visibility = ["//visibility:public"])
+
 # Interfaces
 
 ros_interface(
     name = "msg__ServiceEventInfo",
     src = "msg/ServiceEventInfo.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@builtin_interfaces//:msg__Time",
     ],
@@ -35,5 +36,4 @@ ros_package(
     interfaces = [
         ":msg__ServiceEventInfo",
     ],
-    visibility = ["//visibility:public"],
 )

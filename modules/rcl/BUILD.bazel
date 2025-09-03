@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rosidl_generator_c//:defs.bzl", "c_ros_library")
+load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -71,9 +71,9 @@ cc_library(
         "@rcl_logging_spdlog",
         "@rcl_yaml_param_parser",
         # "@rcutils",
-        # "@rmw_implementation",
+        "@rmw_implementation",
         "@rmw",
-        "@rosidl_runtime_c",
+        "@rosidl_runtime_cpp",
         # "@rosidl_runtime_cpp",
         "@tracetools",
     ],

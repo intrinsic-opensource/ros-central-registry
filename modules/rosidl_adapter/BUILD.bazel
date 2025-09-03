@@ -17,8 +17,7 @@ load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
-# Export the aspect for converting ROS interfaces to IDLs.
-exports_files(["defs.bzl"])
+exports_files(glob(["*.bzl"]))
 
 # This is the python library that does the bulk of the work for converting
 # the .msg, .srv, .action files to the generic .idl representation.

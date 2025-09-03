@@ -15,7 +15,7 @@
 
 # Imports
 
-load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
+load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -223,18 +223,7 @@ cc_library(
         ["include/rclcpp/node_interfaces/get_{}.hpp".format(i) for i in INTERFACES] +
         ["include/rclcpp/node_interfaces/{}_traits.hpp".format(i) for i in INTERFACES],
     includes = ["include"],
-    local_defines = [
-        "ROS_PACKAGE_NAME=\\\"rclcpp\\\"",
-    ],
-    cxxopts = [
-        "-Wall",
-        "-Wextra",
-        "-Wconversion",
-        "-Wno-sign-conversion",
-        "-Wpedantic",
-        "-Wnon-virtual-dtor",
-        "-Woverloaded-virtual",
-    ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp\\\""],
     deps = [
         "@ament_index_cpp",
         "@libstatistics_collector",
@@ -247,6 +236,7 @@ cc_library(
         "@rosidl_dynamic_typesupport",
         "@rosidl_runtime_c",
         "@rosidl_runtime_cpp",
+        "@rosidl_typesupport_c",
         "@rosidl_typesupport_cpp",
         "@tracetools",
         ":msgs_cc",

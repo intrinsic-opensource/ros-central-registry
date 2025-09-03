@@ -14,12 +14,13 @@
 # limitations under the License.
 
 load("@protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
-load("@rosidl_adapter//:defs.bzl", "idl_ros_library")
-load("@rosidl_adapter_proto//:defs.bzl", "proto_ros_library")
-load("@rosidl_generator_type_description//:defs.bzl", "type_description_ros_library")
-load("@rosidl_generator_c//:defs.bzl", "c_ros_library")
-load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
-load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+load("@rosidl_adapter//:rules.bzl", "idl_ros_library")
+load("@rosidl_adapter_proto//:rules.bzl", "proto_ros_library")
+load("@rosidl_generator_type_description//:rules.bzl", "type_description_ros_library")
+load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
+load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -64,14 +65,14 @@ cc_binary(
     deps = [":example_ros_c_msgs"],
 )
 
-# cc_binary(
-#     name = "example_ros_node_c",
-#     srcs = ["src/example_ros_node.c"],
-#     deps = [
-#         "@rcl",
-#         ":example_ros_c_msgs"
-#     ],
-# )
+cc_binary(
+    name = "example_ros_node_c",
+    srcs = ["src/example_ros_node.c"],
+    deps = [
+        "@rcl",
+        ":example_ros_c_msgs"
+    ],
+)
 
 # C++ examples (note that cc_ros_library includes proto type support)
 
@@ -89,20 +90,20 @@ cc_binary(
     deps = [":example_ros_cc_msgs"],
 )
 
-# cc_binary(
-#     name = "example_ros_node_cc",
-#     srcs = ["src/example_ros_node.cc"],
-#     deps = [
-#         "@rclcpp",
-#         ":example_ros_cc_msgs"
-#     ],
-# )
-
 cc_binary(
-    name = "example_ros_proto_cc",
-    srcs = ["src/example_ros_proto.cc"],
-    deps = [":example_ros_cc_msgs"],
+    name = "example_ros_node_cc",
+    srcs = ["src/example_ros_node.cc"],
+    deps = [
+        "@rclcpp",
+        ":example_ros_cc_msgs"
+    ],
 )
+
+# cc_binary(
+#     name = "example_ros_proto_cc",
+#     srcs = ["src/example_ros_proto.cc"],
+#     deps = [":example_ros_cc_msgs"],
+# )
 
 
 # Protobuf pipeline

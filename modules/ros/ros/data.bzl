@@ -32,8 +32,11 @@ def _ros_data_impl(ctx):
             # The Bazel runfile engine by default prefixes the symlinks
             # with the workspace_root to avoid conflicts. We have to
             # remove this to allow them all to be relative to
-            file_path = file.path.removeprefix(ctx.label.workspace_root + "/")
-            symlinks["share" + "/" + module_name + "/" + file_path] = file
+            if file.basename.endswith(".so"):
+                symlinks["lib" + "/" + file.basename] = file
+            else:
+                file_path = file.path.removeprefix(ctx.label.workspace_root + "/")
+                symlinks["share" + "/" + module_name + "/" + file_path] = file
 
     # Return a collection of runfiles with manipulated symlinks.
     return [

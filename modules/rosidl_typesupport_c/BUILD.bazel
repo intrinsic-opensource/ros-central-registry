@@ -20,23 +20,26 @@ load("@ros//python:defs.bzl", "py_pytest")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
+package(default_visibility = ["//visibility:public"])
+
+exports_files(glob(["*.bzl"]))
+
 filegroup(
     name = "interface_templates",
     srcs = glob(["resource/**/*.em"]),
-    visibility = ["//visibility:public"],
 )
 
 # C library
 
 cc_library(
     name = "rosidl_typesupport_c",
-    srcs = glob(["src/**/*.c"]),
+    srcs = glob(["src/**/*.c", "src/**/*.cpp", "src/**/*.hpp"]),
     hdrs = glob(["include/**/*.h"]),
     deps = [
+        "@rcpputils",
         "@rosidl_runtime_c"
     ],
     includes = ["include"],
-    visibility = ["//visibility:public"],
 )
 
 # Python library
@@ -50,7 +53,6 @@ py_library(
         "@rosidl_pycommon",
         "@rosidl_generator_c",
     ],
-    visibility = ["//visibility:public"],
 )
 
 genrule(
@@ -66,7 +68,6 @@ py_binary(
     main = ":bin/rosidl_typesupport_c.py",
     python_version = "PY3",
     deps = [":rosidl_typesupport_c_py"],
-    visibility = ["//visibility:public"],
 )
 
 py_pytest(

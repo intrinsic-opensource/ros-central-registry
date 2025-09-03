@@ -15,34 +15,6 @@
 
 # Imports
 
-load("@ros//:defs.bzl", "ros_package")
+package(default_visibility = ["//visibility:public"])
 
-# Package
 
-ros_package(
-    name = "rosidl_generator_py",
-    deps = [
-        "@ament_cmake",
-        "@ament_cmake_cppcheck",
-        "@ament_cmake_cpplint",
-        "@ament_cmake_flake8",
-        "@ament_cmake_pep257",
-        "@ament_cmake_pytest",
-        "@ament_cmake_uncrustify",
-        "@ament_index_python",
-        "@ament_lint_auto",
-        "@ament_lint_common",
-        "@rmw",
-        "@rosidl_cli",
-        "@rosidl_cmake",
-        "@rosidl_generator_c",
-        "@rosidl_generator_cpp",
-        "@rosidl_parser",
-        "@rosidl_runtime_c",
-        "@rosidl_typesupport_c",
-        "@rosidl_typesupport_fastrtps_c",
-        "@rosidl_typesupport_introspection_c",
-        "@rpyutils",
-        "@test_interface_files",
-    ],
-)
