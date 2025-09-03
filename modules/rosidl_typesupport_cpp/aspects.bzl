@@ -21,6 +21,7 @@ load("@rosidl_adapter//:tools.bzl", "generate_sources", "generate_cc_info")
 load("@rosidl_generator_c//:types.bzl", "RosCBindingsInfo")
 load("@rosidl_generator_cpp//:types.bzl", "RosCcBindingsInfo")
 load("@rosidl_generator_type_description//:types.bzl", "RosTypeDescriptionInfo")
+load("@rosidl_typesupport_c//:types.bzl", "RosCTypesupportInfo")
 load(":types.bzl", "RosCcTypesupportInfo")
 
 def _cc_typesupport_aspect_impl(target, ctx):
@@ -95,7 +96,11 @@ def _cc_typesupport_aspect_impl(target, ctx):
     deps.extend([dep[CcInfo] for dep in ctx.attr._cc_deps + ctx.rule.attr.deps if CcInfo in dep])
     deps.extend([d for d in target[RosCBindingsInfo].cc_infos.to_list()])
     deps.extend([d for d in target[RosCcBindingsInfo].cc_infos.to_list()])
-
+    deps.extend([d for d in target[RosCTypesupportInfo].cc_infos.to_list()])
+    for dep in ctx.rule.attr.deps:
+        if RosCcTypesupportInfo in dep:
+            deps.extend([d for d in dep[RosCcTypesupportInfo].cc_infos.to_list()])
+    
     # Merge headers, sources and deps into a CcInfo provider.
     hdrs = cc_typesupport_hdrs + cc_introspection_hdrs + cc_protobuf_hdrs + cc_fastrtps_hdrs
     srcs = cc_typesupport_srcs + cc_introspection_srcs + cc_protobuf_srcs + cc_fastrtps_srcs
@@ -200,10 +205,12 @@ cc_typesupport_aspect = aspect(
         
         "_cc_deps": attr.label_list(
             default = [
+                Label("@rosidl_typesupport_interface"),
                 Label("@rosidl_typesupport_cpp"),
                 Label("@rosidl_typesupport_introspection_cpp"),
                 Label("@rosidl_typesupport_fastrtps_cpp"),
                 Label("@rosidl_typesupport_protobuf_cpp"),
+                Label("@rmw"),
             ],
             providers = [CcInfo],
         ),  
@@ -215,6 +222,7 @@ cc_typesupport_aspect = aspect(
         [CcInfo],
         [RosCBindingsInfo],
         [RosCcBindingsInfo],
+        [RosCTypesupportInfo],
     ],
     provides = [RosCcTypesupportInfo],
 )

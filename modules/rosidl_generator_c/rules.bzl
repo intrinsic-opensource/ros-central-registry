@@ -19,20 +19,21 @@ load("@rosidl_adapter_proto//:aspects.bzl", "proto_aspect")
 load("@rosidl_generator_type_description//:aspects.bzl", "type_description_aspect")
 load("@rosidl_generator_cpp//:aspects.bzl", "cc_aspect")
 load("@rosidl_typesupport_c//:aspects.bzl", "c_typesupport_aspect")
+load("@rosidl_typesupport_c//:types.bzl", "RosCTypesupportInfo")
 load(":aspects.bzl", "c_aspect")
 load(":types.bzl", "RosCBindingsInfo")
 
 def _c_ros_library_impl(ctx):
     cc_infos = []
     for dep in ctx.attr.deps:
-        cc_infos.extend(dep[RosCBindingsInfo].cc_infos.to_list())
+        cc_infos.extend(dep[RosCTypesupportInfo].cc_infos.to_list())
     return [
         cc_common.merge_cc_infos(direct_cc_infos = cc_infos),
         DefaultInfo(
             files = depset(
                 transitive = [
-                    dep[RosCBindingsInfo].cc_files
-                        for dep in ctx.attr.deps if RosCBindingsInfo in dep
+                    dep[RosCTypesupportInfo].cc_files
+                        for dep in ctx.attr.deps if RosCTypesupportInfo in dep
                 ]
             )
         ),

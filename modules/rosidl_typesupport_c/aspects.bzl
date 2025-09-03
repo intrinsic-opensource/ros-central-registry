@@ -89,6 +89,9 @@ def _c_typesupport_aspect_impl(target, ctx):
     deps.extend([dep[CcInfo] for dep in ctx.attr._c_deps + ctx.rule.attr.deps if CcInfo in dep])
     deps.extend([d for d in target[RosCBindingsInfo].cc_infos.to_list()])
     deps.extend([d for d in target[RosCcBindingsInfo].cc_infos.to_list()])
+    for dep in ctx.rule.attr.deps:
+        if RosCTypesupportInfo in dep:
+            deps.extend([d for d in dep[RosCTypesupportInfo].cc_infos.to_list()])
     
     # Merge headers, sources and deps into a CcInfo provider.
     hdrs = c_typesupport_hdrs + c_typesupport_introspection_hdrs + c_typesupport_fastrtps_hdrs + c_typesupport_protobuf_hdrs
@@ -197,10 +200,12 @@ c_typesupport_aspect = aspect(
         
         "_c_deps": attr.label_list(
             default = [
+                Label("@rosidl_typesupport_interface"),
                 Label("@rosidl_typesupport_c"),
                 Label("@rosidl_typesupport_introspection_c"),
                 Label("@rosidl_typesupport_fastrtps_c"),
                 Label("@rosidl_typesupport_protobuf_c"),
+                Label("@rmw"),
             ],
             providers = [CcInfo],
         ),
