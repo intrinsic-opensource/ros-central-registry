@@ -88,7 +88,6 @@ static rosidl_service_type_support_t _@(service.namespaced_type.name)__handle = 
 }  // namespace @(ns)
 @[end for]@
 
-/* NOTE(asymingt) This looks to be for rclcpp support, which is not available.
 namespace rosidl_typesupport_protobuf
 {
 
@@ -101,7 +100,6 @@ get_service_type_support_handle<@('::'.join([package_name] + list(interface_path
 }
 
 }  // namespace rosidl_typesupport_protobuf_c
-*/
 
 #ifdef __cplusplus
 extern "C"

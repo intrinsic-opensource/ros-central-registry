@@ -23,7 +23,7 @@ def generate_c(generator_arguments_file, type_supports):
     :param type_support: List of type supports to be used
     """
     mapping = {
-        'idl__type_support.cpp.em': '%s__type_support.c',
+        'idl__type_support.cpp.em': 'detail/%s__rosidl_typesupport_c.cpp',
     }
     return generate_files(
         generator_arguments_file, mapping,

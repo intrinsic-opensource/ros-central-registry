@@ -1,8 +1,17 @@
 # Augment the BCR with a few of our own modules. 
-common --registry=https://bcr.bazel.build --registry=file:///%workspace%/registry
+common --registry=file:///%workspace%/registry --registry=https://bcr.bazel.build
 
-# Don't allow etsts to access the network by default. 
+# Don't allow tests to access the network by default. 
 test --sandbox_default_allow_network=false
 
-# Build everything with C++1
-build --cxxopt=-std=c++17
+# Use the C++17 standard by default across the whole repo.
+#build --cxxopt=-std=c++17
+
+# Hermetic builds with clang-17, musl, glibc 2.17-2.38
+# common --repo_env=CC=clang-15
+# build --extra_toolchains=@zig_sdk//toolchain:linux_amd64_gnu.2.38
+# build --action_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
+# common --enable_platform_specific_config
+# build:linux --sandbox_add_mount_pair=/tmp
+# build:macos --sandbox_add_mount_pair=/var/tmp
+# build:windows --sandbox_add_mount_pair=C:\Temp

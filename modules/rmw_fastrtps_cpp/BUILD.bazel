@@ -15,7 +15,7 @@
 
 # Imports
 
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -26,9 +26,9 @@ cc_library(
     hdrs = glob(["include/**/*.hpp", "include/**/*.h"]),
     srcs = glob(["src/**/*.hpp", "src/**/*.cpp"]),
     includes = ["include"],
-    local_defines = [
-        "ROS_PACKAGE_NAME=\\\"rmw_fastrtps_cpp\\\"",
-    ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_fastrtps_cpp\\\""],
+    copts = ["-fvisibility=hidden"],
+    linkopts = ["-fvisibility=hidden"],
     deps = [
         "@fastcdr",
         "@fastdds",

@@ -27,9 +27,9 @@ def _cargo_build_stdout_capture_impl(ctx):
 
     # Construct a command to cargo build and pipe the output to a file. Note that we are adding
     # the suffix || true to override the failing return code with a pass to avoid aborting. 
-    command_str = "cargo build --no-default-features -F panic %s --manifest-path %s &> %s || true" % (
+    command_str = "cargo +1.75.0 build --no-default-features -F panic %s --manifest-path %s &> %s || true" % (
         cargo_feature_str, manifest_file.path, output_file.path)
-    # print("Building with: %s" % command_str)
+    print("Building with: %s" % command_str)
 
     # Run the command.
     ctx.actions.run_shell(

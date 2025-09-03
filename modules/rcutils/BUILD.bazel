@@ -17,6 +17,8 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
+package(default_visibility = ["//visibility:public"])
+
 # ROS C/C++ libraries
 
 # cc_library(
@@ -89,16 +91,11 @@ cc_library(
     name = "rcutils",
     srcs = glob(["src/**/*.h", "src/**/*.c"], exclude = ["src/time_win32.c"]),
     hdrs = glob(["include/**/*.h"]),
-    includes = [
-        "include",
-    ],
+    includes = ["include"],
     local_defines = [
-        "RCUTILS_ENABLE_FAULT_INJECTION",
         "ROS_PACKAGE_NAME=\\\"rcutils\\\"",
-        "_GNU_SOURCE",
-        "rcutils_EXPORTS",
+        "_GNU_SOURCE",  # Required to get 'program_invocation_name'
     ],
-    visibility = ["//visibility:public"],
 )
 
 # # ROS C/C++ binaries

@@ -34,10 +34,14 @@ cmake_configure_file(
     name = "config_h",
     src = "include/tracetools/config.h.in",
     out = "include/tracetools/config.h",
-    undefines = [
-        "TRACETOOLS_DISABLED",
-        "TRACETOOLS_TRACEPOINTS_EXCLUDED",
+    defines = [
+        "TRACETOOLS_DISABLED=1",
+        "TRACETOOLS_TRACEPOINTS_EXCLUDED=1",
     ],
+    # undefines = [
+    #     "TRACETOOLS_DISABLED",
+    #     "TRACETOOLS_TRACEPOINTS_EXCLUDED",
+    # ],
 )
 
 # Libraries
@@ -58,9 +62,9 @@ cc_library(
         "ROS_PACKAGE_NAME=\\\"tracetools\\\"",
         "tracetools_EXPORTS",
     ],
-    deps = [
-        "@lttng-ust",
-    ],
+    # deps = [
+    #     "@lttng-ust//:lttng-ust-project",
+    # ],
 )
 
 cc_library(

@@ -6,6 +6,14 @@ The ROS packages in the `modules` folder are snapshots from a rolling release, a
 
 Right now I have message IDL generation working up to C and C++, and I have `rcl` and `rclcpp` compiling against `rmw` with `fastrtps` only (untested). The generators also support producing `.proto` files and protocol buffer C++ interfaces using a heavily modified version of [rosidl_typesupport_protobuf](https://github.com/eclipse-ecal/rosidl_typesupport_protobuf).
 
+# Prerequisites
+
+The `rmw_zenoh_cpp` middleware currently depends on a Cargo build from `rules_rust`. Unfortunately, this is not hermetic and depends in turn on `rustup` being installed in your environment. To do this, simply run the following:
+
+```
+sudo apt install rustup
+```
+
 # Demo of C and C++ messages
 
 Clone the repo:

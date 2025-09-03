@@ -26,8 +26,7 @@ def generate_c(generator_arguments_file: str) -> List[str]:
     :type generator_arguments_file: str
     """
     mapping = {
-        'idl__rosidl_typesupport_introspection_c.h.em':
-        'detail/%s__rosidl_typesupport_introspection_c.h',
-        'idl__type_support.c.em': 'detail/%s__type_support.c',
+        'idl__rosidl_typesupport_introspection_c.h.em': 'detail/%s__rosidl_typesupport_introspection_c.h',
+        'idl__type_support.c.em': 'detail/%s__rosidl_typesupport_introspection_c.c',
     }
     return generate_files(generator_arguments_file, mapping)

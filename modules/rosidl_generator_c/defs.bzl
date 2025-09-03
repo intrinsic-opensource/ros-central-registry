@@ -28,9 +28,6 @@ RosCBindingsInfo = provider(
     ]
 )
 def _c_aspect_impl(target, ctx):
-    #print("C_IDL: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
-
-    # Collect all IDLs and JSON files required to generate the language bindings.
     input_idls = target[RosIdlInfo].idls.to_list()
     input_type_descriptions = target[RosTypeDescriptionInfo].jsons.to_list()
 
@@ -51,8 +48,27 @@ def _c_aspect_impl(target, ctx):
         templates_srcs = [
             "detail/{}__description.c",
             "detail/{}__functions.c",
+            "detail/{}__type_support.c",
         ],
         template_visibility_control = ctx.file._c_visibility_template,
+    )
+
+    # Generate type support
+    c_typesupport_hdrs, c_typesupport_srcs, _ = generate_sources(
+        ctx = ctx,
+        executable = ctx.executable._c_typesupport_generator,
+        mnemonic = "CTypeSupportGeneration",
+        input_idls = input_idls,
+        input_type_descriptions = input_type_descriptions,
+        input_templates = ctx.attr._c_typesupport_templates[DefaultInfo].files.to_list(),
+        templates_hdrs = [],
+        templates_srcs = ["detail/{}__rosidl_typesupport_c.cpp"],
+        additional = [
+            "--typesupports",
+            "rosidl_typesupport_introspection_c",
+            # "rosidl_typesupport_fastrtps_c",
+            # "rosidl_typesupport_protobuf_c",
+        ],
     )
 
     # Generate the type support library for introspection
@@ -64,35 +80,35 @@ def _c_aspect_impl(target, ctx):
         input_type_descriptions = input_type_descriptions,
         input_templates = ctx.attr._c_typesupport_introspection_templates[DefaultInfo].files.to_list(),
         templates_hdrs = ["detail/{}__rosidl_typesupport_introspection_c.h"],
-        templates_srcs = ["detail/{}__type_support.c"],
+        templates_srcs = ["detail/{}__rosidl_typesupport_introspection_c.c"],
         template_visibility_control = ctx.file._c_typesupport_introspection_visibility_template,
     )
 
     # Generate the type support library for fastrtps
-    c_typesupport_fastrtps_hdrs, c_typesupport_fastrtps_srcs, _ = generate_sources(
-        ctx = ctx,
-        executable = ctx.executable._c_typesupport_fastrtps_generator,
-        mnemonic = "CTypeSupportFastRTPSGeneration",
-        input_idls = input_idls,
-        input_type_descriptions = input_type_descriptions,
-        input_templates = ctx.attr._c_typesupport_fastrtps_templates[DefaultInfo].files.to_list(),
-        templates_hdrs = ["detail/{}__rosidl_typesupport_fastrtps_c.h"],
-        templates_srcs = ["detail/{}__type_support_c.cpp"],
-        template_visibility_control = ctx.file._c_typesupport_fastrtps_visibility_template,
-    )
+    # c_typesupport_fastrtps_hdrs, c_typesupport_fastrtps_srcs, _ = generate_sources(
+    #     ctx = ctx,
+    #     executable = ctx.executable._c_typesupport_fastrtps_generator,
+    #     mnemonic = "CTypeSupportFastRTPSGeneration",
+    #     input_idls = input_idls,
+    #     input_type_descriptions = input_type_descriptions,
+    #     input_templates = ctx.attr._c_typesupport_fastrtps_templates[DefaultInfo].files.to_list(),
+    #     templates_hdrs = ["detail/{}__rosidl_typesupport_fastrtps_c.h"],
+    #     templates_srcs = ["detail/{}__rosidl_typesupport_fastrtps_c.cpp"],
+    #     template_visibility_control = ctx.file._c_typesupport_fastrtps_visibility_template,
+    # )
 
-    # Generate the type support library for protobuf
-    c_typesupport_protobuf_hdrs, c_typesupport_protobuf_srcs, _ = generate_sources(
-        ctx = ctx,
-        executable = ctx.executable._c_typesupport_protobuf_generator,
-        mnemonic = "CTypeSupportProtobufGeneration",
-        input_idls = input_idls,
-        input_type_descriptions = input_type_descriptions,
-        input_templates = ctx.attr._c_typesupport_protobuf_templates[DefaultInfo].files.to_list(),
-        templates_hdrs = ["{}__rosidl_typesupport_protobuf_c.hpp"],
-        templates_srcs = ["detail/protobuf_c/{}__type_support.cpp"],
-        template_visibility_control = ctx.file._c_typesupport_protobuf_visibility_template,
-    )
+    # # Generate the type support library for protobuf
+    # c_typesupport_protobuf_hdrs, c_typesupport_protobuf_srcs, _ = generate_sources(
+    #     ctx = ctx,
+    #     executable = ctx.executable._c_typesupport_protobuf_generator,
+    #     mnemonic = "CTypeSupportProtobufGeneration",
+    #     input_idls = input_idls,
+    #     input_type_descriptions = input_type_descriptions,
+    #     input_templates = ctx.attr._c_typesupport_protobuf_templates[DefaultInfo].files.to_list(),
+    #     templates_hdrs = ["{}__rosidl_typesupport_protobuf_c.hpp"],
+    #     templates_srcs = ["{}__rosidl_typesupport_protobuf_c.cpp"],
+    #     template_visibility_control = ctx.file._c_typesupport_protobuf_visibility_template,
+    # )
 
     # These deps will all have CcInfo providers.
     deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
@@ -104,8 +120,8 @@ def _c_aspect_impl(target, ctx):
             deps.extend([d for d in dep[RosCBindingsInfo].cc_infos.to_list()])
     
     # Merge headers, sources and deps into a CcInfo provider.
-    hdrs = c_hdrs + c_typesupport_introspection_hdrs + c_typesupport_fastrtps_hdrs + c_typesupport_protobuf_hdrs
-    srcs = c_srcs + c_typesupport_introspection_srcs + c_typesupport_fastrtps_srcs + c_typesupport_protobuf_srcs
+    hdrs = c_hdrs + c_typesupport_hdrs + c_typesupport_introspection_hdrs #+ c_typesupport_fastrtps_hdrs #+ c_typesupport_protobuf_hdrs
+    srcs = c_srcs + c_typesupport_srcs + c_typesupport_introspection_srcs #+ c_typesupport_fastrtps_srcs #+ c_typesupport_protobuf_srcs
     cc_info = generate_cc_info(
         ctx = ctx,
         name = "{}_c".format(ctx.label.name),
@@ -156,6 +172,19 @@ c_aspect = aspect(
         "_c_visibility_template": attr.label(
             default = Label("//:resource/rosidl_generator_c__visibility_control.h.in"),
             allow_single_file = True,
+        ),
+
+        #########################################################################
+        # General type support generation #######################################
+        #########################################################################
+        
+        "_c_typesupport_generator": attr.label(
+            default = Label("@rosidl_typesupport_c//:cli"),
+            executable = True,
+            cfg = "exec",
+        ),
+        "_c_typesupport_templates": attr.label(
+            default = Label("@rosidl_typesupport_c//:interface_templates"),
         ),
 
         #########################################################################
@@ -216,10 +245,18 @@ c_aspect = aspect(
         "_c_deps": attr.label_list(
             default = [
                 Label("@rosidl_runtime_c"),
-                Label("@rosidl_typesupport_fastrtps_c"),
-                Label("@rosidl_typesupport_protobuf_c"),
+                #Label("@rosidl_runtime_cpp"),
+                Label("@rosidl_typesupport_c"),
+                #Label("@rosidl_typesupport_cpp"),
+                # Label("@rosidl_typesupport_fastrtps_c"),
                 Label("@rosidl_typesupport_introspection_c"),
-                Label("@rclcpp//:type_adapter"),
+                # Label("@rosidl_typesupport_protobuf"),
+                # Label("@rosidl_typesupport_protobuf_c"),
+                # It might seem a little funky that cpp headers are needed by the C interfaces. This is
+                # actually OK because we are exposing a C interface to an underlying C++ implementation.
+                # >> Needed by: rosidl_typesupport_fastrtps_c and rosidl_typesupport_protobuf
+                # Label("@rosidl_runtime_cpp"),
+                # Label("@rclcpp//:type_adapter"),
                 Label("@rmw"),        
             ],
             providers = [CcInfo],

@@ -20,14 +20,16 @@ module(
 
 # System
 
-bazel_dep(name = "hermetic_cc_toolchain", version = "4.0.1")
+#bazel_dep(name = "hermetic_cc_toolchain", version = "4.0.1")
 bazel_dep(name = "protobuf", version = "32.0")
-bazel_dep(name = "rules_cc", version = "0.1.4")
+bazel_dep(name = "rules_cc", version = "0.2.2")
 bazel_dep(name = "rules_python", version = "1.5.1")
-bazel_dep(name = "rules_rust", version = "0.63.0")
+bazel_dep(name = "rules_rust", version = "0.62.0") # 0.63.0 has issues!
 
 # Third party
 
+bazel_dep(name = "cyclonedds", version = "0.10.5")
+bazel_dep(name = "fastcdr", version = "2.3.0")
 bazel_dep(name = "fastdds", version = "3.2.2")
 bazel_dep(name = "liburcu", version = "0.0.0")
 bazel_dep(name = "lttng-ust", version = "0.0.0")
@@ -76,11 +78,15 @@ bazel_dep(name = "rosidl_typesupport_protobuf", version = "0.0.0")
 bazel_dep(name = "rosidl_typesupport_protobuf_c", version = "0.0.0")
 bazel_dep(name = "rosidl_typesupport_protobuf_cpp", version = "0.0.0")
 bazel_dep(name = "rmw", version = "0.0.0")
+bazel_dep(name = "rmw_cyclonedds_cpp", version = "4.1.1")
 bazel_dep(name = "rmw_security_common", version = "0.0.0")
 bazel_dep(name = "rmw_dds_common", version = "0.0.0")
 bazel_dep(name = "rmw_fastrtps_cpp", version = "0.0.0")
 bazel_dep(name = "rmw_fastrtps_shared_cpp", version = "0.0.0")
+bazel_dep(name = "rmw_fastrtps_dynamic_cpp", version = "0.0.0")
 bazel_dep(name = "rmw_implementation", version = "0.0.0")
+bazel_dep(name = "rmw_test_fixture", version = "0.15.1")
+bazel_dep(name = "rmw_zenoh_cpp", version = "0.8.1")
 bazel_dep(name = "tracetools", version = "0.0.0")
 
 bazel_dep(name = "action_msgs", version = "2.4.1")
@@ -101,6 +107,7 @@ bazel_dep(name = "unique_identifier_msgs", version = "2.8.0")
 
 # Overrides
 
+local_path_override(module_name = "cyclonedds", path = "./thirdparty/cyclonedds")
 local_path_override(module_name = "liburcu", path = "./thirdparty/liburcu")
 local_path_override(module_name = "lttng-ust", path = "./thirdparty/lttng-ust")
 local_path_override(module_name = "mimick", path = "./thirdparty/mimick")
@@ -146,11 +153,15 @@ local_path_override(module_name = "rosidl_typesupport_protobuf", path = "./modul
 local_path_override(module_name = "rosidl_typesupport_protobuf_c", path = "./modules/rosidl_typesupport_protobuf_c")
 local_path_override(module_name = "rosidl_typesupport_protobuf_cpp", path = "./modules/rosidl_typesupport_protobuf_cpp")
 local_path_override(module_name = "rmw", path = "./modules/rmw")
+local_path_override(module_name = "rmw_cyclonedds_cpp", path = "./modules/rmw_cyclonedds_cpp")
 local_path_override(module_name = "rmw_security_common", path = "./modules/rmw_security_common")
 local_path_override(module_name = "rmw_dds_common", path = "./modules/rmw_dds_common")
 local_path_override(module_name = "rmw_implementation", path = "./modules/rmw_implementation")
 local_path_override(module_name = "rmw_fastrtps_cpp", path = "./modules/rmw_fastrtps_cpp")
+local_path_override(module_name = "rmw_fastrtps_dynamic_cpp", path = "./modules/rmw_fastrtps_dynamic_cpp")
 local_path_override(module_name = "rmw_fastrtps_shared_cpp", path = "./modules/rmw_fastrtps_shared_cpp")
+local_path_override(module_name = "rmw_test_fixture", path = "./modules/rmw_test_fixture")
+local_path_override(module_name = "rmw_zenoh_cpp", path = "./modules/rmw_zenoh_cpp")
 local_path_override(module_name = "tracetools", path = "./modules/tracetools")
 
 local_path_override(module_name = "action_msgs", path = "./modules/action_msgs")
@@ -169,14 +180,13 @@ local_path_override(module_name = "tf2_msgs", path = "./modules/tf2_msgs")
 local_path_override(module_name = "type_description_interfaces", path = "./modules/type_description_interfaces")
 local_path_override(module_name = "unique_identifier_msgs", path = "./modules/unique_identifier_msgs")
 
-# Toolchain configuration
+# Hermetic toolchain configuration for consistent builds across different host environments
 
-# This breaks cc_test: https://github.com/ziglang/zig/issues/19699
 # toolchains = use_extension("@hermetic_cc_toolchain//toolchain:ext.bzl", "toolchains")
 # use_repo(toolchains, "zig_sdk")
+
 # register_toolchains(
-#     "@zig_sdk//toolchain:linux_amd64_gnu.2.37",
-#     "@zig_sdk//toolchain:linux_arm64_gnu.2.37",
+#     "@zig_sdk//toolchain:linux_amd64_gnu.2.38",
 # )
 
 # Python configuration
@@ -186,3 +196,11 @@ python.toolchain(
     python_version = "3.12",
     is_default = True,
 )
+
+# Use a RUST compiler known to work with Zenoh.
+
+# rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+# rust.toolchain(
+#     edition = "2021",
+#     versions = ["1.75.0"],
+# )

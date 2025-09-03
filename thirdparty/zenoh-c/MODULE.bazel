@@ -4,13 +4,13 @@ module(
     compatibility_level = 1,
 )
 
-bazel_dep(name = "rules_cc", version = "0.1.2")
-bazel_dep(name = "rules_rust", version = "0.62.0")
+bazel_dep(name = "rules_cc", version = "0.2.2")
+bazel_dep(name = "rules_rust", version = "0.62.0") # 0.63.0 has issues.
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
     edition = "2021",
-    versions = [ "1.75.0" ],
+    versions = ["1.75.0"],
 )
 
 crate = use_extension("@rules_rust//crate_universe:extensions.bzl", "crate")

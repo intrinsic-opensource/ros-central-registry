@@ -10,12 +10,12 @@ load(":tools.bzl", "multi_test", "cargo_build_stdout_capture")
 # error[E0512]: cannot transmute between types of different sizes, or dependently-sized types
 
 FEATURES = [
-    # shared-memory",
+    "shared-memory",
     "transport_compression",
     "transport_tcp",
     "transport_udp",
     "transport_tls",
-    # unstable"
+    "unstable"
 ]
 
 # The zenoh-c project has an unusual way of building. An outer cargo build calls an inner cargo build
@@ -35,7 +35,7 @@ cargo_build_stdout_capture(
 )
 
 # Now that we have our opaque type information we can go ahead and finally call the cargo build
-# script. This function calls build.rs o generate the src/opaque_types/mod.rs file and some
+# script. This function calls build.rs to generate the src/opaque_types/mod.rs file and some
 # header files to include when using the C interface.
 
 cargo_build_script(
@@ -55,12 +55,13 @@ cargo_build_script(
     ) + [
         ".build_resources_opaque_types.txt",
     ],
+    edition = "2021",
     crate_root = "build.rs",
     crate_features = FEATURES,    
     deps = all_crate_deps(build = True, normal = False),
     rustc_env = {
-        "ZENOHC_BUILD_WITH_SHARED_MEMORY": "TRUE",
-        "ZENOHC_BUILD_WITH_UNSTABLE_API": "TRUE",
+        "ZENOHC_BUILD_WITH_SHARED_MEMORY": "FALSE",
+        "ZENOHC_BUILD_WITH_UNSTABLE_API": "FALSE",
     },
     visibility = ["//visibility:private"],
 )
@@ -79,9 +80,7 @@ filegroup(
 genrule(
     name = "extract_opaque_types_mod_rs",
     srcs = [":output_dir"],
-    outs = [
-        "src/opaque_types/mod.rs"
-    ],
+    outs = ["src/opaque_types/mod.rs"],
     cmd = "cp $(location :output_dir)/src/opaque_types/mod.rs $@",
     visibility = ["//visibility:public"],
 )
@@ -103,8 +102,8 @@ rust_library(
         "-Ctarget-feature=-crt-static"
     ],
     rustc_env = {
-        "ZENOHC_BUILD_WITH_SHARED_MEMORY": "TRUE",
-        "ZENOHC_BUILD_WITH_UNSTABLE_API": "TRUE",
+        "ZENOHC_BUILD_WITH_SHARED_MEMORY": "FALSE",
+        "ZENOHC_BUILD_WITH_UNSTABLE_API": "FALSE",
     }
 )
 

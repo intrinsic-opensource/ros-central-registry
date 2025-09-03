@@ -13,14 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rosidl_generator_c//:defs.bzl", "c_ros_library")
+load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
 # Generate a C bindings for various messages used internally by rcl.
-c_ros_library(
-    name = "msgs_c",
+cc_ros_library(
+    name = "msgs_cc",
     deps = [
         "@rcl_interfaces//:msg__FloatingPointRange",
         "@rcl_interfaces//:msg__IntegerRange",
@@ -64,16 +64,16 @@ cc_library(
         "ROS_PACKAGE_NAME=\\\"rcl\\\""
     ],
     deps = [
-        ":msgs_c",
+        ":msgs_cc",
         # "@fastcdr",
         # "@llttng-ust",
         "@rcl_logging_interface",
         "@rcl_logging_spdlog",
         "@rcl_yaml_param_parser",
         # "@rcutils",
-        # "@rmw_implementation",
+        "@rmw_implementation",
         "@rmw",
-        "@rosidl_runtime_c",
+        "@rosidl_runtime_cpp",
         # "@rosidl_runtime_cpp",
         "@tracetools",
     ],
