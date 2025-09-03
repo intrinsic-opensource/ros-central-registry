@@ -17,8 +17,8 @@
 
 load("@ros//:defs.bzl", "ros_interface", "ros_package")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@rosidl_generator_c//:defs.bzl", "c_ros_library")
-load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
+load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
+load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
 
 package(default_visibility = ["//visibility:public"])
 

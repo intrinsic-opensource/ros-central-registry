@@ -17,8 +17,7 @@ load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
-# Export the aspect for converting ROS interfaces to IDLs.
-exports_files(["defs.bzl"])
+exports_files(glob(["*.bzl"]))
 
 # These are the templates used for per-message header and source generation.
 filegroup(
@@ -65,5 +64,4 @@ py_binary(
     main = ":bin/rosidl_generator_cpp.py",
     python_version = "PY3",
     deps = [":rosidl_generator_cpp"],
-    visibility = ["//visibility:public"],
 )

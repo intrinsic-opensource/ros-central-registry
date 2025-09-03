@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,26 +13,12 @@
 # limitations under the License.
 
 load("@ros//:defs.bzl", "RosInterfaceInfo")
-load("@rosidl_adapter//:defs.bzl", "RosIdlInfo", "idl_aspect",
-    "message_info_from_target", "idl_tuple_from_path")
+load("@rosidl_adapter//:types.bzl", "RosIdlInfo")
+load("@rosidl_adapter//:tools.bzl", "message_info_from_target", "idl_tuple_from_path")
+load(":types.bzl", "RosTypeDescriptionInfo")
+load(":tools.bzl", "pkg_name_and_base_from_path")
 
-TYPE_DESCRIPTION_GENERATOR_TEMPLATES = ["{}.json"]
-
-RosTypeDescriptionInfo = provider(
-    "Encapsulates type description information generated for an underlying IDL.", 
-    fields = [
-        "jsons",
-    ]
-)
-
-def pkg_name_and_base_from_path(path):
-    package_parts = path.split("/")
-    package_name = package_parts[-3]
-    package_base = "/".join(package_parts[:-2])
-    return package_name, package_base
-
-def _type_decription_idl_aspect_impl(target, ctx):
-    #print("TYPE_DESCRIPTION_IDL: @" + ctx.label.repo_name.removesuffix("+") + "//:" +  ctx.label.name)
+def _type_description_aspect_impl(target, ctx):
     package_name = ctx.label.repo_name.removesuffix("+")
     message_type, message_name, message_code = message_info_from_target(ctx.label.name)
 
@@ -101,7 +86,7 @@ def _type_decription_idl_aspect_impl(target, ctx):
 
 
 type_description_aspect = aspect(
-    implementation = _type_decription_idl_aspect_impl,
+    implementation = _type_description_aspect_impl,
     attr_aspects = ["deps"],
     attrs = {
         "_rosidl_generator": attr.label(
@@ -117,27 +102,3 @@ type_description_aspect = aspect(
     required_aspect_providers = [RosIdlInfo],
     provides = [RosTypeDescriptionInfo],
 )
-
-def _type_description_ros_library_impl(ctx):
-    files = []
-    for dep in ctx.attr.deps:
-        files.extend(dep[RosTypeDescriptionInfo].jsons.to_list())
-    return [
-        DefaultInfo(files = depset(files)),
-    ]
-
-type_description_ros_library = rule(
-    implementation = _type_description_ros_library_impl,
-    attrs = {
-        "deps": attr.label_list(
-            aspects = [
-                idl_aspect,                 # idl  <- ros aspect [STEP 1]
-                type_description_aspect,    # json <- idl aspect [STEP 2]
-            ],
-            providers = [RosInterfaceInfo],
-            allow_files = False,
-        ),
-    },
-    #provides = [CcInfo],
-)
-

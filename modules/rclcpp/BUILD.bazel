@@ -15,7 +15,7 @@
 
 # Imports
 
-load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
+load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
