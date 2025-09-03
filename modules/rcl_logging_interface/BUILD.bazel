@@ -24,9 +24,7 @@ cc_library(
     srcs = glob(["src/**/*.c"]),
     hdrs = glob(["include/**/*.h"]),
     includes = ["include"],
-    local_defines = [
-        "ROS_PACKAGE_NAME=\\\"rcl_logging_interface\\\"",
-    ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_interface\\\""],
     deps = [
         "@rcutils",
         "@rcpputils",

@@ -17,6 +17,8 @@
 
 load("@ros//:defs.bzl", "ros_data")
 
+package(default_visibility = ["//visibility:public"])
+
 # Exports
 
 exports_files(
@@ -26,6 +28,5 @@ exports_files(
         "srv/*.srv",
         "action/*.action"
     ]),
-    visibility = ["//visibility:public"],
 )
 

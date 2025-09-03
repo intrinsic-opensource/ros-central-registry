@@ -66,7 +66,7 @@ def _c_aspect_impl(target, ctx):
         additional = [
             "--typesupports",
             "rosidl_typesupport_introspection_c",
-            # "rosidl_typesupport_fastrtps_c",
+            "rosidl_typesupport_fastrtps_c",
             # "rosidl_typesupport_protobuf_c",
         ],
     )
@@ -85,17 +85,17 @@ def _c_aspect_impl(target, ctx):
     )
 
     # Generate the type support library for fastrtps
-    # c_typesupport_fastrtps_hdrs, c_typesupport_fastrtps_srcs, _ = generate_sources(
-    #     ctx = ctx,
-    #     executable = ctx.executable._c_typesupport_fastrtps_generator,
-    #     mnemonic = "CTypeSupportFastRTPSGeneration",
-    #     input_idls = input_idls,
-    #     input_type_descriptions = input_type_descriptions,
-    #     input_templates = ctx.attr._c_typesupport_fastrtps_templates[DefaultInfo].files.to_list(),
-    #     templates_hdrs = ["detail/{}__rosidl_typesupport_fastrtps_c.h"],
-    #     templates_srcs = ["detail/{}__rosidl_typesupport_fastrtps_c.cpp"],
-    #     template_visibility_control = ctx.file._c_typesupport_fastrtps_visibility_template,
-    # )
+    c_typesupport_fastrtps_hdrs, c_typesupport_fastrtps_srcs, _ = generate_sources(
+        ctx = ctx,
+        executable = ctx.executable._c_typesupport_fastrtps_generator,
+        mnemonic = "CTypeSupportFastRTPSGeneration",
+        input_idls = input_idls,
+        input_type_descriptions = input_type_descriptions,
+        input_templates = ctx.attr._c_typesupport_fastrtps_templates[DefaultInfo].files.to_list(),
+        templates_hdrs = ["detail/{}__rosidl_typesupport_fastrtps_c.h"],
+        templates_srcs = ["detail/{}__rosidl_typesupport_fastrtps_c.cpp"],
+        template_visibility_control = ctx.file._c_typesupport_fastrtps_visibility_template,
+    )
 
     # # Generate the type support library for protobuf
     # c_typesupport_protobuf_hdrs, c_typesupport_protobuf_srcs, _ = generate_sources(
@@ -120,8 +120,8 @@ def _c_aspect_impl(target, ctx):
             deps.extend([d for d in dep[RosCBindingsInfo].cc_infos.to_list()])
     
     # Merge headers, sources and deps into a CcInfo provider.
-    hdrs = c_hdrs + c_typesupport_hdrs + c_typesupport_introspection_hdrs #+ c_typesupport_fastrtps_hdrs #+ c_typesupport_protobuf_hdrs
-    srcs = c_srcs + c_typesupport_srcs + c_typesupport_introspection_srcs #+ c_typesupport_fastrtps_srcs #+ c_typesupport_protobuf_srcs
+    hdrs = c_hdrs + c_typesupport_hdrs + c_typesupport_introspection_hdrs + c_typesupport_fastrtps_hdrs #+ c_typesupport_protobuf_hdrs
+    srcs = c_srcs + c_typesupport_srcs + c_typesupport_introspection_srcs + c_typesupport_fastrtps_srcs #+ c_typesupport_protobuf_srcs
     cc_info = generate_cc_info(
         ctx = ctx,
         name = "{}_c".format(ctx.label.name),
@@ -245,10 +245,10 @@ c_aspect = aspect(
         "_c_deps": attr.label_list(
             default = [
                 Label("@rosidl_runtime_c"),
-                #Label("@rosidl_runtime_cpp"),
+                Label("@rosidl_runtime_cpp"),
                 Label("@rosidl_typesupport_c"),
-                #Label("@rosidl_typesupport_cpp"),
-                # Label("@rosidl_typesupport_fastrtps_c"),
+                Label("@rosidl_typesupport_cpp"),
+                Label("@rosidl_typesupport_fastrtps_c"),
                 Label("@rosidl_typesupport_introspection_c"),
                 # Label("@rosidl_typesupport_protobuf"),
                 # Label("@rosidl_typesupport_protobuf_c"),

@@ -17,13 +17,14 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
+package(default_visibility = ["//visibility:public"])
+
 # Package
 
 cc_library(
     name = "rosidl_typesupport_interface",
     hdrs = glob(["include/**/*.h"]),
     includes = ["include"],
-    visibility = ["//visibility:public"],
 )
 
 cc_test(

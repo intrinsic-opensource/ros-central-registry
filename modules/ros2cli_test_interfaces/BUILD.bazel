@@ -17,18 +17,18 @@
 
 load("@ros//:defs.bzl", "ros_interface", "ros_package")
 
+package(default_visibility = ["//visibility:public"])
+
 # Interfaces
 
 ros_interface(
     name = "msg__ShortVaried",
     src = "msg/ShortVaried.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__ShortVariedNested",
     src = "msg/ShortVariedNested.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__ShortVaried",
     ],
@@ -37,7 +37,6 @@ ros_interface(
 ros_interface(
     name = "msg__ShortVariedMultiNested",
     src = "msg/ShortVariedMultiNested.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__ShortVariedNested",
     ],
@@ -46,7 +45,6 @@ ros_interface(
 ros_interface(
     name = "srv__ShortVariedMultiNested",
     src = "srv/ShortVariedMultiNested.srv",
-    visibility = ["//visibility:public"],
     deps = [
         "@service_msgs//:msg__ServiceEventInfo",
         ":msg__ShortVariedNested",
@@ -56,7 +54,6 @@ ros_interface(
 ros_interface(
     name = "action__ShortVariedMultiNested",
     src = "action/ShortVariedMultiNested.action",
-    visibility = ["//visibility:public"],
     deps = [
         "@action_msgs//:msg__GoalInfo",
         "@action_msgs//:msg__GoalStatus",
@@ -75,5 +72,4 @@ ros_package(
         ":msg__ShortVaried",
         ":msg__ShortVariedNested",
     ],
-    visibility = ["//visibility:public"],
 )

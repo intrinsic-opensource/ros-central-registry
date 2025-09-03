@@ -17,24 +17,23 @@
 
 load("@ros//:defs.bzl", "ros_interface", "ros_package")
 
+package(default_visibility = ["//visibility:public"])
+
 # Interfaces
 
 ros_interface(
     name = "msg__Bool",
     src = "msg/Bool.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Byte",
     src = "msg/Byte.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__ByteMultiArray",
     src = "msg/ByteMultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -43,31 +42,26 @@ ros_interface(
 ros_interface(
     name = "msg__Char",
     src = "msg/Char.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__ColorRGBA",
     src = "msg/ColorRGBA.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Empty",
     src = "msg/Empty.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Float32",
     src = "msg/Float32.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Float32MultiArray",
     src = "msg/Float32MultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -76,13 +70,11 @@ ros_interface(
 ros_interface(
     name = "msg__Float64",
     src = "msg/Float64.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Float64MultiArray",
     src = "msg/Float64MultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -91,7 +83,6 @@ ros_interface(
 ros_interface(
     name = "msg__Header",
     src = "msg/Header.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@builtin_interfaces//:msg__Time",
     ],
@@ -100,13 +91,11 @@ ros_interface(
 ros_interface(
     name = "msg__Int16",
     src = "msg/Int16.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Int16MultiArray",
     src = "msg/Int16MultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -115,13 +104,11 @@ ros_interface(
 ros_interface(
     name = "msg__Int32",
     src = "msg/Int32.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Int32MultiArray",
     src = "msg/Int32MultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -130,13 +117,11 @@ ros_interface(
 ros_interface(
     name = "msg__Int64",
     src = "msg/Int64.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Int64MultiArray",
     src = "msg/Int64MultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -145,13 +130,11 @@ ros_interface(
 ros_interface(
     name = "msg__Int8",
     src = "msg/Int8.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Int8MultiArray",
     src = "msg/Int8MultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -160,13 +143,11 @@ ros_interface(
 ros_interface(
     name = "msg__MultiArrayDimension",
     src = "msg/MultiArrayDimension.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__MultiArrayLayout",
     src = "msg/MultiArrayLayout.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayDimension",
     ],
@@ -175,19 +156,16 @@ ros_interface(
 ros_interface(
     name = "msg__String",
     src = "msg/String.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__UInt16",
     src = "msg/UInt16.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__UInt16MultiArray",
     src = "msg/UInt16MultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -196,13 +174,11 @@ ros_interface(
 ros_interface(
     name = "msg__UInt32",
     src = "msg/UInt32.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__UInt32MultiArray",
     src = "msg/UInt32MultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -211,13 +187,11 @@ ros_interface(
 ros_interface(
     name = "msg__UInt64",
     src = "msg/UInt64.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__UInt64MultiArray",
     src = "msg/UInt64MultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -226,13 +200,11 @@ ros_interface(
 ros_interface(
     name = "msg__UInt8",
     src = "msg/UInt8.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__UInt8MultiArray",
     src = "msg/UInt8MultiArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__MultiArrayLayout",
     ],
@@ -274,5 +246,4 @@ ros_package(
         ":msg__UInt8",
         ":msg__UInt8MultiArray",
     ],
-    visibility = ["//visibility:public"],
 )

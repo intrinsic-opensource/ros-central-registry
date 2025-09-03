@@ -17,12 +17,13 @@
 
 load("@ros//:defs.bzl", "ros_interface", "ros_package")
 
+package(default_visibility = ["//visibility:public"])
+
 # Interfaces
 
 ros_interface(
     name = "srv__CancelGoal",
     src = "srv/CancelGoal.srv",
-    visibility = ["//visibility:public"],
     deps = [
         "@service_msgs//:msg__ServiceEventInfo",
         ":msg__GoalInfo",
@@ -32,7 +33,6 @@ ros_interface(
 ros_interface(
     name = "msg__GoalInfo",
     src = "msg/GoalInfo.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@builtin_interfaces//:msg__Time",
         "@unique_identifier_msgs//:msg__UUID",
@@ -42,7 +42,6 @@ ros_interface(
 ros_interface(
     name = "msg__GoalStatus",
     src = "msg/GoalStatus.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__GoalInfo",
     ],
@@ -51,7 +50,6 @@ ros_interface(
 ros_interface(
     name = "msg__GoalStatusArray",
     src = "msg/GoalStatusArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__GoalStatus",
     ],
@@ -67,5 +65,4 @@ ros_package(
         ":msg__GoalStatusArray",
         ":srv__CancelGoal",
     ],
-    visibility = ["//visibility:public"],
 )

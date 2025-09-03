@@ -17,24 +17,23 @@
 
 load("@ros//:defs.bzl", "ros_interface", "ros_package")
 
+package(default_visibility = ["//visibility:public"])
+
 # Interfaces
 
 ros_interface(
     name = "srv__Empty",
     src = "srv/Empty.srv",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "srv__SetBool",
     src = "srv/SetBool.srv",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "srv__Trigger",
     src = "srv/Trigger.srv",
-    visibility = ["//visibility:public"],
 )
 
 # Package
@@ -46,5 +45,4 @@ ros_package(
         ":srv__SetBool",
         ":srv__Trigger",
     ],
-    visibility = ["//visibility:public"],
 )

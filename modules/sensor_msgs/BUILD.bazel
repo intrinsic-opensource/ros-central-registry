@@ -17,12 +17,13 @@
 
 load("@ros//:defs.bzl", "ros_interface", "ros_package")
 
+package(default_visibility = ["//visibility:public"])
+
 # Interfaces
 
 ros_interface(
     name = "msg__BatteryState",
     src = "msg/BatteryState.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -31,7 +32,6 @@ ros_interface(
 ros_interface(
     name = "msg__CameraInfo",
     src = "msg/CameraInfo.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__RegionOfInterest",
         "@std_msgs//:msg__Header",
@@ -41,13 +41,11 @@ ros_interface(
 ros_interface(
     name = "msg__ChannelFloat32",
     src = "msg/ChannelFloat32.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__CompressedImage",
     src = "msg/CompressedImage.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -56,7 +54,6 @@ ros_interface(
 ros_interface(
     name = "msg__FluidPressure",
     src = "msg/FluidPressure.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -65,7 +62,6 @@ ros_interface(
 ros_interface(
     name = "msg__Illuminance",
     src = "msg/Illuminance.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -74,7 +70,6 @@ ros_interface(
 ros_interface(
     name = "msg__Image",
     src = "msg/Image.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -83,7 +78,6 @@ ros_interface(
 ros_interface(
     name = "msg__Imu",
     src = "msg/Imu.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@geometry_msgs//:msg__Quaternion",
         "@geometry_msgs//:msg__Vector3",
@@ -94,7 +88,6 @@ ros_interface(
 ros_interface(
     name = "msg__JointState",
     src = "msg/JointState.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -103,7 +96,6 @@ ros_interface(
 ros_interface(
     name = "msg__Joy",
     src = "msg/Joy.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -112,13 +104,11 @@ ros_interface(
 ros_interface(
     name = "msg__JoyFeedback",
     src = "msg/JoyFeedback.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__JoyFeedbackArray",
     src = "msg/JoyFeedbackArray.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__JoyFeedback",
     ],
@@ -127,13 +117,11 @@ ros_interface(
 ros_interface(
     name = "msg__LaserEcho",
     src = "msg/LaserEcho.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__LaserScan",
     src = "msg/LaserScan.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -142,7 +130,6 @@ ros_interface(
 ros_interface(
     name = "msg__MagneticField",
     src = "msg/MagneticField.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@geometry_msgs//:msg__Vector3",
         "@std_msgs//:msg__Header",
@@ -152,7 +139,6 @@ ros_interface(
 ros_interface(
     name = "msg__MultiDOFJointState",
     src = "msg/MultiDOFJointState.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@geometry_msgs//:msg__Transform",
         "@geometry_msgs//:msg__Twist",
@@ -164,7 +150,6 @@ ros_interface(
 ros_interface(
     name = "msg__MultiEchoLaserScan",
     src = "msg/MultiEchoLaserScan.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__LaserEcho",
         "@std_msgs//:msg__Header",
@@ -174,7 +159,6 @@ ros_interface(
 ros_interface(
     name = "msg__NavSatFix",
     src = "msg/NavSatFix.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__NavSatStatus",
         "@std_msgs//:msg__Header",
@@ -184,13 +168,11 @@ ros_interface(
 ros_interface(
     name = "msg__NavSatStatus",
     src = "msg/NavSatStatus.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__PointCloud",
     src = "msg/PointCloud.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__ChannelFloat32",
         "@geometry_msgs//:msg__Point32",
@@ -201,7 +183,6 @@ ros_interface(
 ros_interface(
     name = "msg__PointCloud2",
     src = "msg/PointCloud2.msg",
-    visibility = ["//visibility:public"],
     deps = [
         ":msg__PointField",
         "@std_msgs//:msg__Header",
@@ -211,13 +192,11 @@ ros_interface(
 ros_interface(
     name = "msg__PointField",
     src = "msg/PointField.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Range",
     src = "msg/Range.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -226,13 +205,11 @@ ros_interface(
 ros_interface(
     name = "msg__RegionOfInterest",
     src = "msg/RegionOfInterest.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__RelativeHumidity",
     src = "msg/RelativeHumidity.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -241,7 +218,6 @@ ros_interface(
 ros_interface(
     name = "srv__SetCameraInfo",
     src = "srv/SetCameraInfo.srv",
-    visibility = ["//visibility:public"],
     deps = [
         "@sensor_msgs//:msg__CameraInfo",
     ],
@@ -250,7 +226,6 @@ ros_interface(
 ros_interface(
     name = "msg__Temperature",
     src = "msg/Temperature.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@std_msgs//:msg__Header",
     ],
@@ -259,7 +234,6 @@ ros_interface(
 ros_interface(
     name = "msg__TimeReference",
     src = "msg/TimeReference.msg",
-    visibility = ["//visibility:public"],
     deps = [
         "@builtin_interfaces//:msg__Time",
         "@std_msgs//:msg__Header",
@@ -270,8 +244,7 @@ ros_interface(
 
 # ros_cc_test(
 #     name = "test_sensor_msgs",
-#     visibility = ["//visibility:public"],
-#     srcs = [
+# #     srcs = [
 #         "test/test_image_encodings.cpp",
 #         "test/test_pointcloud_conversion.cpp",
 #         "test/test_pointcloud_iterator.cpp",
@@ -337,5 +310,4 @@ ros_package(
         ":msg__TimeReference",
         ":srv__SetCameraInfo",
     ],
-    visibility = ["//visibility:public"],
 )

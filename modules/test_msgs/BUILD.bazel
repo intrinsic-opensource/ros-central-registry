@@ -20,14 +20,15 @@ load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@rosidl_generator_c//:defs.bzl", "c_ros_library")
 load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
 
+package(default_visibility = ["//visibility:public"])
+
 # Interfaces
 
 [
     ros_interface(
         name = "msg__{}".format(msg),
         src = "@test_interface_files//:msg/{}.msg".format(msg),
-        visibility = ["//visibility:public"],
-    )
+        )
     for msg in [
         "Arrays",
         "BasicTypes",
@@ -53,8 +54,7 @@ load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
         deps = [
             "@service_msgs//:msg__ServiceEventInfo",
         ],
-        visibility = ["//visibility:public"],
-    )
+        )
     for srv in [
         "Arrays",
         "BasicTypes",
@@ -74,8 +74,7 @@ load("@rosidl_generator_cpp//:defs.bzl", "cc_ros_library")
             "@action_msgs//:msg__GoalStatusArray",
             "@action_msgs//:srv__CancelGoal",
         ],
-        visibility = ["//visibility:public"],
-    )
+        )
     for action in [
         "Fibonacci",
     ]
@@ -88,7 +87,6 @@ ros_interface(
         "@builtin_interfaces//:msg__Duration",
         "@builtin_interfaces//:msg__Time",
     ],
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
@@ -103,7 +101,6 @@ ros_interface(
         "@test_msgs//:msg__BasicTypes",
         ":msg__Builtins",
     ],
-    visibility = ["//visibility:public"],
 )
 
 # Targets
@@ -111,8 +108,7 @@ ros_interface(
 # cc_library(
 #     name = "test_msgs_cc",
 #     hdrs = glob(["src/**/*.hpp"])
-#     visibility = ["//visibility:public"],
-# )
+# # )
 
 # py_library(
 #     name = "test_msgs_py",
@@ -123,8 +119,7 @@ ros_interface(
 #         "@ros//python:numpy",
 #         "@ros//python:pyyaml",
 #     ],
-#     visibility = ["//visibility:public"],
-# )
+# # )
 
 # filegroup(
 #   name = "test_msgs",
@@ -157,7 +152,6 @@ cc_test(
         "@googletest//:gtest_main",
         ":test_action_typesupport_c_builds_msgs",
     ],
-    visibility = ["//visibility:public"],
 )
 
 cc_ros_library(
@@ -181,7 +175,6 @@ cc_test(
         "@googletest//:gtest_main",
         ":test_action_typesupport_cpp_builds_msgs",
     ],
-    visibility = ["//visibility:public"],
 )
 
 
@@ -205,6 +198,5 @@ ros_package(
         ":srv__Empty",
         ":action__Fibonacci"
     ],
-    visibility = ["//visibility:public"],
 )
 

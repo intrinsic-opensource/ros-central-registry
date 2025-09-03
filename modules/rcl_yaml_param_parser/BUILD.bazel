@@ -29,9 +29,7 @@ cc_library(
     ]),
     hdrs = glob(["include/**/*.h"]),
     includes = ["include"],
-    local_defines = [
-        "ROS_PACKAGE_NAME=\\\"rcl_yaml_param_parser\\\"",
-    ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_yaml_param_parser\\\""],
     deps = [
         "@rcutils",
         "@rmw",

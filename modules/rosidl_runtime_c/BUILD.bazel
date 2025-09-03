@@ -17,6 +17,8 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
+package(default_visibility = ["//visibility:public"])
+
 # Package
 
 cc_library(
@@ -28,5 +30,4 @@ cc_library(
         "@rcutils",
         "@rosidl_typesupport_interface",
     ],
-    visibility = ["//visibility:public"],
 )

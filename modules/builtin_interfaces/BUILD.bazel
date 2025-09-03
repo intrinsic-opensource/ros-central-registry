@@ -17,18 +17,18 @@
 
 load("@ros//:defs.bzl", "ros_interface", "ros_package")
 
+package(default_visibility = ["//visibility:public"])
+
 # Interfaces
 
 ros_interface(
     name = "msg__Duration",
     src = "msg/Duration.msg",
-    visibility = ["//visibility:public"],
 )
 
 ros_interface(
     name = "msg__Time",
     src = "msg/Time.msg",
-    visibility = ["//visibility:public"],
 )
 
 # Package
@@ -39,5 +39,4 @@ ros_package(
         ":msg__Duration",
         ":msg__Time",
     ],
-    visibility = ["//visibility:public"],
 )

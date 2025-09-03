@@ -20,15 +20,15 @@ load("@ros//python:defs.bzl", "py_pytest")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
+package(default_visibility = ["//visibility:public"])
+
 filegroup(
     name = "interface_templates",
     srcs = glob(["resource/**/*.em"]),
-    visibility = ["//visibility:public"],
 )
 
 exports_files(
     srcs = ["resource/rosidl_typesupport_fastrtps_cpp__visibility_control.h.in"],
-    visibility = ["//visibility:public"],
 )
 
 cc_library(
@@ -40,7 +40,6 @@ cc_library(
         "@fastcdr",
         "@rcutils"
     ],
-    visibility = ["//visibility:public"],
 )
 
 py_library(
@@ -52,7 +51,6 @@ py_library(
         "@rosidl_pycommon",
         "@rosidl_generator_cpp",
     ],
-    visibility = ["//visibility:public"],
 )
 
 genrule(
@@ -68,7 +66,6 @@ py_binary(
     main = ":bin/rosidl_typesupport_fastrtps_cpp.py",
     python_version = "PY3",
     deps = [":rosidl_typesupport_fastrtps_cpp_py"],
-    visibility = ["//visibility:public"],
 )
 
 py_pytest(

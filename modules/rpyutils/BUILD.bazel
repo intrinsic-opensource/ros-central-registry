@@ -16,11 +16,12 @@
 load("@ros//python:defs.bzl", "py_pytest")
 load("@rules_python//python:defs.bzl", "py_library")
 
+package(default_visibility = ["//visibility:public"])
+
 py_library(
     name = "rpyutils",
     srcs = glob(["rpyutils/**/*.py"]),
     data = glob(["rpyutils/**/*.typed"]),
-    visibility = ["//visibility:public"],
 )
 
 [
