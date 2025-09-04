@@ -14,28 +14,13 @@ The `rmw_zenoh_cpp` middleware currently depends on a Cargo build from `rules_ru
 sudo apt install rustup
 ```
 
-# Demo of C and C++ nodes
+# Limitations
 
-To try out the C and C++ minimal publisher examples with the three supported middleware implementations:
-
-```sh
-# Example C node
-bazel build //:example_ros_node_c --config=rmw_cyclonedds_cpp
-bazel build //:example_ros_node_c --config=rmw_fastrtps_cpp
-bazel build //:example_ros_node_c --config=rmw_fastrtps_dynamic_cpp
-
-# Example C++ node
-bazel build //:example_ros_node_cc --config=rmw_cyclonedds_cpp
-bazel build //:example_ros_node_cc --config=rmw_fastrtps_cpp
-bazel build //:example_ros_node_cc --config=rmw_fastrtps_dynamic_cpp
-```
-
-Notes:
 - [ ] Zenoh currently has compilation issues, and so it's disabled.
 - [ ] ConnextDDS and GurumDDS are more complicated to support.
 - [ ] FastDDS uses rules_foreign_cc and takes 400+ seconds to build.
 
-# Demo of C and C++ messages
+# Examples
 
 Clone the repo:
 
@@ -59,4 +44,18 @@ Build a C++ target that uses protocol buffer C++ bindings.
 
 ```
 bazel build //:example_proto_cc
+```
+
+There are C and C++ example nodes with the three supported middleware implementations:
+
+```sh
+# Example C node
+bazel run //:example_ros_node_c --config=rmw_cyclonedds_cpp
+bazel run //:example_ros_node_c --config=rmw_fastrtps_cpp
+bazel run //:example_ros_node_c --config=rmw_fastrtps_dynamic_cpp
+
+# Example C++ node
+bazel run //:example_ros_node_cc --config=rmw_cyclonedds_cpp
+bazel run //:example_ros_node_cc --config=rmw_fastrtps_cpp
+bazel run //:example_ros_node_cc --config=rmw_fastrtps_dynamic_cpp
 ```
