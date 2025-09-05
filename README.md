@@ -1,10 +1,11 @@
 # Overview
 
-This repo is meant to illustrate work in progress towards a new Bazel build system for ROS in which there is a Bazel Module for each ROS package. A good chunk of the implementation is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) repository.
+This repo illustrates work in progress towards Bazel build system for ROS, where each ROS package is a Bazel module. A good chunk of the implementation is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) repository.
 
-The ROS packages in the `modules` folder are snapshots from a rolling release, augmented with Bazel build files in a way that lends itself towards a `source.json` file format submitted to a central registry. For now, version numbers have no meaning because this project used local overrides.
+The ROS packages in the `modules` folder are snapshots from a rolling release, augmented with Bazel build files in a way that lends itself towards a `source.json` file format submitted to a central registry. For now, version numbers have no meaning because this project uses local overrides. In the long term we intend to convert our patches and Bazel build files into modules in a ROS Central Registry, where the evolution of package versions and interdependency can be tightly managed.
 
-Right now I have message IDL generation working up to C and C++, and I have `rcl` and `rclcpp` compiling against `rmw` with `fastrtps` only (untested). The generators also support producing `.proto` files and protocol buffer C++ interfaces using a heavily modified version of [rosidl_typesupport_protobuf](https://github.com/eclipse-ecal/rosidl_typesupport_protobuf).
+> [!WARNING]
+> This repository is under active open development, and no guarantees are made about stability. Please do not depend on this code!
 
 # Prerequisites
 
@@ -14,11 +15,27 @@ The `rmw_zenoh_cpp` middleware currently depends on a Cargo build from `rules_ru
 sudo apt install rustup
 ```
 
-# Limitations
+# Status
 
-- [ ] Zenoh currently has compilation issues, and so it's disabled.
-- [ ] ConnextDDS and GurumDDS are more complicated to support.
-- [ ] FastDDS uses rules_foreign_cc and takes 400+ seconds to build.
+- Message language bindings
+  - [x] `c`
+  - [x] `cpp`
+  - [ ] `py`
+  - [ ] `rust`
+- Type supports:
+  - [x] `rosidl_typesupport_introspection`
+  - [x] `rosidl_typesupport_fastrtps`
+  - [x] `rosidl_typesupport_protobuf` : C++ only
+- Middleware:
+  - [x] `rmw_cyclonedds_cpp`
+  - [x] `rmw_fastrtps_cpp`
+  - [x] `rmw_fastrtps_dynamic_cpp`
+  - [ ] `rmw_zenoh_cpp` (work in progress)
+  - [ ] `rmw_connextdds_cpp`
+  - [ ] `rmw_gurumdds_cpp`
+- Core:
+  - [x] `rcl`
+  - [x] `rclcpp` 
 
 # Examples
 
