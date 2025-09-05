@@ -82,12 +82,18 @@ INFO: Running command line: bazel-bin/example_ros_subscriber_cc
 [INFO] [1757113580.783017681] [minimal_subscriber]: I heard: 'Hello, world! from C++ 14'
 ```
 
-# Protobuf type support for ROS publishers and subscribers
+# Protobuf type support for ROS
 
 For C++ only we have enabled protobuf type support using an updated version of the type support implementation from [eclipse-ecal/rosidl_typesupport_protobuf](https://github.com/eclipse-ecal/rosidl_typesupport_protobuf). What this means is that you can directly send protobuf types and the internal mapping to a ROS message type is handled for you. Eg:
 
 ```c++
+// Include the auto-generated protobuf language bindings for C++.
+#include "sensor_msgs/msg/compressed_image__typeadapter_protobuf_cpp.hpp"
+
+// Create a publisher that takes the ::pb:: namespaced protobuf type.
 auto publisher = this->create_publisher<sensor_msgs::msg::pb::CompressedImage>("topic", 10);
+
+// Create a protobuf message and send it to the ROS pubsub syste,.
 auto protobuf_message = sensor_msgs::msg::pb::CompressedImage();
 publisher->publish(protobuf_message);
 ```
