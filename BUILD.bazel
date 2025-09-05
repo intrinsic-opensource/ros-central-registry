@@ -66,13 +66,28 @@ cc_binary(
 )
 
 cc_binary(
-    name = "example_ros_node_c",
-    srcs = ["src/example_ros_node.c"],
+    name = "example_ros_publisher_c",
+    srcs = ["src/example_ros_publisher.c"],
     deps = [
         "@rcl",
         ":example_ros_c_msgs"
     ],
 )
+
+cc_binary(
+    name = "example_ros_subscriber_c",
+    srcs = ["src/example_ros_subscriber.c"],
+    deps = [
+        "@rcl",
+        ":example_ros_c_msgs"
+    ],
+)
+
+alias(
+    name = "example_ros_node_c",
+    actual = ":example_ros_publisher_c",
+)
+
 
 # C++ examples (note that cc_ros_library includes proto type support)
 
@@ -91,12 +106,26 @@ cc_binary(
 )
 
 cc_binary(
-    name = "example_ros_node_cc",
-    srcs = ["src/example_ros_node.cc"],
+    name = "example_ros_publisher_cc",
+    srcs = ["src/example_ros_publisher.cc"],
     deps = [
         "@rclcpp",
         ":example_ros_cc_msgs"
     ],
+)
+
+cc_binary(
+    name = "example_ros_subscriber_cc",
+    srcs = ["src/example_ros_subscriber.cc"],
+    deps = [
+        "@rclcpp",
+        ":example_ros_cc_msgs"
+    ],
+)
+
+alias(
+    name = "example_ros_node_cc",
+    actual = ":example_ros_publisher_cc",
 )
 
 # cc_binary(
