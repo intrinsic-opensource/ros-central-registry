@@ -46,7 +46,7 @@ def _c_typesupport_aspect_impl(target, ctx):
     )
 
     # Generate the type support library for introspection
-    c_typesupport_introspection_hdrs, c_typesupport_introspection_srcs, _ = generate_sources(
+    c_introspection_hdrs, c_introspection_srcs, _ = generate_sources(
         ctx = ctx,
         executable = ctx.executable._c_typesupport_introspection_generator,
         mnemonic = "CTypeSupportIntrospectionGeneration",
@@ -59,7 +59,7 @@ def _c_typesupport_aspect_impl(target, ctx):
     )
 
     # Generate the type support library for fastrtps
-    c_typesupport_fastrtps_hdrs, c_typesupport_fastrtps_srcs, _ = generate_sources(
+    c_fastrtps_hdrs, c_fastrtps_srcs, _ = generate_sources(
         ctx = ctx,
         executable = ctx.executable._c_typesupport_fastrtps_generator,
         mnemonic = "CTypeSupportFastRTPSGeneration",
@@ -72,7 +72,7 @@ def _c_typesupport_aspect_impl(target, ctx):
     )
 
     # Generate the type support library for protobuf
-    c_typesupport_protobuf_hdrs, c_typesupport_protobuf_srcs, _ = generate_sources(
+    c_protobuf_hdrs, c_protobuf_srcs, _ = generate_sources(
         ctx = ctx,
         executable = ctx.executable._c_typesupport_protobuf_generator,
         mnemonic = "CTypeSupportProtobufGeneration",
@@ -94,8 +94,8 @@ def _c_typesupport_aspect_impl(target, ctx):
             deps.extend([d for d in dep[RosCTypesupportInfo].cc_infos.to_list()])
     
     # Merge headers, sources and deps into a CcInfo provider.
-    hdrs = c_typesupport_hdrs + c_typesupport_introspection_hdrs + c_typesupport_fastrtps_hdrs + c_typesupport_protobuf_hdrs
-    srcs = c_typesupport_srcs + c_typesupport_introspection_srcs + c_typesupport_fastrtps_srcs + c_typesupport_protobuf_srcs
+    hdrs = c_typesupport_hdrs + c_introspection_hdrs + c_fastrtps_hdrs #+ c_protobuf_hdrs
+    srcs = c_typesupport_srcs + c_introspection_srcs + c_fastrtps_srcs #+ c_protobuf_srcs
     cc_info = generate_cc_info(
         ctx = ctx,
         name = "{}_c_typesupport".format(ctx.label.name),

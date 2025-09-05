@@ -7,10 +7,11 @@ test --sandbox_default_allow_network=false
 # Use the C++17 standard by default across the whole repo.
 #build --cxxopt=-std=c++17
 
-# Build configuration for FastRTPS
+# Build configuration for RMW implementations
+build:rmw_cyclonedds_cpp --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
 build:rmw_fastrtps_cpp --@rmw_implementation//:rmw=rmw_fastrtps_cpp
 build:rmw_fastrtps_dynamic_cpp --@rmw_implementation//:rmw=rmw_fastrtps_dynamic_cpp
-build:rmw_cyclonedds_cpp --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
+build:rmw_zenoh_cpp --@rmw_implementation//:rmw=rmw_zenoh_cpp
 
 # Hermetic builds with clang-17, musl, glibc 2.17-2.38
 # common --repo_env=CC=clang-15

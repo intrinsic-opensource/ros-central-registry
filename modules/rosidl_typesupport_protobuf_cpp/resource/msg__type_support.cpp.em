@@ -211,7 +211,8 @@ static rosidl_message_type_support_t @(handle_name) = {
 }  // namespace @(ns)
 @[  end for]@
 
-namespace rosidl_typesupport_protobuf
+/*
+namespace rosidl_typesupport_protobuf_cpp
 {
 
 template<>
@@ -221,8 +222,8 @@ const rosidl_message_type_support_t *get_message_type_support_handle<@(ros_type)
   return &@(namespaced_handle_name);
 }
 
-}  // namespace rosidl_typesupport_protobuf
-
+}  // namespace rosidl_typesupport_protobuf_cpp
+*/
 #ifdef __cplusplus
 extern "C"
 {

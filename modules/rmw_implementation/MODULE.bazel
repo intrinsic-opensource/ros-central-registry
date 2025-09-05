@@ -36,6 +36,7 @@ bazel_dep(name = "rmw", version = "7.9.0")
 bazel_dep(name = "rmw_cyclonedds_cpp", version = "7.9.0")
 bazel_dep(name = "rmw_fastrtps_cpp", version = "7.9.0")
 bazel_dep(name = "rmw_fastrtps_dynamic_cpp", version = "7.9.0")
+bazel_dep(name = "rmw_zenoh_cpp", version = "7.9.0")
 bazel_dep(name = "rosidl_runtime_c", version = "9.4.1")
 
 # bazel_dep(name = "performance_test_fixture", version = "0.4.0")

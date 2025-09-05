@@ -20,6 +20,7 @@ load("@rosidl_adapter_proto//:aspects.bzl", "proto_aspect")
 load("@rosidl_generator_c//:aspects.bzl", "c_aspect")
 load("@rosidl_generator_type_description//:aspects.bzl", "type_description_aspect")
 load("@rosidl_typesupport_c//:aspects.bzl", "c_typesupport_aspect")
+load("@rosidl_typesupport_c//:types.bzl", "RosCTypesupportInfo")
 load("@rosidl_typesupport_cpp//:aspects.bzl", "cc_typesupport_aspect")
 load("@rosidl_typesupport_cpp//:types.bzl", "RosCcTypesupportInfo")
 load(":types.bzl", "RosCcBindingsInfo")
@@ -52,7 +53,6 @@ cc_ros_library = rule(
                 type_description_aspect,  # RosTypeDescriptionInfo
                 c_aspect,                 # RosCBindingsInfo
                 cc_aspect,                # RosCcBindingsInfo
-                c_typesupport_aspect,     # RosCcTypesupportInfo
                 cc_typesupport_aspect,    # RosCcTypesupportInfo
             ],
             providers = [RosInterfaceInfo],

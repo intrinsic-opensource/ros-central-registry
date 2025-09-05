@@ -51,6 +51,13 @@ config_setting(
     },
 )
 
+config_setting(
+    name = "rmw_zenoh_cpp",
+    flag_values = {
+        ":rmw": "rmw_zenoh_cpp"
+    },
+)
+
 # Libraries
 
 cc_library(
@@ -59,7 +66,8 @@ cc_library(
         ":rmw_cyclonedds_cpp": ["@rmw_cyclonedds_cpp"],
         ":rmw_fastrtps_cpp": ["@rmw_fastrtps_cpp"],
         ":rmw_fastrtps_dynamic_cpp": ["@rmw_fastrtps_dynamic_cpp"],
-        "//conditions:default": ["@rmw_cyclonedds_cpp"],
+        ":rmw_zenoh_cpp": ["@rmw_zenoh_cpp"],
+        "//conditions:default": [],
     }),
 )
 

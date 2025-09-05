@@ -311,17 +311,20 @@ static rosidl_message_type_support_t @(handle_name) = {
 }  // namespace @(ns)
 @[  end for]@
 
-namespace rosidl_typesupport_protobuf
+/*
+namespace rosidl_typesupport_protobuf_c
 {
 
 template<>
 ROSIDL_TYPESUPPORT_PROTOBUF_C_EXPORT__@(package_name)
-const rosidl_message_type_support_t *get_message_type_support_handle<@(ros_type)>()
+const rosidl_message_type_support_t *
+get_message_type_support_handle<@(ros_type.replace("__", "::"))>()
 {
   return &@(namespaced_handle_name);
 }
 
-}  // namespace rosidl_typesupport_protobuf
+}  // namespace rosidl_typesupport_protobuf_c
+*/
 
 #ifdef __cplusplus
 extern "C"

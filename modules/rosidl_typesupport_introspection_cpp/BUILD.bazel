@@ -22,6 +22,10 @@ load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
+exports_files(
+    srcs = ["resource/rosidl_typesupport_fastrtps_cpp__visibility_control.h.in"],
+)
+
 filegroup(
     name = "interface_templates",
     srcs = glob(["resource/**/*.em"]),
@@ -32,6 +36,9 @@ cc_library(
     srcs = glob(["src/**"]),
     hdrs = glob(["include/**"]),
     includes = ["include"],
+    deps = [
+        "@rosidl_typesupport_introspection_c",
+    ]
 )
 
 py_library(

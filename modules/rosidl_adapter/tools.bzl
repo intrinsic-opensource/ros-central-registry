@@ -178,6 +178,7 @@ def generate_cc_info(ctx, name, hdrs, srcs, include_dirs = [], deps = []):
             compilation_outputs = compilation_outputs,
             linking_contexts = [dep.linking_context for dep in deps],
             name = name,
+            alwayslink = True,
         )
     else:
         linking_context = cc_common.merge_linking_contexts(

@@ -23,7 +23,7 @@ def generate_cpp(generator_arguments_file):
     mapping = {
         "idl__rosidl_typesupport_protobuf_cpp.hpp.em": "%s__rosidl_typesupport_protobuf_cpp.hpp",
         "idl__typeadapter_protobuf_cpp.hpp.em": "%s__typeadapter_protobuf_cpp.hpp",
-        "idl__type_support.cpp.em": "detail/protobuf_cpp/%s__type_support.cpp",
+        "idl__type_support.cpp.em": "detail/%s__rosidl_typesupport_protobuf_cpp.cpp",
     }
     generate_files(generator_arguments_file, mapping)
     return 0

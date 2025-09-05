@@ -15,8 +15,9 @@
 
 # Imports
 
-load("@ros//:defs.bzl", "ros_interface")
+load("@ros//:defs.bzl", "ros_interface", "ros_data")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
 load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
 
 package(default_visibility = ["//visibility:public"])
@@ -64,12 +65,8 @@ cc_library(
         "include/**/*.hpp"
     ]),
     includes = ["include"],
-    local_defines = [
-        "RCUTILS_ENABLE_FAULT_INJECTION",
-        "RMW_DDS_COMMON_BUILDING_LIBRARY",
-        "ROS_PACKAGE_NAME=\\\"rmw_dds_common\\\"",
-        "rmw_dds_common_library_EXPORTS",
-    ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_dds_common\\\""],
+    linkopts = ["-ldl", "-rdynamic"],
     deps = [
         "@rcpputils",
         "@rcutils",

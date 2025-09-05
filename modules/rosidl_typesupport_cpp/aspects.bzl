@@ -85,7 +85,7 @@ def _cc_typesupport_aspect_impl(target, ctx):
             "{}__typeadapter_protobuf_cpp.hpp",
         ],
         templates_srcs = [
-            "detail/protobuf_cpp/{}__type_support.cpp",
+            "detail/{}__rosidl_typesupport_protobuf_cpp.cpp",
         ],
         template_visibility_control = ctx.file._cc_typesupport_protobuf_visibility_template,
     )
@@ -96,14 +96,13 @@ def _cc_typesupport_aspect_impl(target, ctx):
     deps.extend([dep[CcInfo] for dep in ctx.attr._cc_deps + ctx.rule.attr.deps if CcInfo in dep])
     deps.extend([d for d in target[RosCBindingsInfo].cc_infos.to_list()])
     deps.extend([d for d in target[RosCcBindingsInfo].cc_infos.to_list()])
-    deps.extend([d for d in target[RosCTypesupportInfo].cc_infos.to_list()])
     for dep in ctx.rule.attr.deps:
         if RosCcTypesupportInfo in dep:
             deps.extend([d for d in dep[RosCcTypesupportInfo].cc_infos.to_list()])
     
     # Merge headers, sources and deps into a CcInfo provider.
-    hdrs = cc_typesupport_hdrs + cc_introspection_hdrs + cc_protobuf_hdrs + cc_fastrtps_hdrs
-    srcs = cc_typesupport_srcs + cc_introspection_srcs + cc_protobuf_srcs + cc_fastrtps_srcs
+    hdrs = cc_typesupport_hdrs + cc_introspection_hdrs + cc_fastrtps_hdrs #+ cc_protobuf_hdrs
+    srcs = cc_typesupport_srcs + cc_introspection_srcs + cc_fastrtps_srcs #+ cc_protobuf_srcs
     cc_info = generate_cc_info(
         ctx = ctx,
         name = "{}_cc_typesupport".format(ctx.label.name),
@@ -222,7 +221,6 @@ cc_typesupport_aspect = aspect(
         [CcInfo],
         [RosCBindingsInfo],
         [RosCcBindingsInfo],
-        [RosCTypesupportInfo],
     ],
     provides = [RosCcTypesupportInfo],
 )

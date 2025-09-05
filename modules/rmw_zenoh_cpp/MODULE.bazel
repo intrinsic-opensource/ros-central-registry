@@ -31,6 +31,8 @@ bazel_dep(name = "rcpputils", version = "2.14.2")
 bazel_dep(name = "rcutils", version = "7.0.0")
 bazel_dep(name = "rmw", version = "7.9.0")
 bazel_dep(name = "rosidl_runtime_c", version = "0.0.0")
+bazel_dep(name = "rosidl_typesupport_fastrtps_c", version = "0.0.0")
+bazel_dep(name = "rosidl_typesupport_fastrtps_cpp", version = "0.0.0")
 bazel_dep(name = "tracetools", version = "0.0.0")
 bazel_dep(name = "zenoh-cpp", version = "0.0.0")
 
