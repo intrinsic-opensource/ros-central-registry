@@ -46,16 +46,36 @@ Build a C++ target that uses protocol buffer C++ bindings.
 bazel build //:example_proto_cc
 ```
 
-There are C and C++ example nodes with the three supported middleware implementations:
+We've included a C++ publish and susbscribe examples. Note that you can replace `--config=rmw_cyclonedds_cpp` with `--config=rmw_fastrtps_cpp` or `--config=rmw_fastrtps_dynamic_cpp` to switch between middleware implementations as needed. We intend to add Zenoh support in the near future.
 
 ```sh
-# Example C node
-bazel run //:example_ros_node_c --config=rmw_cyclonedds_cpp
-bazel run //:example_ros_node_c --config=rmw_fastrtps_cpp
-bazel run //:example_ros_node_c --config=rmw_fastrtps_dynamic_cpp
+# In one terminal
+[shell] bazel run //:example_ros_publisher_cc --config=rmw_cyclonedds_cpp
+INFO: Analyzed target //:example_ros_publisher_cc (0 packages loaded, 16770 targets configured).
+INFO: Found 1 target...
+Target //:example_ros_publisher_cc up-to-date:
+  bazel-bin/example_ros_publisher_cc
+INFO: Elapsed time: 12.685s, Critical Path: 9.65s
+INFO: 131 processes: 2533 action cache hit, 4 internal, 127 processwrapper-sandbox.
+INFO: Build completed successfully, 131 total actions
+INFO: Running command line: bazel-bin/example_ros_publisher_cc
+[INFO] [1757113510.547578338] [minimal_publisher]: Published: 'Hello, world! from C++ 0'
+[INFO] [1757113511.547565265] [minimal_publisher]: Published: 'Hello, world! from C++ 1'
+[INFO] [1757113512.547580653] [minimal_publisher]: Published: 'Hello, world! from C++ 2'
+[INFO] [1757113513.547580236] [minimal_publisher]: Published: 'Hello, world! from C++ 3'
 
-# Example C++ node
-bazel run //:example_ros_node_cc --config=rmw_cyclonedds_cpp
-bazel run //:example_ros_node_cc --config=rmw_fastrtps_cpp
-bazel run //:example_ros_node_cc --config=rmw_fastrtps_dynamic_cpp
+# In a second terminal
+[shell] bazel run //:example_ros_subscriber_cc --config=rmw_cyclonedds_cpp
+INFO: Analyzed target //:example_ros_subscriber_cc (0 packages loaded, 2 targets configured).
+INFO: Found 1 target...
+Target //:example_ros_subscriber_cc up-to-date:
+  bazel-bin/example_ros_subscriber_cc
+INFO: Elapsed time: 7.668s, Critical Path: 7.24s
+INFO: 6 processes: 1 action cache hit, 4 internal, 2 processwrapper-sandbox.
+INFO: Build completed successfully, 6 total actions
+INFO: Running command line: bazel-bin/example_ros_subscriber_cc
+[INFO] [1757113577.783073521] [minimal_subscriber]: I heard: 'Hello, world! from C++ 11'
+[INFO] [1757113578.783137353] [minimal_subscriber]: I heard: 'Hello, world! from C++ 12'
+[INFO] [1757113579.783068847] [minimal_subscriber]: I heard: 'Hello, world! from C++ 13'
+[INFO] [1757113580.783017681] [minimal_subscriber]: I heard: 'Hello, world! from C++ 14'
 ```
