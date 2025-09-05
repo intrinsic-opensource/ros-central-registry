@@ -46,11 +46,13 @@ Build a C++ target that uses protocol buffer C++ bindings.
 bazel build //:example_proto_cc
 ```
 
-We've included a C++ publish and susbscribe examples. Note that you can replace `--config=rmw_cyclonedds_cpp` with `--config=rmw_fastrtps_cpp` or `--config=rmw_fastrtps_dynamic_cpp` to switch between middleware implementations as needed. We intend to add Zenoh support in the near future.
+# Basic publisher and subscriber examples
+
+We've included a C++ publish and subscribe examples. Note that you can replace `--config=rmw_cyclonedds_cpp` with `--config=rmw_fastrtps_cpp` or `--config=rmw_fastrtps_dynamic_cpp` to switch between middleware implementations as needed. We intend to add Zenoh support in the near future.
 
 ```sh
 # In one terminal
-[shell] bazel run //:example_ros_publisher_cc --config=rmw_cyclonedds_cpp
+[rolling] bazel_ros_demo 💥 bazel run //:example_ros_publisher_cc --config=rmw_cyclonedds_cpp
 INFO: Analyzed target //:example_ros_publisher_cc (0 packages loaded, 16770 targets configured).
 INFO: Found 1 target...
 Target //:example_ros_publisher_cc up-to-date:
@@ -65,7 +67,7 @@ INFO: Running command line: bazel-bin/example_ros_publisher_cc
 [INFO] [1757113513.547580236] [minimal_publisher]: Published: 'Hello, world! from C++ 3'
 
 # In a second terminal
-[shell] bazel run //:example_ros_subscriber_cc --config=rmw_cyclonedds_cpp
+[rolling] bazel_ros_demo 💥 bazel run //:example_ros_subscriber_cc --config=rmw_cyclonedds_cpp
 INFO: Analyzed target //:example_ros_subscriber_cc (0 packages loaded, 2 targets configured).
 INFO: Found 1 target...
 Target //:example_ros_subscriber_cc up-to-date:
@@ -78,4 +80,46 @@ INFO: Running command line: bazel-bin/example_ros_subscriber_cc
 [INFO] [1757113578.783137353] [minimal_subscriber]: I heard: 'Hello, world! from C++ 12'
 [INFO] [1757113579.783068847] [minimal_subscriber]: I heard: 'Hello, world! from C++ 13'
 [INFO] [1757113580.783017681] [minimal_subscriber]: I heard: 'Hello, world! from C++ 14'
+```
+
+# Protobuf type support for ROS publishers and subscribers
+
+For C++ only we have enabled protobuf type support using an updated version of the type support implementation from [eclipse-ecal/rosidl_typesupport_protobuf](https://github.com/eclipse-ecal/rosidl_typesupport_protobuf). What this means is that you can directly send protobuf types and the internal mapping to a ROS message type is handled for you. Eg:
+
+```c++
+auto publisher = this->create_publisher<sensor_msgs::msg::pb::CompressedImage>("topic", 10);
+auto protobuf_message = sensor_msgs::msg::pb::CompressedImage();
+publisher->publish(protobuf_message);
+```
+
+This is only possible in C++, and we've included two examples:
+
+```sh
+# In one terminal
+[rolling] bazel_ros_demo 💥 bazel run //:example_ros_proto_publisher_cc --config=rmw_cyclonedds_cpp
+INFO: Analyzed target //:example_ros_proto_publisher_cc (0 packages loaded, 0 targets configured).
+INFO: Found 1 target...
+Target //:example_ros_proto_publisher_cc up-to-date:
+  bazel-bin/example_ros_proto_publisher_cc
+INFO: Elapsed time: 0.559s, Critical Path: 0.02s
+INFO: 1 process: 4 action cache hit, 1 internal.
+INFO: Build completed successfully, 1 total action
+INFO: Running command line: bazel-bin/example_ros_proto_publisher_cc
+[INFO] [1757115413.832288766] [minimal_proto_publisher]: Published protbuf message
+[INFO] [1757115414.832286101] [minimal_proto_publisher]: Published protbuf message
+[INFO] [1757115415.832314817] [minimal_proto_publisher]: Published protbuf message
+
+# In a second terminal
+[rolling] bazel_ros_demo 💥 bazel run //:example_ros_proto_subscriber_cc --config=rmw_cyclonedds_cpp
+INFO: Analyzed target //:example_ros_proto_subscriber_cc (0 packages loaded, 0 targets configured).
+INFO: Found 1 target...
+Target //:example_ros_proto_subscriber_cc up-to-date:
+  bazel-bin/example_ros_proto_subscriber_cc
+INFO: Elapsed time: 9.744s, Critical Path: 9.20s
+INFO: 3 processes: 1 action cache hit, 1 internal, 2 processwrapper-sandbox.
+INFO: Build completed successfully, 3 total actions
+INFO: Running command line: bazel-bin/example_ros_proto_subscriber_cc
+[INFO] [1757115413.832665806] [minimal_subscriber]: Received protobuf message
+[INFO] [1757115414.832732991] [minimal_subscriber]: Received protobuf message
+[INFO] [1757115415.832741286] [minimal_subscriber]: Received protobuf message
 ```

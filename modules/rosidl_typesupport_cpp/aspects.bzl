@@ -101,8 +101,8 @@ def _cc_typesupport_aspect_impl(target, ctx):
             deps.extend([d for d in dep[RosCcTypesupportInfo].cc_infos.to_list()])
     
     # Merge headers, sources and deps into a CcInfo provider.
-    hdrs = cc_typesupport_hdrs + cc_introspection_hdrs + cc_fastrtps_hdrs #+ cc_protobuf_hdrs
-    srcs = cc_typesupport_srcs + cc_introspection_srcs + cc_fastrtps_srcs #+ cc_protobuf_srcs
+    hdrs = cc_typesupport_hdrs + cc_introspection_hdrs + cc_fastrtps_hdrs + cc_protobuf_hdrs
+    srcs = cc_typesupport_srcs + cc_introspection_srcs + cc_fastrtps_srcs + cc_protobuf_srcs
     cc_info = generate_cc_info(
         ctx = ctx,
         name = "{}_cc_typesupport".format(ctx.label.name),
