@@ -5,7 +5,7 @@ This repo illustrates work in progress towards Bazel build system for ROS, where
 The ROS packages in the `modules` folder are snapshots from a rolling release, augmented with Bazel build files in a way that lends itself towards a `source.json` file format submitted to a central registry. For now, version numbers have no meaning because this project uses local overrides. In the long term we intend to convert our patches and Bazel build files into modules in a ROS Central Registry, where the evolution of package versions and interdependency can be tightly managed.
 
 > [!WARNING]
-> This repository is under active open development, and no guarantees are made about stability. Please do not depend on this code!
+> This repository is a proof of concept and under active open development, and so no guarantees are made about stability. Please do not depend on this code!
 
 # Prerequisites
 
