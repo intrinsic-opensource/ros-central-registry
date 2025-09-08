@@ -1,0 +1,130 @@
+[submodule "submodules/ament_cmake_ros"]
+	path = submodules/ament_cmake_ros
+	url = https://github.com/asymingt/ament_cmake_ros.git
+	branch = rolling-bazel
+[submodule "submodules/ament_index"]
+	path = submodules/ament_index
+	url = https://github.com/asymingt/ament_index.git
+	branch = rolling-bazel
+[submodule "submodules/common_interfaces"]
+	path = submodules/common_interfaces
+	url = https://github.com/asymingt/common_interfaces.git
+	branch = rolling-bazel
+[submodule "submodules/geometry2"]
+	path = submodules/geometry2
+	url = https://github.com/asymingt/geometry2.git
+	branch = rolling-bazel
+[submodule "submodules/libstatistics_collector"]
+	path = submodules/libstatistics_collector
+	url = https://github.com/asymingt/libstatistics_collector.git
+	branch = rolling-bazel
+[submodule "submodules/osrf_testing_tools_cpp"]
+	path = submodules/osrf_testing_tools_cpp
+	url = https://github.com/asymingt/osrf_testing_tools_cpp.git
+	branch = rolling-bazel
+[submodule "submodules/performance_test_fixture"]
+	path = submodules/performance_test_fixture
+	url = https://github.com/asymingt/performance_test_fixture.git
+	branch = rolling-bazel
+[submodule "submodules/rcl"]
+	path = submodules/rcl
+	url = https://github.com/asymingt/rcl.git
+	branch = rolling-bazel
+[submodule "submodules/rcl_interfaces"]
+	path = submodules/rcl_interfaces
+	url = https://github.com/asymingt/rcl_interfaces.git
+	branch = rolling-bazel
+[submodule "submodules/rmw_connextdds"]
+	path = submodules/rmw_connextdds
+	url = https://github.com/asymingt/rmw_connextdds.git
+	branch = rolling-bazel
+[submodule "submodules/rmw_cyclonedds"]
+	path = submodules/rmw_cyclonedds
+	url = https://github.com/asymingt/rmw_cyclonedds.git
+	branch = rolling-bazel
+[submodule "submodules/rmw_dds_common"]
+	path = submodules/rmw_dds_common
+	url = https://github.com/asymingt/rmw_dds_common.git
+	branch = rolling-bazel
+[submodule "submodules/rmw_fastrtps"]
+	path = submodules/rmw_fastrtps
+	url = https://github.com/asymingt/rmw_fastrtps.git
+	branch = rolling-bazel
+[submodule "submodules/rmw_implementation"]
+	path = submodules/rmw_implementation
+	url = https://github.com/asymingt/rmw_implementation.git
+	branch = rolling-bazel
+[submodule "submodules/rmw_zenoh"]
+	path = submodules/rmw_zenoh
+	url = https://github.com/asymingt/rmw_zenoh.git
+	branch = rolling-bazel
+[submodule "submodules/ros2_tracing"]
+	path = submodules/ros2_tracing
+	url = https://github.com/asymingt/ros2_tracing.git
+	branch = rolling-bazel
+[submodule "submodules/ros2cli"]
+	path = submodules/ros2cli
+	url = https://github.com/asymingt/ros2cli.git
+	branch = rolling-bazel
+[submodule "submodules/rosidl"]
+	path = submodules/rosidl
+	url = https://github.com/asymingt/rosidl.git
+	branch = rolling-bazel
+[submodule "submodules/rosidl_dynamic_typesupport"]
+	path = submodules/rosidl_dynamic_typesupport
+	url = https://github.com/asymingt/rosidl_dynamic_typesupport.git
+	branch = rolling-bazel
+[submodule "submodules/rosidl_python"]
+	path = submodules/rosidl_python
+	url = https://github.com/asymingt/rosidl_python.git
+	branch = rolling-bazel
+[submodule "submodules/rosidl_typesupport"]
+	path = submodules/rosidl_typesupport
+	url = https://github.com/asymingt/rosidl_typesupport.git
+	branch = rolling-bazel
+[submodule "submodules/rosidl_typesupport_fastrtps"]
+	path = submodules/rosidl_typesupport_fastrtps
+	url = https://github.com/asymingt/rosidl_typesupport_fastrtps.git
+	branch = rolling-bazel
+[submodule "submodules/rosidl_typesupport_protobuf"]
+	path = submodules/rosidl_typesupport_protobuf
+	url = https://github.com/asymingt/rosidl_typesupport_protobuf.git
+	branch = rolling-bazel
+[submodule "submodules/rpyutils"]
+	path = submodules/rpyutils
+	url = https://github.com/asymingt/rpyutils.git
+	branch = rolling-bazel
+[submodule "submodules/test_interface_files"]
+	path = submodules/test_interface_files
+	url = https://github.com/asymingt/test_interface_files.git
+	branch = rolling-bazel
+[submodule "submodules/unique_identifier_msgs"]
+	path = submodules/unique_identifier_msgs
+	url = https://github.com/asymingt/unique_identifier_msgs.git
+	branch = rolling-bazel
+[submodule "submodules/rcl_logging"]
+	path = submodules/rcl_logging
+	url = https://github.com/asymingt/rcl_logging.git
+	branch = rolling-bazel
+[submodule "submodules/rclcpp"]
+	path = submodules/rclcpp
+	url = https://github.com/asymingt/rclcpp.git
+	branch = rolling-bazel
+[submodule "submodules/rcpputils"]
+	path = submodules/rcpputils
+	url = https://github.com/asymingt/rcpputils.git
+	branch = rolling-bazel
+[submodule "submodules/rcutils"]
+	path = submodules/rcutils
+	url = https://github.com/asymingt/rcutils.git
+	branch = rolling-bazel
+[submodule "submodules/rmw"]
+	path = submodules/rmw
+	url = https://github.com/asymingt/rmw.git
+	branch = rolling-bazel
+[submodule "submodules/rosidl_runtime_py"]
+	path = submodules/rosidl_runtime_py
+	url = https://github.com/asymingt/rosidl_runtime_py.git
+[submodule "submodules/rosidl_dynamic_typesupport_fastrtps"]
+	path = submodules/rosidl_dynamic_typesupport_fastrtps
+	url = https://github.com/asymingt/rosidl_dynamic_typesupport_fastrtps.git
