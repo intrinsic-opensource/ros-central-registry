@@ -1,7 +1,0 @@
-module test_msgs {
-  module idl {
-    struct IdlOnlyTypes {
-      wchar wchar_value;
-    };
-  };
-};

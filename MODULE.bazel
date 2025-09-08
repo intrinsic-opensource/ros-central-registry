@@ -112,6 +112,8 @@ local_path_override(module_name = "mimick", path = "./thirdparty/mimick")
 local_path_override(module_name = "zenoh-c", path = "./thirdparty/zenoh-c")
 local_path_override(module_name = "zenoh-cpp", path = "./thirdparty/zenoh-cpp")
 
+local_path_override(module_name = "ros", path = "./ros")
+
 local_path_override(module_name = "action_msgs", path = "./submodules/rcl_interfaces/action_msgs")
 local_path_override(module_name = "ament_index_cpp", path = "./submodules/ament_index/ament_index_cpp")
 local_path_override(module_name = "ament_index_python", path = "./submodules/ament_index/ament_index_python")
@@ -138,7 +140,6 @@ local_path_override(module_name = "rmw_security_common", path = "./submodules/rm
 local_path_override(module_name = "rmw_test_fixture", path = "./submodules/ament_cmake_ros/rmw_test_fixture")
 local_path_override(module_name = "rmw_zenoh_cpp", path = "./submodules/rmw_zenoh/rmw_zenoh_cpp")
 local_path_override(module_name = "rmw", path = "./submodules/rmw/rmw")
-local_path_override(module_name = "ros", path = "./modules/ros")
 local_path_override(module_name = "ros2cli_test_interfaces", path = "./submodules/ros2cli/ros2cli_test_interfaces")
 local_path_override(module_name = "rosgraph_msgs", path = "./submodules/rcl_interfaces/rosgraph_msgs")
 local_path_override(module_name = "rosidl_adapter_proto", path = "./submodules/rosidl_typesupport_protobuf/rosidl_adapter_proto")
