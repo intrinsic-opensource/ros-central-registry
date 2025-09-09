@@ -4,7 +4,10 @@ module(
     compatibility_level = 1,
 )
 
-bazel_dep(name = "rules_foreign_cc", version = "0.15.0")
+bazel_dep(name = "cmake_configure_file", version = "0.1.2")
+bazel_dep(name = "rules_cc", version = "0.1.4")
+
+#bazel_dep(name = "rules_foreign_cc", version = "0.15.0")
 bazel_dep(name = "liburcu", version = "0.15.3")
 
-local_path_override(module_name = "liburcu", path = "../liburcu")
+#local_path_override(module_name = "liburcu", path = "../liburcu")

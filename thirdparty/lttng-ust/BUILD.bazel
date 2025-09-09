@@ -1,90 +1,33 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "configure_make")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
-LIBRARY_TARGETS = [
-    "lttng-ust-common",
-    "lttng-ust-ctl",
-    "lttng-ust-cyg-profile-fast",
-    "lttng-ust-cyg-profile",
-    "lttng-ust-dl",
-    "lttng-ust-fd",
-    "lttng-ust-fork",
-    "lttng-ust-libc-wrapper",
-    "lttng-ust-pthread-wrapper",
-    "lttng-ust-tracepoint",
-    "lttng-ust",
-]
-
-EXECUTABLE_TARGETS = [
-    "lttng-gen-tp"
-]
-
-filegroup(
-    name = "all",
-    srcs = glob(["**"], exclude=["BUILD.bazel", "MODULE.bazel"]),
-)
-
-configure_make(
-    name = "lttng-ust-project",
-    lib_source = ":all",
-    autogen = True,
-    autogen_command = "bootstrap",
-    configure_in_place = True,
-    configure_options = [
-        "--disable-examples",
-        "--disable-man-pages",
+cc_library(
+    name = "lttng-ust",
+    srcs = glob([
+        "src/common/**/*.h",
+        "src/common/**/*.c",
+        "src/lib/lttng-ust/**/*.h",
+        "src/lib/lttng-ust/**/*.c",
+    ], exclude = [
+        "src/lib/lttng-ust/lttng-context-perf-counters.c",
+    ]),
+    hdrs = glob([
+        "include/**/*.h",
+    ]),
+    includes = [
+        "include",
+        "src",
+        "src/lib/lttng-ust"
     ],
+    local_defines = [
+        "_GNU_SOURCE",
+        "LTTNG_SYSTEM_RUNDIR=\\\"/var/run/lttng\\\"",
+    ],
+    copts = [
+      "-Wno-stringop-overread"
+   ],
     deps = [
         "@liburcu",
     ],
-    out_binaries = EXECUTABLE_TARGETS,
-    out_shared_libs = ["lib" + lib + ".so" for lib in LIBRARY_TARGETS],
 )
-
-# Extract the binaries
-
-# [
-#     filegroup(
-#         name = pkg + "_bin",
-#         output_group = pkg,
-#         srcs = [":lttng-ust-project"],
-#     ) 
-#     for pkg in EXECUTABLE_TARGETS
-# ]
-
-# [
-#     cc_binary(
-#         name = pkg,
-#         srcs = [":" + pkg + "_bin"],
-#     )
-#     for pkg in EXECUTABLE_TARGETS
-# ]
-
-# Extract the executables
-
-[
-    filegroup(
-        name = pkg + "_lib",
-        output_group = "lib" + pkg + ".so",
-        srcs = [":lttng-ust-project"],
-    )
-    for pkg in LIBRARY_TARGETS
-]
-
-[
-    cc_library(
-        name = pkg,
-        srcs = [":" + pkg + "_lib"],
-    )
-    for pkg in LIBRARY_TARGETS
-]
-
-
-
-
-
-
-
-
-
