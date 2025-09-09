@@ -15,6 +15,12 @@ The `rmw_zenoh_cpp` middleware currently depends on a Cargo build from `rules_ru
 sudo apt install rustup
 ```
 
+In addition to a workign GCC compiler, the `rules_foreign_cc` requires `libtool` to function correctly. You must install these two packages before installing:
+
+```
+sudo apt install build-essential libtool
+```
+
 # Status
 
 - Message language bindings
