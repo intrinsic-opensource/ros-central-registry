@@ -42,8 +42,16 @@ bazel_dep(name = "action_msgs", version = "2.4.1")
 bazel_dep(name = "ament_index_cpp", version = "0.0.0")
 bazel_dep(name = "ament_index_python", version = "0.0.0")
 bazel_dep(name = "builtin_interfaces", version = "2.4.1")
+bazel_dep(name = "diagnostic_msgs", version = "2.4.1")
 bazel_dep(name = "geometry_msgs", version = "5.8.1")
+bazel_dep(name = "nav_msgs", version = "2.4.1")
+bazel_dep(name = "shape_msgs", version = "2.4.1")
+bazel_dep(name = "stereo_msgs", version = "2.4.1")
+bazel_dep(name = "trajectory_msgs", version = "2.4.1")
+bazel_dep(name = "visualization_msgs", version = "2.4.1")
 bazel_dep(name = "libstatistics_collector", version = "0.0.0")
+bazel_dep(name = "lifecycle_msgs", version = "0.0.0")
+bazel_dep(name = "composition_interfaces", version = "0.0.0")
 bazel_dep(name = "osrf_testing_tools_cpp", version = "0.0.0")
 bazel_dep(name = "performance_test_fixture", version = "0.0.0")
 bazel_dep(name = "rcl_interfaces", version = "0.0.0")
@@ -118,8 +126,12 @@ local_path_override(module_name = "action_msgs", path = "./submodules/rcl_interf
 local_path_override(module_name = "ament_index_cpp", path = "./submodules/ament_index/ament_index_cpp")
 local_path_override(module_name = "ament_index_python", path = "./submodules/ament_index/ament_index_python")
 local_path_override(module_name = "builtin_interfaces", path = "./submodules/rcl_interfaces/builtin_interfaces")
+local_path_override(module_name = "composition_interfaces", path = "./submodules/rcl_interfaces/composition_interfaces")
+local_path_override(module_name = "diagnostic_msgs", path = "./submodules/common_interfaces/diagnostic_msgs")
 local_path_override(module_name = "geometry_msgs", path = "./submodules/common_interfaces/geometry_msgs")
 local_path_override(module_name = "libstatistics_collector", path = "./submodules/libstatistics_collector")
+local_path_override(module_name = "lifecycle_msgs", path = "./submodules/rcl_interfaces/lifecycle_msgs")
+local_path_override(module_name = "nav_msgs", path = "./submodules/common_interfaces/nav_msgs")
 local_path_override(module_name = "osrf_testing_tools_cpp", path = "submodules/osrf_testing_tools_cpp/osrf_testing_tools_cpp")
 local_path_override(module_name = "performance_test_fixture", path = "./submodules/performance_test_fixture")
 local_path_override(module_name = "rcl_interfaces", path = "./submodules/rcl_interfaces/rcl_interfaces")
@@ -168,24 +180,19 @@ local_path_override(module_name = "rosidl_typesupport_protobuf", path = "./submo
 local_path_override(module_name = "rpyutils", path = "./submodules/rpyutils")
 local_path_override(module_name = "sensor_msgs", path = "./submodules/common_interfaces/sensor_msgs")
 local_path_override(module_name = "service_msgs", path = "./submodules/rcl_interfaces/service_msgs")
+local_path_override(module_name = "shape_msgs", path = "./submodules/common_interfaces/shape_msgs")
 local_path_override(module_name = "statistics_msgs", path = "./submodules/rcl_interfaces/statistics_msgs")
 local_path_override(module_name = "std_msgs", path = "./submodules/common_interfaces/std_msgs")
 local_path_override(module_name = "std_srvs", path = "./submodules/common_interfaces/std_srvs")
+local_path_override(module_name = "stereo_msgs", path = "./submodules/common_interfaces/stereo_msgs")
 local_path_override(module_name = "test_interface_files", path = "./submodules/test_interface_files")
 local_path_override(module_name = "test_msgs", path = "./submodules/rcl_interfaces/test_msgs")
 local_path_override(module_name = "tf2_msgs", path = "./submodules/geometry2/tf2_msgs")
 local_path_override(module_name = "tracetools", path = "./submodules/ros2_tracing/tracetools")
+local_path_override(module_name = "trajectory_msgs", path = "./submodules/common_interfaces/trajectory_msgs")
 local_path_override(module_name = "type_description_interfaces", path = "./submodules/rcl_interfaces/type_description_interfaces")
 local_path_override(module_name = "unique_identifier_msgs", path = "./submodules/unique_identifier_msgs")
-
-# Hermetic toolchain configuration for consistent builds across different host environments
-
-# toolchains = use_extension("@hermetic_cc_toolchain//toolchain:ext.bzl", "toolchains")
-# use_repo(toolchains, "zig_sdk")
-
-# register_toolchains(
-#     "@zig_sdk//toolchain:linux_amd64_gnu.2.38",
-# )
+local_path_override(module_name = "visualization_msgs", path = "./submodules/common_interfaces/visualization_msgs")
 
 # Python configuration
 
