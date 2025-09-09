@@ -28,22 +28,22 @@ package(default_visibility = ["//visibility:public"])
 idl_ros_library(
     name = "example_ros_idl",
     deps = [
-        "@std_msgs//:msg__String",
-        "@geometry_msgs//:msg__PoseStamped",
-        "@ros2cli_test_interfaces//:msg__ShortVariedMultiNested",
-        "@ros2cli_test_interfaces//:srv__ShortVariedMultiNested",
-        "@ros2cli_test_interfaces//:action__ShortVariedMultiNested"
+        "@std_msgs//msg:String",
+        "@geometry_msgs//msg:PoseStamped",
+        "@ros2cli_test_interfaces//msg:ShortVariedMultiNested",
+        "@ros2cli_test_interfaces//srv:ShortVariedMultiNested",
+        "@ros2cli_test_interfaces//action:ShortVariedMultiNested"
     ],
 )
 
 type_description_ros_library(
     name = "example_ros_type_description",
     deps = [
-        "@std_msgs//:msg__String",
-        "@geometry_msgs//:msg__PoseStamped",
-        "@ros2cli_test_interfaces//:msg__ShortVariedMultiNested",
-        "@ros2cli_test_interfaces//:srv__ShortVariedMultiNested",
-        "@ros2cli_test_interfaces//:action__ShortVariedMultiNested"
+        "@std_msgs//msg:String",
+        "@geometry_msgs//msg:PoseStamped",
+        "@ros2cli_test_interfaces//msg:ShortVariedMultiNested",
+        "@ros2cli_test_interfaces//srv:ShortVariedMultiNested",
+        "@ros2cli_test_interfaces//action:ShortVariedMultiNested"
     ],
 )
 
@@ -52,9 +52,9 @@ type_description_ros_library(
 c_ros_library(
     name = "example_ros_c_msgs",
     deps = [
-        "@sensor_msgs//:msg__CompressedImage",
-        "@std_msgs//:msg__String",
-        "@rcl_interfaces//:srv__SetLoggerLevels",
+        "@sensor_msgs//msg:CompressedImage",
+        "@std_msgs//msg:String",
+        "@rcl_interfaces//srv:SetLoggerLevels",
     ],
 )
 
@@ -93,8 +93,8 @@ alias(
 cc_ros_library(
     name = "example_ros_cc_msgs",
     deps = [
-        "@sensor_msgs//:msg__CompressedImage",
-        "@std_msgs//:msg__String",
+        "@sensor_msgs//msg:CompressedImage",
+        "@std_msgs//msg:String",
     ],
 )
 
@@ -151,7 +151,7 @@ cc_binary(
 proto_ros_library(
     name = "example_proto",
     deps = [
-        "@sensor_msgs//:msg__CompressedImage",
+        "@sensor_msgs//msg:CompressedImage",
     ]
 )
 
@@ -171,6 +171,6 @@ cc_binary(
 proto_ros_library(
     name = "example_tf2_proto",
     deps = [
-        "@tf2_msgs//:msg__TFMessage",
+        "@tf2_msgs//msg:TFMessage",
     ],
 )
