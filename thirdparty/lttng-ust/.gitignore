@@ -26,8 +26,8 @@ cscope.*
 /autom4te.cache
 /include/lttng/stamp-h2
 /include/lttng/stamp-h3
-/include/lttng/ust-version.h
-/include/lttng/ust-config.h
+# /include/lttng/ust-version.h
+# /include/lttng/ust-config.h
 
 /config/ar-lib
 /config/compile
@@ -51,8 +51,8 @@ cscope.*
 /config.status
 /libtool
 
-/src/common/config.h
-/src/common/config.h.in
+#/src/common/config.h
+#/src/common/config.h.in
 /src/common/stamp-h1
 /src/lib/lttng-ust-ctl.pc
 /src/lib/lttng-ust.pc

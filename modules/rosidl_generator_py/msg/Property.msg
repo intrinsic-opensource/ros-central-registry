@@ -1,2 +1,0 @@
-string property
-string anything

@@ -39,10 +39,10 @@ sudo apt install rustup
 
 # Examples
 
-Clone the repo:
+Clone the repo, making sure to also pull all submodules:
 
 ```
-git clone https://github.com/asymingt/bazel_ros_demo.git
+git clone --recurse-submodules https://github.com/asymingt/bazel_ros_demo.git
 ```
 
 Build a C target that links against ROS C bindings.
