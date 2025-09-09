@@ -190,3 +190,11 @@
 	path = submodules/ros_testing
 	url = https://github.com/asymingt/ros_testing.git
 	branch = rolling-bazel
+[submodule "submodules/rosidl_core"]
+	path = submodules/rosidl_core
+	url = https://github.com/asymingt/rosidl_core.git
+	branch = rolling-bazel
+[submodule "submodules/rosidl_defaults"]
+	path = submodules/rosidl_defaults
+	url = https://github.com/asymingt/rosidl_defaults.git
+	branch = rolling-bazel
