@@ -44,6 +44,6 @@ build:msan --linkopt=-fsanitize=memory
 # TSAN
 build:tsan --strip=never
 build:tsan --copt=-fsanitize=thread
-build:msan --copt=-O0
+build:tsan --copt=-O0
 build:tsan --copt=-fno-omit-frame-pointer
 build:tsan --linkopt=-fsanitize=thread
