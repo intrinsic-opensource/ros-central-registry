@@ -25,7 +25,8 @@ cc_library(
         "LTTNG_SYSTEM_RUNDIR=\\\"/var/run/lttng\\\"",
     ],
     copts = [
-      "-Wno-stringop-overread"
+      "-Wno-stringop-overread",              # TODO(asymingt) fix this
+      "-Wno-implicit-function-declaration",  # TODO(asymingt) fix this
    ],
     deps = [
         "@liburcu",
