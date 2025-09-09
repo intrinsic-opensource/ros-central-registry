@@ -130,3 +130,63 @@
 	path = submodules/rosidl_dynamic_typesupport_fastrtps
 	url = https://github.com/asymingt/rosidl_dynamic_typesupport_fastrtps.git
 	branch = rolling-bazel
+[submodule "submodules/ament_package"]
+	path = submodules/ament_package
+	url = https://github.com/asymingt/ament_package.git
+	branch = rolling-bazel
+[submodule "submodules/ament_cmake"]
+	path = submodules/ament_cmake
+	url = https://github.com/asymingt/ament_cmake.git
+	branch = rolling-bazel
+[submodule "submodules/ament_lint"]
+	path = submodules/ament_lint
+	url = https://github.com/asymingt/ament_lint.git
+	branch = rolling-bazel
+[submodule "submodules/class_loader"]
+	path = submodules/class_loader
+	url = https://github.com/asymingt/class_loader.git
+	branch = rolling-bazel
+[submodule "submodules/console_bridge_vendor"]
+	path = submodules/console_bridge_vendor
+	url = https://github.com/asymingt/console_bridge_vendor.git
+	branch = rolling-bazel
+[submodule "submodules/iceoryx"]
+	path = submodules/iceoryx
+	url = https://github.com/asymingt/iceoryx.git
+	branch = rolling-bazel
+[submodule "submodules/launch"]
+	path = submodules/launch
+	url = https://github.com/asymingt/launch.git
+	branch = rolling-bazel
+[submodule "submodules/launch_ros"]
+	path = submodules/launch_ros
+	url = https://github.com/asymingt/launch_ros.git
+	branch = rolling-bazel
+[submodule "submodules/osrf_pycommon"]
+	path = submodules/osrf_pycommon
+	url = https://github.com/asymingt/osrf_pycommon.git
+	branch = rolling-bazel
+[submodule "submodules/pluginlib"]
+	path = submodules/pluginlib
+	url = https://github.com/asymingt/pluginlib.git
+	branch = rolling-bazel
+[submodule "submodules/ros2cli_common_extensions"]
+	path = submodules/ros2cli_common_extensions
+	url = https://github.com/asymingt/ros2cli_common_extensions.git
+	branch = rolling-bazel
+[submodule "submodules/ros_environment"]
+	path = submodules/ros_environment
+	url = https://github.com/asymingt/ros_environment.git
+	branch = rolling-bazel
+[submodule "submodules/variants"]
+	path = submodules/variants
+	url = https://github.com/asymingt/variants.git
+	branch = rolling-bazel
+[submodule "submodules/sros2"]
+	path = submodules/sros2
+	url = https://github.com/asymingt/sros2.git
+	branch = rolling-bazel
+[submodule "submodules/ros_testing"]
+	path = submodules/ros_testing
+	url = https://github.com/asymingt/ros_testing.git
+	branch = rolling-bazel
