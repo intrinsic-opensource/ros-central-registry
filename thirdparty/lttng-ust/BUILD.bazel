@@ -4,31 +4,31 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "lttng-ust",
-    srcs = glob([
-        "src/common/**/*.h",
-        "src/common/**/*.c",
-        "src/lib/lttng-ust/**/*.h",
-        "src/lib/lttng-ust/**/*.c",
-    ], exclude = [
-        "src/lib/lttng-ust/lttng-context-perf-counters.c",
-    ]),
-    hdrs = glob([
-        "include/**/*.h",
-    ]),
-    includes = [
-        "include",
-        "src",
-        "src/lib/lttng-ust"
-    ],
-    local_defines = [
-        "_GNU_SOURCE",
-        "LTTNG_SYSTEM_RUNDIR=\\\"/var/run/lttng\\\"",
-    ],
-    copts = [
+   srcs = glob([
+      "src/common/**/*.h",
+      "src/common/**/*.c",
+      "src/lib/lttng-ust/**/*.h",
+      "src/lib/lttng-ust/**/*.c",
+   ], exclude = [
+      "src/lib/lttng-ust/lttng-context-perf-counters.c",
+   ]),
+   hdrs = glob([
+      "include/**/*.h",
+   ]),
+   includes = [
+      "include",
+      "src",
+      "src/lib/lttng-ust"
+   ],
+   local_defines = [
+      "_GNU_SOURCE",
+      "LTTNG_SYSTEM_RUNDIR=\\\"/var/run/lttng\\\"",
+   ],
+   copts = [
       "-Wno-stringop-overread",              # TODO(asymingt) fix this
       "-Wno-implicit-function-declaration",  # TODO(asymingt) fix this
    ],
-    deps = [
-        "@liburcu",
-    ],
+   deps = [
+      "@liburcu",
+   ],
 )
