@@ -125,6 +125,8 @@
 [submodule "submodules/rosidl_runtime_py"]
 	path = submodules/rosidl_runtime_py
 	url = https://github.com/asymingt/rosidl_runtime_py.git
+	branch = rolling-bazel
 [submodule "submodules/rosidl_dynamic_typesupport_fastrtps"]
 	path = submodules/rosidl_dynamic_typesupport_fastrtps
 	url = https://github.com/asymingt/rosidl_dynamic_typesupport_fastrtps.git
+	branch = rolling-bazel
