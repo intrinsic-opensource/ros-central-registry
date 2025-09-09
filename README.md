@@ -65,11 +65,11 @@ bazel build //:example_proto_cc
 
 # Basic publisher and subscriber examples
 
-We've included a C++ publish and subscribe examples. Note that you can replace `--config=rmw_cyclonedds_cpp` with `--config=rmw_fastrtps_cpp` or `--config=rmw_fastrtps_dynamic_cpp` to switch between middleware implementations as needed. We intend to add Zenoh support in the near future.
+We've included a C++ publish and subscribe examples. Note that you can set the RMW implementation with `--@rmw_implementation//:rmw=...`. Take a look at the `.bazelrc` for more information about how to do this. Since the desired RMW implementation is statically linked, switching will trigger a rebuild which can be expensive.
 
 ```sh
 # In one terminal
-[rolling] bazel_ros_demo 💥 bazel run //:example_ros_publisher_cc --config=rmw_cyclonedds_cpp
+[rolling] bazel_ros_demo 💥 bazel run //:example_ros_publisher_cc
 INFO: Analyzed target //:example_ros_publisher_cc (0 packages loaded, 16770 targets configured).
 INFO: Found 1 target...
 Target //:example_ros_publisher_cc up-to-date:
@@ -84,7 +84,7 @@ INFO: Running command line: bazel-bin/example_ros_publisher_cc
 [INFO] [1757113513.547580236] [minimal_publisher]: Published: 'Hello, world! from C++ 3'
 
 # In a second terminal
-[rolling] bazel_ros_demo 💥 bazel run //:example_ros_subscriber_cc --config=rmw_cyclonedds_cpp
+[rolling] bazel_ros_demo 💥 bazel run //:example_ros_subscriber_cc
 INFO: Analyzed target //:example_ros_subscriber_cc (0 packages loaded, 2 targets configured).
 INFO: Found 1 target...
 Target //:example_ros_subscriber_cc up-to-date:
@@ -119,7 +119,7 @@ This is only possible in C++, and we've included two examples:
 
 ```sh
 # In one terminal
-[rolling] bazel_ros_demo 💥 bazel run //:example_ros_proto_publisher_cc --config=rmw_cyclonedds_cpp
+[rolling] bazel_ros_demo 💥 bazel run //:example_ros_proto_publisher_cc
 INFO: Analyzed target //:example_ros_proto_publisher_cc (0 packages loaded, 0 targets configured).
 INFO: Found 1 target...
 Target //:example_ros_proto_publisher_cc up-to-date:
@@ -133,7 +133,7 @@ INFO: Running command line: bazel-bin/example_ros_proto_publisher_cc
 [INFO] [1757115415.832314817] [minimal_proto_publisher]: Published protbuf message
 
 # In a second terminal
-[rolling] bazel_ros_demo 💥 bazel run //:example_ros_proto_subscriber_cc --config=rmw_cyclonedds_cpp
+[rolling] bazel_ros_demo 💥 bazel run //:example_ros_proto_subscriber_cc
 INFO: Analyzed target //:example_ros_proto_subscriber_cc (0 packages loaded, 0 targets configured).
 INFO: Found 1 target...
 Target //:example_ros_proto_subscriber_cc up-to-date:
