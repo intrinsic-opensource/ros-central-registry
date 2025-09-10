@@ -4,7 +4,7 @@
     "strip_prefix": "Fast-CDR-2.3.0",
     "overlay": {
         "BUILD.bazel": "sha256-7b/ATxdZ7ULY9+h7C8FBAHx8buyc1p4rkcPKb5SpIyM=",
-        "MODULE.bazel": "sha256-ZfN3884lBTjoC5zT5r2+aW1FoShvOArUEE/kT5nQ0Z8="
+        "MODULE.bazel": "sha256-91qsLF76H5TEspP+X0ZAfwI1QI1/w5d39RSFHpVvFPY="
     },
     "patch_strip": 0
 }

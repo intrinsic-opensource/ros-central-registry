@@ -6,7 +6,7 @@
         "cmake/modules/Findfastcdr.cmake": "sha256-MbatgeWOZ2dxRr6gLYFDoCrUSyccbOhBvZNtwA1UhWM=",
         "cmake/modules/Findfoonathan_memory.cmake": "sha256-GB93MPzutMlz3+bYOK7n2tRuYQqxNoighP8m0LPRwIo=",
         "BUILD.bazel": "sha256-aDk9RCyfTgl+dU9RohDRCVSTjOx730MfR9wmtVRaWAc=",
-        "MODULE.bazel": "sha256-tKr13THHphZatgVsZP3r2WyZfs+hcxk5AOP6KcHSg/Q="
+        "MODULE.bazel": "sha256-nGi/QjQzcK0VMb/yG7nBF87GNjR/0+oHklDjIqiHGLg="
     },
     "patch_strip": 0
 }

@@ -113,7 +113,7 @@
 	path = submodules/console_bridge_vendor
 	url = https://github.com/asymingt/console_bridge_vendor.git
 [submodule "submodules/iceoryx"]
-	path = submodules/iceoryx
+	path = thirdparty/iceoryx
 	url = https://github.com/asymingt/iceoryx.git
 [submodule "submodules/launch"]
 	path = submodules/launch
