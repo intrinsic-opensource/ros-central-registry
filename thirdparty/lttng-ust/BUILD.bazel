@@ -3,12 +3,16 @@ load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "lttng-ust",
+   name = "lttng-ust",
    srcs = glob([
       "src/common/**/*.h",
       "src/common/**/*.c",
-      "src/lib/lttng-ust/**/*.h",
+      "src/lib/lttng-ust-common/**/*.c",
+      "src/lib/lttng-ust-common/**/*.h",
+      "src/lib/lttng-ust-tracepoint/**/*.c",
+      "src/lib/lttng-ust-tracepoint/**/*.h",
       "src/lib/lttng-ust/**/*.c",
+      "src/lib/lttng-ust/**/*.h",
    ], exclude = [
       "src/lib/lttng-ust/lttng-context-perf-counters.c",
    ]),
@@ -23,10 +27,9 @@ cc_library(
    local_defines = [
       "_GNU_SOURCE",
       "LTTNG_SYSTEM_RUNDIR=\\\"/var/run/lttng\\\"",
-   ],
+   ], 
    copts = [
       "-Wno-stringop-overread",              # TODO(asymingt) fix this
-      "-Wno-implicit-function-declaration",  # TODO(asymingt) fix this
    ],
    deps = [
       "@liburcu",
