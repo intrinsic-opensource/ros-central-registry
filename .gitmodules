@@ -148,3 +148,21 @@
 [submodule "submodules/rosidl_defaults"]
 	path = submodules/rosidl_defaults
 	url = https://github.com/asymingt/rosidl_defaults.git
+[submodule "thirdparty/cyclonedds"]
+	path = thirdparty/cyclonedds
+	url = https://github.com/asymingt/cyclonedds.git
+[submodule "thirdparty/lttng-ust"]
+	path = thirdparty/lttng-ust
+	url = https://github.com/asymingt/lttng-ust.git
+[submodule "thirdparty/liburcu"]
+	path = thirdparty/liburcu
+	url = https://github.com/asymingt/liburcu.git
+[submodule "thirdparty/mimick"]
+	path = thirdparty/mimick
+	url = https://github.com/asymingt/mimick.git
+[submodule "thirdparty/zenoh-cpp"]
+	path = thirdparty/zenoh-cpp
+	url = https://github.com/asymingt/zenoh-cpp.git
+[submodule "thirdparty/zenoh-c"]
+	path = thirdparty/zenoh-c
+	url = https://github.com/asymingt/zenoh-c.git
