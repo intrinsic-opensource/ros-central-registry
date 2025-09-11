@@ -15,7 +15,7 @@ The `rmw_zenoh_cpp` middleware currently depends on a Cargo build from `rules_ru
 sudo apt install rustup
 ```
 
-In addition to a workign GCC compiler, the `rules_foreign_cc` requires `libtool` to function correctly. You must install these two packages before installing:
+In addition to a working GCC compiler, the `rules_foreign_cc` requires `libtool` to function correctly. You must install these two packages before installing:
 
 ```
 sudo apt install build-essential libtool
@@ -151,4 +151,12 @@ INFO: Running command line: bazel-bin/example_ros_proto_subscriber_cc
 [INFO] [1757115413.832665806] [minimal_subscriber]: Received protobuf message
 [INFO] [1757115414.832732991] [minimal_subscriber]: Received protobuf message
 [INFO] [1757115415.832741286] [minimal_subscriber]: Received protobuf message
+```
+
+# Testing
+
+There is no straightforward way of running a full test suite across all package imports. Bazel doesn't support to support a wildcard expansion for test targets that spans multiple modules. For this reason we have a [Distribution File](distribution.txt) and supporting rule in our `.bazelrc` file that enables you to run all tests across all repos. Right now this doesn't work, but ultimately we should be able to run all tests this way:
+
+```
+bazel test --config=distribution
 ```
