@@ -31,12 +31,12 @@ sudo apt install build-essential libtool
 - Type supports:
   - [x] `rosidl_typesupport_introspection`
   - [x] `rosidl_typesupport_fastrtps`
-  - [x] `rosidl_typesupport_protobuf` : C++ only
+  - [x] `rosidl_typesupport_protobuf`
 - Middleware:
   - [x] `rmw_cyclonedds_cpp`
   - [x] `rmw_fastrtps_cpp`
   - [x] `rmw_fastrtps_dynamic_cpp`
-  - [ ] `rmw_zenoh_cpp` (work in progress)
+  - [x] `rmw_zenoh_cpp`
   - [ ] `rmw_connextdds_cpp`
   - [ ] `rmw_gurumdds_cpp`
 - Core:
