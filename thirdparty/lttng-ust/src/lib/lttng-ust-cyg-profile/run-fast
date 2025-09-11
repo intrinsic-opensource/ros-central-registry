@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# SPDX-FileCopyrightText: 2023 EfficiOS, Inc
-#
-# SPDX-License-Identifier: LGPL-2.1-only
-
-LD_VERBOSE=1 LD_PRELOAD=.libs/liblttng-ust-cyg-profile-fast.so ${*}
