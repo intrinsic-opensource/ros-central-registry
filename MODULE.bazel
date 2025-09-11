@@ -44,6 +44,10 @@ bazel_dep(name = "mimick", version = "0.3.0")
 bazel_dep(name = "zenoh-c", version = "1.4.0")
 bazel_dep(name = "zenoh-cpp", version = "1.4.0")
 
+# Dependencies for a specific rolling snapshot
+
+bazel_dep(name = "rosdistro", version = "rolling-2025-09-05")
+
 # ROS packages (things we intend to add to the RCR)
 
 bazel_dep(name = "action_msgs", version = "2.4.1")
@@ -166,7 +170,6 @@ bazel_dep(name = "ros_base", version = "0.13.0")
 bazel_dep(name = "ros_core", version = "0.13.0")
 bazel_dep(name = "ros_environment", version = "4.4.1")
 bazel_dep(name = "ros_testing", version = "0.9.0")
-bazel_dep(name = "ros", version = "0.0.1")
 bazel_dep(name = "ros2action", version = "0.39.2")
 bazel_dep(name = "ros2cli_common_extensions", version = "0.5.1")
 bazel_dep(name = "ros2cli_test_interfaces", version = "0.39.2")
@@ -396,7 +399,7 @@ local_path_override(module_name = "ros_base", path = "./submodules/variants/ros_
 local_path_override(module_name = "ros_core", path = "./submodules/variants/ros_core")
 local_path_override(module_name = "ros_environment", path = "./submodules/ros_environment")
 local_path_override(module_name = "ros_testing", path = "./submodules/ros_testing/ros_testing")
-local_path_override(module_name = "ros", path = "./ros")
+local_path_override(module_name = "rosdistro", path = "./submodules/rosdistro")
 local_path_override(module_name = "ros2action", path = "./submodules/ros2cli/ros2action")
 local_path_override(module_name = "ros2cli_common_extensions", path = "./submodules/ros2cli_common_extensions/ros2cli_common_extensions")
 local_path_override(module_name = "ros2cli_test_interfaces", path = "./submodules/ros2cli/ros2cli_test_interfaces")

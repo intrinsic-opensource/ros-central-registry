@@ -166,3 +166,6 @@
 [submodule "thirdparty/zenoh-c"]
 	path = thirdparty/zenoh-c
 	url = https://github.com/asymingt/zenoh-c.git
+[submodule "submodules/rosdistro"]
+	path = submodules/rosdistro
+	url = https://github.com/asymingt/rosdistro.git
