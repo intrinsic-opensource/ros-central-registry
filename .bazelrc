@@ -48,3 +48,6 @@ build:tsan --copt=-fsanitize=thread
 build:tsan --copt=-O0
 build:tsan --copt=-fno-omit-frame-pointer
 build:tsan --linkopt=-fsanitize=thread
+
+# Helper for testing all modules, in lieu of support for bazel test @@//...
+test:distribution --target_pattern_file=distribution.txt
