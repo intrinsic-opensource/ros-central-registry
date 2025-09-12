@@ -26,7 +26,7 @@ build --cxxopt=-std=c++17
 #   --@rmw_implementation//:rmw=rmw_fastrtps_cpp
 #   --@rmw_implementation//:rmw=rmw_fastrtps_dynamic_cpp
 #   --@rmw_implementation//:rmw=rmw_zenoh_cpp
-build --@rmw_implementation//:rmw=rmw_zenoh_cpp
+# build --@rmw_implementation//:rmw=rmw_zenoh_cpp
 
 # ASAN
 build:asan --strip=never
