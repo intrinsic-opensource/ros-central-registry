@@ -1,0 +1,418 @@
+ament_cmake_ros:
+  github: ros2/ament_cmake_ros
+  version: 0.15.1
+  modules:
+    ament_cmake_ros_core: ament_cmake_ros_core
+    ament_cmake_ros: ament_cmake_ros
+    domain_coordinator: domain_coordinator
+    rmw_test_fixture_implementation: rmw_test_fixture_implementation
+    rmw_test_fixture: rmw_test_fixture
+ament_cmake:
+  github: ament/ament_cmake
+  version: 2.8.4
+  modules:
+    ament_cmake_auto : ament_cmake_auto
+    ament_cmake_core : ament_cmake_core
+    ament_cmake_export_definitions : ament_cmake_export_definitions
+    ament_cmake_export_dependencies : ament_cmake_export_dependencies
+    ament_cmake_export_include_directories : ament_cmake_export_include_directories
+    ament_cmake_export_libraries : ament_cmake_export_libraries
+    ament_cmake_export_link_flags : ament_cmake_export_link_flags
+    ament_cmake_export_targets : ament_cmake_export_targets
+    ament_cmake_gen_version_h : ament_cmake_gen_version_h
+    ament_cmake_gmock : ament_cmake_gmock
+    ament_cmake_google_benchmark : ament_cmake_google_benchmark
+    ament_cmake_gtest : ament_cmake_gtest
+    ament_cmake_include_directories : ament_cmake_include_directories
+    ament_cmake_libraries : ament_cmake_libraries
+    ament_cmake_pytest : ament_cmake_pytest
+    ament_cmake_python : ament_cmake_python
+    ament_cmake_target_dependencies : ament_cmake_target_dependencies
+    ament_cmake_test : ament_cmake_test
+    ament_cmake_vendor_package : ament_cmake_vendor_package
+    ament_cmake_version : ament_cmake_version
+    ament_cmake : ament_cmake
+ament_index:
+  github: ament/ament_index
+  version: 1.12.0
+  modules:
+    ament_index_cpp: ament_index_cpp
+    ament_index_python: ament_index_python
+ament_lint:
+  github: ament/ament_lint
+  version: 0.20.1
+  modules:
+    ament_clang_format : ament_clang_format
+    ament_clang_tidy : ament_clang_tidy
+    ament_cmake_clang_format : ament_cmake_clang_format
+    ament_cmake_clang_tidy : ament_cmake_clang_tidy
+    ament_cmake_copyright : ament_cmake_copyright
+    ament_cmake_cppcheck : ament_cmake_cppcheck
+    ament_cmake_cpplint : ament_cmake_cpplint
+    ament_cmake_flake8 : ament_cmake_flake8
+    ament_cmake_lint_cmake : ament_cmake_lint_cmake
+    ament_cmake_mypy : ament_cmake_mypy
+    ament_cmake_pclint : ament_cmake_pclint
+    ament_cmake_pep257 : ament_cmake_pep257
+    ament_cmake_pycodestyle : ament_cmake_pycodestyle
+    ament_cmake_pyflakes : ament_cmake_pyflakes
+    ament_cmake_uncrustify : ament_cmake_uncrustify
+    ament_cmake_xmllint : ament_cmake_xmllint
+    ament_copyright : ament_copyright
+    ament_cppcheck : ament_cppcheck
+    ament_cpplint : ament_cpplint
+    ament_flake8 : ament_flake8
+    ament_lint_auto : ament_lint_auto
+    ament_lint_cmake : ament_lint_cmake
+    ament_lint_common : ament_lint_common
+    ament_lint : ament_lint
+    ament_mypy : ament_mypy
+    ament_pclint : ament_pclint
+    ament_pep257 : ament_pep257
+    ament_pycodestyle : ament_pycodestyle
+    ament_pyflakes : ament_pyflakes
+    ament_uncrustify : ament_uncrustify
+    ament_xmllint : ament_xmllint
+ament_package:
+  github: ament/ament_package
+  version: 0.18.0
+class_loader:
+  github: ros/class_loader
+  version: 2.9.0
+common_interfaces:
+  github: ros2/common_interfaces
+  version: 5.8.1
+  modules:
+    common_interfaces: common_interfaces
+    diagnostic_msgs: diagnostic_msgs
+    geometry_msgs: geometry_msgs
+    nav_msgs: nav_msgs
+    sensor_msgs_py: sensor_msgs_py
+    sensor_msgs: sensor_msgs
+    shape_msgs: shape_msgs
+    std_msgs: std_msgs
+    std_srvs: std_srvs
+    stereo_msgs: stereo_msgs
+    trajectory_msgs: trajectory_msgs
+    visualization_msgs: visualization_msgs
+console_bridge_vendor:
+  github: ros2/console_bridge_vendor
+  version: 1.9.1
+geometry2:
+  github: ros2/geometry2
+  version: 0.43.0
+  modules:
+    examples_tf2_py: examples_tf2_py
+    geometry2: geometry2
+    test_tf2: test_tf2
+    tf2_bullet: tf2_bullet
+    tf2_eigen_kdl: tf2_eigen_kdl
+    tf2_eigen: tf2_eigen
+    tf2_geometry_msgs: tf2_geometry_msgs
+    tf2_kdl: tf2_kdl
+    tf2_msgs: tf2_msgs
+    tf2_py: tf2_py
+    tf2_ros_py: tf2_ros_py
+    tf2_ros: tf2_ros
+    tf2_sensor_msgs: tf2_sensor_msgs
+    tf2_tools: tf2_tools
+    tf2: tf2
+launch_ros:
+  github: ros2/launch_ros
+  version: 0.29.1
+  modules:
+    launch_ros: launch_ros
+    launch_testing_ros: launch_testing_ros
+    ros2launch: ros2launch
+    test_launch_ros: test_launch_ros
+launch:
+  github: ros2/launch
+  version: 3.9.1
+  modules:
+    launch_pytest: launch_pytest
+    launch_testing_ament_cmake: launch_testing_ament_cmake
+    launch_testing: launch_testing
+    launch_xml: launch_xml
+    launch_yaml: launch_yaml
+    launch: launch
+    test_launch_testing: test_launch_testing
+libstatistics_collector:
+  github: ros-tooling/libstatistics_collector
+  version: 2.1.1
+osrf_pycommon:
+  github: osrf/osrf_pycommon
+  version: 2.1.4
+osrf_testing_tools_cpp:
+  github: osrf/osrf_testing_tools_cpp
+  version: 2.3.0
+  modules:
+    osrf_testing_tools_cpp: osrf_testing_tools_cpp
+    test_osrf_testing_tools_cpp: test_osrf_testing_tools_cpp
+performance_test_fixture:
+  github: ros2/performance_test_fixture
+  version: 0.4.0
+pluginlib:
+  github: ros/pluginlib
+  version: 5.7.0
+rcl_interfaces:
+  github: ros2/rcl_interfaces
+  version: 2.4.1
+  modules:
+    action_msgs: action_msgs
+    builtin_interfaces: builtin_interfaces
+    composition_interfaces: composition_interfaces
+    lifecycle_msgs: lifecycle_msgs
+    rcl_interfaces: rcl_interfaces
+    rosgraph_msgs: rosgraph_msgs
+    service_msgs: service_msgs
+    statistics_msgs: statistics_msgs
+    test_msgs: test_msgs
+    type_description_interfaces: type_description_interfaces
+rcl_logging:
+  github: ros2/rcl_logging
+  version: 3.3.0
+  modules:
+    rcl_logging_interface: rcl_logging_interface
+    rcl_logging_noop: rcl_logging_noop
+    rcl_logging_spdlog: rcl_logging_spdlog
+rcl:
+  github: ros2/rcl
+  version: 10.2.2
+  modules:
+    rcl_action: rcl_action
+    rcl_lifecycle: rcl_lifecycle
+    rcl_yaml_param_parser: rcl_yaml_param_parser
+    rcl: rcl
+rclcpp:
+  github: ros2/rclcpp
+  version: 30.0.0
+  modules:
+    rclcpp_action: rclcpp_action
+    rclcpp_components: rclcpp_components
+    rclcpp_lifecycle: rclcpp_lifecycle
+    rclcpp: rclcpp
+rcpputils:
+  github: ros2/rcpputils
+  version: 2.14.2
+rcutils:
+  github: ros2/rcutils
+  version: 7.0.0
+rmw_connextdds:
+  github: ros2/rmw_connextdds
+  version: 1.2.1
+  modules:
+    rmw_connextdds_common: rmw_connextdds_common
+    rmw_connextdds: rmw_connextdds
+    rmw_connextddsmicro: rmw_connextddsmicro
+    rti_connext_dds_cmake_module: rti_connext_dds_cmake_module
+rmw_cyclonedds:
+  github: ros2/rmw_cyclonedds
+  version: 4.1.1
+  modules:
+    rmw_cyclonedds_cpp: rmw_cyclonedds_cpp
+rmw_dds_common:
+  github: ros2/rmw_dds_common
+  version: 4.0.0
+  modules:
+    rmw_dds_common: rmw_dds_common
+rmw_fastrtps:
+  github: ros2/rmw_fastrtps
+  version: 9.4.1
+  modules:
+    rmw_fastrtps_cpp: rmw_fastrtps_cpp
+    rmw_fastrtps_dynamic_cpp: rmw_fastrtps_dynamic_cpp
+    rmw_fastrtps_shared_cpp: rmw_fastrtps_shared_cpp
+rmw_implementation:
+  github: ros2/rmw_implementation
+  version: 3.1.1
+  modules:
+    rmw_implementation: rmw_implementation
+    test_rmw_implementation: test_rmw_implementation
+rmw_zenoh:
+  github: ros2/rmw_zenoh
+  version: 0.8.1
+  modules:
+    rmw_zenoh_cpp: rmw_zenoh_cpp
+    zenoh_security_tools: zenoh_security_tools
+rmw:
+  github: ros2/rmw
+  version: 7.9.0
+  modules:
+    rmw_implementation_cmake: rmw_implementation_cmake
+    rmw_security_common: rmw_security_common
+    rmw: rmw
+ros_environment:
+  github: ros/ros_environment
+  version: 4.4.1
+ros_testing:
+  github: ros2/ros_testing
+  version: 0.9.0
+  modules:
+    ros_testing: ros_testing
+    ros2test: ros2test
+ros2_tracing:
+  github: ros2/ros2_tracing
+  version: 8.8.0
+  modules:
+    lttngpy: lttngpy
+    ros2trace: ros2trace
+    test_ros2trace: test_ros2trace
+    test_tracetools_launch: test_tracetools_launch
+    test_tracetools: test_tracetools
+    tracetools_launch: tracetools_launch
+    tracetools_read: tracetools_read
+    tracetools_test: tracetools_test
+    tracetools_trace: tracetools_trace
+    tracetools: tracetools
+ros2cli_common_extensions:
+  github: ros2/ros2cli_common_extensions
+  version: 0.5.1
+  modules:
+    ros2cli_common_extensions: ros2cli_common_extensions
+ros2cli:
+  github: ros2/ros2cli
+  version: 0.39.2
+  modules:
+    ros2action: ros2action
+    ros2cli_test_interfaces: ros2cli_test_interfaces
+    ros2cli: ros2cli
+    ros2component: ros2component
+    ros2doctor: ros2doctor
+    ros2interface: ros2interface
+    ros2lifecycle_test_fixtures: ros2lifecycle_test_fixtures
+    ros2lifecycle: ros2lifecycle
+    ros2multicast: ros2multicast
+    ros2node: ros2node
+    ros2param: ros2param
+    ros2pkg: ros2pkg
+    ros2run: ros2run
+    ros2service: ros2service
+    ros2topic: ros2topic
+rosdistro:
+  github: ros/rosdistro
+  version: rolling-2025-09-05
+  upstream: rolling/2025-09-05
+rosidl_core:
+  github: ros2/rosidl_core
+  version: 0.4.0
+  modules:
+    rosidl_core_generators: rosidl_core_generators
+    rosidl_core_runtime: rosidl_core_runtime
+rosidl_defaults:
+  github: ros2/rosidl_defaults
+  version: 1.8.1
+  modules:
+    rosidl_default_generators: rosidl_default_generators
+    rosidl_default_runtime: rosidl_default_runtime
+rosidl_dynamic_typesupport_fastrtps:
+  github: ros2/rosidl_dynamic_typesupport_fastrtps
+  version: 0.5.0
+rosidl_dynamic_typesupport:
+  github: ros2/rosidl_dynamic_typesupport
+  version: 0.4.0
+rosidl_python:
+  github: ros2/rosidl_python
+  version: 0.25.0
+  modules:
+    rosidl_generator_py: rosidl_generator_py
+rosidl_runtime_py:
+  github: ros2/rosidl_runtime_py
+  version: 0.15.0
+rosidl_typesupport_fastrtps:
+  github: ros2/rosidl_typesupport_fastrtps
+  version: 3.9.0
+  modules:
+    rosidl_typesupport_fastrtps_c: rosidl_typesupport_fastrtps_c
+    rosidl_typesupport_fastrtps_cpp: rosidl_typesupport_fastrtps_cpp
+rosidl_typesupport_protobuf:
+  github: asymingt/rosidl_typesupport_protobuf
+  version: 0.0.1
+  modules:
+    rosidl_adapter_proto: rosidl_adapter_proto
+    rosidl_typeadapter_protobuf_test: rosidl_typeadapter_protobuf_test
+    rosidl_typesupport_protobuf_c: rosidl_typesupport_protobuf_c
+    rosidl_typesupport_protobuf_cpp: rosidl_typesupport_protobuf_cpp
+    rosidl_typesupport_protobuf: rosidl_typesupport_protobuf
+rosidl_typesupport:
+  github: ros2/rosidl_typesupport
+  version: 3.4.0
+  modules:
+    rosidl_typesupport_c: rosidl_typesupport_c
+    rosidl_typesupport_cpp: rosidl_typesupport_cpp
+    rosidl_typesupport_tests: rosidl_typesupport_tests
+rosidl:
+  github: ros2/rosidl
+  version: 5.0.0
+  modules:
+    rosidl_adapter: rosidl_adapter
+    rosidl_cli: rosidl_cli
+    rosidl_cmake: rosidl_cmake
+    rosidl_generator_c: rosidl_generator_c
+    rosidl_generator_cpp: rosidl_generator_cpp
+    rosidl_generator_tests: rosidl_generator_tests
+    rosidl_generator_type_description: rosidl_generator_type_description
+    rosidl_parser: rosidl_parser
+    rosidl_pycommon: rosidl_pycommon
+    rosidl_runtime_c: rosidl_runtime_c
+    rosidl_runtime_cpp: rosidl_runtime_cpp
+    rosidl_typesupport_interface: rosidl_typesupport_interface
+    rosidl_typesupport_introspection_c: rosidl_typesupport_introspection_c
+    rosidl_typesupport_introspection_cpp: rosidl_typesupport_introspection_cpp
+    rosidl_typesupport_introspection_tests: rosidl_typesupport_introspection_tests
+rpyutils:
+  github: ros2/rpyutils
+  version: 0.7.0
+sros2:
+  github: ros2/sros2
+  version: 0.16.1
+  modules:
+    sros2_cmake: sros2_cmake
+    sros2: sros2
+test_interface_files:
+  github: ros2/test_interface_files
+  version: 0.14.1
+unique_identifier_msgs:
+  github: ros2/unique_identifier_msgs
+  version: 2.8.0
+variants:
+  github: ros2/variants
+  version: 0.13.0
+  modules:
+    desktop_full: desktop_full
+    desktop: desktop
+    perception: perception
+    ros_base: ros_base
+    ros_core: ros_core
+    simulation: simulation
+cyclonedds:
+  github: eclipse-cyclonedds/cyclonedds
+  version: 0.10.5
+  folder: thirdparty
+iceoryx:
+  github: eclipse-iceoryx/iceoryx
+  version: 2.0.5
+  upstream: v2.0.5
+  folder: thirdparty
+liburcu:
+  github: urcu/userspace-rcu
+  version: 0.15.3
+  upstream: v0.15.3
+  folder: thirdparty
+lttng-ust:
+  github: lttng/lttng-ust
+  version: 2.14.0
+  upstream: v2.14.0
+  folder: thirdparty
+mimick:
+  github: ros2/Mimick
+  version: 0.9.0
+  upstream: ros2
+  folder: thirdparty
+zenoh-c:
+  github: eclipse-zenoh/zenoh-c
+  version: 1.4.0
+  folder: thirdparty
+zenoh-cpp:
+  github: eclipse-zenoh/zenoh-cpp
+  version: 1.4.0
+  folder: thirdparty
