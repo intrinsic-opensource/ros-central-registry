@@ -1,6 +1,0 @@
-#include "sensor_msgs/msg/CompressedImage.pb.h"
-
-int main(int arg, char* argv[]) {
-    sensor_msgs::msg::pb::CompressedImage msg;
-    return 0;
-}
