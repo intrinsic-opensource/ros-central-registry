@@ -129,7 +129,7 @@ def update_overlay_file(overlay_dest, overlay_src):
 def update_patch_file(patch_dest, patch_content):
     """Update a patch file with content"""
     patch_dest.parent.mkdir(parents=True, exist_ok=True)
-    patch_content = patch_content.replace("\n\ No newline at end of file", "")
+    patch_content = patch_content.replace("\n\\ No newline at end of file", "")
     with open(patch_dest, "w") as file:
         file.write(patch_content)
 
@@ -206,7 +206,7 @@ for repo_name, repo_data in yaml_data.items():
         # print(overlay)
         src_module_bazel = BASE_OUT_PATH / module_name / repo_version / 'overlay' / 'MODULE.bazel'
         dst_module_bazel = BASE_OUT_PATH / module_name / repo_version / 'MODULE.bazel'
-        dst_module_bazel.symlink_to(src_module_bazel)
+        shutil.copy(src_module_bazel, dst_module_bazel)
 
         # Patches are done at the repo level, so we need to strip out the subfolder.
         strip = module_subfolder
