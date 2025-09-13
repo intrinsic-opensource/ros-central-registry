@@ -175,7 +175,7 @@ for repo_name, repo_data in yaml_data.items():
 
         # Update the metadata.json file.
         metadata_json = BASE_OUT_PATH / module_name / 'metadata.json'
-        update_metadata_json(metadata_json, repo_ghsuffix, repo_upstream)
+        update_metadata_json(metadata_json, repo_ghsuffix, repo_version)
 
         # Create overlay files.
         overlay = {}
