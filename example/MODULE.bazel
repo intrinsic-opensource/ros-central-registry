@@ -1,0 +1,52 @@
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Every ROS package must be a module for the IDL generation to work!
+# This is because any ros_interface or ros_data rules need a package
+# name in order to create a destination output folder.
+
+module(
+    name = "example",
+    version = "0.0.1",
+    compatibility_level = 0,
+)
+
+# From the BCR -- these are found here: https://registry.bazel.build. These
+# are the minimal set of general modules needed for a functional workspace.
+
+bazel_dep(name = "protobuf", version = "32.0")
+bazel_dep(name = "rules_cc", version = "0.2.4")
+bazel_dep(name = "rules_python", version = "1.6.1")
+
+# From the RCR - right now you need to use a compatible set of versioned
+# packages from a ROS release. In future we might use module-rules to
+# lazily-load a compatible collection from a @ros metapackage.
+
+bazel_dep(name = "rclcpp", version = "30.0.0")
+bazel_dep(name = "rmw_implementation", version = "3.1.1")
+bazel_dep(name = "rosidl_adapter_proto", version = "0.0.1")
+bazel_dep(name = "rosidl_cmake", version = "5.0.0")
+bazel_dep(name = "rosidl_generator_cpp", version = "5.0.0")
+bazel_dep(name = "sensor_msgs", version = "5.8.1")
+bazel_dep(name = "std_msgs", version = "5.8.1")
+bazel_dep(name = "zenoh-cpp", version = "1.4.0")
+
+# A lot of the tooling for IDL generation requires a Python 3.12 toolchain
+# to work. You need to configure your workspace correctly to provide one.
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.12",
+    is_default = True,
+)

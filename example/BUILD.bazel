@@ -1,0 +1,77 @@
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+load("@rosidl_adapter_proto//:rules.bzl", "proto_ros_library")
+load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+# Generate .proto files for the ros_interface in ./msg/BUILD.bazel.
+
+proto_ros_library(
+    name = "example_proto_files",
+    deps = [
+        "//msg:ExampleMessage",
+    ],
+)
+
+# Generate C++ bindings to the ros_interface in ./msg/BUILD.bazel.
+
+cc_ros_library(
+    name = "example_ros_cc_msgs",
+    deps = [
+        "//msg:ExampleMessage",
+    ],
+)
+
+# C++ examples (note that cc_ros_library includes proto type support)
+
+cc_binary(
+    name = "example_ros_publisher_cc",
+    srcs = ["src/example_ros_publisher.cc"],
+    deps = [
+        "@rclcpp",
+        ":example_ros_cc_msgs"
+    ],
+)
+
+cc_binary(
+    name = "example_ros_subscriber_cc",
+    srcs = ["src/example_ros_subscriber.cc"],
+    deps = [
+        "@rclcpp",
+        ":example_ros_cc_msgs"
+    ],
+)
+
+# Protobuf pipeline
+
+cc_binary(
+    name = "example_proto_publisher_cc",
+    srcs = ["proto/example_proto_publisher.cc"],
+    deps = [
+        "@rclcpp",
+        ":example_ros_cc_msgs"
+    ],
+)
+
+cc_binary(
+    name = "example_proto_subscriber_cc",
+    srcs = ["proto/example_proto_subscriber.cc"],
+    deps = [
+        "@rclcpp",
+        ":example_ros_cc_msgs"
+    ],
+)
