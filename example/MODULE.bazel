@@ -35,12 +35,12 @@ bazel_dep(name = "rules_python", version = "1.6.1")
 
 bazel_dep(name = "rclcpp", version = "30.0.0")
 bazel_dep(name = "rmw_implementation", version = "3.1.1")
+bazel_dep(name = "rmw_zenoh_cpp", version = "0.8.1")
 bazel_dep(name = "rosidl_adapter_proto", version = "0.0.1")
 bazel_dep(name = "rosidl_cmake", version = "5.0.0")
 bazel_dep(name = "rosidl_generator_cpp", version = "5.0.0")
 bazel_dep(name = "sensor_msgs", version = "5.8.1")
 bazel_dep(name = "std_msgs", version = "5.8.1")
-bazel_dep(name = "zenoh-cpp", version = "1.4.0")
 
 # A lot of the tooling for IDL generation requires a Python 3.12 toolchain
 # to work. You need to configure your workspace correctly to provide one.
