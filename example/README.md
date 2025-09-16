@@ -1,6 +1,6 @@
 # Overview
 
-This is a small example workspace showing a minimal C++ publisher and subscriber exchanging a custom message, where the message can be created and manipulated with ROS C++ bindings or protocol buffer C++ bindings. Under the hood ROS messages are always serialized to the wire, but a type adapter automatically converts to and from the protocol buffer bindings, preventing the developer from  having to write message-specify type converters, which is both laborious and prone to error.
+This is a small example workspace showing a minimal C++ publisher and subscriber exchanging a custom message, where the message can be created and manipulated with ROS C++ bindings or protocol buffer C++ bindings. Under the hood ROS messages are always serialized to the wire, but a type adapter automatically converts to and from the protocol buffer bindings, preventing the developer from  having to write message-specific type converters, which is both laborious and prone to error.
 
 A lot of this work was derived from [rules_ros2](https://github.com/mvukov/rules_ros2) and adapted to work with Bazel modules. If you are looking for an implementation that is more complete, we recommend that you take a look at it. Right now, our repo only includes `C` / `C++` message bindings and `rcl` / `rclcpp`. Our protobuf typesupport was adapted from [rosidl_typesupport_protobuf](https://github.com/eclipse-ecal/rosidl_typesupport_protobuf). A full list of packages is included in the [ROS Central Registry](https://asymingt.github.io/rcr-ui).
 
@@ -9,7 +9,7 @@ A lot of this work was derived from [rules_ros2](https://github.com/mvukov/rules
 
 # System preparation
 
-This code has been tested with `Bazel 8.3.1` via `Bazelisk` on `Ubuntu 24.04 x86_64` within a Docker container. It may work on other platforms, but our goal at this point is to create a functional first release before branching out to support other architectures and operating systems. 
+This code has been tested with `Bazel 8.3.1` via `Bazelisk` on `Ubuntu 24.04 x86_64` within a Docker container. It may work on other platforms, but our current goal is to create a functional first release before branching out to support other architectures and operating systems. 
 
 The `rmw_zenoh_cpp` middleware currently depends on a Cargo build from `rules_rust`. Unfortunately, this is not hermetic and depends in turn on `rustup` being installed in your environment. In addition to a working GCC compiler, the `rules_foreign_cc` modules also requires `libtool` to function correctly. To install all three at once run the following command.
 
