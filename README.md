@@ -23,6 +23,16 @@ sudo apt install build-essential libtool
 
 # Status
 
+The table below summarizes the status of the github workflow exercising the target platform:
+
+| Item              | x64                                                                                                     | arm64                                                                                                   |
+| :---------------- | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| Ubuntu 24.04      | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-linux-amd64.yml/badge.svg)   | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-linux-arm64.yml/badge.svg)   |
+| MacOS 15          | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-macos-amd64.yml/badge.svg)   | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-macos-arm64.yml/badge.svg)   |
+| Windows 11        | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-windows-amd64.yml/badge.svg) | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-windows-arm64.yml/badge.svg) |
+
+In terms of features, this is what we currently support:
+
 - Message language bindings
   - [x] `c`
   - [x] `cpp`
