@@ -16,7 +16,7 @@ name: test-target-platforms
 run-name: ${{ github.actor }} tests that code can build across platforms
 on: [push]
 jobs:
-  test-ubuntu-24.04:
+  test-linux-amd64:
     runs-on: ubuntu-24.04
     steps:
 
