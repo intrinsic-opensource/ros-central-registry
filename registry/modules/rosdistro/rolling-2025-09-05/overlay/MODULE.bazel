@@ -18,6 +18,7 @@ module(
     compatibility_level = 0,
 )
 
+bazel_dep(name = "rules_cc", version = "0.2.4")
 bazel_dep(name = "rules_python", version = "1.6.1")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")

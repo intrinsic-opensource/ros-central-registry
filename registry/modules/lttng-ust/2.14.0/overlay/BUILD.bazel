@@ -16,6 +16,35 @@ load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
+# Generate a include/lttng/ust-version.h file with the version information.
+genrule(
+   name = "generate_ust_version_h",
+   outs = ["include/lttng/ust-version.h"],
+   cmd = """
+echo '
+#ifndef _LTTNG_UST_VERSION_H
+#define _LTTNG_UST_VERSION_H
+#define LTTNG_UST_MAJOR_VERSION 2
+#define LTTNG_UST_MINOR_VERSION 14
+#define LTTNG_UST_PATCHLEVEL_VERSION 0
+#define LTTNG_UST_VERSION "2.14.0"
+#define LTTNG_UST_LIB_SONAME_MAJOR 1
+#define LTTNG_UST_CTL_LIB_SONAME_MAJOR 6
+#endif  /* _LTTNG_UST_VERSION_H */' > $(location include/lttng/ust-version.h)""",
+)
+
+# Generate an include/lttng/ust-config.h file with the version information.
+genrule(
+   name = "generate_ust_config_h",
+   outs = ["include/lttng/ust-config.h"],
+   cmd = """
+echo '
+#ifndef _LTTNG_UST_CONFIG_H
+#define _LTTNG_UST_CONFIG_H
+#endif  /* _LTTNG_UST_CONFIG_H */' > $(location include/lttng/ust-config.h)""",
+)
+
+
 cc_library(
    name = "lttng-ust",
    srcs = glob([
@@ -32,7 +61,10 @@ cc_library(
    ]),
    hdrs = glob([
       "include/**/*.h",
-   ]),
+   ]) + [
+      ":generate_ust_version_h",
+      ":generate_ust_config_h",
+   ],
    includes = [
       "include",
       "src",
@@ -42,9 +74,6 @@ cc_library(
       "_GNU_SOURCE",
       "LTTNG_SYSTEM_RUNDIR=\\\"/var/run/lttng\\\"",
    ], 
-   copts = [
-      "-Wno-stringop-overread",              # TODO(asymingt) fix this
-   ],
    deps = [
       "@liburcu",
    ],

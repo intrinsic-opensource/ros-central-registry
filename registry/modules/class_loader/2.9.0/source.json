@@ -5,5 +5,9 @@
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
         "MODULE.bazel": "sha256-YIVNMDWzdypScqeyIbQVoRZwsUig/zBT63Uq3TB8VKQ="
-    }
+    },
+    "patches": {
+        "fix__gitignore.patch": "sha256-df5BnIQw5Pgl5um3Qci3zaw8DH6QjZjyBl4OPzkxNBA="
+    },
+    "patch_strip": 1
 }
