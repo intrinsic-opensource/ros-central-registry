@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Augment the BCR with a few of our own modules. 
-common --registry=file:///%workspace%/registry --registry=https://bcr.bazel.build
+common --registry=file:///%workspace%/docs --registry=https://bcr.bazel.build
 
 # Don't allow tests to access the network by default. 
 test --sandbox_default_allow_network=false
