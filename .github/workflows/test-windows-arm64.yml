@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: test-target-platforms
-run-name: ${{ github.actor }} tests that code can build across platforms
+name: test-windows-arm64
+run-name: ${{ github.actor }} tests code against a windows arm64 platform.
 on: [push]
 jobs:
-  test-linux-amd64:
-    runs-on: ubuntu-24.04
+  checkout-setup-build-test: 
+    runs-on: windows-11-arm 
     steps:
 
     # Checkout this repository and all submodules.
@@ -35,5 +35,9 @@ jobs:
         repository-cache: true
 
     # Build the ROS examples.
-    - name: Run Build
+    - name: Run build
       run: bazel build //...
+
+    # Test the Zenoh C library.
+    - name: Run test
+      run: bazel test @zenoh-c//...
