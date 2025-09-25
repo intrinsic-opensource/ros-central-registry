@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: test-linux-arm64
+name: test-linux-amd64
 run-name: ${{ github.actor }} tests code against a linux amd64 platform.
 on: [push]
 jobs:
