@@ -29,7 +29,7 @@ from pathlib import Path
 # Path to file containing information about the registries
 REPO_YAML_FILE = Path(__file__).parent / 'registry_scraper_data.yaml'
 REPO_BASE_PATH = Path(__file__).parent.parent
-BASE_OUT_PATH = Path(__file__).parent.parent / 'registry' / 'modules'
+BASE_OUT_PATH = Path(__file__).parent.parent / 'docs' / 'modules'
 
 # Try and open the file with all the repos
 try:
