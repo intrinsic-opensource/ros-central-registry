@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: test-macos-arm64
-run-name: ${{ github.actor }} tests code against a macos arm64 platform.
+name: build-test-linux-amd64
+run-name: ${{ github.actor }} tests code against a linux amd64 platform.
 on: [push]
 jobs:
   checkout-setup-build-test: 
-    runs-on: macos-15
+    runs-on: ubuntu-24.04
     steps:
 
     # Checkout this repository and all submodules.

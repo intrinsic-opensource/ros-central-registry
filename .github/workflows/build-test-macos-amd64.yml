@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: test-macos-amd64
+name: build-test-macos-amd64
 run-name: ${{ github.actor }} tests code against a macos amd64 platform.
 on: [push]
 jobs:

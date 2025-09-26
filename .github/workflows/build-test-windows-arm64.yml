@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: test-windows-arm64
+name: build-test-windows-arm64
 run-name: ${{ github.actor }} tests code against a windows arm64 platform.
 on: [push]
 jobs:

@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: test-windows-amd64
-run-name: ${{ github.actor }} tests code against a windows amd64 platform.
+name: build-test-macos-arm64
+run-name: ${{ github.actor }} tests code against a macos arm64 platform.
 on: [push]
 jobs:
   checkout-setup-build-test: 
-    runs-on: windows-2025 
+    runs-on: macos-15
     steps:
 
     # Checkout this repository and all submodules.
