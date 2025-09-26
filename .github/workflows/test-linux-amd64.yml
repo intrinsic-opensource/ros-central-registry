@@ -30,9 +30,9 @@ jobs:
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.15.0
       with:
-        bazelisk-cache: false
+        bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
-        repository-cache: false
+        repository-cache: true
 
     # Build the ROS examples.
     - name: Run build
