@@ -24,21 +24,21 @@ using namespace std::chrono_literals;
 
 class ExampleRosPublisher : public rclcpp::Node {
 public:
-  MinimalPublisher() : Node("example_ros_publisher"), count_(0) {
+  ExampleRosPublisher() : Node("example_ros_publisher"), count_(0) {
     publisher_ = this->create_publisher<example::msg::ExampleMessage>("topic", 10);
     auto timer_callback =
       [this]() -> void {
         auto msg = example::msg::ExampleMessage();
         msg.message.data = "Hello, world! from C++ " + std::to_string(this->count_++);
         RCLCPP_INFO(this->get_logger(), "Published: '%s'", msg.message.data.c_str());
-        this->publisher_->publish(message);
+        this->publisher_->publish(msg);
       };
     timer_ = this->create_wall_timer(1s, timer_callback);
   }
 
 private:
   rclcpp::TimerBase::SharedPtr timer_;
-  rclcpp::Publisher<example::msg::ExampleMessage::SharedPtr publisher_;
+  rclcpp::Publisher<example::msg::ExampleMessage>::SharedPtr publisher_;
   size_t count_;
 };
 

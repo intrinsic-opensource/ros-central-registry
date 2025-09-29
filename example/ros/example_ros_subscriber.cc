@@ -26,7 +26,7 @@ public:
   {
     auto topic_callback =
       [this](example::msg::ExampleMessage::UniquePtr msg) -> void {
-        RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->data.c_str());
+        RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->message.data.c_str());
       };
     subscription_ =
       this->create_subscription<example::msg::ExampleMessage>("topic", 10, topic_callback);

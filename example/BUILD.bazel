@@ -40,7 +40,7 @@ cc_ros_library(
 
 cc_binary(
     name = "example_ros_publisher_cc",
-    srcs = ["src/example_ros_publisher.cc"],
+    srcs = ["ros/example_ros_publisher.cc"],
     deps = [
         "@rclcpp",
         ":example_ros_cc_msgs"
@@ -49,7 +49,7 @@ cc_binary(
 
 cc_binary(
     name = "example_ros_subscriber_cc",
-    srcs = ["src/example_ros_subscriber.cc"],
+    srcs = ["ros/example_ros_subscriber.cc"],
     deps = [
         "@rclcpp",
         ":example_ros_cc_msgs"
