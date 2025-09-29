@@ -14,7 +14,7 @@
 
 # Add the ROS Central Registry (RCR) to our list of remote modules. We
 # also make sure to include the Bazel Central Registry here too!
-common --registry=https://asymingt.github.io/bazel_ros_demo \
+common --registry=https://intrinsic-opensource.github.io/ros-central-registry \
        --registry=https://bcr.bazel.build
 
 # Don't allow tests to access the network by default. 
