@@ -1,8 +1,6 @@
 # Overview
 
-The goal of the [ROS Central Registry](http://asymingt.github.io/bazel_ros_demo) is to provide a [Bazel](https://bazel.build) build system for [Robot Operating System (ROS)](https://ros.org) applications. Our philosophy is to build everything from source, using the dependency management system provided by the [Bazel modules](https://bazel.build/external/module) ecosystem to ensure consistency across ROS releases.
-
-A lot of the work in this project is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) repository. His is one of [several pre-existing Bazel build systems for ROS](https://github.com/RobotLocomotion/drake-ros/blob/main/bazel_ros2_rules/lib/README.md). 
+The goal of the [ROS Central Registry](http://asymingt.github.io/bazel_ros_demo) is to provide a [Bazel](https://bazel.build) build system for [Robot Operating System (ROS)](https://ros.org) applications. Our philosophy is to build everything from source, using the dependency management system provided by the [Bazel modules](https://bazel.build/external/module) ecosystem to ensure consistency across ROS releases. A lot of the work in this project is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) repository. His is one of [several pre-existing Bazel build systems for ROS](https://github.com/RobotLocomotion/drake-ros/blob/main/bazel_ros2_rules/lib/README.md). 
 
 > [!WARNING]
 > This repository is a proof of concept and under active open development, and so no guarantees are made about stability. Please do not depend on this code until we have an official release!
