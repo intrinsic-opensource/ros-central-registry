@@ -28,6 +28,7 @@ module(
 bazel_dep(name = "protobuf", version = "32.0")
 bazel_dep(name = "rules_cc", version = "0.2.4")
 bazel_dep(name = "rules_python", version = "1.6.1")
+bazel_dep(name = "toolchains_llvm", version = "1.5.0")
 
 # From the RCR - right now you need to use a compatible set of versioned
 # packages from a ROS release. In future we might use module-rules to
@@ -50,3 +51,13 @@ python.toolchain(
     python_version = "3.12",
     is_default = True,
 )
+
+# Having a self-contained C++ toolchain prevents bazel from polling PATH
+# for a compiler, making the builds less reliant on the host environment.
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(
+    llvm_version = "19.1.0",
+)
+use_repo(llvm, "llvm_toolchain")
+register_toolchains("@llvm_toolchain//:all")
