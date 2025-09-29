@@ -17,6 +17,7 @@ This tool loads the 'distribution.txt' file to find all bazel modules
 in this developer workspace. It then uses the .gitmodules
 """
 
+import argparse
 import hashlib
 import base64
 import json
@@ -25,21 +26,8 @@ import yaml
 import urllib3
 from git import Repo
 from pathlib import Path
-
-# Path to file containing information about the registries
-REPO_YAML_FILE = Path(__file__).parent / 'registry_scraper_data.yaml'
-REPO_BASE_PATH = Path(__file__).parent.parent
-BASE_OUT_PATH = Path(__file__).parent.parent / 'docs' / 'modules'
-
-# Try and open the file with all the repos
-try:
-    with REPO_YAML_FILE.open('r') as f:
-        yaml_data = yaml.safe_load(f)
-    print("YAML data loaded successfully:")
-except FileNotFoundError:
-    print(f"Error: The YAML file '{REPO_YAML_FILE}' was not found.")
-except yaml.YAMLError as e:
-    print(f"Error parsing YAML file: {e}")
+from python.runfiles import runfiles
+                                        
 
 def calculate_bazel_integrity(uri):
     """Given a local or remote file URI, download and calculate integrity"""
@@ -133,84 +121,104 @@ def update_patch_file(patch_dest, patch_content):
     with open(patch_dest, "w") as file:
         file.write(patch_content)
 
-for repo_name, repo_data in yaml_data.items():
-    print("Processing", repo_name)
-    repo_folder = repo_data.get('folder', 'submodules')
-    repo_version = repo_data["version"]
-    repo_ghsuffix = repo_data["github"]
-    repo_upstream = repo_data.get('upstream', repo_version)
-    repo_path = REPO_BASE_PATH / repo_folder / repo_name
+def repos_from_submodules(repo_base_path, repo_yaml_file):
+    """Process all repos in the yaml file"""
+    base_out_path = repo_base_path / 'docs' / 'modules'
 
-    # Collect diffs
-    repo = Repo(repo_path)
-    commit_base = repo.commit(repo_upstream)
-    commit_feat = repo.commit("HEAD")
-    diff_index = commit_base.diff(commit_feat)
-    repo_overlay = {}
-    repo_patches = {}
-    for diff in diff_index:
-        if diff.change_type == 'M':  # 'M' for modified
-            repo_patches[diff.b_path] = repo.git.diff(commit_base, commit_feat, diff.b_path)
+    # Try and open the file with all the repos
+    try:
+        with repo_yaml_file.open('r') as f:
+            yaml_data = yaml.safe_load(f)
+        print("YAML data loaded successfully:")
+    except FileNotFoundError:
+        print(f"Error: The YAML file '{repo_yaml_file}' was not found.")
+    except yaml.YAMLError as e:
+        print(f"Error parsing YAML file: {e}")
+
+    for repo_name, repo_data in yaml_data.items():
+        print("Processing", repo_name)
+        repo_folder = repo_data.get('folder', 'submodules')
+        repo_version = repo_data["version"]
+        repo_ghsuffix = repo_data["github"]
+        repo_upstream = repo_data.get('upstream', repo_version)
+        repo_path = repo_base_path / repo_folder / repo_name
+
+        # Collect diffs
+        repo = Repo(repo_path)
+        commit_base = repo.commit(repo_upstream)
+        commit_feat = repo.commit("HEAD")
+        diff_index = commit_base.diff(commit_feat)
+        repo_overlay = {}
+        repo_patches = {}
+        for diff in diff_index:
+            if diff.change_type == 'M':  # 'M' for modified
+                repo_patches[diff.b_path] = repo.git.diff(commit_base, commit_feat, diff.b_path)
+            else:
+                overlay_path = str(repo_path / diff.b_path)
+                repo_overlay[diff.b_path] = calculate_bazel_integrity(overlay_path)
+        
+        # Extract modules for this repo.
+        repo_modules = {}
+        if 'modules' in repo_data.keys():
+            for module_name, module_path in repo_data['modules'].items():
+                repo_modules[module_name] = module_path
         else:
-            overlay_path = str(repo_path / diff.b_path)
-            repo_overlay[diff.b_path] = calculate_bazel_integrity(overlay_path)
-    
-    # Extract modules for this repo.
-    repo_modules = {}
-    if 'modules' in repo_data.keys():
-        for module_name, module_path in repo_data['modules'].items():
-            repo_modules[module_name] = module_path
-    else:
-        repo_modules[repo_name] = ""
+            repo_modules[repo_name] = ""
 
-    # Process modules
-    for module_name, module_subfolder in repo_modules.items():
-        print("+", module_name)
+        # Process modules
+        for module_name, module_subfolder in repo_modules.items():
+            print("+", module_name)
 
-        # Clear anything that's already there.
-        shutil.rmtree(BASE_OUT_PATH / module_name, ignore_errors=True)
+            # Clear anything that's already there.
+            shutil.rmtree(base_out_path / module_name, ignore_errors=True)
 
-        # Get the path to the module folder of the repo
-        module_path = REPO_BASE_PATH / repo_folder / repo_name / module_subfolder
+            # Get the path to the module folder of the repo
+            module_path = repo_base_path / repo_folder / repo_name / module_subfolder
 
-        # Update the metadata.json file.
-        metadata_json = BASE_OUT_PATH / module_name / 'metadata.json'
-        update_metadata_json(metadata_json, repo_ghsuffix, repo_version)
+            # Update the metadata.json file.
+            metadata_json = base_out_path / module_name / 'metadata.json'
+            update_metadata_json(metadata_json, repo_ghsuffix, repo_version)
 
-        # Create overlay files.
-        overlay = {}
-        for overlay_rel_path, overlay_integrity in repo_overlay.items():
-            overlay_src_path =  repo_path / overlay_rel_path
-            # print(overlay_src_path, overlay_rel_path)
-            if not str(overlay_src_path).startswith(str(module_path) + "/"):
-                continue
-            strip_prefix = str(overlay_src_path).removeprefix(str(module_path) + "/")
-            overlay_dst_path = BASE_OUT_PATH / module_name / repo_version / 'overlay' / strip_prefix
-            update_overlay_file(overlay_dst_path, overlay_src_path)
-            overlay[strip_prefix] = overlay_integrity
+            # Create overlay files.
+            overlay = {}
+            for overlay_rel_path, overlay_integrity in repo_overlay.items():
+                overlay_src_path =  repo_path / overlay_rel_path
+                if not str(overlay_src_path).startswith(str(module_path) + "/"):
+                    continue
+                strip_prefix = str(overlay_src_path).removeprefix(str(module_path) + "/")
+                overlay_dst_path = base_out_path / module_name / repo_version / 'overlay' / strip_prefix
+                update_overlay_file(overlay_dst_path, overlay_src_path)
+                overlay[strip_prefix] = overlay_integrity
 
-        # Create patch files
-        patches = {}
-        for patch_rel_path, patch_content in repo_patches.items():
-            patch_src_path =  repo_path / patch_rel_path
-            if not str(patch_src_path).startswith(str(module_path) + "/"):
-                continue
-            strip_prefix = str(patch_src_path).removeprefix(str(module_path) + "/")
-            patch_name = "fix_" + str(strip_prefix).replace("/", "_").replace(".", "_") + ".patch"
-            patch_dst_path = BASE_OUT_PATH / module_name / repo_version / 'patches' / patch_name
-            update_patch_file(patch_dst_path, patch_content)
-            patches[patch_name] = calculate_bazel_integrity(patch_dst_path)
+            # Create patch files
+            patches = {}
+            for patch_rel_path, patch_content in repo_patches.items():
+                patch_src_path =  repo_path / patch_rel_path
+                if not str(patch_src_path).startswith(str(module_path) + "/"):
+                    continue
+                strip_prefix = str(patch_src_path).removeprefix(str(module_path) + "/")
+                patch_name = "fix_" + str(strip_prefix).replace("/", "_").replace(".", "_") + ".patch"
+                patch_dst_path = base_out_path / module_name / repo_version / 'patches' / patch_name
+                update_patch_file(patch_dst_path, patch_content)
+                patches[patch_name] = calculate_bazel_integrity(patch_dst_path)
 
-        # This is the patter we'll use across all modules
-        # print(repo_overlay)
-        # print(overlay)
-        src_module_bazel = BASE_OUT_PATH / module_name / repo_version / 'overlay' / 'MODULE.bazel'
-        dst_module_bazel = BASE_OUT_PATH / module_name / repo_version / 'MODULE.bazel'
-        shutil.copy(src_module_bazel, dst_module_bazel)
+            # Copy over the MODULE.bazel file.
+            src_module_bazel = base_out_path / module_name / repo_version / 'overlay' / 'MODULE.bazel'
+            dst_module_bazel = base_out_path / module_name / repo_version / 'MODULE.bazel'
+            dst_module_bazel.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(src_module_bazel, dst_module_bazel)
 
-        # Patches are done at the repo level, so we need to strip out the subfolder.
-        strip = module_subfolder
+            # Patches are done at the repo level, so we need to strip out the subfolder.
+            strip = module_subfolder
 
-        # Update the source.json file.
-        source_json = BASE_OUT_PATH / module_name / repo_version / 'source.json'
-        update_source_json(source_json, repo_ghsuffix, repo_upstream, overlay, patches, strip)
+            # Update the source.json file.
+            source_json = base_out_path / module_name / repo_version / 'source.json'
+            update_source_json(source_json, repo_ghsuffix, repo_upstream, overlay, patches, strip)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("workspace", help="Path to the bazel workspace")
+    args = parser.parse_args()
+    repo_base_path = Path(args.workspace)
+    repo_yaml_file = Path(runfiles.Create().Rlocation('_main/tools/registry_scraper_data.yaml'))
+    repos_from_submodules(repo_base_path, repo_yaml_file)

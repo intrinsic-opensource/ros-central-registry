@@ -1,35 +1,19 @@
 # Overview
 
-This repo illustrates work in progress towards Bazel build system for ROS, where each ROS package is a Bazel module. A good chunk of the implementation is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) repository.
-
-The ROS packages in the `modules` folder are snapshots from a rolling release, augmented with Bazel build files in a way that lends itself towards a `source.json` file format submitted to a central registry. For now, version numbers have no meaning because this project uses local overrides. In the long term we intend to convert our patches and Bazel build files into modules in a ROS Central Registry, where the evolution of package versions and interdependency can be tightly managed.
+The goal of the [ROS Central Registry](http://intrinsic-opensource.github.io/ros-central-registry) is to provide a [Bazel](https://bazel.build) build system for [Robot Operating System (ROS)](https://ros.org) applications. Our philosophy is to build everything from source, using the dependency management system provided by the [Bazel modules](https://bazel.build/external/module) ecosystem to ensure consistency across ROS releases. A lot of the work in this project is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) repository. His is one of [several pre-existing Bazel build systems for ROS](https://github.com/RobotLocomotion/drake-ros/blob/main/bazel_ros2_rules/lib/README.md). 
 
 > [!WARNING]
-> This repository is a proof of concept and under active open development, and so no guarantees are made about stability. Please do not depend on this code!
-
-# Prerequisites
-
-The `rmw_zenoh_cpp` middleware currently depends on a Cargo build from `rules_rust`. Unfortunately, this is not hermetic and depends in turn on `rustup` being installed in your environment. To do this, simply run the following:
-
-```
-sudo apt install rustup
-```
-
-In addition to a working GCC compiler, the `rules_foreign_cc` requires `libtool` to function correctly. You must install these two packages before installing:
-
-```
-sudo apt install build-essential libtool
-```
+> This repository is a proof of concept and under active open development, and so no guarantees are made about stability. Please do not depend on this code until we have an official release!
 
 # Status
 
-The table below summarizes the status of the github workflow exercising the target platform:
+The table below summarizes the status of the github workflows exercising various platforms:
 
-| Item              | x64                                                                                                     | arm64                                                                                                   |
+| Platform          | x64                                                                                                     | arm64                                                                                                   |
 | :---------------- | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
-| Ubuntu 24.04      | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-linux-amd64.yml/badge.svg)   | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-linux-arm64.yml/badge.svg)   |
-| MacOS 15          | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-macos-amd64.yml/badge.svg)   | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-macos-arm64.yml/badge.svg)   |
-| Windows 11        | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-windows-amd64.yml/badge.svg) | ![amd64](https://github.com/asymingt/bazel_ros_demo/actions/workflows/test-windows-arm64.yml/badge.svg) |
+| Ubuntu 24.04      | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-amd64.yml/badge.svg)   | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-arm64.yml/badge.svg)   |
+| MacOS 15          | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-macos-amd64.yml/badge.svg)   | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-macos-arm64.yml/badge.svg)   |
+| Windows 11        | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-windows-amd64.yml/badge.svg) | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-windows-arm64.yml/badge.svg) |
 
 In terms of features, this is what we currently support:
 
@@ -51,121 +35,142 @@ In terms of features, this is what we currently support:
   - [ ] `rmw_gurumdds_cpp`
 - Core:
   - [x] `rcl`
+  - [ ] `rcl_action`
+  - [ ] `rcl_lifecycle`
   - [x] `rclcpp` 
+  - [ ] `rclcpp_action` 
+  - [ ] `rclcpp_lifecycle` 
+
+Our intention is to ultimately host a CI plan that responds to new ROS releases by automatically creating a set of Bazel modules and running tests. For now, however, we are working off a snapshot of the rolling release from June 2025 to determine the long term feasibility of this concept.
+
+# Prerequisites
+
+## Ubuntu Linux 24.04 (functional, recommended)
+
+Right now, we only support Ubuntu 24.04. You must first install `git` and and [bazelisk](https://github.com/bazelbuild/bazelisk) in order to run or edit code. The project downloads a LLVM toolchain with clang, which means that you don't need any compiler or toolchains installed in your host environment. Th only thing you will need is a functioning build environment, because some packages use `rules_foreign_cc` and require `autoconf` to build correctly. To add this tool, run the following:
+
+```
+apt install build-essential
+```
+
+## MacOS 15 (broken, unsupported)
+
+You will need need to install homebrew first, and then add a few packages before trying to build any examples.
+
+```
+brew install automake autoconf libtool zstd rust bazelisk
+```
+
+The `automake`, `autoconf`, and `libtool` packages are needed by `rules_foreign_cc` to detect system features when generating Makefiles. The `zstd` package is needed by the protocol buffer rules. The `rust` package provides the `cargo` binary, which is needed for a Zenoh build. The `bazelisk` package provides the `bazel` command, which bootstraps a bazel build tool for this project.
+
+## Windows 11 (broken, unsupported)
+
+Currently the `toolchains_llvm` project does not offer a functional compiler setup for windows environments. For more information, please see [this issue](https://github.com/bazel-contrib/toolchains_llvm/issues/395).
 
 # Examples
 
-Clone the repo, making sure to also pull all submodules:
+First, checkout this repository:
 
 ```
-git clone --recurse-submodules https://github.com/asymingt/bazel_ros_demo.git
+git clone https://github.com/intrinsic-opensource/ros-central-registry.git
 ```
 
-Build a C target that links against ROS C bindings.
+## Custom message with minimal publisher and subscriber
+
+We have included a small self-contained example workspace showing a minimal C++ publisher and subscriber exchanging a custom message. By default we use the Zenoh middleware. Start by opening three terminals at the `example` directory from within this project.
+
+In terminal 1, start the zenohd router.
 
 ```
-bazel build //:example_ros_c
+bazel run @rmw_zenoh_cpp//:rmw_zenohd
 ```
 
-Build a C++ target that links against ROS C++ bindings.
+In terminal 2, start a ROS node to publish a custom message.
 
 ```
-bazel build //:example_ros_cc
+bazel run //:example_ros_publisher_cc
 ```
 
-Build a C++ target that uses protocol buffer C++ bindings.
+In terminal 3, start a ROS node to subscribe to the custom message.
 
 ```
-bazel build //:example_proto_cc
+bazel run //:example_ros_subscriber_cc
 ```
 
-# Basic publisher and subscriber examples
+We also support several other RMW  middleware implementations -- `rmw_cyclonedds_cpp`, `rmw_fastrtps_cpp` and `rmw_fastrtps_dynamic_cpp`. You must specify which one you want to use, either permanently in the `~/.bashrc` or as an argument to *every* bazel action. For Cyclone DDS you need not run the `zenohd` router, and it should be sufficient to do the following:
 
-We've included a C++ publish and subscribe examples. Note that you can set the RMW implementation with `--@rmw_implementation//:rmw=...`. Take a look at the `.bazelrc` for more information about how to do this. Since the desired RMW implementation is statically linked, switching will trigger a rebuild which can be expensive.
+```
+# In terminal 1
+bazel run //:example_ros_publisher_cc \
+    --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
 
-```sh
-# In one terminal
-[rolling] bazel_ros_demo 💥 bazel run //:example_ros_publisher_cc
-INFO: Analyzed target //:example_ros_publisher_cc (0 packages loaded, 16770 targets configured).
-INFO: Found 1 target...
-Target //:example_ros_publisher_cc up-to-date:
-  bazel-bin/example_ros_publisher_cc
-INFO: Elapsed time: 12.685s, Critical Path: 9.65s
-INFO: 131 processes: 2533 action cache hit, 4 internal, 127 processwrapper-sandbox.
-INFO: Build completed successfully, 131 total actions
-INFO: Running command line: bazel-bin/example_ros_publisher_cc
-[INFO] [1757113510.547578338] [minimal_publisher]: Published: 'Hello, world! from C++ 0'
-[INFO] [1757113511.547565265] [minimal_publisher]: Published: 'Hello, world! from C++ 1'
-[INFO] [1757113512.547580653] [minimal_publisher]: Published: 'Hello, world! from C++ 2'
-[INFO] [1757113513.547580236] [minimal_publisher]: Published: 'Hello, world! from C++ 3'
-
-# In a second terminal
-[rolling] bazel_ros_demo 💥 bazel run //:example_ros_subscriber_cc
-INFO: Analyzed target //:example_ros_subscriber_cc (0 packages loaded, 2 targets configured).
-INFO: Found 1 target...
-Target //:example_ros_subscriber_cc up-to-date:
-  bazel-bin/example_ros_subscriber_cc
-INFO: Elapsed time: 7.668s, Critical Path: 7.24s
-INFO: 6 processes: 1 action cache hit, 4 internal, 2 processwrapper-sandbox.
-INFO: Build completed successfully, 6 total actions
-INFO: Running command line: bazel-bin/example_ros_subscriber_cc
-[INFO] [1757113577.783073521] [minimal_subscriber]: I heard: 'Hello, world! from C++ 11'
-[INFO] [1757113578.783137353] [minimal_subscriber]: I heard: 'Hello, world! from C++ 12'
-[INFO] [1757113579.783068847] [minimal_subscriber]: I heard: 'Hello, world! from C++ 13'
-[INFO] [1757113580.783017681] [minimal_subscriber]: I heard: 'Hello, world! from C++ 14'
+# In terminal 2
+bazel run //:example_ros_subscriber_cc \
+    --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
 ```
 
-# Protobuf type support for ROS
+Note that you can set `--@rmw_implementation//:rmw=rmw_cyclonedds_cpp` in the `.bazelrc` file to make it permanent across the workspace.
 
-For C++ only we have enabled protobuf type support using an updated version of the type support implementation from [eclipse-ecal/rosidl_typesupport_protobuf](https://github.com/eclipse-ecal/rosidl_typesupport_protobuf). What this means is that you can directly send protobuf types and the internal mapping to a ROS message type is handled for you. Eg:
+## Protocol buffer support
 
-```c++
-// Include the auto-generated protobuf language bindings for C++.
-#include "sensor_msgs/msg/compressed_image__typeadapter_protobuf_cpp.hpp"
+We have also included protocol buffer type support, which allows you to interact with messages, services and actions through the protocol buffer C++ API. The protocol bufer type adapter automatically converts to and from the protocol buffer bindings, preventing the developer from  having to write message-specific type converters, which is both laborious and prone to error.
 
-// Create a publisher that takes the ::pb:: namespaced protobuf type.
-auto publisher = this->create_publisher<sensor_msgs::msg::pb::CompressedImage>("topic", 10);
+# Development
 
-// Create a protobuf message and send it to the ROS pubsub syste,.
-auto protobuf_message = sensor_msgs::msg::pb::CompressedImage();
-publisher->publish(protobuf_message);
+ROS is a federated system, which means that its code is spread across multiple repositories. This makes managing a feature branch more challenging, because you have to keep several repositories in sync with each other. While we migrate to using the `wstool` or `vcs` tools, this repo uses submodules.
+
+To setup your developer environment, simply do this from the root directory of this project. This will take a bit of time recursively pulling all dependent projects to the `submodules` folders. The `submodule` folder is where our ROS packages live, while the `thirdparty` folder contains vendored dependencies.
+
+```
+git submodule update --init --recursive
 ```
 
-This is only possible in C++, and we've included two examples:
+Now, take a look at the base folder structure of this project.
 
-```sh
-# In one terminal
-[rolling] bazel_ros_demo 💥 bazel run //:example_ros_proto_publisher_cc
-INFO: Analyzed target //:example_ros_proto_publisher_cc (0 packages loaded, 0 targets configured).
-INFO: Found 1 target...
-Target //:example_ros_proto_publisher_cc up-to-date:
-  bazel-bin/example_ros_proto_publisher_cc
-INFO: Elapsed time: 0.559s, Critical Path: 0.02s
-INFO: 1 process: 4 action cache hit, 1 internal.
-INFO: Build completed successfully, 1 total action
-INFO: Running command line: bazel-bin/example_ros_proto_publisher_cc
-[INFO] [1757115413.832288766] [minimal_proto_publisher]: Published protbuf message
-[INFO] [1757115414.832286101] [minimal_proto_publisher]: Published protbuf message
-[INFO] [1757115415.832314817] [minimal_proto_publisher]: Published protbuf message
-
-# In a second terminal
-[rolling] bazel_ros_demo 💥 bazel run //:example_ros_proto_subscriber_cc
-INFO: Analyzed target //:example_ros_proto_subscriber_cc (0 packages loaded, 0 targets configured).
-INFO: Found 1 target...
-Target //:example_ros_proto_subscriber_cc up-to-date:
-  bazel-bin/example_ros_proto_subscriber_cc
-INFO: Elapsed time: 9.744s, Critical Path: 9.20s
-INFO: 3 processes: 1 action cache hit, 1 internal, 2 processwrapper-sandbox.
-INFO: Build completed successfully, 3 total actions
-INFO: Running command line: bazel-bin/example_ros_proto_subscriber_cc
-[INFO] [1757115413.832665806] [minimal_subscriber]: Received protobuf message
-[INFO] [1757115414.832732991] [minimal_subscriber]: Received protobuf message
-[INFO] [1757115415.832741286] [minimal_subscriber]: Received protobuf message
+```
++ .github/         # CI workflows for checking various platforms.
++ docs/            # Output modules from the scraping process.
++ example/         # Standalone example showing how to use our modules.
+# src/             # Some examples showing how to use the developer environment.
++ tools/           # Tools for transforming repos into Bazel modules.
++ submodules/      # Bazel modules we expect to always live in the RCR ***
++ thirdparty/      # Bazel modules we expect to eventually live in the BCR ***
 ```
 
-# Testing
+Right now the developer workflow is to modify the submodules directly as you test. If you look at the `MODULE.bazel` file in the root of this project you will see that a `local_path_override` masks the Bazel module with a local copy while you test. Once you have finished making changes and testing, you must commit your changes to the `rolling-bazel` branch of each repo you modified:
 
-There is no straightforward way of running a full test suite across all package imports. Bazel doesn't support to support a wildcard expansion for test targets that spans multiple modules. For this reason we have a [Distribution File](distribution.txt) and supporting rule in our `.bazelrc` file that enables you to run all tests across all repos. Right now this doesn't work, but ultimately we should be able to run all tests this way:
+As an example, lets assume you made a change to `rclcpp`. To push the change upstream, you will need write permission to the repo. Right now we are in the process of setting up a better way of handling this.
+
+```
+cd submodules/rclcpp
+git pull
+git checkout rolling-bazel
+git commit -m "Added new tests"
+git push
+```
+
+Note that you will also need to push the updated submodule commit hash on this repo, so that the developer workspace now points to a `rclcpp` repo commit containing your change. Before we do this, however, we want to first make sure that we have regenerated our bazel modules files:
+
+```
+bazel run //tools:regenerate_modules -- $PWD
+```
+
+This tool iterates over all submodules in `submodules` and `thirdparty` and calculates a diff between the upstream versioned release and the `rolling-bazel` branch, and then transforms this into Bazel module in the `docs` folder. If you run `git diff` you should see changes in `docs` to the `rclcpp` package.
+
+Once you are happy with the change to the submodule commit and `docs` folder, you can commit and push your code to a new branch and setup a PR.
+
+```
+git checkout -b feature/rclcpp-test-fixes
+git add .
+git commit -m "Add some rclcpp fixes"
+git push
+```
+
+When you open a pull request containing your changes, you will see some CI plans run. These let you know whether the changes you have made are functional across a variety of different platforms.
+
+## Testing tip
+
+There is no straightforward way of running a full test suite across all package imports. Bazel doesn't support to support a wildcard expansion for test targets that span multiple modules. For this reason we have a [Distribution File](distribution.txt) and supporting rule in our `.bazelrc` file that enables you to run all tests across all repos in the following way:
 
 ```
 bazel test --config=distribution

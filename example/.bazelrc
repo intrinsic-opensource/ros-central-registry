@@ -14,18 +14,42 @@
 
 # Add the ROS Central Registry (RCR) to our list of remote modules. We
 # also make sure to include the Bazel Central Registry here too!
-common --registry=https://asymingt.github.io/bazel_ros_demo \
+common --registry=https://intrinsic-opensource.github.io/ros-central-registry \
        --registry=https://bcr.bazel.build
 
 # Don't allow tests to access the network by default. 
 test --sandbox_default_allow_network=false
 
-# Use the C++17 standard by default across the whole repo.
-build --cxxopt=-std=c++17
+# Use C++17 standard by default across the whole repo. 
+build --cxxopt="-std=c++17"
+
+# Ensure that we use toolchains_llvm instead of the host toolchain.
+build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
 
 # Build configuration for RMW implementations
 #   --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
 #   --@rmw_implementation//:rmw=rmw_fastrtps_cpp
 #   --@rmw_implementation//:rmw=rmw_fastrtps_dynamic_cpp
 #   --@rmw_implementation//:rmw=rmw_zenoh_cpp
-build --@rmw_implementation//:rmw=rmw_zenoh_cpp
+# build --@rmw_implementation//:rmw=rmw_zenoh_cpp
+
+# ASAN
+build:asan --strip=never
+build:asan --copt=-fsanitize=address
+build:asan --copt=-O0
+build:asan --copt=-fno-omit-frame-pointer
+build:asan --linkopt=-fsanitize=address
+
+# MSAN
+build:msan --strip=never
+build:msan --copt=-fsanitize=memory
+build:msan --copt=-O0
+build:msan --copt=-fno-omit-frame-pointer
+build:msan --linkopt=-fsanitize=memory
+
+# TSAN
+build:tsan --strip=never
+build:tsan --copt=-fsanitize=thread
+build:tsan --copt=-O0
+build:tsan --copt=-fno-omit-frame-pointer
+build:tsan --linkopt=-fsanitize=thread
