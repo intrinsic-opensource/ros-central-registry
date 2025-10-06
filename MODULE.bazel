@@ -519,8 +519,8 @@ python.toolchain(
 
 # Use a RUST compiler known to work with Zenoh.
 
-# rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
-# rust.toolchain(
-#     edition = "2021",
-#     versions = ["1.75.0"],
-# )
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = [ "1.85.0" ],
+)
