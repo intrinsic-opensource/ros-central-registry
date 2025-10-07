@@ -92,7 +92,8 @@ cmake(
             "-Wno-missing-braces"
         ],
         deps = [":zenoh-c"],
-        timeout = "short"
+        timeout = "short",
+        tags = ["requires-network"],
     )
     for name in [
         "z_api_config_test",

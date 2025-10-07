@@ -3,8 +3,8 @@
     "integrity": "sha256-aGJnIAy+3MmBbGHVPfrkp6kmpo+m+fpTPPHPKu1e9mM=",
     "strip_prefix": "zenoh-c-1.4.0",
     "overlay": {
-        "BUILD.bazel": "sha256-li5RGFTre0buFcasgwNSmGU4j1T45YzigtiXxMIy6+E=",
-        "MODULE.bazel": "sha256-dHsq6HJ2UTp4JVNSTgEWvCFUDF4OcliROO54scrBKTM="
+        "BUILD.bazel": "sha256-UN2K2QVqyH20BU+ZOT4kRTaEDe7JE5y86nf29t9kPPw=",
+        "MODULE.bazel": "sha256-auhSXX4hVBP/SYU5Y60+tQEEQl7dUL9rF7dlO5iRh5k="
     },
     "patches": {
         "fix__gitignore.patch": "sha256-9PhX9OjPZ5hd/+Jw/euZf7qCS+deMy+MPPkckR2ZRNA=",
