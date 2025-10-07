@@ -17,19 +17,43 @@ load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
 
 package(default_visibility = ["//visibility:public"])
 
+# The Zenoh builds makes several nested calls to "cargo" which are
+# difficult to fix or change. To keep the build isolated, we will
+# create a fake CARGO_HOME directory, and then pass the rustc and
+# cargo tools as environment variables.
+# -> TODO(asymingt) fix this properly through crates in rules_rust
+
+CARGO_HOME = ".cargo_home/AUTO_GENERATED"
+
+genrule(
+    name = "cargo_home",
+    outs = [CARGO_HOME],
+    cmd = """
+mkdir -p $$(dirname $(location :%s)) && touch $(location :%s)
+""" % (CARGO_HOME, CARGO_HOME),
+)
+
+# Call rules_foreign_cc.cmake to perform a Zenoh build. Note the
+# environment variables passed into the cmake calls provide the
+# right tools and cache locations for the isolated build.
+
 filegroup(
     name = "srcs",
-    srcs = glob(["**"], exclude=[
-        # Platform dependent generated files
-        "include/zenoh_configure.h",
-        "include/zenoh_opaque.h",
-        # Build resources
-        ".build_resources/**",
-        "src/opaque_types/mod.rs",
-        # Bazel files
-        "BUILD.bazel",
-        "MODULE.bazel",
-        "MODULE.bazel.lock"]
+    srcs = glob(["**"],
+        exclude=[
+            # These are auto-generated header files.
+            "include/zenoh_commons.h",
+            "include/zenoh_concrete.h",
+            "include/zenoh_configure.h",
+            "include/zenoh_macros.h",
+            "include/zenoh_opaque.h",
+            # These are auto-generated rust files.
+            "src/opaque_types/mod.rs",
+            # Bazel files
+            "BUILD.bazel",
+            "MODULE.bazel",
+            "MODULE.bazel.lock"
+        ]
     ),
 )
 
@@ -42,7 +66,19 @@ cmake(
     lib_source = ":srcs",
     out_static_libs = ["libzenohc.a"],
     out_include_dir = "include",
+    env = {
+        "CARGO": "$(execpath {})".format("@rules_rust//tools/upstream_wrapper:cargo"),
+        "RUSTC": "$(execpath {})".format("@rules_rust//tools/upstream_wrapper:rustc"),
+        "CARGO_HOME": "$${PWD}/bazel-bin/external/zenoh-c+/.cargo_home",
+    },
+    build_data = [
+        "@rules_rust//tools/upstream_wrapper:rustc",
+        "@rules_rust//tools/upstream_wrapper:cargo"
+    ],
+    tags = ["requires-network"],
 )
+
+# Run all tests in the Zenoh-C build to make sure we have things working as expected.
 
 [
     cc_test(

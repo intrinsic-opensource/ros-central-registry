@@ -3,11 +3,16 @@
     "integrity": "sha256-aGJnIAy+3MmBbGHVPfrkp6kmpo+m+fpTPPHPKu1e9mM=",
     "strip_prefix": "zenoh-c-1.4.0",
     "overlay": {
-        "BUILD.bazel": "sha256-xeb+gwz3XAhWjnJXu8Kr3Lxo4qQ6E6sIFOuZi6q1hKc=",
-        "MODULE.bazel": "sha256-Dg0X38HNFyqbHRq2WaLRdvclEOtYx9q2hbuZOqbAR4o="
+        "BUILD.bazel": "sha256-li5RGFTre0buFcasgwNSmGU4j1T45YzigtiXxMIy6+E=",
+        "MODULE.bazel": "sha256-dHsq6HJ2UTp4JVNSTgEWvCFUDF4OcliROO54scrBKTM="
     },
     "patches": {
-        "fix__gitignore.patch": "sha256-9PhX9OjPZ5hd/+Jw/euZf7qCS+deMy+MPPkckR2ZRNA="
+        "fix__gitignore.patch": "sha256-9PhX9OjPZ5hd/+Jw/euZf7qCS+deMy+MPPkckR2ZRNA=",
+        "fix_CMakeLists_txt.patch": "sha256-g5zYnKmrNkLhasdtlipL35iUOiVJIUuhr99yfepupDE=",
+        "fix_Cargo_lock.patch": "sha256-0voET75zlXqz/jrDZqLsPinW+4NLppMtylRfILHNb6c=",
+        "fix_Cargo_toml.patch": "sha256-+61GxCtzyUzyQxfNYfWWdGjHW0/VNP0Hx4oFnMTDp9E=",
+        "fix_build-resources_opaque-types_Cargo_lock.patch": "sha256-7bawAyAIva46n3J+9M6UATaL3UraB2uI+inu6LV7wL4=",
+        "fix_buildrs_opaque_types_generator_rs.patch": "sha256-hC4une4uKyFegPxwgBcqPdduoeeiUH6T5s3PQhvSy5U="
     },
     "patch_strip": 1
 }
