@@ -3,7 +3,7 @@
     "integrity": "sha256-aGJnIAy+3MmBbGHVPfrkp6kmpo+m+fpTPPHPKu1e9mM=",
     "strip_prefix": "zenoh-c-1.4.0",
     "overlay": {
-        "BUILD.bazel": "sha256-UN2K2QVqyH20BU+ZOT4kRTaEDe7JE5y86nf29t9kPPw=",
+        "BUILD.bazel": "sha256-jj4VukqAjouZfXp7PgZbGhIwGCOxXPLJWgERwp0kKfQ=",
         "MODULE.bazel": "sha256-auhSXX4hVBP/SYU5Y60+tQEEQl7dUL9rF7dlO5iRh5k="
     },
     "patches": {

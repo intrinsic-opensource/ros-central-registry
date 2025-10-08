@@ -50,7 +50,7 @@ Our intention is to ultimately host a CI plan that responds to new ROS releases 
 Right now, we only support Ubuntu 24.04. You must first install `git` and and [bazelisk](https://github.com/bazelbuild/bazelisk) in order to run or edit code. The project downloads a LLVM toolchain with clang, which means that you don't need any compiler or toolchains installed in your host environment. Th only thing you will need is a functioning build environment, because some packages use `rules_foreign_cc` and require `autoconf` to build correctly. To add this tool, run the following:
 
 ```
-apt install build-essential
+apt install build-essential valgrind
 ```
 
 ## MacOS 15 (broken, unsupported)
@@ -170,11 +170,13 @@ When you open a pull request containing your changes, you will see some CI plans
 
 ## Notes
 
-### Module locking
+### Module locking failures
 
 Right now we will periodically update modules but keep the same version number. Bazel aggressively caches based on the version numbers. If you find that you are getting a download hash mismatch for modules, make sure that you remove the `MODULE.bazel.lock` file in the root workspace. If you still have issues, clean the workspace by running `bazel clean` followed by `bazel shutdown`. If you still have issues, you can try running `rm -rf $(bazel info repository_cache)` but note that this will clear all repository cache, and a build will need to re-download the LLVM toolchain.
 
-### Module testing
+### Module testing failures.
+
+If you are running in docker, there is a known issue with valgrind. Before running any tests you must set your ulimit down from the default of 1073741804 to something more reasonable, like 4096. Do this with `ulimit -n 4096`, otherwise valgrind will error on initialization.
 
 There is no straightforward way of running a full test suite across all package imports. Bazel doesn't support to support a wildcard expansion for test targets that span multiple modules. For this reason we have a [Distribution File](distribution.txt) and supporting rule in our `.bazelrc` file that enables you to run all tests across all repos in the following way:
 

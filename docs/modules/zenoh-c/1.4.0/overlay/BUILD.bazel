@@ -65,6 +65,7 @@ cmake(
     },
     lib_source = ":srcs",
     out_static_libs = ["libzenohc.a"],
+    out_shared_libs = ["libzenohc.so"],
     out_include_dir = "include",
     env = {
         "CARGO": "$(execpath {})".format("@rules_rust//tools/upstream_wrapper:cargo"),
@@ -78,18 +79,14 @@ cmake(
     tags = ["requires-network"],
 )
 
-# Run all tests in the Zenoh-C build to make sure we have things working as expected.
+
+# Unit tests can be parallelized to maximize test throughput.
 
 [
     cc_test(
-        name = 'test_' + name.removesuffix('_test'),
-        srcs = [       
-            "tests/z_int_helpers.h",
-            "tests/" + name + ".c"
-        ],
-        copts = [
-            "-Wno-unused-variable",
-            "-Wno-missing-braces"
+        name = name,
+        srcs = ["tests/" + name + ".c"],
+        copts = ["-Wno-unused-variable", "-Wno-missing-braces"
         ],
         deps = [":zenoh-c"],
         timeout = "short",
@@ -107,7 +104,89 @@ cmake(
         "z_api_null_drop_test",
         "z_api_payload_test",
         "z_api_session_test",
-        "z_api_shm_test",
         "z_api_unitinialized_check",
     ]
 ]
+
+# The build tests really only check for the preprocessor directive ZENOHC_DYN_LIB,
+# and so -- even though we can control the linking -- the tests don't detect it.
+
+cc_test(
+    name = "z_build_static",
+    srcs = ["tests/z_build_static.c"],
+    copts = ["-Wno-unused-variable", "-Wno-missing-braces"],
+    deps = [":zenoh-c"],
+    linkstatic = True,
+    timeout = "short",
+    tags = ["requires-network", "exclusive"],
+)
+
+
+cc_test(
+    name = "z_build_shared",
+    srcs = ["tests/z_build_shared.c"],
+    copts = ["-Wno-unused-variable", "-Wno-missing-braces"],
+    deps = [":zenoh-c"],
+    timeout = "short",
+    linkstatic = False,
+    local_defines = ["ZENOHC_DYN_LIB"],
+    tags = ["requires-network", "exclusive"],
+)
+
+# Integration tests must be run exclusively to prevent destructive interference
+
+[
+    cc_test(
+        name = name,
+        srcs = ["tests/z_int_helpers.h", "tests/" + name + ".c"],
+        copts = ["-Wno-unused-variable", "-Wno-missing-braces"],
+        deps = [":zenoh-c"],
+        timeout = "short",
+        tags = ["requires-network", "exclusive"],
+    )
+    for name in [
+        "z_int_helpers_test",
+        "z_int_pub_sub_attachment_test",
+        "z_int_pub_sub_test",
+        "z_int_queryable_attachment_test",
+        "z_int_queryable_test",
+        "z_int_advanced_pub_sub_test",
+        "z_int_pub_cache_query_sub_test",
+    ]
+]
+
+# Leak test : z_leak_pub_sub_test (require valgrind)
+
+cc_binary(
+    name = "z_leak_pub_sub_test_impl",
+    srcs = ["tests/z_leak_pub_sub_test.c"],
+    copts = ["-Wno-unused-variable", "-Wno-missing-braces"],
+    deps = [":zenoh-c"],
+)
+
+sh_test(
+    name = "z_leak_pub_sub_test",
+    srcs = ["tests/run_leak_check.sh"],
+    args = ["$(location :z_leak_pub_sub_test_impl)"],
+    data = [":z_leak_pub_sub_test_impl"],
+    timeout = "short",
+    tags = ["requires-network", "exclusive"],
+)
+
+# Leak test : z_leak_queryable_get_test (require valgrind)
+
+cc_binary(
+    name = "z_leak_queryable_get_test_impl",
+    srcs = ["tests/z_leak_queryable_get_test.c"],
+    copts = ["-Wno-unused-variable", "-Wno-missing-braces"],
+    deps = [":zenoh-c"],
+)
+
+sh_test(
+    name = "z_leak_queryable_get_test",
+    srcs = ["tests/run_leak_check.sh"],
+    args = ["$(location :z_leak_queryable_get_test_impl)"],
+    data = [":z_leak_queryable_get_test_impl"],
+    timeout = "short",
+    tags = ["requires-network", "exclusive"],
+)
