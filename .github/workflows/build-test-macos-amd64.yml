@@ -38,6 +38,6 @@ jobs:
     - name: Run build
       run: bazel build //...
 
-    # Test the Zenoh C library.
-    # - name: Run test
-    #   run: bazel test @zenoh-c//...
+    # Test the distribution.
+    - name: Run tests
+      run: bazel test --config=distribution
