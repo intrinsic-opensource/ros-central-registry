@@ -168,7 +168,13 @@ git push
 
 When you open a pull request containing your changes, you will see some CI plans run. These let you know whether the changes you have made are functional across a variety of different platforms.
 
-## Testing tip
+## Notes
+
+### Module locking
+
+Right now we will periodically update modules but keep the same version number. Bazel aggressively caches based on the version numbers. If you find that you are getting a download hash mismatch for modules, make sure that you remove the `MODULE.bazel.lock` file in the root workspace. If you still have issues, clean the workspace by running `bazel clean` followed by `bazel shutdown`. If you still have issues, you can try running `rm -rf $(bazel info repository_cache)` but note that this will clear all repository cache, and a build will need to re-download the LLVM toolchain.
+
+### Module testing
 
 There is no straightforward way of running a full test suite across all package imports. Bazel doesn't support to support a wildcard expansion for test targets that span multiple modules. For this reason we have a [Distribution File](distribution.txt) and supporting rule in our `.bazelrc` file that enables you to run all tests across all repos in the following way:
 
