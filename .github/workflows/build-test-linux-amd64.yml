@@ -20,6 +20,13 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
 
+    # Install necessary platform tooling
+    - name: Install platform tooling
+      timeout-minutes: 10
+      run: |
+        apt-get -qq update
+        apt-get -qq install -y build-essential valgrind
+
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
