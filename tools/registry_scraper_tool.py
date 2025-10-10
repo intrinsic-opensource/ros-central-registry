@@ -74,8 +74,8 @@ def update_metadata_json(metadata_json, ghsuffix, version):
             "homepage": f"https://github.com/{ghsuffix}",
             "maintainers": [
                 {
-                    "email": "asymingt@users.noreply.github.com",
-                    "name": "asymingt"
+                    "email": "intrinsic-opensource@users.noreply.github.com",
+                    "name": "intrinsic-opensource"
                 }
             ],
             "repository": [
