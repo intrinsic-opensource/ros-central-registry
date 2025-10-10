@@ -1,6 +1,6 @@
 # Overview
 
-The goal of the [ROS Central Registry](http://asymingt.github.io/ros-central-registry) is to provide a [Bazel](https://bazel.build) build system for [Robot Operating System (ROS)](https://ros.org) applications. Our philosophy is to build everything from source, using the dependency management system provided by the [Bazel modules](https://bazel.build/external/module) ecosystem to ensure consistency across ROS releases. A lot of the work in this project is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) project, one of [several existing Bazel build systems for ROS](https://github.com/RobotLocomotion/drake-ros/blob/main/bazel_ros2_rules/lib/README.md). 
+The goal of the [ROS Central Registry](http://intrinsic-opensource.github.io/ros-central-registry) is to provide a [Bazel](https://bazel.build) build system for [Robot Operating System (ROS)](https://ros.org) applications. Our philosophy is to build everything from source, using the dependency management system provided by the [Bazel modules](https://bazel.build/external/module) ecosystem to ensure consistency across ROS releases. In our approach, every ROS package has a corresponding Bazel module. A lot of the work in this project is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) project, one of [several existing Bazel build systems for ROS](https://github.com/RobotLocomotion/drake-ros/blob/main/bazel_ros2_rules/lib/README.md). 
 
 > [!WARNING]
 > This repository is a proof of concept and under active open development, and so no guarantees are made about stability. Please do not depend on this code until we have an official release!
@@ -11,9 +11,9 @@ The table below summarizes the status of the github workflows exercising various
 
 | Platform          | x64                                                                                                     | arm64                                                                                                   |
 | :---------------- | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
-| Ubuntu 24.04      | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-linux-amd64.yml/badge.svg)   | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-linux-arm64.yml/badge.svg)   |
-| MacOS 15          | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-macos-amd64.yml/badge.svg)   | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-macos-arm64.yml/badge.svg)   |
-| Windows 11        | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-windows-amd64.yml/badge.svg) | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-windows-arm64.yml/badge.svg) |
+| Ubuntu 24.04      | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-amd64.yml/badge.svg)   | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-arm64.yml/badge.svg)   |
+| MacOS 15          | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-macos-amd64.yml/badge.svg)   | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-macos-arm64.yml/badge.svg)   |
+| Windows 11        | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-windows-amd64.yml/badge.svg) | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-windows-arm64.yml/badge.svg) |
 
 In terms of features, this is what we currently support:
 
@@ -72,50 +72,45 @@ Currently the `toolchains_llvm` project does not offer a functional compiler set
 First, checkout this repository:
 
 ```
-git clone https://github.com/asymingt/ros-central-registry.git
+git clone https://github.com/intrinsic-opensource/ros-central-registry.git
 ```
 
 ## Custom message with minimal publisher and subscriber
 
-We have included a small self-contained example workspace showing a minimal C++ publisher and subscriber exchanging a custom message. By default we use the Zenoh middleware. Start by opening three terminals at the `example` directory from within this project.
+We have included a small self-contained example workspace showing a minimal C++ publisher and subscriber exchanging a custom message. By default we use the FastRTPS middleware. Start by opening two terminals at the `example` directory from within this project.
 
-In terminal 1, start the zenohd router.
-
-```
-bazel run @rmw_zenoh_cpp//:rmw_zenohd
-```
-
-In terminal 2, start a ROS node to publish a custom message.
+In terminal 1, start a ROS node to publish a custom message.
 
 ```
 bazel run //:example_ros_publisher_cc
 ```
 
-In terminal 3, start a ROS node to subscribe to the custom message.
+In terminal 2, start a ROS node to subscribe to the custom message.
 
 ```
 bazel run //:example_ros_subscriber_cc
 ```
 
-We also support several other RMW  middleware implementations -- `rmw_cyclonedds_cpp`, `rmw_fastrtps_cpp` and `rmw_fastrtps_dynamic_cpp`. You must specify which one you want to use, either permanently in the `~/.bashrc` or as an argument to *every* bazel action. For Cyclone DDS you need not run the `zenohd` router, and it should be sufficient to do the following:
+We also support several other RMW  middleware implementations -- `rmw_cyclonedds_cpp`, `rmw_zenoh_cpp` and `rmw_fastrtps_dynamic_cpp`. You must specify which one you want to use, either permanently in the `.bazelrc` or as an argument to *every* Bazel action. For zenoh you must also run the `zenohd` router, like this:
 
 ```
-# In terminal 1
-bazel run //:example_ros_publisher_cc \
-    --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
+In terminal 1, start the zenohd router.
+bazel run @rmw_zenoh_cpp//:rmw_zenohd
 
 # In terminal 2
-bazel run //:example_ros_subscriber_cc \
-    --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
-```
+bazel run //:example_ros_publisher_cc \
+    --@rmw_implementation//:rmw=rmw_zenoh_cpp
 
-Note that you can set `--@rmw_implementation//:rmw=rmw_cyclonedds_cpp` in the `.bazelrc` file to make it permanent across the workspace.
+# In terminal 3
+bazel run //:example_ros_subscriber_cc \
+    --@rmw_implementation//:rmw=rmw_zenoh_cpp
+```
 
 ## Protocol buffer support
 
 We have also included protocol buffer type support, which allows you to interact with messages, services and actions through the protocol buffer C++ API. The protocol bufer type adapter automatically converts to and from the protocol buffer bindings, preventing the developer from  having to write message-specific type converters, which is both laborious and prone to error.
 
-# Development
+# Setting up a development environment
 
 ROS is a federated system, which means that its code is spread across multiple repositories. This makes managing a feature branch more challenging, because you have to keep several repositories in sync with each other. While we migrate to using the `wstool` or `vcs` tools, this repo uses submodules.
 
