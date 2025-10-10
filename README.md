@@ -1,6 +1,6 @@
 # Overview
 
-The goal of the [ROS Central Registry](http://asymingt.github.io/ros-central-registry) is to provide a [Bazel](https://bazel.build) build system for [Robot Operating System (ROS)](https://ros.org) applications. Our philosophy is to build everything from source, using the dependency management system provided by the [Bazel modules](https://bazel.build/external/module) ecosystem to ensure consistency across ROS releases. A lot of the work in this project is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) project, one of [several existing Bazel build systems for ROS](https://github.com/RobotLocomotion/drake-ros/blob/main/bazel_ros2_rules/lib/README.md). 
+The goal of the [ROS Central Registry](http://intrinsic-opensource.github.io/ros-central-registry) is to provide a [Bazel](https://bazel.build) build system for [Robot Operating System (ROS)](https://ros.org) applications. Our philosophy is to build everything from source, using the dependency management system provided by the [Bazel modules](https://bazel.build/external/module) ecosystem to ensure consistency across ROS releases. A lot of the work in this project is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) project, one of [several existing Bazel build systems for ROS](https://github.com/RobotLocomotion/drake-ros/blob/main/bazel_ros2_rules/lib/README.md). 
 
 > [!WARNING]
 > This repository is a proof of concept and under active open development, and so no guarantees are made about stability. Please do not depend on this code until we have an official release!
@@ -11,9 +11,9 @@ The table below summarizes the status of the github workflows exercising various
 
 | Platform          | x64                                                                                                     | arm64                                                                                                   |
 | :---------------- | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
-| Ubuntu 24.04      | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-linux-amd64.yml/badge.svg)   | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-linux-arm64.yml/badge.svg)   |
-| MacOS 15          | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-macos-amd64.yml/badge.svg)   | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-macos-arm64.yml/badge.svg)   |
-| Windows 11        | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-windows-amd64.yml/badge.svg) | ![amd64](https://github.com/asymingt/ros-central-registry/actions/workflows/build-test-windows-arm64.yml/badge.svg) |
+| Ubuntu 24.04      | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-amd64.yml/badge.svg)   | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-arm64.yml/badge.svg)   |
+| MacOS 15          | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-macos-amd64.yml/badge.svg)   | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-macos-arm64.yml/badge.svg)   |
+| Windows 11        | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-windows-amd64.yml/badge.svg) | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-windows-arm64.yml/badge.svg) |
 
 In terms of features, this is what we currently support:
 
@@ -72,7 +72,7 @@ Currently the `toolchains_llvm` project does not offer a functional compiler set
 First, checkout this repository:
 
 ```
-git clone https://github.com/asymingt/ros-central-registry.git
+git clone https://github.com/intrinsic-opensource/ros-central-registry.git
 ```
 
 ## Custom message with minimal publisher and subscriber
