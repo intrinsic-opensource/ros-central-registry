@@ -13,8 +13,10 @@
 # limitations under the License.
 
 """
-This tool loads the 'distribution.txt' file to find all bazel modules
-in this developer workspace. It then uses the .gitmodules
+This tool parses a `registry_scraper_data.yaml` file to determine all of
+the repos and packages in this project. Using this, it calculates a diff
+between the upstream package version and the changes needed to get a
+Bazel build working, and transforms this to a Bazel module.
 """
 
 import argparse
