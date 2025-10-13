@@ -75,6 +75,8 @@ First, checkout this repository:
 git clone https://github.com/intrinsic-opensource/ros-central-registry.git
 ```
 
+If you're goign to be developing add `--recurse-submodules` but it's not necessary for just the examples.
+
 ## Custom message with minimal publisher and subscriber
 
 We have included a small self-contained example workspace showing a minimal C++ publisher and subscriber exchanging a custom message. By default we use the FastRTPS middleware. Start by opening two terminals at the `example` directory from within this project.
@@ -82,12 +84,14 @@ We have included a small self-contained example workspace showing a minimal C++ 
 In terminal 1, start a ROS node to publish a custom message.
 
 ```
+cd example
 bazel run //:example_ros_publisher_cc
 ```
 
 In terminal 2, start a ROS node to subscribe to the custom message.
 
 ```
+cd example
 bazel run //:example_ros_subscriber_cc
 ```
 
@@ -95,13 +99,16 @@ We also support several other RMW  middleware implementations -- `rmw_cyclonedds
 
 ```
 In terminal 1, start the zenohd router.
+cd example
 bazel run @rmw_zenoh_cpp//:rmw_zenohd
 
 # In terminal 2
+cd example
 bazel run //:example_ros_publisher_cc \
     --@rmw_implementation//:rmw=rmw_zenoh_cpp
 
 # In terminal 3
+cd example
 bazel run //:example_ros_subscriber_cc \
     --@rmw_implementation//:rmw=rmw_zenoh_cpp
 ```
