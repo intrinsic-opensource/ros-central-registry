@@ -13,8 +13,10 @@
 # limitations under the License.
 
 """
-This tool loads the 'distribution.txt' file to find all bazel modules
-in this developer workspace. It then uses the .gitmodules
+This tool parses a `registry_scraper_data.yaml` file to determine all of
+the repos and packages in this project. Using this, it calculates a diff
+between the upstream package version and the changes needed to get a
+Bazel build working, and transforms this to a Bazel module.
 """
 
 import argparse
@@ -121,7 +123,7 @@ def update_patch_file(patch_dest, patch_content):
     with open(patch_dest, "w") as file:
         file.write(patch_content)
 
-def repos_from_submodules(repo_base_path, repo_yaml_file):
+def repos_from_submodules(repo_base_path, repo_yaml_file, package=None):
     """Process all repos in the yaml file"""
     base_out_path = repo_base_path / 'docs' / 'modules'
 
@@ -167,6 +169,8 @@ def repos_from_submodules(repo_base_path, repo_yaml_file):
 
         # Process modules
         for module_name, module_subfolder in repo_modules.items():
+            if package is not None and package != module_name:
+                continue
             print("+", module_name)
 
             # Clear anything that's already there.
@@ -218,7 +222,8 @@ def repos_from_submodules(repo_base_path, repo_yaml_file):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("workspace", help="Path to the bazel workspace")
+    parser.add_argument("-p", "--package", type=str, help="Target package name (optional)")
     args = parser.parse_args()
     repo_base_path = Path(args.workspace)
     repo_yaml_file = Path(runfiles.Create().Rlocation('_main/tools/registry_scraper_data.yaml'))
-    repos_from_submodules(repo_base_path, repo_yaml_file)
+    repos_from_submodules(repo_base_path, repo_yaml_file, args.package)
