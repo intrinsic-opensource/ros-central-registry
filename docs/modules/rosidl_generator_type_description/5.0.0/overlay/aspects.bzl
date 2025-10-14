@@ -40,7 +40,7 @@ def _type_description_aspect_impl(target, ctx):
     input_templates = ctx.attr._rosidl_templates[DefaultInfo].files.to_list()
 
     # Create the idl_tuples and include_paths arguments for the generator.
-    idl_tuples = [idl_tuple_from_path(idl.path) for idl in input_idls]
+    idl_tuples = []
     include_paths = []
     for idl in input_idls:
         msg_package_name, msg_package_base = pkg_name_and_base_from_path(idl.path)
