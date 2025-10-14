@@ -26,6 +26,10 @@ build --cxxopt="-std=c++17"
 # Ensure that we use toolchains_llvm instead of the host toolchain.
 build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
 
+# Force Bazel to use an environment with a static value for PATH, and not to
+# use the LD_LIBRARY_PATH. This makes builds robust to terminal refreshes.
+build --incompatible_strict_action_env
+
 # Build configuration for RMW implementations
 #   --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
 #   --@rmw_implementation//:rmw=rmw_fastrtps_cpp
