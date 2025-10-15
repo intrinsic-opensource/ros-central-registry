@@ -35,8 +35,8 @@ In terms of features, this is what we currently support:
   - [ ] `rmw_gurumdds_cpp`
 - Core:
   - [x] `rcl`
-  - [ ] `rcl_action`
-  - [ ] `rcl_lifecycle`
+  - [x] `rcl_action`
+  - [x] `rcl_lifecycle`
   - [x] `rclcpp` 
   - [ ] `rclcpp_action` 
   - [ ] `rclcpp_lifecycle` 
