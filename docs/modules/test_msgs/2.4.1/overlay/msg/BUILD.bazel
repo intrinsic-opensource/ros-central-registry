@@ -18,6 +18,36 @@ load("@rosidl_cmake//:rules.bzl", "ros_interface")
 
 package(default_visibility = ["//visibility:public"])
 
+# IDL pipeline
+
+ros_interface(
+    name = "KeyedString",
+    src = "KeyedString.idl",
+)
+
+ros_interface(
+    name = "KeyedLong",
+    src = "KeyedLong.idl",
+)
+
+ros_interface(
+    name = "NonKeyedWithNestedKey",
+    src = "NonKeyedWithNestedKey.idl",
+    deps = [
+        ":KeyedString"
+    ]
+)
+
+ros_interface(
+    name = "ComplexNestedKey",
+    src = "ComplexNestedKey.idl",
+    deps = [
+        ":NonKeyedWithNestedKey"
+    ]
+)
+
+# Normal pipeline
+
 [
     ros_interface(
         name = msg,

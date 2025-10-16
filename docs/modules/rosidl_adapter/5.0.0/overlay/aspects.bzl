@@ -61,10 +61,10 @@ def _idl_adapter_aspect_impl(target, ctx):
     src = target[RosInterfaceInfo].srcs.to_list()[-1]
 
     # Calculate the metadata to package alongside the IDL.
-    package_name = target[RosInterfaceInfo].package                 # eg. sensor_msgs
-    interface_type = src.extension                                  # eg. msg
-    interface_name = src.basename[:-len(src.extension) - 1]         # eg. CompressedImage
-    interface_code = _snake_case_from_pascal_case(interface_name)   # eg. compressed_image
+    package_name = target[RosInterfaceInfo].package                       # eg. sensor_msgs
+    interface_type = "msg" if src.extension == "idl" else src.extension   # eg. msg
+    interface_name = src.basename[:-len(src.extension) - 1]               # eg. CompressedImage
+    interface_code = _snake_case_from_pascal_case(interface_name)         # eg. compressed_image
 
     # Now, were going to transform the source file (msg, srv, action) to an IDL.
     idl = ctx.actions.declare_file(
@@ -77,6 +77,8 @@ def _idl_adapter_aspect_impl(target, ctx):
         _generate(ctx, ctx.executable._srv2idl, package_name, src, idl, "IdlFromSrv")
     elif src.extension == 'action':
         _generate(ctx, ctx.executable._action2idl, package_name, src, idl, "IdlFromAction")
+    elif src.extension == "idl":
+        ctx.actions.symlink(output = idl, target_file = src)
     else:
         fail('Unknown file extension: ' + src.extension)
     return [

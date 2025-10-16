@@ -26,10 +26,21 @@ package(default_visibility = ["//visibility:public"])
             # Services have implicit deps
             "@service_msgs//msg:ServiceEventInfo",
         ],
-        )
+    )
     for srv in [
-        "Arrays",
         "BasicTypes",
         "Empty",
     ]
 ]
+
+ros_interface(
+    name = "Arrays",
+    src = "@test_interface_files//srv:Arrays.srv",
+    deps = [
+        "//msg:BasicTypes",
+        "//msg:Constants",
+        "//msg:Defaults",
+        # Services have implicit deps
+        "@service_msgs//msg:ServiceEventInfo",
+    ],
+)

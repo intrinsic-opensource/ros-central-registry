@@ -18,21 +18,17 @@ load("@rosidl_cmake//:rules.bzl", "ros_interface")
 
 package(default_visibility = ["//visibility:public"])
 
-[
-    ros_interface(
-        name = action,
-        src = "@test_interface_files//action:{}.action".format(action),
-        deps = [
-            "@action_msgs//msg:GoalInfo",
-            "@action_msgs//msg:GoalStatus",
-            "@action_msgs//msg:GoalStatusArray",
-            "@action_msgs//srv:CancelGoal",
-        ],
-        )
-    for action in [
-        "Fibonacci",
-    ]
-]
+
+ros_interface(
+    name = "Fibonacci",
+    src = "@test_interface_files//action:Fibonacci.action",
+    deps = [
+        "@action_msgs//msg:GoalInfo",
+        "@action_msgs//msg:GoalStatus",
+        "@action_msgs//msg:GoalStatusArray",
+        "@action_msgs//srv:CancelGoal",
+    ],
+)
 
 ros_interface(
     name = "NestedMessage",
