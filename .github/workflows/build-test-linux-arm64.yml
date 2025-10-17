@@ -47,4 +47,4 @@ jobs:
 
     # Test the distribution.
     - name: Run tests
-      run: bazel test --config=distribution
+      run: bazel test --config=distribution --test_output=all
