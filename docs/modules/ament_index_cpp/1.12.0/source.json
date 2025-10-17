@@ -9,7 +9,7 @@
     },
     "patches": {
         "fix_src_get_search_paths_cpp.patch": "sha256-5pWvyLYoiTglr3t5q+K9FscgmfhvrwsIdRFocuoiTgU=",
-        "fix_test_utest_cpp.patch": "sha256-ohNTtqHjCbMRvfxGQ4w6BGeSrtGlkyB+shChQ8/oWA8="
+        "fix_test_utest_cpp.patch": "sha256-eIuX5Zs1K4UwSCFnhQhlbsdq9O9bf9SfwX2W1kp52lk="
     },
     "patch_strip": 2
 }
