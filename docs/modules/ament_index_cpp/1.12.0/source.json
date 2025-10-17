@@ -8,7 +8,7 @@
         "rules.bzl": "sha256-7gigf48SA52plAWy5qbBupt1fg5EX+cIrhT3eNHiCcA="
     },
     "patches": {
-        "fix_src_get_search_paths_cpp.patch": "sha256-Ovmde8wTYUvQky6uL0ZhyoatpXZtbZJy82zbTFRjvKo=",
+        "fix_src_get_search_paths_cpp.patch": "sha256-5pWvyLYoiTglr3t5q+K9FscgmfhvrwsIdRFocuoiTgU=",
         "fix_test_utest_cpp.patch": "sha256-ohNTtqHjCbMRvfxGQ4w6BGeSrtGlkyB+shChQ8/oWA8="
     },
     "patch_strip": 2
