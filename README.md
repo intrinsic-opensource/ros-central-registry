@@ -50,7 +50,7 @@ Our intention is to ultimately host a CI plan that responds to new ROS releases 
 Right now, we only support Ubuntu 24.04. You must first install `git` and and [bazelisk](https://github.com/bazelbuild/bazelisk) in order to run or edit code. The project downloads a LLVM toolchain with clang, which means that you don't need any compiler or toolchains installed in your host environment. Th only thing you will need is a functioning build environment, because some packages use `rules_foreign_cc` and require `autoconf` to build correctly. To add this tool, run the following:
 
 ```
-apt install build-essential valgrind
+apt install build-essential automake autoconf libtool valgrind
 ```
 
 ## MacOS 15 (broken, unsupported)
