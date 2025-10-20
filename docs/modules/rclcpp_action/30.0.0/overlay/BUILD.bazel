@@ -1,0 +1,100 @@
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Imports
+
+load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+# Messages
+
+cc_ros_library(
+    name = "msgs",
+    deps = [
+        "@action_msgs//msg:GoalInfo",
+        "@action_msgs//msg:GoalStatus",
+        "@action_msgs//msg:GoalStatusArray",
+        "@action_msgs//srv:CancelGoal",
+    ],
+)
+
+# Libraries
+
+cc_library(
+    name = "rclcpp_action",
+    srcs = glob(["src/**/*.cpp"]),
+    hdrs = glob(["include/**/*.hpp"]),
+    includes = ["include"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_action\\\""],
+    deps = [
+        "@rcl_action",
+        "@rclcpp",
+        "@rosidl_runtime_cpp",
+        ":msgs",
+    ],
+)
+
+# Tests
+
+cc_ros_library(
+    name = "test_msgs",
+    deps = [
+        "@test_msgs//action:Fibonacci",
+    ],
+)
+
+[
+    cc_test(
+        name = name,
+        srcs = ["test/{}.cpp".format(name)] + ["test/mocking_utils/patch.hpp"],
+        deps = [
+            "@googletest//:gtest",
+            "@googletest//:gtest_main",
+            "@mimick",
+            ":rclcpp_action",
+            ":test_msgs",
+        ],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_action\\\""],
+        timeout = "moderate",
+    )
+    for name in [
+        "test_client",
+        "test_generic_client",
+        "test_server_goal_handle",
+        "test_server",
+        "test_traits",
+        "test_types",
+    ]
+]
+
+[
+    cc_test(
+        name = name,
+        srcs = ["test/benchmark/{}.cpp".format(name)],
+        deps = [
+            "@google_benchmark//:benchmark_main",
+            "@performance_test_fixture",
+            ":rclcpp_action",
+            ":test_msgs",
+        ],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_action\\\""],
+        timeout = "moderate",
+    )
+    for name in [
+        "benchmark_action_client",
+        "benchmark_action_server"
+    ]
+]

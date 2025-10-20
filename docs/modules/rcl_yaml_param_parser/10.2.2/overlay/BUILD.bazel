@@ -43,32 +43,13 @@ cc_library(
 [
     cc_test(
         name = test,
-        srcs = ["test/benchmark/" + test + ".cpp"],
-        data = ["test/benchmark/benchmark_params.yaml"],
-        deps = [
-            "@google_benchmark//:benchmark",
-            "@google_benchmark//:benchmark_main",
-            "@osrf_testing_tools_cpp//:memory_tools",
-            "@performance_test_fixture",
-            "@rcutils",
-            ":rcl_yaml_param_parser",
-        ],
-        timeout = "short"
-    )
-    for test in [
-        "benchmark_parse_yaml",
-        "benchmark_variant",
-    ]
-]
-
-[
-    cc_test(
-        name = test,
         srcs = [
             "test/mocking_utils/patch.hpp",
+            "test/locate_test_assets.h",
             "test/time_bomb_allocator_testing_utils.h",
             "test/" + test + ".cpp",
         ],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_yaml_param_parser\\\""],
         data = glob(["test/**/*.yaml"]),
         deps = [
             "@googletest//:gtest",
@@ -76,8 +57,10 @@ cc_library(
             "@mimick",
             "@osrf_testing_tools_cpp//:memory_tools",
             "@rcutils",
+            "@rules_cc//cc/runfiles",
             ":rcl_yaml_param_parser",
         ],
+        timeout = "moderate",
     )
     for test in [
         "test_namespace",
@@ -88,5 +71,28 @@ cc_library(
         "test_parser_multiple_nodes",
         "test_parser_multiple_params",
         "test_yaml_variant",
+    ]
+]
+
+[
+    cc_test(
+        name = test,
+        srcs = ["test/benchmark/" + test + ".cpp"],
+        data = ["test/benchmark/benchmark_params.yaml"],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_yaml_param_parser\\\""],
+        deps = [
+            "@google_benchmark//:benchmark_main",
+            "@google_benchmark//:benchmark",
+            "@mimick",
+            "@osrf_testing_tools_cpp//:memory_tools",
+            "@performance_test_fixture",
+            "@rcutils",
+            ":rcl_yaml_param_parser",
+        ],
+        timeout = "moderate",
+    )
+    for test in [
+        "benchmark_parse_yaml",
+        "benchmark_variant",
     ]
 ]

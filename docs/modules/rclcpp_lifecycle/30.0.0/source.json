@@ -3,7 +3,14 @@
     "integrity": "sha256-A8qAS1nVZa1FIBBKl72CX7BXdJge7Slf6ebDXjCl5v0=",
     "strip_prefix": "rclcpp-30.0.0/rclcpp_lifecycle",
     "overlay": {
-        "BUILD.bazel": "sha256-HhjdjcVuo3pNpW4HDz5s9RCWLXj6Eb7rrq0ExwH1qNk=",
-        "MODULE.bazel": "sha256-rJsNhpuFYYfWscNJL+ZphCfM7rhxlzUqZB3vDMcu5XM="
-    }
+        "BUILD.bazel": "sha256-wyiDVwybuGa0m0+n8NNpdLe95HmhSNMVjLz40pcdqns=",
+        "MODULE.bazel": "sha256-tqBnar1zYMepsjl3pXwcEHvDBvFWsoCtDdMnHyHAF+4="
+    },
+    "patches": {
+        "fix_test_test_lifecycle_node_cpp.patch": "sha256-o+UuEufQ2lWgRXAhsdc6Pin5C7MpcrfZRGvJlrkljuo=",
+        "fix_test_test_lifecycle_node_errors_cpp.patch": "sha256-+nqtk8ccP4/Oto2gTz2B9mm4ZZ3nBI6tJ9jfGEReMK8=",
+        "fix_test_test_lifecycle_service_client_cpp.patch": "sha256-NLMsZCaNvkHvP6xINcLXVESRcBYVjnx4OCJKL+JffV4=",
+        "fix_test_test_transition_wrapper_cpp.patch": "sha256-b4DUcaiva2VTBQ7xY8kC8AfHAK6JinTO7z/kJdd6NTA="
+    },
+    "patch_strip": 2
 }

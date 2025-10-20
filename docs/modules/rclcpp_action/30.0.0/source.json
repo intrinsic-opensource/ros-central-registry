@@ -3,7 +3,14 @@
     "integrity": "sha256-A8qAS1nVZa1FIBBKl72CX7BXdJge7Slf6ebDXjCl5v0=",
     "strip_prefix": "rclcpp-30.0.0/rclcpp_action",
     "overlay": {
-        "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-UVRTKYZYniU7Bwr8FThiCi4ekUnp3LbIRinJSe4fEW0="
-    }
+        "BUILD.bazel": "sha256-B/cR1ew/l2pQ2cJUb1qY0SF+GuWfLJkuiw/tS81bW18=",
+        "MODULE.bazel": "sha256-ihtzd9o2KsG/NC+qIN8mQEnR8pEOeRtKNBOj0oWUKT0="
+    },
+    "patches": {
+        "fix_test_test_client_cpp.patch": "sha256-JnT+z1Usu53KRVdgCVb9mqrVQ3w5sbK0hdZ6Eq5FGM4=",
+        "fix_test_test_generic_client_cpp.patch": "sha256-WzKP7ZpZb2J3FA2JXJV2c8UlFk1k1TVJMITM2AZwSXo=",
+        "fix_test_test_server_cpp.patch": "sha256-+o8SZ/1jYXNlttSbPvCongHbSN37wSVdUqPXTbNIvpc=",
+        "fix_test_test_server_goal_handle_cpp.patch": "sha256-s35Kidqcthd9tAJCCwv9RK0tO5RrcWn2GADhmmYoTcg="
+    },
+    "patch_strip": 2
 }

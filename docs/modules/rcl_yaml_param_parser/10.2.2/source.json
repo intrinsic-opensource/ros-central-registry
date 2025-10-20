@@ -3,7 +3,16 @@
     "integrity": "sha256-HVkkm2udcPcu6vC610S4RE/k9F0bvjTPwAEMgA4C2IY=",
     "strip_prefix": "rcl-10.2.2/rcl_yaml_param_parser",
     "overlay": {
-        "BUILD.bazel": "sha256-QlpUiGNi8o97JrJSuHGlLL8nmbss2N8ap7kI+gITHQw=",
-        "MODULE.bazel": "sha256-CyLmpLIIprO/EZ5mfeFruL8nuX4bY5jz4y5fwkd/lIE="
-    }
+        "BUILD.bazel": "sha256-vmFVuRChaOoP2q6jYU/qb8YgqOLezsiPmkdY0RjZGMs=",
+        "MODULE.bazel": "sha256-CyLmpLIIprO/EZ5mfeFruL8nuX4bY5jz4y5fwkd/lIE=",
+        "test/locate_test_assets.h": "sha256-ia47EJ5WscWEKv5VP+9UjtdG+ga+IKU/wGktwux1vjA="
+    },
+    "patches": {
+        "fix_test_test_parse_cpp.patch": "sha256-wJRG6y24kyeeWAiZNYz++2yDbOWP/qKf+3gJNXTU528=",
+        "fix_test_test_parse_yaml_cpp.patch": "sha256-pBaLmhv+A6Ajqp7SiHJJT7rolPV4ChBL/fTZVMnwPAQ=",
+        "fix_test_test_parser_cpp.patch": "sha256-XDFg3iGTAKvmDjkh/W6VpMBb+7aTT8Bb5xXZeNGB2oE=",
+        "fix_test_test_parser_multiple_nodes_cpp.patch": "sha256-t4G7BGMQ67XTtCE16wNFQr5YjuPqjYcLFL7KsnVjhBw=",
+        "fix_test_test_parser_multiple_params_cpp.patch": "sha256-G1i/cgGQ9EpOwjKyk4ko6ZsZCxx7+prZymZnVSHArR4="
+    },
+    "patch_strip": 2
 }
