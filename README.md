@@ -32,7 +32,6 @@ In terms of features, this is what we currently support:
   - [x] `rmw_fastrtps_dynamic_cpp`
   - [x] `rmw_zenoh_cpp`
   - [ ] `rmw_connextdds_cpp`
-  - [ ] `rmw_gurumdds_cpp`
 - Core:
   - [x] `rcl`
   - [ ] `rcl_action`
@@ -115,11 +114,17 @@ bazel run //:example_ros_subscriber_cc \
 
 ## Protocol buffer support
 
-We have also included protocol buffer type support, which allows you to interact with messages, services and actions through the protocol buffer C++ API. The protocol bufer type adapter automatically converts to and from the protocol buffer bindings, preventing the developer from  having to write message-specific type converters, which is both laborious and prone to error.
+We have also included protocol buffer type support, which allows you to interact with messages, services and actions through the protocol buffer C++ API. The protocol buffer type adapter automatically converts to and from the protocol buffer bindings, preventing the developer from  having to write message-specific type converters, which is both laborious and prone to error.
 
 # Setting up a development environment
 
 ROS is a federated system, which means that its code is spread across multiple repositories. This makes managing a feature branch more challenging, because you have to keep several repositories in sync with each other. While we migrate to using the `wstool` or `vcs` tools, this repo uses submodules.
+
+Each Bazel test is spawned in a separate sandbox environment. Since many ROS packages use the network, their tests may interfere with each other. To prevent this from happening, we force tests to use a `docker` sandbox, which runs the test in a container from the [Dockerfile](Dockerfile) image.
+
+```
+docker build -t ros-central-registry:24.04 .
+```
 
 To setup your developer environment, simply do this from the root directory of this project. This will take a bit of time recursively pulling all dependent projects to the `submodules` folders. The `submodule` folder is where our ROS packages live, while the `thirdparty` folder contains vendored dependencies.
 
@@ -133,7 +138,7 @@ Now, take a look at the base folder structure of this project.
 + .github/         # CI workflows for checking various platforms.
 + docs/            # Output modules from the scraping process.
 + example/         # Standalone example showing how to use our modules.
-# src/             # Some examples showing how to use the developer environment.
++ src/             # Some examples showing how to use the developer environment.
 + tools/           # Tools for transforming repos into Bazel modules.
 + submodules/      # Bazel modules we expect to always live in the RCR ***
 + thirdparty/      # Bazel modules we expect to eventually live in the BCR ***
