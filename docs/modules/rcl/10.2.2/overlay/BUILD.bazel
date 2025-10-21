@@ -14,6 +14,7 @@
 # limitations under the License.
 
 load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
+load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -58,6 +59,7 @@ cc_library(
     hdrs = glob(["include/**/*.h"]),
     includes = ["include", "src"],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rcl\\\""],
+    copts = ["-Wno-deprecated-pragma"],
     deps = [
         "@rcl_logging_interface",
         "@rcl_logging_spdlog",
@@ -72,15 +74,23 @@ cc_library(
 
 # Tests
 
-c_ros_library(
+cc_ros_library(
     name = "test_msgs",
     deps = [
         "@test_msgs//msg:Arrays",
-        "@test_msgs//msg:Constants",
-        "@test_msgs//msg:BasicTypes",
-        "@test_msgs//msg:Strings",
-        "@test_msgs//srv:BasicTypes",
     ],
+)
+
+cc_library(
+    name = "wait_for_entity_helpers",
+    srcs = ["test/rcl/wait_for_entity_helpers.cpp"],
+    hdrs = ["test/rcl/wait_for_entity_helpers.hpp"],
+    includes = ["test"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl\\\""],
+    deps = [
+        "@osrf_testing_tools_cpp//:memory_tools",
+        ":rcl",
+    ]
 )
 
 [
@@ -93,9 +103,11 @@ c_ros_library(
             "test/rcl/**/*.h",
             "test/rcl/**/*.hpp",
             "test/mocking_utils/*.hpp",
-            "test/rcl/wait_for_entity_helpers.cpp",
         ]),
-        local_defines = ["ROS_PACKAGE_NAME=\\\"rcl\\\""],
+        local_defines = [
+            "ROS_PACKAGE_NAME=\\\"rcl\\\"",
+            "RMW_TIMESTAMPS_SUPPORTED=1",
+        ],
         includes = ["src/rcl"],
         data = glob(["test/resources/**"]),
         deps = [
@@ -104,53 +116,56 @@ c_ros_library(
             "@osrf_testing_tools_cpp//:memory_tools",
             "@mimick",
             "@rules_cc//cc/runfiles",
+            "@test_msgs//:msgs_c",
             ":rcl",
-            ":test_msgs"
+            ":wait_for_entity_helpers",
+            ":test_msgs",
         ],
+        timeout = "moderate",
     )
     for test in [
         "test_arguments",
-        # "test_client",
-        # "test_common",
-        # # "test_context",
-        # "test_count_matched",
-        # "test_discovery_options",
-        # # "test_domain_id",
-        # "test_events",
-        # # "test_expand_topic_name",
-        # "test_get_actual_qos",
-        # # "test_get_node_names",
-        # "test_get_type_description_service",
-        # # "test_graph",
-        # # "test_guard_condition",
-        # "test_info_by_topic",
-        # # "test_init",
-        # "test_lexer",
-        # "test_lexer_lookahead",
-        # "test_log_level",
-        # # "test_logging",
-        # # "test_logging_rosout",
-        # "test_namespace",
-        # "test_network_flow_endpoints",
-        # # "test_node",
-        # "test_node_type_cache",
-        # # "test_publisher",
-        # "test_publisher_wait_all_ack",
-        # "test_remap",
-        # "test_remap_integration",
-        # "test_rmw_impl_id_check_exe",
-        # # "test_rmw_impl_id_check_func",
-        # # "test_security",
-        # # "test_service",
-        # # "test_service_event_publisher",
-        # # "test_subscription",
-        # "test_subscription_content_filter_options",
-        # "test_time",
-        # "test_timer",
-        # # "test_type_description_conversions",
-        # "test_type_hash",
-        # # "test_validate_enclave_name",
-        # "test_validate_topic_name",
-        # "test_wait",
+        "test_client",
+        "test_common",
+        "test_context",
+        "test_count_matched",
+        "test_discovery_options",
+        "test_domain_id",
+        "test_events",
+        "test_expand_topic_name",
+        "test_get_actual_qos",
+        "test_get_node_names",
+        "test_get_type_description_service",
+        "test_graph",
+        "test_guard_condition",
+        "test_info_by_topic",
+        "test_init",
+        "test_lexer",
+        "test_lexer_lookahead",
+        "test_log_level",
+        "test_logging",
+        "test_logging_rosout",
+        "test_namespace",
+        "test_network_flow_endpoints",
+        "test_node",
+        "test_node_type_cache",
+        "test_publisher",
+        "test_publisher_wait_all_ack",
+        "test_remap",
+        "test_remap_integration",
+        "test_rmw_impl_id_check_exe",
+        "test_rmw_impl_id_check_func",
+        "test_security",
+        "test_service",
+        "test_service_event_publisher",
+        "test_subscription",
+        "test_subscription_content_filter_options",
+        "test_time",
+        "test_timer",
+        "test_type_description_conversions",
+        "test_type_hash",
+        "test_validate_enclave_name",
+        "test_validate_topic_name",
+        "test_wait",
     ]
 ]

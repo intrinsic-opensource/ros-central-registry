@@ -20,3 +20,15 @@ module(
     compatibility_level = 0,
 )
 
+
+bazel_dep(name = "action_msgs", version = "2.4.1")
+bazel_dep(name = "google_benchmark", version = "1.9.4")
+bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "mimick", version = "0.9.0")
+bazel_dep(name = "performance_test_fixture", version = "0.4.0")
+bazel_dep(name = "rcl_action", version = "10.2.2")
+bazel_dep(name = "rclcpp", version = "10.2.2")
+bazel_dep(name = "rosidl_generator_cpp", version = "5.0.0")
+bazel_dep(name = "rosidl_runtime_cpp", version = "5.0.0")
+bazel_dep(name = "rules_cc", version = "0.2.4")
+bazel_dep(name = "test_msgs", version = "2.4.1")

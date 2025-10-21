@@ -69,6 +69,7 @@ c_ros_library(
             ":lifecycle_msgs_test_c",
             ":rcl_lifecycle",
         ],
+        timeout = "moderate",
     )
     for test in [
         "test_default_state_machine",

@@ -1,0 +1,14 @@
+diff --git a/rclcpp_lifecycle/test/test_lifecycle_node_errors.cpp b/rclcpp_lifecycle/test/test_lifecycle_node_errors.cpp
+index 0653b813..dcbe67b2 100644
+--- a/rclcpp_lifecycle/test/test_lifecycle_node_errors.cpp
++++ b/rclcpp_lifecycle/test/test_lifecycle_node_errors.cpp
+@@ -51,7 +51,8 @@ public:
+ // Unfortunately, this means that the resources are not actually cleaned up, and thus other tests
+ // may return incorrect results.  By having it in a separate process we ensure that the resources
+ // will at least be cleaned up by the process dying.
+-TEST_F(TestDefaultStateMachine, empty_initializer_rcl_errors)
++// TODO(asymingt) enable once mocking works in Bazel.
++TEST_F(TestDefaultStateMachine, DISABLED_empty_initializer_rcl_errors)
+ {
+   {
+     auto patch = mocking_utils::patch_and_return(

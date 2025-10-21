@@ -27,16 +27,13 @@ ros_interface(
 ros_interface(
     name = "LargeMessage",
     src = "LargeMessage.msg",
-    deps = [
-        "@builtin_interfaces//msg:Time",
-    ],
 )
 
 ros_interface(
-    name = "LargeMessageWithHeader",
-    src = "LargeMessageWithHeader.msg",
+    name = "MessageWithHeader",
+    src = "MessageWithHeader.msg",
     deps = [
-        "@std_msgs//msg:Header",
+        ":Header",
     ],
 )
 
