@@ -76,6 +76,7 @@ cmake(
         "@rules_rust//tools/upstream_wrapper:rustc",
         "@rules_rust//tools/upstream_wrapper:cargo"
     ],
+    linkopts = ["-lrt"],
     tags = ["requires-network"],
 )
 
@@ -86,8 +87,7 @@ cmake(
     cc_test(
         name = name,
         srcs = ["tests/" + name + ".c"],
-        copts = ["-Wno-unused-variable", "-Wno-missing-braces"
-        ],
+        copts = ["-Wno-unused-variable", "-Wno-missing-braces"],
         deps = [":zenoh-c"],
         timeout = "short",
         tags = ["requires-network"],
