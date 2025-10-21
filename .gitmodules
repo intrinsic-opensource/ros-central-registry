@@ -169,3 +169,6 @@
 [submodule "submodules/rosdistro"]
 	path = submodules/rosdistro
 	url = https://github.com/asymingt/rosdistro.git
+[submodule "thirdparty/fastdds"]
+	path = thirdparty/fastdds
+	url = https://github.com/asymingt/fastdds.git

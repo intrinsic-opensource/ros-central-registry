@@ -31,6 +31,7 @@ ros_interface_rule = rule(
     attrs = {
         "src": attr.label(
             allow_single_file = [
+                ".idl",
                 ".msg",
                 ".srv",
                 ".action"
