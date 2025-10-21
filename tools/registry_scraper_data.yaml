@@ -388,6 +388,11 @@ cyclonedds:
   github: eclipse-cyclonedds/cyclonedds
   version: 0.10.5
   folder: thirdparty
+fastdds:
+  github: eProsima/Fast-DDS
+  version: 3.2.2
+  upstream: v3.2.2
+  folder: thirdparty
 iceoryx:
   github: eclipse-iceoryx/iceoryx
   version: 2.0.5
