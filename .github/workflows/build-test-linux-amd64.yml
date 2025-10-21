@@ -20,18 +20,23 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
 
-    # Install necessary platform tooling
-    - name: Install platform tooling
-      timeout-minutes: 10
-      run: |
-        sudo apt-get -qq update
-        sudo apt-get -qq install -y build-essential valgrind
+    # Remove unnecessary files to maximize build space.
+    - name: Free disk space
+      uses: jlumbroso/free-disk-space@v1.3.1
+      with:
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        docker-images: true
+        swap-storage: false
 
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
       with:
         submodules: recursive
+        fetch-depth: 1
 
     # Setup bazel as a tool for building.
     - name: Setup Bazel
