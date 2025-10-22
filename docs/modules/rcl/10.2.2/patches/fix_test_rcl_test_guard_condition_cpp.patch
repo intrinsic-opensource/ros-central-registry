@@ -1,14 +1,12 @@
 diff --git a/rcl/test/rcl/test_guard_condition.cpp b/rcl/test/rcl/test_guard_condition.cpp
-index 027fa9a..6fbeeeb 100644
+index 027fa9a..3cedf49 100644
 --- a/rcl/test/rcl/test_guard_condition.cpp
 +++ b/rcl/test/rcl/test_guard_condition.cpp
-@@ -127,7 +127,8 @@ TEST_F(TestGuardConditionFixture, test_rcl_guard_condition_accessors) {
+@@ -127,6 +127,7 @@ TEST_F(TestGuardConditionFixture, test_rcl_guard_condition_accessors) {
  
  /* Tests the guard condition life cycle, including rcl_guard_condition_init/fini().
   */
--TEST_F(TestGuardConditionFixture, test_rcl_guard_condition_life_cycle) {
 +// TODO(asymingt) enable once mocking works in Bazel.
-+TEST_F(TestGuardConditionFixture, DISABLED_test_rcl_guard_condition_life_cycle) {
+ TEST_F(TestGuardConditionFixture, test_rcl_guard_condition_life_cycle) {
    rcl_ret_t ret;
    rcl_context_t context = rcl_get_zero_initialized_context();
-   rcl_guard_condition_t guard_condition = rcl_get_zero_initialized_guard_condition();
