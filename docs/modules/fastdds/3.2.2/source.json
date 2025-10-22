@@ -3,7 +3,7 @@
     "integrity": "sha256-JDaZ07L5qXAS10wzaavnBaqrBwBxLz2ey9n3BaM2sEQ=",
     "strip_prefix": "Fast-DDS-3.2.2",
     "overlay": {
-        "BUILD.bazel": "sha256-sl3AbZDURboVLKB0lXuB7JKOp8nylemx5AIulg/5fTE=",
+        "BUILD.bazel": "sha256-bI96tI5MpOJvF5nPvHUJrfwgkcNSnA5/sFHEziTHoTc=",
         "MODULE.bazel": "sha256-7H6X1A3YUvkVQbdlc1szAXWC04baHFPqwvCAUlh8LxU=",
         "include/fastdds/config.hpp": "sha256-ep03IkuECUeIYgb8iTuTDbvJsKdc59ypXrA3Qk/CuMw="
     }

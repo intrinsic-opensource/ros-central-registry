@@ -273,6 +273,7 @@ bazel_dep(name = "zenoh_security_tools", version = "0.8.1")
 # Overrides (enable these for development)
 
 local_path_override(module_name = "cyclonedds", path = "./thirdparty/cyclonedds")
+local_path_override(module_name = "fastcdr", path = "./thirdparty/fastcdr")
 local_path_override(module_name = "fastdds", path = "./thirdparty/fastdds")
 local_path_override(module_name = "iceoryx", path = "./thirdparty/iceoryx")
 local_path_override(module_name = "liburcu", path = "./thirdparty/liburcu")

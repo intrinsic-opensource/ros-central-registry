@@ -172,3 +172,6 @@
 [submodule "thirdparty/fastdds"]
 	path = thirdparty/fastdds
 	url = https://github.com/asymingt/fastdds.git
+[submodule "thirdparty/fastcdr"]
+	path = thirdparty/fastcdr
+	url = https://github.com/asymingt/fastcdr.git
