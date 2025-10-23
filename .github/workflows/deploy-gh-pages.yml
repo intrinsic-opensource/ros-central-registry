@@ -22,6 +22,9 @@ on:
       - main
       - asymingt/deploy-gh-pages-automatically # temporary, for testing
 
+permissions:
+  contents: write
+
 jobs:
   deploy-gh-pages: 
     runs-on: ubuntu-24.04
@@ -52,3 +55,14 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         folder: docs
+
+    # Send a repository dispatch to another repository to notify it of the deployment.
+    - name: Send repository dispatch
+      run: |
+        curl -L \
+        -X POST \
+        -H "Accept: application/vnd.github+json" \
+        -H "Authorization: Bearer ${{ secrets.TARGET_REPO_PAT }}" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        https://api.github.com/repos/OWNER/TARGET_REPO/dispatches \
+        -d '{"event_type":"custom-event", "client_payload":{"message":"Hello from another repo!"}}'
