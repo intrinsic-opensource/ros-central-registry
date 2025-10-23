@@ -25,30 +25,42 @@ cc_library(
     deps = ["@zenoh-c"],
 )
 
+# Tests that may be parallelized.
+
 [
     cc_test(
-        name = 'test_' + name.replace("/", "_"),
+        name = name.replace("/", "_") + "_test",
         srcs = ["tests/" + name + ".cxx"],
-        cxxopts = [
-            "-Wno-parentheses",
-            "-Wno-sign-compare",
-            "-Wno-unused-variable"
-        ],
-        deps = [
-            ":zenoh-cpp",
-        ],
+        cxxopts = ["-Wno-parentheses", "-Wno-sign-compare","-Wno-unused-variable"],
+        deps = [":zenoh-cpp"],
+        timeout = "short",
+        tags = ["requires-network"]
     ) for name in [
         "build/warnings",
         "universal/bytes",
         "universal/closures",
         "universal/details",
-        "universal/network/keyexpr",
-        "universal/network/liveliness",
-        "universal/network/pub_sub",
-        "universal/network/queryable_get",
         "universal/serialization",
         "zenohc/advanced_pub_sub",
         "zenohc/config",
         "zenohc/shm_api",
+    ]
+]
+
+# Tests that must be run with network in isolation.
+
+[
+    cc_test(
+        name = name.replace("/", "_") + "_test",
+        srcs = ["tests/" + name + ".cxx"],
+        cxxopts = ["-Wno-parentheses", "-Wno-sign-compare","-Wno-unused-variable"],
+        deps = [":zenoh-cpp"],
+        timeout = "short",
+        tags = ["requires-network", "exclusive"]
+    ) for name in [
+        "universal/network/keyexpr",
+        "universal/network/liveliness",
+        "universal/network/pub_sub",
+        "universal/network/queryable_get",
     ]
 ]

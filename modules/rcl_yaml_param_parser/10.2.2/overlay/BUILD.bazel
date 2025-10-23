@@ -15,7 +15,7 @@
 
 # Imports
 
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_import", "cc_shared_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -40,35 +40,29 @@ cc_library(
 
 # Tests
 
-[
-    cc_test(
-        name = test,
-        srcs = ["test/benchmark/" + test + ".cpp"],
-        data = ["test/benchmark/benchmark_params.yaml"],
-        deps = [
-            "@google_benchmark//:benchmark",
-            "@google_benchmark//:benchmark_main",
-            "@osrf_testing_tools_cpp//:memory_tools",
-            "@performance_test_fixture",
-            "@rcutils",
-            ":rcl_yaml_param_parser",
-        ],
-        timeout = "short"
-    )
-    for test in [
-        "benchmark_parse_yaml",
-        "benchmark_variant",
-    ]
-]
+cc_library(
+    name = "rcl_yaml_param_parser_mock",
+    srcs = [":rcl_yaml_param_parser"],
+    hdrs = glob(["include/**/*.h"]),
+    includes = ["include"],
+    deps = [
+        "@rcutils",
+        "@rmw",
+        "@rosidl_runtime_c",
+        "@libyaml",
+    ],
+)
 
 [
     cc_test(
         name = test,
-        srcs = [
+        srcs = glob(["src/**/*.h"]) + [
             "test/mocking_utils/patch.hpp",
+            "test/locate_test_assets.h",
             "test/time_bomb_allocator_testing_utils.h",
             "test/" + test + ".cpp",
         ],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_yaml_param_parser\\\""],
         data = glob(["test/**/*.yaml"]),
         deps = [
             "@googletest//:gtest",
@@ -76,8 +70,10 @@ cc_library(
             "@mimick",
             "@osrf_testing_tools_cpp//:memory_tools",
             "@rcutils",
-            ":rcl_yaml_param_parser",
+            "@rules_cc//cc/runfiles",
+            ":rcl_yaml_param_parser_mock",
         ],
+        timeout = "moderate",
     )
     for test in [
         "test_namespace",
@@ -88,5 +84,28 @@ cc_library(
         "test_parser_multiple_nodes",
         "test_parser_multiple_params",
         "test_yaml_variant",
+    ]
+]
+
+[
+    cc_test(
+        name = test,
+        srcs = glob(["src/**/*.h"]) + ["test/benchmark/" + test + ".cpp"],
+        data = ["test/benchmark/benchmark_params.yaml"],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_yaml_param_parser\\\""],
+        deps = [
+            "@google_benchmark//:benchmark_main",
+            "@google_benchmark//:benchmark",
+            "@mimick",
+            "@osrf_testing_tools_cpp//:memory_tools",
+            "@performance_test_fixture",
+            "@rcutils",
+            ":rcl_yaml_param_parser_mock",
+        ],
+        timeout = "moderate",
+    )
+    for test in [
+        "benchmark_parse_yaml",
+        "benchmark_variant",
     ]
 ]

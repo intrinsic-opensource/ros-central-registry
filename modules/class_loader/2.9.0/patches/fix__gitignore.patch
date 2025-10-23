@@ -1,0 +1,7 @@
+diff --git a/.gitignore b/.gitignore
+index 378eac2..f5838f8 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1 +1,2 @@
+ build
++**/MODULE.bazel.lock

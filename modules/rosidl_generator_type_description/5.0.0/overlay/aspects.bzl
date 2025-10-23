@@ -39,13 +39,13 @@ def _type_description_aspect_impl(target, ctx):
     input_idls = target[RosIdlInfo].idls.to_list()
     input_templates = ctx.attr._rosidl_templates[DefaultInfo].files.to_list()
 
-    # Now add this package's IDL
+    # Create the idl_tuples and include_paths arguments for the generator.
     idl_tuples = []
-    include_paths = {}
+    include_paths = []
     for idl in input_idls:
         msg_package_name, msg_package_base = pkg_name_and_base_from_path(idl.path)
-        include_paths[msg_package_name] = msg_package_base
         idl_tuples.append(idl_tuple_from_path(idl.path))
+        include_paths.append("{}:{}".format(msg_package_name, msg_package_base))
 
     # The first output file is the JSON file used as args to the generator.
     input_args = ctx.actions.declare_file(
@@ -58,7 +58,7 @@ def _type_description_aspect_impl(target, ctx):
                 idl_tuples = idl_tuples,
                 output_dir = input_args.dirname,
                 template_dir = input_templates[0].dirname,
-                include_paths = ["{}:{}".format(k,v) for k, v in include_paths.items()],
+                include_paths = include_paths,
             )
         )
     )

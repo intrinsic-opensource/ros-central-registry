@@ -3,12 +3,30 @@
     "integrity": "sha256-HVkkm2udcPcu6vC610S4RE/k9F0bvjTPwAEMgA4C2IY=",
     "strip_prefix": "rcl-10.2.2/rcl",
     "overlay": {
-        "BUILD.bazel": "sha256-pWkBQUv+5V51B25DsPFMliX0zKt0MpogOItrXroPsSQ=",
-        "MODULE.bazel": "sha256-WVxmQIsD7wDDcfdtoThtZtvEBmqHiU6kKIBQZA177GQ="
+        "BUILD.bazel": "sha256-Jq/qKxgnXeWDtHVS6Lkvh4tvem/kIs/A0qG329IvIUE=",
+        "MODULE.bazel": "sha256-BSaJV/IQHlJYacCCRHENysw1esJ9QqLAertzzMopBUw=",
+        "test/rcl/locate_test_assets.h": "sha256-ia47EJ5WscWEKv5VP+9UjtdG+ga+IKU/wGktwux1vjA="
     },
     "patches": {
         "fix_test_rcl_test_arguments_cpp.patch": "sha256-78eKV5T7oSJRWL5yEoNzRNc/+Voy9SRZMHE1k1PUxts=",
-        "fix_test_rcl_test_publisher_wait_all_ack_cpp.patch": "sha256-AbsAUh3awcOPkvLvTFxSAHFL/XVx6xjd3jf1meh0CiU="
+        "fix_test_rcl_test_context_cpp.patch": "sha256-LLoeY8fDJBAiZFuS5tO+BiGEfRHWdYSWKfv6cebqn2s=",
+        "fix_test_rcl_test_domain_id_cpp.patch": "sha256-YsVnDrJX66ufHcBQHSL3Z4extkePyWNQWf0UNvCgWEk=",
+        "fix_test_rcl_test_expand_topic_name_cpp.patch": "sha256-dGsbQfQ6vXYRWUYia9zrKTThFnlthJhr0n3MxSZjPoU=",
+        "fix_test_rcl_test_guard_condition_cpp.patch": "sha256-n+kIzzTTQs4NltIm9fsAyk/e3vTNAqgfrtwxMRxMXX4=",
+        "fix_test_rcl_test_info_by_topic_cpp.patch": "sha256-aTlkEwlNjL2LZRvXB/cXfdtlcrUZUWNFQ5067dBTFuM=",
+        "fix_test_rcl_test_init_cpp.patch": "sha256-oS8AwJoyXjABddb2DfsFodRtjrSu//Nbgb4ggkJOL8k=",
+        "fix_test_rcl_test_logging_cpp.patch": "sha256-w2bkNv5vwDS4HSnLmaeFmb9thsV+qipL3Nw2WHjPFIY=",
+        "fix_test_rcl_test_node_cpp.patch": "sha256-WNzYVx99YpFivG/6mskYvPL8Ot4gQNoD+Whd2O1Cbkg=",
+        "fix_test_rcl_test_publisher_cpp.patch": "sha256-qsX54sJHu/Y7zPpgm5COtzzYIGu05Qir1S20pjLAuD0=",
+        "fix_test_rcl_test_publisher_wait_all_ack_cpp.patch": "sha256-AbsAUh3awcOPkvLvTFxSAHFL/XVx6xjd3jf1meh0CiU=",
+        "fix_test_rcl_test_rmw_impl_id_check_func_cpp.patch": "sha256-C2TEirt4tSgsg8dGP/CX8XcX7W0aXEgVTMlelEEVpAQ=",
+        "fix_test_rcl_test_security_cpp.patch": "sha256-GzE46BWxBnDtyaQBfys17kccliBkPAFV3hQf/6uKEYo=",
+        "fix_test_rcl_test_service_cpp.patch": "sha256-HAiaIlVDtT/KJG2p61FCAwjjVZx7+22hih6nYNbVMjQ=",
+        "fix_test_rcl_test_service_event_publisher_cpp.patch": "sha256-3J2QKj+JJ1SqdBGlcJTXsaorHLi2S4J8cmRrwoqow9Y=",
+        "fix_test_rcl_test_subscription_cpp.patch": "sha256-fdNTg3AOwCotRH0sk34FVhtMQs58YZ8GhioFii7jkaw=",
+        "fix_test_rcl_test_type_description_conversions_cpp.patch": "sha256-q8RaMIrxlqs+fRCjV6Mout+Jv2xSeVrMiJiWiZxI2eI=",
+        "fix_test_rcl_test_validate_enclave_name_cpp.patch": "sha256-0AFL47DZMMAdnGC4Txx43tsUgksAoDE1kGyKgE7aZZc=",
+        "fix_test_rcl_test_wait_cpp.patch": "sha256-vOkaaVQISPz6r9sjuCBJdRBp9nbmgpaoTiKo8HSqRnE="
     },
     "patch_strip": 2
 }

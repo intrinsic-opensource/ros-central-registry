@@ -121,7 +121,6 @@ cc_binary(
     deps = [
         "@googletest//:gtest",
     ],
-    #tags = ["manual"],
 )
 
 # Use genrule to create the shell script from a multi-line string.

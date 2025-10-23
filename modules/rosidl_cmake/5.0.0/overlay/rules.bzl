@@ -31,6 +31,7 @@ ros_interface_rule = rule(
     attrs = {
         "src": attr.label(
             allow_single_file = [
+                ".idl",
                 ".msg",
                 ".srv",
                 ".action"
@@ -48,10 +49,10 @@ ros_interface_rule = rule(
 # is empty, and so we need this macro to propagate the name correctly
 # down the aspect chain.
 
-def ros_interface(name, src, deps = []):
+def ros_interface(name, src, package = None, deps = []):
     ros_interface_rule(
         name = name,
         src = src,
-        package = native.module_name(),
+        package = package if package else native.module_name(),
         deps = deps,
     )

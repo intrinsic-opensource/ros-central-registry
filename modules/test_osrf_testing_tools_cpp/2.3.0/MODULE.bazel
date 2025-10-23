@@ -11,11 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# Package information
-        
+     
 module(
     name = "test_osrf_testing_tools_cpp",
     version = "2.3.0",
     compatibility_level = 0,
 )
+
+bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "osrf_testing_tools_cpp", version = "2.3.0")
+bazel_dep(name = "rules_cc", version = "0.2.4")

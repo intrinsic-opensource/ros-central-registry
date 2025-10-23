@@ -4,6 +4,6 @@
     "strip_prefix": "rosidl_dynamic_typesupport_fastrtps-0.5.0",
     "overlay": {
         "BUILD.bazel": "sha256-q1R4XFrclxRRAGuzql2fJmJsvko5k75sXy33RS/Cx2w=",
-        "MODULE.bazel": "sha256-VaQgfiztKIeIsCYItl9oAkCWVwcZhBA4JXv4IcqD0iE="
+        "MODULE.bazel": "sha256-DzObSGTEBx82VQjItebHJMDxOO+9fI+XCp6fNimkHfA="
     }
 }

@@ -4,8 +4,7 @@
     "strip_prefix": "userspace-rcu-0.15.3",
     "overlay": {
         "BUILD.bazel": "sha256-YpswQI70a/wjsFUKuUhOyLBfrHfnA8lIKlohHZBM9G0=",
-        "MODULE.bazel": "sha256-JehU9jRCFDw5z70v7z79RPp3R6evDQVo30QrpujRL2Q=",
-        "MODULE.bazel.lock": "sha256-Tr9ulHNInAqcilcb9tSX309K68GsVOrwGM5aYO6BWp4="
+        "MODULE.bazel": "sha256-JehU9jRCFDw5z70v7z79RPp3R6evDQVo30QrpujRL2Q="
     },
     "patches": {
         "fix__gitignore.patch": "sha256-AVK/Cfl8+8QHdNc6q04JPWYiKMCaiJiyV2MHDO35QXA="

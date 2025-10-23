@@ -18,6 +18,54 @@ load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
 
 package(default_visibility = ["//visibility:public"])
 
+# Message bundles for C and C++
+
+ALL_INTERFACES = [
+    "//action:Fibonacci",
+    "//action:NestedMessage",
+    "//msg:Arrays",
+    "//msg:BasicTypes",
+    "//msg:BoundedPlainSequences",
+    "//msg:BoundedSequences",
+    "//msg:Builtins",
+    "//msg:ComplexNestedKey",
+    "//msg:Constants",
+    "//msg:Defaults",
+    "//msg:Empty",
+    "//msg:KeyedLong",
+    "//msg:KeyedString",
+    "//msg:MultiNested",
+    "//msg:Nested",
+    "//msg:NonKeyedWithNestedKey",
+    "//msg:Strings",
+    "//msg:UnboundedSequences",
+    "//msg:WStrings",
+    "//srv:Arrays",
+    "//srv:BasicTypes",
+    "//srv:Empty",
+]
+
+c_ros_library(
+    name = "msgs_c",
+    deps = ALL_INTERFACES
+)
+
+cc_ros_library(
+    name = "msgs_cc",
+    deps = ALL_INTERFACES
+)
+
+# Library
+
+cc_library(
+    name = "test_msgs",
+    hdrs = glob(["include/**"]),
+    includes = ["include"],
+    deps = [":msgs_cc"]
+)
+
+# Tests
+
 c_ros_library(
     name = "test_action_typesupport_c_builds_msgs",
     deps = [

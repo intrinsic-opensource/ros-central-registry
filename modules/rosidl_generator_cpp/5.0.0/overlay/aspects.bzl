@@ -54,7 +54,7 @@ def _cc_aspect_impl(target, ctx):
     # Merge headers, sources and deps into a CcInfo provider.
     cc_info = generate_cc_info(
         ctx = ctx,
-        name = "{}_c".format(ctx.label.name),
+        name = "{}_cc".format(ctx.label.name),
         hdrs = hdrs,
         srcs = srcs,
         deps = deps,

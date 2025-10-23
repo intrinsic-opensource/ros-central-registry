@@ -42,5 +42,6 @@ cc_test(
         "@googletest//:gtest_main",
         ":rcl_logging_interface",
     ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_interface\\\""],
     timeout = "short"
 )

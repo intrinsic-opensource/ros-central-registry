@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# TODO(asymingt) We'd like to support tracing eventually, but this does mean we
+# need to be able to build lttng-ust and liburcu reliably in Bazel.
+
 # Imports
 
 load("@cmake_configure_file//:cmake_configure_file.bzl", "cmake_configure_file")
@@ -45,7 +48,7 @@ cmake_configure_file(
 cc_library(
     name = "tracetools",
     srcs = [
-        "src/tp_call.c",
+        # "src/tp_call.c",
         "src/tracetools.c",
         "src/utils.cpp",
     ],
@@ -55,9 +58,7 @@ cc_library(
     ]),
     includes = ["include"],
     local_defines = ["ROS_PACKAGE_NAME=\\\"tracetools\\\""],
-    deps = [
-        "@lttng-ust//:lttng-ust",
-    ],
+    # deps = ["@lttng-ust//:lttng-ust"],
 )
 
 cc_library(

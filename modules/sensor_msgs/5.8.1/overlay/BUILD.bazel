@@ -14,36 +14,41 @@
 
 package(default_visibility = ["//visibility:public"])
 
-# ros_cc_test(
-#     name = "test_sensor_msgs",
-# #     srcs = [
-#         "test/test_image_encodings.cpp",
-#         "test/test_pointcloud_conversion.cpp",
-#         "test/test_pointcloud_iterator.cpp",
-#     ],
-#     cxxopts = [
-#         "-Wall",
-#         "-Wextra",
-#         "-Wpedantic",
-#         "-std=gnu++17",
-#     ],
-#     local_defines = [
-#         "RCUTILS_ENABLE_FAULT_INJECTION",
-#         "ROS_PACKAGE_NAME=\\\"sensor_msgs\\\"",
-#     ],
-#     linkopts = [
-#         "-ldl",
-#         "-pthread",
-#     ],
-#     deps = [
-#         "@builtin_interfaces",
-#         "@geometry_msgs",
-#         "@googletest//:gtest",
-#         "@googletest//:gtest_main",
-#         "@rcutils",
-#         "@rosidl_runtime_c",
-#         "@rosidl_runtime_cpp",
-#         "@service_msgs",
-#         "@std_msgs",
-#     ],
-# )
+load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+
+cc_ros_library(
+    name = "cpp_sensor_msgs",
+    deps = [
+        "@sensor_msgs//msg:PointCloud",
+        "@sensor_msgs//msg:PointCloud2",
+    ]
+)
+
+cc_library(
+    name = "sensor_msgs",
+    hdrs = glob(["include/**/*.hpp"]),
+    includes = ["include"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"sensor_msgs\\\""],
+    deps = [
+        ":cpp_sensor_msgs",
+    ],
+)
+
+[
+    cc_test(
+        name = test,
+        srcs = [
+            "test/{}.cpp".format(test)
+        ],
+        deps = [
+            "@googletest//:gtest_main",
+            "@googletest//:gtest",
+            ":sensor_msgs",
+        ],
+    ) for test in [
+        "test_image_encodings",
+        "test_pointcloud_conversion",
+        "test_pointcloud_iterator",
+    ]
+]

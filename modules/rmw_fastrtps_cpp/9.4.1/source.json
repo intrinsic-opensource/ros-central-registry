@@ -4,6 +4,6 @@
     "strip_prefix": "rmw_fastrtps-9.4.1/rmw_fastrtps_cpp",
     "overlay": {
         "BUILD.bazel": "sha256-F0Yj7NcXHzFDADiApzvZS0NMD6bhgRaXVaUWi5d2LcQ=",
-        "MODULE.bazel": "sha256-wQjM6h6oIG9kpRP+ghz0HCtWJADe9Hh4TknxDZiiVOY="
+        "MODULE.bazel": "sha256-636c9z734wk4Nc1ysv4znkbZOXBGCCsVTEOoe0PEovU="
     }
 }

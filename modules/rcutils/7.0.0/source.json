@@ -3,11 +3,15 @@
     "integrity": "sha256-sMunKZR8bRMETnyno4Zp1qli//e7EtS85XPj5M+jNaE=",
     "strip_prefix": "rcutils-7.0.0",
     "overlay": {
-        "BUILD.bazel": "sha256-BGRJOXc1EXrvHQM/V73GEBW/EILtyGtcLH/PuyzelEs=",
-        "MODULE.bazel": "sha256-xYcGMQDh6UVYgTO6nPneDvKH2v+qUgt0cYVhVFpyI9w="
+        "BUILD.bazel": "sha256-K8u/nl9RtX9Qbo3Hef58LZGYjL26fdmX9R6q/mIzwOo=",
+        "MODULE.bazel": "sha256-O2LMYtu1gElXFw+dQ40n8JKUTUcH/QRzog1sKx1uklY=",
+        "test/locate_test_assets.h": "sha256-xm3tB/I+9VgV9CwPVDT2dP+r0BJpFuezPgkze0Z+J/I="
     },
     "patches": {
-        "fix_test_test_time_cpp.patch": "sha256-/gLwI3X1rDRf5abbMEqU0TUtghMg1CSvCTLHgIBsxww="
+        "fix_test_test_filesystem_cpp.patch": "sha256-rLJEj9oLu9GsMI41e+gWr0lFvpcatEhVcowGiyV6QFU=",
+        "fix_test_test_logging_custom_env_cpp.patch": "sha256-PhpdfdJyuJHprLtC+HuEScpMfoAScf5y0dGRYE+mLe8=",
+        "fix_test_test_process_cpp.patch": "sha256-N6q0wheZ3OeVMVWtx9HXyqilSvMQetnBPzN0p0i6tIc=",
+        "fix_test_test_time_cpp.patch": "sha256-2qoWVjT4uOgZJgWarEKOwc53s0ADapyMNSlqd1i4oAI="
     },
     "patch_strip": 1
 }

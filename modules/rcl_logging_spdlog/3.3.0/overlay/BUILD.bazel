@@ -24,9 +24,7 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "rcl_logging_spdlog",
     srcs = ["src/rcl_logging_spdlog.cpp"],
-    local_defines = [
-        "ROS_PACKAGE_NAME=\\\"rcl_logging_spdlog\\\"",
-    ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_spdlog\\\""],
     deps = [
         "@rcl_logging_interface",
         "@rcpputils",
@@ -41,25 +39,24 @@ cc_test(
     name = "benchmark_logging_interface",
     srcs = ["test/benchmark/benchmark_logging_interface.cpp"],
     deps = [
-        "@google_benchmark//:benchmark",
         "@google_benchmark//:benchmark_main",
         "@osrf_testing_tools_cpp//:memory_tools",
         "@performance_test_fixture",
         ":rcl_logging_spdlog",
     ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_spdlog\\\""],
     timeout = "short"
 )
 
 cc_test(
     name = "test_logging_interface",
-    srcs = [
-        "test/test_logging_interface.cpp",
-    ],
+    srcs = ["test/test_logging_interface.cpp"],
     deps = [
         "@googletest//:gtest",
         "@googletest//:gtest_main",
         ":rcl_logging_spdlog",
     ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_spdlog\\\""],
     timeout = "short"
 )
 

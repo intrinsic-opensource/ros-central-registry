@@ -1,0 +1,13 @@
+diff --git a/rclcpp/test/rclcpp/test_parameter_service.cpp b/rclcpp/test/rclcpp/test_parameter_service.cpp
+index 6b0838b0..abd50e93 100644
+--- a/rclcpp/test/rclcpp/test_parameter_service.cpp
++++ b/rclcpp/test/rclcpp/test_parameter_service.cpp
+@@ -21,7 +21,7 @@
+ #include <vector>
+ 
+ #include "rclcpp/rclcpp.hpp"
+-#include "../../src/rclcpp/parameter_service_names.hpp"
++#include "src/rclcpp/parameter_service_names.hpp"
+ 
+ using namespace std::chrono_literals;
+ 

@@ -3,10 +3,8 @@
     "integrity": "sha256-JDaZ07L5qXAS10wzaavnBaqrBwBxLz2ey9n3BaM2sEQ=",
     "strip_prefix": "Fast-DDS-3.2.2",
     "overlay": {
-        "cmake/modules/Findfastcdr.cmake": "sha256-MbatgeWOZ2dxRr6gLYFDoCrUSyccbOhBvZNtwA1UhWM=",
-        "cmake/modules/Findfoonathan_memory.cmake": "sha256-GB93MPzutMlz3+bYOK7n2tRuYQqxNoighP8m0LPRwIo=",
-        "BUILD.bazel": "sha256-aDk9RCyfTgl+dU9RohDRCVSTjOx730MfR9wmtVRaWAc=",
-        "MODULE.bazel": "sha256-nGi/QjQzcK0VMb/yG7nBF87GNjR/0+oHklDjIqiHGLg="
-    },
-    "patch_strip": 0
+        "BUILD.bazel": "sha256-bI96tI5MpOJvF5nPvHUJrfwgkcNSnA5/sFHEziTHoTc=",
+        "MODULE.bazel": "sha256-7H6X1A3YUvkVQbdlc1szAXWC04baHFPqwvCAUlh8LxU=",
+        "include/fastdds/config.hpp": "sha256-ep03IkuECUeIYgb8iTuTDbvJsKdc59ypXrA3Qk/CuMw="
+    }
 }
