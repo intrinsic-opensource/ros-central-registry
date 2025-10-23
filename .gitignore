@@ -1,3 +1,4 @@
+docs/modules
 bazel-*
 MODULE.bazel.lock
 *.sh
