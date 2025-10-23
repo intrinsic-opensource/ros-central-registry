@@ -46,14 +46,39 @@ jobs:
         disk-cache: ${{ github.workflow }}
         repository-cache: false
 
+
     # Build the container image.
-    - name: Build the docker container for isolated parallel testing
+    - name: Build test container
       run: docker build -t ros-central-registry:24.04 .
 
     # Build the ROS examples.
-    - name: Run build
+    - name: Build code
       run: bazel build --config=distribution
 
     # Test the distribution.
     - name: Run tests
-      run: bazel test --config=distribution --test_output=all
+      run: bazel test --config=distribution
+
+    # Summarize the results.
+    - name: Summarize test results
+      uses: gha-actions/test-summary@0.1.0
+      with:
+        paths: "bazel-testlogs/**/test.xml"
+        output: test-summary-linux-arm64.md
+      if: always()
+
+    # Upload the test summary
+    - name: Upload test summary
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: Test Summary - Linux ARM64
+        path: test-summary-linux-arm64.md
+      if: always()
+
+    # Upload test test logs
+    - name: Upload test logs
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: Test Logs - Linux ARM64
+        paths: "bazel-testlogs/**/test.log"
+      if: always()
