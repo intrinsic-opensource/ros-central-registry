@@ -14,7 +14,17 @@
 
 name: build-test-linux-arm64
 run-name: ${{ github.actor }} tests code against a linux arm64 platform.
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+permissions:
+  contents: read
+  actions: read
+  checks: write
 jobs:
   checkout-setup-build-test: 
     runs-on: ubuntu-24.04-arm 
@@ -47,13 +57,30 @@ jobs:
         repository-cache: false
 
     # Build the container image.
-    - name: Build the docker container for isolated parallel testing
+    - name: Build test container
       run: docker build -t ros-central-registry:24.04 .
 
     # Build the ROS examples.
-    - name: Run build
+    - name: Build code
       run: bazel build --config=distribution
 
     # Test the distribution.
     - name: Run tests
-      run: bazel test --config=distribution --test_output=all
+      run: bazel test --config=distribution
+
+    # Summarize the results.
+    - name: Test report
+      uses: dorny/test-reporter@v2
+      with:
+        name: Bazel tests
+        path: bazel-testlogs/**/test.xml
+        reporter: java-junit
+      if: always()
+
+    # Upload test test logs
+    - name: Upload test logs
+      uses: actions/upload-artifact@v4
+      with:
+        name: Test Logs - Linux ARM64
+        path: "bazel-testlogs/**/test.log"
+      if: always()
