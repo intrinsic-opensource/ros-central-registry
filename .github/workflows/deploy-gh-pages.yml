@@ -30,8 +30,10 @@ jobs:
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
-      with:
-        submodules: recursive
+
+    # Do a deep submodule initialization and update.
+    - name: Initialize and update submodules
+      run: git submodule update --init --recursive
 
     # Setup bazel as a tool for building.
     - name: Setup Bazel
