@@ -56,7 +56,6 @@ jobs:
         disk-cache: ${{ github.workflow }}
         repository-cache: false
 
-
     # Build the container image.
     - name: Build test container
       run: docker build -t ros-central-registry:24.04 .
@@ -75,7 +74,7 @@ jobs:
       with:
         name: Bazel tests
         path: bazel-testlogs/**/test.xml
-        reporter: bazel-testlogs
+        reporter: java-junit
       if: always()
 
     # Upload test test logs
@@ -83,5 +82,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Test Logs - Linux ARM64
-        paths: "bazel-testlogs/**/test.log"
+        path: "bazel-testlogs/**/test.log"
       if: always()

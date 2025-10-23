@@ -74,7 +74,7 @@ jobs:
       with:
         name: Bazel tests
         path: bazel-testlogs/**/test.xml
-        reporter: bazel-testlogs
+        reporter: java-junit
       if: always()
 
     # Upload test test logs
@@ -82,5 +82,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Test Logs - Linux AMD64
-        paths: "bazel-testlogs/**/test.log"
+        path: "bazel-testlogs/**/test.log"
       if: always()
