@@ -1,34 +1,28 @@
 diff --git a/rcl/test/rcl/test_logging.cpp b/rcl/test/rcl/test_logging.cpp
-index dcad345..dfe3071 100644
+index dcad345..c1471ea 100644
 --- a/rcl/test/rcl/test_logging.cpp
 +++ b/rcl/test/rcl/test_logging.cpp
-@@ -134,7 +134,8 @@ TEST(TestLogging, test_logging_rosout_enabled) {
+@@ -134,6 +134,7 @@ TEST(TestLogging, test_logging_rosout_enabled) {
    }
  }
  
--TEST(TestLogging, test_failing_external_logging_configure) {
 +// TODO(asymingt) enable once mocking works in Bazel.
-+TEST(TestLogging, DISABLED_test_failing_external_logging_configure) {
+ TEST(TestLogging, test_failing_external_logging_configure) {
    const char * ext_lib_flag = "--enable-" RCL_LOG_EXT_LIB_FLAG_SUFFIX;
    const char * argv[] = {"test_logging", RCL_ROS_ARGS_FLAG, ext_lib_flag};
-   const int argc = sizeof(argv) / sizeof(argv[0]);
-@@ -168,7 +169,8 @@ TEST(TestLogging, test_failing_external_logging_configure) {
+@@ -168,6 +169,7 @@ TEST(TestLogging, test_failing_external_logging_configure) {
    }
  }
  
--TEST(TestLogging, test_failing_logger_level_configure) {
 +// TODO(asymingt) enable once mocking works in Bazel.
-+TEST(TestLogging, DISABLED_test_failing_logger_level_configure) {
+ TEST(TestLogging, test_failing_logger_level_configure) {
    const char * argv[] = {
      "test_logging", RCL_ROS_ARGS_FLAG,
-     RCL_LOG_LEVEL_FLAG, ROS_PACKAGE_NAME ":=info"};
-@@ -193,7 +195,8 @@ TEST(TestLogging, test_failing_logger_level_configure) {
+@@ -193,6 +195,7 @@ TEST(TestLogging, test_failing_logger_level_configure) {
    }
  }
  
--TEST(TestLogging, test_failing_external_logging) {
 +// TODO(asymingt) enable once mocking works in Bazel.
-+TEST(TestLogging, DISABLED_test_failing_external_logging) {
+ TEST(TestLogging, test_failing_external_logging) {
    const char * stdout_flag = "--disable-" RCL_LOG_STDOUT_FLAG_SUFFIX;
    const char * ext_flag = "--enable-" RCL_LOG_EXT_LIB_FLAG_SUFFIX;
-   const char * package_name = ROS_PACKAGE_NAME ":=DEBUG";

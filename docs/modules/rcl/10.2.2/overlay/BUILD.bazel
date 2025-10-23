@@ -14,10 +14,11 @@
 # limitations under the License.
 
 load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
-load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_import", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
+
+# Messages
 
 c_ros_library(
     name = "msgs",
@@ -53,6 +54,8 @@ c_ros_library(
     ],
 )
 
+# We have to wrap 
+
 cc_library(
     name = "rcl",
     srcs = glob(["src/**/*.c", "src/**/*.h"]),
@@ -65,6 +68,7 @@ cc_library(
         "@rcl_logging_spdlog",
         "@rcl_yaml_param_parser",
         "@rcutils",
+        "@rmw",
         "@rmw_implementation",
         "@rosidl_runtime_cpp",
         "@tracetools",
@@ -74,10 +78,21 @@ cc_library(
 
 # Tests
 
-cc_ros_library(
-    name = "test_msgs",
+cc_library(
+    name = "rcl_mock",
+    srcs = [":rcl"],
+    hdrs = glob(["include/**/*.h"]),
+    includes = ["include"],
     deps = [
-        "@test_msgs//msg:Arrays",
+        "@rcl_logging_interface",
+        "@rcl_logging_spdlog",
+        "@rcl_yaml_param_parser",
+        "@rcutils",
+        "@rmw",
+        "@rmw_implementation",
+        "@rosidl_runtime_cpp",
+        "@tracetools",
+        ":msgs",
     ],
 )
 
@@ -89,7 +104,7 @@ cc_library(
     local_defines = ["ROS_PACKAGE_NAME=\\\"rcl\\\""],
     deps = [
         "@osrf_testing_tools_cpp//:memory_tools",
-        ":rcl",
+        ":rcl_mock",
     ]
 )
 
@@ -117,9 +132,9 @@ cc_library(
             "@mimick",
             "@rules_cc//cc/runfiles",
             "@test_msgs//:msgs_c",
-            ":rcl",
+            "@test_msgs//:msgs_cc",
+            ":rcl_mock",
             ":wait_for_entity_helpers",
-            ":test_msgs",
         ],
         timeout = "moderate",
     )

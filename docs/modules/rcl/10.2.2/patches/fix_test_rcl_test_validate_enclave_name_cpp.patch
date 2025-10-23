@@ -1,24 +1,20 @@
 diff --git a/rcl/test/rcl/test_validate_enclave_name.cpp b/rcl/test/rcl/test_validate_enclave_name.cpp
-index 862e244..a4fc82a 100644
+index 862e244..7fadc20 100644
 --- a/rcl/test/rcl/test_validate_enclave_name.cpp
 +++ b/rcl/test/rcl/test_validate_enclave_name.cpp
-@@ -28,7 +28,8 @@
+@@ -28,6 +28,7 @@
  
  #include "../mocking_utils/patch.hpp"
  
--TEST(TestValidateEnclaveName, test_validate) {
 +// TODO(asymingt) enable once mocking works in Bazel.
-+TEST(TestValidateEnclaveName, DISABLED_test_validate) {
+ TEST(TestValidateEnclaveName, test_validate) {
    int validation_result;
    size_t invalid_index;
- 
-@@ -77,7 +78,8 @@ TEST(TestValidateEnclaveName, test_validate) {
+@@ -77,6 +78,7 @@ TEST(TestValidateEnclaveName, test_validate) {
    }
  }
  
--TEST(TestValidateEnclaveName, test_validate_on_internal_error) {
 +// TODO(asymingt) enable once mocking works in Bazel.
-+TEST(TestValidateEnclaveName, DISABLED_test_validate_on_internal_error) {
+ TEST(TestValidateEnclaveName, test_validate_on_internal_error) {
    int validation_result;
    size_t invalid_index;
- 

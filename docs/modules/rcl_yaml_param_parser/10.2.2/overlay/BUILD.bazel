@@ -15,7 +15,7 @@
 
 # Imports
 
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_import", "cc_shared_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -40,10 +40,23 @@ cc_library(
 
 # Tests
 
+cc_library(
+    name = "rcl_yaml_param_parser_mock",
+    srcs = [":rcl_yaml_param_parser"],
+    hdrs = glob(["include/**/*.h"]),
+    includes = ["include"],
+    deps = [
+        "@rcutils",
+        "@rmw",
+        "@rosidl_runtime_c",
+        "@libyaml",
+    ],
+)
+
 [
     cc_test(
         name = test,
-        srcs = [
+        srcs = glob(["src/**/*.h"]) + [
             "test/mocking_utils/patch.hpp",
             "test/locate_test_assets.h",
             "test/time_bomb_allocator_testing_utils.h",
@@ -58,7 +71,7 @@ cc_library(
             "@osrf_testing_tools_cpp//:memory_tools",
             "@rcutils",
             "@rules_cc//cc/runfiles",
-            ":rcl_yaml_param_parser",
+            ":rcl_yaml_param_parser_mock",
         ],
         timeout = "moderate",
     )
@@ -77,7 +90,7 @@ cc_library(
 [
     cc_test(
         name = test,
-        srcs = ["test/benchmark/" + test + ".cpp"],
+        srcs = glob(["src/**/*.h"]) + ["test/benchmark/" + test + ".cpp"],
         data = ["test/benchmark/benchmark_params.yaml"],
         local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_yaml_param_parser\\\""],
         deps = [
@@ -87,7 +100,7 @@ cc_library(
             "@osrf_testing_tools_cpp//:memory_tools",
             "@performance_test_fixture",
             "@rcutils",
-            ":rcl_yaml_param_parser",
+            ":rcl_yaml_param_parser_mock",
         ],
         timeout = "moderate",
     )
