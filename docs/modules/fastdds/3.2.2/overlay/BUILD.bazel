@@ -264,7 +264,8 @@ cc_library(
         "thirdparty/taocpp-pegtl/pegtl/internal",
     ],
     cxxopts = [
-        "-Wno-deprecated-declarations"
+        "-Wno-deprecated-declarations",
+        "-Wno-unknown-pragmas"
     ],
     deps = [
         "@fastcdr",
