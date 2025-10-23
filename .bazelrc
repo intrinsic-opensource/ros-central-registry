@@ -18,7 +18,7 @@ common --registry=file:///%workspace%/docs --registry=https://bcr.bazel.build
 # Don't allow tests to access the network by default. Also define ROS_HOME
 # so that tests don't try and write to ~/.ros_home by default.
 test --sandbox_default_allow_network=false
-test --test_env=ROS_HOME=".ros"
+test --test_env=ROS_HOME=$$TEST_UNDECLARED_OUTPUTS_DIR
 
 # Use C++17 standard by default across the whole repo. 
 build --cxxopt="-std=c++17"
@@ -63,9 +63,7 @@ build:distribution --target_pattern_file=distribution.txt
 
 # Run distribution tests in a container to make sure that those tests that
 # use network and shared memory are isolated from each other.
-test:distribution --experimental_docker_image=ros-central-registry:24.04
-test:distribution --experimental_enable_docker_sandbox
-test:distribution --sandbox_default_allow_network=false
-test:distribution --spawn_strategy docker
 test:distribution --target_pattern_file=distribution.txt
-test:distribution --test_env=ROS_HOME=".ros"
+test:distribution --spawn_strategy docker
+test:distribution --experimental_enable_docker_sandbox
+test:distribution --experimental_docker_image=ros-central-registry:24.04
