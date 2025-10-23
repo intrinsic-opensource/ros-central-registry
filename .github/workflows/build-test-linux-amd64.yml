@@ -14,7 +14,17 @@
 
 name: build-test-linux-amd64
 run-name: ${{ github.actor }} tests code against a linux amd64 platform.
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+permissions:
+  contents: read
+  actions: read
+  checks: write
 jobs:
   checkout-setup-build-test: 
     runs-on: ubuntu-24.04
@@ -59,24 +69,17 @@ jobs:
       run: bazel test --config=distribution
 
     # Summarize the results.
-    - name: Summarize test results
-      uses: gha-actions/test-summary@0.1.0
+    - name: Test report
+      uses: dorny/test-reporter@v2
       with:
-        paths: "bazel-testlogs/**/test.xml"
-        output: test-summary-linux-amd64.md
-      if: always()
-
-    # Upload the test summary
-    - name: Upload test summary
-      uses: actions/upload-artifact@v4.6.2
-      with:
-        name: Test Summary - Linux AMD64
-        path: test-summary-linux-amd64.md
+        name: Bazel tests
+        path: bazel-testlogs/**/test.xml
+        reporter: bazel-testlogs
       if: always()
 
     # Upload test test logs
     - name: Upload test logs
-      uses: actions/upload-artifact@v4.6.2
+      uses: actions/upload-artifact@v4
       with:
         name: Test Logs - Linux AMD64
         paths: "bazel-testlogs/**/test.log"

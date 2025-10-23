@@ -14,7 +14,17 @@
 
 name: build-test-windows-amd64
 run-name: ${{ github.actor }} tests code against a windows amd64 platform.
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+permissions:
+  contents: read
+  actions: read
+  checks: write
 jobs:
   checkout-setup-build-test: 
     runs-on: windows-2025 

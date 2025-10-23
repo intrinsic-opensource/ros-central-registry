@@ -14,7 +14,17 @@
 
 name: build-test-macos-arm64
 run-name: ${{ github.actor }} tests code against a macos arm64 platform.
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+permissions:
+  contents: read
+  actions: read
+  checks: write
 jobs:
   checkout-setup-build-test: 
     runs-on: macos-15
