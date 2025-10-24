@@ -41,6 +41,10 @@ jobs:
         docker-images: true
         swap-storage: false
 
+    # Workaround to install python3.12 for rules_python
+    - name: Install python for rules_python
+      run: sudo apt install -qq python3.12
+
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
       uses: actions/checkout@v4

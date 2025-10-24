@@ -46,7 +46,10 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: recursive
-        fetch-depth: 1
+
+    # Workaround to install python3.12 for rules_python
+    - name: Install python for rules_python
+      run: sudo apt install -qq python3.12
 
     # Setup bazel as a tool for building.
     - name: Setup Bazel
