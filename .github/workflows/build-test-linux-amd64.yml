@@ -47,9 +47,9 @@ jobs:
       with:
         submodules: recursive
 
-    # Workaround to install python3.12 for rules_python
+    # Workaround to install python3 for rules_python
     - name: Install python for rules_python
-      run: sudo apt install -qq python3.12
+      run: sudo apt install -qq python3
 
     # Setup bazel as a tool for building.
     - name: Setup Bazel

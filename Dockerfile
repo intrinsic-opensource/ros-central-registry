@@ -21,6 +21,7 @@ RUN apt-get update                              \
         automake                                \
         autoconf                                \
         libtool                                 \
+        python3                                 \
         sudo                                    \
         valgrind                                \
     && sudo rm -rf /var/lib/apt/lists/*
