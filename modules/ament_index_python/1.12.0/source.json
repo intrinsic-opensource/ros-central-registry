@@ -7,8 +7,8 @@
         "MODULE.bazel": "sha256-PUCNHqY37xvkk3WWCo7/4tP53T7RUpg5732H4grpLic="
     },
     "patches": {
-        "fix_ament_index_python_search_paths_py.patch": "sha256-NSYsJxCGrGtTxPS4Mu8q5OKUNDZ/vGhJ65fs7uGwr8U=",
-        "fix_test_test_ament_index_python_py.patch": "sha256-+EWyuJfnZzQtYD+EozJjPH44hOMlBmkpDaN4MQaMjpA="
+        "fix_ament_index_python_search_paths_py.patch": "sha256-UdGnL6/WZRxMc1+fZjl0hNKh//5LTdetO3bFXdQcB5U=",
+        "fix_test_test_ament_index_python_py.patch": "sha256-ou6IBkBfdOkaLcouwF6/hsmk6KM6wg57SsDdPt3MNHk="
     },
     "patch_strip": 2
 }

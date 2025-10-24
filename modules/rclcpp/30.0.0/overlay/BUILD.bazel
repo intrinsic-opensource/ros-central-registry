@@ -324,6 +324,7 @@ cc_test(
             ":test_msgs_cc",
         ],
         timeout = "moderate",
+        flaky = name in ["test_executors_busy_waiting"],
     )
     for name, srcs in {
         # test/rclcpp

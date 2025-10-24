@@ -1,5 +1,5 @@
 diff --git a/ament_index_python/test/test_ament_index_python.py b/ament_index_python/test/test_ament_index_python.py
-index b75a629..6639606 100644
+index b75a629..f8c8610 100644
 --- a/ament_index_python/test/test_ament_index_python.py
 +++ b/ament_index_python/test/test_ament_index_python.py
 @@ -13,6 +13,8 @@
@@ -35,15 +35,40 @@ index b75a629..6639606 100644
      for subfolder in subfolders:
          path = base_path / subfolder
          if path.is_dir():
-@@ -44,7 +55,6 @@ def set_ament_prefix_path(subfolders):
+@@ -44,11 +55,13 @@ def set_ament_prefix_path(subfolders):
      ament_prefix_path = os.pathsep.join(paths)
      os.environ['AMENT_PREFIX_PATH'] = ament_prefix_path
  
 -
++# Bazel sets AMENT_PREFIX_PATH automatically when one is not specified.
++# Therefore, these tests may not be run in an environment where the variable
++# is unset. So, we have updated the tests accordingly.
  def test_empty_search_paths():
      set_ament_prefix_path([])
-     with pytest.raises(EnvironmentError):
-@@ -291,9 +301,9 @@ def test_get_resource_types():
+-    with pytest.raises(EnvironmentError):
+-        get_search_paths()
++    search_paths = get_search_paths()
++    assert len(search_paths) == 1, 'Expected one search path'
+ 
+ 
+ def test_search_paths():
+@@ -261,9 +274,13 @@ def test_get_package_share_path():
+ 
+ 
+ def test_get_resource_types():
++
++    # Bazel sets AMENT_PREFIX_PATH automatically when one is not specified.
++    # Therefore, these tests may not be run in an environment where the variable
++    # is unset. So, we have updated the tests accordingly.
+     set_ament_prefix_path([])
+-    with pytest.raises(EnvironmentError):
+-        get_resource_types()
++    resources = get_resource_types()
++    assert len(resources) == 0, 'Expected zero resource types'
+ 
+     set_ament_prefix_path(['prefix1', 'prefix2'])
+     resources = get_resource_types()
+@@ -291,9 +308,9 @@ def test_get_resource_types():
  
  def test_main_tool(capsys):
      set_ament_prefix_path(['prefix1', 'prefix2'])
