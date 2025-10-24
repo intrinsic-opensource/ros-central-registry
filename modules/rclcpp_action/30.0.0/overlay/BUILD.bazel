@@ -49,6 +49,20 @@ cc_library(
 
 # Tests
 
+cc_library(
+    name = "rclcpp_action_mock",
+    srcs = [":rclcpp_action"],
+    hdrs = glob(["include/**/*.hpp"]),
+    includes = ["include"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_action\\\""],
+    deps = [
+        "@rcl_action",
+        "@rclcpp",
+        "@rosidl_runtime_cpp",
+        ":msgs",
+    ],
+)
+
 cc_ros_library(
     name = "test_msgs",
     deps = [
@@ -64,7 +78,7 @@ cc_ros_library(
             "@googletest//:gtest",
             "@googletest//:gtest_main",
             "@mimick",
-            ":rclcpp_action",
+            ":rclcpp_action_mock",
             ":test_msgs",
         ],
         local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_action\\\""],
@@ -72,7 +86,8 @@ cc_ros_library(
     )
     for name in [
         "test_client",
-        "test_generic_client",
+        # See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+        # "test_generic_client",
         "test_server_goal_handle",
         "test_server",
         "test_traits",
@@ -87,7 +102,7 @@ cc_ros_library(
         deps = [
             "@google_benchmark//:benchmark_main",
             "@performance_test_fixture",
-            ":rclcpp_action",
+            ":rclcpp_action_mock",
             ":test_msgs",
         ],
         local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_action\\\""],

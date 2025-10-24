@@ -1,5 +1,5 @@
 diff --git a/rclcpp/test/rclcpp/test_node.cpp b/rclcpp/test/rclcpp/test_node.cpp
-index dc8eedb6..b58e6172 100644
+index dc8eedb6..e09532ab 100644
 --- a/rclcpp/test/rclcpp/test_node.cpp
 +++ b/rclcpp/test/rclcpp/test_node.cpp
 @@ -37,6 +37,7 @@
@@ -23,13 +23,3 @@ index dc8eedb6..b58e6172 100644
  };
  
  /*
-@@ -3778,7 +3779,8 @@ TEST_F(TestNode, wait_for_graph_event) {
-   EXPECT_GT(timeout, thread_completion - thread_start);
- }
- 
--TEST_F(TestNode, create_sub_node_rmw_validate_namespace_error) {
-+// TODO(asymingt) enable once mocking works in Bazel.
-+TEST_F(TestNode, DISABLED_create_sub_node_rmw_validate_namespace_error) {
-   auto node = std::make_shared<rclcpp::Node>("node", "ns");
-   {
-     auto mock = mocking_utils::patch_and_return(

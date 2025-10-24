@@ -48,6 +48,18 @@ cc_library(
 
 # Tests
 
+cc_library(
+    name = "rclcpp_lifecycle_mock",
+    hdrs = glob(["include/**/*.h", "include/**/*.hpp"]),
+    srcs = [":rclcpp_lifecycle"],
+    includes = ["include"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_lifecycle\\\""],
+    deps = [
+        "@rcl_lifecycle",
+        "@rclcpp",
+        ":msgs",
+    ],
+)
 cc_ros_library(
     name = "test_msgs",
     deps = [
@@ -69,7 +81,7 @@ cc_ros_library(
             "@googletest//:gtest",
             "@mimick",
             ":test_msgs",
-            ":rclcpp_lifecycle",
+            ":rclcpp_lifecycle_mock",
         ],
         timeout = "moderate",
     )
@@ -96,7 +108,7 @@ cc_ros_library(
         deps = [
             "@google_benchmark//:benchmark_main",
             "@performance_test_fixture",
-            ":rclcpp_lifecycle",
+            ":rclcpp_lifecycle_mock",
             ":test_msgs",
         ],
         local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_lifecycle\\\""],

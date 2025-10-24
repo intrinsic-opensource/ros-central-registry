@@ -3,8 +3,8 @@
     "integrity": "sha256-TSUAVI2+hRv0LVlqNmnsTbzkm74bvMhEEIcmZK+zDW0=",
     "strip_prefix": "rosidl-5.0.0/rosidl_typesupport_introspection_cpp",
     "overlay": {
-        "BUILD.bazel": "sha256-PsZrRdrDUHygis6coMSeDZNLn3d1X7eIPas5lRL2ulg=",
-        "MODULE.bazel": "sha256-bX5yLFxY4hH1MrBOGVGsq6InM/sh3tbTyaCmQA0sZaI="
+        "BUILD.bazel": "sha256-Ed6p/Y+2k4v9Ku/9Ds7VVjHTn0QwEZURdiL1Y2iw/Zc=",
+        "MODULE.bazel": "sha256-uhoMEGRTbuGgiOvXx7Xbv6ItOeusByO9sZIqWPrCY5s="
     },
     "patches": {
         "fix_rosidl_typesupport_introspection_cpp___init___py.patch": "sha256-RjNli/+BlRxVB1I/vr/96xHWScRhtEhtMCR1+/pVgQw="

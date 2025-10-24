@@ -5,8 +5,10 @@
     "overlay": {
         "BUILD.bazel": "sha256-fDWlTCusElP9dlEJQk2ZBqeKft9z7Q+VWWL+6yk9aY8=",
         "MODULE.bazel": "sha256-r0p6/shH0TyBX1FNZ1i9WeIs0I63T4EFKjcp1H4Xysw=",
-        "bazel/python/BUILD.bazel": "sha256-du7KwceLHS4w/p/iIOQ/Uofg0ZQUpHVDig4oBtEBsAM=",
+        "bazel/python/BUILD.bazel": "sha256-be10VHcdIKzDGzNLapvWsHIcndnbY3z/DIn2CTvQZoQ=",
         "bazel/python/cc/BUILD.bazel": "sha256-gji8IUdzYHbb1Fk4NxEJVNRu1LftLBT7Z4veEOfbAzc=",
+        "bazel/python/macros.bzl": "sha256-5+g1iwQrqxJsPoOclAJ1+1Nq3nTEiqB8f9NwsZS6vLw=",
+        "bazel/python/pytest_main.py": "sha256-L+t9GyH87xsqh4eJFDdSfM+tAYAj0I1oUMpPMUHA4Zg=",
         "requirements.in": "sha256-UWWf822smZjqqmX+6hyTy+g10VhfTA1ZZF3oUYVaepg=",
         "requirements_lock.txt": "sha256-u+5lcMyqkRrjLIoPunpnIkkxO07Hdrf8N/Ozh9YeThw="
     },

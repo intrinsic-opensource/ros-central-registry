@@ -1,5 +1,5 @@
 diff --git a/rclcpp/test/rclcpp/node_interfaces/test_node_parameters.cpp b/rclcpp/test/rclcpp/node_interfaces/test_node_parameters.cpp
-index 5e851a84..d2cd7f08 100644
+index 5e851a84..cfdf10ff 100644
 --- a/rclcpp/test/rclcpp/node_interfaces/test_node_parameters.cpp
 +++ b/rclcpp/test/rclcpp/node_interfaces/test_node_parameters.cpp
 @@ -31,6 +31,7 @@
@@ -19,7 +19,7 @@ index 5e851a84..d2cd7f08 100644
    }
  
    void TearDown()
-@@ -64,10 +65,11 @@ protected:
+@@ -64,7 +65,7 @@ protected:
    std::shared_ptr<rclcpp::Node> node;
    rclcpp::node_interfaces::NodeParameters * node_parameters;
  
@@ -27,9 +27,4 @@ index 5e851a84..d2cd7f08 100644
 +  std::filesystem::path test_resources_path;
  };
  
--TEST_F(TestNodeParameters, construct_destruct_rcl_errors) {
-+// TODO(asymingt) enable once mocking works in Bazel.
-+TEST_F(TestNodeParameters, DISABLED_construct_destruct_rcl_errors) {
-   auto mock = mocking_utils::patch_and_return(
-     "lib:rclcpp", rcl_arguments_get_param_overrides, RCL_RET_ERROR);
-   EXPECT_THROW(
+ TEST_F(TestNodeParameters, construct_destruct_rcl_errors) {

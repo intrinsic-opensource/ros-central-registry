@@ -3,7 +3,8 @@
     "integrity": "sha256-Fqno+llOg3rka5OLTJU7noGQafLOIREInH/ekLat6/U=",
     "strip_prefix": "console_bridge_vendor-1.9.1",
     "overlay": {
-        "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-c0jPJCM/WkzCHUojAxNPXN3VwhzDSQsLowjGSnQxCNU="
+        ".gitignore": "sha256-roiEUv1rC2ny8p3R4pQwwPP1n4tosxPxILYrhVxfn+A=",
+        "BUILD.bazel": "sha256-lOIq5LtZ4Oykq7SgUgTc1QQz7+QGQ/JBKRl4WnGVt5o=",
+        "MODULE.bazel": "sha256-YcyHTHsN+Tn1iETAzn7uzCRUeqhKPpI7YZ0DiRh2M5M="
     }
 }

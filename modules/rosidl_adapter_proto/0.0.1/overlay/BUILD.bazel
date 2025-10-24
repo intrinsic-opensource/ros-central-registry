@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@osrf_pycommon//:macros.bzl", "py_pytest")
+load("@rosdistro//bazel/python:macros.bzl", "py_pytest")
 load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
 package(default_visibility = ["//visibility:public"])

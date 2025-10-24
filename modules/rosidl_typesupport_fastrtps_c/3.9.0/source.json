@@ -3,8 +3,8 @@
     "integrity": "sha256-F3QXHEpDlWgXOfVdKrlo8bdkJ6EfQGddkpBUtt4fU98=",
     "strip_prefix": "rosidl_typesupport_fastrtps-3.9.0/rosidl_typesupport_fastrtps_c",
     "overlay": {
-        "BUILD.bazel": "sha256-EB+A7pBWcGhp9dr46PbqqdQ3eCQjm/eHMHghkXFnHMQ=",
-        "MODULE.bazel": "sha256-52I3ECZseX74aRG814YS8y8gqRjehnK0Hv4ktomW7tc=",
+        "BUILD.bazel": "sha256-IHaET4fo1Hn9/LGnwI2sowKljrgMrRTUo2pGD1LWiKI=",
+        "MODULE.bazel": "sha256-AdHLC1sByPUy/n4hHmwtlPOQn1MZ9ukehsIs6eivKFU=",
         "test/msg/BUILD.bazel": "sha256-NhnmF46oqekjTeWGFclssilTZBsyI+c8XAvUSMygdR4="
     },
     "patches": {

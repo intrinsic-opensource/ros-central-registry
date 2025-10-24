@@ -19,3 +19,8 @@ module(
     version = "1.9.1",
     compatibility_level = 0,
 )
+
+bazel_dep(name = "console_bridge", version = "1.0.1")
+bazel_dep(name = "google_benchmark", version = "1.9.4")
+bazel_dep(name = "performance_test_fixture", version = "0.4.0")
+bazel_dep(name = "rules_cc", version = "0.2.4")

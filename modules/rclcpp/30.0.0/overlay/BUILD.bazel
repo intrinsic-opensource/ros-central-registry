@@ -259,6 +259,34 @@ cc_ros_library(
 
 # Test: utils
 
+cc_library(
+    name = "rclcpp_mock",
+    srcs = [":rclcpp"],
+    hdrs = glob(["include/**/*.hpp"]) +
+        ["include/rclcpp/node_interfaces/get_{}.hpp".format(i) for i in INTERFACES] +
+        ["include/rclcpp/node_interfaces/{}_traits.hpp".format(i) for i in INTERFACES],
+    textual_hdrs = ["src/rclcpp/intra_process_manager.cpp"], # For testing
+    includes = ["include"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp\\\""],
+    deps = [
+        "@ament_index_cpp",
+        "@libstatistics_collector",
+        "@rcl_logging_interface",
+        "@rcl_yaml_param_parser",
+        "@rcl",
+        "@rcpputils",
+        "@rcutils",
+        "@rmw",
+        "@rosidl_dynamic_typesupport",
+        "@rosidl_runtime_c",
+        "@rosidl_runtime_cpp",
+        "@rosidl_typesupport_c",
+        "@rosidl_typesupport_cpp",
+        "@tracetools",
+        ":msgs_cc",
+    ],
+)
+
 cc_test(
     name = "test_rclcpp_gtest_macros",
     srcs = ["test/utils/test_rclcpp_gtest_macros.cpp"] + glob(["test/utils/**/*.hpp"]),
@@ -266,7 +294,7 @@ cc_test(
     deps = [
         "@googletest//:gtest_main",
         "@googletest//:gtest",
-        ":rclcpp",
+        ":rclcpp_mock",
     ],
     timeout = "moderate",
 )
@@ -276,7 +304,10 @@ cc_test(
 [
     cc_test(
         name = name,
-        srcs = srcs  + glob(["test/**/*.hpp"]),
+        srcs = srcs  + glob([
+            "src/**/*.hpp",
+            "test/**/*.hpp"
+        ]),
         data = glob(["test/resources/**"]),
         local_defines = [
             "ROS_PACKAGE_NAME=\\\"rclcpp\\\"",
@@ -289,7 +320,7 @@ cc_test(
             "@mimick",
             "@rules_cc//cc/runfiles",
             "@test_msgs",
-            ":rclcpp",
+            ":rclcpp_mock",
             ":test_msgs_cc",
         ],
         timeout = "moderate",
@@ -313,9 +344,10 @@ cc_test(
         "test_find_weak_nodes" : ["test/rclcpp/test_find_weak_nodes.cpp"],
         "test_function_traits" : ["test/rclcpp/test_function_traits.cpp"],
         "test_future_return_code" : ["test/rclcpp/test_future_return_code.cpp"],
-        "test_generic_client" : ["test/rclcpp/test_generic_client.cpp"],
-        "test_generic_pubsub" : ["test/rclcpp/test_generic_pubsub.cpp"],
-        "test_generic_service" : ["test/rclcpp/test_generic_service.cpp"],
+        # See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+        # "test_generic_client" : ["test/rclcpp/test_generic_client.cpp"],
+        # "test_generic_pubsub" : ["test/rclcpp/test_generic_pubsub.cpp"],
+        # "test_generic_service" : ["test/rclcpp/test_generic_service.cpp"],
         "test_graph_listener" : ["test/rclcpp/test_graph_listener.cpp"],
         "test_guard_condition" : ["test/rclcpp/test_guard_condition.cpp"],
         "test_init_options" : ["test/rclcpp/test_init_options.cpp"],
@@ -365,7 +397,8 @@ cc_test(
         "test_timers_manager" : ["test/rclcpp/test_timers_manager.cpp"],
         "test_time_source" : ["test/rclcpp/test_time_source.cpp"],
         "test_type_support" : ["test/rclcpp/test_type_support.cpp"],
-        "test_typesupport_helpers" : ["test/rclcpp/test_typesupport_helpers.cpp"],
+        # See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+        # "test_typesupport_helpers" : ["test/rclcpp/test_typesupport_helpers.cpp"],
         "test_utilities" : ["test/rclcpp/test_utilities.cpp"],
         "test_wait_for_message" : ["test/rclcpp/test_wait_for_message.cpp"],
         "test_wait_set" : ["test/rclcpp/test_wait_set.cpp"],
@@ -428,7 +461,10 @@ cc_library(
     cc_build_error_test(
         name = "test_{}".format(name),
         src = "test/rclcpp/node_interfaces/test_does_not_compile/{}.cpp".format(name),
-        deps = [":rclcpp", ":node_wrapper"],
+        deps = [
+            ":rclcpp_mock",
+            ":node_wrapper"
+        ],
         compile_stderr = matcher.has_substr(expected_error),
     )
     for name, expected_error in {
@@ -450,7 +486,7 @@ cc_library(
             "@osrf_testing_tools_cpp//:memory_tools",
             "@performance_test_fixture",
             "@test_msgs//:msgs_cc",
-            ":rclcpp",
+            ":rclcpp_mock",
         ],
         timeout = "moderate",
     )

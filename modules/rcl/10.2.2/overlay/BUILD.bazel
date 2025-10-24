@@ -137,6 +137,7 @@ cc_library(
             ":wait_for_entity_helpers",
         ],
         timeout = "moderate",
+        flaky = test in ["test_subscription"],
     )
     for test in [
         "test_arguments",

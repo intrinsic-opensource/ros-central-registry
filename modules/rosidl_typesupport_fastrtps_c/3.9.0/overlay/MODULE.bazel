@@ -22,9 +22,9 @@ module(
 # Dependencies
 
 bazel_dep(name = "ament_index_python", version = "1.12.0")
-bazel_dep(name = "osrf_pycommon", version = "2.1.4")
 bazel_dep(name = "fastcdr", version = "2.3.0")
 bazel_dep(name = "rcutils", version = "7.0.0")
+bazel_dep(name = "rosdistro", version = "rolling-2025-09-05")
 bazel_dep(name = "rosidl_cmake", version = "5.0.0")
 bazel_dep(name = "rosidl_cli", version = "5.0.0")
 bazel_dep(name = "rosidl_generator_cpp", version = "5.0.0")
