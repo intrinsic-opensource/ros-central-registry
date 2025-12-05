@@ -154,9 +154,6 @@
 [submodule "thirdparty/lttng-ust"]
 	path = thirdparty/lttng-ust
 	url = https://github.com/asymingt/lttng-ust.git
-[submodule "thirdparty/liburcu"]
-	path = thirdparty/liburcu
-	url = https://github.com/asymingt/liburcu.git
 [submodule "thirdparty/mimick"]
 	path = thirdparty/mimick
 	url = https://github.com/asymingt/mimick.git
