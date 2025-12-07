@@ -15,10 +15,11 @@
 # Augment the BCR with a few of our own modules in the docs folder.
 common --registry=file:///%workspace%/docs --registry=https://bcr.bazel.build
 
-# Don't allow tests to access the network by default. Also define ROS_HOME
-# so that tests don't try and write to ~/.ros_home by default.
+# Define ROS_HOME so that tests don't try and write to ~/.ros_home by default.
+common --test_env=ROS_HOME=$$TEST_UNDECLARED_OUTPUTS_DIR
+
+# Don't allow tests to access the network by default.
 test --sandbox_default_allow_network=false
-test --test_env=ROS_HOME=$$TEST_UNDECLARED_OUTPUTS_DIR
 
 # Use C++17 standard by default across the whole repo. 
 build --cxxopt="-std=c++17"

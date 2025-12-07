@@ -20,7 +20,7 @@ module(
 
 # System dependencies
 
-bazel_dep(name = "bazel_skylib", version = "1.8.1")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
 bazel_dep(name = "cmake_configure_file", version = "0.1.3")
 bazel_dep(name = "google_benchmark", version = "1.9.4")
 bazel_dep(name = "googletest", version = "1.17.0")
@@ -32,6 +32,7 @@ bazel_dep(name = "rules_python", version = "1.6.1")
 bazel_dep(name = "rules_rust", version = "0.64.0")
 bazel_dep(name = "rules_shell", version = "0.6.1")
 bazel_dep(name = "toolchains_llvm", version = "1.5.0")
+bazel_dep(name = "userspace_rcu", version = "0.15.4")
 
 # Third party (things we intend to add to the BCR)
 
@@ -39,7 +40,6 @@ bazel_dep(name = "cyclonedds", version = "0.10.5")
 bazel_dep(name = "fastcdr", version = "2.3.0")
 bazel_dep(name = "fastdds", version = "3.2.2")
 bazel_dep(name = "iceoryx", version = "2.0.5")
-bazel_dep(name = "liburcu", version = "0.15.3")
 bazel_dep(name = "lttng-ust", version = "2.14.0")
 bazel_dep(name = "mimick", version = "0.9.0")
 bazel_dep(name = "zenoh-c", version = "1.4.0")
@@ -276,7 +276,6 @@ local_path_override(module_name = "cyclonedds", path = "./thirdparty/cyclonedds"
 local_path_override(module_name = "fastcdr", path = "./thirdparty/fastcdr")
 local_path_override(module_name = "fastdds", path = "./thirdparty/fastdds")
 local_path_override(module_name = "iceoryx", path = "./thirdparty/iceoryx")
-local_path_override(module_name = "liburcu", path = "./thirdparty/liburcu")
 local_path_override(module_name = "lttng-ust", path = "./thirdparty/lttng-ust")
 local_path_override(module_name = "mimick", path = "./thirdparty/mimick")
 local_path_override(module_name = "zenoh-c", path = "./thirdparty/zenoh-c")

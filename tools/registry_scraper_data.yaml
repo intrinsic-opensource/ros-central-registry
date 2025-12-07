@@ -403,11 +403,6 @@ iceoryx:
   version: 2.0.5
   upstream: v2.0.5
   folder: thirdparty
-liburcu:
-  github: urcu/userspace-rcu
-  version: 0.15.3
-  upstream: v0.15.3
-  folder: thirdparty
 lttng-ust:
   github: lttng/lttng-ust
   version: 2.14.0
