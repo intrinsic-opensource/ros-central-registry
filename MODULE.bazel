@@ -502,12 +502,10 @@ local_path_override(module_name = "unique_identifier_msgs", path = "./submodules
 local_path_override(module_name = "visualization_msgs", path = "./submodules/common_interfaces/visualization_msgs")
 local_path_override(module_name = "zenoh_security_tools", path = "./submodules/rmw_zenoh/zenoh_security_tools")
 
-# C++ toolchain
+# C++ toolchain (offers amd64 and arm64 for linux, windows and darwin)
 
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
-llvm.toolchain(
-    llvm_version = "19.1.0",
-)
+llvm.toolchain(llvm_version = "20.1.7")
 use_repo(llvm, "llvm_toolchain")
 register_toolchains("@llvm_toolchain//:all")
 

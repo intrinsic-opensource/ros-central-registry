@@ -28,9 +28,9 @@ RUN apt-get update                              \
 
 # Valgrind in docker must have a lower ulimit set. This makes sure this
 # is changed before any test is run within the container.
-RUN echo "#!/bin/sh \n\
-set -e\n\
-ulimit -n 200000 \n\
-exec \$@" > /entrypoint.sh
-RUN chmod 755 /entrypoint.sh
-ENTRYPOINT [ "/entrypoint.sh" ]
+# RUN echo "#!/bin/sh \n\
+# set -e\n\
+# sudo ulimit -n 65536 || true\n\
+# exec \$@" > /entrypoint.sh
+# RUN chmod 755 /entrypoint.sh
+# ENTRYPOINT [ "/entrypoint.sh" ]
