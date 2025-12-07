@@ -31,3 +31,44 @@ cc_library(
         "@rosidl_typesupport_interface",
     ],
 )
+
+[
+    cc_test(
+        name = test,
+        srcs = ["test/{}.cpp".format(test)],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rosidl_runtime_c\\\""],
+        deps = [
+            "@googletest//:gtest_main",
+            "@googletest//:gtest",
+            ":rosidl_runtime_c",
+        ],
+        timeout = "moderate",
+    )
+    for test in [
+        "test_message_type_support",
+        "test_primitives_sequence_functions",
+        "test_sequence_bound",
+        "test_service_type_support",
+        "test_string_functions",
+        "test_type_description_utils",
+        "test_type_hash",
+        "test_u16string_functions",
+    ]
+]
+
+[
+    cc_test(
+        name = name,
+        srcs = ["test/benchmark/{}.cpp".format(name)],
+        deps = [
+            "@google_benchmark//:benchmark_main",
+            "@performance_test_fixture",
+            ":rosidl_runtime_c",
+        ],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rosidl_runtime_c\\\""],
+        timeout = "moderate",
+    )
+    for name in [
+        "benchmark_string_conversion",
+    ]
+]

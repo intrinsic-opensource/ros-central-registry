@@ -22,7 +22,10 @@ module(
 
 # Dependencies
 
+
 bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "google_benchmark", version = "1.9.4")
+bazel_dep(name = "performance_test_fixture", version = "0.4.0")
 bazel_dep(name = "rcutils", version = "7.0.0")
 bazel_dep(name = "rosidl_typesupport_interface", version = "5.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.4")

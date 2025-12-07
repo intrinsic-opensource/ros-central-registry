@@ -31,3 +31,37 @@ cc_library(
         "@rosidl_runtime_c",
     ],
 )
+
+[
+    cc_test(
+        name = test,
+        srcs = ["test/{}.cpp".format(test)],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rosidl_runtime_cpp\\\""],
+        deps = [
+            "@googletest//:gtest_main",
+            "@googletest//:gtest",
+            ":rosidl_runtime_cpp",
+        ],
+        timeout = "moderate",
+    )
+    for test in [
+        "test_bounded_vector",
+    ]
+]
+
+[
+    cc_test(
+        name = name,
+        srcs = ["test/benchmark/{}.cpp".format(name)],
+        deps = [
+            "@google_benchmark//:benchmark_main",
+            "@performance_test_fixture",
+            ":rosidl_runtime_cpp",
+        ],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rosidl_runtime_cpp\\\""],
+        timeout = "moderate",
+    )
+    for name in [
+        "benchmark_bounded_vector",
+    ]
+]
