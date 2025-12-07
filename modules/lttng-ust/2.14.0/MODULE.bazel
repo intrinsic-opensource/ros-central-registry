@@ -18,5 +18,5 @@ module(
     compatibility_level = 0,
 )
 
-bazel_dep(name = "liburcu", version = "0.15.3")
 bazel_dep(name = "rules_cc", version = "0.2.4")
+bazel_dep(name = "userspace_rcu", version = "0.15.4")

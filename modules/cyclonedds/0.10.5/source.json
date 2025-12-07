@@ -4,7 +4,7 @@
     "strip_prefix": "cyclonedds-0.10.5",
     "overlay": {
         "BUILD.bazel": "sha256-Zi4cBktnvlIoYXthAvjOxpK/PJ5ahR0M9Q9RkVv3MSM=",
-        "MODULE.bazel": "sha256-XS4Ow+3V5ToWFKffYzfWsjh0ky9ViSzTe1sllR5/IHA="
+        "MODULE.bazel": "sha256-EqVp8mJemzhJacwTBUsAarN4aeFHh3or5yNjMSBW4k0="
     },
     "patches": {
         "fix__gitignore.patch": "sha256-sgpFthkaxyQIUp/HIBUmCmZOujd+UcWo2X0AKdrp6+Y="

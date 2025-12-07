@@ -75,6 +75,6 @@ cc_library(
       "LTTNG_SYSTEM_RUNDIR=\\\"/var/run/lttng\\\"",
    ], 
    deps = [
-      "@liburcu",
+      "@userspace_rcu",
    ],
 )

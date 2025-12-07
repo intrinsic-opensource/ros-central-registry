@@ -12,8 +12,7 @@
         "fix_Cargo_lock.patch": "sha256-0voET75zlXqz/jrDZqLsPinW+4NLppMtylRfILHNb6c=",
         "fix_Cargo_toml.patch": "sha256-+61GxCtzyUzyQxfNYfWWdGjHW0/VNP0Hx4oFnMTDp9E=",
         "fix_build-resources_opaque-types_Cargo_lock.patch": "sha256-7bawAyAIva46n3J+9M6UATaL3UraB2uI+inu6LV7wL4=",
-        "fix_buildrs_opaque_types_generator_rs.patch": "sha256-hC4une4uKyFegPxwgBcqPdduoeeiUH6T5s3PQhvSy5U=",
-        "fix_tests_run_leak_check_sh.patch": "sha256-1nd5kh+brHXeguiMSXUvMnxWPvxWpUmv32fg+2TrvuA="
+        "fix_buildrs_opaque_types_generator_rs.patch": "sha256-hC4une4uKyFegPxwgBcqPdduoeeiUH6T5s3PQhvSy5U="
     },
     "patch_strip": 1
 }
