@@ -1,0 +1,16 @@
+{
+    "homepage": "https://github.com/urcu/userspace-rcu",
+    "maintainers": [
+        {
+            "email": "intrinsic-opensource@users.noreply.github.com",
+            "name": "intrinsic-opensource"
+        }
+    ],
+    "repository": [
+        "github:urcu/userspace-rcu"
+    ],
+    "versions": [
+        "0.15.3"
+    ],
+    "yanked_versions": {}
+}
