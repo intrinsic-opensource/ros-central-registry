@@ -13,13 +13,14 @@
 # limitations under the License.
 
 load("@protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
-
 load("@rosidl_adapter//:rules.bzl", "idl_ros_library")
 load("@rosidl_adapter_proto//:rules.bzl", "proto_ros_library")
-load("@rosidl_generator_type_description//:rules.bzl", "type_description_ros_library")
 load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
 load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
+load("@rosidl_generator_py//:rules.bzl", "py_ros_library")
+load("@rosidl_generator_type_description//:rules.bzl", "type_description_ros_library")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("@rules_python//python:defs.bzl", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -28,22 +29,22 @@ package(default_visibility = ["//visibility:public"])
 idl_ros_library(
     name = "example_ros_idl",
     deps = [
-        "@std_msgs//msg:String",
         "@geometry_msgs//msg:PoseStamped",
+        "@ros2cli_test_interfaces//action:ShortVariedMultiNested",
         "@ros2cli_test_interfaces//msg:ShortVariedMultiNested",
         "@ros2cli_test_interfaces//srv:ShortVariedMultiNested",
-        "@ros2cli_test_interfaces//action:ShortVariedMultiNested"
+        "@std_msgs//msg:String",
     ],
 )
 
 type_description_ros_library(
     name = "example_ros_type_description",
     deps = [
-        "@std_msgs//msg:String",
         "@geometry_msgs//msg:PoseStamped",
+        "@ros2cli_test_interfaces//action:ShortVariedMultiNested",
         "@ros2cli_test_interfaces//msg:ShortVariedMultiNested",
         "@ros2cli_test_interfaces//srv:ShortVariedMultiNested",
-        "@ros2cli_test_interfaces//action:ShortVariedMultiNested"
+        "@std_msgs//msg:String",
     ],
 )
 
@@ -52,9 +53,9 @@ type_description_ros_library(
 c_ros_library(
     name = "example_ros_c_msgs",
     deps = [
+        "@rcl_interfaces//srv:SetLoggerLevels",
         "@sensor_msgs//msg:CompressedImage",
         "@std_msgs//msg:String",
-        "@rcl_interfaces//srv:SetLoggerLevels",
     ],
 )
 
@@ -68,8 +69,8 @@ cc_binary(
     name = "example_ros_publisher_c",
     srcs = ["src/example_ros_publisher.c"],
     deps = [
+        ":example_ros_c_msgs",
         "@rcl",
-        ":example_ros_c_msgs"
     ],
 )
 
@@ -77,8 +78,8 @@ cc_binary(
     name = "example_ros_subscriber_c",
     srcs = ["src/example_ros_subscriber.c"],
     deps = [
+        ":example_ros_c_msgs",
         "@rcl",
-        ":example_ros_c_msgs"
     ],
 )
 
@@ -86,7 +87,6 @@ alias(
     name = "example_ros_node_c",
     actual = ":example_ros_publisher_c",
 )
-
 
 # C++ examples (note that cc_ros_library includes proto type support)
 
@@ -108,8 +108,8 @@ cc_binary(
     name = "example_ros_publisher_cc",
     srcs = ["src/example_ros_publisher.cc"],
     deps = [
+        ":example_ros_cc_msgs",
         "@rclcpp",
-        ":example_ros_cc_msgs"
     ],
 )
 
@@ -117,8 +117,8 @@ cc_binary(
     name = "example_ros_subscriber_cc",
     srcs = ["src/example_ros_subscriber.cc"],
     deps = [
+        ":example_ros_cc_msgs",
         "@rclcpp",
-        ":example_ros_cc_msgs"
     ],
 )
 
@@ -131,8 +131,8 @@ cc_binary(
     name = "example_ros_proto_publisher_cc",
     srcs = ["src/example_ros_proto_publisher.cc"],
     deps = [
+        ":example_ros_cc_msgs",
         "@rclcpp",
-        ":example_ros_cc_msgs"
     ],
 )
 
@@ -140,11 +140,26 @@ cc_binary(
     name = "example_ros_proto_subscriber_cc",
     srcs = ["src/example_ros_proto_subscriber.cc"],
     deps = [
+        ":example_ros_cc_msgs",
         "@rclcpp",
-        ":example_ros_cc_msgs"
     ],
 )
 
+# Python
+
+py_ros_library(
+    name = "example_ros_py_msgs",
+    deps = [
+        "@sensor_msgs//msg:CompressedImage",
+    ],
+)
+
+py_binary(
+    name = "example_ros_py",
+    srcs = ["src/example_ros.py"],
+    main = "src/example_ros.py",
+    deps = [":example_ros_py_msgs"],
+)
 
 # Protobuf pipeline
 
@@ -152,7 +167,7 @@ proto_ros_library(
     name = "example_proto",
     deps = [
         "@sensor_msgs//msg:CompressedImage",
-    ]
+    ],
 )
 
 cc_proto_library(
