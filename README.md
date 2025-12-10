@@ -20,7 +20,7 @@ In terms of features, this is what we currently support:
 - Message language bindings
   - [x] `c`
   - [x] `cpp`
-  - [ ] `py`
+  - [x] `py`
   - [ ] `rust`
 - Type supports:
   - [x] `rosidl_typesupport_introspection`
@@ -34,11 +34,13 @@ In terms of features, this is what we currently support:
   - [ ] `rmw_connextdds_cpp`
 - Core:
   - [x] `rcl`
-  - [ ] `rcl_action`
-  - [ ] `rcl_lifecycle`
+  - [x] `rcl_action`
+  - [x] `rcl_lifecycle`
   - [x] `rclcpp` 
-  - [ ] `rclcpp_action` 
-  - [ ] `rclcpp_lifecycle` 
+  - [x] `rclcpp_action` 
+  - [x] `rclcpp_lifecycle`
+  - [ ] `rclpy`
+  - [ ] `rclrs`
 
 Our intention is to ultimately host a CI plan that responds to new ROS releases by automatically creating a set of Bazel modules and running tests. For now, however, we are working off a snapshot of the rolling release from June 2025 to determine the long term feasibility of this concept.
 
