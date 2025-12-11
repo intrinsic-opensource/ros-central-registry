@@ -145,21 +145,22 @@ cc_binary(
     ],
 )
 
-# Python
+# Python - we cannot add these until we have refactored the IDL pipelines
+# to avoid constructing and passing CcInfo providers.
 
-py_ros_library(
-    name = "example_ros_py_msgs",
-    deps = [
-        "@sensor_msgs//msg:CompressedImage",
-    ],
-)
+# py_ros_library(
+#     name = "example_ros_py_msgs",
+#     deps = [
+#         "@sensor_msgs//msg:CompressedImage",
+#     ],
+# )
 
-py_binary(
-    name = "example_ros_py",
-    srcs = ["src/example_ros.py"],
-    main = "src/example_ros.py",
-    deps = [":example_ros_py_msgs"],
-)
+# py_binary(
+#     name = "example_ros_py",
+#     srcs = ["src/example_ros.py"],
+#     main = "src/example_ros.py",
+#     deps = [":example_ros_py_msgs"],
+# )
 
 # Protobuf pipeline
 
