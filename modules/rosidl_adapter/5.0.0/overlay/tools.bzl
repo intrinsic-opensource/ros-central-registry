@@ -42,7 +42,8 @@ def generate_sources(
     templates_srcs,
     template_visibility_control = None,
     additional = [],
-    message_is_pascal_case = True
+    message_is_pascal_case = True,
+    debug = False,
 ):
     # Extract message metadata from the IdlInfo provider, where it was calculated.
     package_name = target[RosIdlInfo].package_name
@@ -92,7 +93,7 @@ def generate_sources(
             exec = executable.path,
             genfile = "--generator-arguments-file={}".format(input_args.path),
             extra = " ".join(additional),
-            out = "> /dev/null 2>&1"
+            out = "" if debug else "> /dev/null 2>&1"
         ),
         tools = [executable],
         inputs = input_idls + input_type_descriptions + input_templates + [input_args],
@@ -171,4 +172,30 @@ def generate_cc_info(ctx, name, hdrs, srcs, include_dirs = [], deps = []):
         linking_context = linking_context,
     )
     return cc_info
+    
+
+# Merge headers, sources and deps into a CcInfo provider.
+def generate_linking_outputs(ctx, name, linking_contexts):
+
+    # Query for the current CC toolchain and feature set.
+    cc_toolchain = find_cc_toolchain(ctx)
+
+    # Get the compiler feature configuration.
+    feature_configuration = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
+
+    # Generate the linking outputs.
+    linking_outputs = cc_common.link(
+        name = name, 
+        actions = ctx.actions,
+        feature_configuration = feature_configuration,
+        cc_toolchain = cc_toolchain,
+        output_type = "dynamic_library",
+        linking_contexts = linking_contexts,
+    )
+    return linking_outputs
     

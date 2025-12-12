@@ -1,0 +1,29 @@
+diff --git a/rosidl_generator_py/rosidl_generator_py/generate_py_impl.py b/rosidl_generator_py/rosidl_generator_py/generate_py_impl.py
+index 0cbaaa1..b4afd2d 100644
+--- a/rosidl_generator_py/rosidl_generator_py/generate_py_impl.py
++++ b/rosidl_generator_py/rosidl_generator_py/generate_py_impl.py
+@@ -120,14 +120,16 @@ def generate_py(generator_arguments_file, typesupport_impls):
+                 action.namespaced_type.name)
+ 
+     for subfolder in modules.keys():
+-        with open(os.path.join(args['output_dir'], subfolder, '__init__.py'), 'w') as f:
+-            module_names = {}
+-            for idl_stem in modules[subfolder]:
+-                module_names[idl_stem] = '_' + \
+-                    convert_camel_case_to_lower_case_underscore(idl_stem)
+-            # sorting after lower case conversion to get true order
+-            for module_name, idl_stem in \
+-                    sorted((value, key) for (key, value) in module_names.items()):
++        module_names = {}
++        for idl_stem in modules[subfolder]:
++            module_names[idl_stem] = '_' + \
++                convert_camel_case_to_lower_case_underscore(idl_stem)
++        # sorting after lower case conversion to get true order
++        for module_name, idl_stem in sorted((value, key) for (key, value) in module_names.items()):
++            module_init_path = os.path.join(args['output_dir'], subfolder, f'{module_names[idl_stem]}-__init__.py')
++            print(module_init_path)
++            with open(os.path.join(module_init_path), 'w') as f:
++
+                 f.write(
+                     f'from {package_name}.{subfolder}.{module_name} import '
+                     f'{idl_stem}  # noqa: F401\n')

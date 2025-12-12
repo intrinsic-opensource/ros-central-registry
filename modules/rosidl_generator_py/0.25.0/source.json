@@ -3,8 +3,18 @@
     "integrity": "sha256-Ny7mC/LHZTsoYkeqwDV9APxNmYxC4ekcZ6WD0jlO0HA=",
     "strip_prefix": "rosidl_python-0.25.0/rosidl_generator_py",
     "overlay": {
-        "BUILD.bazel": "sha256-SQ0vbq+NCYMSxadC6G3ZVzIsCGtZCNYZZ/u9aTPXzio=",
-        "MODULE.bazel": "sha256-TTRm4DKZ4THfESsmm3ejg8OFs0j9dqVV8XG+3o/lXd0=",
-        "msg/BUILD.bazel": "sha256-pWvW/5IwprGr5vUISTjlcgqhsKamdSO+2Ysstonbmck="
-    }
+        "BUILD.bazel": "sha256-mjEIF9AvE7BTt2RJA2sIKQxbod/sN9NlmYACZFF3NP8=",
+        "MODULE.bazel": "sha256-ZUP3pQ40csaHr+PPivNrTe6Wp6Nbgb5hFFJJQSlYiDI=",
+        "aspects.bzl": "sha256-SB/41S2gRxOUDBCELnwP41cn9l/acNFLsPPtX7ZrEQs=",
+        "msg/BUILD.bazel": "sha256-pWvW/5IwprGr5vUISTjlcgqhsKamdSO+2Ysstonbmck=",
+        "rules.bzl": "sha256-mU30NCkD7DI5kjOit7EyjZXCL+u2TwcSEj6UXxkf2N0=",
+        "types.bzl": "sha256-gpU3cKBSFXtK+aRI1GrSOgpubbV/0AbFdgJbILWvVas="
+    },
+    "patches": {
+        "fix_resource__action_py_em.patch": "sha256-ddW5Q5hk16SR0cw/ee1SSt3vPJIxplkMqCzEKZ9XRfs=",
+        "fix_resource__msg_py_em.patch": "sha256-Y4yQA7jXwsmtzew+d4kTegqQUvnyWvqBF71RuJ1E0c0=",
+        "fix_resource__srv_py_em.patch": "sha256-ABK5dZ79ES45LFBm2wmBuM7ddk0usMVIPr1Y1AuKmzc=",
+        "fix_rosidl_generator_py_generate_py_impl_py.patch": "sha256-AqA7yhpOAc3ve9npYUJxij9A8q9jNs/w4womjStb5jY="
+    },
+    "patch_strip": 2
 }

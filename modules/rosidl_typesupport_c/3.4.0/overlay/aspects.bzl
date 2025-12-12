@@ -91,8 +91,7 @@ def _c_typesupport_aspect_impl(target, ctx):
     # )
 
     # These deps will all have CcInfo providers.
-    deps = [target[CcInfo]]
-    deps.extend([dep[CcInfo] for dep in ctx.attr._c_deps + ctx.rule.attr.deps if CcInfo in dep])
+    deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
     deps.extend([d for d in target[RosCBindingsInfo].cc_infos.to_list()])
     deps.extend([d for d in target[RosCcBindingsInfo].cc_infos.to_list()])
     for dep in ctx.rule.attr.deps:

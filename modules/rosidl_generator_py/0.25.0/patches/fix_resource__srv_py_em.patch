@@ -1,0 +1,13 @@
+diff --git a/rosidl_generator_py/resource/_srv.py.em b/rosidl_generator_py/resource/_srv.py.em
+index 24d4548..6a18567 100644
+--- a/rosidl_generator_py/resource/_srv.py.em
++++ b/rosidl_generator_py/resource/_srv.py.em
+@@ -29,7 +29,7 @@ class Metaclass_@(service.namespaced_type.name)(type):
+     def __import_type_support__(cls):
+         try:
+             from rosidl_generator_py import import_type_support
+-            module = import_type_support('@(package_name)')
++            module = import_type_support('@(package_name)__srv_@(service_name)')
+         except ImportError:
+             import logging
+             import traceback

@@ -110,7 +110,6 @@ cc_aspect = aspect(
     required_aspect_providers = [
         [RosIdlInfo],
         [RosTypeDescriptionInfo],
-        [CcInfo],
     ],
     provides = [RosCcBindingsInfo],
 )

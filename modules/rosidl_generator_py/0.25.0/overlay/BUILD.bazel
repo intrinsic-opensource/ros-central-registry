@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +12,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Imports
+load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
+exports_files(glob(["*.bzl"]))
 
+filegroup(
+    name = "interface_templates",
+    srcs = glob(["resource/**/*.em"]),
+)
+
+py_library(
+    name = "rosidl_generator_py",
+    srcs = glob(["rosidl_generator_py/**/*.py"]),
+    deps = [
+        "@ament_index_python",
+        "@rpyutils",
+        "@rosidl_cli",
+        "@rosidl_generator_c",
+        "@rosidl_generator_type_description",
+        "@rosidl_parser",
+        "@rosidl_pycommon",
+    ],
+)
+
+genrule(
+    name = "cli_rename",
+    srcs = ["bin/rosidl_generator_py"],
+    outs = ["bin/rosidl_generator_py.py"],
+    cmd = "cp $(location :bin/rosidl_generator_py) $(location :bin/rosidl_generator_py.py)",
+)
+
+py_binary(
+    name = "cli",
+    srcs = [":bin/rosidl_generator_py.py"],
+    main = ":bin/rosidl_generator_py.py",
+    python_version = "PY3",
+    deps = [":rosidl_generator_py"],
+)

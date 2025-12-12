@@ -10,7 +10,7 @@
         "test/data/action/BUILD.bazel": "sha256-iCSLKmDFgJZi/6LVwC7VZBmh+Cv9fi0y04tPtKf0CX0=",
         "test/data/msg/BUILD.bazel": "sha256-NhnmF46oqekjTeWGFclssilTZBsyI+c8XAvUSMygdR4=",
         "test/data/srv/BUILD.bazel": "sha256-HJ25RJ8jhoHmYNZjfajFzSyvwADzJFxuVhkz4Zx3pus=",
-        "tools.bzl": "sha256-vrUpM7E+C0v7cQq43GCo/MwyLk08FHZ5Ff+NooDiWss=",
+        "tools.bzl": "sha256-eu4nHqPKEGVhAksRpsB0VRjEn4aUqlHvDPvegb9qtFE=",
         "types.bzl": "sha256-m/C0bzPIpVE5nrSghdj8S1cfeW9tGJW5mycnC5vMlzs="
     },
     "patches": {

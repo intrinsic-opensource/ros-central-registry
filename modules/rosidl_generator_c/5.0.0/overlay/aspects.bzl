@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@rosidl_adapter//:tools.bzl", "generate_cc_info", "generate_sources")
+load("@rosidl_adapter//:types.bzl", "RosIdlInfo")
+load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
+load("@rosidl_generator_type_description//:types.bzl", "RosTypeDescriptionInfo")
 load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
-load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
-load("@rosidl_adapter//:types.bzl", "RosIdlInfo")
-load("@rosidl_adapter//:tools.bzl", "generate_sources", "generate_cc_info")
-load("@rosidl_generator_type_description//:types.bzl", "RosTypeDescriptionInfo")
 load(":types.bzl", "RosCBindingsInfo")
 
 def _c_aspect_impl(target, ctx):
@@ -48,7 +48,7 @@ def _c_aspect_impl(target, ctx):
     )
 
     # These deps will all have CcInfo providers.
-    deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep] 
+    deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
     for dep in ctx.rule.attr.deps:
         if RosCBindingsInfo in dep:
             deps.extend([d for d in dep[RosCBindingsInfo].cc_infos.to_list()])
@@ -70,17 +70,19 @@ def _c_aspect_impl(target, ctx):
                 direct = [cc_info],
                 transitive = [
                     dep[RosCBindingsInfo].cc_infos
-                        for dep in ctx.rule.attr.deps if RosCBindingsInfo in dep
+                    for dep in ctx.rule.attr.deps
+                    if RosCBindingsInfo in dep
                 ],
             ),
             cc_files = depset(
                 direct = hdrs + srcs,
                 transitive = [
                     dep[RosCBindingsInfo].cc_files
-                        for dep in ctx.rule.attr.deps if RosCBindingsInfo in dep
+                    for dep in ctx.rule.attr.deps
+                    if RosCBindingsInfo in dep
                 ],
             ),
-        )
+        ),
     ]
 
 c_aspect = aspect(
@@ -107,13 +109,11 @@ c_aspect = aspect(
             ],
             providers = [CcInfo],
         ),
-        
     },
     required_providers = [RosInterfaceInfo],
     required_aspect_providers = [
         [RosIdlInfo],
         [RosTypeDescriptionInfo],
-        [CcInfo]
     ],
     provides = [RosCBindingsInfo],
 )
