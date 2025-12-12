@@ -16,21 +16,12 @@
 FROM ubuntu:24.04@sha256:278628f08d4979fb9af9ead44277dbc9c92c2465922310916ad0c46ec9999295
 
 # Install baseline tools that are needed to build code and run tests.
-RUN apt-get update                              \
- && apt-get install -y --no-install-recommends  \
-        automake                                \
-        autoconf                                \
-        libtool                                 \
-        python3                                 \
-        sudo                                    \
-        valgrind                                \
+RUN apt-get update                                  \
+    && apt-get install -y --no-install-recommends   \
+    automake                                        \
+    autoconf                                        \
+    libtool                                         \
+    python3                                         \
+    sudo                                            \
+    valgrind                                        \
     && sudo rm -rf /var/lib/apt/lists/*
-
-# Valgrind in docker must have a lower ulimit set. This makes sure this
-# is changed before any test is run within the container.
-# RUN echo "#!/bin/sh \n\
-# set -e\n\
-# sudo ulimit -n 65536 || true\n\
-# exec \$@" > /entrypoint.sh
-# RUN chmod 755 /entrypoint.sh
-# ENTRYPOINT [ "/entrypoint.sh" ]
