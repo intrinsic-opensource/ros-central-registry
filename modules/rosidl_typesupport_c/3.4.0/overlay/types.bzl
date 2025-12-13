@@ -15,7 +15,15 @@
 RosCTypesupportInfo = provider(
     "Encapsulates C type support information generated for an underlying ROS message.", 
     fields = [
-        "cc_infos",
-        "cc_files",
+        "cc_info",
+    ]
+)
+
+RosCTypesupportFilesInfo = provider(
+    "Encapsulates C type support generated sources for an underlying ROS message.", 
+    fields = [
+        "srcs",
+        "hdrs",
+        "include_dirs",
     ]
 )

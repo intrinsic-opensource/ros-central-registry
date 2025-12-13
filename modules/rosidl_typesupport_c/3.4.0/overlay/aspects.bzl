@@ -21,9 +21,10 @@ load("@rosidl_adapter//:tools.bzl", "generate_sources", "generate_cc_info")
 load("@rosidl_generator_c//:types.bzl", "RosCBindingsInfo")
 load("@rosidl_generator_cpp//:types.bzl", "RosCcBindingsInfo")
 load("@rosidl_generator_type_description//:types.bzl", "RosTypeDescriptionInfo")
-load(":types.bzl", "RosCTypesupportInfo")
+load(":types.bzl", "RosCTypesupportInfo", "RosCTypesupportFilesInfo")
 
-def _c_typesupport_aspect_impl(target, ctx):
+
+def _c_typesupport_files_aspect_impl(target, ctx):
     input_idls = target[RosIdlInfo].idls.to_list()
     input_type_descriptions = target[RosTypeDescriptionInfo].jsons.to_list()
 
@@ -90,55 +91,22 @@ def _c_typesupport_aspect_impl(target, ctx):
     #     template_visibility_control = ctx.file._c_typesupport_protobuf_visibility_template,
     # )
 
-    # These deps will all have CcInfo providers.
-    deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
-    deps.extend([d for d in target[RosCBindingsInfo].cc_infos.to_list()])
-    deps.extend([d for d in target[RosCcBindingsInfo].cc_infos.to_list()])
-    for dep in ctx.rule.attr.deps:
-        if RosCTypesupportInfo in dep:
-            deps.extend([d for d in dep[RosCTypesupportInfo].cc_infos.to_list()])
-    
     # Merge headers, sources and deps into a CcInfo provider.
-    hdrs = c_typesupport_hdrs + c_introspection_hdrs + c_fastrtps_hdrs
-    srcs = c_typesupport_srcs + c_introspection_srcs + c_fastrtps_srcs
-    cc_info = generate_cc_info(
-        ctx = ctx,
-        name = "{}_c_typesupport".format(ctx.label.name),
-        hdrs = hdrs,
-        srcs = srcs,
-        deps = deps,
-        include_dirs = [
-            c_include_dir,
-            c_introspection_include_dir,
-            c_fastrtps_include_dir,
-        ]
-    )
-
-    # Return a CcInfo provider for the aspect.
     return [
-        RosCTypesupportInfo(
-            cc_infos = depset(
-                direct = [cc_info],
-                transitive = [
-                    dep[RosCTypesupportInfo].cc_infos
-                        for dep in ctx.rule.attr.deps if RosCTypesupportInfo in dep
-                ],
-            ),
-            cc_files = depset(
-                direct = hdrs + srcs,
-                transitive = [
-                    dep[RosCTypesupportInfo].cc_files
-                        for dep in ctx.rule.attr.deps if RosCTypesupportInfo in dep
-                ],
-            ),
+        RosCTypesupportFilesInfo(
+            hdrs = c_typesupport_hdrs + c_introspection_hdrs + c_fastrtps_hdrs,
+            srcs = c_typesupport_srcs + c_introspection_srcs + c_fastrtps_srcs,
+            include_dirs = [
+                c_include_dir,
+                c_introspection_include_dir,
+                c_fastrtps_include_dir
+            ]
         )
     ]
 
-c_typesupport_aspect = aspect(
-    implementation = _c_typesupport_aspect_impl,
-    toolchains = use_cc_toolchain(),
+c_typesupport_files_aspect = aspect(
+    implementation = _c_typesupport_files_aspect_impl,
     attr_aspects = ["deps"],
-    fragments = ["cpp"],
     attrs = {
         #########################################################################
         # General type support generation #######################################
@@ -203,11 +171,50 @@ c_typesupport_aspect = aspect(
             default = Label("@rosidl_typesupport_protobuf_c//:resource/rosidl_typesupport_protobuf_c__visibility_control.h.in"),
             allow_single_file = True,
         ),
+    },
+    required_providers = [RosInterfaceInfo],
+    required_aspect_providers = [
+        [RosIdlInfo],
+        [RosTypeDescriptionInfo],
+    ],
+    provides = [RosCTypesupportFilesInfo],
+)
 
-        #########################################################################
-        # Dependencies ##########################################################
-        #########################################################################
-        
+def _c_typesupport_aspect_impl(target, ctx):
+
+    # Calculate deps for this target's CcInfo.
+    deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
+    deps.append(target[RosCBindingsInfo].cc_info)
+    deps.append(target[RosCcBindingsInfo].cc_info)
+    deps.extend([
+        dep[RosCTypesupportInfo].cc_info
+        for dep in ctx.rule.attr.deps
+        if RosCTypesupportInfo in dep
+    ])
+
+    # Merge headers, sources and deps into a CcInfo provider.
+    cc_info = generate_cc_info(
+        ctx = ctx,
+        name = "{}_c_typesupport".format(ctx.label.name),
+        hdrs = target[RosCTypesupportFilesInfo].hdrs,
+        srcs = target[RosCTypesupportFilesInfo].srcs,
+        include_dirs = target[RosCTypesupportFilesInfo].include_dirs,
+        deps = deps,
+    )
+
+    # Return a CcInfo provider for the aspect.
+    return [
+        RosCTypesupportInfo(
+            cc_info = cc_info
+        )
+    ]
+
+c_typesupport_aspect = aspect(
+    implementation = _c_typesupport_aspect_impl,
+    toolchains = use_cc_toolchain(),
+    attr_aspects = ["deps"],
+    fragments = ["cpp"],
+    attrs = {
         "_c_deps": attr.label_list(
             default = [
                 Label("@rosidl_typesupport_interface"),
@@ -219,15 +226,12 @@ c_typesupport_aspect = aspect(
             ],
             providers = [CcInfo],
         ),
-        
     },
     required_providers = [RosInterfaceInfo],
     required_aspect_providers = [
-        [RosIdlInfo],
-        [RosTypeDescriptionInfo],
-        [CcInfo],
         [RosCBindingsInfo],
-        [RosCcBindingsInfo]
+        [RosCcBindingsInfo],
+        [RosCTypesupportFilesInfo],
     ],
     provides = [RosCTypesupportInfo],
 )

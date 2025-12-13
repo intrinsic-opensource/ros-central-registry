@@ -14,7 +14,7 @@
 
 load("@rosidl_adapter//:aspects.bzl", "idl_aspect")
 load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
-load("@rosidl_generator_c//:aspects.bzl", "c_aspect")
+load("@rosidl_generator_c//:aspects.bzl", "c_aspect", "c_files_aspect")
 load("@rosidl_generator_type_description//:aspects.bzl", "type_description_aspect")
 load("@rules_python//python:defs.bzl", "PyInfo")
 load(":aspects.bzl", "py_aspect")
@@ -107,10 +107,11 @@ py_ros_library = rule(
     attrs = {
         "deps": attr.label_list(
             aspects = [
-                idl_aspect,  # RosIdlInfo <- RosInterfaceInfo
-                type_description_aspect,  # RosTypeDescriptionInfo <- RosIdlInfo
-                c_aspect,  # RosCBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
-                py_aspect,  # RosCcBindingsInfo <- {RosIdlInfo, RosTypeDescriptionInfo}
+                idl_aspect,                 # RosIdlInfo
+                type_description_aspect,    # RosTypeDescriptionInfo
+                c_files_aspect,             # RosCBindingsFilesInfo
+                c_aspect,                   # RosCBindingsInfo
+                py_aspect,                  # RosCcBindingsInfo
             ],
             providers = [RosInterfaceInfo],
             allow_files = False,

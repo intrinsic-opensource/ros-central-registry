@@ -5,8 +5,8 @@
     "overlay": {
         "BUILD.bazel": "sha256-vI1LUGZuE20/cL8WdY9IJ9fW5ptV+6zkWO5uiBo7TzQ=",
         "MODULE.bazel": "sha256-8YjKtw/fY3e+rDLmF1eElDc/CMdkbfgN9owKU7W3FkM=",
-        "aspects.bzl": "sha256-1FOEuW9NRSLCDCW37U6tQ1NKxagoo4H21xZLL8cyn8U=",
-        "rules.bzl": "sha256-mhawNUpNDsODPG5+C7syOX9XSI8fXeuu8sCxwUIk/Kg=",
-        "types.bzl": "sha256-rZym4kym//DILDsXcs92MB1BMmG2ZlTSCd2BwuLpvzc="
+        "aspects.bzl": "sha256-MRZpktfS6vUSxDZTQuIRq335eVBkgpbmyxsMb5CbP3c=",
+        "rules.bzl": "sha256-5yPwofTbV0Er8fYmoviKm+XoBMecOQqpoR1YLcF+lRk=",
+        "types.bzl": "sha256-F4jlmxO2oIne97DotNMqNwUer8oNL8kUbStgk9uEJ+Y="
     }
 }

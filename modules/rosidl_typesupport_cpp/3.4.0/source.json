@@ -5,9 +5,9 @@
     "overlay": {
         "BUILD.bazel": "sha256-85aP8yvE/O0Lk6SG3VAJECZ8Le1xzU6FT9m3GiQMvUI=",
         "MODULE.bazel": "sha256-oRjOtK8+3XAQiKKOD8GnDSiy1JbnfxwLSXrhvjOwDiA=",
-        "aspects.bzl": "sha256-k58vY+HXaYkJHlbzK3hqH4O3qhgRhgTAcWGCQuyhfjs=",
+        "aspects.bzl": "sha256-xLbL1l6P+dV1GOEqFtMum1sSzxIsofEgOyAjMZE/zLE=",
         "test/msg/BUILD.bazel": "sha256-NhnmF46oqekjTeWGFclssilTZBsyI+c8XAvUSMygdR4=",
-        "types.bzl": "sha256-bN5ZLxFGGRFBejyYMkod8totlDxWHidmyE17LECDLDE="
+        "types.bzl": "sha256-AuvG7RZ0kPtHZ0/NV+Gk/SYXqjFjAu9mblfMIPHQnVw="
     },
     "patches": {
         "fix_rosidl_typesupport_cpp___init___py.patch": "sha256-k99ysevO7IY7CX7wqB4ovXjN6PS05F2eRCn26CV1YRI=",

@@ -12,10 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-RosCBindingsInfo = provider(
-    "Encapsulates C information generated for an underlying ROS message.", 
+RosCBindingsFilesInfo = provider(
+    "Encapsulates C generated sources for an underlying ROS message.", 
     fields = [
-        "cc_infos",
-        "cc_files",
+        "srcs",
+        "hdrs",
+        "include_dirs",
+    ]
+)
+
+RosCBindingsInfo = provider(
+    "Encapsulates C compilation information for an underlying ROS message.", 
+    fields = [
+        "cc_info",
     ]
 )

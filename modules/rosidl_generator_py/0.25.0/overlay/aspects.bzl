@@ -48,7 +48,7 @@ def _py_aspect_impl(target, ctx):
 
     # Collect the set of deps needed to build the C type support module.
     deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep]
-    deps.extend(target[RosCBindingsInfo].cc_infos.to_list())
+    deps.append(target[RosCBindingsInfo].cc_info)
 
     # Merge sources and deps into a CcInfo provider.
     cc_info = generate_cc_info(

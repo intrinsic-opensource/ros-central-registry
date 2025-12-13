@@ -12,10 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+RosCcBindingsFilesInfo = provider(
+    "Encapsulates C++ generated sources for an underlying ROS message.", 
+    fields = [
+        "srcs",
+        "hdrs",
+        "include_dirs",
+    ]
+)
+
 RosCcBindingsInfo = provider(
     "Encapsulates C++ information generated for an underlying ROS message.", 
     fields = [
-        "cc_infos",
-        "cc_files",
+        "cc_info",
     ]
 )

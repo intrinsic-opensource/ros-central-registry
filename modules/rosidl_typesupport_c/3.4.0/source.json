@@ -5,9 +5,9 @@
     "overlay": {
         "BUILD.bazel": "sha256-gkUo/Tjwe/oFH4Kh9ZpzA3NcLHo70ErzLEsCW2XmFZ8=",
         "MODULE.bazel": "sha256-TJIcQ/IO7JRRgkL3btF1FBinMWBjd6AsSojjJQrgsW8=",
-        "aspects.bzl": "sha256-amPVlF8c51G32PHD/fstGZZ3yjU5PQwYf23KuGVg/ZE=",
+        "aspects.bzl": "sha256-yvtUVevww9pJujyyd1TfJlmYCIPqFDJ1RRb7IFATrhg=",
         "test/msg/BUILD.bazel": "sha256-NhnmF46oqekjTeWGFclssilTZBsyI+c8XAvUSMygdR4=",
-        "types.bzl": "sha256-ZpWjnsh7VZ7IsRx4mKMCWlCXhReryeq3CG1EOsPXNrs="
+        "types.bzl": "sha256-peBoD7As4UUuE63f3K+h+faLcPUYlndDmFad3m3g3ns="
     },
     "patches": {
         "fix_resource_msg__type_support_cpp_em.patch": "sha256-HyPauXdbfReR8aeub8k70eUb8fT/f9eE0D6CXFFmCkU=",
