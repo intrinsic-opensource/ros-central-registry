@@ -39,7 +39,7 @@ In terms of features, this is what we currently support:
   - [x] `rclcpp` 
   - [x] `rclcpp_action` 
   - [x] `rclcpp_lifecycle`
-  - [ ] `rclpy`
+  - [x] `rclpy`
   - [ ] `rclrs`
 
 Our intention is to ultimately host a CI plan that responds to new ROS releases by automatically creating a set of Bazel modules and running tests. For now, however, we are working off a snapshot of the rolling release from June 2025 to determine the long term feasibility of this concept.
@@ -178,6 +178,10 @@ git push
 When you open a pull request containing your changes, you will see some CI plans run. These let you know whether the changes you have made are functional across a variety of different platforms.
 
 ## Notes
+
+### Airlock / pip failures
+
+If you are in a corporate environment, you might need to configure pip correctly before you can use this repo. I would consider looking at the documentation for `airlock` and run `gcert` and `gpkg setup` before trying to build or run code in this repo.
 
 ### Module locking failures
 

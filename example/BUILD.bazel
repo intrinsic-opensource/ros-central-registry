@@ -14,6 +14,7 @@
 
 load("@rosidl_adapter_proto//:rules.bzl", "proto_ros_library")
 load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
+load("@rosidl_generator_py//:rules.bzl", "py_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
 
 package(default_visibility = ["//visibility:public"])
@@ -27,10 +28,17 @@ proto_ros_library(
     ],
 )
 
-# Generate C++ bindings to the ros_interface in ./msg/BUILD.bazel.
+# Generate language bindings to the ros_interface in ./msg/BUILD.bazel.
 
 cc_ros_library(
     name = "example_ros_cc_msgs",
+    deps = [
+        "//msg:ExampleMessage",
+    ],
+)
+
+py_ros_library(
+    name = "example_ros_py_msgs",
     deps = [
         "//msg:ExampleMessage",
     ],
@@ -73,5 +81,28 @@ cc_binary(
     deps = [
         "@rclcpp",
         ":example_ros_cc_msgs"
+    ],
+)
+
+# Python examples
+
+
+py_binary(
+    name = "example_ros_publisher_py",
+    srcs = ["ros/example_ros_publisher.py"],
+    main = "ros/example_ros_publisher.py",
+    deps = [
+        ":example_ros_py_msgs",
+        "@rclpy",
+    ],
+)
+
+py_binary(
+    name = "example_ros_subscriber_py",
+    srcs = ["ros/example_ros_subscriber.py"],
+    main = "ros/example_ros_subscriber.py",
+    deps = [
+        ":example_ros_py_msgs",
+        "@rclpy",
     ],
 )
