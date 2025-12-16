@@ -31,6 +31,10 @@ build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
 # use the LD_LIBRARY_PATH. This makes builds robust to terminal refreshes.
 build --incompatible_strict_action_env
 
+# Force Bazel to stop producing implicit __init__.py files in Python. This
+# is so that we can use PEP420 namespace package feature for IDL generation.
+build --incompatible_default_to_explicit_init_py
+
 # Build configuration for RMW implementations.
 #   --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
 #   --@rmw_implementation//:rmw=rmw_fastrtps_cpp

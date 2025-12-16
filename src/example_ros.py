@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import sys
+print(sys.path)
+
 from sensor_msgs.msg import CompressedImage
 
 if __name__ == '__main__':
