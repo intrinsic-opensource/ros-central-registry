@@ -18,6 +18,14 @@ common --registry=file:///%workspace%/docs --registry=https://bcr.bazel.build
 # Define ROS_HOME so that tests don't try and write to ~/.ros_home by default.
 common --test_env=ROS_HOME=$$TEST_UNDECLARED_OUTPUTS_DIR
 
+# Force Bazel to stop producing implicit __init__.py files in Python. This
+# is so that we can use PEP420 namespace package feature for IDL generation.
+common --incompatible_default_to_explicit_init_py
+
+# Force Bazel to use an environment with a static value for PATH, and not to
+# use the LD_LIBRARY_PATH. This makes builds robust to terminal refreshes.
+common --incompatible_strict_action_env
+
 # Don't allow tests to access the network by default.
 test --sandbox_default_allow_network=false
 
@@ -26,14 +34,6 @@ build --cxxopt="-std=c++17"
 
 # Ensure that we use toolchains_llvm instead of the host toolchain.
 build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
-
-# Force Bazel to use an environment with a static value for PATH, and not to
-# use the LD_LIBRARY_PATH. This makes builds robust to terminal refreshes.
-build --incompatible_strict_action_env
-
-# Force Bazel to stop producing implicit __init__.py files in Python. This
-# is so that we can use PEP420 namespace package feature for IDL generation.
-build --incompatible_default_to_explicit_init_py
 
 # Build configuration for RMW implementations.
 #   --@rmw_implementation//:rmw=rmw_cyclonedds_cpp

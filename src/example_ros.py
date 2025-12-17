@@ -15,7 +15,7 @@
 import sys
 print(sys.path)
 
-from sensor_msgs.msg import CompressedImage
+from sensor_msgs.msg._compressed_image import CompressedImage
 
 if __name__ == '__main__':
     msg = CompressedImage()
