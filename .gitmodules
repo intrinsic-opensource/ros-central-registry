@@ -172,3 +172,6 @@
 [submodule "thirdparty/fastcdr"]
 	path = thirdparty/fastcdr
 	url = https://github.com/asymingt/fastcdr.git
+[submodule "submodules/rclpy"]
+	path = submodules/rclpy
+	url = https://github.com/asymingt/rclpy.git

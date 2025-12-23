@@ -150,6 +150,7 @@ bazel_dep(name = "rclcpp_action", version = "30.0.0")
 bazel_dep(name = "rclcpp_components", version = "30.0.0")
 bazel_dep(name = "rclcpp_lifecycle", version = "30.0.0")
 bazel_dep(name = "rclcpp", version = "30.0.0")
+bazel_dep(name = "rclpy", version = "9.2.0")
 bazel_dep(name = "rcpputils", version = "2.14.2")
 bazel_dep(name = "rcutils", version = "7.0.0")
 bazel_dep(name = "rmw_connextdds_common", version = "1.2.1")
@@ -380,6 +381,7 @@ local_path_override(module_name = "rclcpp_action", path = "./submodules/rclcpp/r
 local_path_override(module_name = "rclcpp_components", path = "./submodules/rclcpp/rclcpp_components")
 local_path_override(module_name = "rclcpp_lifecycle", path = "./submodules/rclcpp/rclcpp_lifecycle")
 local_path_override(module_name = "rclcpp", path = "./submodules/rclcpp/rclcpp")
+local_path_override(module_name = "rclpy", path = "./submodules/rclpy/rclpy")
 local_path_override(module_name = "rcpputils", path = "./submodules/rcpputils")
 local_path_override(module_name = "rcutils", path = "./submodules/rcutils")
 local_path_override(module_name = "rmw_connextdds_common", path = "./submodules/rmw_connextdds/rmw_connextdds_common")
@@ -521,5 +523,5 @@ python.toolchain(
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
     edition = "2021",
-    versions = [ "1.85.0" ],
+    versions = ["1.85.0"],
 )

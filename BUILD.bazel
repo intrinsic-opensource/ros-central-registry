@@ -162,6 +162,26 @@ py_binary(
     deps = [":example_ros_py_msgs"],
 )
 
+py_binary(
+    name = "example_ros_publisher_py",
+    srcs = ["src/example_ros_publisher.py"],
+    main = "src/example_ros_publisher.py",
+    deps = [
+        ":example_ros_py_msgs",
+        "@rclpy",
+    ],
+)
+
+py_binary(
+    name = "example_ros_subscriber_py",
+    srcs = ["src/example_ros_subscriber.py"],
+    main = "src/example_ros_subscriber.py",
+    deps = [
+        ":example_ros_py_msgs",
+        "@rclpy",
+    ],
+)
+
 # Protobuf pipeline
 
 proto_ros_library(
