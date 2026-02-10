@@ -111,6 +111,17 @@ cc_binary(
         ":example_ros_cc_msgs",
         "@rclcpp",
     ],
+    linkstatic = False,
+)
+
+cc_binary(
+    name = "example_ros_publisher_cc_static",
+    srcs = ["src/example_ros_publisher.cc"],
+    deps = [
+        ":example_ros_cc_msgs",
+        "@rclcpp",
+    ],
+    linkstatic = True,
 )
 
 cc_binary(
@@ -120,6 +131,17 @@ cc_binary(
         ":example_ros_cc_msgs",
         "@rclcpp",
     ],
+    linkstatic = False,
+)
+
+cc_binary(
+    name = "example_ros_subscriber_cc_static",
+    srcs = ["src/example_ros_subscriber.cc"],
+    deps = [
+        ":example_ros_cc_msgs",
+        "@rclcpp",
+    ],
+    linkstatic = True,
 )
 
 alias(
@@ -160,6 +182,26 @@ py_binary(
     srcs = ["src/example_ros.py"],
     main = "src/example_ros.py",
     deps = [":example_ros_py_msgs"],
+)
+
+py_binary(
+    name = "example_ros_publisher_py",
+    srcs = ["src/example_ros_publisher.py"],
+    main = "src/example_ros_publisher.py",
+    deps = [
+        ":example_ros_py_msgs",
+        "@rclpy",
+    ],
+)
+
+py_binary(
+    name = "example_ros_subscriber_py",
+    srcs = ["src/example_ros_subscriber.py"],
+    main = "src/example_ros_subscriber.py",
+    deps = [
+        ":example_ros_py_msgs",
+        "@rclpy",
+    ],
 )
 
 # Protobuf pipeline

@@ -191,6 +191,11 @@ rclcpp:
     rclcpp_components: rclcpp_components
     rclcpp_lifecycle: rclcpp_lifecycle
     rclcpp: rclcpp
+rclpy:
+  github: ros2/rclpy
+  version: 9.2.0
+  modules:
+    rclpy: rclpy
 rcpputils:
   github: ros2/rcpputils
   version: 2.14.2

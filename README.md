@@ -1,23 +1,22 @@
-# Overview
+<p align="center">
+<img width="256" src="docs/rcr_logo.png"/>
+<br/>
+<img src="https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-amd64.yml/badge.svg">
+&nbsp;&nbsp;   
+<img src="https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-arm64.yml/badge.svg">
+</p>
 
-The goal of the [ROS Central Registry](http://intrinsic-opensource.github.io/ros-central-registry) is to provide a [Bazel](https://bazel.build) build system for [Robot Operating System (ROS)](https://ros.org) applications. Our philosophy is to build everything from source, using the dependency management system provided by the [Bazel modules](https://bazel.build/external/module) ecosystem to ensure consistency across ROS releases. In our approach, every ROS package has a corresponding Bazel module. A lot of the work in this project is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) project, one of [several existing Bazel build systems for ROS](https://github.com/RobotLocomotion/drake-ros/blob/main/bazel_ros2_rules/lib/README.md). 
+# Overview
+The [ROS Central Registry](http://intrinsic-opensource.github.io/ros-central-registry) provides [Bazel](https://bazel.build) modules for [Robot Operating System (ROS)](https://ros.org) core packages. Our philosophy is to build everything from source, using the dependency management system provided by the [Bazel](https://bazel.build) ecosystem to ensure consistency across ROS releases. A lot of the work in this project is inspired by Milan Vukov's [rules_ros2](https://github.com/mvukov/rules_ros2) project, one of [several existing Bazel build systems for ROS](https://github.com/RobotLocomotion/drake-ros/blob/main/bazel_ros2_rules/lib/README.md). 
 
 > [!WARNING]
 > This repository is a proof of concept and under active open development, and so no guarantees are made about stability. Please do not depend on this code until we have an official release!
 
 # Status
 
-The table below summarizes the status of the github workflows exercising various platforms:
-
-| Platform          | x64                                                                                                     | arm64                                                                                                   |
-| :---------------- | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
-| Ubuntu 24.04      | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-amd64.yml/badge.svg)   | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-arm64.yml/badge.svg)   |
-| MacOS 15          | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-macos-amd64.yml/badge.svg)   | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-macos-arm64.yml/badge.svg)   |
-| Windows 11        | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-windows-amd64.yml/badge.svg) | ![amd64](https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-windows-arm64.yml/badge.svg) |
-
 In terms of features, this is what we currently support:
 
-- Message language bindings
+- Message generators:
   - [x] `c`
   - [x] `cpp`
   - [x] `py`
@@ -32,41 +31,25 @@ In terms of features, this is what we currently support:
   - [x] `rmw_fastrtps_dynamic_cpp`
   - [x] `rmw_zenoh_cpp`
   - [ ] `rmw_connextdds_cpp`
-- Core:
+- Client libraries:
   - [x] `rcl`
   - [x] `rcl_action`
   - [x] `rcl_lifecycle`
   - [x] `rclcpp` 
   - [x] `rclcpp_action` 
   - [x] `rclcpp_lifecycle`
-  - [ ] `rclpy`
+  - [x] `rclpy`
   - [ ] `rclrs`
 
 Our intention is to ultimately host a CI plan that responds to new ROS releases by automatically creating a set of Bazel modules and running tests. For now, however, we are working off a snapshot of the rolling release from June 2025 to determine the long term feasibility of this concept.
 
 # Prerequisites
 
-## Ubuntu Linux 24.04 (functional, recommended)
-
 Right now, we only support Ubuntu 24.04. You must first install `git` and and [bazelisk](https://github.com/bazelbuild/bazelisk) in order to run or edit code. The project downloads a LLVM toolchain with clang, which means that you don't need any compiler or toolchains installed in your host environment. Th only thing you will need is a functioning build environment, because some packages use `rules_foreign_cc` and require `autoconf` to build correctly. To add this tool, run the following:
 
 ```
 apt install build-essential automake autoconf libtool valgrind
 ```
-
-## MacOS 15 (broken, unsupported)
-
-You will need need to install homebrew first, and then add a few packages before trying to build any examples.
-
-```
-brew install automake autoconf libtool zstd rust bazelisk
-```
-
-The `automake`, `autoconf`, and `libtool` packages are needed by `rules_foreign_cc` to detect system features when generating Makefiles. The `zstd` package is needed by the protocol buffer rules. The `rust` package provides the `cargo` binary, which is needed for a Zenoh build. The `bazelisk` package provides the `bazel` command, which bootstraps a bazel build tool for this project.
-
-## Windows 11 (broken, unsupported)
-
-Currently the `toolchains_llvm` project does not offer a functional compiler setup for windows environments. For more information, please see [this issue](https://github.com/bazel-contrib/toolchains_llvm/issues/395).
 
 # Examples
 
@@ -178,6 +161,10 @@ git push
 When you open a pull request containing your changes, you will see some CI plans run. These let you know whether the changes you have made are functional across a variety of different platforms.
 
 ## Notes
+
+### Airlock / pip failures
+
+If you are in a corporate environment, you might need to configure pip correctly before you can use this repo. I would consider looking at the documentation for `airlock` and run `gcert` and `gpkg setup` before trying to build or run code in this repo.
 
 ### Module locking failures
 
