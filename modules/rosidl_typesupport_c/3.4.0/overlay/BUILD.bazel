@@ -36,7 +36,8 @@ cc_library(
     hdrs = glob(["include/**/*.h"]),
     deps = [
         "@rcpputils",
-        "@rosidl_runtime_c"
+        "@rosidl_runtime_c",
+        "@rules_cc//cc/runfiles",
     ],
     includes = ["include"],
 )

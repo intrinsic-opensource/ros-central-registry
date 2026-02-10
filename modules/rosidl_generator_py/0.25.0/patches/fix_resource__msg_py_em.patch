@@ -1,25 +1,36 @@
 diff --git a/rosidl_generator_py/resource/_msg.py.em b/rosidl_generator_py/resource/_msg.py.em
-index 61640c5..024a104 100644
+index 61640c5..f14e224 100644
 --- a/rosidl_generator_py/resource/_msg.py.em
 +++ b/rosidl_generator_py/resource/_msg.py.em
-@@ -102,12 +102,14 @@ class Metaclass_@(message.structure.namespaced_type.name)(type):
+@@ -87,7 +87,6 @@ for member in message.structure.members:
+ @[end if]@
+ @#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ 
+-
+ class Metaclass_@(message.structure.namespaced_type.name)(type):
+     """Metaclass of message '@(message.structure.namespaced_type.name)'."""
+ 
+@@ -102,12 +101,17 @@ class Metaclass_@(message.structure.namespaced_type.name)(type):
          '@(constant.name)': @constant_value_to_py(constant.type, constant.value),
  @[end for]@
      }
 -
 +@{
-+suffix = '__'.join(message.structure.namespaced_type.namespaces[1:]) + '__' + convert_camel_case_to_lower_case_underscore(message.structure.namespaced_type.name)
++ifcode = convert_camel_case_to_lower_case_underscore(message.structure.namespaced_type.name)
++import_ifcode = locals().get('import_ifcode', ifcode)
++suffix = '__'.join(message.structure.namespaced_type.namespaces[1:]) + '__' + ifcode
++import_suffix = locals().get('import_suffix', suffix)
 +}@
      @@classmethod
      def __import_type_support__(cls):
          try:
              from rosidl_generator_py import import_type_support
 -            module = import_type_support('@(package_name)')
-+            module = import_type_support('@(package_name)__@(suffix)')
++            module = import_type_support('@(package_name)__@(import_suffix)_s__rosidl_typesupport_c')
          except ImportError:
              import logging
              import traceback
-@@ -117,9 +119,6 @@ class Metaclass_@(message.structure.namespaced_type.name)(type):
+@@ -117,9 +121,6 @@ class Metaclass_@(message.structure.namespaced_type.name)(type):
                  'Failed to import needed modules for type support:\n' +
                  traceback.format_exc())
          else:

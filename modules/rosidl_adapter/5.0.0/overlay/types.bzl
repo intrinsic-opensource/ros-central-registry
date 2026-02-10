@@ -15,7 +15,7 @@
 RosIdlInfo = provider(
     "Encapsulates IDL information generated for an underlying ROS message.", 
     fields = [
-        "idls",             # depset() of IDL paths.
+        "idl",              # path to IDL file
         "interface_type",   # msg
         "interface_name",   # CompressedImage
         "interface_code",   # compressed_image

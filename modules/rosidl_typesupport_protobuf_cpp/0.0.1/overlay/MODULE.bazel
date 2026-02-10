@@ -23,6 +23,13 @@ module(
 # Dependencies
 
 bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "rmw", version = "7.9.0")
+bazel_dep(name = "rosidl_adapter", version = "5.0.0")
+bazel_dep(name = "rosidl_adapter_proto", version = "0.0.1")
+bazel_dep(name = "rosidl_cmake", version = "5.0.0")
+bazel_dep(name = "rosidl_generator_c", version = "5.0.0")
+bazel_dep(name = "rosidl_generator_cpp", version = "5.0.0")
+bazel_dep(name = "rosidl_generator_type_description", version = "5.0.0")
 bazel_dep(name = "rosidl_pycommon", version = "5.0.0")
 bazel_dep(name = "rosidl_runtime_cpp", version = "5.0.0")
 bazel_dep(name = "rosidl_typesupport_protobuf", version = "0.0.1")

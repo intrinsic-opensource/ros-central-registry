@@ -14,16 +14,19 @@
 # limitations under the License.
 
 load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
-load("@rosidl_adapter//:aspects.bzl", "idl_aspect")
-load(":aspects.bzl", "type_description_aspect")
+load("@rosidl_adapter//:aspects.bzl", "rosidl_adapter_aspect")
+load(":aspects.bzl", "rosidl_generator_type_description_aspect")
 load(":types.bzl", "RosTypeDescriptionInfo")
 
 def _type_description_ros_library_impl(ctx):
-    files = []
-    for dep in ctx.attr.deps:
-        files.extend(dep[RosTypeDescriptionInfo].jsons.to_list())
     return [
-        DefaultInfo(files = depset(files)),
+        DefaultInfo(
+            files = depset([
+                dep[RosTypeDescriptionInfo].jsons.to_list()[-1]
+                for dep in ctx.attr.deps
+                if RosTypeDescriptionInfo in dep
+            ])
+        ),
     ]
 
 type_description_ros_library = rule(
@@ -31,8 +34,8 @@ type_description_ros_library = rule(
     attrs = {
         "deps": attr.label_list(
             aspects = [
-                idl_aspect,                 # idl  <- ros aspect [STEP 1]
-                type_description_aspect,    # json <- idl aspect [STEP 2]
+                rosidl_adapter_aspect,
+                rosidl_generator_type_description_aspect,
             ],
             providers = [RosInterfaceInfo],
             allow_files = False,

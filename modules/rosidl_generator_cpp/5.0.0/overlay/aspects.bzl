@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,25 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@rosidl_adapter//:tools.bzl", "generate_compilation_information", "generate_sources")
+load("@rosidl_adapter//:types.bzl", "RosIdlInfo")
+load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
+load("@rosidl_generator_c//:types.bzl", "RosCBindingsInfo")
+load("@rosidl_generator_type_description//:types.bzl", "RosTypeDescriptionInfo")
 load("@rules_cc//cc:defs.bzl", "CcInfo")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
-load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
-load("@rosidl_adapter//:types.bzl", "RosIdlInfo")
-load("@rosidl_adapter//:tools.bzl", "generate_sources", "generate_cc_info")
-load("@rosidl_generator_type_description//:types.bzl", "RosTypeDescriptionInfo")
-load(":types.bzl", "RosCcBindingsInfo", "RosCcBindingsFilesInfo")
+load(":types.bzl", "RosCcBindingsInfo")
 
-def _cc_files_aspect_impl(target, ctx):
-    input_idls = target[RosIdlInfo].idls.to_list()
-    input_type_descriptions = target[RosTypeDescriptionInfo].jsons.to_list()
-
-    hdrs, srcs, include_dir = generate_sources(
+def _rosidl_generator_cpp_aspect_impl(target, ctx):
+    # Generate source files
+    hdrs, srcs, include_dirs = generate_sources(
         target = target,
         ctx = ctx,
         executable = ctx.executable._cc_generator,
         mnemonic = "CcGeneration",
-        input_idls = input_idls,
-        input_type_descriptions = input_type_descriptions,
+        input_idls = [target[RosIdlInfo].idl],
+        input_type_descriptions = target[RosTypeDescriptionInfo].jsons.to_list(),
         input_templates = ctx.attr._cc_templates[DefaultInfo].files.to_list(),
         templates_hdrs = [
             "{}.hpp",
@@ -44,17 +42,48 @@ def _cc_files_aspect_impl(target, ctx):
         template_visibility_control = ctx.file._cc_visibility_template,
     )
 
+    # Collect dependencies
+    deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep]
+    for dep in ctx.rule.attr.deps:
+        if RosCcBindingsInfo in dep:
+            deps.append(dep[RosCcBindingsInfo].cc_info)
+    deps.append(target[RosCBindingsInfo].cc_info)
+
+    # Assemble the CcInfo provider.
+    cc_info, dynamic_library = generate_compilation_information(
+        ctx = ctx,
+        name = "{}__{}__{}__rosidl_generator_cpp".format(
+            target[RosIdlInfo].package_name,
+            target[RosIdlInfo].interface_type,
+            target[RosIdlInfo].interface_code,
+        ),
+        hdrs = hdrs,
+        srcs = srcs,
+        deps = deps,
+        include_dirs = include_dirs,
+    )
+
+    # Return the CcInfo wrapped in a RosCBindingsInfo provider.
     return [
-        RosCcBindingsFilesInfo(
-            hdrs = hdrs,
-            srcs = srcs,
-            include_dirs = [include_dir],
-        )
+        RosCcBindingsInfo(
+            cc_info = cc_info,
+            dynamic_libraries = depset(
+                direct = [dynamic_library],
+                transitive = [
+                    dep[RosCBindingsInfo].dynamic_libraries
+                    for dep in ctx.rule.attr.deps
+                    if RosCBindingsInfo in dep
+                ],
+            ),
+            linker_inputs = cc_info.linking_context.linker_inputs
+        ),
     ]
 
-cc_files_aspect = aspect(
-    implementation = _cc_files_aspect_impl,
+rosidl_generator_cpp_aspect = aspect(
+    implementation = _rosidl_generator_cpp_aspect_impl,
+    toolchains = use_cc_toolchain(),
     attr_aspects = ["deps"],
+    fragments = ["cpp"],
     attrs = {
         "_cc_generator": attr.label(
             default = Label("//:cli"),
@@ -68,56 +97,18 @@ cc_files_aspect = aspect(
             default = Label("//:resource/rosidl_generator_cpp__visibility_control.hpp.in"),
             allow_single_file = True,
         ),
-    },
-    required_providers = [RosInterfaceInfo],
-    required_aspect_providers = [
-        [RosIdlInfo],
-        [RosTypeDescriptionInfo],
-    ],
-    provides = [RosCcBindingsFilesInfo],
-)
-
-def _cc_aspect_impl(target, ctx):
-
-    # These deps will all have CcInfo providers.
-    deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep]
-    for dep in ctx.rule.attr.deps:
-        if RosCcBindingsInfo in dep:
-            deps.append(dep[RosCcBindingsInfo].cc_info)
-
-    # Merge headers, sources and deps into a CcInfo provider.
-    cc_info = generate_cc_info(
-        ctx = ctx,
-        name = "{}_cc".format(ctx.label.name),
-        hdrs = target[RosCcBindingsFilesInfo].hdrs,
-        srcs = target[RosCcBindingsFilesInfo].srcs,
-        include_dirs = target[RosCcBindingsFilesInfo].include_dirs,
-        deps = deps,
-    )
-
-    # Return a CcInfo provider for the aspect.
-    return [
-        RosCcBindingsInfo(
-            cc_info = cc_info
-        )
-    ]
-
-cc_aspect = aspect(
-    implementation = _cc_aspect_impl,
-    toolchains = use_cc_toolchain(),
-    attr_aspects = ["deps"],
-    fragments = ["cpp"],
-    attrs = {
         "_cc_deps": attr.label_list(
             default = [
                 Label("@rosidl_runtime_cpp"),
             ],
             providers = [CcInfo],
-        ),  
+        ),
     },
     required_providers = [RosInterfaceInfo],
     required_aspect_providers = [
-        [RosCcBindingsFilesInfo],
+        [RosIdlInfo],
+        [RosTypeDescriptionInfo],
+        [RosCBindingsInfo],
     ],
     provides = [RosCcBindingsInfo],
 )

@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
 load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
+load("@rosidl_generator_py//:rules.bzl", "py_ros_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rules_python//python:defs.bzl", "py_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -55,6 +57,11 @@ cc_ros_library(
     deps = ALL_INTERFACES
 )
 
+py_ros_library(
+    name = "msgs_py",
+    deps = ALL_INTERFACES
+)
+
 # Library
 
 cc_library(
@@ -62,6 +69,13 @@ cc_library(
     hdrs = glob(["include/**"]),
     includes = ["include"],
     deps = [":msgs_cc"]
+)
+
+py_library(
+    name = "test_msgs_py",
+    srcs = glob(["src/test_msgs/**/*.py"]),
+    deps = [":msgs_py"],
+    imports = ["src"],
 )
 
 # Tests

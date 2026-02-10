@@ -1,0 +1,23 @@
+diff --git a/rosidl_typesupport_cpp/resource/msg__type_support.cpp.em b/rosidl_typesupport_cpp/resource/msg__type_support.cpp.em
+index 64d7617..5ff9220 100644
+--- a/rosidl_typesupport_cpp/resource/msg__type_support.cpp.em
++++ b/rosidl_typesupport_cpp/resource/msg__type_support.cpp.em
+@@ -9,6 +9,9 @@ include_parts = [package_name] + list(interface_path.parents[0].parts) + [
+     'detail', convert_camel_case_to_lower_case_underscore(interface_path.stem)]
+ include_base = '/'.join(include_parts)
+ 
++interface_type = "__".join(interface_path.parents[0].parts)
++interface_code = convert_camel_case_to_lower_case_underscore(interface_path.stem)
++
+ header_files = [
+     'cstddef',
+     'rosidl_runtime_c/message_type_support_struct.h',
+@@ -92,7 +95,7 @@ static _@(message.structure.namespaced_type.name)_type_support_data_t _@(message
+ 
+ static const type_support_map_t _@(message.structure.namespaced_type.name)_message_typesupport_map = {
+   @(len(type_supports)),
+-  "@(package_name)",
++  "@(package_name)__@(interface_type)__@(interface_code)",
+   &_@(message.structure.namespaced_type.name)_message_typesupport_ids.typesupport_identifier[0],
+   &_@(message.structure.namespaced_type.name)_message_typesupport_symbol_names.symbol_name[0],
+   &_@(message.structure.namespaced_type.name)_message_typesupport_data.data[0],

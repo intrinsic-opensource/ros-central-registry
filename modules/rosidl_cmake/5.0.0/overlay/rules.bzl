@@ -17,12 +17,7 @@ load(":types.bzl", "RosInterfaceInfo")
 
 def _ros_interface_impl(ctx):
     return RosInterfaceInfo(
-        srcs = depset(
-            direct = [ctx.file.src],
-            transitive = [
-                dep[RosInterfaceInfo].srcs for dep in ctx.attr.deps
-            ]
-        ),
+        src = ctx.file.src,
         package = ctx.attr.package
     )
 

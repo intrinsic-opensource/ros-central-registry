@@ -13,8 +13,9 @@
 # limitations under the License.
 
 load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
-load("@rosidl_adapter//:aspects.bzl", "idl_aspect")
-load(":aspects.bzl", "proto_aspect")
+load("@rosidl_adapter//:aspects.bzl", "rosidl_adapter_aspect")
+load("@rosidl_generator_type_description//:aspects.bzl", "rosidl_generator_type_description_aspect")
+load(":aspects.bzl", "rosidl_adapter_proto_aspect")
 load(":types.bzl", "RosProtoInfo")
 load(":tools.bzl", "merge_proto_infos")
 
@@ -38,13 +39,17 @@ proto_ros_library = rule(
     attrs = {
         "deps": attr.label_list(
             aspects = [
-                idl_aspect,
-                proto_aspect,
+                rosidl_adapter_aspect,
+                rosidl_generator_type_description_aspect,
+                rosidl_adapter_proto_aspect,
             ],
             providers = [RosInterfaceInfo],
             allow_files = False,
         ),
     },
-    provides = [ProtoInfo, DefaultInfo],
+    provides = [
+        ProtoInfo,
+        DefaultInfo
+    ],
 )
 

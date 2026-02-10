@@ -19,11 +19,11 @@ load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:types.bzl", "RosIdlInfo")
 load("@rosidl_adapter//:tools.bzl", "generate_sources")
+load("@rosidl_generator_type_description//:types.bzl", "RosTypeDescriptionInfo")
 load(":types.bzl", "RosProtoInfo")
 load(":tools.bzl", "merge_proto_infos")
 
-def _proto_aspect_impl(target, ctx):
-    # Extract message metadata from the IdlInfo provider, where it was calculated.
+def _rosidl_adapter_proto_aspect_impl(target, ctx):
     package_name = target[RosIdlInfo].package_name
     message_type = target[RosIdlInfo].interface_type
     message_name = target[RosIdlInfo].interface_name
@@ -35,8 +35,8 @@ def _proto_aspect_impl(target, ctx):
         ctx = ctx,
         executable = ctx.executable._proto_generator,
         mnemonic = "IdlToProtobuf",
-        input_idls = target[RosIdlInfo].idls.to_list(),
-        input_type_descriptions = [],
+        input_idls = [target[RosIdlInfo].idl],
+        input_type_descriptions = target[RosTypeDescriptionInfo].jsons.to_list(),
         input_templates = ctx.attr._proto_templates[DefaultInfo].files.to_list(),
         templates_hdrs = [],
         templates_srcs = ["{}.proto"],
@@ -70,13 +70,18 @@ def _proto_aspect_impl(target, ctx):
         actions = ctx.actions,
         proto_info = proto_info,
         proto_lang_toolchain_info = proto_toolchain,
-        generated_files = [output_proto_h, output_proto_cc],
+        generated_files = [
+            output_proto_h,
+            output_proto_cc
+        ],
         experimental_output_files = "multiple",
     )
-    deps = []
-    if proto_toolchain.runtime:
-        deps = [proto_toolchain.runtime]
-    deps.extend(getattr(ctx.rule.attr, "deps", []))
+
+    deps = [proto_toolchain.runtime] if proto_toolchain.runtime else []
+    for dep in ctx.rule.attr.deps:
+        if CcInfo in dep:
+            deps.append(dep)
+
     cc_info, libraries, temps = cc_proto_compile_and_link(
         ctx = ctx,
         deps = deps,
@@ -93,17 +98,18 @@ def _proto_aspect_impl(target, ctx):
                 direct = srcs,
                 transitive = [
                     dep[RosProtoInfo].protos
-                        for dep in ctx.rule.attr.deps if RosProtoInfo in dep
+                    for dep in ctx.rule.attr.deps
+                    if RosProtoInfo in dep
                 ],
             ),
+            proto_info = proto_info,
+            cc_info = cc_info,
         ),
-        proto_info,
-        cc_info
+        cc_info # Required because of the way deps work with 
     ]
 
-
-proto_aspect = aspect(
-    implementation = _proto_aspect_impl,
+rosidl_adapter_proto_aspect = aspect(
+    implementation = _rosidl_adapter_proto_aspect_impl,
     attr_aspects = ["deps"],
     fragments = ["proto", "cpp"],
     toolchains = use_cc_toolchain() + [
@@ -125,7 +131,10 @@ proto_aspect = aspect(
         ),
     },
     required_providers = [RosInterfaceInfo],
-    required_aspect_providers = [RosIdlInfo],
-    provides = [RosProtoInfo, ProtoInfo, CcInfo],
+    required_aspect_providers = [
+        [RosIdlInfo],
+        [RosTypeDescriptionInfo],
+    ],
+    provides = [RosProtoInfo, CcInfo],
 )
 

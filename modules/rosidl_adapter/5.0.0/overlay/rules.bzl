@@ -14,21 +14,24 @@
 
 load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
 load(":types.bzl", "RosIdlInfo")
-load(":aspects.bzl", "idl_aspect")
+load(":aspects.bzl", "rosidl_adapter_aspect")
 
 def _idl_ros_library_impl(ctx):
-    files = []
-    for dep in ctx.attr.deps:
-        files.extend(dep[RosIdlInfo].idls.to_list())
     return [
-        DefaultInfo(files = depset(files)),
+        DefaultInfo(
+            files = depset([
+                dep[RosIdlInfo].idl
+                for dep in ctx.attr.deps
+                if RosIdlInfo in dep
+            ])
+        ),
     ]
 
 idl_ros_library = rule(
     implementation = _idl_ros_library_impl,
     attrs = {
         "deps": attr.label_list(
-            aspects = [idl_aspect],
+            aspects = [rosidl_adapter_aspect],
             providers = [RosInterfaceInfo],
             allow_files = False,
         ),

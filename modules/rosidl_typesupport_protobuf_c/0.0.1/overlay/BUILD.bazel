@@ -32,6 +32,7 @@ cc_library(
     srcs = glob(["src/**"]),
     hdrs = glob(["include/**"]),
     deps = [
+        "@rmw",
         "@rosidl_typesupport_protobuf",
         "@rosidl_runtime_c",
         "@rosidl_runtime_cpp",

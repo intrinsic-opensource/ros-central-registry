@@ -12,8 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def pkg_name_and_base_from_path(path):
-    package_parts = path.split("/")
-    package_name = package_parts[-3]
-    package_base = "/".join(package_parts[:-2])
-    return package_name, package_base
+RosCcTypesupportIntrospectionInfo = provider(
+    "Encapsulates type support information for C++ introspection.", 
+    fields = [
+        "cc_info",
+        "dynamic_libraries",
+        "linker_inputs",
+    ]
+)

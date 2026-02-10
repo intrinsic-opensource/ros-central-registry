@@ -16,7 +16,7 @@
 RosInterfaceInfo = provider(
     "Provides info for interface code generation.",
     fields = {
-        "srcs": "The source defining an interface.",
+        "src": "The source defining an interface.",
         "package": "The package name",
     }
 )

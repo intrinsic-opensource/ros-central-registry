@@ -13,82 +13,59 @@
 # limitations under the License.
 
 load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
+load(":tools.bzl", "snake_case_from_pascal_case")
 load(":types.bzl", "RosIdlInfo")
 
-# Calls the tool to generate a .idl file from the interface. Inputs:
-#   executable   : the script to call
-#   package_name : name of the package containing the interface
-#   src          : path to input interface relative to Bazel working dir
-#   dst          : path to output idl relative to Bazel working dir
-def _generate(ctx, executable, package_name, src, dst, mnemonic):
-    ctx.actions.run_shell(
-        command = "{exec} -p {src_dir} -n {pkg} {src_name} {dst_dir} {out}".format(
-            exec = executable.path,
-            src_dir = src.dirname,
-            pkg = package_name,
-            src_name = src.basename,
-            dst_dir = dst.dirname,
-            out = "> /dev/null 2>&1"
-        ),
-        tools = [executable],
-        inputs = [src],
-        outputs = [dst],
-        mnemonic = mnemonic,
-        progress_message = "Generating IDL files for {}".format(ctx.label.name),
-    )
-
-# This would be better expressed as a regex operation, but unfortunately Bazel's
-# starlark language does not yet support this, and so it would require a module.
-# For example: https://github.com/magnetde/starlark-re/tree/master
-def _snake_case_from_pascal_case(pascal_case):
-    result = ""
-    pascal_case_padded = " " + pascal_case + " "
-    for i in range(len(pascal_case)):
-        prev_char, char, next_char = pascal_case_padded[i:i + 3].elems()
-        if char.isupper() and next_char.islower() and prev_char != " ":
-            # Insert an underscore before any upper case letter which is not
-            # followed by another upper case letter.
-            result += "_"
-        elif char.isupper() and (prev_char.islower() or prev_char.isdigit()):
-            # Insert an underscore before any upper case letter which is
-            # preseded by a lower case letter or number.
-            result += "_"
-        result += char.lower()
-    return result
-
-def _idl_adapter_aspect_impl(target, ctx):
-    # The last element of the traversal order of the message depset is the current element.
-    src = target[RosInterfaceInfo].srcs.to_list()[-1]
+def _rosidl_adapter_aspect_impl(target, ctx):
+    src = target[RosInterfaceInfo].src
 
     # Calculate the metadata to package alongside the IDL.
     package_name = target[RosInterfaceInfo].package                       # eg. sensor_msgs
     interface_type = "msg" if src.extension == "idl" else src.extension   # eg. msg
     interface_name = src.basename[:-len(src.extension) - 1]               # eg. CompressedImage
-    interface_code = _snake_case_from_pascal_case(interface_name)         # eg. compressed_image
+    interface_code = snake_case_from_pascal_case(interface_name)          # eg. compressed_image
 
-    # Now, were going to transform the source file (msg, srv, action) to an IDL.
-    idl = ctx.actions.declare_file(
+    # Declare the output IDL file.
+    dst = ctx.actions.declare_file(
         "{}/{}/{}.idl".format(package_name, interface_type, interface_name)
     )
 
-    if src.extension == 'msg':
-        _generate(ctx, ctx.executable._msg2idl, package_name, src, idl, "IdlFromMsg")
-    elif src.extension == 'srv':
-        _generate(ctx, ctx.executable._srv2idl, package_name, src, idl, "IdlFromSrv")
-    elif src.extension == 'action':
-        _generate(ctx, ctx.executable._action2idl, package_name, src, idl, "IdlFromAction")
+    # The tool we use depends on the file suffix.
+    executable_map = {
+        "msg" : ctx.executable._msg2idl,
+        "srv" : ctx.executable._srv2idl,
+        "action" : ctx.executable._action2idl
+    }    
+
+    # For the three fundamental message types we use generators.
+    if src.extension in ["msg", "srv", "action"]:
+        executable = executable_map[src.extension]
+        ctx.actions.run_shell(
+            command = "{exec} -p {src_dir} -n {pkg} {src_name} {dst_dir} {out}".format(
+                exec = executable.path,
+                src_dir = src.dirname,
+                pkg = package_name,
+                src_name = src.basename,
+                dst_dir = dst.dirname,
+                out = "> /dev/null 2>&1"
+            ),
+            tools = [executable],
+            inputs = [src],
+            outputs = [dst],
+            mnemonic = "IdlFrom{}".format(src.extension),
+            progress_message = "Generating IDL files for {}".format(ctx.label.name),
+        )
+    # IDL files can simply be symlinked directly.
     elif src.extension == "idl":
-        ctx.actions.symlink(output = idl, target_file = src)
+        ctx.actions.symlink(output = dst, target_file = src)
+    # Everything else is not supported.
     else:
         fail('Unknown file extension: ' + src.extension)
+
+    # Return the IDL file and some extra information used by follow-on aspects.
     return [
         RosIdlInfo(
-            idls = depset(
-                direct = [idl],
-                transitive = [
-                    dep[RosIdlInfo].idls for dep in ctx.rule.attr.deps if RosIdlInfo in dep
-                ],
-            ),
+            idl = dst,
             interface_type = interface_type,
             interface_name = interface_name,
             interface_code = interface_code,
@@ -98,8 +75,8 @@ def _idl_adapter_aspect_impl(target, ctx):
 
 # IDL aspect runs along the deps property to generate IDLs for each RosInterface,
 # through one of the three cli tools, producing a ROS IDL for each one.
-idl_aspect = aspect(
-    implementation = _idl_adapter_aspect_impl,
+rosidl_adapter_aspect = aspect(
+    implementation = _rosidl_adapter_aspect_impl,
     attr_aspects = ["deps"],
     attrs = {
         "_msg2idl": attr.label(

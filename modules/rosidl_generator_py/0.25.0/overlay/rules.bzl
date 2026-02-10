@@ -12,116 +12,102 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rosidl_adapter//:aspects.bzl", "idl_aspect")
+load("@rosidl_adapter//:aspects.bzl", "rosidl_adapter_aspect")
+load("@rosidl_adapter//:tools.bzl", "extract_dynamic_library_runfiles_for_provider")
+load("@rosidl_adapter_proto//:aspects.bzl", "rosidl_adapter_proto_aspect")
 load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
-load("@rosidl_generator_c//:aspects.bzl", "c_aspect", "c_files_aspect")
-load("@rosidl_generator_type_description//:aspects.bzl", "type_description_aspect")
-load("@rules_python//python:defs.bzl", "PyInfo")
-load(":aspects.bzl", "py_aspect")
+load("@rosidl_generator_c//:aspects.bzl", "rosidl_generator_c_aspect")
+load("@rosidl_generator_c//:types.bzl", "RosCBindingsInfo")
+load("@rosidl_generator_cpp//:aspects.bzl", "rosidl_generator_cpp_aspect")
+load("@rosidl_generator_cpp//:types.bzl", "RosCcBindingsInfo")
+load("@rosidl_generator_type_description//:aspects.bzl", "rosidl_generator_type_description_aspect")
+load("@rosidl_typesupport_c//:aspects.bzl", "rosidl_typesupport_c_aspect")
+load("@rosidl_typesupport_c//:types.bzl", "RosCTypesupportInfo")
+load("@rosidl_typesupport_fastrtps_c//:aspects.bzl", "rosidl_typesupport_fastrtps_c_aspect")
+load("@rosidl_typesupport_fastrtps_c//:types.bzl", "RosCTypesupportFastRTPSInfo")
+load("@rosidl_typesupport_fastrtps_cpp//:aspects.bzl", "rosidl_typesupport_fastrtps_cpp_aspect")
+load("@rosidl_typesupport_fastrtps_cpp//:types.bzl", "RosCcTypesupportFastRTPSInfo")
+load("@rosidl_typesupport_introspection_c//:aspects.bzl", "rosidl_typesupport_introspection_c_aspect")
+load("@rosidl_typesupport_introspection_c//:types.bzl", "RosCTypesupportIntrospectionInfo")
+load("@rosidl_typesupport_protobuf_c//:aspects.bzl", "rosidl_typesupport_protobuf_c_aspect")
+load("@rosidl_typesupport_protobuf_c//:types.bzl", "RosCTypesupportProtobufInfo")
+load("@rules_python//python:defs.bzl", "PyInfo", "py_library")
+load(":aspects.bzl", "rosidl_generator_py_aspect")
 load(":types.bzl", "RosPyBindingsInfo")
 
-def _py_ros_library_impl(ctx):
-    # Collect all the message __init__.py files from dependencies and concatenate
-    # them into the <package>/<type>/__init__.py files. This is so that one calls
-    # "from std_msgs.msg import Time" and not "from std_msgs.msg._time import Time"
-    # module_inits = {}
-    # for dep in ctx.attr.deps:
-    #     if RosPyBindingsInfo in dep:
-    #         for init_file in dep[RosPyBindingsInfo].py_inits.to_list():
-    #             init_path = "{}/__init__.py".format(dep[RosPyBindingsInfo].py_relpath)
-    #             if init_path not in module_inits.keys():
-    #                 module_inits[init_path] = [init_file]
-    #             else:
-    #                 module_inits[init_path].append(init_file)
-    # init_py_files = []
-    # for module_init_file, message_init_files in module_inits.items():
-    #     init_py_file = ctx.actions.declare_file(module_init_file)
-    #     command = "cat {} > {}".format(" ".join(
-    #         [f.path for f in message_init_files]),
-    #         init_py_file.path,
-    #     )
-    #     #print ("Command: {}".format(command))
-    #     ctx.actions.run_shell(
-    #         outputs = [init_py_file],
-    #         inputs = message_init_files,
-    #         command = command
-    #     )
-    #     init_py_files.append(init_py_file)
+DYNAMIC_TYPESUPPORTS = [
+    RosCcTypesupportFastRTPSInfo,
+    RosCTypesupportFastRTPSInfo,
+    RosCTypesupportIntrospectionInfo,
+    RosCTypesupportProtobufInfo,
+    RosPyBindingsInfo,
+]
 
-    # Symlink all generated python interface files into the runfiles tree.
-    direct_sources = []
-
-    # Handle the python interfaces
-    init_file_dict = {}
-    for dep in ctx.attr.deps:
-        for py_interface_path, py_interface_file in dep[RosPyBindingsInfo].py_interfaces.to_list():
-            symlinked_py_file = ctx.actions.declare_file(py_interface_path)
-            ctx.actions.symlink( output = symlinked_py_file, target_file = py_interface_file)
-            direct_sources.append(symlinked_py_file)
-        for py_init_path, py_init_file in dep[RosPyBindingsInfo].py_inits.to_list():
-            if py_init_path not in init_file_dict.keys():
-                init_file_dict[py_init_path] = [py_init_file]
-            else:
-                init_file_dict[py_init_path].append(py_init_file)
-    for py_init_path, py_init_files in init_file_dict.items():
-        output = ctx.actions.declare_file(py_init_path)
-        command = "cat {} > {}".format(" ".join(
-            [f.path for f in py_init_files]),
-            output.path,
-        )
-        ctx.actions.run_shell(
-            outputs = [output],
-            inputs = py_init_files,
-            command = "cat {} > {}".format(" ".join([f.path for f in py_init_files]), output.path)
-        )
-        direct_sources.append(output)
-
-    # Return a PyInfo provider with all generated python files and imports, and
-    # a DefaultInfo provider with the dynamic libraries for C type support.
-    return [
-        DefaultInfo(
-            runfiles = ctx.runfiles(
-                transitive_files = depset(
-                    transitive = [
-                        dep[RosPyBindingsInfo].dynamic_libraries
-                        for dep in ctx.attr.deps
-                        if dep in ctx.attr.deps
-                    ],
-                ),
-            ),
+def _py_ros_library_rule_impl(ctx):
+    default_info = extract_dynamic_library_runfiles_for_provider(ctx, DYNAMIC_TYPESUPPORTS)
+    py_info = PyInfo(
+        imports = depset(
+            transitive = [
+                dep[RosPyBindingsInfo].imports
+                for dep in ctx.attr.deps
+                if RosPyBindingsInfo in dep
+            ],
         ),
-        PyInfo(
-            transitive_sources = depset(
-                direct = direct_sources,
-                transitive = [
-                    dep[PyInfo].transitive_sources
-                    for dep in ctx.attr._py_deps
-                    if PyInfo in dep
-                ]
-            ),
+        transitive_sources = depset(
+            transitive = [
+                dep[RosPyBindingsInfo].transitive_sources
+                for dep in ctx.attr.deps
+                if RosPyBindingsInfo in dep
+            ],
         ),
-    ]
+    )
+    return [default_info, py_info]
 
-py_ros_library = rule(
-    implementation = _py_ros_library_impl,
+py_ros_library_rule = rule(
+    implementation = _py_ros_library_rule_impl,
     attrs = {
         "deps": attr.label_list(
             aspects = [
-                idl_aspect,                 # RosIdlInfo
-                type_description_aspect,    # RosTypeDescriptionInfo
-                c_files_aspect,             # RosCBindingsFilesInfo
-                c_aspect,                   # RosCBindingsInfo
-                py_aspect,                  # RosCcBindingsInfo
+                # Adapters
+                rosidl_adapter_aspect,
+                rosidl_generator_type_description_aspect,
+                rosidl_adapter_proto_aspect,
+                # Generators
+                rosidl_generator_c_aspect,
+                rosidl_generator_cpp_aspect,
+                # Typesupports
+                rosidl_typesupport_introspection_c_aspect,
+                rosidl_typesupport_fastrtps_cpp_aspect,
+                rosidl_typesupport_fastrtps_c_aspect,
+                rosidl_typesupport_protobuf_c_aspect,
+                rosidl_typesupport_c_aspect,
+                # Python
+                rosidl_generator_py_aspect,
             ],
             providers = [RosInterfaceInfo],
             allow_files = False,
         ),
-        "_py_deps": attr.label_list(
-            default = [
-                Label("@rosidl_parser"),
-            ],
-            providers = [PyInfo],
-        ),
     },
     provides = [DefaultInfo, PyInfo],
 )
+
+def py_ros_library(name, deps):
+    """
+    Convenience function for setting up py dependencies.
+
+    This is entirely a convenience wrapper to setup a dependency
+    on rosidl_generator_py in order to pull in python deps (with
+    c extensions and files) as well as the hook.
+    """
+    rule_name = "{}_internal".format(name)
+    py_ros_library_rule(
+        name = rule_name,
+        deps = deps,
+    )
+    py_library(
+        name = name,
+        deps = [
+            ":{}".format(rule_name),
+            "@rosidl_generator_py",
+        ],
+    )

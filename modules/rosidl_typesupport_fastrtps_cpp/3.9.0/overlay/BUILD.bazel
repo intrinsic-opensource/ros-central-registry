@@ -37,7 +37,8 @@ cc_library(
     includes = ["include"],
     deps = [
         "@fastcdr",
-        "@rcutils"
+        "@rcutils",
+        "@rmw",
     ],
 )
 

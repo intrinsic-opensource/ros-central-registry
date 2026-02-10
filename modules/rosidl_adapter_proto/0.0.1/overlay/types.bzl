@@ -17,5 +17,7 @@ RosProtoInfo = provider(
     "Encapsulates protobuf information generated for an underlying IDL.", 
     fields = [
         "protos",
+        "proto_info",
+        "cc_info"
     ]
 )

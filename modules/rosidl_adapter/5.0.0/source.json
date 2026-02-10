@@ -5,13 +5,13 @@
     "overlay": {
         "BUILD.bazel": "sha256-xHZmfbpwP1r6uCaRcomtw646BhvpFgsWjQoblQUruZ0=",
         "MODULE.bazel": "sha256-Ewtoybic9f6lh/L2BgqLbR9vvcvh4ROCCZ2auI9p/4M=",
-        "aspects.bzl": "sha256-zNZONVd9HIaIHPK3DgzPap8UIgUx/gfEavtFecS+APo=",
-        "rules.bzl": "sha256-gLzgpTun3qZ8xiRTDqf0InCSVBbbitlEe6G1oTKbErw=",
+        "aspects.bzl": "sha256-EbNtcAU3Jxttqp5sVMAY/o5p4R2dlgId92QwasY5dIM=",
+        "rules.bzl": "sha256-kkleKEmTPFyJgo6hfdABbt+gj5J5fR1rf7W7G2mxrMQ=",
         "test/data/action/BUILD.bazel": "sha256-iCSLKmDFgJZi/6LVwC7VZBmh+Cv9fi0y04tPtKf0CX0=",
         "test/data/msg/BUILD.bazel": "sha256-NhnmF46oqekjTeWGFclssilTZBsyI+c8XAvUSMygdR4=",
         "test/data/srv/BUILD.bazel": "sha256-HJ25RJ8jhoHmYNZjfajFzSyvwADzJFxuVhkz4Zx3pus=",
-        "tools.bzl": "sha256-eu4nHqPKEGVhAksRpsB0VRjEn4aUqlHvDPvegb9qtFE=",
-        "types.bzl": "sha256-m/C0bzPIpVE5nrSghdj8S1cfeW9tGJW5mycnC5vMlzs="
+        "tools.bzl": "sha256-0K8JPp8efCKkVrJxJ3t/IP9u5IhNP3MJXaUFyaTKX+o=",
+        "types.bzl": "sha256-ah5XOLmafkYEelWn69DHeC3bMupUEBuHYk8IAB9YhiQ="
     },
     "patches": {
         "fix_scripts_action2idl_py.patch": "sha256-GNUAsVF/yv4cDZSa8BmA2Crq7mgDR3TqJENUK7Znlio=",

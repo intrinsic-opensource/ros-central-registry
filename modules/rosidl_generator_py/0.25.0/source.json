@@ -3,18 +3,20 @@
     "integrity": "sha256-Ny7mC/LHZTsoYkeqwDV9APxNmYxC4ekcZ6WD0jlO0HA=",
     "strip_prefix": "rosidl_python-0.25.0/rosidl_generator_py",
     "overlay": {
-        "BUILD.bazel": "sha256-mjEIF9AvE7BTt2RJA2sIKQxbod/sN9NlmYACZFF3NP8=",
-        "MODULE.bazel": "sha256-ZUP3pQ40csaHr+PPivNrTe6Wp6Nbgb5hFFJJQSlYiDI=",
-        "aspects.bzl": "sha256-SbZgc/lXJblAWNW73l6zSfb542V1klTI6qaVcgGRhbY=",
+        "BUILD.bazel": "sha256-u0LotckOr2MmljLGEFYrvetxsvs6eryK9j6y0vCgKWU=",
+        "MODULE.bazel": "sha256-mY45QMOkdlvI1v391itBZvNWVNo2ryd5IXcjNfnqcEs=",
+        "aspects.bzl": "sha256-rNlhvYASsUW2q9IzCAdgGpvmlQA5xgWKbMZ+Hsve1Sk=",
         "msg/BUILD.bazel": "sha256-pWvW/5IwprGr5vUISTjlcgqhsKamdSO+2Ysstonbmck=",
-        "rules.bzl": "sha256-f95OQWpgPNP0aoS21fvW0a42zODb3A1EPHgCAmV0iTE=",
-        "types.bzl": "sha256-gpU3cKBSFXtK+aRI1GrSOgpubbV/0AbFdgJbILWvVas="
+        "rules.bzl": "sha256-mT0iwrbS+HUEwxsMwixhc666HRwQ0kxiGvOgucPMLWs=",
+        "sitecustomize.py": "sha256-Z2MHID48GAzjCetaWzydwzJNFLI4vW262gMZtPny0r4=",
+        "types.bzl": "sha256-vYMaDsZHBRY2DBefxdsMNLLjqER8HidvRTRTPmBNnv0="
     },
     "patches": {
-        "fix_resource__action_py_em.patch": "sha256-ddW5Q5hk16SR0cw/ee1SSt3vPJIxplkMqCzEKZ9XRfs=",
-        "fix_resource__msg_py_em.patch": "sha256-Y4yQA7jXwsmtzew+d4kTegqQUvnyWvqBF71RuJ1E0c0=",
-        "fix_resource__srv_py_em.patch": "sha256-ABK5dZ79ES45LFBm2wmBuM7ddk0usMVIPr1Y1AuKmzc=",
-        "fix_rosidl_generator_py_generate_py_impl_py.patch": "sha256-AqA7yhpOAc3ve9npYUJxij9A8q9jNs/w4womjStb5jY="
+        "fix_resource__action_py_em.patch": "sha256-psuvLd7W2VbY077e2lPnbaaspwXlpCrQpCMTiTCcvdw=",
+        "fix_resource__msg_py_em.patch": "sha256-74JFaZUa4LSGWaNQiU7zC+TwVPVKid1sCK+SVTSYOds=",
+        "fix_resource__srv_py_em.patch": "sha256-HF706Sg9z7Es3XeiSahP3UJs0sgsQgyo/2ywhjj0RVU=",
+        "fix_rosidl_generator_py_generate_py_impl_py.patch": "sha256-MLhDoQlJh9A7FxB3zV58qYNaj43Qd5788/S+tvp6DY4=",
+        "fix_rosidl_generator_py_import_type_support_impl_py.patch": "sha256-d9jXF924gA8TGBKvD3Cq3cK9KFQWnWU1VQfkimXutQM="
     },
     "patch_strip": 2
 }

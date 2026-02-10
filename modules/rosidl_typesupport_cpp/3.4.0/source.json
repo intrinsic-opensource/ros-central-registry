@@ -3,15 +3,17 @@
     "integrity": "sha256-hOZAR9FMEifptWzDDUFoTBBRveJJLr7LuegISZ4/tDg=",
     "strip_prefix": "rosidl_typesupport-3.4.0/rosidl_typesupport_cpp",
     "overlay": {
-        "BUILD.bazel": "sha256-85aP8yvE/O0Lk6SG3VAJECZ8Le1xzU6FT9m3GiQMvUI=",
+        "BUILD.bazel": "sha256-9x3AzUuGGCeMuAYRJJDMpJiXSFDQCNlgRDvdIbW2QJI=",
         "MODULE.bazel": "sha256-oRjOtK8+3XAQiKKOD8GnDSiy1JbnfxwLSXrhvjOwDiA=",
-        "aspects.bzl": "sha256-xLbL1l6P+dV1GOEqFtMum1sSzxIsofEgOyAjMZE/zLE=",
+        "aspects.bzl": "sha256-e/rkmqFXj0ClDdNFUayvk7lst5Ew9ueJThGdGXsQ1Sg=",
         "test/msg/BUILD.bazel": "sha256-NhnmF46oqekjTeWGFclssilTZBsyI+c8XAvUSMygdR4=",
-        "types.bzl": "sha256-AuvG7RZ0kPtHZ0/NV+Gk/SYXqjFjAu9mblfMIPHQnVw="
+        "types.bzl": "sha256-jDoE+dJPWLFvPVcN/j6TMsa8D13shyXUZwXV9R9hxdM="
     },
     "patches": {
+        "fix_resource_msg__type_support_cpp_em.patch": "sha256-GcpZhHzSfgUkzISoA1suJPBeIpJputq3vog9KUvHpB8=",
+        "fix_resource_srv__type_support_cpp_em.patch": "sha256-zJYL+tT0td7nYxOyegX0Kp2092Kuv01DuXvsbOfDuMU=",
         "fix_rosidl_typesupport_cpp___init___py.patch": "sha256-k99ysevO7IY7CX7wqB4ovXjN6PS05F2eRCn26CV1YRI=",
-        "fix_src_type_support_dispatch_hpp.patch": "sha256-XziM9RNwptabhRCcZHL7JziHGnEJUPOXuOZGaYxPw+w="
+        "fix_src_type_support_dispatch_hpp.patch": "sha256-mGSsMuxgx5KfWSTUmapSEqcf1Au4pMxsYQkT4dkSWfY="
     },
     "patch_strip": 2
 }

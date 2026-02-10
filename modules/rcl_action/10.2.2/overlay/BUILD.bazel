@@ -37,44 +37,37 @@ cc_library(
     name = "rcl_action",
     srcs = glob([
         "src/**/*.h",
-        "src/**/*.c"
+        "src/**/*.c",
     ]),
     hdrs = glob(["include/**/*.h"]),
     includes = ["include"],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_action\\\""],
     deps = [
+        ":msgs",
         "@rcl",
         "@rosidl_runtime_c",
-        ":msgs",
     ],
 )
 
 # Tests
 
-c_ros_library(
-    name = "test_msgs",
-    deps = [
-        "@test_msgs//action:Fibonacci",
-    ],
-)
-
 [
     cc_test(
         name = name,
+        timeout = "moderate",
         srcs = ["test/rcl_action/{}.cpp".format(name)] + glob([
             "src/**/*.h",
             "test/**/*.hpp",
         ]),
         includes = ["src"],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_action\\\""],
         deps = [
+            ":rcl_action",
             "@googletest//:gtest",
             "@googletest//:gtest_main",
             "@osrf_testing_tools_cpp//:memory_tools",
-            ":rcl_action",
-            ":test_msgs",
+            "@test_msgs//:msgs_c",
         ],
-        local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_action\\\""],
-        timeout = "moderate",
     )
     for name in [
         "test_action_client",

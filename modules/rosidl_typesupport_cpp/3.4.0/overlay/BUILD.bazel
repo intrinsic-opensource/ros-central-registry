@@ -35,6 +35,7 @@ cc_library(
     deps = [
         "@rcpputils",
         "@rosidl_typesupport_c",
+        "@rules_cc//cc/runfiles",
     ],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rosidl_typesupport_cpp\\\""],
     includes = ["include"],

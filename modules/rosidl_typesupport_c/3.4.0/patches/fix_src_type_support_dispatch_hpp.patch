@@ -1,22 +1,67 @@
 diff --git a/rosidl_typesupport_c/src/type_support_dispatch.hpp b/rosidl_typesupport_c/src/type_support_dispatch.hpp
-index c689f88..f63db1d 100644
+index c689f88..c21ed00 100644
 --- a/rosidl_typesupport_c/src/type_support_dispatch.hpp
 +++ b/rosidl_typesupport_c/src/type_support_dispatch.hpp
-@@ -15,6 +15,8 @@
+@@ -15,10 +15,13 @@
  #ifndef TYPE_SUPPORT_DISPATCH_HPP_
  #define TYPE_SUPPORT_DISPATCH_HPP_
  
 +#include <dlfcn.h>
++#include <unistd.h> // For readlink
++#include <limits.h> // For PATH_MAX
 +
  #include <cstddef>
  #include <cstdio>
  #include <cstring>
-@@ -53,6 +55,22 @@ get_typesupport_handle_function(
-       if (strcmp(map->typesupport_identifier[i], identifier) != 0) {
-         continue;
+-
+ #include <memory>
+ #include <stdexcept>
+ #include <string>
+@@ -29,9 +32,31 @@
+ #include "rosidl_typesupport_c/identifier.h"
+ #include "rosidl_typesupport_c/type_support_map.h"
+ 
++#include "rules_cc/cc/runfiles/runfiles.h"
++
++using rules_cc::cc::runfiles::Runfiles;
++
+ namespace rosidl_typesupport_c
+ {
+ 
++// Try to get the value of an environment variable, and optionally return the result.
++static std::optional<std::string>
++get_env_variable(const char * env_var)
++{
++  char * ament_prefix_path = nullptr;
++#ifndef _WIN32
++  ament_prefix_path = getenv(env_var);
++#else
++  size_t ament_prefix_path_size;
++  _dupenv_s(&ament_prefix_path, &ament_prefix_path_size, env_var);
++#endif
++  if (!ament_prefix_path || std::string(ament_prefix_path).empty())
++  {
++      return {};
++  }
++  return std::string(ament_prefix_path);
++}
++
+ extern const char * typesupport_identifier;
+ 
+ template<typename TypeSupport>
+@@ -55,39 +80,68 @@ get_typesupport_handle_function(
        }
-+    
-+      /* First, check to see if the symbol is available in the current library
+       rcpputils::SharedLibrary * lib = nullptr;
+ 
+-      if (!map->data[i]) {
+-        char library_basename[1024];
+-        int ret = rcutils_snprintf(
+-          library_basename, 1023, "%s__%s",
+-          map->package_name, identifier);
+-        if (ret < 0) {
+-          RCUTILS_SET_ERROR_MSG("Failed to format library name");
+-          return nullptr;
++      /* Firstly, check to see if the symbol is available in the current library
 +       * to cover the case where Bazel has statically linked it in. */
 +      void* handle = dlopen(NULL, RTLD_LAZY);
 +      if (handle) {
@@ -26,11 +71,69 @@ index c689f88..f63db1d 100644
 +          funcSignature func = reinterpret_cast<funcSignature>(func_ptr);
 +          const TypeSupport * ts = func();
 +          return ts;
-+        }
+         }
+-
+-        std::string library_name;
++      }
++      
++     /* Secondly, check to see if there is a pybind11 extension with the
++         typesupport statically compiled in. */
++      const std::string package_name(map->package_name);
++      const std::string typesupport_name(identifier);
++      const std::optional<std::string> test_workspace = get_env_variable("TEST_WORKSPACE");
++      std::string error;
++      auto runfiles = test_workspace
++        ? Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error) 
++        : Runfiles::Create("ignore-argv[0]", BAZEL_CURRENT_REPOSITORY, &error);
++
++      // Try load statically from the pybind extension.
++      if (!map->data[i]) {
++        const std::string library_name = runfiles->Rlocation(
++          "_main/lib" + package_name + "_s__rosidl_typesupport_c.so");
+         try {
+-          library_name = rcpputils::get_platform_library_name(library_basename);
+-        } catch (const std::exception & e) {
++          map->data[i] = new rcpputils::SharedLibrary(library_name);
++        } catch (const std::runtime_error & e) {
+           RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
+-            "Failed to compute library name for '%s' due to %s",
+-            library_basename, e.what());
+-          return nullptr;
++            "Could not load library %s: %s", library_name.c_str(), e.what());
++        } catch (const std::bad_alloc & e) {
++          RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
++            "Could not load library %s: %s", library_name.c_str(), e.what());
+         }
++      }
+ 
++      // Fall back to the typesupport library.
++      if (!map->data[i]) {
++        const std::string library_name = runfiles->Rlocation(
++          "_main/lib" + package_name + "__" + typesupport_name + ".so");
+         try {
+-          lib = new rcpputils::SharedLibrary(library_name);
++          map->data[i] = new rcpputils::SharedLibrary(library_name);
+         } catch (const std::runtime_error & e) {
+           RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
+             "Could not load library %s: %s", library_name.c_str(), e.what());
+-          return nullptr;
+         } catch (const std::bad_alloc & e) {
+           RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
+             "Could not load library %s: %s", library_name.c_str(), e.what());
+-          return nullptr;
+         }
+-        map->data[i] = lib;
+       }
++
++      // We can't load the library, so bail with error.
++      if (!map->data[i]) {
++        RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
++          "Could not load typesupport library %s for message %s",
++            typesupport_name.c_str(), package_name.c_str());
++        return nullptr;
 +      }
 +
-+      /* If the symbol is not available on the current executable, fall back
-+         to the shared library query */
-       rcpputils::SharedLibrary * lib = nullptr;
++      // Get the symbol from the library
+       auto clib = static_cast<const rcpputils::SharedLibrary *>(map->data[i]);
+       lib = const_cast<rcpputils::SharedLibrary *>(clib);
  
-       if (!map->data[i]) {
