@@ -24,6 +24,7 @@ import hashlib
 import base64
 import json
 import shutil
+import os
 import yaml
 import urllib3
 from git import Repo
@@ -153,11 +154,12 @@ def repos_from_submodules(repo_base_path, repo_yaml_file, package=None):
         repo_overlay = {}
         repo_patches = {}
         for diff in diff_index:
-            if diff.change_type == 'M':  # 'M' for modified
-                repo_patches[diff.b_path] = repo.git.diff(commit_base, commit_feat, diff.b_path)
-            else:
+            if diff.change_type == 'A':  # 'A' for new file (we can use Bazel "overlays")
                 overlay_path = str(repo_path / diff.b_path)
                 repo_overlay[diff.b_path] = calculate_bazel_integrity(overlay_path)
+            else:
+                file_path = diff.b_path if diff.b_path else diff.a_path
+                repo_patches[file_path] = repo.git.diff(commit_base, commit_feat, '--', file_path)
         
         # Extract modules for this repo.
         repo_modules = {}
