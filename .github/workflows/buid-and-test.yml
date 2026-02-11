@@ -100,7 +100,7 @@ jobs:
       with:
         auth: ${{ secrets.STATUS_BADGE_SECRET }}
         gistID: 4d05b2382879fbd51f9a07bb7c63fb29
-        filename: ${{ matrix.name }}
+        filename: ${{ matrix.name }}.json
         label: ${{ matrix.name }}
         message: ${{ job.status == 'success' && 'passed' || 'failed' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
