@@ -52,8 +52,6 @@ jobs:
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
-      with:
-        submodules: recursive
     # Setup bazel as a tool for building.
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.15.0
@@ -64,11 +62,6 @@ jobs:
     # Build the container image.
     - name: Build test container
       run: docker build -t ros-central-registry:24.04 .
-    # Regenerate the bazel module pages
-    - name: Regenerate module pages
-      env:
-        USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
-      run: bazel run //tools:regenerate_modules -- $PWD
     # Build the ROS examples.
     - name: Build code
       env:
