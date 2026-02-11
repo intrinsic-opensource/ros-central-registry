@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: buid-and-test
-run-name: Build and test across mutliple bazel versions and 
+run-name: Build and test across mutliple operating systems, architectures and Bazel versions.
 on:
   push:
     branches:
