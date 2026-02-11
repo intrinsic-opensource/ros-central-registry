@@ -102,6 +102,6 @@ jobs:
         gistID: 4d05b2382879fbd51f9a07bb7c63fb29
         filename: ${{ matrix.name }}.json
         label: ${{ matrix.name }}
-        message: ${{ job.status == 'success' && 'passed' || 'failed' }}
+        message: ${{ job.status == 'success' && 'pass' || 'fail' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
       if: always()
