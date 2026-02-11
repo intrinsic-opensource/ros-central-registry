@@ -51,7 +51,7 @@ jobs:
         swap-storage: true
     # Install valgrind
     - name: Install Valgrind
-      run: sudo apt install valgrind
+      run: sudo apt update && sudo apt install valgrind
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
