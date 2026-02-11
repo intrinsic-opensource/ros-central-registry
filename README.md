@@ -1,13 +1,13 @@
 <p align="center">
 <img width="256" src="docs/rcr_logo.png"/>
 <br/>
-<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu24.04_bazel8.5.1.json">
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu-24.04_bazel-8.5.1_x86_64.json">
 &nbsp;   
-<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu24.04_bazel9.0.0.json">
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu-24.04_bazel-9.0.0_x86_64.json">
 &nbsp;   
-<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu24.04-arm_bazel8.5.1.json">
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu-24.04_bazel-8.5.1_aarch64.json">
 &nbsp;
-<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu24.04-arm_bazel9.0.0.json">
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu-24.04_bazel-9.0.0_aarch64.json">
 </p>
 
 # Overview
