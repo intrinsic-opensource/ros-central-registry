@@ -20,18 +20,18 @@ module(
 
 # System dependencies
 
-bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "cmake_configure_file", version = "0.1.3")
 bazel_dep(name = "google_benchmark", version = "1.9.4")
-bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "protobuf", version = "32.0")
-bazel_dep(name = "rules_cc", version = "0.2.4")
+bazel_dep(name = "protobuf", version = "33.4")
+bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "rules_foreign_cc", version = "0.15.0")
-bazel_dep(name = "rules_python", version = "1.6.1")
+bazel_dep(name = "rules_python", version = "1.8.3")
 bazel_dep(name = "rules_rust", version = "0.64.0")
 bazel_dep(name = "rules_shell", version = "0.6.1")
-bazel_dep(name = "toolchains_llvm", version = "1.5.0")
+bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 bazel_dep(name = "userspace_rcu", version = "0.15.4")
 
 # Third party (things we intend to add to the BCR)

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: buid-and-test
+name: build-and-test
 run-name: Build and test across mutliple operating systems, architectures and Bazel versions.
 on:
   push:
@@ -49,6 +49,9 @@ jobs:
         large-packages: true
         docker-images: true
         swap-storage: true
+    # Install valgrind
+    - name: Install Valgrind
+      run: sudo apt install valgrind
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
