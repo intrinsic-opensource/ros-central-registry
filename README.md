@@ -1,9 +1,13 @@
 <p align="center">
 <img width="256" src="docs/rcr_logo.png"/>
 <br/>
-<img src="https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-amd64.yml/badge.svg">
-&nbsp;&nbsp;   
-<img src="https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-arm64.yml/badge.svg">
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/ubuntu-24.04_bazel-8.5.1_x86_64.json">
+&nbsp;
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/ubuntu-24.04_bazel-8.5.1_aarch64.json">
+<br/>   
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/ubuntu-24.04_bazel-9.0.0_x86_64.json">
+&nbsp;
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/ubuntu-24.04_bazel-9.0.0_aarch64.json">
 </p>
 
 # Overview

@@ -25,11 +25,11 @@ module(
 # From the BCR -- these are found here: https://registry.bazel.build. These
 # are the minimal set of general modules needed for a functional workspace.
 
-bazel_dep(name = "protobuf", version = "32.0")
-bazel_dep(name = "rules_cc", version = "0.2.4")
-bazel_dep(name = "rules_python", version = "1.6.1")
+bazel_dep(name = "protobuf", version = "33.4")
+bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_python", version = "1.8.3")
 bazel_dep(name = "rules_rust", version = "0.64.0")
-bazel_dep(name = "toolchains_llvm", version = "1.5.0")
+bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 
 # From the RCR - right now you need to use a compatible set of versioned
 # packages from a ROS release. In future we might use module-rules to

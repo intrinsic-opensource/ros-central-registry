@@ -63,12 +63,18 @@ build:tsan --copt=-O0
 build:tsan --copt=-fno-omit-frame-pointer
 build:tsan --linkopt=-fsanitize=thread
 
-# Helper for building and testing all modules in the workspace.
-build:distribution --target_pattern_file=distribution.txt
+# The github actions pipeline has workers with 2 CPUs and 7GB RAM. This
+# can cause tests to flake due to timeouts. Assume every test is flaky
+# and run sequentially with up to five times to try and skirt around this
+# issue. In reality, we'll use 
+common:ci --target_pattern_file=distribution.txt
+test:ci --flaky_test_attempts=5
+test:ci --jobs 1
 
-# Run distribution tests in a container to make sure that those tests that
-# use network and shared memory are isolated from each other.
-test:distribution --target_pattern_file=distribution.txt
-test:distribution --spawn_strategy=docker
-test:distribution --experimental_enable_docker_sandbox
-test:distribution --experimental_docker_image=ros-central-registry:24.04
+# TODO(asymingt) the docker-sandbox is currently broken with toolchains_llvm
+# v1.6.0. We need to go back and fix this in the future.
+common:docker --target_pattern_file=distribution.txt
+test:docker --flaky_test_attempts=5
+test:docker --spawn_strategy=docker
+test:docker --experimental_enable_docker_sandbox
+test:docker --experimental_docker_image=ros-central-registry:24.04
