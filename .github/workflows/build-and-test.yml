@@ -71,12 +71,12 @@ jobs:
     - name: Build code
       env:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
-      run: bazel build --config=distribution
+      run: bazel build --config=ci
     # Test the distribution.
     - name: Run tests
       env:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
-      run: bazel test --config=docker
+      run: bazel test --config=ci
     # Summarize the results.
     - name: Test report
       uses: dorny/test-reporter@v2
