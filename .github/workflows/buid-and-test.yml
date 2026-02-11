@@ -27,15 +27,16 @@ permissions:
   checks: write
 jobs:
   checkout-setup-build-test: 
-    name: ${{ matrix.payload.name }}
-    runs-on: ${{ matrix.payload.os }}
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      payload:
-        - { name: 'ubuntu24.04_bazel8.5.1_x86_64',  os: 'ubuntu24.04',     bazel-version: '8.5.1' }
-        - { name: 'ubuntu24.04_bazel9.0.0_x86_64',  os: 'ubuntu24.04',     bazel-version: '9.0.0' }
-        - { name: 'ubuntu24.04_bazel8.5.1_aarch64', os: 'ubuntu24.04-arm', bazel-version: '8.5.1' }
-        - { name: 'ubuntu24.04_bazel9.0.0_aarch64', os: 'ubuntu24.04-arm', bazel-version: '9.0.0' }
+      matrix:
+        include:
+          - { name: 'ubuntu-24.04_bazel-8.5.1_x86_64',  os: 'ubuntu-24.04',     bazel-version: '8.5.1' }
+          - { name: 'ubuntu-24.04_bazel-9.0.0_x86_64',  os: 'ubuntu-24.04',     bazel-version: '9.0.0' }
+          - { name: 'ubuntu-24.04_bazel-8.5.1_aarch64', os: 'ubuntu-24.04-arm', bazel-version: '8.5.1' }
+          - { name: 'ubuntu-24.04_bazel-9.0.0_aarch64', os: 'ubuntu-24.04-arm', bazel-version: '9.0.0' }
     steps:
     # Remove unnecessary files to maximize build space.
     - name: Free disk space
@@ -66,17 +67,17 @@ jobs:
     # Regenerate the bazel module pages
     - name: Regenerate module pages
       env:
-        USE_BAZEL_VERSION: ${{ matrix.payload.bazel-version }}
+        USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
       run: bazel run //tools:regenerate_modules -- $PWD
     # Build the ROS examples.
     - name: Build code
       env:
-        USE_BAZEL_VERSION: ${{ matrix.payload.bazel-version }}
+        USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
       run: bazel build --config=distribution
     # Test the distribution.
     - name: Run tests
       env:
-        USE_BAZEL_VERSION: ${{ matrix.payload.bazel-version }}
+        USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
       run: bazel test --config=distribution
     # Summarize the results.
     - name: Test report
@@ -90,7 +91,7 @@ jobs:
     - name: Upload test logs
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.payload.name }} (test logs)
+        name: ${{ matrix.name }} (test logs)
         path: "bazel-testlogs/**/test.log"
       if: always()
     # Create badges for each build
@@ -99,8 +100,8 @@ jobs:
       with:
         auth: ${{ secrets.STATUS_BADGE_SECRET }}
         gistID: 4d05b2382879fbd51f9a07bb7c63fb29
-        filename: ${{ matrix.payload.os }}_bazel${{ matrix.payload.bazel-version }}.json
-        label: ${{ matrix.payload.name }}
+        filename: ${{ matrix.name }}
+        label: ${{ matrix.name }}
         message: ${{ job.status == 'success' && 'passed' || 'failed' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
       if: always()
