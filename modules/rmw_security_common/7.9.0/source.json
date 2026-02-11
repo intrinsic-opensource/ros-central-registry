@@ -4,6 +4,6 @@
     "strip_prefix": "rmw-7.9.0/rmw_security_common",
     "overlay": {
         "BUILD.bazel": "sha256-Fy6pi3I4Rt/aRAQPRuWpv90LxuojN74AaAGt6JGLmC0=",
-        "MODULE.bazel": "sha256-R0X8j4jPFGjiahI9b59uHaxozGiExNoI61TknjKdo9w="
+        "MODULE.bazel": "sha256-cl414VQ+k6fChgGhTM4+BlExgw1ZDWR5JyaZqrYqgFM="
     }
 }

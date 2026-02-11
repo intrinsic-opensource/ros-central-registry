@@ -4,7 +4,7 @@
     "strip_prefix": "rcutils-7.0.0",
     "overlay": {
         "BUILD.bazel": "sha256-K8u/nl9RtX9Qbo3Hef58LZGYjL26fdmX9R6q/mIzwOo=",
-        "MODULE.bazel": "sha256-O2LMYtu1gElXFw+dQ40n8JKUTUcH/QRzog1sKx1uklY=",
+        "MODULE.bazel": "sha256-DzhoYAEsRb/3mnWDj41w+HHFM2ezpimnRS8wdkS/uqA=",
         "test/locate_test_assets.h": "sha256-xm3tB/I+9VgV9CwPVDT2dP+r0BJpFuezPgkze0Z+J/I="
     },
     "patches": {

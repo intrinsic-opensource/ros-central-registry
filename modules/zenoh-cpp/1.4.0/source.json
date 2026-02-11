@@ -4,7 +4,7 @@
     "strip_prefix": "zenoh-cpp-1.4.0",
     "overlay": {
         "BUILD.bazel": "sha256-UfEHIv9SlbP7HEuR/MxZPXl8iwkNPiws8OtdS3l8jYQ=",
-        "MODULE.bazel": "sha256-VuqeQoxJZyQEn9X6Aa5Q+CEy32Kel1VGogmZBo7d9n4="
+        "MODULE.bazel": "sha256-dKjnXE+pqBtASgUZGe7fGKLN0gMkikFBV2zc3ohGVzg="
     },
     "patches": {
         "fix__gitignore.patch": "sha256-M5OjbzX40uQq9IQHXi7Jjpj3vBOYs9j7cIBoMM3s0Ps="

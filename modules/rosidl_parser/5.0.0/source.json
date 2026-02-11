@@ -4,6 +4,6 @@
     "strip_prefix": "rosidl-5.0.0/rosidl_parser",
     "overlay": {
         "BUILD.bazel": "sha256-jp3mJMoMs7J9h5SQ/+f5AvGyqtFaemqmmm9YQbehFNU=",
-        "MODULE.bazel": "sha256-MgGnm5Z413hqqS259yoI4jIAmooSl67qSlakEmWcUN4="
+        "MODULE.bazel": "sha256-xjKpLy/Zlln4NBwaWl3WWaFD+PsDA9tYaH3b0uu+FYY="
     }
 }

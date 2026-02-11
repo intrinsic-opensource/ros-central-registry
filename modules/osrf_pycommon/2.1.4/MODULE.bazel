@@ -21,4 +21,4 @@ module(
 )
 
 bazel_dep(name = "rosdistro", version = "rolling-2025-09-05")
-bazel_dep(name = "rules_python", version = "1.6.1")
+bazel_dep(name = "rules_python", version = "1.8.3")

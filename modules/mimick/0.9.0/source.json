@@ -4,7 +4,7 @@
     "strip_prefix": "Mimick-ros2",
     "overlay": {
         "BUILD.bazel": "sha256-KlGsQ4/iWLO/RzHiWyfV6PN865E9mw1rK84MoiujbG4=",
-        "MODULE.bazel": "sha256-fdMNAGBLdFLY1klKt0fuG0UBi5ICHeXpXewBHywUEEU="
+        "MODULE.bazel": "sha256-MtYrRT4c/zQBMZLeuKFqOB5QHInLxnUfD4vUjCBICf0="
     },
     "patches": {
         "fix__gitignore.patch": "sha256-8nV5TTrg4NGVTAlajekyo1IGrcSBquWdHxI5A4YqXW4="

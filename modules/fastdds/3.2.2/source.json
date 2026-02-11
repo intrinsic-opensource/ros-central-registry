@@ -4,7 +4,7 @@
     "strip_prefix": "Fast-DDS-3.2.2",
     "overlay": {
         "BUILD.bazel": "sha256-bI96tI5MpOJvF5nPvHUJrfwgkcNSnA5/sFHEziTHoTc=",
-        "MODULE.bazel": "sha256-7H6X1A3YUvkVQbdlc1szAXWC04baHFPqwvCAUlh8LxU=",
+        "MODULE.bazel": "sha256-EA0UcrcYd6kP+AmoN62Y7e7Py9H/Xr97hxZNtZXRrv8=",
         "include/fastdds/config.hpp": "sha256-ep03IkuECUeIYgb8iTuTDbvJsKdc59ypXrA3Qk/CuMw="
     }
 }

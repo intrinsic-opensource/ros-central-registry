@@ -4,6 +4,6 @@
     "strip_prefix": "rosidl_runtime_py-0.15.0",
     "overlay": {
         "BUILD.bazel": "sha256-NnJNl2d36qBr6IZBd+i+0xop1cla+GkERbRo3DEhmWU=",
-        "MODULE.bazel": "sha256-aN4M8MdbmU6VBBesZg41voikLwYmmVWMsx1uYcBMqVw="
+        "MODULE.bazel": "sha256-JloLD4bJPpg8aPxBsyL2fkSrkfZX8+w2BqO5/juncPE="
     }
 }

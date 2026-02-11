@@ -23,4 +23,4 @@ module(
 # Dependencies
 
 bazel_dep(name = "rmw", version = "7.9.0")
-bazel_dep(name = "rules_cc", version = "0.2.4")
+bazel_dep(name = "rules_cc", version = "0.2.16")

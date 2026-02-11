@@ -4,7 +4,7 @@
     "strip_prefix": "rcl_interfaces-2.4.1/test_msgs",
     "overlay": {
         "BUILD.bazel": "sha256-28RJzMU+P8mPCXE7LSeBbgoFyWn4RyFMj4V4CeqcrLw=",
-        "MODULE.bazel": "sha256-szNOsjAZdgjnixK1/WB1qQmBGo25hD8+BtxMxfrRoxc=",
+        "MODULE.bazel": "sha256-wenGUsd1ZWjYJkC9qBXPyNUj6KHRRkJWfQ5CXyGlH+A=",
         "action/BUILD.bazel": "sha256-EaOrRimwTrt0r2O4y/yJeJ0nh4pkdJ3WkUT262QSS1E=",
         "msg/BUILD.bazel": "sha256-L5WmAYDjUuEViOuDDQqkMr+V7d77CpQuN1iO+voM5GQ=",
         "srv/BUILD.bazel": "sha256-bxnUQbuSe0MPA4+ggLCKhdtmwCvGik1AEnO33zPZXAA="

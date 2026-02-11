@@ -4,7 +4,7 @@
     "strip_prefix": "rmw_zenoh-0.8.1/rmw_zenoh_cpp",
     "overlay": {
         "BUILD.bazel": "sha256-RNeOyrxgk2gXkutoKLeReNlT0wKi4wnRNOCBV6P1+nk=",
-        "MODULE.bazel": "sha256-Q+4j+UMleQ47O06r50GD1l4BrIoVitwxD1WpxHnycY0="
+        "MODULE.bazel": "sha256-Wvltn/t7GN+4xvRB9R5bWaqIiq0pzB8dI86yWl80l/c="
     },
     "patches": {
         "fix_src_detail_rmw_context_impl_s_cpp.patch": "sha256-YFOlimzxcyYCLc5WIpvb9xMjlG1Dzf64NjISeU1+Wo8="

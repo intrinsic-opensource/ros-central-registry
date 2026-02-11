@@ -3,8 +3,8 @@
     "integrity": "sha256-Non8yu51qNN8BfGN+s4Fcdcdy0xDeZlLb5vaYmJziaw=",
     "strip_prefix": "rcl_logging-3.3.0/rcl_logging_spdlog",
     "overlay": {
-        "BUILD.bazel": "sha256-U0j4ciP33m65w8NSZXSJuDjMFi0kIgA0v+MX7QpVFM8=",
-        "MODULE.bazel": "sha256-96nkPkIT9fbBeguxj6prPdzeLo6A9mqJ+JMxqJummO4="
+        "BUILD.bazel": "sha256-Iy9WhTTn/cqag/TIbHRcwgarcnGyiw2hGO02enVZSIw=",
+        "MODULE.bazel": "sha256-/FFzdXLfJ2hrKhkRfZF90rTt34fjk+DMNoS6/pRPLPw="
     },
     "patches": {
         "fix_test_test_logging_interface_cpp.patch": "sha256-cmoJGQKeeQcBMKyPub3DkD3gKYG9tlhIzTC5zhl5OqQ="

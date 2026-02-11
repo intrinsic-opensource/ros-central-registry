@@ -45,7 +45,7 @@ cc_test(
         ":rcl_logging_spdlog",
     ],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_spdlog\\\""],
-    timeout = "short"
+    timeout = "short",
 )
 
 cc_test(

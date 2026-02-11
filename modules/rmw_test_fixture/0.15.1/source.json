@@ -4,6 +4,6 @@
     "strip_prefix": "ament_cmake_ros-0.15.1/rmw_test_fixture",
     "overlay": {
         "BUILD.bazel": "sha256-7lj85zTNRGEzIsN757Nm4551nZ64SsWbiyTA28ym+kE=",
-        "MODULE.bazel": "sha256-kB0hRRyDJ6i5Hw0i4sp+F5wtVRiPkh1qQs6+JjQzeXQ="
+        "MODULE.bazel": "sha256-kjN0nwWn4oV7mbp+L3/r+rzMsTmiA886MZTOcOYKRSM="
     }
 }

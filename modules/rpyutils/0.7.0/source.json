@@ -4,6 +4,6 @@
     "strip_prefix": "rpyutils-0.7.0",
     "overlay": {
         "BUILD.bazel": "sha256-/XtJgQY4JAzuo9qAjQddnvMQsQP12hjHpFaxpnef+2U=",
-        "MODULE.bazel": "sha256-JHe+Pe5SD7D/Ahte/I3DHHNg85fqFu4qNIWnfJnTmj8="
+        "MODULE.bazel": "sha256-ihPoUyt0PxPkQSe/0GAQGK7U4VU0gC+Vv/uhOZGwO+g="
     }
 }

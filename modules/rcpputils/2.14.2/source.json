@@ -4,7 +4,7 @@
     "strip_prefix": "rcpputils-2.14.2",
     "overlay": {
         "BUILD.bazel": "sha256-kYl3SNFVqI9Q8m90SsHrXdc/Qm5NhUs4dmbN+zv5LX4=",
-        "MODULE.bazel": "sha256-700ddt0KiGLtaYB0bWySsW3QSA2hy+eVU7Mible0VYo="
+        "MODULE.bazel": "sha256-RLz+VDRFFMt9beFj0TpV8fkmGWtrcjFW3+8oOL0gAh4="
     },
     "patches": {
         "fix_test_test_filesystem_helper_std_cpp.patch": "sha256-wVMaBVSNjOQ4pKkVnyoOe+idStAMz8u6X0ovpJrCFkY="

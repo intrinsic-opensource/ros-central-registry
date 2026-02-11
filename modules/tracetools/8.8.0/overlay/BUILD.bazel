@@ -20,7 +20,7 @@
 
 load("@cmake_configure_file//:cmake_configure_file.bzl", "cmake_configure_file")
 load("@ament_cmake_gen_version_h//:macros.bzl", "generate_ros_version_defines")
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 

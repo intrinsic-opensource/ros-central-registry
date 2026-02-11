@@ -4,7 +4,7 @@
     "strip_prefix": "lttng-ust-2.14.0",
     "overlay": {
         "BUILD.bazel": "sha256-HQaE3VSNC0LClx1ogXc4qMHJv8a4i5/IkLACGSrqW6w=",
-        "MODULE.bazel": "sha256-uxJ3vRuXErp2yPq3cMcffNysUESOvCGKikDf5TiM9t8="
+        "MODULE.bazel": "sha256-dbb80cPZ8lIOXagRjLhhaThvHdi5ULCQXTsMI+hsMO8="
     },
     "patches": {
         "fix__gitignore.patch": "sha256-F21AQ/8FnQy1Jls4qofPLRVMVoDPNO+cekkaoB5NAxA=",

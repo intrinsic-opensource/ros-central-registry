@@ -4,7 +4,7 @@
     "strip_prefix": "rosidl-5.0.0/rosidl_adapter",
     "overlay": {
         "BUILD.bazel": "sha256-xHZmfbpwP1r6uCaRcomtw646BhvpFgsWjQoblQUruZ0=",
-        "MODULE.bazel": "sha256-Ewtoybic9f6lh/L2BgqLbR9vvcvh4ROCCZ2auI9p/4M=",
+        "MODULE.bazel": "sha256-CaIeV7XWRF7jI1wviRTklTMwQtoqqaUDY75f5rnYGGU=",
         "aspects.bzl": "sha256-EbNtcAU3Jxttqp5sVMAY/o5p4R2dlgId92QwasY5dIM=",
         "rules.bzl": "sha256-kkleKEmTPFyJgo6hfdABbt+gj5J5fR1rf7W7G2mxrMQ=",
         "test/data/action/BUILD.bazel": "sha256-iCSLKmDFgJZi/6LVwC7VZBmh+Cv9fi0y04tPtKf0CX0=",

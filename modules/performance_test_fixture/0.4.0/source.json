@@ -4,6 +4,6 @@
     "strip_prefix": "performance_test_fixture-0.4.0",
     "overlay": {
         "BUILD.bazel": "sha256-KgaJIoozus4UOmUHCFBA/vTN9DxP1Iy+YD9Ih4NeQKc=",
-        "MODULE.bazel": "sha256-VkkBSR0xx9fIrczrqAGkbFYM9rJpNwWsQGqwIwlIAio="
+        "MODULE.bazel": "sha256-xTg6Kw39iFhj9eu3aXuY9tpcQYDgeJGG7VHlHyDxEbc="
     }
 }

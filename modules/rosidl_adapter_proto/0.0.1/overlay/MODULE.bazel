@@ -22,12 +22,12 @@ module(
 
 # Dependencies
 
-bazel_dep(name = "protobuf", version = "32.0")
+bazel_dep(name = "protobuf", version = "33.4")
 bazel_dep(name = "rosdistro", version = "rolling-2025-09-05")
 bazel_dep(name = "rosidl_cmake", version = "5.0.0")
 bazel_dep(name = "rosidl_adapter", version = "5.0.0")
 bazel_dep(name = "rosidl_generator_type_description", version = "5.0.0")
 bazel_dep(name = "rosidl_parser", version = "5.0.0")
 bazel_dep(name = "rosidl_pycommon", version = "5.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.4")
-bazel_dep(name = "rules_python", version = "1.6.1")
+bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_python", version = "1.8.3")

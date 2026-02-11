@@ -4,6 +4,6 @@
     "strip_prefix": "rcl-10.2.2/rcl_action",
     "overlay": {
         "BUILD.bazel": "sha256-C68RfFTdz1CdOHT9CQANQ341pVX0JyPiX01sLFhB5C0=",
-        "MODULE.bazel": "sha256-pxqhttS7qMxD+rFvjtHrDT6p12Y7Jrdg1xLE/1NMh+A="
+        "MODULE.bazel": "sha256-AZeE8pFDaNTE/bjXO3AMseN+F2E2/Ik0/KecvSXOkkY="
     }
 }

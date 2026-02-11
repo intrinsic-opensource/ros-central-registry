@@ -4,7 +4,7 @@
     "strip_prefix": "rosidl_typesupport_protobuf-0.0.1/rosidl_typesupport_protobuf_c",
     "overlay": {
         "BUILD.bazel": "sha256-g+ZJeXYQbXXM7JPuKO8BWo41VVwkHZofCMd8O+2Y2PU=",
-        "MODULE.bazel": "sha256-UttK1BZ0gjzLVHaavVO7IuDHmIoeKKJBIC2Rmpvx3Y0=",
+        "MODULE.bazel": "sha256-5p1D043AWgQPgZzE/HxsSg/Wad61zZiNu9s3uPaY/aw=",
         "aspects.bzl": "sha256-Z/I8BoCM79kmihyd0ZSeOBwlFLXiSomz1/Nb+9jtimE=",
         "types.bzl": "sha256-8G0GgjZJjFnx3+/xN+BE6niBELrqL5qE2q6K/Z5yCRY="
     },

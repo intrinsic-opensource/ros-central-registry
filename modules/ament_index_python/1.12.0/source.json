@@ -3,8 +3,8 @@
     "integrity": "sha256-uyBCdwdodHJbBFUFqdWYL3Pu1PLn4TzbFsIa4Lsr2s8=",
     "strip_prefix": "ament_index-1.12.0/ament_index_python",
     "overlay": {
-        "BUILD.bazel": "sha256-J953Sw4sUDxLWDvbiXoDsFDNZ3ZfdlqDBvjuKMvzfBg=",
-        "MODULE.bazel": "sha256-PUCNHqY37xvkk3WWCo7/4tP53T7RUpg5732H4grpLic="
+        "BUILD.bazel": "sha256-E5/dp7GWBOcqyAPdTco0kY9tHpBVd6M/EWY/Nc35Mws=",
+        "MODULE.bazel": "sha256-EI3yxjzu9cCzxkt5+tRtrdBuAV+VzZFXfiyemT8tOpY="
     },
     "patches": {
         "fix_ament_index_python_search_paths_py.patch": "sha256-UdGnL6/WZRxMc1+fZjl0hNKh//5LTdetO3bFXdQcB5U=",

@@ -4,6 +4,6 @@
     "strip_prefix": "osrf_testing_tools_cpp-2.3.0/test_osrf_testing_tools_cpp",
     "overlay": {
         "BUILD.bazel": "sha256-oJgKweAUMeOIFcLML7MBBqtUBLDUXHeA7npPw8mfXIQ=",
-        "MODULE.bazel": "sha256-kHNulaXloZ2jPM63xsyPan+qnMqJCvx+bo0UGypHdmI="
+        "MODULE.bazel": "sha256-Y7R8lxDf9zCrXNok1e0FtqCea9thuHrrKHJ8M7FhmNk="
     }
 }

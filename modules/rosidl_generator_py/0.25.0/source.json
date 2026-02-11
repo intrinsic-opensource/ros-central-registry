@@ -4,7 +4,7 @@
     "strip_prefix": "rosidl_python-0.25.0/rosidl_generator_py",
     "overlay": {
         "BUILD.bazel": "sha256-u0LotckOr2MmljLGEFYrvetxsvs6eryK9j6y0vCgKWU=",
-        "MODULE.bazel": "sha256-mY45QMOkdlvI1v391itBZvNWVNo2ryd5IXcjNfnqcEs=",
+        "MODULE.bazel": "sha256-vkPSs5RlwCq7XnuAtrB/ozumWkh0l6CxPyx2dJCCB1o=",
         "aspects.bzl": "sha256-rNlhvYASsUW2q9IzCAdgGpvmlQA5xgWKbMZ+Hsve1Sk=",
         "msg/BUILD.bazel": "sha256-pWvW/5IwprGr5vUISTjlcgqhsKamdSO+2Ysstonbmck=",
         "rules.bzl": "sha256-mT0iwrbS+HUEwxsMwixhc666HRwQ0kxiGvOgucPMLWs=",

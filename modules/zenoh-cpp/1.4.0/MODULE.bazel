@@ -18,5 +18,5 @@ module(
     compatibility_level = 0,
 )
 
-bazel_dep(name = "rules_cc", version = "0.2.4")
+bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "zenoh-c", version = "1.4.0")

@@ -70,7 +70,7 @@ cc_test(
         "@rosidl_runtime_cpp",
         ":rmw_dds_common",
     ],
-    timeout = "short"
+    timeout = "short",
 )
 
 [

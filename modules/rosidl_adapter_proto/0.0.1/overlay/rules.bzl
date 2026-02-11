@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
 load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:aspects.bzl", "rosidl_adapter_aspect")
 load("@rosidl_generator_type_description//:aspects.bzl", "rosidl_generator_type_description_aspect")
