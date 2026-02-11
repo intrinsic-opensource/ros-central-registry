@@ -59,7 +59,7 @@ jobs:
       uses: bazel-contrib/setup-bazel@0.15.0
       with:
         bazelisk-cache: true
-        disk-cache: ${{ github.workflow }}
+        disk-cache: ${{ matrix.name}}
         repository-cache: false
     # Build the container image.
     - name: Build test container
