@@ -64,11 +64,10 @@ build:tsan --copt=-fno-omit-frame-pointer
 build:tsan --linkopt=-fsanitize=thread
 
 # Helper for building and testing all modules in the workspace.
-build:distribution --target_pattern_file=distribution.txt
+common:distribution --target_pattern_file=distribution.txt
 
-# Run distribution tests in a container to make sure that those tests that
-# use network and shared memory are isolated from each other.
-test:distribution --target_pattern_file=distribution.txt
-test:distribution --spawn_strategy=docker
-test:distribution --experimental_enable_docker_sandbox
-test:distribution --experimental_docker_image=ros-central-registry:24.04
+# Helper for building and testing all modules in the workspace.
+common:docker --target_pattern_file=distribution.txt
+common:docker --spawn_strategy=docker
+common:docker --experimental_enable_docker_sandbox
+common:docker --experimental_docker_image=ros-central-registry:24.04

@@ -1,9 +1,13 @@
 <p align="center">
 <img width="256" src="docs/rcr_logo.png"/>
 <br/>
-<img src="https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-amd64.yml/badge.svg">
-&nbsp;&nbsp;   
-<img src="https://github.com/intrinsic-opensource/ros-central-registry/actions/workflows/build-test-linux-arm64.yml/badge.svg">
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu24.04_bazel8.5.1.json">
+&nbsp;   
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu24.04_bazel9.0.0.json">
+&nbsp;   
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu24.04-arm_bazel8.5.1.json">
+&nbsp;
+<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/5cff5dc544f50a3a2a635a69f8eab7df64515683/ubuntu24.04-arm_bazel9.0.0.json">
 </p>
 
 # Overview

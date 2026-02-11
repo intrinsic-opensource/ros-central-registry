@@ -20,8 +20,12 @@ RUN apt-get update                                  \
     && apt-get install -y --no-install-recommends   \
     automake                                        \
     autoconf                                        \
+    bash                                            \
+    libxml2                                         \
     libtool                                         \
+    openjdk-21-jdk                                  \
     python3                                         \
     sudo                                            \
     valgrind                                        \
     && sudo rm -rf /var/lib/apt/lists/*
+RUN ldconfig
