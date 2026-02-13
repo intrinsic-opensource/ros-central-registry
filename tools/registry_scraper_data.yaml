@@ -183,6 +183,14 @@ rcl:
     rcl_lifecycle: rcl_lifecycle
     rcl_yaml_param_parser: rcl_yaml_param_parser
     rcl: rcl
+rclc:
+  github: ros2/rclc
+  version: 6.2.0
+  modules:
+    rclc: rclc
+    rclc_examples: rclc_examples
+    rclc_lifecycle: rclc_lifecycle
+    rclc_parameter: rclc_parameter
 rclcpp:
   github: ros2/rclcpp
   version: 30.0.0
