@@ -39,6 +39,9 @@ In terms of features, this is what we currently support:
   - [x] `rcl`
   - [x] `rcl_action`
   - [x] `rcl_lifecycle`
+  - [x] `rclc`
+  - [x] `rclc_lifecycle`
+  - [x] `rclc_parameter`
   - [x] `rclcpp` 
   - [x] `rclcpp_action` 
   - [x] `rclcpp_lifecycle`
