@@ -98,6 +98,9 @@ common_interfaces:
 console_bridge_vendor:
   github: ros2/console_bridge_vendor
   version: 1.9.1
+example_interfaces:
+  github: ros2/example_interfaces
+  version: 0.14.1
 geometry2:
   github: ros2/geometry2
   version: 0.43.0
@@ -183,6 +186,14 @@ rcl:
     rcl_lifecycle: rcl_lifecycle
     rcl_yaml_param_parser: rcl_yaml_param_parser
     rcl: rcl
+rclc:
+  github: ros2/rclc
+  version: 6.2.0
+  modules:
+    rclc: rclc
+    rclc_examples: rclc_examples
+    rclc_lifecycle: rclc_lifecycle
+    rclc_parameter: rclc_parameter
 rclcpp:
   github: ros2/rclcpp
   version: 30.0.0

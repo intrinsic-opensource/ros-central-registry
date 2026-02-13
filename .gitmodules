@@ -175,3 +175,9 @@
 [submodule "submodules/rclpy"]
 	path = submodules/rclpy
 	url = https://github.com/asymingt/rclpy.git
+[submodule "submodules/rclc"]
+	path = submodules/rclc
+	url = https://github.com/asymingt/rclc.git
+[submodule "submodules/example_interfaces"]
+	path = submodules/example_interfaces
+	url = https://github.com/asymingt/example_interfaces.git
