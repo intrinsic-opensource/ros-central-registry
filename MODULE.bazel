@@ -31,7 +31,7 @@ bazel_dep(name = "rules_foreign_cc", version = "0.15.0")
 bazel_dep(name = "rules_python", version = "1.8.3")
 bazel_dep(name = "rules_rust", version = "0.64.0")
 bazel_dep(name = "rules_shell", version = "0.6.1")
-bazel_dep(name = "toolchains_llvm", version = "1.6.0")
+bazel_dep(name = "toolchains_llvm_bootstrapped", version = "0.5.5")
 bazel_dep(name = "userspace_rcu", version = "0.15.4")
 
 # Third party (things we intend to add to the BCR)
@@ -515,10 +515,17 @@ local_path_override(module_name = "zenoh_security_tools", path = "./submodules/r
 
 # C++ toolchain (offers amd64 and arm64 for linux, windows and darwin)
 
-llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
-llvm.toolchain(llvm_version = "20.1.7")
-use_repo(llvm, "llvm_toolchain")
-register_toolchains("@llvm_toolchain//:all")
+toolchain = use_extension("@toolchains_llvm_bootstrapped//extensions:toolchain.bzl", "toolchain")
+toolchain.exec(
+    arch = "x86_64",
+    os = "linux",
+)
+toolchain.target(
+    arch = "x86_64",
+    os = "linux",
+)
+use_repo(toolchain, "llvm_toolchains")
+register_toolchains("@llvm_toolchains//:all")
 
 # Python configuration
 
