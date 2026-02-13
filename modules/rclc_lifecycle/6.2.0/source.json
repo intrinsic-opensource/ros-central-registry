@@ -1,0 +1,13 @@
+{
+    "url": "https://github.com/ros2/rclc/archive/refs/tags/6.2.0.tar.gz",
+    "integrity": "sha256-VEtr9D8fXCu0GpefaNQwBFgNq04gbi6t53o0EEYCgPY=",
+    "strip_prefix": "rclc-6.2.0/rclc_lifecycle",
+    "overlay": {
+        "BUILD.bazel": "sha256-XXzv4RnFSIdvpdMpd8QrXllFSlqVRgoYyucFmIvpYEk=",
+        "MODULE.bazel": "sha256-NTKgRKu7xZzFijblQM0DCch0M6vqIwbsm6stdW4UO+E="
+    },
+    "patches": {
+        "fix_src_rclc_lifecycle_rclc_lifecycle_c.patch": "sha256-wudZxuylLKfZYTM9xsVKtdA581kbAc/ZZ4TJc5RMLZ4="
+    },
+    "patch_strip": 2
+}

@@ -1,0 +1,14 @@
+diff --git a/rclc_lifecycle/src/rclc_lifecycle/rclc_lifecycle.c b/rclc_lifecycle/src/rclc_lifecycle/rclc_lifecycle.c
+index 8bd9aac..cd4dc70 100644
+--- a/rclc_lifecycle/src/rclc_lifecycle/rclc_lifecycle.c
++++ b/rclc_lifecycle/src/rclc_lifecycle/rclc_lifecycle.c
+@@ -53,6 +53,9 @@ rclc_make_node_a_lifecycle_node(
+   lifecycle_node->node = node;
+   lifecycle_node->publish_transitions = enable_communication_interface;
+ 
++  // // THis is needed
++  // memset(&lifecycle_node->callbacks, 0, sizeof(rclc_lifecycle_callback_map_t));
++
+   rcl_lifecycle_state_machine_options_t state_machine_options =
+     rcl_lifecycle_get_default_state_machine_options();
+   state_machine_options.enable_com_interface = enable_communication_interface;
