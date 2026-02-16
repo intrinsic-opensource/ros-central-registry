@@ -5,5 +5,9 @@
     "overlay": {
         "BUILD.bazel": "sha256-g0R9OlY8G/p1gzAXkzfhCWi+o824VslvdopUt0BmvZY=",
         "MODULE.bazel": "sha256-p/GnX/HHo+3tCK4VeMn5mAQRYYzSm0Nm/EWJhhGYWrI="
-    }
+    },
+    "patches": {
+        "fix_src_example_lifecycle_node_c.patch": "sha256-aIa/Y7rZJcDcMvlZyKW+x35A6RAEhM7AWiOw11Wz1rg="
+    },
+    "patch_strip": 2
 }

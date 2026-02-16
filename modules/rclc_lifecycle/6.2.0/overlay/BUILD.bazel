@@ -56,7 +56,6 @@ cc_test(
     srcs = ["test/test_lifecycle.cpp"], 
     local_defines = ["ROS_PACKAGE_NAME=\\\"rclc_lifecycle\\\""],
     includes = ["src/rcl"],
-    cxxopts = ["-ftrivial-auto-var-init=zero"],
     deps = [
         ":rclc_lifecycle",
         "@googletest//:gtest",
