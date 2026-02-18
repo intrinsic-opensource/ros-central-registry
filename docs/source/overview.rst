@@ -1,0 +1,20 @@
+Overview
+========
+
+Bazel is an open source release of a build tool used internally by engineers at Alphabet. It was designed for performance, scalability and determinism. It also supports multiple platforms and languages.
+
+The Robot Operating System (ROS) pre-dates Bazel and builds and packages code with its own custom tools that fundamentally wrap CMake and the native python packaging systems. It also supports meson-based packages now too. ROS as a project pre-dates Bazel’s first release. An important concept in ROS build tooling is a workspace, which is essentially a collection of ROS packages. When code is built in a workspace it may be packaged and used by another developer as an underlay. Implicit in this layered design is the notion of dynamically linking against pre-built products, abstracting away the mechanism that built them and supporting multiple different build systems to support different languages, as well as system dependencies in those different languages as well.
+
+Pros and cons of Bazel, compared to CMake
+In a sense, Bazel is antithetical to the workspace concept in ROS; instead of the workspace abstraction, it encourages capturing the entire dependency chain per-target – including all parent packages – from source. And, it does this for builds, executions and tests (called actions). Moreover it does this all in a sandbox environment, in an effort to make builds consistent across different environments. This provides the following key benefits:
+Correctness:  By default Bazel builds everything from source, including what you import from your dependencies. It therefore doesn’t rely on dynamically linking against binaries in the environment at runtime, the versions of which may differ from system-to-system, which may vary between systems. This has the additional advantage that platform specific compiler flags are consistently used across the dep chain.
+Speed: Computational resources can be more optimally scheduled, because the action graph is built across the entire project plus its dependencies. This means that you only build what is needed for your request. 
+Reproducibility: Bazel builds code in a ‘hermetic’ sandbox environment, which isolates it from the host system. This means that for a given code commit Bazel is capable of producing output products that hash to the same value, which helps the release process and root-causing bugs across systems.
+Scalability: The action graph allows both code compilation and test execution results to be cached centrally in a build farm, and this significantly reduces cloud compute cost, leading to quicker build turnarounds. 
+Portability: Everything required by a single target is collected in the binary output folder controlled by Bazel, making it easier to decouple output from the environment. This self-containment will in all likelihood make it easier to package binary output as Python wheels or Conda packages. 
+Some of the shortcomings of Bazel when it comes to using it as ROS 2 build system are:
+CMake is an industry standard, has the benefit of a large user base, and supports a wide range of compilers and operating systems. Bazel has the potential to do the same, but there are gaps in the tooling.
+Bazel forces all dependencies to be built from source, and therefore if your project is tied to an upstream dependency that does not have Bazel this can be a significant road block to supporting Bazel builds.
+Bazel forces everything to be rebuilt from source, if you have a very large dependency graph it can take a long time to build. There are advanced caching mechanisms for it but you do still need to build things all the way down.
+There are not as many examples of Bazel projects as there are CMake projects, so it’s tricky for newcomers to get even a relatively simple project up and running.
+The location that Bazel chooses to place output binaries is opaque, and so you need to use tooling like rules_pkg to package up something in a way that it can be used outside of the sandbox.

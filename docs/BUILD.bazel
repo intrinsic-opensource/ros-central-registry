@@ -1,0 +1,15 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+load("@docs_deps//:requirements.bzl", "requirement")
+
+py_binary(
+    name = "preview",
+    srcs = ["docs_runner.py"],
+    main = "docs_runner.py",
+    deps = [
+        requirement("sphinx"),
+        requirement("sphinx-autobuild"),
+        requirement("sphinx-tabs"),
+        requirement("furo"),
+    ],
+    tags = ["requires-network"],
+)
