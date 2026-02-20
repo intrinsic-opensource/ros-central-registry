@@ -31,8 +31,6 @@ genrule(
     srcs = glob([
         "source/**",
         "_static/**",
-        "*.html",
-        "*.txt",
     ]),
     outs = ["html_docs.tar.gz"],
     cmd = "$(location :sphinx_build) -M html docs/source $(@D)/build && " +
