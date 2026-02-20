@@ -75,7 +75,7 @@ Now, let's say we want to build the ``foo`` library. We can do this with any of 
    bazel build //libraries/foo:foo
    bazel build //libraries/foo
 
-The important thing to note is that in order for the colcon ``:`` separator to work, you must have a ``BUILD.bazel`` file in the target directory. For this reason, in the example above ``bazel build //docs/...`` will not work because there is no ``BUILD.bazel`` file in the ``docs`` subdirectory.
+The important thing to note is that in order for the colon ``:`` separator to work, you must have a ``BUILD.bazel`` file in the target directory. For this reason, in the example above ``bazel build //docs/...`` will not work because there is no ``BUILD.bazel`` file in the ``docs`` subdirectory.
 
 Build rules
 +++++++++++
@@ -199,7 +199,7 @@ ROS fundamentals
 Interfaces
 ++++++++++
 
-One of the fundamental advantages of ROS is provides a standardized way of exchanging and storing information. This allows for lots of reusable tooling and easy interoperation between packages, even if they are written in different programming languages. What drives this concept is the idea of an ``interface``, which is an agreed-upon strategy for exchanging information.
+One of the fundamental advantages of ROS is provides a standardized way of exchanging and storing information. This allows for lots of reusable tooling and easy inter-operation between packages, even if they are written in different programming languages. What drives this concept is the idea of an ``interface``, which is an agreed-upon strategy for exchanging information.
 
 The Bazel rules for interfaces are inspired by the Bazel rules for protocol buffers. In essence, you define a ROS interface with the ``ros_interface`` rule. If you re-use other packages' interfaces, you add them to the ``deps`` attribute of the ``ros_interface`` rule. In so doing you construct a graph of interfaces. The language_specific rules, eg ``c_ros_library``, ``cc_ros_library``, ``py_ros_library`` are then called on a collection of interfaces to generate the language-specific interfaces.
 
@@ -227,7 +227,7 @@ If one wanted to define this interface in a ``BUILD.bazel`` file, one would do s
       ],
    )
 
-If you have prior experience building a ROS package, you might be surprised that dependency is now described at the message, not the package level. This is a concious design choice to allow for more fine-grained dependency and faster build times. At the point where you want to use this interface in a C++ node, you would need to transform this (and perhaps combine with other messages) into a ``cc_ros_library`` target. Here is what that looks like:
+If you have prior experience building a ROS package, you might be surprised that dependency is now described at the message, not the package level. This is a conscious design choice to allow for more fine-grained dependency and faster build times. At the point where you want to use this interface in a C++ node, you would need to transform this (and perhaps combine with other messages) into a ``cc_ros_library`` target. Here is what that looks like:
 
 
 .. tabs::

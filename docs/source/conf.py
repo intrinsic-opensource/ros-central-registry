@@ -29,5 +29,5 @@ html_css_files = [
 html_logo = "rcr_logo.png"
 
 html_theme_options = {
-    "sidebar_hide_name": True,
+    "sidebar_hide_name": False,
 }
