@@ -1,4 +1,4 @@
-Why Bazel?
+Motivation
 ==========
 
 Bazel brings hermeticity, reproducibility, and scalability to ROS 2 builds.

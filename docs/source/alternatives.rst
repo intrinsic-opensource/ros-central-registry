@@ -1,5 +1,5 @@
-Survey of Alternate Approaches
-==============================
+Alternatives
+============
 
 We evaluated several alternatives before settling on the current design:
 
