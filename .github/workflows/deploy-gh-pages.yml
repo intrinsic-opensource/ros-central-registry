@@ -20,7 +20,7 @@ on:
   push:
     branches:
       - main
-      - asymingt/trigger-the-rcr-ui-automatically # TODO remove before merge
+      - asymingt/add-sphinx-docs
 
 permissions:
   contents: write
@@ -47,14 +47,27 @@ jobs:
         repository-cache: false
 
     # Regenerate the bazel module pages
-    - name: Regenerate module pages
+    - name: Regenerate modules
       run: bazel run //tools:regenerate_modules -- $PWD
 
-    # Deploy the documentation to GitHub Pages.
+    # Regenerate the documentation
+    - name: Regenerate docs
+      run: bazel build //docs:html
+
+    # Copy the modules folder
+    - name: Merge docs and modules
+      run: |
+        mkdir -p ./deploy
+        touch ./deploy/.nojekyll
+        echo -e "{\n\t\"mirrors\": []\n}" > ./deploy/bazel_registry.json
+        tar -xzvf bazel-bin/docs/html_docs.tar.gz -C ./deploy 
+        cp -R ./modules deploy/modules
+
+    # Deploy 
     - name: Deploy to github pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        folder: docs
+        folder: deploy
 
     # Notify the RCR-UI that it needs to regenerate its pages.
     - name: Notify the RCR-UI to rebuild

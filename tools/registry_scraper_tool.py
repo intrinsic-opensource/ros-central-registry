@@ -126,7 +126,7 @@ def update_patch_file(patch_dest, patch_content):
 
 def repos_from_submodules(repo_base_path, repo_yaml_file, package=None):
     """Process all repos in the yaml file"""
-    base_out_path = repo_base_path / 'docs' / 'modules'
+    base_out_path = repo_base_path / 'modules'
 
     # Try and open the file with all the repos
     try:
