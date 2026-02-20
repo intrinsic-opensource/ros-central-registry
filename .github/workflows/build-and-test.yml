@@ -102,4 +102,4 @@ jobs:
         label: ${{ matrix.name }}
         message: ${{ job.status == 'success' && 'pass' || 'fail' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: always()
+      if: github.ref_name == 'main'

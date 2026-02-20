@@ -20,7 +20,6 @@ on:
   push:
     branches:
       - main
-      - asymingt/add-sphinx-docs
 
 permissions:
   contents: write
