@@ -1,5 +1,5 @@
 <p align="center">
-<img width="256" src="docs/rcr_logo.png"/>
+<img width="256" src="docs/source/rcr_logo.png"/>
 <br/>
 <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/4d05b2382879fbd51f9a07bb7c63fb29/raw/ubuntu-24.04_bazel-8.5.1_x86_64.json">
 &nbsp;

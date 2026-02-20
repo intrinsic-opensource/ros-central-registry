@@ -535,3 +535,11 @@ rust.toolchain(
     edition = "2021",
     versions = ["1.85.0"],
 )
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "docs_deps",
+    python_version = "3.12",
+    requirements_lock = "//docs:requirements.txt",
+)
+use_repo(pip, "docs_deps")
