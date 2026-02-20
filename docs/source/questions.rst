@@ -27,9 +27,32 @@ We only support packages that are present in the upstream rosdistro repository. 
 
 If your package was recently added to rosdistro, then you will need to wait for the next release to bootstrap the module. Once it has been bootstrapped, you can follow the "patching" instructions in the `developer guide <developer_guide.html>`__ to create a local development environment in which to iterate on your module. Once you have a module, you can open a pull request against the RCR. After mt merges, you should be able to use the module in your own projects. When the next patch release for the distribution is
 
-How do I update this documentation?
+How do I update your documentation?
 +++++++++++++++++++++++++++++++++++
+
+You can checkout the RCR repo and run the following command to preview the documentation locally:
 
 .. code-block:: shell 
 
    bazel run //docs:preview
+
+This will build the documentation and serve it locally on port 8000. You can then open `http://localhost:8000 <http://localhost:8000>`__ in your browser to view the documentation. It will update automatically as you make changes to the documentation source files in the ``docs`` directory of the repository. Once you are satisfied with your changes, you can open a pull request against the RCR.
+
+
+How do I deploy build products to a robot?
+++++++++++++++++++++++++++++++++++++++++++
+
+Right now we don't have a solid answer for this. Since we build everything from source using a hermetic toolchain, we should in principle be able to cross-compile for different architectures.
+
+However, packaging remains an open problem. Currently, we think that a (yet to be written) ``ros_underlay`` rule might be the right answer to this problem. This rule would collect binaries, libraries, and data files from the workspace into a tarball whose file structure resembles a ROS underlay.  One could then write an application-specific rule that takes this tarball and deploys it to a robot. 
+
+.. code-block:: python 
+
+   ros_underlay(
+      name = "my_underlay",
+      executables = ["@example//:foo_node"],
+      libraries = ["@example//:bar_component"],
+      data = ["@example//:baz_data"],
+   )
+
+If you have any ideas or suggestions about how we might improve this workflow, please reach out to us.
