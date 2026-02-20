@@ -3,11 +3,11 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Motivation" href="motivation.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="FAQs" href="questions.html"><link rel="prev" title="Developer guide" href="developer_guide.html">
         <link rel="prefetch" href="_static/rcr_logo.png" as="image">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
-        <title>ROS Central Registry 0.0.1 documentation</title>
+        <title>Alternatives - ROS Central Registry 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -163,7 +163,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">ROS Central Registry 0.0.1 documentation</div></a>
+      <a href="index.html"><div class="brand">ROS Central Registry 0.0.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -174,7 +174,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -182,7 +182,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="_static/rcr_logo.png" alt="Logo"/>
   </div>
@@ -196,12 +196,12 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="design_choices.html">Design choices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="alternatives.html">Alternatives</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Alternatives</a></li>
 <li class="toctree-l1"><a class="reference internal" href="questions.html">FAQs</a></li>
 </ul>
 
@@ -223,7 +223,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/index.rst.txt" title="View this page">
+  <a class="muted-link" href="_sources/alternatives.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -236,82 +236,43 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="rcr-documentation">
-<h1>RCR Documentation<a class="headerlink" href="#rcr-documentation" title="Link to this heading">¶</a></h1>
-<p>Welcome to the ROS Central Registry documentation.</p>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="motivation.html">Motivation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quick_start.html#setup-your-workspace">Setup your workspace</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quick_start.html#install-bazel">Install Bazel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quick_start.html#copy-release">Copy release</a></li>
+          <section id="alternatives">
+<h1>Alternatives<a class="headerlink" href="#alternatives" title="Link to this heading">¶</a></h1>
+<p>The ROS Central Registry is not the first Bazel build system for ROS. However, it offers the highest degree of test coverage, supports the widest range of messaging middleware implementations, and is the first to declare interface dependencies at a sub-package granularity. From ROS “Lyrical” onwards, we endeavor to follow each upstream distribution release with a corresponding Bazel release.</p>
+<p>Our implementation would not be possible without the work of others in the ROS community. Notably, we use many ideas from the IDL aspects from <a class="reference external" href="https://github.com/mvukov/rules_ros2">mvukov/rules_ros2</a> and the Bazel module encapsulation from <a class="reference external" href="https://github.com/idealworks/bazel-public-registry">idealworks/bazel-public-registry</a>.</p>
+<p>We are aware of many other proprietary and open source approaches. In the remainder of this page we describe our best understanding of each of the well-adopted open source projects. We do this so that readers can understand how our approach is positioned with respect to other approaches, so that they can make an informed decision about which approach is best for their own needs.</p>
+<section id="mvukov-rules-ros2">
+<h2><a class="reference external" href="https://github.com/mvukov/rules_ros2">mvukov/rules_ros2</a><a class="headerlink" href="#mvukov-rules-ros2" title="Link to this heading">¶</a></h2>
+<p>This approach follows the Bazel build-everything-from-source philosophy by providing a collection of <code class="docutils literal notranslate"><span class="pre">BUILD.bazel</span></code> files for many existing packages. The tooling downloads the <code class="docutils literal notranslate"><span class="pre">humble/2024-12-05</span></code> release of the <code class="docutils literal notranslate"><span class="pre">ros2.repos</span></code> file, which it transforms into a structured list of package definitions, which call a Bazel rule to register the package with a source download location, collection of patches, and Bazel <code class="docutils literal notranslate"><span class="pre">BUILD</span></code> file. Supports only ROS 2 Humble with ConnextDDS as messaging middleware.</p>
+<dl class="simple">
+<dt>Key features of this project are:</dt><dd><ul class="simple">
+<li><p>Builds C++, Python and Rust messages from msg, srv, action files.</p></li>
+<li><p>Offers CycloneDDS as messaging middleware.</p></li>
+<li><p>Does not include PyTest or GTest targets in the <code class="docutils literal notranslate"><span class="pre">BUILD.bazel</span></code> files provided for the foundational ROS packages. This means that <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">test</span></code> cannot be used to test functionality, and so modification and testing of packages must go through the traditional ci.ros.org pipeline.</p></li>
+<li><p>No process in place for moving the package patches upstream.</p></li>
+<li><p>This project also includes Bazel targets for common ROS 2 commandline tools, like <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span></code></p></li>
 </ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quick_start.html#bazel-fundamentals">Bazel fundamentals</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quick_start.html#targets">Targets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quick_start.html#build-rules">Build rules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quick_start.html#build-products">Build products</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quick_start.html#ros-packages">ROS packages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quick_start.html#build-packages">Build packages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quick_start.html#test-packages">Test packages</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quick_start.html#ros-fundamentals">ROS fundamentals</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quick_start.html#interfaces">Interfaces</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quick_start.html#shared-data">Shared data</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="quick_start.html#example-code">Example code</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="design_choices.html">Design choices</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="design_choices.html#versioning">Versioning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="design_choices.html#interfaces">Interfaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="design_choices.html#shared-libraries">Shared libraries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="design_choices.html#runtime-data">Runtime data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="design_choices.html#python-modules">Python modules</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#bootstrapping">Bootstrapping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#patching">Patching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#tooling">Tooling</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="alternatives.html">Alternatives</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="alternatives.html#mvukov-rules-ros2">mvukov/rules_ros2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="alternatives.html#apexai-rules-ros">ApexAI/rules_ros</a></li>
-<li class="toctree-l2"><a class="reference internal" href="alternatives.html#idealworks-bazel-public-registry">idealworks/bazel-public-registry</a></li>
-<li class="toctree-l2"><a class="reference internal" href="alternatives.html#robotlocomotion-drake-ros">RobotLocomotion/drake-ros</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="questions.html">FAQs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="questions.html#why-not-use-a-module-extension">Why not use a module extension?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="questions.html#how-do-i-get-a-package-into-the-registry">How do I get a package into the registry?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="questions.html#how-do-i-update-your-documentation">How do I update your documentation?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="questions.html#how-do-i-deploy-build-products-to-a-robot">How do I deploy build products to a robot?</a></li>
-</ul>
-</li>
-</ul>
-</div>
+</dd>
+</dl>
+<p>In June 2025 the entire project was packaged up as one single Bazel module: <a class="reference external" href="https://registry.bazel.build/modules/com_github_mvukov_rules_ros2">https://registry.bazel.build/modules/com_github_mvukov_rules_ros2</a></p>
 </section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
+<section id="apexai-rules-ros">
+<h2><a class="reference external" href="https://github.com/ApexAI/rules_ros">ApexAI/rules_ros</a><a class="headerlink" href="#apexai-rules-ros" title="Link to this heading">¶</a></h2>
+<p>Similar to the first approach, this one also builds everything from source. Their BUILD files are stored in a directory hierarchy. This project appears to be more of a skeleton work in progress than something that can be used immediately. This is because some fairly critical packages, like <code class="docutils literal notranslate"><span class="pre">sensor_msgs</span></code>, don’t seem to be included in their implementation. It supports only ROS “Humble”, and is tested only on Ubuntu 20.04. It does IDL generation, builds C++ targets only.</p>
+</section>
+<section id="idealworks-bazel-public-registry">
+<h2><a class="reference external" href="https://github.com/idealworks/bazel-public-registry">idealworks/bazel-public-registry</a><a class="headerlink" href="#idealworks-bazel-public-registry" title="Link to this heading">¶</a></h2>
+<p>Appears to be the only implementation of a ROS distribution as Bazel modules through a custom registry. Packages in the ROS ecosystem are prefixed with ros2. Based on the naming structure, it appears to be pinned to ROS 2 Jazzy and uses a lot of the Bazel providers and aspects from the module <a class="reference external" href="https://github.com/mvukov/rules_ros2">mvukov/rules_ros2</a>. Unfortunately, there is no supporting tooling around module maintenance, and so it unclear how or when modules will be updated in response to a new upstream ROS release.</p>
+</section>
+<section id="robotlocomotion-drake-ros">
+<h2><a class="reference external" href="https://github.com/RobotLocomotion/drake-ros">RobotLocomotion/drake-ros</a><a class="headerlink" href="#robotlocomotion-drake-ros" title="Link to this heading">¶</a></h2>
+<p>Instead of building everything from source, the project exposes an existing ROS workspace – either on a local machine or from some archive available online. Their implementation scrapes the workspace to create Bazel labels for all targets. In a sense, this project seeks to bridge a Bazel workspace to a ROS workspace. Since the scraping is done during the analysis phase, it can introduce some latency that causes <code class="docutils literal notranslate"><span class="pre">bazel</span></code> commands to take longer than expected to complete. Also, since the upstream products are pre-compiled, you can’t for example easily add address, memory or thread sanitizers to your build. They also include tooling to enforce network isolation during tests, which helps make parallel test execution more resilient to interference.</p>
+</section>
 </section>
 
         </article>
@@ -319,16 +280,26 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="motivation.html">
+          <a class="next-page" href="questions.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Motivation</div>
+                <div class="title">FAQs</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          
+          <a class="prev-page" href="developer_guide.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Developer guide</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -347,8 +318,30 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Alternatives</a><ul>
+<li><a class="reference internal" href="#mvukov-rules-ros2">mvukov/rules_ros2</a></li>
+<li><a class="reference internal" href="#apexai-rules-ros">ApexAI/rules_ros</a></li>
+<li><a class="reference internal" href="#idealworks-bazel-public-registry">idealworks/bazel-public-registry</a></li>
+<li><a class="reference internal" href="#robotlocomotion-drake-ros">RobotLocomotion/drake-ros</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
