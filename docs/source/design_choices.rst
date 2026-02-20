@@ -1,6 +1,8 @@
 Design choices
 ==============
 
+This page is targeted at those who are interested in learning more about various design decisions that the team needed to make when developing the ROS Central Registry.
+
 Versioning
 ----------
 

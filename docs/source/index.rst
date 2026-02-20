@@ -9,10 +9,8 @@ Welcome to the ROS Central Registry documentation.
    :caption: Contents:
 
    motivation
-   overview
    quick_start
    design_choices
-   release_process
    developer_guide
    alternatives
    questions
