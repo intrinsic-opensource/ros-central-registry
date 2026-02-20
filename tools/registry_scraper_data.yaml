@@ -76,6 +76,9 @@ ament_lint:
 ament_package:
   github: ament/ament_package
   version: 0.18.0
+ament_rs:
+  github: ros2-rust/ament_rs
+  version: v0.3.0
 class_loader:
   github: ros/class_loader
   version: 2.9.0
@@ -266,6 +269,11 @@ ros_testing:
   modules:
     ros_testing: ros_testing
     ros2test: ros2test
+ros2_rust:
+  github: ros2-rust/ros2_rust
+  version: v0.7.0
+  modules:
+    rclrs: rclrs
 ros2_tracing:
   github: ros2/ros2_tracing
   version: 8.8.0
@@ -334,6 +342,14 @@ rosidl_python:
 rosidl_runtime_py:
   github: ros2/rosidl_runtime_py
   version: 0.15.0
+rosidl_runtime_rs:
+  github: ros2-rust/rosidl_runtime_rs
+  version: v0.6.0
+rosidl_rust:
+  github: ros2-rust/rosidl_rust
+  version: 0.4.10
+  modules:
+    rosidl_generator_rs: rosidl_generator_rs
 rosidl_typesupport_fastrtps:
   github: ros2/rosidl_typesupport_fastrtps
   version: 3.9.0

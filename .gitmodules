@@ -181,3 +181,15 @@
 [submodule "submodules/example_interfaces"]
 	path = submodules/example_interfaces
 	url = https://github.com/asymingt/example_interfaces.git
+[submodule "submodules/rosidl_rust"]
+	path = submodules/rosidl_rust
+	url = https://github.com/asymingt/rosidl_rust.git
+[submodule "submodules/ros2_rust"]
+	path = submodules/ros2_rust
+	url = https://github.com/asymingt/ros2_rust.git
+[submodule "submodules/rosidl_runtime_rs"]
+	path = submodules/rosidl_runtime_rs
+	url = https://github.com/asymingt/rosidl_runtime_rs.git
+[submodule "submodules/ament_rs"]
+	path = submodules/ament_rs
+	url = https://github.com/asymingt/ament_rs.git
