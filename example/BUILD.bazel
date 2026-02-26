@@ -15,7 +15,8 @@
 load("@rosidl_adapter_proto//:rules.bzl", "proto_ros_library")
 load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
 load("@rosidl_generator_py//:rules.bzl", "py_ros_library")
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_python//python:defs.bzl", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -50,8 +51,8 @@ cc_binary(
     name = "example_ros_publisher_cc",
     srcs = ["ros/example_ros_publisher.cc"],
     deps = [
+        ":example_ros_cc_msgs",
         "@rclcpp",
-        ":example_ros_cc_msgs"
     ],
 )
 
@@ -59,8 +60,8 @@ cc_binary(
     name = "example_ros_subscriber_cc",
     srcs = ["ros/example_ros_subscriber.cc"],
     deps = [
+        ":example_ros_cc_msgs",
         "@rclcpp",
-        ":example_ros_cc_msgs"
     ],
 )
 
@@ -70,8 +71,8 @@ cc_binary(
     name = "example_proto_publisher_cc",
     srcs = ["proto/example_proto_publisher.cc"],
     deps = [
+        ":example_ros_cc_msgs",
         "@rclcpp",
-        ":example_ros_cc_msgs"
     ],
 )
 
@@ -79,13 +80,12 @@ cc_binary(
     name = "example_proto_subscriber_cc",
     srcs = ["proto/example_proto_subscriber.cc"],
     deps = [
+        ":example_ros_cc_msgs",
         "@rclcpp",
-        ":example_ros_cc_msgs"
     ],
 )
 
 # Python examples
-
 
 py_binary(
     name = "example_ros_publisher_py",

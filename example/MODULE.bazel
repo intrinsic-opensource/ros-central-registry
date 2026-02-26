@@ -38,6 +38,7 @@ bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 bazel_dep(name = "rclcpp", version = "30.0.0")
 bazel_dep(name = "rmw_implementation", version = "3.1.1")
 bazel_dep(name = "rmw_zenoh_cpp", version = "0.8.1")
+bazel_dep(name = "rclpy", version = "9.2.0")
 bazel_dep(name = "rosidl_adapter_proto", version = "0.0.1")
 bazel_dep(name = "rosidl_cmake", version = "5.0.0")
 bazel_dep(name = "rosidl_generator_cpp", version = "5.0.0")
@@ -52,8 +53,8 @@ bazel_dep(name = "zenoh-cpp", version = "1.4.0")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
-    python_version = "3.12",
     is_default = True,
+    python_version = "3.12",
 )
 
 # Having a self-contained C++ toolchain prevents bazel from polling PATH
@@ -62,4 +63,5 @@ python.toolchain(
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(llvm_version = "20.1.7")
 use_repo(llvm, "llvm_toolchain")
+
 register_toolchains("@llvm_toolchain//:all")
