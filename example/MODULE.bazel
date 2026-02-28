@@ -48,6 +48,40 @@ bazel_dep(name = "std_msgs", version = "5.8.1")
 bazel_dep(name = "zenoh-c", version = "1.4.0")
 bazel_dep(name = "zenoh-cpp", version = "1.4.0")
 
+# Work around rosidl_adapter@5.0.0 adding None entries into dynamic library
+# depsets when aggregating runfiles for generated message typesupports.
+single_version_override(
+    module_name = "rosidl_adapter",
+    version = "5.0.0",
+    patches = ["//:patches/rosidl_adapter-filter-none-dynamic-libs.patch"],
+    patch_strip = 1,
+)
+
+# rcutils assumes GNU strerror_r when _GNU_SOURCE is set; that breaks on
+# Apple libc where strerror_r follows the XSI signature (returns int).
+single_version_override(
+    module_name = "rcutils",
+    version = "7.0.0",
+    patches = ["//:patches/rcutils-macos-strerror-r.patch"],
+    patch_strip = 1,
+)
+
+# Fix macOS executable path detection includes/limits in ament_index_cpp.
+single_version_override(
+    module_name = "ament_index_cpp",
+    version = "1.12.0",
+    patches = ["//:patches/ament_index_cpp-macos-path-limits.patch"],
+    patch_strip = 1,
+)
+
+# fastdds uses IOKit APIs on macOS but does not link the required frameworks.
+single_version_override(
+    module_name = "fastdds",
+    version = "3.2.2",
+    patches = ["//:patches/fastdds-macos-framework-linkopts.patch"],
+    patch_strip = 1,
+)
+
 # A lot of the tooling for IDL generation requires a Python 3.12 toolchain
 # to work. You need to configure your workspace correctly to provide one.
 
