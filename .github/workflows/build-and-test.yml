@@ -32,7 +32,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [10, 12, 14]
         os:
           - macos-26-intel
           - macos-26
