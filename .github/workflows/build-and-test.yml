@@ -20,7 +20,7 @@ on:
       - main
   pull_request:
     branches:
-      - asymingt/update-test-matrix-in-ci
+      - main
 permissions:
   contents: read
   actions: read
