@@ -61,10 +61,7 @@ jobs:
         large-packages: true
         docker-images: true
         swap-storage: true
-
-    # Install valgrind
-    - name: Install Valgrind
-      run: sudo apt update && sudo apt install valgrind
+      if: runner.os == 'Linux'
 
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
@@ -79,10 +76,6 @@ jobs:
         bazelisk-cache: true
         disk-cache: ${{ matrix.os }}-${{ matrix.bazel }}-${{ matrix.rmw }}
         repository-cache: false
-
-    # Build the container image.
-    - name: Build test container
-      run: docker build -t ros-central-registry:24.04 .
 
     # Build the ROS examples.
     - name: Build code
@@ -123,4 +116,4 @@ jobs:
         label: ${{ matrix.bazel }}
         message: ${{ job.status == 'success' && '✓' || '✘' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: github.ref_name == 'main'
+      if: github.ref_name == 'main' || github.ref_name == 'asymingt/update-test-matrix-in-ci' 
