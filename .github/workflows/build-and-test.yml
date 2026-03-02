@@ -13,14 +13,14 @@
 # limitations under the License.
 
 name: build-and-test
-run-name: Build and test across mutliple operating systems, architectures and Bazel versions.
+run-name: Build and test across multiple operating systems, architectures and Bazel versions.
 on:
   push:
     branches:
       - main
   pull_request:
     branches:
-      - main
+      - asymingt/update-test-matrix-in-ci
 permissions:
   contents: read
   actions: read
@@ -32,12 +32,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - { name: 'ubuntu-24.04_bazel-8.5.1_x86_64',  os: 'ubuntu-24.04',     bazel-version: '8.5.1' }
-          - { name: 'ubuntu-24.04_bazel-9.0.0_x86_64',  os: 'ubuntu-24.04',     bazel-version: '9.0.0' }
-          - { name: 'ubuntu-24.04_bazel-8.5.1_aarch64', os: 'ubuntu-24.04-arm', bazel-version: '8.5.1' }
-          - { name: 'ubuntu-24.04_bazel-9.0.0_aarch64', os: 'ubuntu-24.04-arm', bazel-version: '9.0.0' }
+        version: [10, 12, 14]
+        os:
+          - macos-26-intel
+          - macos-26
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
+          - windows-11
+          - windows-11-arm
+        bazel:
+          - 7.x
+          - 8.x
+          - 9.x
+        rmw:
+          - rmw_fastrtps_cpp
+          - rmw_zenoh_cpp
+          - rmw_cyclonedds_cpp
     steps:
+
     # Remove unnecessary files to maximize build space.
     - name: Free disk space
       uses: jlumbroso/free-disk-space@v1.3.1
@@ -49,34 +61,41 @@ jobs:
         large-packages: true
         docker-images: true
         swap-storage: true
+
     # Install valgrind
     - name: Install Valgrind
       run: sudo apt update && sudo apt install valgrind
+
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
       with:
         submodules: recursive
+
     # Setup bazel as a tool for building.
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.15.0
       with:
         bazelisk-cache: true
-        disk-cache: ${{ matrix.name}}
+        disk-cache: ${{ matrix.os }}-${{ matrix.bazel }}-${{ matrix.rmw }}
         repository-cache: false
+
     # Build the container image.
     - name: Build test container
       run: docker build -t ros-central-registry:24.04 .
+
     # Build the ROS examples.
     - name: Build code
       env:
-        USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
-      run: bazel build --config=ci
+        USE_BAZEL_VERSION: ${{ matrix.bazel }}
+      run: bazel build --config=ci --@rmw_implementation//:rmw=${{ matrix.rmw }}
+
     # Test the distribution.
     - name: Run tests
       env:
-        USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
-      run: bazel test --config=ci --jobs 1
+        USE_BAZEL_VERSION: ${{ matrix.bazel }}
+      run: bazel test --config=ci --@rmw_implementation//:rmw=${{ matrix.rmw }} --jobs 1
+
     # Summarize the results.
     - name: Test report
       uses: dorny/test-reporter@v2
@@ -85,21 +104,23 @@ jobs:
         path: bazel-testlogs/**/test.xml
         reporter: java-junit
       if: always()
+
     # Upload test test logs
     - name: Upload test logs
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.name }} (test logs)
+        name: ${{ matrix.os }}-${{ matrix.bazel }}-${{ matrix.rmw }} (test logs)
         path: "bazel-testlogs/**/test.log"
       if: always()
+
     # Create badges for each build
     - name: Update status badges
       uses: Schneegans/dynamic-badges-action@v1.7.0
       with:
         auth: ${{ secrets.STATUS_BADGE_SECRET }}
         gistID: 4d05b2382879fbd51f9a07bb7c63fb29
-        filename: ${{ matrix.name }}.json
-        label: ${{ matrix.name }}
-        message: ${{ job.status == 'success' && 'pass' || 'fail' }}
+        filename: ${{ matrix.os }}-${{ matrix.bazel }}-${{ matrix.rmw }}.json
+        label: ${{ matrix.bazel }}
+        message: ${{ job.status == 'success' && '✓' || '✘' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
       if: github.ref_name == 'main'
