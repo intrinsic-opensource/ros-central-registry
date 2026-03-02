@@ -110,9 +110,8 @@ jobs:
       uses: Schneegans/dynamic-badges-action@v1.7.0
       with:
         auth: ${{ secrets.STATUS_BADGE_SECRET }}
-        gistID: 4d05b2382879fbd51f9a07bb7c63fb29
+        gistID: f796805a77e0f05cc837b18e60142773
         filename: ${{ matrix.os }}-${{ matrix.bazel }}-${{ matrix.rmw }}.json
         label: ${{ matrix.bazel }}
         message: ${{ job.status == 'success' && '✓' || '✘' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: github.ref_name == 'main' || github.ref_name == 'asymingt/update-test-matrix-in-ci' 
