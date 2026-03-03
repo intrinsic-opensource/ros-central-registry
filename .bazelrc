@@ -13,7 +13,9 @@
 # limitations under the License.
 
 # Augment the BCR with a few of our own modules in the docs folder.
-common --registry=file:///%workspace%/staging --registry=https://bcr.bazel.build
+common --registry=file:///%workspace% \
+       --registry=file:///%workspace%/staging \
+       --registry=https://bcr.bazel.build
 
 # Define ROS_HOME so that tests don't try and write to ~/.ros_home by default.
 common --test_env=ROS_HOME=".ros"
