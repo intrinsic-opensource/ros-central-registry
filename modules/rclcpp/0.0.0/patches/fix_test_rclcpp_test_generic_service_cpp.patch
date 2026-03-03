@@ -1,0 +1,103 @@
+diff --git a/rclcpp/test/rclcpp/test_generic_service.cpp b/rclcpp/test/rclcpp/test_generic_service.cpp
+index dd75120c..a1b04f28 100644
+--- a/rclcpp/test/rclcpp/test_generic_service.cpp
++++ b/rclcpp/test/rclcpp/test_generic_service.cpp
+@@ -91,6 +91,8 @@ protected:
+ /*
+    Testing service construction and destruction.
+  */
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericService, construction_and_destruction) {
+   auto callback = [](
+     rclcpp::GenericService::SharedRequest,
+@@ -123,6 +125,8 @@ TEST_F(TestGenericService, construction_and_destruction) {
+ /*
+    Testing service construction and destruction for subnodes.
+  */
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericServiceSub, construction_and_destruction) {
+   auto callback = [](
+     rclcpp::GenericService::SharedRequest,
+@@ -150,6 +154,8 @@ TEST_F(TestGenericServiceSub, construction_and_destruction) {
+   }
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericService, construction_and_destruction_rcl_errors) {
+   auto callback = [](
+     rclcpp::GenericService::SharedRequest, rclcpp::GenericService::SharedResponse) {};
+@@ -169,6 +175,8 @@ TEST_F(TestGenericService, construction_and_destruction_rcl_errors) {
+   }
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericService, generic_service_take_request) {
+   auto callback = [](
+     rclcpp::GenericService::SharedRequest, rclcpp::GenericService::SharedResponse) {};
+@@ -198,6 +206,8 @@ TEST_F(TestGenericService, generic_service_take_request) {
+   }
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericService, generic_service_send_response) {
+   auto callback = [](
+     const rclcpp::GenericService::SharedRequest, rclcpp::GenericService::SharedResponse) {};
+@@ -224,6 +234,8 @@ TEST_F(TestGenericService, generic_service_send_response) {
+ /*
+    Testing on_new_request callbacks.
+  */
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericService, generic_service_on_new_request_callback) {
+   auto server_callback = [](
+     const rclcpp::GenericService::SharedRequest, rclcpp::GenericService::SharedResponse) {FAIL();};
+@@ -293,6 +305,8 @@ TEST_F(TestGenericService, generic_service_on_new_request_callback) {
+   EXPECT_THROW(generic_service->set_on_new_request_callback(invalid_cb), std::invalid_argument);
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericService, rcl_service_response_publisher_get_actual_qos_error) {
+   auto mock = mocking_utils::patch_and_return(
+     "lib:rclcpp", rcl_service_response_publisher_get_actual_qos, nullptr);
+@@ -305,6 +319,8 @@ TEST_F(TestGenericService, rcl_service_response_publisher_get_actual_qos_error)
+     std::runtime_error("failed to get service's response publisher qos settings: error not set"));
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericService, rcl_service_request_subscription_get_actual_qos_error) {
+   auto mock = mocking_utils::patch_and_return(
+     "lib:rclcpp", rcl_service_request_subscription_get_actual_qos, nullptr);
+@@ -317,6 +333,8 @@ TEST_F(TestGenericService, rcl_service_request_subscription_get_actual_qos_error
+     std::runtime_error("failed to get service's request subscription qos settings: error not set"));
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericService, generic_service_qos) {
+   rclcpp::ServicesQoS qos_profile;
+   qos_profile.liveliness(rclcpp::LivelinessPolicy::Automatic);
+@@ -339,6 +357,8 @@ TEST_F(TestGenericService, generic_service_qos) {
+   EXPECT_EQ(qos_profile, rs_qos);
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericService, generic_service_qos_depth) {
+   uint64_t server_cb_count_ = 0;
+   auto server_callback = [&](
+@@ -386,6 +406,8 @@ TEST_F(TestGenericService, generic_service_qos_depth) {
+   EXPECT_EQ(server_cb_count_, server_qos_profile.depth());
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(TestGenericService, generic_service_and_client) {
+   const std::string service_name = "test_service";
+   const std::string service_type = "test_msgs/srv/BasicTypes";

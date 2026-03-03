@@ -1,0 +1,16 @@
+{
+    "homepage": "https://github.com/osrf/osrf_testing_tools_cpp",
+    "maintainers": [
+        {
+            "email": "intrinsic-opensource@users.noreply.github.com",
+            "name": "intrinsic-opensource"
+        }
+    ],
+    "repository": [
+        "github:osrf/osrf_testing_tools_cpp"
+    ],
+    "versions": [
+        "0.0.0"
+    ],
+    "yanked_versions": {}
+}

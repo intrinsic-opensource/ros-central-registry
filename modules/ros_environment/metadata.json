@@ -1,0 +1,16 @@
+{
+    "homepage": "https://github.com/ros/ros_environment",
+    "maintainers": [
+        {
+            "email": "intrinsic-opensource@users.noreply.github.com",
+            "name": "intrinsic-opensource"
+        }
+    ],
+    "repository": [
+        "github:ros/ros_environment"
+    ],
+    "versions": [
+        "0.0.0"
+    ],
+    "yanked_versions": {}
+}

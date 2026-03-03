@@ -1,0 +1,27 @@
+{
+    "url": "https://github.com/ros2/rclcpp/archive/refs/tags/30.0.0.tar.gz",
+    "integrity": "sha256-A8qAS1nVZa1FIBBKl72CX7BXdJge7Slf6ebDXjCl5v0=",
+    "strip_prefix": "rclcpp-30.0.0/rclcpp",
+    "overlay": {
+        "BUILD.bazel": "sha256-gsrspceQEu2IQKRWYynl12Y3Aqq6XNsxeH3xoULdazw=",
+        "test/locate_test_assets.hpp": "sha256-J2XuAG6kFos7tUIL8y0aM+AfHucJvGkGAjklcj7Nlv0=",
+        "test/msg/BUILD.bazel": "sha256-SEQOkYFgVQF02oGALvnRo3QammcYejJQT+s+nN4Ftes="
+    },
+    "patches": {
+        "fix_test_rclcpp_node_interfaces_test_does_not_compile_get_node_topics_interface_const_ptr_wrapped_node_cpp.patch": "sha256-z6/VSiKPRZDOHBALO2lrHtSNw8k1s1K1HPjY1+o4S8I=",
+        "fix_test_rclcpp_node_interfaces_test_does_not_compile_get_node_topics_interface_const_ref_wrapped_node_cpp.patch": "sha256-Xo+3pvUt43g0YLT3PlDQ9ZUDLlBmxkFKPXGsCw8OLWo=",
+        "fix_test_rclcpp_node_interfaces_test_node_graph_cpp.patch": "sha256-c2y0e1IvrVka7X6v4r6PcP/hnXB281OCK9mr+nmhAJg=",
+        "fix_test_rclcpp_node_interfaces_test_node_parameters_cpp.patch": "sha256-0uZ3By9gKfHauosdG4SEDslvk+Wlb89BA/uIEq7qaq0=",
+        "fix_test_rclcpp_test_client_common_cpp.patch": "sha256-t8cpnuvyoa8q8cFNYp9lyIQy0dNjr0+ZSglUm6/72nM=",
+        "fix_test_rclcpp_test_generic_client_cpp.patch": "sha256-HzMqDrWrjp04VKbnPr2ywp/l8+q3Cy1w7wnPufiadPA=",
+        "fix_test_rclcpp_test_generic_pubsub_cpp.patch": "sha256-QSSM8GYZi9I8ExSrb2m5JN4q7kHXoeiFgG52qrjEAcM=",
+        "fix_test_rclcpp_test_generic_service_cpp.patch": "sha256-eT69O1UqpzO0qtlgxBOqrXjnFNKtffTCGpZ/ponvo6M=",
+        "fix_test_rclcpp_test_intra_process_manager_cpp.patch": "sha256-oujiviketPTEoHUqq5TkplIFIVAa+3xzngMnj99+DIU=",
+        "fix_test_rclcpp_test_node_cpp.patch": "sha256-1IiN0cTsZQMFicZ6URvuAC/1W35HUi6I3/ZYIfWH3P8=",
+        "fix_test_rclcpp_test_parameter_client_cpp.patch": "sha256-Hv+ORlNTvCWahxsbaT3tAB8ODsyQG/VG9V277TjYy/c=",
+        "fix_test_rclcpp_test_parameter_service_cpp.patch": "sha256-fFgBaZLXX+IVxblxclZsOnbsj8I610lO+uh9If4Wc6Q=",
+        "fix_test_rclcpp_test_typesupport_helpers_cpp.patch": "sha256-ZFh35P6+soOpgWNWISfpi3iTgWx2rvMLGuUcgGlrLxY=",
+        "fix_test_rclcpp_wait_set_policies_test_storage_policy_common_cpp.patch": "sha256-KIOI3lrMQOgdtqYdm2IwgHMmmb829rdJ0eBe0wiXYfY="
+    },
+    "patch_strip": 2
+}

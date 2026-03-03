@@ -1,0 +1,50 @@
+diff --git a/rclcpp/test/rclcpp/test_generic_pubsub.cpp b/rclcpp/test/rclcpp/test_generic_pubsub.cpp
+index 46dd397c..b15b28dd 100644
+--- a/rclcpp/test/rclcpp/test_generic_pubsub.cpp
++++ b/rclcpp/test/rclcpp/test_generic_pubsub.cpp
+@@ -142,7 +142,8 @@ private:
+   }
+ };
+ 
+-
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(RclcppGenericNodeFixture, publisher_and_subscriber_work)
+ {
+   // We currently publish more messages because they can get lost
+@@ -180,6 +181,8 @@ TEST_F(RclcppGenericNodeFixture, publisher_and_subscriber_work)
+   EXPECT_THAT(subscribed_messages[0], StrEq("Hello World"));
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(RclcppGenericNodeFixture, publish_loaned_msg_work)
+ {
+   // We currently publish more messages because they can get lost
+@@ -225,6 +228,8 @@ TEST_F(RclcppGenericNodeFixture, publish_loaned_msg_work)
+   }
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(RclcppGenericNodeFixture, generic_subscription_uses_qos)
+ {
+   // If the GenericSubscription does not use the provided QoS profile,
+@@ -245,6 +250,8 @@ TEST_F(RclcppGenericNodeFixture, generic_subscription_uses_qos)
+   ASSERT_TRUE(wait_for(connected, 5s));
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(RclcppGenericNodeFixture, generic_publisher_uses_qos)
+ {
+   // If the GenericPublisher does not use the provided QoS profile,
+@@ -265,6 +272,8 @@ TEST_F(RclcppGenericNodeFixture, generic_publisher_uses_qos)
+   ASSERT_TRUE(wait_for(connected, 5s));
+ }
+ 
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
+ TEST_F(RclcppGenericNodeFixture, generic_subscription_different_callbacks)
+ {
+   using namespace std::chrono_literals;

@@ -12,21 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@pip_ros_central_registry//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
 py_binary(
-    name = "regenerate_modules",
-    srcs = ["registry_scraper_tool.py"],
-    main = "registry_scraper_tool.py",
-    data = [
-        "registry_scraper_data.yaml"
-    ],
+    name = "superflore-gen-bazel",
+    srcs = glob(["superflore/superflore/**/*.py"]),
+    imports = ["superflore"],
+    main = "superflore/superflore/generators/bazel/run.py",
     deps = [
-        "@rules_python//python/runfiles",
-        "@rosdistro//bazel/python:gitpython",
-        "@rosdistro//bazel/python:pyyaml",
-        "@rosdistro//bazel/python:urllib3",
-    ]
+        requirement("catkin_pkg"),
+        requirement("docker"),
+        requirement("flake8-import-order"),
+        requirement("flake8"),
+        requirement("gitpython"),
+        requirement("packaging"),
+        requirement("pep8"),
+        requirement("pygithub"),
+        requirement("pynose"),
+        requirement("pyyaml"),
+        requirement("requests"),
+        requirement("rosdep"),
+        requirement("rosdistro"),
+        requirement("rosinstall_generator"),
+        requirement("rospkg"),
+        requirement("setuptools"),
+        requirement("termcolor"),
+        requirement("xmltodict"),
+    ],
 )

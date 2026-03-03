@@ -1,0 +1,8 @@
+{
+    "url": "https://github.com/ros2/rclc/archive/refs/tags/6.2.0.tar.gz",
+    "integrity": "sha256-VEtr9D8fXCu0GpefaNQwBFgNq04gbi6t53o0EEYCgPY=",
+    "strip_prefix": "rclc-6.2.0/rclc_parameter",
+    "overlay": {
+        "BUILD.bazel": "sha256-baC0Cnb7h1Ur0YHA1GNXykQAMYeBpnGUBe+tNCNqVho="
+    }
+}

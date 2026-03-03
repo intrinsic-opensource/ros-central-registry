@@ -13,7 +13,9 @@
 # limitations under the License.
 
 # Augment the BCR with a few of our own modules in the docs folder.
-common --registry=file:///%workspace%/staging --registry=https://bcr.bazel.build
+common --registry=file:///%workspace% \
+       --registry=file:///%workspace%/staging \
+       --registry=https://bcr.bazel.build
 
 # Define ROS_HOME so that tests don't try and write to ~/.ros_home by default.
 common --test_env=ROS_HOME=".ros"
@@ -34,13 +36,6 @@ build --cxxopt="-std=c++17"
 
 # Ensure that we use toolchains_llvm instead of the host toolchain.
 build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
-
-# Build configuration for RMW implementations.
-#   --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
-#   --@rmw_implementation//:rmw=rmw_fastrtps_cpp
-#   --@rmw_implementation//:rmw=rmw_fastrtps_dynamic_cpp
-#   --@rmw_implementation//:rmw=rmw_zenoh_cpp
-build --@rmw_implementation//:rmw=rmw_fastrtps_cpp
 
 # ASAN
 build:asan --strip=never
@@ -65,15 +60,10 @@ build:tsan --linkopt=-fsanitize=thread
 
 # The github actions pipeline has workers with 2 CPUs and 7GB RAM. This
 # can cause tests to flake due to timeouts. Assume every test is flaky
-# and run sequentially with up to five times to try and skirt around this
-# issue. In reality, we'll use 
+# and run sequentially with up to five times to try and mitigate.
 common:ci --target_pattern_file=distribution.txt
 test:ci --flaky_test_attempts=5
 
 # TODO(asymingt) the docker-sandbox is currently broken with toolchains_llvm
 # v1.6.0. We need to go back and fix this in the future.
 common:docker --target_pattern_file=distribution.txt
-test:docker --flaky_test_attempts=5
-test:docker --spawn_strategy=docker
-test:docker --experimental_enable_docker_sandbox
-test:docker --experimental_docker_image=ros-central-registry:24.04

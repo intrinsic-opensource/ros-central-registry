@@ -1,0 +1,154 @@
+diff --git a/rcl_yaml_param_parser/test/test_parse_yaml.cpp b/rcl_yaml_param_parser/test/test_parse_yaml.cpp
+index fa2c29c..5abe41f 100644
+--- a/rcl_yaml_param_parser/test/test_parse_yaml.cpp
++++ b/rcl_yaml_param_parser/test/test_parse_yaml.cpp
+@@ -26,11 +26,13 @@
+ #include "rcutils/error_handling.h"
+ #include "rcutils/filesystem.h"
+ 
++#include "./locate_test_assets.h"
++
+ static char cur_dir[1024];
+ 
+ TEST(test_parser, correct_syntax) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -214,7 +216,7 @@ TEST(test_parser, correct_syntax) {
+ 
+ TEST(test_file_parser, string_array_with_quoted_number) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -255,7 +257,7 @@ TEST(test_file_parser, string_array_with_quoted_number) {
+ 
+ TEST(test_file_parser, multi_ns_correct_syntax) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -283,7 +285,7 @@ TEST(test_file_parser, multi_ns_correct_syntax) {
+ 
+ TEST(test_file_parser, root_ns) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -315,7 +317,7 @@ TEST(test_file_parser, root_ns) {
+ 
+ TEST(test_file_parser, seq_map1) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -342,7 +344,7 @@ TEST(test_file_parser, seq_map1) {
+ 
+ TEST(test_file_parser, seq_map2) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -369,7 +371,7 @@ TEST(test_file_parser, seq_map2) {
+ 
+ TEST(test_file_parser, params_with_no_node) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -396,7 +398,7 @@ TEST(test_file_parser, params_with_no_node) {
+ 
+ TEST(test_file_parser, no_alias_support) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -423,7 +425,7 @@ TEST(test_file_parser, no_alias_support) {
+ 
+ TEST(test_file_parser, empty_string) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -451,7 +453,7 @@ TEST(test_file_parser, empty_string) {
+ 
+ TEST(test_file_parser, no_value1) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -478,7 +480,7 @@ TEST(test_file_parser, no_value1) {
+ 
+ TEST(test_file_parser, indented_ns) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -506,7 +508,7 @@ TEST(test_file_parser, indented_ns) {
+ // Test special float point(https://github.com/ros2/rcl/issues/555).
+ TEST(test_file_parser, special_float_point) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -552,7 +554,7 @@ TEST(test_file_parser, special_float_point) {
+ 
+ TEST(test_file_parser, empty_name_in_ns) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024));
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024));
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -579,7 +581,7 @@ TEST(test_file_parser, empty_name_in_ns) {
+ 
+ TEST(test_file_parser, wildcards) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024));
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024));
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -606,7 +608,7 @@ TEST(test_file_parser, wildcards) {
+ 
+ TEST(test_file_parser, wildcards_node_slash) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024));
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024));
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
+@@ -633,7 +635,7 @@ TEST(test_file_parser, wildcards_node_slash) {
+ 
+ TEST(test_file_parser, wildcards_partial) {
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024));
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024));
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);
+   ASSERT_TRUE(NULL != test_path) << rcutils_get_error_string().str;
