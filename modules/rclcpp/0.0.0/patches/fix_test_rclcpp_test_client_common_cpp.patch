@@ -1,0 +1,30 @@
+diff --git a/rclcpp/test/rclcpp/test_client_common.cpp b/rclcpp/test/rclcpp/test_client_common.cpp
+index 83b0232e..5b017c24 100644
+--- a/rclcpp/test/rclcpp/test_client_common.cpp
++++ b/rclcpp/test/rclcpp/test_client_common.cpp
+@@ -175,10 +175,13 @@ protected:
+   const std::string service_name{"empty_service"};
+ };
+ 
+-using ClientType =
+-  ::testing::Types<
+-  rclcpp::Client<test_msgs::srv::Empty>,
+-  rclcpp::GenericClient>;
++// TODO(asymingt) fix generic clients (dynamic type loading) and mocking.
++// See: https://github.com/intrinsic-opensource/ros-central-registry/issues/66
++// using ClientType =
++//   ::testing::Types<
++//   rclcpp::Client<test_msgs::srv::Empty>,
++//   rclcpp::GenericClient>;
++using ClientType = ::testing::Types<rclcpp::Client<test_msgs::srv::Empty>>;
+ 
+ class ClientTypeNames
+ {
+@@ -206,6 +209,7 @@ TYPED_TEST(TestAllClientTypesWithServer, async_send_request)
+   EXPECT_TRUE(this->template SendEmptyRequestAndWait<ClientType>());
+ }
+ 
++
+ TYPED_TEST(TestAllClientTypesWithServer, test_client_remove_pending_request)
+ {
+   using ClientType = TypeParam;

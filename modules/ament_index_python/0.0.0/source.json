@@ -1,0 +1,13 @@
+{
+    "url": "https://github.com/ament/ament_index/archive/refs/tags/1.12.0.tar.gz",
+    "integrity": "sha256-uyBCdwdodHJbBFUFqdWYL3Pu1PLn4TzbFsIa4Lsr2s8=",
+    "strip_prefix": "ament_index-1.12.0/ament_index_python",
+    "overlay": {
+        "BUILD.bazel": "sha256-E5/dp7GWBOcqyAPdTco0kY9tHpBVd6M/EWY/Nc35Mws="
+    },
+    "patches": {
+        "fix_ament_index_python_search_paths_py.patch": "sha256-UdGnL6/WZRxMc1+fZjl0hNKh//5LTdetO3bFXdQcB5U=",
+        "fix_test_test_ament_index_python_py.patch": "sha256-ou6IBkBfdOkaLcouwF6/hsmk6KM6wg57SsDdPt3MNHk="
+    },
+    "patch_strip": 2
+}

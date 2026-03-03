@@ -1,0 +1,12 @@
+{
+    "url": "https://github.com/ros2/rcpputils/archive/refs/tags/2.14.2.tar.gz",
+    "integrity": "sha256-0bZvCVEh4EwIDPsv6vq2r9hBd+UU9PCdl5cTWA/BExg=",
+    "strip_prefix": "rcpputils-2.14.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-kYl3SNFVqI9Q8m90SsHrXdc/Qm5NhUs4dmbN+zv5LX4="
+    },
+    "patches": {
+        "fix_test_test_filesystem_helper_std_cpp.patch": "sha256-wVMaBVSNjOQ4pKkVnyoOe+idStAMz8u6X0ovpJrCFkY="
+    },
+    "patch_strip": 1
+}

@@ -1,0 +1,16 @@
+{
+    "homepage": "https://github.com/asymingt/rosidl_typesupport_protobuf",
+    "maintainers": [
+        {
+            "email": "intrinsic-opensource@users.noreply.github.com",
+            "name": "intrinsic-opensource"
+        }
+    ],
+    "repository": [
+        "github:asymingt/rosidl_typesupport_protobuf"
+    ],
+    "versions": [
+        "0.0.0"
+    ],
+    "yanked_versions": {}
+}

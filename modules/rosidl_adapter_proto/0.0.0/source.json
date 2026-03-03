@@ -1,0 +1,19 @@
+{
+    "url": "https://github.com/asymingt/rosidl_typesupport_protobuf/archive/refs/tags/0.0.1.tar.gz",
+    "integrity": "sha256-o17hyXS8+7AdEBLExQ4v4+wCQX0KLlEtB5X4KPrGUlo=",
+    "strip_prefix": "rosidl_typesupport_protobuf-0.0.1/rosidl_adapter_proto",
+    "overlay": {
+        "BUILD.bazel": "sha256-Ua3ffHtzbP+OzRX8uguJwoqZh6zstquN9gzRt6J70UA=",
+        "aspects.bzl": "sha256-7HoFihL2VsHUqtNYpepGGEfpU+Thm5Hbvscv3nCKWq8=",
+        "rules.bzl": "sha256-DmeBnDK1sI4QsPw7Rttl3zJzdcDBNGyUhoUMofNLSxk=",
+        "tools.bzl": "sha256-i3+W9Jq4WOVRtDyV4JyyGqRgH5OPECEhGqNd3prun+A=",
+        "types.bzl": "sha256-ieUh65Z2codGGKzsYn9xN9O2A9kmr6UoGzUTEAVLQEU="
+    },
+    "patches": {
+        "fix_bin_rosidl_adapter_proto.patch": "sha256-PuwPWzb7pr8QepaGLtUEA/qPJq35fiEHSjhQkbzXbCA=",
+        "fix_resource_action_proto_em.patch": "sha256-1vF5S8cca14Ua6BpXYzmbHjEoGWVCX3gNRYsa3KTfcs=",
+        "fix_resource_srv_proto_em.patch": "sha256-ri7OGP2bm0J5kITm/8XRexockxgk9u1s9pxVHqzx/7E=",
+        "fix_rosidl_adapter_proto___init___py.patch": "sha256-SIs29rOqbV7608l2HG/fLGQGczqkjlK6f11cbuIZZM4="
+    },
+    "patch_strip": 2
+}

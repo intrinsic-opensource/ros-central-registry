@@ -1,0 +1,18 @@
+{
+    "url": "https://github.com/ros2/rosidl_typesupport/archive/refs/tags/3.4.0.tar.gz",
+    "integrity": "sha256-hOZAR9FMEifptWzDDUFoTBBRveJJLr7LuegISZ4/tDg=",
+    "strip_prefix": "rosidl_typesupport-3.4.0/rosidl_typesupport_c",
+    "overlay": {
+        "BUILD.bazel": "sha256-9J0TCv6fCqpP96iPLTFD6RT5xt2NpsPLjVHyxoKcAwk=",
+        "aspects.bzl": "sha256-Yy+r0SvJrT2tWo/a8x85j5o8iQA+EJRFAlyjMCBpvyw=",
+        "test/msg/BUILD.bazel": "sha256-NhnmF46oqekjTeWGFclssilTZBsyI+c8XAvUSMygdR4=",
+        "types.bzl": "sha256-Tn96ZDenEnbacC4vFnN+jq3j3q8egaHPKtHb612IJuk="
+    },
+    "patches": {
+        "fix_resource_msg__type_support_cpp_em.patch": "sha256-Id9GdqyHVcXTaH1011bxRu25QLvbTDATpxuXu43qXyY=",
+        "fix_resource_srv__type_support_cpp_em.patch": "sha256-2Za/CsGfizoxDges5oWQJEIJAz29LzDM8Tw/2k7hEYI=",
+        "fix_rosidl_typesupport_c___init___py.patch": "sha256-f3bHF8fTt05tybZkb9ec8YTqVPqoW7Xd/yNYY/RlhXA=",
+        "fix_src_type_support_dispatch_hpp.patch": "sha256-sssc/0CZ3uxqmNbDcvb16bMCZBUoNBjoFcT+l2fYo14="
+    },
+    "patch_strip": 2
+}

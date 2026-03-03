@@ -1,0 +1,9 @@
+{
+    "url": "https://github.com/ros2/console_bridge_vendor/archive/refs/tags/1.9.1.tar.gz",
+    "integrity": "sha256-Fqno+llOg3rka5OLTJU7noGQafLOIREInH/ekLat6/U=",
+    "strip_prefix": "console_bridge_vendor-1.9.1",
+    "overlay": {
+        ".gitignore": "sha256-roiEUv1rC2ny8p3R4pQwwPP1n4tosxPxILYrhVxfn+A=",
+        "BUILD.bazel": "sha256-lOIq5LtZ4Oykq7SgUgTc1QQz7+QGQ/JBKRl4WnGVt5o="
+    }
+}

@@ -1,0 +1,21 @@
+diff --git a/rcl_yaml_param_parser/test/test_parse.cpp b/rcl_yaml_param_parser/test/test_parse.cpp
+index f7e004f..c8afa3b 100644
+--- a/rcl_yaml_param_parser/test/test_parse.cpp
++++ b/rcl_yaml_param_parser/test/test_parse.cpp
+@@ -28,6 +28,7 @@
+ #include "rcutils/types/string_array.h"
+ 
+ #include "./mocking_utils/patch.hpp"
++#include "./locate_test_assets.h"
+ 
+ TEST(TestParse, parse_value) {
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+@@ -462,7 +463,7 @@ TEST(TestParse, parse_key_bad_args)
+ TEST(TestParse, parse_file_events_mock_yaml_parser_parse) {
+   char cur_dir[1024];
+   rcutils_reset_error();
+-  EXPECT_TRUE(rcutils_get_cwd(cur_dir, 1024)) << rcutils_get_error_string().str;
++  EXPECT_TRUE(get_test_asset_dir(cur_dir, 1024)) << rcutils_get_error_string().str;
+ 
+   rcutils_allocator_t allocator = rcutils_get_default_allocator();
+   char * test_path = rcutils_join_path(cur_dir, "test", allocator);

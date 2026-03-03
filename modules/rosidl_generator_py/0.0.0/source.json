@@ -1,0 +1,21 @@
+{
+    "url": "https://github.com/ros2/rosidl_python/archive/refs/tags/0.25.0.tar.gz",
+    "integrity": "sha256-Ny7mC/LHZTsoYkeqwDV9APxNmYxC4ekcZ6WD0jlO0HA=",
+    "strip_prefix": "rosidl_python-0.25.0/rosidl_generator_py",
+    "overlay": {
+        "BUILD.bazel": "sha256-u0LotckOr2MmljLGEFYrvetxsvs6eryK9j6y0vCgKWU=",
+        "aspects.bzl": "sha256-rNlhvYASsUW2q9IzCAdgGpvmlQA5xgWKbMZ+Hsve1Sk=",
+        "msg/BUILD.bazel": "sha256-pWvW/5IwprGr5vUISTjlcgqhsKamdSO+2Ysstonbmck=",
+        "rules.bzl": "sha256-mT0iwrbS+HUEwxsMwixhc666HRwQ0kxiGvOgucPMLWs=",
+        "sitecustomize.py": "sha256-Z2MHID48GAzjCetaWzydwzJNFLI4vW262gMZtPny0r4=",
+        "types.bzl": "sha256-vYMaDsZHBRY2DBefxdsMNLLjqER8HidvRTRTPmBNnv0="
+    },
+    "patches": {
+        "fix_resource__action_py_em.patch": "sha256-psuvLd7W2VbY077e2lPnbaaspwXlpCrQpCMTiTCcvdw=",
+        "fix_resource__msg_py_em.patch": "sha256-74JFaZUa4LSGWaNQiU7zC+TwVPVKid1sCK+SVTSYOds=",
+        "fix_resource__srv_py_em.patch": "sha256-HF706Sg9z7Es3XeiSahP3UJs0sgsQgyo/2ywhjj0RVU=",
+        "fix_rosidl_generator_py_generate_py_impl_py.patch": "sha256-MLhDoQlJh9A7FxB3zV58qYNaj43Qd5788/S+tvp6DY4=",
+        "fix_rosidl_generator_py_import_type_support_impl_py.patch": "sha256-d9jXF924gA8TGBKvD3Cq3cK9KFQWnWU1VQfkimXutQM="
+    },
+    "patch_strip": 2
+}

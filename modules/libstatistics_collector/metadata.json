@@ -1,0 +1,16 @@
+{
+    "homepage": "https://github.com/ros-tooling/libstatistics_collector",
+    "maintainers": [
+        {
+            "email": "intrinsic-opensource@users.noreply.github.com",
+            "name": "intrinsic-opensource"
+        }
+    ],
+    "repository": [
+        "github:ros-tooling/libstatistics_collector"
+    ],
+    "versions": [
+        "0.0.0"
+    ],
+    "yanked_versions": {}
+}
