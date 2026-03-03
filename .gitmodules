@@ -112,9 +112,6 @@
 [submodule "submodules/console_bridge_vendor"]
 	path = submodules/console_bridge_vendor
 	url = https://github.com/asymingt/console_bridge_vendor.git
-[submodule "submodules/iceoryx"]
-	path = thirdparty/iceoryx
-	url = https://github.com/asymingt/iceoryx.git
 [submodule "submodules/launch"]
 	path = submodules/launch
 	url = https://github.com/asymingt/launch.git
@@ -148,30 +145,9 @@
 [submodule "submodules/rosidl_defaults"]
 	path = submodules/rosidl_defaults
 	url = https://github.com/asymingt/rosidl_defaults.git
-[submodule "thirdparty/cyclonedds"]
-	path = thirdparty/cyclonedds
-	url = https://github.com/asymingt/cyclonedds.git
-[submodule "thirdparty/lttng-ust"]
-	path = thirdparty/lttng-ust
-	url = https://github.com/asymingt/lttng-ust.git
-[submodule "thirdparty/mimick"]
-	path = thirdparty/mimick
-	url = https://github.com/asymingt/mimick.git
-[submodule "thirdparty/zenoh-cpp"]
-	path = thirdparty/zenoh-cpp
-	url = https://github.com/asymingt/zenoh-cpp.git
-[submodule "thirdparty/zenoh-c"]
-	path = thirdparty/zenoh-c
-	url = https://github.com/asymingt/zenoh-c.git
 [submodule "submodules/rosdistro"]
 	path = submodules/rosdistro
 	url = https://github.com/asymingt/rosdistro.git
-[submodule "thirdparty/fastdds"]
-	path = thirdparty/fastdds
-	url = https://github.com/asymingt/fastdds.git
-[submodule "thirdparty/fastcdr"]
-	path = thirdparty/fastcdr
-	url = https://github.com/asymingt/fastcdr.git
 [submodule "submodules/rclpy"]
 	path = submodules/rclpy
 	url = https://github.com/asymingt/rclpy.git
