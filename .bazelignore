@@ -1,2 +1,8 @@
+# These are our RCR modules
+modules
+
+# These are our staged BCR modules.
 staging
+
+# These are deprecated
 submodules

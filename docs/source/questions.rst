@@ -18,7 +18,7 @@ If you've been working with Bazel for a while, you might have come across the ``
    use_repo(ros, "ros")
 
 
-Unfortunately, this is not possible because of the order in which Bazel phases its execution. In the first resolution phase the ``MODULE.bazel`` file is parsed and dependencies are resolved. In teh second extension phase the module extensions are loaded and executed. In summary, we wouldn't be able to distribute ROS packages as Bazel modules, and therefore we'd lose the dependency and versioning benefits. In stead, we'd have to resort to the older ``http_archive`` or ``git_repository`` rules.
+Unfortunately, this is not possible because of the order in which Bazel phases its execution. In the first resolution phase the ``MODULE.bazel`` file is parsed and dependencies are resolved. In the second extension phase the module extensions are loaded and executed. In summary, we wouldn't be able to distribute ROS packages as Bazel modules, and therefore we'd lose the dependency and versioning benefits. In stead, we'd have to resort to the older ``http_archive`` or ``git_repository`` rules.
 
 How do I get a package into the registry?
 +++++++++++++++++++++++++++++++++++++++++++++
