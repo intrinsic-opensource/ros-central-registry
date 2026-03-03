@@ -13,7 +13,8 @@
 # limitations under the License.
 
 # Augment the BCR with a few of our own modules in the docs folder.
-common --registry=https://intrinsic-opensource.github.io/ros-central-registry \
+common --registry=file:///%workspace%/../../.. \
+       --registry=file:///%workspace%/../../../staging \
        --registry=https://bcr.bazel.build
 
 # Define ROS_HOME so that tests don't try and write to ~/.ros_home by default.
@@ -32,15 +33,12 @@ test --sandbox_default_allow_network=false
 
 # Use C++17 standard by default across the whole repo.
 build --cxxopt="-std=c++17"
+build --cxxopt="-Wno-unused-command-line-argument"
 
 # Ensure that we use toolchains_llvm instead of the host toolchain.
 build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
 
 # Build configuration for RMW implementations.
-#   --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
-#   --@rmw_implementation//:rmw=rmw_fastrtps_cpp
-#   --@rmw_implementation//:rmw=rmw_fastrtps_dynamic_cpp
-#   --@rmw_implementation//:rmw=rmw_zenoh_cpp
 build --@rmw_implementation//:rmw=rmw_fastrtps_cpp
 
 # ASAN

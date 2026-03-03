@@ -14,11 +14,13 @@
 
 # Every ROS workspace must declare itself as a module.
 module(
-    name = "developer_preview",
+    name = "example",
     version = "0.0.1",
 )
 
 # BCR deps
+bazel_dep(name = "protobuf", version = "33.4")
+bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "rules_python", version = "1.8.3")
 bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 
