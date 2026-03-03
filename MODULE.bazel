@@ -21,16 +21,19 @@ module(
 bazel_dep(name = "rules_python", version = "1.8.3")
 bazel_dep(name = "rclcpp", version = "0.0.0")
 
+# We are currently using Python 3.11 because the rosdistro module depends on
+# distutils, which was removed from Python 3.12 onwards.
+
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
     is_default = True,
-    python_version = "3.14",
+    python_version = "3.11",
 )
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
-    hub_name = "docs_deps",
-    python_version = "3.14",
+    hub_name = "pip_ros_central_registry",
+    python_version = "3.11",
     requirements_lock = "//:requirements.txt",
 )
-use_repo(pip, "docs_deps")
+use_repo(pip, "pip_ros_central_registry")
