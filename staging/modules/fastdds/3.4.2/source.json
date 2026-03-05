@@ -1,8 +1,0 @@
-{
-    "url": "https://github.com/eProsima/Fast-DDS/archive/refs/tags/v3.4.2.tar.gz",
-    "integrity": "sha256-Xy2NInKXtYbljjRuHns8MDgbfhFYDw32oSxtoVoZQPQ=",
-    "strip_prefix": "Fast-DDS-3.4.2",
-    "overlay": {
-        "BUILD.bazel": "sha256-6D2G7dk4oJ33t7Aq6ei3Ane0Chdj2g/0vTXdqh3k6xI="
-    }
-}
