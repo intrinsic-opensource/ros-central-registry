@@ -1,0 +1,34 @@
+--- a/tools.bzl
++++ b/tools.bzl
+@@ -160,1 +160,1 @@
+-def generate_compilation_information(ctx, name, hdrs, srcs, include_dirs = [], deps = [], link_deps_statically = False):
++def generate_compilation_information(ctx, name, hdrs, srcs, include_dirs = [], deps = [], link_deps_statically = True):
+@@ -192,1 +193,2 @@
+-        alwayslink = True,
++        alwayslink = True,
++        disallow_dynamic_library = True,
+@@ -205,1 +205,2 @@
+-        link_deps_statically = link_deps_statically,  # avoid enormous per-message libs
++        link_deps_statically = link_deps_statically,  # avoid enormous per-message libs
++        user_link_flags = ["-undefined", "dynamic_lookup"],
+@@ -225,2 +226,4 @@
+-                        library.dynamic_library
+-                        for library in linker_input.libraries
++                        dynamic_library
++                        for library in linker_input.libraries
++                        for dynamic_library in [library.dynamic_library]
++                        if dynamic_library != None
+@@ -228,6 +231,7 @@
+-                for file in dep[provider].dynamic_libraries.to_list():
+-                    unmangled = file.basename
+-                    unmangled = unmangled.replace("_S", "/").replace("_U", "_")
+-                    unmangled = unmangled[unmangled.rfind("/") + 1:]
+-                    transitive_dynamic_libraries_symlinks[unmangled] = file                
+-                    transitive_dynamic_libraries.append(file)
++                for file in dep[provider].dynamic_libraries.to_list():
++                    if file != None:
++                        unmangled = file.basename
++                        unmangled = unmangled.replace("_S", "/").replace("_U", "_")
++                        unmangled = unmangled[unmangled.rfind("/") + 1:]
++                        transitive_dynamic_libraries_symlinks[unmangled] = file
++                        transitive_dynamic_libraries.append(file)
