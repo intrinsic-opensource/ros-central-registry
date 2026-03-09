@@ -15,6 +15,12 @@
 # Augment the BCR with a few of our own modules in the docs folder.
 common --registry=file:///%workspace%/staging --registry=https://bcr.bazel.build
 
+# Remote cache.
+common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
+common --remote_upload_local_results=false
+common --remote_cache_compression=true
+common --google_default_credentials
+
 # Define ROS_HOME so that tests don't try and write to ~/.ros_home by default.
 common --test_env=ROS_HOME=".ros"
 
@@ -68,9 +74,9 @@ build:tsan --linkopt=-fsanitize=thread
 # and run sequentially with up to five times to try and skirt around this
 # issue. In reality, we'll use 
 common:ci --target_pattern_file=distribution.txt
-common:ci --remote_cache=grpcs://storage.googleapis.com/intrinsic-opensource-buildcache
-common:ci --remote_upload_local_results
-common:ci --remote_cache_compression
+common:ci --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
+common:ci --remote_upload_local_results=true
+common:ci --remote_cache_compression=true
 common:ci --google_default_credentials
 test:ci --flaky_test_attempts=5
 
