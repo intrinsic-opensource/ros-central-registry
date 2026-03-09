@@ -68,6 +68,9 @@ build:tsan --linkopt=-fsanitize=thread
 # and run sequentially with up to five times to try and skirt around this
 # issue. In reality, we'll use 
 common:ci --target_pattern_file=distribution.txt
+common:ci --remote_cache=grpcs://storage.googleapis.com/intrinsic-opensource-buildcache
+common:ci --remote_upload_local_results=true
+common:ci --remote_cache_compression
 test:ci --flaky_test_attempts=5
 
 # TODO(asymingt) the docker-sandbox is currently broken with toolchains_llvm

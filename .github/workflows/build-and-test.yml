@@ -49,6 +49,13 @@ jobs:
         large-packages: true
         docker-images: true
         swap-storage: true
+    # Authenticate with Google Cloud
+    - name: Authenticate to Google Cloud
+      uses: "google-github-actions/auth@71fee32a0bb7e97b4d33d548e7d957010649d8fa" # v2.1.3
+      with:
+        token_format: access_token
+        workload_identity_provider: projects/771457463613/locations/global/workloadIdentityPools/github-automation/providers/build-dev
+        service_account: github-automation-bot@gha-intrinsic-opensource-rcr.iam.gserviceaccount.com
     # Install valgrind
     - name: Install Valgrind
       run: sudo apt update && sudo apt install valgrind
