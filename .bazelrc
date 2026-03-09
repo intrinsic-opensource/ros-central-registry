@@ -13,13 +13,12 @@
 # limitations under the License.
 
 # Augment the BCR with a few of our own modules in the docs folder.
-common --registry=file:///%workspace%/staging --registry=https://bcr.bazel.build
+common --registry=https://bcr.bazel.build
 
 # Remote cache.
 common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
 common --remote_upload_local_results=false
 common --remote_cache_compression=true
-common --google_default_credentials
 
 # Define ROS_HOME so that tests don't try and write to ~/.ros_home by default.
 common --test_env=ROS_HOME=".ros"
@@ -80,10 +79,5 @@ common:ci --remote_cache_compression=true
 common:ci --google_default_credentials
 test:ci --flaky_test_attempts=5
 
-# TODO(asymingt) the docker-sandbox is currently broken with toolchains_llvm
-# v1.6.0. We need to go back and fix this in the future.
-common:docker --target_pattern_file=distribution.txt
-test:docker --flaky_test_attempts=5
-test:docker --spawn_strategy=docker
-test:docker --experimental_enable_docker_sandbox
-test:docker --experimental_docker_image=ros-central-registry:24.04
+# Allow for local testing of distribution.
+common:distribution --target_pattern_file=distribution.txt
