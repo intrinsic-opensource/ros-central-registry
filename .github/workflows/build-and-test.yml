@@ -39,6 +39,7 @@ jobs:
           - { name: 'ubuntu-24.04_bazel-8.5.1_aarch64', os: 'ubuntu-24.04-arm', bazel-version: '8.5.1' }
           - { name: 'ubuntu-24.04_bazel-9.0.0_aarch64', os: 'ubuntu-24.04-arm', bazel-version: '9.0.0' }
     steps:
+
     # Remove unnecessary files to maximize build space.
     - name: Free disk space
       uses: jlumbroso/free-disk-space@v1.3.1
@@ -50,6 +51,13 @@ jobs:
         large-packages: true
         docker-images: true
         swap-storage: true
+
+    # Checkout this repository and all submodules.
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
     # Authenticate with Google Cloud
     - name: Authenticate to Google Cloud
       uses: "google-github-actions/auth@71fee32a0bb7e97b4d33d548e7d957010649d8fa" # v2.1.3
@@ -57,14 +65,8 @@ jobs:
         token_format: access_token
         workload_identity_provider: projects/771457463613/locations/global/workloadIdentityPools/github-automation/providers/build-dev
         service_account: github-automation-bot@gha-intrinsic-opensource-rcr.iam.gserviceaccount.com
-    # Install valgrind
-    - name: Install Valgrind
-      run: sudo apt update && sudo apt install valgrind
-    # Checkout this repository and all submodules.
-    - name: Checkout repository and submodules
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
+        create_credentials_file: true
+
     # Setup bazel as a tool for building.
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.15.0
@@ -72,19 +74,19 @@ jobs:
         bazelisk-cache: true
         disk-cache: ${{ matrix.name}}
         repository-cache: false
-    # Build the container image.
-    - name: Build test container
-      run: docker build -t ros-central-registry:24.04 .
+
     # Build the ROS examples.
     - name: Build code
       env:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
       run: bazel build --config=ci
+
     # Test the distribution.
     - name: Run tests
       env:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
       run: bazel test --config=ci --jobs 1
+
     # Summarize the results.
     - name: Test report
       uses: dorny/test-reporter@v2
@@ -93,6 +95,7 @@ jobs:
         path: bazel-testlogs/**/test.xml
         reporter: java-junit
       if: always()
+
     # Upload test test logs
     - name: Upload test logs
       uses: actions/upload-artifact@v4
@@ -100,6 +103,7 @@ jobs:
         name: ${{ matrix.name }} (test logs)
         path: "bazel-testlogs/**/test.log"
       if: always()
+
     # Create badges for each build
     - name: Update status badges
       uses: Schneegans/dynamic-badges-action@v1.7.0
