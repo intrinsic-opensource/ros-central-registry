@@ -13,7 +13,7 @@
 # limitations under the License.
 
 name: build-and-test
-run-name: Build and test across mutliple operating systems, architectures and Bazel versions.
+run-name: Build and test across multiple operating systems, architectures and Bazel versions.
 on:
   push:
     branches:
@@ -22,9 +22,10 @@ on:
     branches:
       - main
 permissions:
-  contents: read
   actions: read
   checks: write
+  contents: read
+  id-token: write
 jobs:
   checkout-setup-build-test: 
     name: ${{ matrix.name }}
