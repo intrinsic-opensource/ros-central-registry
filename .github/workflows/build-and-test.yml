@@ -21,13 +21,15 @@ on:
   pull_request:
     branches:
       - main
-permissions:
-  actions: read
-  checks: write
-  contents: read
-  id-token: write
+
 jobs:
   checkout-setup-build-test: 
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write  # needed for Google Cloud auth
+      
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -60,9 +62,8 @@ jobs:
 
     # Authenticate with Google Cloud
     - name: Authenticate to Google Cloud
-      uses: "google-github-actions/auth@71fee32a0bb7e97b4d33d548e7d957010649d8fa" # v2.1.3
+      uses: "google-github-actions/auth@71fee32a0bb7e97b4d33d548e7d957010649d8fa"
       with:
-        token_format: access_token
         workload_identity_provider: projects/771457463613/locations/global/workloadIdentityPools/github-automation/providers/build-dev
         service_account: github-automation-bot@gha-intrinsic-opensource-rcr.iam.gserviceaccount.com
         create_credentials_file: true
@@ -70,10 +71,6 @@ jobs:
     # Setup bazel as a tool for building.
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.15.0
-      with:
-        bazelisk-cache: true
-        disk-cache: ${{ matrix.name}}
-        repository-cache: false
 
     # Build the ROS examples.
     - name: Build code
