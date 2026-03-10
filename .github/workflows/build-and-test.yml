@@ -26,28 +26,66 @@ jobs:
 
   # This avoids building anything that wouldn't merge.
   lint-bazel-files:
-    name: Run buildifier on all Bazel files
+    name: Lint all Bazel files
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
       with:
         submodules: recursive
-    - name: Run Buildifier
-      uses: buildbuddy-io/buildifier-action@v1.0.0
+    - name: Setup buildifier
+      uses: jbajic/setup-buildifier@v1
+    - name: Run buildifier
+      run: |
+        buildifier -mode check -r .
+    - name: Update status badges
+      uses: Schneegans/dynamic-badges-action@v1.7.0
       with:
-        mode: check
-        warnings: "all"
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: 4d05b2382879fbd51f9a07bb7c63fb29
+        filename: buildifier.json
+        label: linting
+        message: ${{ job.status == 'success' && 'pass' || 'fail' }}
+        color: ${{ job.status == 'success' && 'green' || 'red' }}
+      if: ${{ github.ref_name == 'main' || github.ref_name == 'asymingt/update-rules-cc-and-run-buildifier' }}
+
+  # This avoids building anything with bad documentation.
+  generate-documentation:
+    name: Regenerate documentation
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Setup Bazel
+      uses: bazel-contrib/setup-bazel@0.15.0
+    - name: Build documentation
+      env:
+        USE_BAZEL_VERSION: 9.0.0
+      run: bazel build //docs/...
+    - name: Update status badges
+      uses: Schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: 4d05b2382879fbd51f9a07bb7c63fb29
+        filename: documentation.json
+        label: linting
+        message: ${{ job.status == 'success' && 'pass' || 'fail' }}
+        color: ${{ job.status == 'success' && 'green' || 'red' }}
+      if: ${{ github.ref_name == 'main' || github.ref_name == 'asymingt/update-rules-cc-and-run-buildifier' }}
 
   # Only try and build if linting passes.
   checkout-setup-build-test:
-    needs: lint-bazel-files
+    needs:
+    - lint-bazel-files
+    - generate-documentation
 
     permissions:
       actions: read
       checks: write
       contents: read
-      id-token: write  # needed for Google Cloud auth
+      id-token: write
       
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
