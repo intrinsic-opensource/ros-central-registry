@@ -17,6 +17,11 @@
 common --registry=https://intrinsic-opensource.github.io/ros-central-registry \
        --registry=https://bcr.bazel.build
 
+# Remote cache.
+common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
+common --remote_upload_local_results=false
+common --remote_cache_compression=true
+
 # Define ROS_HOME so that tests don't try and write to ~/.ros_home by default.
 common --test_env=ROS_HOME=".ros"
 
@@ -36,6 +41,9 @@ build --cxxopt="-std=c++17"
 
 # Ensure that we use toolchains_llvm instead of the host toolchain.
 build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
+
+# Tell Bazel to use the pre-compiled binary instead of building from source
+build --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
 
 # Build configuration for RMW implementations.
 #   --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
