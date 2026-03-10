@@ -1,13 +1,16 @@
 diff --git a/ament_index_cpp/src/get_search_paths.cpp b/ament_index_cpp/src/get_search_paths.cpp
-index 7a411ac..5c4f59e 100644
+index 7a411ac..dd106a5 100644
 --- a/ament_index_cpp/src/get_search_paths.cpp
 +++ b/ament_index_cpp/src/get_search_paths.cpp
-@@ -15,9 +15,14 @@
+@@ -15,9 +15,17 @@
  #include "ament_index_cpp/get_search_paths.hpp"
  
  #include <sys/stat.h>
 +#include <unistd.h> // For readlink
 +#include <limits.h> // For PATH_MAX
++#ifdef __APPLE__
++#include <mach-o/dyld.h> // For _NSGetExecutablePath
++#endif
  
  #include <cstdlib>
 +#include <filesystem>
@@ -17,7 +20,7 @@ index 7a411ac..5c4f59e 100644
  #include <sstream>
  #include <stdexcept>
  #include <string>
-@@ -26,16 +31,15 @@
+@@ -26,16 +34,15 @@
  #define stat _stat
  #endif
  
@@ -39,7 +42,7 @@ index 7a411ac..5c4f59e 100644
  #ifndef _WIN32
    ament_prefix_path = getenv(env_var);
  #else
-@@ -43,12 +47,69 @@ get_search_paths()
+@@ -43,12 +50,82 @@ get_search_paths()
    _dupenv_s(&ament_prefix_path, &ament_prefix_path_size, env_var);
  #endif
    if (!ament_prefix_path || std::string(ament_prefix_path).empty()) {
@@ -58,10 +61,15 @@ index 7a411ac..5c4f59e 100644
 +  char result[MAX_PATH + 1] = {'\0'};
 +  auto path_len = GetModuleFileNameA(NULL, result, MAX_PATH);
 +#elif defined(__APPLE__)
-+  char result[MAXPATHLEN + 1] = {'\0'};
-+  uint32_t path_len = MAXPATHLEN;
++  char result[PATH_MAX + 1] = {'\0'};
++  uint32_t path_len = PATH_MAX;
 +  if (_NSGetExecutablePath(result, &path_len) != 0) {
-+    path_len = readlink(result, result, MAXPATHLEN);
++    return std::nullopt;
++  }
++  const ssize_t resolved_path_len = readlink(result, result, PATH_MAX);
++  if (resolved_path_len > 0) {
++    result[resolved_path_len] = '\0';
++    path_len = static_cast<uint32_t>(resolved_path_len);
 +  }
 +#else
 +  char result[PATH_MAX + 1] = {'\0'};
@@ -97,6 +105,14 @@ index 7a411ac..5c4f59e 100644
 +      if (std::filesystem::exists(runfiles_path / "MANIFEST")) {
 +        return std::list<std::string>{*executable_path + ".runfiles/_main"};
 +      }
++    }
++
++    // Python apps built with Bazel typically have a wrapper executable where the 
++    // get_executable_path trick above fails. Fallback to checking if the CWD is
++    // inside a runfiles tree, just like ament_index_python does.
++    const std::filesystem::path cwd = std::filesystem::current_path();
++    if (std::filesystem::exists(cwd / ".." / "MANIFEST")) {
++      return std::list<std::string>{cwd.string()};
 +    }
 +    
 +    // If we get here it means that we don't have an AMENT_PREFIX_PATH and we cant work out
