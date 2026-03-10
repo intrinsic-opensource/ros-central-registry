@@ -85,6 +85,14 @@ def main():
             run_git_cmd(["git", "checkout", "-B", args.branch_name], cwd=submodule_path)
             
         elif args.command == "push":
+            # Ensure origin is set correctly
+            remote_url = f"git@github.com:asymingt/{submodule_path.name}.git"
+            remote_status = run_git_cmd(["git", "remote"], cwd=submodule_path, check=False)
+            if "origin" in remote_status.stdout.split():
+                run_git_cmd(["git", "remote", "set-url", "origin", remote_url], cwd=submodule_path)
+            else:
+                run_git_cmd(["git", "remote", "add", "origin", remote_url], cwd=submodule_path)
+
             # 1. Remove all 'MODULE.bazel.lock' files
             for lock_file in submodule_path.rglob("MODULE.bazel.lock"):
                 print(f"[{submodule_path.name}] Removing {lock_file.relative_to(submodule_path)}")
