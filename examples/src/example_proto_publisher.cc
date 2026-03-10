@@ -17,23 +17,23 @@
 #include <string>
 
 #include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+
+#include "example/msg/example_message__typeadapter_protobuf_cpp.hpp"
 
 using namespace std::chrono_literals;
 
-/* This example creates a subclass of Node and uses a fancy C++11 lambda
-* function to shorten the callback syntax, at the expense of making the
-* code somewhat more difficult to understand at first glance. */
-
-class MinimalPublisher : public rclcpp::Node {
+class ExampleProtoPublisher : public rclcpp::Node {
 public:
-  MinimalPublisher() : Node("minimal_publisher"), count_(0) {
-    publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
+  ExampleProtoPublisher() : Node("example_proto_publisher_cpp"), count_(0) {
+    publisher_ = this->create_publisher<example::msg::pb::ExampleMessage>("topic", 10);
     auto timer_callback =
       [this]() -> void {
-        auto message = std_msgs::msg::String();
-        message.data = "Hello, world! from C++ " + std::to_string(this->count_++);
-        RCLCPP_INFO(this->get_logger(), "Published: '%s'", message.data.c_str());
+        auto message = example::msg::pb::ExampleMessage();
+        
+        std::string text = "Hello, world! From protobuf " + std::to_string(count_++);
+        message.mutable_message()->set_data(text);
+        
+        RCLCPP_INFO(this->get_logger(), "Published protobuf message: '%s'", text.c_str());
         this->publisher_->publish(message);
       };
     timer_ = this->create_wall_timer(1s, timer_callback);
@@ -41,14 +41,14 @@ public:
 
 private:
   rclcpp::TimerBase::SharedPtr timer_;
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+  rclcpp::Publisher<example::msg::pb::ExampleMessage>::SharedPtr publisher_;
   size_t count_;
 };
 
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<MinimalPublisher>());
+  rclcpp::spin(std::make_shared<ExampleProtoPublisher>());
   rclcpp::shutdown();
   return 0;
 }

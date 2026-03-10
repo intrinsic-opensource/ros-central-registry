@@ -14,6 +14,7 @@
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary")
 load("@rosidl_adapter_proto//:rules.bzl", "proto_ros_library")
+load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
 load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
 load("@rosidl_generator_py//:rules.bzl", "py_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
@@ -25,23 +26,52 @@ package(default_visibility = ["//visibility:public"])
 proto_ros_library(
     name = "example_proto_files",
     deps = [
-        "//msg:ExampleMessage",
+        "//examples/msg:ExampleMessage",
     ],
 )
 
 # Generate language bindings to the ros_interface in ./msg/BUILD.bazel.
 
+c_ros_library(
+    name = "example_ros_c_msgs",
+    deps = [
+        "//examples/msg:ExampleMessage",
+    ],
+)
+
 cc_ros_library(
     name = "example_ros_cc_msgs",
     deps = [
-        "//msg:ExampleMessage",
+        "//examples/msg:ExampleMessage",
     ],
 )
 
 py_ros_library(
     name = "example_ros_py_msgs",
     deps = [
-        "//msg:ExampleMessage",
+        "//examples/msg:ExampleMessage",
+    ],
+)
+
+# C examples (note that c_ros_library includes proto type support)
+
+cc_binary(
+    name = "example_ros_publisher_c",
+    srcs = ["src/example_ros_publisher.c"],
+    copts = ["-Wno-unused"],
+    deps = [
+        ":example_ros_c_msgs",
+        "@rclc",
+    ],
+)
+
+cc_binary(
+    name = "example_ros_subscriber_c",
+    srcs = ["src/example_ros_subscriber.c"],
+    copts = ["-Wno-unused"],
+    deps = [
+        ":example_ros_c_msgs",
+        "@rclc",
     ],
 )
 
@@ -49,7 +79,7 @@ py_ros_library(
 
 cc_binary(
     name = "example_ros_publisher_cc",
-    srcs = ["ros/example_ros_publisher.cc"],
+    srcs = ["src/example_ros_publisher.cc"],
     deps = [
         ":example_ros_cc_msgs",
         "@rclcpp",
@@ -58,27 +88,7 @@ cc_binary(
 
 cc_binary(
     name = "example_ros_subscriber_cc",
-    srcs = ["ros/example_ros_subscriber.cc"],
-    deps = [
-        ":example_ros_cc_msgs",
-        "@rclcpp",
-    ],
-)
-
-# Protobuf pipeline
-
-cc_binary(
-    name = "example_proto_publisher_cc",
-    srcs = ["proto/example_proto_publisher.cc"],
-    deps = [
-        ":example_ros_cc_msgs",
-        "@rclcpp",
-    ],
-)
-
-cc_binary(
-    name = "example_proto_subscriber_cc",
-    srcs = ["proto/example_proto_subscriber.cc"],
+    srcs = ["src/example_ros_subscriber.cc"],
     deps = [
         ":example_ros_cc_msgs",
         "@rclcpp",
@@ -89,8 +99,8 @@ cc_binary(
 
 py_binary(
     name = "example_ros_publisher_py",
-    srcs = ["ros/example_ros_publisher.py"],
-    main = "ros/example_ros_publisher.py",
+    srcs = ["src/example_ros_publisher.py"],
+    main = "src/example_ros_publisher.py",
     deps = [
         ":example_ros_py_msgs",
         "@rclpy",
@@ -99,10 +109,30 @@ py_binary(
 
 py_binary(
     name = "example_ros_subscriber_py",
-    srcs = ["ros/example_ros_subscriber.py"],
-    main = "ros/example_ros_subscriber.py",
+    srcs = ["src/example_ros_subscriber.py"],
+    main = "src/example_ros_subscriber.py",
     deps = [
         ":example_ros_py_msgs",
         "@rclpy",
+    ],
+)
+
+# Protobuf pipeline example
+
+cc_binary(
+    name = "example_proto_publisher_cc",
+    srcs = ["src/example_proto_publisher.cc"],
+    deps = [
+        ":example_ros_cc_msgs",
+        "@rclcpp",
+    ],
+)
+
+cc_binary(
+    name = "example_proto_subscriber_cc",
+    srcs = ["src/example_proto_subscriber.cc"],
+    deps = [
+        ":example_ros_cc_msgs",
+        "@rclcpp",
     ],
 )
