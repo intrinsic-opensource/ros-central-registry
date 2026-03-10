@@ -23,7 +23,26 @@ on:
       - main
 
 jobs:
-  checkout-setup-build-test: 
+
+  # This avoids building anything that wouldn't merge.
+  lint-bazel-files:
+    name: Run buildifier on all Bazel files
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Run Buildifier
+      uses: buildbuddy-io/buildifier-action@v1.0.0
+      with:
+        mode: check
+        warnings: "all"
+
+  # Only try and build if linting passes.
+  checkout-setup-build-test:
+    needs: lint-bazel-files
+
     permissions:
       actions: read
       checks: write
