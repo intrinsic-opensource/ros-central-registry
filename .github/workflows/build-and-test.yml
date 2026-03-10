@@ -37,9 +37,13 @@ jobs:
       matrix:
         include:
           - { name: 'ubuntu-24.04_bazel-8.5.1_x86_64',  os: 'ubuntu-24.04',     bazel-version: '8.5.1' }
-          - { name: 'ubuntu-24.04_bazel-9.0.0_x86_64',  os: 'ubuntu-24.04',     bazel-version: '9.0.0' }
           - { name: 'ubuntu-24.04_bazel-8.5.1_aarch64', os: 'ubuntu-24.04-arm', bazel-version: '8.5.1' }
+          - { name: 'macos-26_bazel-8.5.1_x86_64',      os: 'macos-26-intel',   bazel-version: '8.5.1' }
+          - { name: 'macos-26_bazel-8.5.1_aarch64',     os: 'macos-26',         bazel-version: '8.5.1' }
+          - { name: 'ubuntu-24.04_bazel-9.0.0_x86_64',  os: 'ubuntu-24.04',     bazel-version: '9.0.0' }
           - { name: 'ubuntu-24.04_bazel-9.0.0_aarch64', os: 'ubuntu-24.04-arm', bazel-version: '9.0.0' }
+          - { name: 'macos-26_bazel-9.0.0_x86_64',      os: 'macos-26-intel',   bazel-version: '9.0.0' }
+          - { name: 'macos-26_bazel-9.0.0_aarch64',     os: 'macos-26',         bazel-version: '9.0.0' }
     steps:
 
     # Remove unnecessary files to maximize build space.
@@ -53,6 +57,7 @@ jobs:
         large-packages: true
         docker-images: true
         swap-storage: true
+      if: runner.os == 'Linux'
 
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
