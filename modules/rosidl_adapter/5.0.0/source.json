@@ -3,8 +3,8 @@
     "integrity": "sha256-TSUAVI2+hRv0LVlqNmnsTbzkm74bvMhEEIcmZK+zDW0=",
     "strip_prefix": "rosidl-5.0.0/rosidl_adapter",
     "overlay": {
-        "BUILD.bazel": "sha256-xHZmfbpwP1r6uCaRcomtw646BhvpFgsWjQoblQUruZ0=",
-        "MODULE.bazel": "sha256-CaIeV7XWRF7jI1wviRTklTMwQtoqqaUDY75f5rnYGGU=",
+        "BUILD.bazel": "sha256-tBzVaaCpso4V0LwsTs2sXLnq/pK9zWZ/Ly/dKsiIo78=",
+        "MODULE.bazel": "sha256-Axjx1CQvzLE7/59JfgiFeSVNrxr3jFBzJbqhZdkBNnk=",
         "aspects.bzl": "sha256-EbNtcAU3Jxttqp5sVMAY/o5p4R2dlgId92QwasY5dIM=",
         "rules.bzl": "sha256-kkleKEmTPFyJgo6hfdABbt+gj5J5fR1rf7W7G2mxrMQ=",
         "test/data/action/BUILD.bazel": "sha256-iCSLKmDFgJZi/6LVwC7VZBmh+Cv9fi0y04tPtKf0CX0=",

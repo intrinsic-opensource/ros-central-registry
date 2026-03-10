@@ -24,9 +24,7 @@ load("@rosidl_typesupport_fastrtps_c//:types.bzl", "RosCTypesupportFastRTPSInfo"
 load("@rosidl_typesupport_fastrtps_cpp//:types.bzl", "RosCcTypesupportFastRTPSInfo")
 load("@rosidl_typesupport_introspection_c//:types.bzl", "RosCTypesupportIntrospectionInfo")
 load("@rosidl_typesupport_protobuf_c//:types.bzl", "RosCTypesupportProtobufInfo")
-load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
-load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain")
-load("@rules_python//python:defs.bzl", "PyInfo")
+load("@rules_cc//cc:defs.bzl", "CcInfo")
 load(":types.bzl", "RosPyBindingsInfo")
 
 def _rosidl_generator_py_aspect_impl(target, ctx):
@@ -109,7 +107,7 @@ def _rosidl_generator_py_aspect_impl(target, ctx):
                     if RosPyBindingsInfo in dep
                 ],
             ),
-            linker_inputs = cc_info.linking_context.linker_inputs
+            linker_inputs = cc_info.linking_context.linker_inputs,
         ),
     ]
 

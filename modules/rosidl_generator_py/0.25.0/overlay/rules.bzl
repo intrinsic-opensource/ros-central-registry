@@ -12,17 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@aspect_rules_py//py:defs.bzl", "py_library")
 load("@rosidl_adapter//:aspects.bzl", "rosidl_adapter_aspect")
 load("@rosidl_adapter//:tools.bzl", "extract_dynamic_library_runfiles_for_provider")
 load("@rosidl_adapter_proto//:aspects.bzl", "rosidl_adapter_proto_aspect")
 load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
 load("@rosidl_generator_c//:aspects.bzl", "rosidl_generator_c_aspect")
-load("@rosidl_generator_c//:types.bzl", "RosCBindingsInfo")
 load("@rosidl_generator_cpp//:aspects.bzl", "rosidl_generator_cpp_aspect")
-load("@rosidl_generator_cpp//:types.bzl", "RosCcBindingsInfo")
 load("@rosidl_generator_type_description//:aspects.bzl", "rosidl_generator_type_description_aspect")
 load("@rosidl_typesupport_c//:aspects.bzl", "rosidl_typesupport_c_aspect")
-load("@rosidl_typesupport_c//:types.bzl", "RosCTypesupportInfo")
 load("@rosidl_typesupport_fastrtps_c//:aspects.bzl", "rosidl_typesupport_fastrtps_c_aspect")
 load("@rosidl_typesupport_fastrtps_c//:types.bzl", "RosCTypesupportFastRTPSInfo")
 load("@rosidl_typesupport_fastrtps_cpp//:aspects.bzl", "rosidl_typesupport_fastrtps_cpp_aspect")
@@ -31,7 +29,7 @@ load("@rosidl_typesupport_introspection_c//:aspects.bzl", "rosidl_typesupport_in
 load("@rosidl_typesupport_introspection_c//:types.bzl", "RosCTypesupportIntrospectionInfo")
 load("@rosidl_typesupport_protobuf_c//:aspects.bzl", "rosidl_typesupport_protobuf_c_aspect")
 load("@rosidl_typesupport_protobuf_c//:types.bzl", "RosCTypesupportProtobufInfo")
-load("@rules_python//python:defs.bzl", "PyInfo", "py_library")
+load("@rules_python//python:defs.bzl", "PyInfo")
 load(":aspects.bzl", "rosidl_generator_py_aspect")
 load(":types.bzl", "RosPyBindingsInfo")
 

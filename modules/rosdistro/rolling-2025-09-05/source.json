@@ -4,10 +4,10 @@
     "strip_prefix": "rosdistro-rolling-2025-09-05",
     "overlay": {
         "BUILD.bazel": "sha256-fDWlTCusElP9dlEJQk2ZBqeKft9z7Q+VWWL+6yk9aY8=",
-        "MODULE.bazel": "sha256-E9yEQmHpOkAX9ZrkHUOUBF6/8mxbrDNX9WSN5LhXgzs=",
-        "bazel/python/BUILD.bazel": "sha256-be10VHcdIKzDGzNLapvWsHIcndnbY3z/DIn2CTvQZoQ=",
+        "MODULE.bazel": "sha256-nufOKQzWO9Z5480+ztWipq1aYhIuLaaLGCYKCUusnt4=",
+        "bazel/python/BUILD.bazel": "sha256-Mw5GvY+WenYjNqwtJ/m91bDrmpdQ28k+AZD9gR25k14=",
         "bazel/python/cc/BUILD.bazel": "sha256-gji8IUdzYHbb1Fk4NxEJVNRu1LftLBT7Z4veEOfbAzc=",
-        "bazel/python/macros.bzl": "sha256-5+g1iwQrqxJsPoOclAJ1+1Nq3nTEiqB8f9NwsZS6vLw=",
+        "bazel/python/macros.bzl": "sha256-zIzO6PknJxi7ZEYp4tpPxwoT4UgWYdhsrW9TcN+BH60=",
         "bazel/python/pytest_main.py": "sha256-yMWt5nPtjVjVJxQOTt7Shu6sESJrvrIY4Y8UTWeAYlc=",
         "requirements.in": "sha256-UWWf822smZjqqmX+6hyTy+g10VhfTA1ZZF3oUYVaepg=",
         "requirements_lock.txt": "sha256-u+5lcMyqkRrjLIoPunpnIkkxO07Hdrf8N/Ozh9YeThw="

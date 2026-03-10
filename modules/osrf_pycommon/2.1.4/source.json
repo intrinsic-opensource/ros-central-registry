@@ -4,6 +4,6 @@
     "strip_prefix": "osrf_pycommon-2.1.4",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-1QeAq6ZNoPF5KzIBEo97dPg9Z4DYJum6YY1JjXWWxnA="
+        "MODULE.bazel": "sha256-/1fPxFSIZsJqi+MOj3hWKNnYIKiHdrf1nSsQSkWQApQ="
     }
 }

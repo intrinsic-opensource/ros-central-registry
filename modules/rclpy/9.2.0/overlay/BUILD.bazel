@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@pybind11_bazel//:build_defs.bzl", "pybind_extension", "pybind_library", "pybind_library_test")
+load("@aspect_rules_py//py:defs.bzl", "py_library")
+load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
 load("@rosdistro//bazel/python:macros.bzl", "py_pytest")
 load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
 load("@rosidl_generator_py//:rules.bzl", "py_ros_library")
-load("@rules_python//python:py_library.bzl", "py_library")
 
 package(default_visibility = ["//visibility:public"])
 

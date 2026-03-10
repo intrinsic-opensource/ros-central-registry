@@ -20,6 +20,7 @@ module(
 
 bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "rules_python", version = "1.8.3")
+bazel_dep(name = "aspect_rules_py", version = "1.8.6")
 
 PYTHON_VERSIONS = [
     "3.11",
@@ -27,15 +28,17 @@ PYTHON_VERSIONS = [
 ]
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+
 [
     python.toolchain(
-        python_version = python_version,
         is_default = python_version == PYTHON_VERSIONS[-1],
+        python_version = python_version,
     )
     for python_version in PYTHON_VERSIONS
 ]
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+
 [
     pip.parse(
         hub_name = "pip_ros",
@@ -44,4 +47,5 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
     )
     for python_version in PYTHON_VERSIONS
 ]
+
 use_repo(pip, "pip_ros")

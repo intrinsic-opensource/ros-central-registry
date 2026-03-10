@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "rosidl_typesupport_protobuf",
     version = "0.0.1",
@@ -26,3 +26,4 @@ bazel_dep(name = "rosidl_pycommon", version = "5.0.0")
 bazel_dep(name = "rosidl_runtime_c", version = "5.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "rules_python", version = "1.8.3")
+bazel_dep(name = "aspect_rules_py", version = "1.8.6")

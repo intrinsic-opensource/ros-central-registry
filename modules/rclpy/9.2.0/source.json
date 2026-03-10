@@ -3,8 +3,8 @@
     "integrity": "sha256-ekJ86pMHRM9MrXN/Bg4OWKQ/zBB1fOJbWcd8Xxx0WOg=",
     "strip_prefix": "rclpy-9.2.0/rclpy",
     "overlay": {
-        "BUILD.bazel": "sha256-Qgj2eNAWn5LZoV1y6qoLvdy+TAfA/6SiP1HnWx1qxlo=",
-        "MODULE.bazel": "sha256-pOpOZMQZi+cqx3AhjgMR4mPCe/Dyx8W1225qo6PWMvY="
+        "BUILD.bazel": "sha256-wP8WyCDoznNJWzC6DH/7AwCQv6VeVGRnho5FP1rgElo=",
+        "MODULE.bazel": "sha256-6Zr2CPhrP73HkwueEnjXbFF4qemcD8eoSMLW/mNElds="
     },
     "patches": {
         "fix_rclpy_impl_implementation_singleton_py.patch": "sha256-8wfVvz17qeennwI27WE27WIeV0K6godfg1FMgKJ2jl0="

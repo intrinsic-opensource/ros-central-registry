@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rosdistro//bazel/python:macros.bzl", "py_pytest")
-load("@rules_python//python:defs.bzl", "py_library", "py_binary")
+load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -57,7 +56,6 @@ py_binary(
     name = "cli",
     srcs = [":bin/rosidl_adapter_proto.py"],
     main = ":bin/rosidl_adapter_proto.py",
-    python_version = "PY3",
     deps = [":rosidl_adapter_proto"],
 )
 
@@ -88,8 +86,7 @@ py_binary(
 # py_pytest(
 #     name = "test_adapter_proto_message",
 #     srcs = ["test/test_adapter_proto_message.py"],
-#     python_version = "PY3",
-#     data = glob(["resource/*.em"]) + glob(["test/msg/**"]) + [
+#     #     data = glob(["resource/*.em"]) + glob(["test/msg/**"]) + [
 #         "test/msg/test_rosid_adapter_proto__arguments.json"
 #     ],
 #     deps = [
@@ -98,4 +95,3 @@ py_binary(
 #         ":rosidl_adapter_proto",
 #     ],
 # )
-

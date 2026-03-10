@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "rosidl_generator_type_description",
     version = "5.0.0",
@@ -29,3 +29,4 @@ bazel_dep(name = "rosidl_adapter", version = "5.0.0")
 bazel_dep(name = "rosidl_cli", version = "5.0.0")
 bazel_dep(name = "rosidl_parser", version = "5.0.0")
 bazel_dep(name = "rules_python", version = "1.8.3")
+bazel_dep(name = "aspect_rules_py", version = "1.8.6")

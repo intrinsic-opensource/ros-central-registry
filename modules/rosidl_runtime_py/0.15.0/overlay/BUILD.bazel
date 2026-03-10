@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 load("@rosdistro//bazel/python:macros.bzl", "py_pytest")
-load("@rules_python//python:defs.bzl", "py_library", "py_binary")
-load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
 
 # This is the python library that does the bulk of the work for converting
 # the .msg, .srv, .action files to the generic .idl representation.
@@ -24,9 +22,9 @@ py_library(
     srcs = glob(["rosidl_runtime_py/**/*.py"]),
     deps = [
         "@ament_index_python",
-        "@rosidl_parser",
         "@rosdistro//bazel/python:numpy",
         "@rosdistro//bazel/python:pyyaml",
+        "@rosidl_parser",
     ],
 )
 
@@ -35,8 +33,8 @@ py_library(
 py_binary(
     name = "setup",
     srcs = ["setup.py"],
-    deps = ["@rosdistro//bazel/python:setuptools"],
     visibility = ["//visibility:private"],
+    deps = ["@rosdistro//bazel/python:setuptools"],
 )
 
 # All functional tests.
@@ -44,7 +42,6 @@ py_binary(
     py_pytest(
         name = test,
         srcs = ["test/rosidl_runtime_py/{}.py".format(test)],
-        python_version = "PY3",
         deps = [":rosidl_runtime_py"],
     )
     for test in [

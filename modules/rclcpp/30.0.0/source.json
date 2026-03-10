@@ -3,8 +3,8 @@
     "integrity": "sha256-A8qAS1nVZa1FIBBKl72CX7BXdJge7Slf6ebDXjCl5v0=",
     "strip_prefix": "rclcpp-30.0.0/rclcpp",
     "overlay": {
-        "BUILD.bazel": "sha256-gsrspceQEu2IQKRWYynl12Y3Aqq6XNsxeH3xoULdazw=",
-        "MODULE.bazel": "sha256-7ui2qtyVem99WwMQif+ohjkPlz/KjbbR3q8mLRBBj8A=",
+        "BUILD.bazel": "sha256-hu7OKjjTznIsIu+mhBvIOvH/DRHrQrS3keyi/6dS6WY=",
+        "MODULE.bazel": "sha256-NPkzIeOOVw4pAptpQsMhbQlVkZpPDM7hYcxFFlEo0iQ=",
         "test/locate_test_assets.hpp": "sha256-J2XuAG6kFos7tUIL8y0aM+AfHucJvGkGAjklcj7Nlv0=",
         "test/msg/BUILD.bazel": "sha256-SEQOkYFgVQF02oGALvnRo3QammcYejJQT+s+nN4Ftes="
     },

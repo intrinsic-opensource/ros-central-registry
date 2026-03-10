@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +14,9 @@
 
 # Imports
 
+load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 load("@rosdistro//bazel/python:macros.bzl", "py_pytest")
 load("@rules_cc//cc:defs.bzl", "cc_library")
-load("@rules_python//python:defs.bzl", "py_library", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -37,7 +36,7 @@ cc_library(
     includes = ["include"],
     deps = [
         "@rosidl_typesupport_introspection_c",
-    ]
+    ],
 )
 
 py_library(
@@ -46,8 +45,8 @@ py_library(
     deps = [
         "@ament_index_python",
         "@rosidl_cli",
-        "@rosidl_pycommon",
         "@rosidl_generator_cpp",
+        "@rosidl_pycommon",
     ],
 )
 
@@ -62,14 +61,12 @@ py_binary(
     name = "cli",
     srcs = [":bin/rosidl_typesupport_introspection_cpp.py"],
     main = ":bin/rosidl_typesupport_introspection_cpp.py",
-    python_version = "PY3",
     deps = [":rosidl_typesupport_introspection_cpp_py"],
 )
 
 py_pytest(
     name = "test_cli_extension",
     srcs = ["test/test_cli_extension.py"],
-    python_version = "PY3",
     data = ["test/msg/Test.msg"],
     deps = [":rosidl_typesupport_introspection_cpp_py"],
 )

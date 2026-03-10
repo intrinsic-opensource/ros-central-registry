@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@aspect_rules_py//py:defs.bzl", "py_library")
 load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
 load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
 load("@rosidl_generator_py//:rules.bzl", "py_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@rules_python//python:defs.bzl", "py_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -49,17 +49,17 @@ ALL_INTERFACES = [
 
 c_ros_library(
     name = "msgs_c",
-    deps = ALL_INTERFACES
+    deps = ALL_INTERFACES,
 )
 
 cc_ros_library(
     name = "msgs_cc",
-    deps = ALL_INTERFACES
+    deps = ALL_INTERFACES,
 )
 
 py_ros_library(
     name = "msgs_py",
-    deps = ALL_INTERFACES
+    deps = ALL_INTERFACES,
 )
 
 # Library
@@ -68,14 +68,14 @@ cc_library(
     name = "test_msgs",
     hdrs = glob(["include/**"]),
     includes = ["include"],
-    deps = [":msgs_cc"]
+    deps = [":msgs_cc"],
 )
 
 py_library(
     name = "test_msgs_py",
     srcs = glob(["src/test_msgs/**/*.py"]),
-    deps = [":msgs_py"],
     imports = ["src"],
+    deps = [":msgs_py"],
 )
 
 # Tests
@@ -83,7 +83,7 @@ py_library(
 c_ros_library(
     name = "test_action_typesupport_c_builds_msgs",
     deps = [
-        "//action:Fibonacci"
+        "//action:Fibonacci",
     ],
 )
 
@@ -91,16 +91,16 @@ cc_test(
     name = "test_action_typesupport_c_builds",
     srcs = ["test/test_c_type_support.cpp"],
     deps = [
+        ":test_action_typesupport_c_builds_msgs",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
-        ":test_action_typesupport_c_builds_msgs",
     ],
 )
 
 cc_ros_library(
     name = "test_action_typesupport_cpp_builds_msgs",
     deps = [
-        "//action:Fibonacci"
+        "//action:Fibonacci",
     ],
 )
 
@@ -108,8 +108,8 @@ cc_test(
     name = "test_action_typesupport_cpp_builds",
     srcs = ["test/test_cpp_type_support.cpp"],
     deps = [
+        ":test_action_typesupport_cpp_builds_msgs",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
-        ":test_action_typesupport_cpp_builds_msgs",
     ],
 )
