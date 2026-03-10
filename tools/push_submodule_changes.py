@@ -70,6 +70,9 @@ def main():
             lock_file.unlink()
 
         # 2. Commit with a message "synchronizing package"
+        run_git_cmd(["git", "checkout", "-B", "rolling-bazel"], cwd=submodule_path)
+
+        # 2. Commit with a message "synchronizing package"
         run_git_cmd(["git", "add", "-A"], cwd=submodule_path)
         
         # 3. Check if there's anything to commit after adding
