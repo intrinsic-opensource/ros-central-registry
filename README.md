@@ -27,10 +27,14 @@ The [ROS Central Registry](http://intrinsic-opensource.github.io/ros-central-reg
 > [!WARNING]
 > This repository is a proof of concept and under active open development, and so no guarantees are made about stability. Please do not depend on this code until we have an official first release!
 
-To get started, make sure that you recurse submodules when you clone this repository:
+Firstly, make sure that you have Bazelisk installed. You can find the latest version of Bazelisk [here](https://github.com/bazelbuild/bazelisk). Then, make sure that you recurse submodules when you clone this repository:
 
 ```python
 git clone https://github.com/intrinsic-opensource/ros-central-registry.git --recurse-submodules
 ```
 
-We currently support C, C++ and Python client nodes, as well as the generation of ROS messages, services and actions from message definition chains. Please take a look at the README in the `examples` directory for a quickstart guide.
+We currently support C, C++ and Python client nodes, as well as the generation of ROS messages, services and actions from message definition chains. Start by looking at the README in the `examples` folder. To get a list of all targets in the `examples` folder, run:
+
+```
+bazel query //examples/...
+```
