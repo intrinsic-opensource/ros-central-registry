@@ -57,6 +57,7 @@ jobs:
         large-packages: true
         docker-images: true
         swap-storage: true
+      if: runner.os == 'Linux'
 
     # Checkout this repository and all submodules.
     - name: Checkout repository and submodules
