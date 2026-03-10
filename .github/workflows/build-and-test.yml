@@ -47,7 +47,7 @@ jobs:
         label: linting
         message: ${{ job.status == 'success' && 'pass' || 'fail' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: ${{ github.ref_name == 'main' || github.ref_name == 'asymingt/update-rules-cc-and-run-buildifier' }}
+      if: github.ref_name == 'main'
 
   # This avoids building anything with bad documentation.
   generate-documentation:
@@ -73,7 +73,7 @@ jobs:
         label: linting
         message: ${{ job.status == 'success' && 'pass' || 'fail' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: ${{ github.ref_name == 'main' || github.ref_name == 'asymingt/update-rules-cc-and-run-buildifier' }}
+      if: github.ref_name == 'main'
 
   # Only try and build if linting passes.
   checkout-setup-build-test:
