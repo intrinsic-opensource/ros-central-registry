@@ -12,21 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rules_python//python:defs.bzl", "py_binary")
+load("@aspect_rules_py//py:defs.bzl", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
 py_binary(
     name = "regenerate_modules",
     srcs = ["registry_scraper_tool.py"],
-    main = "registry_scraper_tool.py",
     data = [
-        "registry_scraper_data.yaml"
+        "registry_scraper_data.yaml",
     ],
+    main = "registry_scraper_tool.py",
     deps = [
-        "@rules_python//python/runfiles",
         "@rosdistro//bazel/python:gitpython",
         "@rosdistro//bazel/python:pyyaml",
         "@rosdistro//bazel/python:urllib3",
-    ]
+        "@rules_python//python/runfiles",
+    ],
+)
+
+py_binary(
+    name = "push_submodule_changes",
+    srcs = ["push_submodule_changes.py"],
 )

@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@aspect_rules_py//py:defs.bzl", "py_binary")
 load("@rosidl_adapter_proto//:rules.bzl", "proto_ros_library")
 load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
 load("@rosidl_generator_py//:rules.bzl", "py_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
-load("@rules_python//python:defs.bzl", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
