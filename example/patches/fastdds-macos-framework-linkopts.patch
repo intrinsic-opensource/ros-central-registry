@@ -1,0 +1,20 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -274,7 +274,14 @@ cc_library(
+     cxxopts = [
+         "-Wno-deprecated-declarations",
+-        "-Wno-unknown-pragmas"
++        "-Wno-unknown-pragmas",
++    ],
++    linkopts = select({
++        "@bazel_tools//src/conditions:darwin": [
++            "-framework IOKit",
++            "-framework CoreFoundation",
++        ],
++        "//conditions:default": [],
++    }),
+-    ],
+     deps = [
+         "@fastcdr",
+         "@foonathan_memory",
