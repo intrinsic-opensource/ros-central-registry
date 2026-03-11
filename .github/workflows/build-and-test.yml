@@ -47,7 +47,7 @@ jobs:
         label: lint
         message: ${{ job.status == 'success' && 'pass' || 'fail' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: always() #&& github.ref_name == 'main'
+      if: always() && github.ref_name == 'main'
 
   # This avoids building anything with bad documentation.
   generate-documentation:
@@ -73,7 +73,7 @@ jobs:
         label: docs
         message: ${{ job.status == 'success' && 'pass' || 'fail' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: always() #&& github.ref_name == 'main'
+      if: always() && github.ref_name == 'main'
 
   # Only try and build if linting passes.
   checkout-setup-build-test:
@@ -131,15 +131,16 @@ jobs:
 
     # Build the ROS examples with FastRTPS middleware.
     - name: Build and test (rmw_fastrtps_cpp)
+      continue-on-error: false
       id: rmw_fastrtps_cpp
       env:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
       run: |
-        mkdir -p final-testlogs
+        mkdir -p final-testlogs/rmw_fastrtps_cpp
         bazel clean
         bazel build --@rmw_implementation//:rmw=rmw_fastrtps_cpp --config=ci
         bazel test --@rmw_implementation//:rmw=rmw_fastrtps_cpp --config=ci --jobs 1
-        mv bazel-testlogs final-testlogs/rmw_fastrtps_cpp
+        cp -R bazel-testlogs/* final-testlogs/rmw_fastrtps_cpp
     - name: Update status badge (rmw_fastrtps_cpp)
       uses: Schneegans/dynamic-badges-action@v1.7.0
       with:
@@ -149,7 +150,7 @@ jobs:
         label: ${{ matrix.bazel-version }}
         message: ${{ steps.rmw_fastrtps_cpp.outcome == 'success' && 'pass' || 'fail' }}
         color: ${{ steps.rmw_fastrtps_cpp.outcome == 'success' && 'green' || 'red' }}
-      if: always() #&& github.ref_name == 'main'
+      if: always() && github.ref_name == 'main'
 
     # Build the ROS examples with FastRTPS dynamic middleware.
     - name: Build and test (rmw_fastrtps_dynamic_cpp)
@@ -158,11 +159,11 @@ jobs:
       env:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
       run: |
-        mkdir -p final-testlogs
+        mkdir -p final-testlogs/rmw_fastrtps_dynamic_cpp
         bazel clean
         bazel build --@rmw_implementation//:rmw=rmw_fastrtps_dynamic_cpp --config=ci
         bazel test --@rmw_implementation//:rmw=rmw_fastrtps_dynamic_cpp --config=ci --jobs 1
-        mv bazel-testlogs final-testlogs/rmw_fastrtps_dynamic_cpp
+        cp -R bazel-testlogs/* final-testlogs/rmw_fastrtps_dynamic_cpp
     - name: Update status badge (rmw_fastrtps_dynamic_cpp)
       uses: Schneegans/dynamic-badges-action@v1.7.0
       with:
@@ -172,7 +173,7 @@ jobs:
         label: ${{ matrix.bazel-version }}
         message: ${{ steps.rmw_fastrtps_dynamic_cpp.outcome == 'success' && 'pass' || 'fail' }}
         color: ${{ steps.rmw_fastrtps_dynamic_cpp.outcome == 'success' && 'green' || 'red' }}
-      if: always() #&& github.ref_name == 'main'
+      if: always() && github.ref_name == 'main'
 
     # Build the ROS examples with Cyclone DDS middleware
     - name: Build and test (rmw_cyclonedds_cpp)
@@ -181,11 +182,11 @@ jobs:
       env:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
       run: |
-        mkdir -p final-testlogs
+        mkdir -p final-testlogs/rmw_cyclonedds_cpp
         bazel clean
         bazel build --@rmw_implementation//:rmw=rmw_cyclonedds_cpp --config=ci
         bazel test --@rmw_implementation//:rmw=rmw_cyclonedds_cpp --config=ci --jobs 1
-        mv bazel-testlogs final-testlogs/rmw_cyclonedds_cpp
+        cp -R bazel-testlogs/* final-testlogs/rmw_cyclonedds_cpp
     - name: Update status badge (rmw_cyclonedds_cpp)
       uses: Schneegans/dynamic-badges-action@v1.7.0
       with:
@@ -195,7 +196,7 @@ jobs:
         label: ${{ matrix.bazel-version }}
         message: ${{ steps.rmw_cyclonedds_cpp.outcome == 'success' && 'pass' || 'fail' }}
         color: ${{ steps.rmw_cyclonedds_cpp.outcome == 'success' && 'green' || 'red' }}
-      if: always() #&& github.ref_name == 'main'
+      if: always() && github.ref_name == 'main'
 
     # Build the ROS examples with Zenoh middleware
     - name: Build and test (rmw_zenoh_cpp)
@@ -204,12 +205,12 @@ jobs:
       env:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
       run: |
-        mkdir -p final-testlogs
+        mkdir -p final-testlogs/rmw_zenoh_cpp
         bazel clean
         bazel build --@rmw_implementation//:rmw=rmw_zenoh_cpp --config=ci
         bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>final-testlogs/zenohd-stderr.log 1>final-testlogs/zenohd-stdout.log &
         bazel test --@rmw_implementation//:rmw=rmw_zenoh_cpp --config=ci --jobs 1
-        mv bazel-testlogs final-testlogs/rmw_zenoh_cpp
+        cp -R bazel-testlogs/* final-testlogs/rmw_zenoh_cpp
     - name: Update status badge (rmw_zenoh_cpp)
       uses: Schneegans/dynamic-badges-action@v1.7.0
       with:
@@ -219,7 +220,7 @@ jobs:
         label: ${{ matrix.bazel-version }}
         message: ${{ steps.rmw_zenoh_cpp.outcome == 'success' && 'pass' || 'fail' }}
         color: ${{ steps.rmw_zenoh_cpp.outcome == 'success' && 'green' || 'red' }}
-      if: always() #&& github.ref_name == 'main'
+      if: always() && github.ref_name == 'main'
 
     # Run the report
     - name: Test report
