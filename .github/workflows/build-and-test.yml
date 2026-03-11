@@ -131,7 +131,7 @@ jobs:
 
     # Build and test: rmw_fastrtps_cpp
     - name: Build and test (rmw_fastrtps_cpp)
-      continue-on-error: true
+      continue-on-error: false
       id: rmw_fastrtps_cpp
       env:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
@@ -239,9 +239,11 @@ jobs:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
       run: |
         bazel build @rmw_zenoh_cpp//:rmw_zenohd
-        bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>final-testlogs/zenohd-stderr.log 1>final-testlogs/zenohd-stdout.log &
+        bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
+        ZENOHD_PID=$!
         bazel build --@rmw_implementation//:rmw=rmw_zenoh_cpp --config=ci
         bazel test --@rmw_implementation//:rmw=rmw_zenoh_cpp --config=ci --jobs=1
+        kill $ZENOHD_PID
     - name: Update status badge (rmw_zenoh_cpp)
       uses: Schneegans/dynamic-badges-action@v1.7.0
       with:
@@ -264,7 +266,10 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.name }} (rmw_zenoh_cpp)
-        path: "bazel-testlogs/**/test.log"
+        path: |
+          "bazel-testlogs/**/test.log"
+          "zenohd-stdout.log"
+          "zenohd-stderr.log"
       if: always()
 
 
