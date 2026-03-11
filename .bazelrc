@@ -71,10 +71,7 @@ build:tsan --copt=-O0
 build:tsan --copt=-fno-omit-frame-pointer
 build:tsan --linkopt=-fsanitize=thread
 
-# The github actions pipeline has workers with 2 CPUs and 7GB RAM. This
-# can cause tests to flake due to timeouts. Assume every test is flaky
-# and run sequentially with up to five times to try and skirt around this
-# issue. In reality, we'll use 
+# Configuration foudn to be stable in CI.
 common:ci --target_pattern_file=distribution.txt
 common:ci --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
 common:ci --remote_upload_local_results=true
