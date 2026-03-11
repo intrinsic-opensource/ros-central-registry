@@ -1411,14 +1411,6 @@ use_repo(llvm, "llvm_toolchain")
 
 register_toolchains("@llvm_toolchain//:all")
 
-# Python configuration
-
-python = use_extension("@rules_python//python/extensions:python.bzl", "python")
-python.toolchain(
-    is_default = True,
-    python_version = "3.12",
-)
-
 # Use a RUST compiler known to work with Zenoh.
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
@@ -1427,10 +1419,19 @@ rust.toolchain(
     versions = ["1.85.0"],
 )
 
+# We are currently using Python 3.11 because the rosdistro module depends on
+# distutils, which was removed from Python 3.12 onwards.
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    is_default = True,
+    python_version = "3.11",
+)
+
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
-    hub_name = "docs_deps",
-    python_version = "3.12",
-    requirements_lock = "//docs:requirements.txt",
+    hub_name = "pip_ros_central_registry",
+    python_version = "3.11",
+    requirements_lock = "//:requirements.txt",
 )
-use_repo(pip, "docs_deps")
+use_repo(pip, "pip_ros_central_registry")

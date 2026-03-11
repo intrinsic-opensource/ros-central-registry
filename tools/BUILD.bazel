@@ -13,9 +13,18 @@
 # limitations under the License.
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary")
+load("@pip_ros_central_registry//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:public"])
 
+#### DEVELOPER PREVIEW TOOLING (DEPRECATED) ##############################
+
+# Runs through all packages in the registry_scraper_data.yaml, calculating
+# a diff between the rolling-bazel branch of the submodule in the registry
+# and the upstream version of the package. It then converts this diff to
+# patches and overlays, and constructs a versioned Bazel module for each
+# package in the 'modules' folder of the repo. Run in the following way:
+# > bazel run //tools:manage_submodules -- $PWD
 py_binary(
     name = "regenerate_modules",
     srcs = ["registry_scraper_tool.py"],
@@ -31,7 +40,51 @@ py_binary(
     ],
 )
 
+# Tool for performing bulk updates to the registry's git submodules. Offers
+# three verbs: "clean", "commit" and "push" used in the following way:
+# > bazel run //tools:manage_submodules -- $PWD clean
+# > bazel run //tools:manage_submodules -- $PWD commit rolling-bazel
+# > bazel run //tools:manage_submodules -- $PWD push rolling-bazel
 py_binary(
     name = "manage_submodules",
     srcs = ["manage_submodules.py"],
+)
+
+#### RELEASE TOOLING (WORK IN PROGRESS) ##################################
+
+# This is a wrapper around superflore's gen-bazel generator. It is intended
+# to be run in the following way:
+# > bazel run //tools:superflore-gen-bazel --  \
+#   --ros-release rolling/2026-01-21 \
+#   --dry-run \
+#   --no-branch \
+#   --no-commit \
+#   --output-repository-path $PWD
+# It will then create a new branch in the registry repo with the generated
+# bazel files.
+py_binary(
+    name = "superflore-gen-bazel",
+    srcs = glob(["superflore/superflore/**/*.py"]),
+    imports = ["superflore"],
+    main = "superflore/superflore/generators/bazel/run.py",
+    deps = [
+        requirement("catkin_pkg"),
+        requirement("docker"),
+        requirement("flake8-import-order"),
+        requirement("flake8"),
+        requirement("gitpython"),
+        requirement("packaging"),
+        requirement("pep8"),
+        requirement("pygithub"),
+        requirement("pynose"),
+        requirement("pyyaml"),
+        requirement("requests"),
+        requirement("rosdep"),
+        requirement("rosdistro"),
+        requirement("rosinstall_generator"),
+        requirement("rospkg"),
+        requirement("setuptools"),
+        requirement("termcolor"),
+        requirement("xmltodict"),
+    ],
 )

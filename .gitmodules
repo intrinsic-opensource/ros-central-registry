@@ -157,3 +157,6 @@
 [submodule "submodules/example_interfaces"]
 	path = submodules/example_interfaces
 	url = https://github.com/asymingt/example_interfaces.git
+[submodule "tools/superflore"]
+	path = tools/superflore
+	url = https://github.com/asymingt/superflore.git
