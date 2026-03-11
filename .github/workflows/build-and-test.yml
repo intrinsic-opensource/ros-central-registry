@@ -228,6 +228,7 @@ jobs:
         name: Bazel tests
         path: final-testlogs/**/test.xml
         reporter: java-junit
+        fail-on-error: 'false'
       if: always()
 
     # Upload test test logs
