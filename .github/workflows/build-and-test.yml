@@ -45,7 +45,7 @@ jobs:
         gistID: f796805a77e0f05cc837b18e60142773
         filename: buildifier.json
         label: lint
-        message: ${{ job.status == 'success' && 'pass' || 'fail' }}
+        message: ${{ job.status == 'success' && '✓' || 'x' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
       if: always() && github.ref_name == 'main'
 
@@ -71,7 +71,7 @@ jobs:
         gistID: f796805a77e0f05cc837b18e60142773
         filename: documentation.json
         label: docs
-        message: ${{ job.status == 'success' && 'pass' || 'fail' }}
+        message: ${{ job.status == 'success' && '✓' || 'x' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
       if: always() && github.ref_name == 'main'
 
@@ -145,7 +145,7 @@ jobs:
         gistID: f796805a77e0f05cc837b18e60142773
         filename: ${{ matrix.name }}_rmw_fastrtps_cpp.json
         label: ${{ matrix.bazel-version }}
-        message: ${{ steps.rmw_fastrtps_cpp.outcome == 'success' && 'pass' || 'fail' }}
+        message: ${{ steps.rmw_fastrtps_cpp.outcome == 'success' && '✓' || 'x' }}
         color: ${{ steps.rmw_fastrtps_cpp.outcome == 'success' && 'green' || 'red' }}
       if: always() && github.ref_name == 'main'
     - name: Test report (rmw_fastrtps_cpp)
@@ -179,7 +179,7 @@ jobs:
         gistID: f796805a77e0f05cc837b18e60142773
         filename: ${{ matrix.name }}_rmw_fastrtps_dynamic_cpp.json
         label: ${{ matrix.bazel-version }}
-        message: ${{ steps.rmw_fastrtps_dynamic_cpp.outcome == 'success' && 'pass' || 'fail' }}
+        message: ${{ steps.rmw_fastrtps_dynamic_cpp.outcome == 'success' && '✓' || 'x' }}
         color: ${{ steps.rmw_fastrtps_dynamic_cpp.outcome == 'success' && 'green' || 'red' }}
       if: always() && github.ref_name == 'main'
     - name: Test report (rmw_fastrtps_dynamic_cpp)
@@ -213,7 +213,7 @@ jobs:
         gistID: f796805a77e0f05cc837b18e60142773
         filename: ${{ matrix.name }}_rmw_cyclonedds_cpp.json
         label: ${{ matrix.bazel-version }}
-        message: ${{ steps.rmw_cyclonedds_cpp.outcome == 'success' && 'pass' || 'fail' }}
+        message: ${{ steps.rmw_cyclonedds_cpp.outcome == 'success' && '✓' || 'x' }}
         color: ${{ steps.rmw_cyclonedds_cpp.outcome == 'success' && 'green' || 'red' }}
       if: always() && github.ref_name == 'main'
     - name: Test report (rmw_cyclonedds_cpp)
@@ -251,7 +251,7 @@ jobs:
         gistID: f796805a77e0f05cc837b18e60142773
         filename: ${{ matrix.name }}_rmw_zenoh_cpp.json
         label: ${{ matrix.bazel-version }}
-        message: ${{ steps.rmw_zenoh_cpp.outcome == 'success' && 'pass' || 'fail' }}
+        message: ${{ steps.rmw_zenoh_cpp.outcome == 'success' && '✓' || 'x' }}
         color: ${{ steps.rmw_zenoh_cpp.outcome == 'success' && 'green' || 'red' }}
       if: always() && github.ref_name == 'main'
     - name: Test report (rmw_zenoh_cpp)
