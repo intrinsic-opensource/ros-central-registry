@@ -18,32 +18,34 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-#include "example/msg/example_message__typeadapter_protobuf_cpp.hpp"
+#include "example/msg/example_message.hpp"
 
 using namespace std::chrono_literals;
 
-class ExampleProtoPublisher : public rclcpp::Node {
+class ExampleRosPublisher : public rclcpp::Node {
 public:
-  ExampleProtoPublisher() : Node("minimal_proto_publisher") {
-    publisher_ = this->create_publisher<example::msg::pb::ExampleMessage>("topic", 10);
+  ExampleRosPublisher() : Node("example_ros_publisher_cpp"), count_(0) {
+    publisher_ = this->create_publisher<example::msg::ExampleMessage>("topic", 10);
     auto timer_callback =
       [this]() -> void {
-        auto message = example::msg::pb::ExampleMessage();
-        RCLCPP_INFO(this->get_logger(), "Published protobuf message");
-        this->publisher_->publish(message);
+        auto msg = example::msg::ExampleMessage();
+        msg.message.data = "Hello, world! from C++ " + std::to_string(this->count_++);
+        RCLCPP_INFO(this->get_logger(), "Published: '%s'", msg.message.data.c_str());
+        this->publisher_->publish(msg);
       };
     timer_ = this->create_wall_timer(1s, timer_callback);
   }
 
 private:
   rclcpp::TimerBase::SharedPtr timer_;
-  rclcpp::Publisher<example::msg::pb::ExampleMessage>::SharedPtr publisher_;
+  rclcpp::Publisher<example::msg::ExampleMessage>::SharedPtr publisher_;
+  size_t count_;
 };
 
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<ExampleProtoPublisher>());
+  rclcpp::spin(std::make_shared<ExampleRosPublisher>());
   rclcpp::shutdown();
   return 0;
 }

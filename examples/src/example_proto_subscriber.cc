@@ -21,11 +21,11 @@
 class ExampleProtoSubscriber : public rclcpp::Node
 {
 public:
-  ExampleProtoSubscriber(): Node("example_proto_subscriber")
+  ExampleProtoSubscriber(): Node("example_proto_subscriber_cpp")
   {
     auto topic_callback =
       [this](const example::msg::pb::ExampleMessage & msg) -> void {
-        RCLCPP_INFO(this->get_logger(), "Received protobuf message");
+        RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg.message().data().c_str());
       };
     subscription_ =
       this->create_subscription<example::msg::pb::ExampleMessage>("topic", 10, topic_callback);

@@ -16,30 +16,31 @@ import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 
-from sensor_msgs.msg import CompressedImage
+from example.msg import ExampleMsg
 
 
-class ExampleRosSubscriber(Node):
+class ExampleRosPublisher(Node):
 
     def __init__(self):
-        super().__init__('example_ros_subscriber')
-        self.subscription = self.create_subscription(
-            CompressedImage,
-            'topic',
-            self.listener_callback,
-            10)
-        self.subscription  # prevent unused variable warning
+        super().__init__('example_ros_publisher_py')
+        self.publisher_ = self.create_publisher(ExampleMsg, 'topic', 10)
+        timer_period = 0.5  # seconds
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.i = 0
 
-    def listener_callback(self, msg):
-        self.get_logger().info('I heard: "%s"' % msg.header.frame_id)
+    def timer_callback(self):
+        msg = ExampleMsg()
+        msg.message = 'Hello, world! from Python: %d' % self.i
+        self.publisher_.publish(msg)
+        self.get_logger().info('Publishing: "%s"' % msg.message)
+        self.i += 1
 
 
 def main(args=None):
     try:
         with rclpy.init(args=args):
-            example_ros_subscriber = ExampleRosSubscriber()
-
-            rclpy.spin(example_ros_subscriber)
+            example_ros_publisher = ExampleRosPublisher()
+            rclpy.spin(example_ros_publisher)
     except (KeyboardInterrupt, ExternalShutdownException):
         pass
 

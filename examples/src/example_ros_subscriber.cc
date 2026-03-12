@@ -22,7 +22,7 @@ class ExampleRosSubscriber : public rclcpp::Node
 {
 public:
   ExampleRosSubscriber()
-  : Node("example_ros_subscriber")
+  : Node("example_ros_subscriber_cpp")
   {
     auto topic_callback =
       [this](example::msg::ExampleMessage::UniquePtr msg) -> void {
