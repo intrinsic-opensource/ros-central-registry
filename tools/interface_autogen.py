@@ -65,6 +65,25 @@ COPYRIGHT_HEADER = """\
 # limitations under the License.
 """
 
+# These are the the types supported by the ROS 2 IDL compiler. Anything
+# else is considered a custom type and must be a dependency.
+PRIMITIVE_TYPES = {
+    'bool',
+    'byte',
+    'char',
+    'float32',
+    'float64',
+    'int8',
+    'uint8',
+    'int16',
+    'uint16',
+    'int32',
+    'uint32',
+    'int64',
+    'uint64',
+    'string',
+    'wstring'
+}
 
 def parse_type(type_str):
     """Extract the base type from a ROS 2 type string.
@@ -107,24 +126,39 @@ def is_constant_definition(line):
     return False
 
 
-def extract_dependencies(filepath):
-    """Parse a ROS 2 interface file and extract external package dependencies.
+def map_package_interfaces(package_root):
+    """Scan the package root for all interface files and map Type -> RelDir."""
+    interface_map = {}
+    for root, _, files in os.walk(package_root):
+        for filename in files:
+            name, ext = os.path.splitext(filename)
+            if ext in INTERFACE_EXTENSIONS:
+                rel_dir = os.path.relpath(root, package_root)
+                if rel_dir == ".":
+                    rel_dir = ""
+                interface_map[name] = rel_dir
+    return interface_map
+
+
+def extract_dependencies(filepath, package_root, interface_map):
+    """Parse a ROS 2 interface file and extract external and internal dependencies.
 
     Reads the interface file line by line, skipping comments, blank lines,
-    section separators (---), and constant definitions. For each field
-    definition, checks if the type contains a forward-slash indicating an
-    external package reference (e.g., "std_msgs/Header").
+    section separators (---), and constant definitions.
 
     Args:
         filepath: Path to the interface file (.msg, .srv, .action, .idl).
+        package_root: Root directory of the ROS package.
+        interface_map: Dict mapping interface names to their relative directories.
 
     Returns:
-        A sorted list of unique dependency strings in the format
-        "@package_name//subdir:MessageName" (e.g., "@std_msgs//msg:Header").
+        A sorted list of unique dependency strings.
     """
     deps = set()
-    # Determine the subdirectory type (msg, srv, action) from the file's parent.
-    subdir = os.path.basename(os.path.dirname(filepath))
+    current_dir = os.path.dirname(filepath)
+    rel_current_dir = os.path.relpath(current_dir, package_root)
+    if rel_current_dir == ".":
+        rel_current_dir = ""
 
     with open(filepath, "r") as f:
         for line in f:
@@ -155,6 +189,17 @@ def extract_dependencies(filepath):
                 # regardless of whether the *using* file is a .srv or .action.
                 dep = f"@{pkg_name}//msg:{msg_name}"
                 deps.add(dep)
+            elif type_str not in PRIMITIVE_TYPES:
+                # Internal dependency - resolve the label based on its location
+                if type_str in interface_map:
+                    target_dir = interface_map[type_str]
+                    if target_dir == rel_current_dir:
+                        dep = f":{type_str}"
+                    else:
+                        # Use //path:Name format for different subdirectories
+                        path = target_dir.replace(os.sep, "/")
+                        dep = f"//{path}:{type_str}"
+                    deps.add(dep)
 
     return sorted(deps)
 
@@ -178,6 +223,8 @@ def find_interface_files(directory):
     for entry in os.listdir(directory):
         filepath = os.path.join(directory, entry)
         if os.path.isfile(filepath):
+            if "ros1" in entry.lower():
+                continue
             _, ext = os.path.splitext(entry)
             if ext in INTERFACE_EXTENSIONS:
                 interface_files.append(entry)
@@ -185,19 +232,21 @@ def find_interface_files(directory):
     return sorted(interface_files)
 
 
-def generate_build_target(filename, filepath):
+def generate_build_target(filename, filepath, package_root, interface_map):
     """Generate a single Bazel rule string for an interface file.
 
     Args:
         filename: The interface file name (e.g., "Header.msg").
         filepath: Full path to the interface file.
+        package_root: Root directory of the ROS package.
+        interface_map: Dict mapping interface names to their relative directories.
 
     Returns:
         A string containing the Bazel rule definition.
     """
     name, ext = os.path.splitext(filename)
     rule_name = EXTENSION_TO_RULE[ext]
-    deps = extract_dependencies(filepath)
+    deps = extract_dependencies(filepath, package_root, interface_map)
 
     lines = []
     lines.append(f"{rule_name}(")
@@ -214,7 +263,7 @@ def generate_build_target(filename, filepath):
     return "\n".join(lines)
 
 
-def generate_build_file(interface_dir):
+def generate_build_file(interface_dir, package_root, interface_map):
     """Generate the complete BUILD.bazel content for a directory.
 
     Collects all interface files in the directory, determines which Bazel
@@ -223,6 +272,8 @@ def generate_build_file(interface_dir):
 
     Args:
         interface_dir: Path to the directory containing interface files.
+        package_root: Root directory of the ROS package.
+        interface_map: Dict mapping interface names to their relative directories.
 
     Returns:
         The complete BUILD.bazel file content as a string, or None if no
@@ -268,7 +319,8 @@ def generate_build_file(interface_dir):
     targets = []
     for filename in files:
         filepath = os.path.join(interface_dir, filename)
-        targets.append(generate_build_target(filename, filepath))
+        targets.append(generate_build_target(
+            filename, filepath, package_root, interface_map))
 
     parts.append("\n\n".join(targets))
     parts.append("")  # Trailing newline.
@@ -324,19 +376,25 @@ def process_directory(base_dir, subdirs=None):
             if os.path.isdir(entry_path):
                 dirs_to_process.append(entry_path)
 
-    # Interface subdirectory names to look for.
-    interface_subdirs = ["msg", "srv", "action"]
+    base_dir = os.path.abspath(base_dir)
+    generated_count = 0
 
     for package_dir in dirs_to_process:
         package_name = os.path.basename(package_dir)
+        interface_map = map_package_interfaces(package_dir)
 
-        for interface_subdir in interface_subdirs:
-            interface_path = os.path.join(package_dir, interface_subdir)
+        # Collect all unique directories containing interface files within the package.
+        unique_dirs = sorted(set(interface_map.values()))
 
-            if not os.path.isdir(interface_path):
+        for rel_dir in unique_dirs:
+            # Skip the package root here; it's handled separately below.
+            if not rel_dir:
                 continue
 
-            content = generate_build_file(interface_path)
+            interface_path = os.path.join(package_dir, rel_dir)
+
+            content = generate_build_file(
+                interface_path, package_dir, interface_map)
             if content is None:
                 continue
 
@@ -350,7 +408,7 @@ def process_directory(base_dir, subdirs=None):
 
         # Also check if the package directory itself contains interface files
         # (not in a msg/srv/action subdirectory).
-        content = generate_build_file(package_dir)
+        content = generate_build_file(package_dir, package_dir, interface_map)
         if content is not None:
             build_file = os.path.join(package_dir, "BUILD.bazel")
             # Only write if there isn't already a BUILD.bazel for this dir
