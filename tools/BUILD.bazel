@@ -88,3 +88,15 @@ py_binary(
         requirement("xmltodict"),
     ],
 )
+
+#### INTERFACE AUTOGEN TOOLING ############################################
+
+# Generates BUILD.bazel files for ROS 2 interface definitions (.msg, .srv,
+# .action, .idl). Scans subdirectories for interface files, parses their
+# field types to discover cross-package dependencies, and emits the
+# appropriate Bazel rules. Run in the following way:
+# > bazel run //tools:interface_autogen -- $PWD/submodules/common_interfaces
+py_binary(
+    name = "interface_autogen",
+    srcs = ["interface_autogen.py"],
+)
