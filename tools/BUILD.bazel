@@ -32,6 +32,6 @@ py_binary(
 )
 
 py_binary(
-    name = "push_submodule_changes",
-    srcs = ["push_submodule_changes.py"],
+    name = "manage_submodules",
+    srcs = ["manage_submodules.py"],
 )

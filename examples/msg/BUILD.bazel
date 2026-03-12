@@ -12,8 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sensor_msgs.msg import CompressedImage
+load("@rosidl_cmake//:rules.bzl", "ros_interface")
 
-if __name__ == '__main__':
-    msg = CompressedImage()
-    print(msg)
+package(default_visibility = ["//visibility:public"])
+
+# Interfaces - note that the interface we are declaring here relies on
+# subfields from two other ros packages. These must be imported in the
+# MODULES.bazel file for this to work.
+
+ros_interface(
+    name = "ExampleMessage",
+    src = "ExampleMessage.msg",
+    package = "example",
+    deps = [
+        "@sensor_msgs//msg:CompressedImage",
+        "@std_msgs//msg:String",
+    ],
+)

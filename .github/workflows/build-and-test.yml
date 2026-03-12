@@ -23,12 +23,69 @@ on:
       - main
 
 jobs:
-  checkout-setup-build-test: 
+
+  # This avoids building anything that wouldn't merge.
+  lint-bazel-files:
+    name: Lint all Bazel files
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Setup buildifier
+      uses: jbajic/setup-buildifier@v1
+    - name: Run buildifier
+      run: |
+        buildifier -mode check -r .
+    - name: Update status badges
+      uses: Schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: buildifier.json
+        label: lint
+        message: ${{ job.status == 'success' && 'pass' || 'fail' }}
+        color: ${{ job.status == 'success' && 'green' || 'red' }}
+      if: always() && github.ref_name == 'main'
+
+  # This avoids building anything with bad documentation.
+  generate-documentation:
+    name: Regenerate documentation
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Setup Bazel
+      uses: bazel-contrib/setup-bazel@0.15.0
+    - name: Build documentation
+      env:
+        USE_BAZEL_VERSION: 9.0.0
+      run: bazel build //docs/...
+    - name: Update status badges
+      uses: Schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: documentation.json
+        label: docs
+        message: ${{ job.status == 'success' && 'pass' || 'fail' }}
+        color: ${{ job.status == 'success' && 'green' || 'red' }}
+      if: always() && github.ref_name == 'main'
+
+  # Only try and build if linting passes.
+  checkout-setup-build-test:
+    needs:
+    - lint-bazel-files
+    - generate-documentation
+
     permissions:
       actions: read
       checks: write
       contents: read
-      id-token: write  # needed for Google Cloud auth
+      id-token: write
       
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
@@ -72,43 +129,147 @@ jobs:
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.15.0
 
-    # Build the ROS examples.
-    - name: Build code
+    # Build and test: rmw_fastrtps_cpp
+    - name: Build and test (rmw_fastrtps_cpp)
+      continue-on-error: false
+      id: rmw_fastrtps_cpp
       env:
         USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
-      run: bazel build --config=ci
-
-    # Test the distribution.
-    - name: Run tests
-      env:
-        USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
-      run: bazel test --config=ci --jobs 1
-
-    # Summarize the results.
-    - name: Test report
+      run: |
+        bazel build --@rmw_implementation//:rmw=rmw_fastrtps_cpp --config=ci
+        bazel test --@rmw_implementation//:rmw=rmw_fastrtps_cpp --config=ci --jobs=1
+    - name: Update status badge (rmw_fastrtps_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.name }}_rmw_fastrtps_cpp.json
+        label: ${{ matrix.bazel-version }}
+        message: ${{ steps.rmw_fastrtps_cpp.outcome == 'success' && 'pass' || 'fail' }}
+        color: ${{ steps.rmw_fastrtps_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always() && github.ref_name == 'main'
+    - name: Test report (rmw_fastrtps_cpp)
       uses: dorny/test-reporter@v2
       with:
         name: Bazel tests
         path: bazel-testlogs/**/test.xml
         reporter: java-junit
+        fail-on-error: 'false'
       if: always()
-
-    # Upload test test logs
-    - name: Upload test logs
+    - name: Test logs (rmw_fastrtps_cpp)
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.name }} (test logs)
+        name: ${{ matrix.name }} (rmw_fastrtps_cpp)
         path: "bazel-testlogs/**/test.log"
       if: always()
 
-    # Create badges for each build
-    - name: Update status badges
+    # Build and test: rmw_fastrtps_dynamic_cpp
+    - name: Build and test (rmw_fastrtps_dynamic_cpp)
+      continue-on-error: true
+      id: rmw_fastrtps_dynamic_cpp
+      env:
+        USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
+      run: |
+        bazel build --@rmw_implementation//:rmw=rmw_fastrtps_dynamic_cpp --config=ci
+        bazel test --@rmw_implementation//:rmw=rmw_fastrtps_dynamic_cpp --config=ci --jobs=1
+    - name: Update status badge (rmw_fastrtps_dynamic_cpp)
       uses: Schneegans/dynamic-badges-action@v1.7.0
       with:
         auth: ${{ secrets.STATUS_BADGE_SECRET }}
-        gistID: 4d05b2382879fbd51f9a07bb7c63fb29
-        filename: ${{ matrix.name }}.json
-        label: ${{ matrix.name }}
-        message: ${{ job.status == 'success' && 'pass' || 'fail' }}
-        color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: github.ref_name == 'main'
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.name }}_rmw_fastrtps_dynamic_cpp.json
+        label: ${{ matrix.bazel-version }}
+        message: ${{ steps.rmw_fastrtps_dynamic_cpp.outcome == 'success' && 'pass' || 'fail' }}
+        color: ${{ steps.rmw_fastrtps_dynamic_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always() && github.ref_name == 'main'
+    - name: Test report (rmw_fastrtps_dynamic_cpp)
+      uses: dorny/test-reporter@v2
+      with:
+        name: Bazel tests
+        path: bazel-testlogs/**/test.xml
+        reporter: java-junit
+        fail-on-error: 'false'
+      if: always()
+    - name: Test logs (rmw_fastrtps_dynamic_cpp)
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.name }} (rmw_fastrtps_dynamic_cpp)
+        path: "bazel-testlogs/**/test.log"
+      if: always()
+
+    # Build and test: rmw_cyclonedds_cpp
+    - name: Build and test (rmw_cyclonedds_cpp)
+      continue-on-error: true
+      id: rmw_cyclonedds_cpp
+      env:
+        USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
+      run: |
+        bazel build --@rmw_implementation//:rmw=rmw_cyclonedds_cpp --config=ci
+        bazel test --@rmw_implementation//:rmw=rmw_cyclonedds_cpp --config=ci --jobs=1
+    - name: Update status badge (rmw_cyclonedds_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.name }}_rmw_cyclonedds_cpp.json
+        label: ${{ matrix.bazel-version }}
+        message: ${{ steps.rmw_cyclonedds_cpp.outcome == 'success' && 'pass' || 'fail' }}
+        color: ${{ steps.rmw_cyclonedds_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always() && github.ref_name == 'main'
+    - name: Test report (rmw_cyclonedds_cpp)
+      uses: dorny/test-reporter@v2
+      with:
+        name: Bazel tests
+        path: bazel-testlogs/**/test.xml
+        reporter: java-junit
+        fail-on-error: 'false'
+      if: always()
+    - name: Test logs (rmw_cyclonedds_cpp)
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.name }} (rmw_cyclonedds_cpp)
+        path: "bazel-testlogs/**/test.log"
+      if: always()
+
+    # Build and test: rmw_zenoh_cpp
+    - name: Build and test (rmw_zenoh_cpp)
+      continue-on-error: true
+      id: rmw_zenoh_cpp
+      env:
+        USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
+      run: |
+        bazel build @rmw_zenoh_cpp//:rmw_zenohd
+        bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
+        ZENOHD_PID=$!
+        bazel build --@rmw_implementation//:rmw=rmw_zenoh_cpp --config=ci
+        bazel test --@rmw_implementation//:rmw=rmw_zenoh_cpp --config=ci --jobs=1
+        kill $ZENOHD_PID
+    - name: Update status badge (rmw_zenoh_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.name }}_rmw_zenoh_cpp.json
+        label: ${{ matrix.bazel-version }}
+        message: ${{ steps.rmw_zenoh_cpp.outcome == 'success' && 'pass' || 'fail' }}
+        color: ${{ steps.rmw_zenoh_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always() && github.ref_name == 'main'
+    - name: Test report (rmw_zenoh_cpp)
+      uses: dorny/test-reporter@v2
+      with:
+        name: Bazel tests
+        path: bazel-testlogs/**/test.xml
+        reporter: java-junit
+        fail-on-error: 'false'
+      if: always()
+    - name: Test logs (rmw_zenoh_cpp)
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.name }} (rmw_zenoh_cpp)
+        path: |
+          "bazel-testlogs/**/test.log"
+          "zenohd-stdout.log"
+          "zenohd-stderr.log"
+      if: always()
+
+

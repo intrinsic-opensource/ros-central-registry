@@ -31,8 +31,9 @@ common --incompatible_default_to_explicit_init_py
 # use the LD_LIBRARY_PATH. This makes builds robust to terminal refreshes.
 common --incompatible_strict_action_env
 
-# Don't allow tests to access the network by default.
-test --sandbox_default_allow_network=false
+# The zenoh tests must be allowed to contact the network to communicate with
+# the zenohd router, or else they will fail.
+test --sandbox_default_allow_network=true
 
 # Use C++17 standard by default across the whole repo.
 build --cxxopt="-std=c++17"
@@ -71,10 +72,7 @@ build:tsan --copt=-O0
 build:tsan --copt=-fno-omit-frame-pointer
 build:tsan --linkopt=-fsanitize=thread
 
-# The github actions pipeline has workers with 2 CPUs and 7GB RAM. This
-# can cause tests to flake due to timeouts. Assume every test is flaky
-# and run sequentially with up to five times to try and skirt around this
-# issue. In reality, we'll use 
+# Configuration foudn to be stable in CI.
 common:ci --target_pattern_file=distribution.txt
 common:ci --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
 common:ci --remote_upload_local_results=true
