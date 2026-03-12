@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,12 +22,18 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "rmw_fastrtps_cpp",
-    hdrs = glob(["include/**/*.hpp", "include/**/*.h"]),
-    srcs = glob(["src/**/*.hpp", "src/**/*.cpp"]),
-    includes = ["include"],
-    local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_fastrtps_cpp\\\""],
+    srcs = glob([
+        "src/**/*.hpp",
+        "src/**/*.cpp",
+    ]),
+    hdrs = glob([
+        "include/**/*.hpp",
+        "include/**/*.h",
+    ]),
     copts = ["-fvisibility=hidden"],
+    includes = ["include"],
     linkopts = ["-fvisibility=hidden"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_fastrtps_cpp\\\""],
     deps = [
         "@fastcdr",
         "@fastdds",

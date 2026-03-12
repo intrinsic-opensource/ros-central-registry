@@ -20,10 +20,10 @@ ros_interface(
     name = "ShortVariedMultiNested",
     src = "ShortVariedMultiNested.action",
     deps = [
+        "//msg:ShortVariedNested",
         "@action_msgs//msg:GoalInfo",
         "@action_msgs//msg:GoalStatus",
         "@action_msgs//msg:GoalStatusArray",
         "@action_msgs//srv:CancelGoal",
-        "//msg:ShortVariedNested",
     ],
 )

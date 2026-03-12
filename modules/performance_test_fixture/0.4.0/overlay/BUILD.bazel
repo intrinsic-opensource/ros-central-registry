@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,49 +33,51 @@ cc_library(
 
 # Tests
 
-
 cc_test(
     name = "benchmark_malloc_realloc",
+    timeout = "moderate",
     srcs = [
-        "test/benchmark/macros.h",
         "test/benchmark/benchmark_malloc_realloc.cpp",
+        "test/benchmark/macros.h",
     ],
     includes = ["include"],
+    tags = ["manual"],
     deps = [
+        ":performance_test_fixture",
         "@google_benchmark//:benchmark_main",
         "@osrf_testing_tools_cpp//:memory_tools",
-        ":performance_test_fixture",
     ],
-    timeout = "moderate",
 )
 
 cc_test(
     name = "benchmark_malloc_realloc_no_memory_tools",
+    timeout = "short",
     srcs = [
-        "test/benchmark/macros.h",
         "test/benchmark/benchmark_malloc_realloc_no_memory_tools.cpp",
+        "test/benchmark/macros.h",
     ],
     includes = ["include"],
+    tags = ["manual"],
     deps = [
-        "@google_benchmark//:benchmark_main",
         ":performance_test_fixture",
+        "@google_benchmark//:benchmark_main",
     ],
-    timeout = "short",
 )
 
 cc_test(
     name = "benchmark_pause_resume",
+    timeout = "short",
     srcs = [
-        "test/benchmark/macros.h",
         "test/benchmark/benchmark_pause_resume.cpp",
+        "test/benchmark/macros.h",
     ],
     includes = ["include"],
+    tags = ["manual"],
     deps = [
+        ":performance_test_fixture",
         "@google_benchmark//:benchmark_main",
         "@osrf_testing_tools_cpp//:memory_tools",
-        ":performance_test_fixture",
     ],
-    timeout = "short",
 )
 
 # ros_cc_binary(

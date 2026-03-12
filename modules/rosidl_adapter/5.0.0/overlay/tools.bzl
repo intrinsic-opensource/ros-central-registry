@@ -229,7 +229,7 @@ def extract_dynamic_library_runfiles_for_provider(ctx, provider_list):
                     unmangled = file.basename
                     unmangled = unmangled.replace("_S", "/").replace("_U", "_")
                     unmangled = unmangled[unmangled.rfind("/") + 1:]
-                    transitive_dynamic_libraries_symlinks[unmangled] = file                
+                    transitive_dynamic_libraries_symlinks[unmangled] = file
                     transitive_dynamic_libraries.append(file)
     return DefaultInfo(
         runfiles = ctx.runfiles(
@@ -238,7 +238,6 @@ def extract_dynamic_library_runfiles_for_provider(ctx, provider_list):
                     depset(transitive_dynamic_libraries),
                 ],
             ),
-            symlinks = transitive_dynamic_libraries_symlinks
-        )
+            symlinks = transitive_dynamic_libraries_symlinks,
+        ),
     )
-

@@ -4,6 +4,6 @@
     "strip_prefix": "ros2_tracing-8.8.0/ros2trace",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-ycZE7SvUpa8dK1lA1ZB2p9dw6hnEhQLp/QbG/42dF0Y="
+        "MODULE.bazel": "sha256-5nz3ApE/eypc+xV27eBBit1stlHuvkS2/H1Ww7zFcT4="
     }
 }

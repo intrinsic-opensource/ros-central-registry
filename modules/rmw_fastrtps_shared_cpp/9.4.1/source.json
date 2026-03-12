@@ -3,7 +3,7 @@
     "integrity": "sha256-7dUBQZqoLvVrk4C1veSWCkuDyMa13W+XBc26cAIZ6Mc=",
     "strip_prefix": "rmw_fastrtps-9.4.1/rmw_fastrtps_shared_cpp",
     "overlay": {
-        "BUILD.bazel": "sha256-arpZq22JUR6hk3q/Iv3rbblRbWztisXmxsZWiDcuaZk=",
-        "MODULE.bazel": "sha256-6Hh5DXWOZr0YukzaTU3Ryu5IFBh0RJGY4lv//Z5GuWQ="
+        "BUILD.bazel": "sha256-dpiIgZljd0ARHDod4Gz5b6vh52jl1HBJKwWJpz28ziM=",
+        "MODULE.bazel": "sha256-T1P022Ha/Lua7L6oMuk1RLINLn542e82qB8M+KQyVtU="
     }
 }

@@ -25,8 +25,8 @@ cc_library(
     includes = ["include"],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_interface\\\""],
     deps = [
-        "@rcutils",
         "@rcpputils",
+        "@rcutils",
     ],
 )
 
@@ -34,14 +34,14 @@ cc_library(
 
 cc_test(
     name = "test_get_logging_directory",
+    timeout = "short",
     srcs = [
         "test/test_get_logging_directory.cpp",
     ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_interface\\\""],
     deps = [
+        ":rcl_logging_interface",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
-        ":rcl_logging_interface",
     ],
-    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_interface\\\""],
-    timeout = "short"
 )

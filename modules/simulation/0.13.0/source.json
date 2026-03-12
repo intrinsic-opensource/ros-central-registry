@@ -4,6 +4,6 @@
     "strip_prefix": "variants-0.13.0/simulation",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-CFR5UsgCTF3FHOQPj4ETik34cm7Dyi4qnQ1Mcia2ABs="
+        "MODULE.bazel": "sha256-0TSZhjMiqpGpbpH9+MPS8qo/CBcgd6U00/wgjI2dm2s="
     }
 }

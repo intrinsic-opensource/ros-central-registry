@@ -20,8 +20,8 @@ ros_interface(
     name = "DiagnosticArray",
     src = "DiagnosticArray.msg",
     deps = [
-        "@std_msgs//msg:Header",
         ":DiagnosticStatus",
+        "@std_msgs//msg:Header",
     ],
 )
 

@@ -32,8 +32,10 @@ def merge_proto_infos(ctx, name, deps, srcs = []):
     # Use the depset data structure to deduplicate the proto_infos from the whole dep tree.
     proto_files = depset(
         transitive = [
-            dep[RosProtoInfo].protos for dep in deps if RosProtoInfo in dep
-        ]
+            dep[RosProtoInfo].protos
+            for dep in deps
+            if RosProtoInfo in dep
+        ],
     ).to_list() + srcs
 
     # We are going to use a target-name prefixed workspace to avoid symlink collisions.
@@ -68,13 +70,13 @@ def merge_proto_infos(ctx, name, deps, srcs = []):
     # written to only accept one value in deps = [], so there is no chance of collision.
     proto_info = ProtoInfo(
         srcs = virtual_srcs,
-        descriptor_set = descriptor_set, 
+        descriptor_set = descriptor_set,
         workspace_root = ctx.label.workspace_root,
-        proto_path = ctx.label.package + "/" + proto_path if ctx.label.package else proto_path, 
+        proto_path = ctx.label.package + "/" + proto_path if ctx.label.package else proto_path,
         bin_dir = ctx.bin_dir.path,
         deps = [],
     )
-    
+
     # Create the descriptor for the proto_info. This is a binary blob capturing all the
     # tpy information contained in the proto collection. Ideally we'd have depsets of
     # this and protos in the aspect, and merge at each node. However, the cc_proto_aspect
@@ -91,4 +93,3 @@ def merge_proto_infos(ctx, name, deps, srcs = []):
     # so that if we pass this proto_info to a proto compiler we know where the output
     # artifacts will end up being written.
     return proto_info, proto_path
-

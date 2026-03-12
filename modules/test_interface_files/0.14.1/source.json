@@ -4,7 +4,7 @@
     "strip_prefix": "test_interface_files-0.14.1",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-3xmp2Cd9kxqsLlMfTaK1S/usJlGXsB8sMvKxFzXl52g=",
+        "MODULE.bazel": "sha256-Bn58ymdPC3aJH9IydBnEw16X2i1wXv0vCXMEE+JsHcA=",
         "action/BUILD.bazel": "sha256-XSk1TFvbzaiAXZScUfOR9xcXssMP9Zxx1fe3IgNjZ40=",
         "idl/BUILD.bazel": "sha256-ZgyHvz4e/eGWtOsi1PCrSdyd6DDjIRK185RF9nA/pdQ=",
         "msg/BUILD.bazel": "sha256-90ZVj8wyomSJitJu31nOF3NrSDit56JFvEaUh66uxtY=",

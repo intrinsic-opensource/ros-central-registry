@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "rclc_lifecycle",
     version = "6.2.0",
@@ -29,5 +29,5 @@ bazel_dep(name = "rcl", version = "10.2.2")
 bazel_dep(name = "rclc", version = "6.2.0")
 bazel_dep(name = "rcutils", version = "7.0.0")
 bazel_dep(name = "rosidl_generator_c", version = "5.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_cc", version = "0.2.17")
 bazel_dep(name = "std_msgs", version = "5.8.1")

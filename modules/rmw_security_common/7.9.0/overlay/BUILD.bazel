@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,11 +42,11 @@ cc_test(
         "RCUTILS_ENABLE_FAULT_INJECTION",
     ],
     deps = [
+        ":rmw_security_common",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
         "@rcutils",
         "@rmw",
         "@rosidl_runtime_c",
-        ":rmw_security_common",
     ],
 )

@@ -4,6 +4,6 @@
     "strip_prefix": "ament_cmake-2.8.4/ament_cmake_test",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-Zi5i71J39gGg8i2WUb5GA/uietV7Af5mfgx+WQlDM18="
+        "MODULE.bazel": "sha256-yuF3fDdy9CyWhTZegYNe3QKI1STn8YisDDI7uHRvXG8="
     }
 }

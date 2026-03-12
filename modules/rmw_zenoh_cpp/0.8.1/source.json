@@ -3,8 +3,8 @@
     "integrity": "sha256-Cyuc+TKLtakPr9dYoW8TsBIchdBZ3gf7rECbaWirp1A=",
     "strip_prefix": "rmw_zenoh-0.8.1/rmw_zenoh_cpp",
     "overlay": {
-        "BUILD.bazel": "sha256-RNeOyrxgk2gXkutoKLeReNlT0wKi4wnRNOCBV6P1+nk=",
-        "MODULE.bazel": "sha256-+B/ftKrDBAxtMga9TUYJuXl+IekmfcBaMrdrGIJVqy0="
+        "BUILD.bazel": "sha256-1vWScvn+HuMUyxON1FNDdxXqzEDmcO4Avty2AJxg1lo=",
+        "MODULE.bazel": "sha256-53ycGoNookK15qHGcnk//18NHpbUvbLXbXiOVvVV9do="
     },
     "patches": {
         "fix_src_detail_rmw_context_impl_s_cpp.patch": "sha256-YFOlimzxcyYCLc5WIpvb9xMjlG1Dzf64NjISeU1+Wo8="

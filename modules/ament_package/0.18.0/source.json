@@ -4,6 +4,6 @@
     "strip_prefix": "ament_package-0.18.0",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-S+KNWady8o09GxQMMgW5npRdM3gcsmjgMsIYCtl5AeI="
+        "MODULE.bazel": "sha256-iJuYmVe3fr7HdrU+/Q5gt/7M31IWqv67LQRLZg94HBA="
     }
 }

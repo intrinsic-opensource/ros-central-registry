@@ -66,7 +66,7 @@ def _rosidl_typesupport_introspection_c_aspect_impl(target, ctx):
                     if RosCTypesupportIntrospectionInfo in dep
                 ],
             ),
-            linker_inputs = cc_info.linking_context.linker_inputs
+            linker_inputs = cc_info.linking_context.linker_inputs,
         ),
     ]
 

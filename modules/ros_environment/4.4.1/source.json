@@ -4,6 +4,6 @@
     "strip_prefix": "ros_environment-4.4.1",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-m/Dxtifj7JTFPGrZLGJOEYKxSYVz16Rs1IiQ12CNloQ="
+        "MODULE.bazel": "sha256-nE0/9JnDOCO0VRthuLi7EXZ5UzB+SsHTI1RsiKdd7l8="
     }
 }

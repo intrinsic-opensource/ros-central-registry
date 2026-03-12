@@ -26,7 +26,7 @@ def _ros_data_impl(ctx):
     ctx.actions.write(output = ament_index_file, content = "")
 
     # Add the package index and the additional files for the share dir.
-    symlinks = { ament_index_path : ament_index_file }
+    symlinks = {ament_index_path: ament_index_file}
     for target in ctx.attr.data:
         for file in target.files.to_list():
             # The Bazel runfile engine by default prefixes the symlinks
@@ -42,13 +42,13 @@ def _ros_data_impl(ctx):
     return [
         DefaultInfo(
             files = depset(direct = symlinks.values()),
-            runfiles = ctx.runfiles(symlinks = symlinks)
-        )
+            runfiles = ctx.runfiles(symlinks = symlinks),
+        ),
     ]
 
 ros_data = rule(
     implementation = _ros_data_impl,
     attrs = {
         "data": attr.label_list(allow_files = True),
-    }
+    },
 )

@@ -4,7 +4,7 @@
     "strip_prefix": "class_loader-2.9.0",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-YIVNMDWzdypScqeyIbQVoRZwsUig/zBT63Uq3TB8VKQ="
+        "MODULE.bazel": "sha256-r3hfAxq5sL5gwCCxm2kKa+v5GV4pFAO303rlBQuEgJk="
     },
     "patches": {
         "fix__gitignore.patch": "sha256-df5BnIQw5Pgl5um3Qci3zaw8DH6QjZjyBl4OPzkxNBA="

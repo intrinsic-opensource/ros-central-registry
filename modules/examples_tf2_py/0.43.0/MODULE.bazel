@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "examples_tf2_py",
     version = "0.43.0",

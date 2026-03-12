@@ -21,7 +21,7 @@ package(default_visibility = ["//visibility:public"])
 ros_interface(
     name = "GetTypeDescription",
     src = "GetTypeDescription.srv",
-    deps = [      
+    deps = [
         "//msg:KeyValue",
         "//msg:TypeDescription",
         "//msg:TypeSource",

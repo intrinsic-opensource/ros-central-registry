@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "ament_index_cpp",
     version = "1.12.0",
@@ -24,4 +23,4 @@ module(
 # Dependencies
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
-bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_cc", version = "0.2.17")

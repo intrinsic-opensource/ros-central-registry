@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:aspects.bzl", "rosidl_adapter_aspect")
+load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
 load(":aspects.bzl", "rosidl_generator_type_description_aspect")
 load(":types.bzl", "RosTypeDescriptionInfo")
 
@@ -25,7 +24,7 @@ def _type_description_ros_library_impl(ctx):
                 dep[RosTypeDescriptionInfo].jsons.to_list()[-1]
                 for dep in ctx.attr.deps
                 if RosTypeDescriptionInfo in dep
-            ])
+            ]),
         ),
     ]
 
@@ -43,4 +42,3 @@ type_description_ros_library = rule(
     },
     provides = [DefaultInfo],
 )
-

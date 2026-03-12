@@ -4,6 +4,6 @@
     "strip_prefix": "common_interfaces-5.8.1/common_interfaces",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-xyxh50YZrc0Rt8HkhGrb72715zO/6d5UhI89TYUwadc="
+        "MODULE.bazel": "sha256-HR2vrxnZy8Hwh5jIzLjxl3m7LEakinrcWRE15bfU31I="
     }
 }

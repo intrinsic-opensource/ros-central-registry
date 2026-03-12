@@ -4,6 +4,6 @@
     "strip_prefix": "launch-3.9.1/launch_testing",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-6hleRwvGxMaqRMhWQXFckuq2DzvxYmgzXgeSg6GPRzw="
+        "MODULE.bazel": "sha256-sTP/t414HIlcx6wVlp6TPW1/kXa87+0+rKXmZ9Go3hs="
     }
 }

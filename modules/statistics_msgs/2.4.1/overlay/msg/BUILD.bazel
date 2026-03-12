@@ -38,4 +38,3 @@ ros_interface(
     name = "StatisticDataType",
     src = "StatisticDataType.msg",
 )
-

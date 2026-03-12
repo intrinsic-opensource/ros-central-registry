@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +17,7 @@ load(":types.bzl", "RosInterfaceInfo")
 def _ros_interface_impl(ctx):
     return RosInterfaceInfo(
         src = ctx.file.src,
-        package = ctx.attr.package
+        package = ctx.attr.package,
     )
 
 ros_interface_rule = rule(
@@ -29,11 +28,11 @@ ros_interface_rule = rule(
                 ".idl",
                 ".msg",
                 ".srv",
-                ".action"
+                ".action",
             ],
             mandatory = True,
         ),
-        "package": attr.string(mandatory=True),
+        "package": attr.string(mandatory = True),
         "deps": attr.label_list(providers = [RosInterfaceInfo]),
     },
     provides = [RosInterfaceInfo],

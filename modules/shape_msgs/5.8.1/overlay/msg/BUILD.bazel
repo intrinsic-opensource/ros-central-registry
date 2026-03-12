@@ -20,8 +20,8 @@ ros_interface(
     name = "Mesh",
     src = "Mesh.msg",
     deps = [
-        "@geometry_msgs//msg:Point",
         ":MeshTriangle",
+        "@geometry_msgs//msg:Point",
     ],
 )
 

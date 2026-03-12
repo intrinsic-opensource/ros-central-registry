@@ -22,5 +22,5 @@ ros_interface(
     deps = [
         # Services have implicit deps
         "@service_msgs//msg:ServiceEventInfo",
-    ]
+    ],
 )

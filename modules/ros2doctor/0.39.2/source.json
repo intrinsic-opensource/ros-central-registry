@@ -4,6 +4,6 @@
     "strip_prefix": "ros2cli-0.39.2/ros2doctor",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-EedTO2NVyvxksTEXJpga+JDkBXNFUI5SEGz8IaWdnwg="
+        "MODULE.bazel": "sha256-i5n4oyrwSI+1+rwhk7Vt+gxqadiqJDmL/49wt0Tr20g="
     }
 }

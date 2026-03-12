@@ -3,9 +3,9 @@
     "integrity": "sha256-2dde9m0QdMZRKm2I00P8iXH3cG5MarR0cZMWlOZlrho=",
     "strip_prefix": "example_interfaces-0.14.1",
     "overlay": {
-        "MODULE.bazel": "sha256-wY5fyggTakCbU0LnsKqjouR75dra4WqP0fOGZqy3UHo=",
-        "action/BUILD.bazel": "sha256-YzMOvg5nPIUGdOesLlFeODh5eAV56p8dcxoH6hrDe6Y=",
+        "MODULE.bazel": "sha256-VmS0e83nx+/Y67lIGZloKHGH/LsYXvPXptgSJa4ysL8=",
+        "action/BUILD.bazel": "sha256-TAFWgVL9Z4LL8nN5jab2njZM8CWk597YeCXiFlHRUtM=",
         "msg/BUILD.bazel": "sha256-igjNQ+UUMjpkHQyci0fCCQ+WtFn9x1RLikzurAxlNd4=",
-        "srv/BUILD.bazel": "sha256-ysuFibrBiX0tGrVkWNC8THfAifGaH2gmW/Ec2L4bF18="
+        "srv/BUILD.bazel": "sha256-SIIN6NIdhswElO5q3sCcCe5DPyOed0BCdos60ZusNEI="
     }
 }

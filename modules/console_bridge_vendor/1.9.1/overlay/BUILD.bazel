@@ -18,13 +18,13 @@ package(default_visibility = ["//visibility:public"])
 
 cc_test(
     name = "benchmark_log",
+    timeout = "moderate",
     srcs = ["test/benchmark/benchmark_log.cpp"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"console_bridge_vendor\\\""],
+    tags = ["manual"],
     deps = [
         "@console_bridge",
         "@google_benchmark//:benchmark_main",
         "@performance_test_fixture",
     ],
-    local_defines = ["ROS_PACKAGE_NAME=\\\"console_bridge_vendor\\\""],
-    timeout = "moderate",
 )
-

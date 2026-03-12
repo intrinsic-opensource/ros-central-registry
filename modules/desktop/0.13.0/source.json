@@ -4,6 +4,6 @@
     "strip_prefix": "variants-0.13.0/desktop",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-vwKAR/rlKpJWdFFCEfI3WAZqCXgIWKvZZu8wWNwkg78="
+        "MODULE.bazel": "sha256-MfVLIsn50aT4hICpQSTwnM3yN2Lkwkd9wqAi4iMSpZE="
     }
 }

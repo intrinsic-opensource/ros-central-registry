@@ -4,12 +4,12 @@
     "strip_prefix": "rosidl_python-0.25.0/rosidl_generator_py",
     "overlay": {
         "BUILD.bazel": "sha256-mj9GNGHF1aCIH6N3/9h9ou4RoIYiVVSCNx2TcOSkCIY=",
-        "MODULE.bazel": "sha256-WuUSU+GbxuARcvNh2776jGLAQ8Ci4Fh3FKCtRjYqgnc=",
+        "MODULE.bazel": "sha256-Ca2sQcJbG1jUBf/yma0bmmG10nL3meH1Pqfoew6OQMI=",
         "aspects.bzl": "sha256-Tpn6efIAtva7cGksUiOunM7jxRYxZFCczOngCxqhPYs=",
         "msg/BUILD.bazel": "sha256-pWvW/5IwprGr5vUISTjlcgqhsKamdSO+2Ysstonbmck=",
         "rules.bzl": "sha256-LwdKsAHNXpXzarOwaQiaHZO27BLVsStmc75jMqbRY0g=",
         "sitecustomize.py": "sha256-Z2MHID48GAzjCetaWzydwzJNFLI4vW262gMZtPny0r4=",
-        "types.bzl": "sha256-vYMaDsZHBRY2DBefxdsMNLLjqER8HidvRTRTPmBNnv0="
+        "types.bzl": "sha256-hMX0z0ZWdFjgAqNdWBhMKLDP/qRAbUWg2vgDXYlJZnw="
     },
     "patches": {
         "fix_resource__action_py_em.patch": "sha256-psuvLd7W2VbY077e2lPnbaaspwXlpCrQpCMTiTCcvdw=",

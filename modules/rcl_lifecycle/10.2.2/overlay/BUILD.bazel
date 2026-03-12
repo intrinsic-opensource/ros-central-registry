@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -32,16 +32,19 @@ c_ros_library(
 
 cc_library(
     name = "rcl_lifecycle",
+    srcs = glob([
+        "src/**/*.h",
+        "src/**/*.c",
+    ]),
     hdrs = glob(["include/**/*.h"]),
-    srcs = glob(["src/**/*.h", "src/**/*.c"]),
     includes = ["include"],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_lifecycle\\\""],
     deps = [
+        ":lifecycle_msgs_c",
         "@rcl",
         "@rcutils",
         "@rosidl_runtime_c",
         "@tracetools",
-        ":lifecycle_msgs_c",
     ],
 )
 
@@ -60,16 +63,16 @@ c_ros_library(
 [
     cc_test(
         name = test,
+        timeout = "moderate",
         srcs = ["test/{}.cpp".format(test)],
         local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_lifecycle\\\""],
         deps = [
-            "@googletest//:gtest_main",
-            "@googletest//:gtest",
-            "@osrf_testing_tools_cpp//:memory_tools",
             ":lifecycle_msgs_test_c",
             ":rcl_lifecycle",
+            "@googletest//:gtest",
+            "@googletest//:gtest_main",
+            "@osrf_testing_tools_cpp//:memory_tools",
         ],
-        timeout = "moderate",
     )
     for test in [
         "test_default_state_machine",

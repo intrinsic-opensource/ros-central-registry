@@ -20,22 +20,22 @@ def _rosidl_adapter_aspect_impl(target, ctx):
     src = target[RosInterfaceInfo].src
 
     # Calculate the metadata to package alongside the IDL.
-    package_name = target[RosInterfaceInfo].package                       # eg. sensor_msgs
-    interface_type = "msg" if src.extension == "idl" else src.extension   # eg. msg
-    interface_name = src.basename[:-len(src.extension) - 1]               # eg. CompressedImage
-    interface_code = snake_case_from_pascal_case(interface_name)          # eg. compressed_image
+    package_name = target[RosInterfaceInfo].package  # eg. sensor_msgs
+    interface_type = "msg" if src.extension == "idl" else src.extension  # eg. msg
+    interface_name = src.basename[:-len(src.extension) - 1]  # eg. CompressedImage
+    interface_code = snake_case_from_pascal_case(interface_name)  # eg. compressed_image
 
     # Declare the output IDL file.
     dst = ctx.actions.declare_file(
-        "{}/{}/{}.idl".format(package_name, interface_type, interface_name)
+        "{}/{}/{}.idl".format(package_name, interface_type, interface_name),
     )
 
     # The tool we use depends on the file suffix.
     executable_map = {
-        "msg" : ctx.executable._msg2idl,
-        "srv" : ctx.executable._srv2idl,
-        "action" : ctx.executable._action2idl
-    }    
+        "msg": ctx.executable._msg2idl,
+        "srv": ctx.executable._srv2idl,
+        "action": ctx.executable._action2idl,
+    }
 
     # For the three fundamental message types we use generators.
     if src.extension in ["msg", "srv", "action"]:
@@ -47,7 +47,7 @@ def _rosidl_adapter_aspect_impl(target, ctx):
                 pkg = package_name,
                 src_name = src.basename,
                 dst_dir = dst.dirname,
-                out = "> /dev/null 2>&1"
+                out = "> /dev/null 2>&1",
             ),
             tools = [executable],
             inputs = [src],
@@ -55,12 +55,14 @@ def _rosidl_adapter_aspect_impl(target, ctx):
             mnemonic = "IdlFrom{}".format(src.extension),
             progress_message = "Generating IDL files for {}".format(ctx.label.name),
         )
-    # IDL files can simply be symlinked directly.
+        # IDL files can simply be symlinked directly.
+
     elif src.extension == "idl":
         ctx.actions.symlink(output = dst, target_file = src)
-    # Everything else is not supported.
+        # Everything else is not supported.
+
     else:
-        fail('Unknown file extension: ' + src.extension)
+        fail("Unknown file extension: " + src.extension)
 
     # Return the IDL file and some extra information used by follow-on aspects.
     return [

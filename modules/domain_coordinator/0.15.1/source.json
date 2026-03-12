@@ -4,6 +4,6 @@
     "strip_prefix": "ament_cmake_ros-0.15.1/domain_coordinator",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-VSEPACPkng6M/Tqowln0lge13SOADQeBTYah1BIvo5Y="
+        "MODULE.bazel": "sha256-P0nRwiY+nuf/D9sMR4Jx/eqOEtXqpyT2ydvajMGvsbE="
     }
 }

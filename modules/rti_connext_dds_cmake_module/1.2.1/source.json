@@ -4,6 +4,6 @@
     "strip_prefix": "rmw_connextdds-1.2.1/rti_connext_dds_cmake_module",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-e5rgHd8SHYQ1ETjHI5Iqyd2/ThUGQV2hhQbzsA2tqnE="
+        "MODULE.bazel": "sha256-5dZIfmEBDoOnrdrDF7cUGvKPpffjYirfM6jS35N1kDE="
     }
 }

@@ -4,6 +4,6 @@
     "strip_prefix": "ros2cli-0.39.2/ros2interface",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-xy4gp7NSZ8NIVv8Imh1CYzvVDp+Yv+DZSXrEQSc9UPc="
+        "MODULE.bazel": "sha256-LjjNtyD2S2C4eaFCub7qvz9v3ulx3b7WeNYc0qN+dng="
     }
 }

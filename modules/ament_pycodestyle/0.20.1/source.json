@@ -4,6 +4,6 @@
     "strip_prefix": "ament_lint-0.20.1/ament_pycodestyle",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-OVNRAMMF5TCejrGWsgQrPuRIXh8uLNtUUzoNalIKfKQ="
+        "MODULE.bazel": "sha256-3H/33ie7Wr9MTiOxeJQWbW6AhDhWl2Bqk7naiR0mU1Q="
     }
 }

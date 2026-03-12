@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "rmw_connextdds",
     version = "1.2.1",

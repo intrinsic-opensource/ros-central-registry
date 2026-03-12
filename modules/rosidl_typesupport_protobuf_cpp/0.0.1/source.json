@@ -4,9 +4,9 @@
     "strip_prefix": "rosidl_typesupport_protobuf-0.0.1/rosidl_typesupport_protobuf_cpp",
     "overlay": {
         "BUILD.bazel": "sha256-Nlqi6jHKArsEbCpvtiOsJWoLFifSa7RUnqpXBcoxQUE=",
-        "MODULE.bazel": "sha256-iqtMwMGXRHoisIZwYtK/V98Wt9DZiUZpkjoDaHUcp0A=",
-        "aspects.bzl": "sha256-I9e3/zA4g3NMGcX1qBcCKaIkRkZ4pfF6vOVWyqPTSF4=",
-        "types.bzl": "sha256-OJANPquOIHITXnU2TXniw8JRg8HiILtwTcA5jjcbuYY="
+        "MODULE.bazel": "sha256-wcrwe8q3YXhHf+Xtd53mXy40wc4GiuD5/dogNQlu89E=",
+        "aspects.bzl": "sha256-WKPSvv11DknhOuVbeYEm0G2imuJetU4ztlSQsVXqrj8=",
+        "types.bzl": "sha256-MQVotDSpaM/tMj/fCWuov5UttCJ+UQLX3nlU2wAbsco="
     },
     "patches": {
         "fix_CMakeLists_txt.patch": "sha256-2zkgombAjAotdHFURVtczBC49n4f0AvHS33Kkx+xUXY=",

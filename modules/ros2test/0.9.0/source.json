@@ -4,6 +4,6 @@
     "strip_prefix": "ros_testing-0.9.0/ros2test",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-Tma6zvL29hTuOeTLS6ixdAjQhGMdjHSbFAymSNV+JmQ="
+        "MODULE.bazel": "sha256-vgyXN5/4uP4Bn2EmMJ5o4THOUnRPLJWc9lxJe8Ln/vk="
     }
 }

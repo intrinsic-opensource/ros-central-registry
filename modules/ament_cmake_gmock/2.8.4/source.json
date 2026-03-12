@@ -4,6 +4,6 @@
     "strip_prefix": "ament_cmake-2.8.4/ament_cmake_gmock",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-Qf33sEBKQz8MpDqies0RlvhX9MTl7BBvoPm2RJxTJzg="
+        "MODULE.bazel": "sha256-pQCVxtqLk1j+nLSrFzHPis2B03w3nsbWa3QK+EyFbfs="
     }
 }

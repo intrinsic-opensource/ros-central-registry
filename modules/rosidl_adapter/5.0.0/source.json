@@ -4,14 +4,14 @@
     "strip_prefix": "rosidl-5.0.0/rosidl_adapter",
     "overlay": {
         "BUILD.bazel": "sha256-tBzVaaCpso4V0LwsTs2sXLnq/pK9zWZ/Ly/dKsiIo78=",
-        "MODULE.bazel": "sha256-Axjx1CQvzLE7/59JfgiFeSVNrxr3jFBzJbqhZdkBNnk=",
-        "aspects.bzl": "sha256-EbNtcAU3Jxttqp5sVMAY/o5p4R2dlgId92QwasY5dIM=",
-        "rules.bzl": "sha256-kkleKEmTPFyJgo6hfdABbt+gj5J5fR1rf7W7G2mxrMQ=",
+        "MODULE.bazel": "sha256-OYdLxRADp0cBgeEeeqirO7QBe+y/Z52ilO8x6ywCsr0=",
+        "aspects.bzl": "sha256-Affh7zR1qUDStDNrBicAlzOQn0MK4beHQO69I3L/Tqs=",
+        "rules.bzl": "sha256-rHeXxbvV1DjpbRea3gk7H/JnWOQ4KSRoNXJtXmuEUSA=",
         "test/data/action/BUILD.bazel": "sha256-iCSLKmDFgJZi/6LVwC7VZBmh+Cv9fi0y04tPtKf0CX0=",
         "test/data/msg/BUILD.bazel": "sha256-NhnmF46oqekjTeWGFclssilTZBsyI+c8XAvUSMygdR4=",
-        "test/data/srv/BUILD.bazel": "sha256-HJ25RJ8jhoHmYNZjfajFzSyvwADzJFxuVhkz4Zx3pus=",
-        "tools.bzl": "sha256-0K8JPp8efCKkVrJxJ3t/IP9u5IhNP3MJXaUFyaTKX+o=",
-        "types.bzl": "sha256-ah5XOLmafkYEelWn69DHeC3bMupUEBuHYk8IAB9YhiQ="
+        "test/data/srv/BUILD.bazel": "sha256-L740qwA/o4Ub+3BXIOYPqspHsCjSAiWllnbY8rAnq0E=",
+        "tools.bzl": "sha256-DGl97ArB+TGHh3GcsuStWRLjkDQfVZnenit7tDVS22U=",
+        "types.bzl": "sha256-kodvqwzgNeQlEKJAM4wCICny1SHEi2Y+FL5bl7Uk//U="
     },
     "patches": {
         "fix_scripts_action2idl_py.patch": "sha256-GNUAsVF/yv4cDZSa8BmA2Crq7mgDR3TqJENUK7Znlio=",

@@ -3,7 +3,7 @@
     "integrity": "sha256-y+J3C5tBfL2BSS9/pGTyh2NIazEEwp7XGZ8oIeHCM0k=",
     "strip_prefix": "rcl_interfaces-2.4.1/rosgraph_msgs",
     "overlay": {
-        "MODULE.bazel": "sha256-TRlwZ+teDYIidml6dMTI0Gqonv8de1j5rOvBzaXTUVY=",
+        "MODULE.bazel": "sha256-vi+IV4DyPHdbHntUmn/C1vjFP+IPny3Hy4bVA0W7ieU=",
         "msg/BUILD.bazel": "sha256-0Cps+SKlQH/aTMoVMaUBdNnMd1cwRg11rFIz5CrXGKs="
     }
 }

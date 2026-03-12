@@ -3,7 +3,7 @@
     "integrity": "sha256-y+J3C5tBfL2BSS9/pGTyh2NIazEEwp7XGZ8oIeHCM0k=",
     "strip_prefix": "rcl_interfaces-2.4.1/builtin_interfaces",
     "overlay": {
-        "MODULE.bazel": "sha256-yCDRnV6/QaWXixF5DLWp5UpWbt0CUDtcs3qs/VUjjVc=",
+        "MODULE.bazel": "sha256-jU4qi4Y2lJrWB3KPYgx4LZp6MS2IqVru3CTvfCTYzAc=",
         "msg/BUILD.bazel": "sha256-1akZMYNFlglgOp1yZtueXdgw1qwUSOkvmhXQJgdbVF8="
     }
 }

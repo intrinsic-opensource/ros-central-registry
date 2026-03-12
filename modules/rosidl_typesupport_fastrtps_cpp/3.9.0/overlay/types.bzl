@@ -13,10 +13,10 @@
 # limitations under the License.
 
 RosCcTypesupportFastRTPSInfo = provider(
-    "Encapsulates C++ Type Support information for FastRTPS.", 
+    "Encapsulates C++ Type Support information for FastRTPS.",
     fields = [
         "cc_info",
         "dynamic_libraries",
         "linker_inputs",
-    ]
+    ],
 )

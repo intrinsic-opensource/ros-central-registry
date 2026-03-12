@@ -1,4 +1,3 @@
-
 # Copyright 2026 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,9 +36,9 @@ cc_library(
     name = "rclc_lifecycle",
     srcs = ["src/rclc_lifecycle/rclc_lifecycle.c"],
     hdrs = glob(["include/**/*.h"]),
+    defines = ["RCLC_LIFECYCLE_MAX_STRING_LENGTH=20"],
     includes = ["include"],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rclc_lifecycle\\\""],
-    defines = ["RCLC_LIFECYCLE_MAX_STRING_LENGTH=20"],
     deps = [
         ":msgs_c",
         "@rcl",
@@ -53,9 +52,9 @@ cc_library(
 
 cc_test(
     name = "test_lifecycle",
-    srcs = ["test/test_lifecycle.cpp"], 
-    local_defines = ["ROS_PACKAGE_NAME=\\\"rclc_lifecycle\\\""],
+    srcs = ["test/test_lifecycle.cpp"],
     includes = ["src/rcl"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rclc_lifecycle\\\""],
     deps = [
         ":rclc_lifecycle",
         "@googletest//:gtest",

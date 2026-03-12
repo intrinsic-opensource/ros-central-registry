@@ -4,6 +4,6 @@
     "strip_prefix": "rmw-7.9.0/rmw_implementation_cmake",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-BMtx8pj52PpWdTXw6RfnAeQMxAGcRyALFU8Xoix45O8="
+        "MODULE.bazel": "sha256-HESwRgqftR8JDv3aGhan4Fwmu8j6ig+fB6pVs+yVkCs="
     }
 }

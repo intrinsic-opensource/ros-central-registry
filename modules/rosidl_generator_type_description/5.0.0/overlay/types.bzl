@@ -13,9 +13,9 @@
 # limitations under the License.
 
 RosTypeDescriptionInfo = provider(
-    "Encapsulates type description information generated for an underlying IDL.", 
+    "Encapsulates type description information generated for an underlying IDL.",
     fields = [
         "jsons",
         "include_paths",
-    ]
+    ],
 )

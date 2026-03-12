@@ -67,7 +67,7 @@ def _rosidl_typesupport_fastrtps_c_aspect_impl(target, ctx):
                     if RosCTypesupportFastRTPSInfo in dep
                 ],
             ),
-            linker_inputs = cc_info.linking_context.linker_inputs
+            linker_inputs = cc_info.linking_context.linker_inputs,
         ),
     ]
 

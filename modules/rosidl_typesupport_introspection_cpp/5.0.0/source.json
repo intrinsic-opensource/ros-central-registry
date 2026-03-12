@@ -4,9 +4,9 @@
     "strip_prefix": "rosidl-5.0.0/rosidl_typesupport_introspection_cpp",
     "overlay": {
         "BUILD.bazel": "sha256-9iQ9U82gMkHWWOZbUW24kpnCQf252xwVS4Mxi5deGdU=",
-        "MODULE.bazel": "sha256-Mxj2TclyjrtI0GA+OxpzXGb9N29UEsb9FTatcPv1UTM=",
-        "aspects.bzl": "sha256-oMithhZMYECf9gwXxNj+BaRv19X+bAJbDqC1KbnucZY=",
-        "types.bzl": "sha256-kTlrO3Ut+E7jRHWrMa9WKEJqwJOQKa3IGLx7NcGrra4="
+        "MODULE.bazel": "sha256-+NLQ3BSRxM3Pig7UsR824htaeSyeTr/aG8WCm07Gnvs=",
+        "aspects.bzl": "sha256-vPFbk8ZQHcDqxr4MrTT4uilmQTvx97OGRsCpl1xLmFI=",
+        "types.bzl": "sha256-W83Gmy6FSzH8O1fCIMrdUuhJzgAikrMHHpYOIS0GuA4="
     },
     "patches": {
         "fix_rosidl_typesupport_introspection_cpp___init___py.patch": "sha256-RjNli/+BlRxVB1I/vr/96xHWScRhtEhtMCR1+/pVgQw="

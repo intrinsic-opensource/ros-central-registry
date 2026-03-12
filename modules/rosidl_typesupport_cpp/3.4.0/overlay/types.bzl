@@ -13,10 +13,10 @@
 # limitations under the License.
 
 RosCcTypesupportInfo = provider(
-    "Encapsulates C++ type support information for an underlying ROS message.", 
+    "Encapsulates C++ type support information for an underlying ROS message.",
     fields = [
         "cc_info",
         "dynamic_libraries",
         "linker_inputs",
-    ]
+    ],
 )

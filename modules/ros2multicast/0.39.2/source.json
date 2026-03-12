@@ -4,6 +4,6 @@
     "strip_prefix": "ros2cli-0.39.2/ros2multicast",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-MIvJklDIR97wwwmwZbWt9NiJxH+WcB4XIndgaQkXENs="
+        "MODULE.bazel": "sha256-9qmmX1996T4qrlxoQEhG9ykfg/OGp8MUu+xFLlbkhi4="
     }
 }

@@ -59,6 +59,7 @@ def _rosidl_typesupport_c_aspect_impl(target, ctx):
     for dep in ctx.rule.attr.deps:
         if RosCTypesupportInfo in dep:
             deps.append(dep[RosCTypesupportInfo].cc_info)
+
     # for typesupports in TYPESUPPORTS.values():
     #     if typesupports in target:
     #         deps.append(target[typesupports].cc_info)
@@ -87,7 +88,7 @@ def _rosidl_typesupport_c_aspect_impl(target, ctx):
                     if RosCTypesupportInfo in dep
                 ],
             ),
-            linker_inputs = cc_info.linking_context.linker_inputs
+            linker_inputs = cc_info.linking_context.linker_inputs,
         ),
     ]
 

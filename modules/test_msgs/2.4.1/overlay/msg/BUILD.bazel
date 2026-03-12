@@ -34,16 +34,16 @@ ros_interface(
     name = "NonKeyedWithNestedKey",
     src = "NonKeyedWithNestedKey.idl",
     deps = [
-        ":KeyedString"
-    ]
+        ":KeyedString",
+    ],
 )
 
 ros_interface(
     name = "ComplexNestedKey",
     src = "ComplexNestedKey.idl",
     deps = [
-        ":NonKeyedWithNestedKey"
-    ]
+        ":NonKeyedWithNestedKey",
+    ],
 )
 
 # Normal pipeline

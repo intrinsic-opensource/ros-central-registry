@@ -4,6 +4,6 @@
     "strip_prefix": "ament_lint-0.20.1/ament_cmake_pyflakes",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-R/zz/J5TzVIfWYSl8tlalLDmpCwMsILEKJGZejIU73c="
+        "MODULE.bazel": "sha256-nWli56/uQL7YIhQYDS/Dr2SXCXoeQtcqSapO/8qMHD0="
     }
 }

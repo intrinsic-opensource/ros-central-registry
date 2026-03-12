@@ -3,8 +3,8 @@
     "integrity": "sha256-y+J3C5tBfL2BSS9/pGTyh2NIazEEwp7XGZ8oIeHCM0k=",
     "strip_prefix": "rcl_interfaces-2.4.1/lifecycle_msgs",
     "overlay": {
-        "MODULE.bazel": "sha256-2rmTo/ueGR16skr3aabC7fxcPq7mJ8niG42lyHsbj3k=",
+        "MODULE.bazel": "sha256-VqJvxJJEcALcZawJ7TWIz/482iWPw9sSe4OBKXyeGfU=",
         "msg/BUILD.bazel": "sha256-e0ObZqR11YvOGCRVUki+pagjg/pz4M6GZjMtENZP6mo=",
-        "srv/BUILD.bazel": "sha256-VE/scyiAs+CkZkknXGzeeCxFNDQLYyQ9asTb9P5nv6A="
+        "srv/BUILD.bazel": "sha256-3Bc6VQeRzPrlYdE3bkhhuhg2kpewUX/2+ymMHNVwYcc="
     }
 }

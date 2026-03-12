@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "rmw_implementation",
     version = "3.1.1",
@@ -35,4 +35,4 @@ bazel_dep(name = "rmw_zenoh_cpp", version = "0.8.1")
 bazel_dep(name = "rmw", version = "7.9.0")
 bazel_dep(name = "rosidl_cmake", version = "5.0.0")
 bazel_dep(name = "rosidl_runtime_c", version = "5.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_cc", version = "0.2.17")

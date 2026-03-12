@@ -4,6 +4,6 @@
     "strip_prefix": "sros2-0.16.1/sros2",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-v7kqxfEhG+ns1QGo4x+TKpRaGw6cROSqVBleKCbLots="
+        "MODULE.bazel": "sha256-gcGzfak7NDuadCT7tAltwHa3Z5pHlIrPqdmfjNBXQO8="
     }
 }

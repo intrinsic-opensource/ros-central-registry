@@ -4,6 +4,6 @@
     "strip_prefix": "launch_ros-0.29.1/test_launch_ros",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-4Fc63wIUQMEXbZMhekVEImlV06qSb3rliPP4+Z8Xg+U="
+        "MODULE.bazel": "sha256-wh93yLWZ5a8aj4uuBtcGewkAD83hvHt67JAaR0NEmv4="
     }
 }

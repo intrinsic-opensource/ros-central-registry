@@ -4,8 +4,8 @@
     "strip_prefix": "ros2cli-0.39.2/ros2cli_test_interfaces",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-MLM25nEf+e/QYBbRmYR3NUY1EVMRvziNchHtC7RswHk=",
-        "action/BUILD.bazel": "sha256-EhXKIj/BKk/PNUaWd3ISONSaUdPrZAnegqQHPXkmg1k=",
+        "MODULE.bazel": "sha256-l+NLA26icU9PHeRewi9EsBRR/ToF5XcFVNh1x/J1p/A=",
+        "action/BUILD.bazel": "sha256-As38D8F9+oUiBiiMhjzQpwgYG5wWcqe9+CXu2pdjgYU=",
         "msg/BUILD.bazel": "sha256-e9xtITdXiaOcbUeyE5O/T4+D33saRg2ZH+CrnqWCcCI=",
         "srv/BUILD.bazel": "sha256-D4ewWGqNzz0XPE4AqO2eWth3L1YxZgY9/Fn1WVs1bqQ="
     }

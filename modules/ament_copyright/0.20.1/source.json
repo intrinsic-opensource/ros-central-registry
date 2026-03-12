@@ -4,6 +4,6 @@
     "strip_prefix": "ament_lint-0.20.1/ament_copyright",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-DXT8gqA+IU4NuHPprf9rv32bQJluzH7G72VAE5N0PCM="
+        "MODULE.bazel": "sha256-qQsB+iHRnxOeDrtw7apFCQp81oEn3qn4J1ddoiEbhTw="
     }
 }

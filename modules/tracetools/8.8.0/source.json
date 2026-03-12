@@ -3,7 +3,7 @@
     "integrity": "sha256-kE6z2Vblk52w8DbfRGgTM8XLUcIC0oIiI74rXY1rumM=",
     "strip_prefix": "ros2_tracing-8.8.0/tracetools",
     "overlay": {
-        "BUILD.bazel": "sha256-ku+8PGBN9H37EimXib4iwWaSSWcpLCa4uz6SWuIeY4I=",
-        "MODULE.bazel": "sha256-xiONA5Rndtl3BR+RlKXapwBaFzpKLyP9cLecimZuitQ="
+        "BUILD.bazel": "sha256-SkU7bTExSR4Qd1MC1VNSjN/Aq2H5FpWKZXJERcPy32Y=",
+        "MODULE.bazel": "sha256-39qdV8sF8nnWtFqPaXgp86kkaaiCB8Hqu4c2F4n1v4I="
     }
 }

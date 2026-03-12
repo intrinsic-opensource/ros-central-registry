@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,7 @@
 # limitations under the License.
 
 load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_import", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_import", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -54,16 +53,23 @@ c_ros_library(
     ],
 )
 
-# We have to wrap 
+# We have to wrap
 
 cc_library(
     name = "rcl",
-    srcs = glob(["src/**/*.c", "src/**/*.h"]),
+    srcs = glob([
+        "src/**/*.c",
+        "src/**/*.h",
+    ]),
     hdrs = glob(["include/**/*.h"]),
-    includes = ["include", "src"],
-    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl\\\""],
     copts = ["-Wno-deprecated-pragma"],
+    includes = [
+        "include",
+        "src",
+    ],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl\\\""],
     deps = [
+        ":msgs",
         "@rcl_logging_interface",
         "@rcl_logging_spdlog",
         "@rcl_yaml_param_parser",
@@ -72,7 +78,6 @@ cc_library(
         "@rmw_implementation",
         "@rosidl_runtime_cpp",
         "@tracetools",
-        ":msgs",
     ],
 )
 
@@ -84,6 +89,7 @@ cc_library(
     hdrs = glob(["include/**/*.h"]),
     includes = ["include"],
     deps = [
+        ":msgs",
         "@rcl_logging_interface",
         "@rcl_logging_spdlog",
         "@rcl_yaml_param_parser",
@@ -92,7 +98,6 @@ cc_library(
         "@rmw_implementation",
         "@rosidl_runtime_cpp",
         "@tracetools",
-        ":msgs",
     ],
 )
 
@@ -103,40 +108,40 @@ cc_library(
     includes = ["test"],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rcl\\\""],
     deps = [
-        "@osrf_testing_tools_cpp//:memory_tools",
         ":rcl_mock",
-    ]
+        "@osrf_testing_tools_cpp//:memory_tools",
+    ],
 )
 
 [
     cc_test(
         name = test,
+        timeout = "moderate",
         srcs = [
-            "test/rcl/{}.cpp".format(test)
+            "test/rcl/{}.cpp".format(test),
         ] + glob([
             "src/rcl/**/*.h",
             "test/rcl/**/*.h",
             "test/rcl/**/*.hpp",
             "test/mocking_utils/*.hpp",
         ]),
+        data = glob(["test/resources/**"]),
+        includes = ["src/rcl"],
         local_defines = [
             "ROS_PACKAGE_NAME=\\\"rcl\\\"",
             "RMW_TIMESTAMPS_SUPPORTED=1",
         ],
-        includes = ["src/rcl"],
-        data = glob(["test/resources/**"]),
         deps = [
-            "@googletest//:gtest_main",
+            ":rcl_mock",
+            ":wait_for_entity_helpers",
             "@googletest//:gtest",
-            "@osrf_testing_tools_cpp//:memory_tools",
+            "@googletest//:gtest_main",
             "@mimick",
+            "@osrf_testing_tools_cpp//:memory_tools",
             "@rules_cc//cc/runfiles",
             "@test_msgs//:msgs_c",
             "@test_msgs//:msgs_cc",
-            ":rcl_mock",
-            ":wait_for_entity_helpers",
         ],
-        timeout = "moderate",
     )
     for test in [
         "test_arguments",

@@ -50,7 +50,7 @@ def _rosidl_typesupport_cpp_aspect_impl(target, ctx):
         templates_hdrs = [],
         templates_srcs = ["detail/{}__rosidl_typesupport_cpp.cpp"],
         additional = additional,
-        debug = True
+        debug = True,
     )
 
     deps = [dep[CcInfo] for dep in ctx.attr._cc_deps if CcInfo in dep]
@@ -58,6 +58,7 @@ def _rosidl_typesupport_cpp_aspect_impl(target, ctx):
     for dep in ctx.rule.attr.deps:
         if RosCcTypesupportInfo in dep:
             deps.append(dep[RosCcTypesupportInfo].cc_info)
+
     # for typesupports in TYPESUPPORTS.values():
     #     if typesupports in target:
     #         deps.append(target[typesupports].cc_info)
@@ -86,7 +87,7 @@ def _rosidl_typesupport_cpp_aspect_impl(target, ctx):
                     if RosCcTypesupportInfo in dep
                 ],
             ),
-            linker_inputs = cc_info.linking_context.linker_inputs
+            linker_inputs = cc_info.linking_context.linker_inputs,
         ),
     ]
 

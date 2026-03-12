@@ -3,7 +3,7 @@
     "integrity": "sha256-AblMLEyLoc5WpNrKiKqI49KwfW41Xa4g6/q+dSkjln0=",
     "strip_prefix": "ament_cmake_ros-0.15.1/rmw_test_fixture",
     "overlay": {
-        "BUILD.bazel": "sha256-7lj85zTNRGEzIsN757Nm4551nZ64SsWbiyTA28ym+kE=",
-        "MODULE.bazel": "sha256-kjN0nwWn4oV7mbp+L3/r+rzMsTmiA886MZTOcOYKRSM="
+        "BUILD.bazel": "sha256-RfVKFPYngFky+oYHWhx9VNNb+acDxvK67qw+C7FLhI8=",
+        "MODULE.bazel": "sha256-0OG0lTcM/88m5gY2HZpKF7Aj+v245pUrus2Yl9urWic="
     }
 }

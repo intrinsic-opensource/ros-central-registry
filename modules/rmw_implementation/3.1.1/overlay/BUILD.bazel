@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,28 +31,28 @@ string_flag(
 config_setting(
     name = "rmw_fastrtps_cpp",
     flag_values = {
-        ":rmw": "rmw_fastrtps_cpp"
+        ":rmw": "rmw_fastrtps_cpp",
     },
 )
 
 config_setting(
     name = "rmw_fastrtps_dynamic_cpp",
     flag_values = {
-        ":rmw": "rmw_fastrtps_dynamic_cpp"
+        ":rmw": "rmw_fastrtps_dynamic_cpp",
     },
 )
 
 config_setting(
     name = "rmw_cyclonedds_cpp",
     flag_values = {
-        ":rmw": "rmw_cyclonedds_cpp"
+        ":rmw": "rmw_cyclonedds_cpp",
     },
 )
 
 config_setting(
     name = "rmw_zenoh_cpp",
     flag_values = {
-        ":rmw": "rmw_zenoh_cpp"
+        ":rmw": "rmw_zenoh_cpp",
     },
 )
 

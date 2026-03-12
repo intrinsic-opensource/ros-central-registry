@@ -25,5 +25,5 @@ ros_interface(
         "@action_msgs//msg:GoalStatus",
         "@action_msgs//msg:GoalStatusArray",
         "@action_msgs//srv:CancelGoal",
-    ]
+    ],
 )

@@ -1,4 +1,3 @@
-
 # Copyright 2026 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,9 +31,9 @@ cc_library(
     includes = ["src"],
     local_defines = ["ROS_PACKAGE_NAME=\"rclc_examples\""],
     deps = [
+        ":msgs_c",
         "@rcl",
         "@rclc",
-        ":msgs_c",
     ],
 )
 
@@ -51,8 +50,7 @@ c_ros_library(
     cc_binary(
         name = name,
         srcs = [
-            "src/{}.cpp".format(name) if name in ["example_pingpong"]
-            else "src/{}.c".format(name)
+            "src/{}.cpp".format(name) if name in ["example_pingpong"] else "src/{}.c".format(name),
         ],
         local_defines = ["ROS_PACKAGE_NAME=\\\"rclc_examples\\\""],
         deps = [

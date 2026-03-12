@@ -13,12 +13,12 @@
 # limitations under the License.
 
 RosIdlInfo = provider(
-    "Encapsulates IDL information generated for an underlying ROS message.", 
+    "Encapsulates IDL information generated for an underlying ROS message.",
     fields = [
-        "idl",              # path to IDL file
-        "interface_type",   # msg
-        "interface_name",   # CompressedImage
-        "interface_code",   # compressed_image
-        "package_name",     # sensor_msgs
-    ]
+        "idl",  # path to IDL file
+        "interface_type",  # msg
+        "interface_name",  # CompressedImage
+        "interface_code",  # compressed_image
+        "package_name",  # sensor_msgs
+    ],
 )

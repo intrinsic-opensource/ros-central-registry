@@ -4,6 +4,6 @@
     "strip_prefix": "ros2_tracing-8.8.0/lttngpy",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-HXkIDbFEDXG1Z2D7fG6RCK7IyFgeB8cI0J69Akc64vQ="
+        "MODULE.bazel": "sha256-+50lrLvKcDBAXXdvaXikWlej4JNxXUi+bwR5wiZBQVo="
     }
 }

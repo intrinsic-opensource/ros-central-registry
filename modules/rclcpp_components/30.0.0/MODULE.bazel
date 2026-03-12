@@ -13,10 +13,9 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "rclcpp_components",
     version = "30.0.0",
     compatibility_level = 0,
 )
-

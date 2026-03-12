@@ -4,9 +4,9 @@
     "strip_prefix": "rosidl-5.0.0/rosidl_generator_cpp",
     "overlay": {
         "BUILD.bazel": "sha256-M4NJBF0VYlJ9Udqr75A60zL/LXD+bu64x00xcNQ5XVw=",
-        "MODULE.bazel": "sha256-ZMp6fZfKKWgSAKDDQzHbuU04V7AoU57iN82LOb8eqXQ=",
-        "aspects.bzl": "sha256-vQ78o2FfwZxZgR5O0ABPskjkVUROdBOrklJfQx3+PL4=",
-        "rules.bzl": "sha256-DwXYec8d63zAUt7X24+qR4NbVvK3JFdp0kDnI65bAWs=",
-        "types.bzl": "sha256-ASvSs7VI56snaVcF9/xcR1Mw7RNOZN536p1MhINusFg="
+        "MODULE.bazel": "sha256-nw8eqfuEcNhSyqwdCdomq4fwO8REr0C8B68WD+TYKZc=",
+        "aspects.bzl": "sha256-a04FGLgmSJu5McMihdfgnqFtuNd6LYHQaX1H9vDZgxI=",
+        "rules.bzl": "sha256-wtMMNa2dkIpuYqZ9KrDapzKZ1xJHuJwtE6CevcRdcXs=",
+        "types.bzl": "sha256-QCXkOiEB7eD4EzkrnMWVft7at7mG5KVBa8pGQC0bvcQ="
     }
 }

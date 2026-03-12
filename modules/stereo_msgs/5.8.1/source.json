@@ -3,7 +3,7 @@
     "integrity": "sha256-4RPVCpaFsWIhxV46J+oUyni25mMUT+e1ROpcMMiXmMs=",
     "strip_prefix": "common_interfaces-5.8.1/stereo_msgs",
     "overlay": {
-        "MODULE.bazel": "sha256-e54m6nQ96ouY3FGduYuozNRMaKTSqknAJ43ZhvXm01w=",
+        "MODULE.bazel": "sha256-UsTy5Mj1TgyY3fEUykCF0zo6pjE5vnuw6rUBC5xfpTM=",
         "msg/BUILD.bazel": "sha256-2AssEHyMNB2E2rjmP5H8OOJk1/rNRMsmBhyqsea2Zr8="
     }
 }

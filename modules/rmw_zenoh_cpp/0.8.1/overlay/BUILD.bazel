@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,7 @@
 # Imports
 
 load("@ament_index_cpp//:rules.bzl", "ros_data")
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -67,11 +66,11 @@ cc_library(
         "src/rmw_qos.cpp",
         "src/rmw_zenoh.cpp",
     ],
-    local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_zenoh_cpp\\\""],
     copts = ["-fvisibility=hidden"],
     cxxopts = ["-fvisibility=hidden"],
-    linkopts = ["-fvisibility=hidden"],
     data = [":config"],
+    linkopts = ["-fvisibility=hidden"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_zenoh_cpp\\\""],
     deps = [
         "@ament_index_cpp",
         "@fastcdr",
@@ -109,23 +108,3 @@ cc_binary(
         "@zenoh-cpp",
     ],
 )
-
-# Tests
-
-# cc_library(
-#     name = "rmw_zenoh_cpp_test_fixture",
-#     srcs = ALL_HEADERS + [
-#         "src/detail/logging.cpp",
-#         "src/detail/zenoh_config.cpp",
-#         "src/rmw_test_fixture.cpp",
-#     ],
-#     deps = [
-#         "@ament_index_cpp",
-#         "@rcpputils",
-#         "@rcutils",
-#         "@rmw",
-#         "@rmw_test_fixture",
-#         "@rosidl_runtime_c",
-#         "@zenoh-cpp",
-#     ],
-# )

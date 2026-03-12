@@ -4,10 +4,10 @@
     "strip_prefix": "rosidl_typesupport_fastrtps-3.9.0/rosidl_typesupport_fastrtps_cpp",
     "overlay": {
         "BUILD.bazel": "sha256-7eO4/sqNh2F9i7aPRCJXXPnEBnIFscQC0YFjrIxOiO4=",
-        "MODULE.bazel": "sha256-jJL7d5FHGzrQkRn9guUR9ch9PjoqWRlJwBuERJABeyk=",
-        "aspects.bzl": "sha256-zZM+sKA+2+tThuNDv9MceUbjZ7vQ3+RmezovaZ2Ahwk=",
+        "MODULE.bazel": "sha256-Q4uk4a6FHil5HYQsr4HRXCQ78a1DXQw3sLF+8YEhEWw=",
+        "aspects.bzl": "sha256-bt99wV2K6jjizhQ8ilV92nhU08mIRdhP8csZZfZfbcE=",
         "test/msg/BUILD.bazel": "sha256-NhnmF46oqekjTeWGFclssilTZBsyI+c8XAvUSMygdR4=",
-        "types.bzl": "sha256-O0b/QciQjYXseXh3PKcRV1VhxzrmW+k9fdTMBV1YrJs="
+        "types.bzl": "sha256-2KLpHxJdjMF8z/vMSdtRejzqUR/10zwQPUMnaAf+LzM="
     },
     "patches": {
         "fix_rosidl_typesupport_fastrtps_cpp___init___py.patch": "sha256-b3iqnAAtNJUYDto90JXewCUbum41I8hYjUweB34QXd8="

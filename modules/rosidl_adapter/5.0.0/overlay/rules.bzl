@@ -13,8 +13,8 @@
 # limitations under the License.
 
 load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
-load(":types.bzl", "RosIdlInfo")
 load(":aspects.bzl", "rosidl_adapter_aspect")
+load(":types.bzl", "RosIdlInfo")
 
 def _idl_ros_library_impl(ctx):
     return [
@@ -23,7 +23,7 @@ def _idl_ros_library_impl(ctx):
                 dep[RosIdlInfo].idl
                 for dep in ctx.attr.deps
                 if RosIdlInfo in dep
-            ])
+            ]),
         ),
     ]
 

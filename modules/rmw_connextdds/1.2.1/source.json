@@ -4,6 +4,6 @@
     "strip_prefix": "rmw_connextdds-1.2.1/rmw_connextdds",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-vLY6m1tiHXAJDp0WEZg8U05v7HGbxRzWrlas1XBaMss="
+        "MODULE.bazel": "sha256-UoOmohUvxb8xinsCABuaMQG1H33hjaHHdXnMLyJHpU0="
     }
 }

@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,22 +26,22 @@ cc_library(
     includes = ["include"],
     deps = [
         "@rcutils",
-        "@rosidl_typesupport_interface",
         "@rosidl_runtime_c",
+        "@rosidl_typesupport_interface",
     ],
 )
 
 [
     cc_test(
         name = test,
+        timeout = "moderate",
         srcs = ["test/{}.cpp".format(test)],
         local_defines = ["ROS_PACKAGE_NAME=\\\"rosidl_runtime_cpp\\\""],
         deps = [
-            "@googletest//:gtest_main",
-            "@googletest//:gtest",
             ":rosidl_runtime_cpp",
+            "@googletest//:gtest",
+            "@googletest//:gtest_main",
         ],
-        timeout = "moderate",
     )
     for test in [
         "test_bounded_vector",
@@ -52,14 +51,15 @@ cc_library(
 [
     cc_test(
         name = name,
+        timeout = "moderate",
         srcs = ["test/benchmark/{}.cpp".format(name)],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rosidl_runtime_cpp\\\""],
+        tags = ["manual"],
         deps = [
+            ":rosidl_runtime_cpp",
             "@google_benchmark//:benchmark_main",
             "@performance_test_fixture",
-            ":rosidl_runtime_cpp",
         ],
-        local_defines = ["ROS_PACKAGE_NAME=\\\"rosidl_runtime_cpp\\\""],
-        timeout = "moderate",
     )
     for name in [
         "benchmark_bounded_vector",

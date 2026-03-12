@@ -3,7 +3,7 @@
     "integrity": "sha256-HVkkm2udcPcu6vC610S4RE/k9F0bvjTPwAEMgA4C2IY=",
     "strip_prefix": "rcl-10.2.2/rcl_lifecycle",
     "overlay": {
-        "BUILD.bazel": "sha256-KZ02BpouKSrsJLFAPLZT0d7vWEnL8f7y73kDYkd5lK0=",
-        "MODULE.bazel": "sha256-odbOGor7n7x7HmY1JTJtQK2XvDcdAjig+PEtXVu/8Tg="
+        "BUILD.bazel": "sha256-T7muqJ9TCwrvkK8asryuQ5K8mFAjS9hCO8gEnuDVNmg=",
+        "MODULE.bazel": "sha256-Bo9rOXAuRZLU5DvdZ+x5PANDt0F164W4yIjHrq2SYWA="
     }
 }

@@ -3,8 +3,8 @@
     "integrity": "sha256-0bZvCVEh4EwIDPsv6vq2r9hBd+UU9PCdl5cTWA/BExg=",
     "strip_prefix": "rcpputils-2.14.2",
     "overlay": {
-        "BUILD.bazel": "sha256-kYl3SNFVqI9Q8m90SsHrXdc/Qm5NhUs4dmbN+zv5LX4=",
-        "MODULE.bazel": "sha256-RLz+VDRFFMt9beFj0TpV8fkmGWtrcjFW3+8oOL0gAh4="
+        "BUILD.bazel": "sha256-Q1fbyGdqQXWbIeLOStb6tgLeSh8XBA2O6qxa/6WESVI=",
+        "MODULE.bazel": "sha256-crQt9B8ix049drGkXP23qErFa/59oLPwM7SCYY1AaRM="
     },
     "patches": {
         "fix_test_test_filesystem_helper_std_cpp.patch": "sha256-wVMaBVSNjOQ4pKkVnyoOe+idStAMz8u6X0ovpJrCFkY="

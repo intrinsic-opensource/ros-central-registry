@@ -4,6 +4,6 @@
     "strip_prefix": "ament_lint-0.20.1/ament_cppcheck",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-d+OeBh0Z+AlMNrR2RSBG+GBKPmvh3cLiKTHv/AQx21s="
+        "MODULE.bazel": "sha256-dxZ9j9zINAUjV2WeF1GmnQp4Ost9XRAzGv5I8RYzIus="
     }
 }

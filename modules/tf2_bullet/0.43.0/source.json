@@ -4,6 +4,6 @@
     "strip_prefix": "geometry2-0.43.0/tf2_bullet",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-73oNobVqx81YtS3zR+SH5r4wBfYMR45MsHFsSwfywbA="
+        "MODULE.bazel": "sha256-Vy2UQc+X41ipSEG1CcSQvSOlpHp1cbcu4x69HxyHRPk="
     }
 }

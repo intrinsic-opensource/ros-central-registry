@@ -1,4 +1,3 @@
-
 # Copyright 2026 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,27 +21,27 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "rclc",
     srcs = [
-        "src/rclc/init.c",
-        "src/rclc/publisher.c",
-        "src/rclc/subscription.c",
-        "src/rclc/client.c",
-        "src/rclc/service.c",
-        "src/rclc/timer.c",
         "src/rclc/action_client.c",
-        "src/rclc/action_server.c",
         "src/rclc/action_goal_handle.c",
-        "src/rclc/node.c",
-        "src/rclc/executor_handle.c",
+        "src/rclc/action_server.c",
+        "src/rclc/client.c",
         "src/rclc/executor.c",
+        "src/rclc/executor_handle.c",
+        "src/rclc/init.c",
+        "src/rclc/node.c",
+        "src/rclc/publisher.c",
+        "src/rclc/service.c",
         "src/rclc/sleep.c",
+        "src/rclc/subscription.c",
+        "src/rclc/timer.c",
     ],
     hdrs = glob([
         "include/**/*.h",
-        "src/**/*.h"
+        "src/**/*.h",
     ]),
     includes = [
         "include",
-        "src"
+        "src",
     ],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rclc\\\""],
     deps = [
@@ -74,9 +73,9 @@ c_ros_library(
 [
     cc_test(
         name = test,
-        srcs = ["test/rclc/{}.cpp".format(test)], 
-        local_defines = ["ROS_PACKAGE_NAME=\\\"rclc\\\""],
+        srcs = ["test/rclc/{}.cpp".format(test)],
         includes = ["src/rcl"],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rclc\\\""],
         deps = [
             ":rclc",
             ":test_msgs_c",

@@ -18,7 +18,6 @@ load("@rosidl_cmake//:rules.bzl", "ros_interface")
 
 package(default_visibility = ["//visibility:public"])
 
-
 ros_interface(
     name = "Fibonacci",
     src = "@test_interface_files//action:Fibonacci.action",
@@ -34,12 +33,12 @@ ros_interface(
     name = "NestedMessage",
     src = "NestedMessage.action",
     deps = [
+        "//msg:BasicTypes",
+        "//msg:Builtins",
         "@action_msgs//msg:GoalInfo",
         "@action_msgs//msg:GoalStatus",
         "@action_msgs//msg:GoalStatusArray",
         "@action_msgs//srv:CancelGoal",
         "@builtin_interfaces//msg:Time",
-        "//msg:BasicTypes",
-        "//msg:Builtins",
     ],
 )

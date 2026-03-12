@@ -4,6 +4,6 @@
     "strip_prefix": "rmw_implementation-3.1.1/test_rmw_implementation",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-4GZ1vRdElXxV82fwrzcnDicfke9RooNAKbmLlLGHidY="
+        "MODULE.bazel": "sha256-fK+mMsTazfAqz7xnrWAQHoeNhcvQkbvJi0kHN3rGpE4="
     }
 }

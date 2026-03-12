@@ -4,6 +4,6 @@
     "strip_prefix": "rcl_logging-3.3.0/rcl_logging_noop",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-k7YxiYiu4C1gI1NLIRAHXEIS3+7NTKsG0SJ/UZbeJik="
+        "MODULE.bazel": "sha256-lwOBnE9Z9cZ+Eo/q/qrPgzYJkwCdV8Cqidx836mbRMk="
     }
 }

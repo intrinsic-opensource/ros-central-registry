@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "rcl_logging_interface",
     version = "3.3.0",
@@ -26,4 +26,4 @@ bazel_dep(name = "google_benchmark", version = "1.9.4")
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 bazel_dep(name = "rcpputils", version = "2.14.2")
 bazel_dep(name = "rcutils", version = "7.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_cc", version = "0.2.17")

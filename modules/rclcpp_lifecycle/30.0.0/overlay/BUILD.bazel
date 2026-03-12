@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -35,14 +35,20 @@ cc_ros_library(
 
 cc_library(
     name = "rclcpp_lifecycle",
-    hdrs = glob(["include/**/*.h", "include/**/*.hpp"]),
-    srcs = glob(["src/**/*.hpp", "src/**/*.cpp"]),
+    srcs = glob([
+        "src/**/*.hpp",
+        "src/**/*.cpp",
+    ]),
+    hdrs = glob([
+        "include/**/*.h",
+        "include/**/*.hpp",
+    ]),
     includes = ["include"],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_lifecycle\\\""],
     deps = [
+        ":msgs",
         "@rcl_lifecycle",
         "@rclcpp",
-        ":msgs",
     ],
 )
 
@@ -50,16 +56,20 @@ cc_library(
 
 cc_library(
     name = "rclcpp_lifecycle_mock",
-    hdrs = glob(["include/**/*.h", "include/**/*.hpp"]),
     srcs = [":rclcpp_lifecycle"],
+    hdrs = glob([
+        "include/**/*.h",
+        "include/**/*.hpp",
+    ]),
     includes = ["include"],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_lifecycle\\\""],
     deps = [
+        ":msgs",
         "@rcl_lifecycle",
         "@rclcpp",
-        ":msgs",
     ],
 )
+
 cc_ros_library(
     name = "test_msgs",
     deps = [
@@ -74,16 +84,16 @@ cc_ros_library(
 [
     cc_test(
         name = test,
+        timeout = "moderate",
         srcs = ["test/{}.cpp".format(test)] + ["test/mocking_utils/patch.hpp"],
         local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_lifecycle\\\""],
         deps = [
-            "@googletest//:gtest_main",
-            "@googletest//:gtest",
-            "@mimick",
-            ":test_msgs",
             ":rclcpp_lifecycle_mock",
+            ":test_msgs",
+            "@googletest//:gtest",
+            "@googletest//:gtest_main",
+            "@mimick",
         ],
-        timeout = "moderate",
     )
     for test in [
         "test_callback_exceptions",
@@ -100,19 +110,19 @@ cc_ros_library(
     ]
 ]
 
-
 [
     cc_test(
         name = name,
+        timeout = "moderate",
         srcs = ["test/benchmark/{}.cpp".format(name)],
+        local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_lifecycle\\\""],
+        tags = ["manual"],
         deps = [
-            "@google_benchmark//:benchmark_main",
-            "@performance_test_fixture",
             ":rclcpp_lifecycle_mock",
             ":test_msgs",
+            "@google_benchmark//:benchmark_main",
+            "@performance_test_fixture",
         ],
-        local_defines = ["ROS_PACKAGE_NAME=\\\"rclcpp_lifecycle\\\""],
-        timeout = "moderate",
     )
     for name in [
         "benchmark_lifecycle_client",

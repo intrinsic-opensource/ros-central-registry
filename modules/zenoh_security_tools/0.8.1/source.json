@@ -4,6 +4,6 @@
     "strip_prefix": "rmw_zenoh-0.8.1/zenoh_security_tools",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-WXA1hhj3nhZiekM4+a3WOk6EgTdPKBvBrtWCMP7HMks="
+        "MODULE.bazel": "sha256-XSPQ/TcFOaOtZpHkvbKm50m5xzYAareqXTUGD+0hHCs="
     }
 }

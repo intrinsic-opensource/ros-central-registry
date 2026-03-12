@@ -4,6 +4,6 @@
     "strip_prefix": "sros2-0.16.1/sros2_cmake",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-kj+XE/Bs564jj0709JxmLaVSVpsiKdd552j0y0t70Qk="
+        "MODULE.bazel": "sha256-00HjQbiITLLTkcZkoGQ7IXOUk331YAilXSfLwdz5Xqk="
     }
 }

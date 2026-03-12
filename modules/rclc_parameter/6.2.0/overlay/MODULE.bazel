@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "rclc_parameter",
     version = "6.2.0",
@@ -23,7 +23,9 @@ module(
 # Dependencies
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
+bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "rcl", version = "10.2.2")
 bazel_dep(name = "rclc", version = "6.2.0")
 bazel_dep(name = "rclcpp", version = "30.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rmw_implementation", version = "3.1.1")
+bazel_dep(name = "rules_cc", version = "0.2.17")

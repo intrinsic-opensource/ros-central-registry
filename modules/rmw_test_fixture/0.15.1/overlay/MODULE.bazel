@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "rmw_test_fixture",
     version = "0.15.1",
@@ -23,4 +23,4 @@ module(
 # Dependencies
 
 bazel_dep(name = "rmw", version = "7.9.0")
-bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_cc", version = "0.2.17")

@@ -13,10 +13,10 @@
 # limitations under the License.
 
 RosCcBindingsInfo = provider(
-    "Encapsulates C++ information generated for an underlying ROS message.", 
+    "Encapsulates C++ information generated for an underlying ROS message.",
     fields = [
         "cc_info",
         "dynamic_libraries",
         "linker_inputs",
-    ]
+    ],
 )

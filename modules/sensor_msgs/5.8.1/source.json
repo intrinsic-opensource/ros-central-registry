@@ -4,8 +4,8 @@
     "strip_prefix": "common_interfaces-5.8.1/sensor_msgs",
     "overlay": {
         "BUILD.bazel": "sha256-sdIpKvgk7yNSoo6E8Ms6yNPdZ8eTmUEYcw3PDqP4a5w=",
-        "MODULE.bazel": "sha256-WC6t6vcmMldmhCmeKpdqAlmwl1UZHg38qjjMnEd4THc=",
-        "msg/BUILD.bazel": "sha256-ym13m9KBHEb2OVG7AJDZjTFRRAwU/W7GB89aakaGms8=",
+        "MODULE.bazel": "sha256-5OQvIQqFNbhRHt6bH+2eD/GpE1jHrUGl2Sftz0Qg3fQ=",
+        "msg/BUILD.bazel": "sha256-XZsf5KuL/uUbk2tPdepg5eIOX68khDh+tldC2pDXWY0=",
         "srv/BUILD.bazel": "sha256-aglstBHPPP4sX1TqxpVyO2NLOLI1NDXKUEqePwhewME="
     }
 }

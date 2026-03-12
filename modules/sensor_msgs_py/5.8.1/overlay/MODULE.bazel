@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "sensor_msgs_py",
     version = "5.8.1",

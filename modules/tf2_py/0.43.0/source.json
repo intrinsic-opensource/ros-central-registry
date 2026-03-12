@@ -4,6 +4,6 @@
     "strip_prefix": "geometry2-0.43.0/tf2_py",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-zw3mRwoCXNK/4kQy8xu4rI9eMGpXirtJl43cndEaTi8="
+        "MODULE.bazel": "sha256-RRHcjjPP6KmJdLzLK6JX0uOuYgfJrKNEVnaD379PewQ="
     }
 }

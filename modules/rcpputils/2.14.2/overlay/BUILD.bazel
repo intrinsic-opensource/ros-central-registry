@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +30,6 @@ cc_library(
         "src/thread_name.cpp",
     ],
     hdrs = glob(["include/**/*.hpp"]),
-    includes = ["include"],
     cxxopts = [
         "-Wall",
         "-Wextra",
@@ -39,11 +37,12 @@ cc_library(
         "-fPIC",
         "-std=gnu++17",
     ],
+    includes = ["include"],
     local_defines = [
         "ROS_PACKAGE_NAME=\\\"rcpputils\\\"",
     ],
     deps = [
-        "@rcutils"
+        "@rcutils",
     ],
 )
 
@@ -53,38 +52,38 @@ cc_library(
     cc_test(
         name = name,
         srcs = ["test/{}".format(src)],
+        data = glob(["test/dummy_shared_library/**"]),
+        env = env,
         local_defines = [
             "ROS_PACKAGE_NAME=\\\"rcpputils\\\"",
         ],
-        data = glob(["test/dummy_shared_library/**"]),
         deps = [
-            "@googletest//:gtest_main",
-            "@googletest//:gtest",
             ":rcpputils",
+            "@googletest//:gtest",
+            "@googletest//:gtest_main",
         ],
-        env = env,
     )
     for (name, src), env in {
-        ("test_asserts_debug", "test_asserts.cpp") : {},
-        ("test_thread_name", "test_thread_name.cpp") : {},
-        ("test_thread_safety_annotations", "test_thread_safety_annotations.cpp") : {},
-        ("test_join", "test_join.cpp") : {},
-        ("test_time", "test_time.cpp") : {},
-        ("test_env", "test_env.cpp") :  {
+        ("test_asserts_debug", "test_asserts.cpp"): {},
+        ("test_thread_name", "test_thread_name.cpp"): {},
+        ("test_thread_safety_annotations", "test_thread_safety_annotations.cpp"): {},
+        ("test_join", "test_join.cpp"): {},
+        ("test_time", "test_time.cpp"): {},
+        ("test_env", "test_env.cpp"): {
             "EMPTY_TEST": "",
             "NORMAL_TEST": "foo",
         },
-        ("test_scope_exit", "test_scope_exit.cpp") : {},
-        ("test_split", "test_split.cpp") : {},
-        ("test_filesystem_helper", "test_filesystem_helper.cpp") : {},
-        ("test_filesystem_helper_std", "test_filesystem_helper_std.cpp") : {},
-        ("test_find_and_replace", "test_find_and_replace.cpp") : {},
-        ("test_pointer_traits", "test_pointer_traits.cpp") : {},
-        ("test_process", "test_process.cpp") : {},
-        ("test_endian", "test_endian.cpp") : {},
-        ("test_library", "test_library.cpp") : {},
-        ("test_find_library", "test_find_library.cpp") : {},
-        ("test_accumulator", "test_accumulator.cpp") : {},
-        ("test_unique_lock", "test_unique_lock.cpp") : {},
+        ("test_scope_exit", "test_scope_exit.cpp"): {},
+        ("test_split", "test_split.cpp"): {},
+        ("test_filesystem_helper", "test_filesystem_helper.cpp"): {},
+        ("test_filesystem_helper_std", "test_filesystem_helper_std.cpp"): {},
+        ("test_find_and_replace", "test_find_and_replace.cpp"): {},
+        ("test_pointer_traits", "test_pointer_traits.cpp"): {},
+        ("test_process", "test_process.cpp"): {},
+        ("test_endian", "test_endian.cpp"): {},
+        ("test_library", "test_library.cpp"): {},
+        ("test_find_library", "test_find_library.cpp"): {},
+        ("test_accumulator", "test_accumulator.cpp"): {},
+        ("test_unique_lock", "test_unique_lock.cpp"): {},
     }.items()
 ]

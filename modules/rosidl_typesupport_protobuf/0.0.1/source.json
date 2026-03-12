@@ -4,7 +4,7 @@
     "strip_prefix": "rosidl_typesupport_protobuf-0.0.1/rosidl_typesupport_protobuf",
     "overlay": {
         "BUILD.bazel": "sha256-yqSMZZrPRNbHl1ZQGN8hWdLc6y6ztVmMA9GwblVUyfw=",
-        "MODULE.bazel": "sha256-vqDZAa3Bg3bhF7cr5bdpF9rNsa9dUjZ90Y+7rb9dOAg="
+        "MODULE.bazel": "sha256-J+zvYnCN5SuaG1J93XXIcYJiXf+diVUchlCmwI0mQjU="
     },
     "patches": {
         "fix_CMakeLists_txt.patch": "sha256-iuyiDKmCvisGW91N406iQdsHVg2t5/6hOeYBcuDXwok=",

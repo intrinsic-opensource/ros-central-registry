@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +14,8 @@
 
 # Imports
 
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
 load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -37,19 +35,22 @@ cc_library(
     srcs = glob(["src/**/*.cpp"]),
     hdrs = glob([
         "include/**/*.h",
-        "include/**/*.hpp"
+        "include/**/*.hpp",
     ]),
     includes = ["include"],
+    linkopts = [
+        "-ldl",
+        "-rdynamic",
+    ],
     local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_dds_common\\\""],
-    linkopts = ["-ldl", "-rdynamic"],
     deps = [
+        ":cc_msgs",
         "@rcpputils",
         "@rcutils",
         "@rmw",
         "@rmw_security_common",
         "@rosidl_runtime_c",
         "@rosidl_runtime_cpp",
-        ":cc_msgs",
     ],
 )
 
@@ -57,9 +58,12 @@ cc_library(
 
 cc_test(
     name = "benchmark_graph_cache",
+    timeout = "short",
     srcs = ["test/benchmark/benchmark_graph_cache.cpp"],
     includes = ["include"],
+    tags = ["manual"],
     deps = [
+        ":rmw_dds_common",
         "@google_benchmark//:benchmark_main",
         "@osrf_testing_tools_cpp//:memory_tools",
         "@performance_test_fixture",
@@ -68,20 +72,20 @@ cc_test(
         "@rmw_security_common",
         "@rosidl_runtime_c",
         "@rosidl_runtime_cpp",
-        ":rmw_dds_common",
     ],
-    timeout = "short",
 )
 
 [
     cc_test(
         name = test,
-        visibility = ["//visibility:public"],
+        timeout = "short",
         srcs = [
             "test/allocator_testing_utils.h",
-            "test/" + test + ".cpp"
+            "test/" + test + ".cpp",
         ],
+        visibility = ["//visibility:public"],
         deps = [
+            ":rmw_dds_common",
             "@googletest//:gtest",
             "@googletest//:gtest_main",
             "@osrf_testing_tools_cpp//:memory_tools",
@@ -91,9 +95,7 @@ cc_test(
             "@rmw_security_common",
             "@rosidl_runtime_c",
             "@rosidl_runtime_cpp",
-            ":rmw_dds_common",
         ],
-        timeout = "short"
     )
     for test in [
         "test_gid_utils",

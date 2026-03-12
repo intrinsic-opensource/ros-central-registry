@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,14 +26,14 @@ cc_library(
         "src/*.cpp",
         "src/*.hpp",
     ]),
-    local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_cyclonedds_cpp\\\""],
     copts = ["-fvisibility=hidden"],
     linkopts = ["-fvisibility=hidden"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_cyclonedds_cpp\\\""],
     deps = [
         "@cyclonedds",
         "@rcpputils",
-        "@rmw_dds_common",
         "@rmw",
+        "@rmw_dds_common",
         "@rosidl_runtime_cpp",
         "@rosidl_typesupport_introspection_c",
         "@rosidl_typesupport_introspection_cpp",

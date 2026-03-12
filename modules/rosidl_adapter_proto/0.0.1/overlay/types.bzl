@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +13,10 @@
 # limitations under the License.
 
 RosProtoInfo = provider(
-    "Encapsulates protobuf information generated for an underlying IDL.", 
+    "Encapsulates protobuf information generated for an underlying IDL.",
     fields = [
         "protos",
         "proto_info",
-        "cc_info"
-    ]
+        "cc_info",
+    ],
 )

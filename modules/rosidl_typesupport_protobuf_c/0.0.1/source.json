@@ -4,9 +4,9 @@
     "strip_prefix": "rosidl_typesupport_protobuf-0.0.1/rosidl_typesupport_protobuf_c",
     "overlay": {
         "BUILD.bazel": "sha256-WlI2oG00ynLKZhO1QC7ADjjLs26aA9BGxT6PPnftCNY=",
-        "MODULE.bazel": "sha256-Zdfeu85raXoK9j75x306R8WoKCYqvKcCwIDGJawUnHs=",
-        "aspects.bzl": "sha256-Z/I8BoCM79kmihyd0ZSeOBwlFLXiSomz1/Nb+9jtimE=",
-        "types.bzl": "sha256-8G0GgjZJjFnx3+/xN+BE6niBELrqL5qE2q6K/Z5yCRY="
+        "MODULE.bazel": "sha256-IVYMDProzNuEFDsUxp1dkTcRRBM7cNDbqB2Guy9191A=",
+        "aspects.bzl": "sha256-Uax+J0Cronh4StBBR9lHltEdcmMem4TQUs0Frgn6y8M=",
+        "types.bzl": "sha256-Dav7sXwLGcYtzfiW8zhR/MBPqnIFM2aoF0Emss35ZyA="
     },
     "patches": {
         "fix_CMakeLists_txt.patch": "sha256-vN5Omo0wi2VV7AT8ged26RNW/MKHyXoXFPQ6KR+HQ+Q=",

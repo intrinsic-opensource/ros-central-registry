@@ -3,7 +3,7 @@
     "integrity": "sha256-y+J3C5tBfL2BSS9/pGTyh2NIazEEwp7XGZ8oIeHCM0k=",
     "strip_prefix": "rcl_interfaces-2.4.1/statistics_msgs",
     "overlay": {
-        "MODULE.bazel": "sha256-MnGvL8mmhCPj1K4w7H6hgEdkuhEJjUmgklHUKeRPB2U=",
-        "msg/BUILD.bazel": "sha256-3ZxMOCCjxlvcBxA63RUW1YGHvHTd7OSDN056VcuZinc="
+        "MODULE.bazel": "sha256-Y3cP8ul+aQsWTQkcg7VD+jh2Q2hIOcj0XfzTizagfVE=",
+        "msg/BUILD.bazel": "sha256-CInR4YMOaeSnS87TRNM4O8A5z4qTNWz+HVKCkTnGmG4="
     }
 }

@@ -3,6 +3,6 @@
     "integrity": "sha256-4RPVCpaFsWIhxV46J+oUyni25mMUT+e1ROpcMMiXmMs=",
     "strip_prefix": "common_interfaces-5.8.1/sensor_msgs_py",
     "overlay": {
-        "MODULE.bazel": "sha256-vNcPVrAjwJixiWqER6fHI7lqxg62wtAwyp5KwKNMXBA="
+        "MODULE.bazel": "sha256-SjhwRs9HCz9TuiE8vT5HVl5+eKXiByP1qvxXbxVaKSY="
     }
 }

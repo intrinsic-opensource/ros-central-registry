@@ -3,8 +3,8 @@
     "integrity": "sha256-7CketqdN8N+NcU/mU2L0+aUJLDgmVvuUjjEMvUMy3RU=",
     "strip_prefix": "libstatistics_collector-2.1.1",
     "overlay": {
-        "BUILD.bazel": "sha256-WGqLkYOTuXXXlec5aXj9AmjIGa0fDDzc6VLn6eLEtO8=",
-        "MODULE.bazel": "sha256-dsSg2AWDK2WlJ+KY2YYWOcToVPT/WeZM8YpYy4ilzyk=",
+        "BUILD.bazel": "sha256-yztzUOyBzIfWFpBoN1ErcQbi86pako/+3dUciC3Ve48=",
+        "MODULE.bazel": "sha256-33AesJD1dA7BKFnyLl9Kcl/8IDGpTWlti73rzdECe8I=",
         "test/msg/BUILD.bazel": "sha256-TjjWtL7PdX2VcUkt5Hns+Wcft9Nf+C8D+0Mh3RWxdAA="
     }
 }

@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,20 +22,26 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "rmw_fastrtps_dynamic_cpp",
-    hdrs = glob(["include/**/*.hpp","include/**/*.h"]),
-    srcs = glob(["src/**/*.hpp", "src/**/*.cpp"]),
-    includes = ["include"],
-    local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_fastrtps_dynamic_cpp\\\""],
+    srcs = glob([
+        "src/**/*.hpp",
+        "src/**/*.cpp",
+    ]),
+    hdrs = glob([
+        "include/**/*.hpp",
+        "include/**/*.h",
+    ]),
     copts = ["-fvisibility=hidden"],
+    includes = ["include"],
     linkopts = ["-fvisibility=hidden"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rmw_fastrtps_dynamic_cpp\\\""],
     deps = [
         "@fastcdr",
         "@fastdds",
         "@rcpputils",
         "@rcutils",
+        "@rmw",
         "@rmw_dds_common",
         "@rmw_fastrtps_shared_cpp",
-        "@rmw",
         "@rosidl_runtime_c",
         "@rosidl_typesupport_introspection_c",
         "@rosidl_typesupport_introspection_cpp",

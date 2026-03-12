@@ -4,6 +4,6 @@
     "strip_prefix": "pluginlib-5.7.0",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-sKdG4mVI/HmxI1RngyhPH8uqEJFcRIvcIO6BNOBi0tU="
+        "MODULE.bazel": "sha256-Yvthuo7IhPLQorZ8OXBPsZJ2DS3CpOyjs94tdYvvf4M="
     }
 }

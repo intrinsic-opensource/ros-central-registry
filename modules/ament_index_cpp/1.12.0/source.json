@@ -3,9 +3,9 @@
     "integrity": "sha256-uyBCdwdodHJbBFUFqdWYL3Pu1PLn4TzbFsIa4Lsr2s8=",
     "strip_prefix": "ament_index-1.12.0/ament_index_cpp",
     "overlay": {
-        "BUILD.bazel": "sha256-WzVTyI+c0RYr5R/L55jrSUOGdTXr32McdsqoFNX98C8=",
-        "MODULE.bazel": "sha256-iiSinuQUTq48JwSaiZNqx3oYY3hzzM7okwvtlijIvBs=",
-        "rules.bzl": "sha256-7gigf48SA52plAWy5qbBupt1fg5EX+cIrhT3eNHiCcA="
+        "BUILD.bazel": "sha256-x/jLUlekk9Y3F+gvoZUKvRapUnU8yIMrOq0PfVVjVXs=",
+        "MODULE.bazel": "sha256-kZeM7zP4D5qGhobFxx1dwWboGIgjydl3KUbBGQ7mTsg=",
+        "rules.bzl": "sha256-GgaptKGVkWok1sEQ35ABvfu2KYaNv07a339+SxjiSew="
     },
     "patches": {
         "fix_src_get_search_paths_cpp.patch": "sha256-4B3wXSQ45UG5QzwrnD6CckdUmmVzIy4JdLY3SuL/joE=",

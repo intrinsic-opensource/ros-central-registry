@@ -4,10 +4,10 @@
     "strip_prefix": "rosidl_typesupport-3.4.0/rosidl_typesupport_c",
     "overlay": {
         "BUILD.bazel": "sha256-05h+r+VVZzZhTUf4B8meU54x2DStVinzXn6ygI8jCZE=",
-        "MODULE.bazel": "sha256-t7kD/Hxn3jKOco31HHiDz+ypCLZ2776HDSWFBzCiXFo=",
-        "aspects.bzl": "sha256-Yy+r0SvJrT2tWo/a8x85j5o8iQA+EJRFAlyjMCBpvyw=",
+        "MODULE.bazel": "sha256-aqyjuKjxY/bpgfax2BffwFsgjIh9qGFDNwNmO+tdDHs=",
+        "aspects.bzl": "sha256-V540xZKDx9EjCaI5Qyg2EawdwfVxaAtDyoXBhSo9l0E=",
         "test/msg/BUILD.bazel": "sha256-NhnmF46oqekjTeWGFclssilTZBsyI+c8XAvUSMygdR4=",
-        "types.bzl": "sha256-Tn96ZDenEnbacC4vFnN+jq3j3q8egaHPKtHb612IJuk="
+        "types.bzl": "sha256-jYi6QSg/RdfoEF8ovF+j0vP7Vg5qljjEqqYGMWv9Ots="
     },
     "patches": {
         "fix_resource_msg__type_support_cpp_em.patch": "sha256-Id9GdqyHVcXTaH1011bxRu25QLvbTDATpxuXu43qXyY=",

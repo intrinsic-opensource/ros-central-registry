@@ -4,6 +4,6 @@
     "strip_prefix": "rclcpp-30.0.0/rclcpp_components",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-OXNi6wC6Oau/xy1Kvr5i4cVQO2s820fwwIx35TnKFBY="
+        "MODULE.bazel": "sha256-5c5HBBjODoJt4SJThf5UxvY2nvLuJrDL9rkiysvEkxM="
     }
 }

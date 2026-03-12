@@ -3,7 +3,7 @@
     "integrity": "sha256-b2aDhAH6pxOUh8YFXgyZH3p/bHL/xkqUlx5niylTQ3I=",
     "strip_prefix": "unique_identifier_msgs-2.8.0",
     "overlay": {
-        "MODULE.bazel": "sha256-io7tY2aEZTO3cm4EZqxrViKCEU1/rivpRjbL4VKhneQ=",
+        "MODULE.bazel": "sha256-OodtWm+UwuUPZ5/g09o3pnK+RBov9BvAtQFNBN/2iqs=",
         "msg/BUILD.bazel": "sha256-PoGzJAz0tLSSQ1KiDfRV93HVyl8hzFD8RUVkvg/bRmQ="
     }
 }

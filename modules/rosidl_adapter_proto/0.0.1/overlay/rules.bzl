@@ -13,18 +13,18 @@
 # limitations under the License.
 
 load("@protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
-load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
 load("@rosidl_adapter//:aspects.bzl", "rosidl_adapter_aspect")
+load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
 load("@rosidl_generator_type_description//:aspects.bzl", "rosidl_generator_type_description_aspect")
 load(":aspects.bzl", "rosidl_adapter_proto_aspect")
-load(":types.bzl", "RosProtoInfo")
 load(":tools.bzl", "merge_proto_infos")
+load(":types.bzl", "RosProtoInfo")
 
 def _proto_ros_library_impl(ctx):
     proto_info, _ = merge_proto_infos(
         ctx = ctx,
         name = ctx.label.name,
-        deps = ctx.attr.deps
+        deps = ctx.attr.deps,
     )
     proto_files = []
     for dep in ctx.attr.deps:
@@ -50,7 +50,6 @@ proto_ros_library = rule(
     },
     provides = [
         ProtoInfo,
-        DefaultInfo
+        DefaultInfo,
     ],
 )
-

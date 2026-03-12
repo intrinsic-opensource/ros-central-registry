@@ -19,6 +19,6 @@ RosPyBindingsInfo = provider(
         "transitive_sources",  # generated .py interface code
         "imports",  # import path for generated code
         "dynamic_libraries",  # shared libraries for c typesupport
-        "linker_inputs", # all deps required by the extension
+        "linker_inputs",  # all deps required by the extension
     ],
 )

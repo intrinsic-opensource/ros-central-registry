@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,26 +36,26 @@ cc_library(
 
 cc_test(
     name = "benchmark_logging_interface",
+    timeout = "short",
     srcs = ["test/benchmark/benchmark_logging_interface.cpp"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_spdlog\\\""],
+    tags = ["manual"],
     deps = [
+        ":rcl_logging_spdlog",
         "@google_benchmark//:benchmark_main",
         "@osrf_testing_tools_cpp//:memory_tools",
         "@performance_test_fixture",
-        ":rcl_logging_spdlog",
     ],
-    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_spdlog\\\""],
-    timeout = "short",
 )
 
 cc_test(
     name = "test_logging_interface",
+    timeout = "short",
     srcs = ["test/test_logging_interface.cpp"],
+    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_spdlog\\\""],
     deps = [
+        ":rcl_logging_spdlog",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
-        ":rcl_logging_spdlog",
     ],
-    local_defines = ["ROS_PACKAGE_NAME=\\\"rcl_logging_spdlog\\\""],
-    timeout = "short"
 )
-

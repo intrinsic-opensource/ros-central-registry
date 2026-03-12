@@ -3,7 +3,7 @@
     "integrity": "sha256-TSUAVI2+hRv0LVlqNmnsTbzkm74bvMhEEIcmZK+zDW0=",
     "strip_prefix": "rosidl-5.0.0/rosidl_typesupport_interface",
     "overlay": {
-        "BUILD.bazel": "sha256-Osgr6c9Ps5YSEPLZHoJPsK2ccydT3G5Z/wlY+CW1McU=",
-        "MODULE.bazel": "sha256-XRuc7azk1uwJ1hxRrn7e/pkYIMuGq16rqXZv6sTg1H4="
+        "BUILD.bazel": "sha256-OUxDcc3Oo+6yE198b2SW3VIuGGnsVd5qlA4LMHJ0wwk=",
+        "MODULE.bazel": "sha256-FOM6OEmzNMv/D+W2Cc/XyhVTK0pQSqKkmZbis6iszsE="
     }
 }

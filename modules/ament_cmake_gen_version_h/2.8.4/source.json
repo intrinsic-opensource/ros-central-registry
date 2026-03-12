@@ -4,8 +4,8 @@
     "strip_prefix": "ament_cmake-2.8.4/ament_cmake_gen_version_h",
     "overlay": {
         "BUILD.bazel": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "MODULE.bazel": "sha256-3p8P++U/MECxgIefi4vzW4akSefs/LYUClMk1X0ZkV8=",
-        "cmake/BUILD.bazel": "sha256-8VZva1anrzetf2bUaU5nRGRHkCcaayM9pQU0Ri+1X6c=",
-        "macros.bzl": "sha256-3vZLLdIuWnfTOQ+85QP9ZHRaQ6BrelO/IGvWov9nvb4="
+        "MODULE.bazel": "sha256-yGxxJ1iinne0fyKYrbBnYYMYurhqcRNcWtNt01UA+co=",
+        "cmake/BUILD.bazel": "sha256-m/Wkf06UeezeixBYNc5gG28/csxTnhcPdNT4Es2h/zs=",
+        "macros.bzl": "sha256-XLaHgZTmBz4a4YrqOx4/Jx2GXmpJATDuPnT4/55baMY="
     }
 }

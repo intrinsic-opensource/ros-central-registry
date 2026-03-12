@@ -4,7 +4,7 @@
     "strip_prefix": "rclpy-9.2.0/rclpy",
     "overlay": {
         "BUILD.bazel": "sha256-wP8WyCDoznNJWzC6DH/7AwCQv6VeVGRnho5FP1rgElo=",
-        "MODULE.bazel": "sha256-6Zr2CPhrP73HkwueEnjXbFF4qemcD8eoSMLW/mNElds="
+        "MODULE.bazel": "sha256-dKtl9RNS8A0YSSxGk5GPeQwwmAiQJ+RSek4BIVhEEKI="
     },
     "patches": {
         "fix_rclpy_impl_implementation_singleton_py.patch": "sha256-8wfVvz17qeennwI27WE27WIeV0K6godfg1FMgKJ2jl0="

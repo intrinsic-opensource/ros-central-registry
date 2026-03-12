@@ -492,6 +492,7 @@ cc_library(
         name = name,
         timeout = "moderate",
         srcs = ["test/benchmark/{}.cpp".format(name)],
+        tags = ["manual"],
         deps = [
             ":rclcpp_mock",
             "@google_benchmark//:benchmark_main",

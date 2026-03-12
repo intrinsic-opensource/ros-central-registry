@@ -13,10 +13,10 @@
 # limitations under the License.
 
 RosCTypesupportIntrospectionInfo = provider(
-    "Encapsulates type support information for C introspection.", 
+    "Encapsulates type support information for C introspection.",
     fields = [
         "cc_info",
         "dynamic_libraries",
         "linker_inputs",
-    ]
+    ],
 )

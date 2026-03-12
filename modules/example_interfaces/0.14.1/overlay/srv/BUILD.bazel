@@ -22,7 +22,7 @@ package(default_visibility = ["//visibility:public"])
         src = name + ".srv",
         deps = [
             # Required for all services
-            "@service_msgs//msg:ServiceEventInfo"
+            "@service_msgs//msg:ServiceEventInfo",
         ],
     )
     for name in [

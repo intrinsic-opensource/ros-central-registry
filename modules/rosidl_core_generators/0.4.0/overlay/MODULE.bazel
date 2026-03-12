@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "rosidl_core_generators",
     version = "0.4.0",

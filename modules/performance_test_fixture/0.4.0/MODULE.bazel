@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Package information
-        
+
 module(
     name = "performance_test_fixture",
     version = "0.4.0",
@@ -25,4 +25,4 @@ module(
 bazel_dep(name = "google_benchmark", version = "1.9.4")
 bazel_dep(name = "osrf_testing_tools_cpp", version = "2.3.0")
 bazel_dep(name = "rosidl_cmake", version = "5.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_cc", version = "0.2.17")

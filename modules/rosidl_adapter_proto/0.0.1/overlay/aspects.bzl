@@ -1,4 +1,3 @@
-
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +14,14 @@
 
 load("@protobuf//bazel/common:proto_common.bzl", "proto_common")
 load("@protobuf//bazel/private:cc_proto_support.bzl", "cc_proto_compile_and_link")
+load("@rosidl_adapter//:tools.bzl", "generate_sources")
+load("@rosidl_adapter//:types.bzl", "RosIdlInfo")
+load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
+load("@rosidl_generator_type_description//:types.bzl", "RosTypeDescriptionInfo")
 load("@rules_cc//cc:defs.bzl", "CcInfo")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
-load("@rosidl_cmake//:types.bzl", "RosInterfaceInfo")
-load("@rosidl_adapter//:types.bzl", "RosIdlInfo")
-load("@rosidl_adapter//:tools.bzl", "generate_sources")
-load("@rosidl_generator_type_description//:types.bzl", "RosTypeDescriptionInfo")
-load(":types.bzl", "RosProtoInfo")
 load(":tools.bzl", "merge_proto_infos")
+load(":types.bzl", "RosProtoInfo")
 
 def _rosidl_adapter_proto_aspect_impl(target, ctx):
     package_name = target[RosIdlInfo].package_name
@@ -57,9 +56,11 @@ def _rosidl_adapter_proto_aspect_impl(target, ctx):
     # The files that are produced by the proto compiler will end up relative to the
     # proto_path specified in the proto_info. So, let's expect them there...
     output_proto_h = ctx.actions.declare_file(
-        "{}/{}/{}/{}.pb.h".format(proto_path, package_name, message_type, message_name))
+        "{}/{}/{}/{}.pb.h".format(proto_path, package_name, message_type, message_name),
+    )
     output_proto_cc = ctx.actions.declare_file(
-        "{}/{}/{}/{}.pb.cc".format(proto_path, package_name, message_type, message_name))
+        "{}/{}/{}/{}.pb.cc".format(proto_path, package_name, message_type, message_name),
+    )
 
     # Create the C++ interface for this specific proto. You might think that doing this
     # here is a bit strange, because if this target exports a ProtoInfo, then any rule
@@ -73,7 +74,7 @@ def _rosidl_adapter_proto_aspect_impl(target, ctx):
         proto_lang_toolchain_info = proto_toolchain,
         generated_files = [
             output_proto_h,
-            output_proto_cc
+            output_proto_cc,
         ],
         experimental_output_files = "multiple",
     )
@@ -106,7 +107,7 @@ def _rosidl_adapter_proto_aspect_impl(target, ctx):
             proto_info = proto_info,
             cc_info = cc_info,
         ),
-        cc_info # Required because of the way deps work with 
+        cc_info,  # Required because of the way deps work with
     ]
 
 rosidl_adapter_proto_aspect = aspect(
@@ -138,4 +139,3 @@ rosidl_adapter_proto_aspect = aspect(
     ],
     provides = [RosProtoInfo, CcInfo],
 )
-
