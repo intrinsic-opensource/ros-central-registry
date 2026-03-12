@@ -38,6 +38,7 @@ cc_library(
 # TODO(asymingt) work out why test_parameter fails on:
 # > rmw_cyclonedds_cpp
 # > rmw_fastrtps_dynamic_cpp
+# > rmw_zenoh_cpp
 cc_test(
     name = "test_parameter",
     srcs = ["test/rclc_parameter/test_parameter.cpp"],
@@ -46,6 +47,7 @@ cc_test(
     target_compatible_with = select({
         "@rmw_implementation//:rmw_fastrtps_dynamic_cpp": ["@platforms//:incompatible"],
         "@rmw_implementation//:rmw_cyclonedds_cpp": ["@platforms//:incompatible"],
+        "@rmw_implementation//:rmw_zenoh_cpp": ["@platforms//:incompatible"],
         "//conditions:default": [],
     }),
     deps = [
