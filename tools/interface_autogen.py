@@ -129,7 +129,10 @@ def is_constant_definition(line):
 def map_package_interfaces(package_root):
     """Scan the package root for all interface files and map Type -> RelDir."""
     interface_map = {}
-    for root, _, files in os.walk(package_root):
+    for root, dirs, files in os.walk(package_root):
+        # Skip directories containing "ros1"
+        if "ros1" in root:
+            continue
         for filename in files:
             name, ext = os.path.splitext(filename)
             if ext in INTERFACE_EXTENSIONS:
@@ -138,6 +141,33 @@ def map_package_interfaces(package_root):
                     rel_dir = ""
                 interface_map[name] = rel_dir
     return interface_map
+
+
+def detect_rosidl_runtime(package_dir):
+    """Detect which ROS IDL runtime to use by parsing MODULE.bazel.
+
+    Args:
+        package_dir: Root directory of the package.
+
+    Returns:
+        The Bazel label for the runtime (e.g., "@rosidl_core_runtime//:defs.bzl").
+    """
+    module_bazel = os.path.join(package_dir, "MODULE.bazel")
+    if os.path.exists(module_bazel):
+        with open(module_bazel, "r") as f:
+            content = f.read()
+            # Look for bazel_dep(name = "rosidl_core_runtime"
+            if re.search(r'bazel_dep\(\s*name\s*=\s*["\']rosidl_core_runtime["\']', content):
+                return "@rosidl_core_runtime//:defs.bzl"
+            # Look for bazel_dep(name = "rosidl_default_runtime"
+            if re.search(r'bazel_dep\(\s*name\s*=\s*["\']rosidl_default_runtime["\']', content):
+                return "@rosidl_default_runtime//:defs.bzl"
+            # Look for bazel_dep(name = "rosidl_default_generators"
+            if re.search(r'bazel_dep\(\s*name\s*=\s*["\']rosidl_default_generators["\']', content):
+                return "@rosidl_default_generators//:defs.bzl"
+
+    # Default to rosidl_default_runtime if unknown.
+    return "@rosidl_default_runtime//:defs.bzl"
 
 
 def extract_dependencies(filepath, package_root, interface_map):
@@ -150,6 +180,25 @@ def extract_dependencies(filepath, package_root, interface_map):
         filepath: Path to the interface file (.msg, .srv, .action, .idl).
         package_root: Root directory of the ROS package.
         interface_map: Dict mapping interface names to their relative directories.
+
+    Returns:
+        A sorted list of unique dependency strings.
+    """
+    return extract_dependencies_v2(filepath, package_root, interface_map, "", {})
+
+
+def extract_dependencies_v2(filepath, package_root, interface_map, current_pkg_name, global_interface_map):
+    """Parse a ROS 2 interface file and extract external and internal dependencies.
+
+    Reads the interface file line by line, skipping comments, blank lines,
+    section separators (---), and constant definitions.
+
+    Args:
+        filepath: Path to the interface file (.msg, .srv, .action, .idl).
+        package_root: Root directory of the ROS package.
+        interface_map: Dict mapping interface names to their relative directories.
+        current_pkg_name: Name of the current package being processed.
+        global_interface_map: Dict mapping package names to their interface maps.
 
     Returns:
         A sorted list of unique dependency strings.
@@ -183,11 +232,34 @@ def extract_dependencies(filepath, package_root, interface_map):
             # Check for external package reference (contains '/').
             if "/" in type_str:
                 pkg_name, msg_name = type_str.split("/", 1)
-                # The dep target points to the msg subdir of the external
-                # package. We always use "msg" as the subdirectory for the
-                # target since that's where message types are defined,
-                # regardless of whether the *using* file is a .srv or .action.
-                dep = f"@{pkg_name}//msg:{msg_name}"
+                
+                # Bug 1 fix: If pkg_name is the current package, treat it as internal.
+                # Strip trailing "+" from current_pkg_name for comparison.
+                if pkg_name == current_pkg_name.rstrip("+"):
+                    if msg_name in interface_map:
+                        target_dir = interface_map[msg_name]
+                        if target_dir == rel_current_dir:
+                            dep = f":{msg_name}"
+                        else:
+                            path = target_dir.replace(os.sep, "/")
+                            dep = f"//{path}:{msg_name}"
+                        deps.add(dep)
+                    continue
+
+                # Bug 2 fix: Consult global_interface_map for the correct subdirectory.
+                # Default to "msg" if not found.
+                target_sub_dir = "msg"
+                if pkg_name in global_interface_map:
+                    pkg_interface_map = global_interface_map[pkg_name]
+                    if msg_name in pkg_interface_map:
+                        target_sub_dir = pkg_interface_map[msg_name]
+                        if not target_sub_dir:
+                            # Root of the package
+                            dep = f"@{pkg_name}//:{msg_name}"
+                            deps.add(dep)
+                            continue
+                
+                dep = f"@{pkg_name}//{target_sub_dir}:{msg_name}"
                 deps.add(dep)
             elif type_str not in PRIMITIVE_TYPES:
                 # Internal dependency - resolve the label based on its location
@@ -223,8 +295,6 @@ def find_interface_files(directory):
     for entry in os.listdir(directory):
         filepath = os.path.join(directory, entry)
         if os.path.isfile(filepath):
-            if "ros1" in entry.lower():
-                continue
             _, ext = os.path.splitext(entry)
             if ext in INTERFACE_EXTENSIONS:
                 interface_files.append(entry)
@@ -244,9 +314,15 @@ def generate_build_target(filename, filepath, package_root, interface_map):
     Returns:
         A string containing the Bazel rule definition.
     """
+    return generate_build_target_v2(filename, filepath, package_root, interface_map, "", {})
+
+
+def generate_build_target_v2(filename, filepath, package_root, interface_map, current_pkg_name, global_interface_map):
+    """Generate a single Bazel rule string for an interface file.
+    """
     name, ext = os.path.splitext(filename)
     rule_name = EXTENSION_TO_RULE[ext]
-    deps = extract_dependencies(filepath, package_root, interface_map)
+    deps = extract_dependencies_v2(filepath, package_root, interface_map, current_pkg_name, global_interface_map)
 
     lines = []
     lines.append(f"{rule_name}(")
@@ -279,6 +355,12 @@ def generate_build_file(interface_dir, package_root, interface_map):
         The complete BUILD.bazel file content as a string, or None if no
         interface files were found.
     """
+    return generate_build_file_v2(interface_dir, package_root, interface_map, "", {}, "@rosidl_default_runtime//:defs.bzl")
+
+
+def generate_build_file_v2(interface_dir, package_root, interface_map, current_pkg_name, global_interface_map, runtime_bzl):
+    """Generate the complete BUILD.bazel content for a directory.
+    """
     files = find_interface_files(interface_dir)
     if not files:
         return None
@@ -306,7 +388,7 @@ def generate_build_file(interface_dir, package_root, interface_map):
     sorted_rules = sorted(needed_rules)
     rule_list = ", ".join(f'"{r}"' for r in sorted_rules)
     parts.append(
-        f'load("@rosidl_default_runtime//:defs.bzl", {rule_list})\n'
+        f'load("{runtime_bzl}", {rule_list})\n'
     )
 
     # Package default visibility.
@@ -319,8 +401,8 @@ def generate_build_file(interface_dir, package_root, interface_map):
     targets = []
     for filename in files:
         filepath = os.path.join(interface_dir, filename)
-        targets.append(generate_build_target(
-            filename, filepath, package_root, interface_map))
+        targets.append(generate_build_target_v2(
+            filename, filepath, package_root, interface_map, current_pkg_name, global_interface_map))
 
     parts.append("\n\n".join(targets))
     parts.append("")  # Trailing newline.
@@ -379,22 +461,32 @@ def process_directory(base_dir, subdirs=None):
     base_dir = os.path.abspath(base_dir)
     generated_count = 0
 
+    # First pass: Build global interface map for all packages.
+    global_interface_map = {}
     for package_dir in dirs_to_process:
         package_name = os.path.basename(package_dir)
-        interface_map = map_package_interfaces(package_dir)
+        global_interface_map[package_name] = map_package_interfaces(package_dir)
+
+    for package_dir in dirs_to_process:
+        package_name = os.path.basename(package_dir)
+        interface_map = global_interface_map[package_name]
 
         # Collect all unique directories containing interface files within the package.
-        unique_dirs = sorted(set(interface_map.values()))
+        unique_dirs = sorted(set(
+            d for d in interface_map.values() if "ros1" not in d
+        ))
 
         for rel_dir in unique_dirs:
             # Skip the package root here; it's handled separately below.
             if not rel_dir:
                 continue
 
-            interface_path = os.path.join(package_dir, rel_dir)
+            runtime_bzl = detect_rosidl_runtime(package_dir)
 
-            content = generate_build_file(
-                interface_path, package_dir, interface_map)
+            interface_path = os.path.join(package_dir, rel_dir)
+            
+            content = generate_build_file_v2(
+                interface_path, package_dir, interface_map, package_name, global_interface_map, runtime_bzl)
             if content is None:
                 continue
 
@@ -408,7 +500,8 @@ def process_directory(base_dir, subdirs=None):
 
         # Also check if the package directory itself contains interface files
         # (not in a msg/srv/action subdirectory).
-        content = generate_build_file(package_dir, package_dir, interface_map)
+        runtime_bzl = detect_rosidl_runtime(package_dir)
+        content = generate_build_file_v2(package_dir, package_dir, interface_map, package_name, global_interface_map, runtime_bzl)
         if content is not None:
             build_file = os.path.join(package_dir, "BUILD.bazel")
             # Only write if there isn't already a BUILD.bazel for this dir
