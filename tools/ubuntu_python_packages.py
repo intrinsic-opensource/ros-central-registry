@@ -90,6 +90,10 @@ def strip_debian_version(version: str) -> str:
     version = re.split(r"\+(?:dfsg|ds|git|really|repack|nmu|b\d)", version)[0]
     # Strip any remaining +<suffix> that isn't part of a normal version.
     version = re.split(r"\+[a-zA-Z]", version)[0]
+    # Strip Debian pre-release tilde suffixes (e.g. 1.2.3~rc1 -> 1.2.3).
+    version = version.split("~")[0]
+    # Strip any trailing plus or minus signs.
+    version = version.rstrip("+-")
     return version
 
 
@@ -134,8 +138,10 @@ def parse_packages(data: bytes) -> Dict[str, str]:
             # End of stanza — process if it's a python3-* package.
             if (current_package and current_version
                     and current_package.startswith("python3-")):
-                pip_name = current_package[len("python3-"):]
-                upstream = strip_debian_version(current_version)
+                pip_name = current_package[len("python3-"):].strip()
+                # Strip ++ from name (e.g. getfem++ -> getfem)
+                pip_name = pip_name.replace("++", "")
+                upstream = strip_debian_version(current_version.strip())
                 # Keep the entry with the higher version if duplicated.
                 if pip_name not in packages or packages[pip_name] < upstream:
                     packages[pip_name] = upstream
@@ -145,8 +151,9 @@ def parse_packages(data: bytes) -> Dict[str, str]:
     # Handle last stanza if file doesn't end with a blank line.
     if (current_package and current_version
             and current_package.startswith("python3-")):
-        pip_name = current_package[len("python3-"):]
-        upstream = strip_debian_version(current_version)
+        pip_name = current_package[len("python3-"):].strip()
+        pip_name = pip_name.replace("++", "")
+        upstream = strip_debian_version(current_version.strip())
         if pip_name not in packages or packages[pip_name] < upstream:
             packages[pip_name] = upstream
 

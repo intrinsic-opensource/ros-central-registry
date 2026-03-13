@@ -42,7 +42,6 @@ EXTENSION_TO_RULE = {
     ".msg": "ros_message",
     ".srv": "ros_service",
     ".action": "ros_action",
-    ".idl": "ros_idl",
 }
 
 # Extensions we care about.
