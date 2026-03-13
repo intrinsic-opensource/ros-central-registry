@@ -100,3 +100,18 @@ py_binary(
     name = "interface_autogen",
     srcs = ["interface_autogen.py"],
 )
+
+#### UBUNTU PYTHON PACKAGES TOOLING ######################################
+
+# Scrapes the Ubuntu snapshot archive for all python3-* packages available
+# for a given Ubuntu version on a given date, and writes them as pip-style
+# requirements (package==version) to an output file. Run in the following
+# way:
+# > bazel run //tools:ubuntu_python_packages -- \
+#   --ubuntu-version 24.04 \
+#   --date 2026-01-21 \
+#   --output $PWD/requirements.in
+py_binary(
+    name = "ubuntu_python_packages",
+    srcs = ["ubuntu_python_packages.py"],
+)
