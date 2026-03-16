@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@aspect_rules_py//py:defs.bzl", "py_binary")
+load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 load("@pip_ros_central_registry//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:public"])
@@ -114,4 +114,35 @@ py_binary(
 py_binary(
     name = "ubuntu_python_packages",
     srcs = ["ubuntu_python_packages.py"],
+)
+
+#### UBUNTU PYTHON PACKAGES TOOLING ######################################
+
+# Scrapes the Ubuntu snapshot archive for all python3-* packages available
+# for a given Ubuntu version on a given date, and writes them as pip-style
+# requirements (package==version) to an output file. Run in the following
+# way:
+# > bazel run //tools:ubuntu_python_packages -- \
+#   --ubuntu-version 24.04 \
+#   --date 2026-01-21 \
+#   --output $PWD/requirements.in
+
+py_library(
+    name = "bazelflore",
+    srcs = glob(["bazelflore/bazelflore/**/*.py"]),
+    imports = ["bazelflore"],
+    deps = [
+        requirement("requests"),
+        requirement("rosdistro"),
+        requirement("rosinstall_generator"),
+    ],
+)
+
+py_binary(
+    name = "bootstrap",
+    srcs = ["bazelflore/main.py"],
+    deps = [
+        ":bazelflore",
+        requirement("yaspin"),
+    ],
 )

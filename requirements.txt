@@ -756,7 +756,9 @@ starlette==0.52.1 \
 termcolor==3.3.0 \
     --hash=sha256:348871ca648ec6a9a983a13ab626c0acce02f515b9e1983332b17af7979521c5 \
     --hash=sha256:cf642efadaf0a8ebbbf4bc7a31cec2f9b5f21a9f726f4ccbb08192c9c26f43a5
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   yaspin
 typing-extensions==4.15.0 \
     --hash=sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466 \
     --hash=sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548
@@ -961,6 +963,10 @@ websockets==16.0 \
 xmltodict==1.0.4 \
     --hash=sha256:6d94c9f834dd9e44514162799d344d815a3a4faec913717a9ecbfa5be1bb8e61 \
     --hash=sha256:a4a00d300b0e1c59fc2bfccb53d7b2e88c32f200df138a0dd2229f842497026a
+    # via -r requirements.in
+yaspin==3.4.0 \
+    --hash=sha256:2a40572a38d39846d0df0a421733459481b7da17789f7a2618c3181bb0a82819 \
+    --hash=sha256:a83a81ac7a9d161e116fb668a7e4d10d87fb18d02b4b08a17b7e472f465f3c90
     # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:

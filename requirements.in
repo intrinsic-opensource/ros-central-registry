@@ -51,3 +51,4 @@ uvicorn
 watchfiles
 websockets
 xmltodict
+yaspin
