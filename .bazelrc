@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Augment the BCR with a few of our own modules in the docs folder.
-common --registry=https://bcr.bazel.build
+common --registry=file://%workspace% --registry=https://bcr.bazel.build
 
 # Remote cache.
 common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
@@ -31,8 +31,7 @@ common --incompatible_default_to_explicit_init_py
 # use the LD_LIBRARY_PATH. This makes builds robust to terminal refreshes.
 common --incompatible_strict_action_env
 
-# The zenoh tests must be allowed to contact the network to communicate with
-# the zenohd router, or else they will fail.
+# Many tests require networking to complete.
 test --sandbox_default_allow_network=true
 
 # Use C++17 standard by default across the whole repo.
@@ -43,13 +42,6 @@ build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
 
 # Tell Bazel to use the pre-compiled binary instead of building from source
 build --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
-
-# Build configuration for RMW implementations.
-#   --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
-#   --@rmw_implementation//:rmw=rmw_fastrtps_cpp
-#   --@rmw_implementation//:rmw=rmw_fastrtps_dynamic_cpp
-#   --@rmw_implementation//:rmw=rmw_zenoh_cpp
-build --@rmw_implementation//:rmw=rmw_fastrtps_cpp
 
 # ASAN
 build:asan --strip=never

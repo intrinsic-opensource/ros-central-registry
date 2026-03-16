@@ -115,29 +115,36 @@ def main():
             package_module.generate_module()
         sp.write("> Created package bazel modules")
 
-        # sp.write("> Creating rosdistro bazel module")
-        # rosdistro_module = RosdistroModule(
-        #     working_directory=args.working_directory,
-        #     bcr_sources=bcr_sources,
-        #     deb_sources=deb_sources,
-        #     ros_sources=ros_sources,
-        #     release_distro=args.ros_release_distro,
-        #     release_date=args.ros_release_date,
-        # )
-        # rosdistro_module.create_module()
-        # sp.write("> Created rosdistro bazel module")
+        sp.write("> Creating rosdistro bazel module")
+        rosdistro_module = RosdistroModule(
+            working_directory=args.working_directory,
+            bcr_sources=bcr_sources,
+            deb_sources=deb_sources,
+            ros_sources=ros_sources,
+            release_distro=args.ros_release_distro,
+            release_date=args.ros_release_date,
+        )
+        rosdistro_module.generate_module()
+        sp.write("> Created rosdistro bazel module")
     
-        # sp.write("> Creating ros bazel module")
-        # ros_module = RosModule(
-        #     working_directory=args.working_directory,
-        #     bcr_sources=bcr_sources,
-        #     deb_sources=deb_sources,
-        #     ros_sources=ros_sources,
-        #     release_distro=args.ros_release_distro,
-        #     release_date=args.ros_release_date,
-        # )
-        # ros_module.create_module()
-        # sp.write("> Created ros bazel module")
+        sp.write("> Creating ros bazel module")
+        ros_module = RosModule(
+            working_directory=args.working_directory,
+            bcr_sources=bcr_sources,
+            deb_sources=deb_sources,
+            ros_sources=ros_sources,
+            release_distro=args.ros_release_distro,
+            release_date=args.ros_release_date,
+        )
+        ros_module.generate_module()
+        sp.write("> Created ros bazel module")
+
+        sp.write("> Creating vendor file")
+        vendor_file = VendorFile(
+            working_directory=args.working_directory,
+        )
+        vendor_file.generate_file()
+        sp.write("> Created vendor file")
 
         sp.ok("✔")
 

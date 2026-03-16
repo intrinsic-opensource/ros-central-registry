@@ -20,7 +20,6 @@ import json
 import base64
 import hashlib
 import urllib
-from datetime import date
 from pathlib import Path
 from typing import Dict
 from bazelflore.sources.bcr import BcrSource
@@ -81,22 +80,6 @@ class Module:
         # Overlay and patch information.
         self.overlays = {}
         self.patches = {}
-
-    def get_copyright_header(self):
-        return """# Copyright {0} Open Source Robotics Foundation, Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.\n
-""".format(date.today().year)
 
     def _calculate_sha256_from_file(self, file_path):
         """Calculate a bazel sha256 hash from a file."""
@@ -223,7 +206,7 @@ class Module:
         """
         Generates the MODULE.bazel contents for the current Bazel module.
         """
-        ret = self.get_copyright_header()
+        ret = get_copyright_header()
         ret += "# ROS package information\n"
         ret += 'module(\n'
         ret += '    name = "{0}",\n'.format(self.module_name)
@@ -264,6 +247,14 @@ class Module:
                 # This means that we intentionally ignore this dep
                 return
             bcr_names.extend(ROS_TO_BAZEL_MAPPING[name])
+        elif name in self.ros_sources.keys():
+            # This avoid the next conditionals catching ROS packages
+            # incorrectly. Examples of the false matches would be:
+            # - boost_geometry_util
+            # - pcl_conversions
+            # - pcl_msgs
+            # - pcl_ros
+            pass
         elif name.startswith("libboost-") \
             or name.startswith("boost"):
             bcr_names.extend(BOOST_DEPS)

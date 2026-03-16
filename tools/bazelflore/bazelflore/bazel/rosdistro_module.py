@@ -18,6 +18,7 @@ Generic module creator for the "rosdistro" module.
 
 from pathlib import Path
 from typing import Dict
+from bazelflore.bazel.constants import get_copyright_header
 from bazelflore.bazel.module import Module
 from bazelflore.sources.bcr import BcrSource
 from bazelflore.sources.deb import DebSource
@@ -46,3 +47,6 @@ class RosdistroModule(Module):
                 release_distro, release_date),
             package_version="{0}.{1}".format(release_distro, release_date)
         )
+
+        # All packages must have an empty build file.
+        self.overlays["BUILD.bazel"] = get_copyright_header()
