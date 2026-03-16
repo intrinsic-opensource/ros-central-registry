@@ -24,6 +24,7 @@ from pathlib import Path
 from termcolor import COLORS, HIGHLIGHTS
 from yaspin import yaspin
 from yaspin.spinners import Spinners
+from bazelflore.bazel.constants import ROS_TO_BAZEL_MAPPING
 from bazelflore.bazel.package_module import PackageModule
 from bazelflore.bazel.ros_module import RosModule
 from bazelflore.bazel.rosdistro_module import RosdistroModule
@@ -90,7 +91,13 @@ def main():
         sp.write("> Collected info about {0} packages".format(len(ros_sources)))
 
         sp.write("> Creating Bazel modules for all ROS packages")
-        for pkg_name, pkg_info in ros_sources.items():
+        for pkg_name in sorted(ros_sources.keys()):
+            # We intentionally choose to skip some vendored packages in the BCR:
+            if pkg_name in ROS_TO_BAZEL_MAPPING and ROS_TO_BAZEL_MAPPING[pkg_name] is None:
+                sp.write("> Skipping vendored package {0}".format(pkg_name))
+                continue
+            # If we get here, we need to generate a package module for the current package.
+            pkg_info = ros_sources[pkg_name]
             sp.write("> Processing {0}".format(pkg_name))
             package_module = PackageModule(
                 working_directory=args.working_directory,
@@ -101,7 +108,7 @@ def main():
                 release_date=args.ros_release_date,
                 module_name=pkg_name,
                 module_version=pkg_info.version,
-                module_url=pkg_info.url
+                module_url=pkg_info.url,
             )
             for dep in pkg_info.dependencies:
                 package_module.add_dependency(dep)

@@ -41,15 +41,19 @@ class Module:
                  release_date: str,
                  module_name: str,
                  module_version: str,
-                 module_url : str):
+                 module_url : str,
+                 package_version: str):
         """
         Initialize the module.
         """
         
+        # This is the version of the generated package.
+        self.package_version = package_version
+
         # Destination directory structure.
         self.cache_dir = working_directory / ".cache"
         self.pkg_dir = working_directory / "modules" / module_name
-        self.version_dir = self.pkg_dir / module_version
+        self.version_dir = self.pkg_dir / package_version
         self.patches_dir = self.version_dir / "patches"
         self.overlay_dir = self.version_dir / "overlay"
         self.module_file_path = self.version_dir / 'MODULE.bazel'
@@ -91,7 +95,7 @@ class Module:
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License.
+# limitations under the License.\n
 """.format(date.today().year)
 
     def _calculate_sha256_from_file(self, file_path):
@@ -101,32 +105,6 @@ class Module:
             for byte_block in iter(lambda: f.read(4096), b""):
                 sha256_hash.update(byte_block)
         return "sha256-" + base64.b64encode(sha256_hash.digest()).decode()
-
-    def _calculate_sha256_from_string(self, content):
-        """Calculate a bazel sha256 hash from a string."""
-        sha256_hash = hashlib.sha256(content.encode('utf-8'))
-        return "sha256-" + base64.b64encode(sha256_hash.digest()).decode()
-
-    def _generate_module_dot_bazel(self):
-        """
-        Generates the MODULE.bazel contents for the current Bazel module.
-        """
-        ret = self.get_copyright_header()
-        ret += "# ROS package information\n"
-        ret += 'module(\n'
-        ret += '    name = "{0}",\n'.format(self.module_name)
-        ret += '    version = "{0}.{1}",\n'.format(self.release_distro, self.module_version)
-        ret += '    bazel_compatibility = [">=7.2.1"],\n'
-        ret += ')\n\n'
-        if self.bcr_deps:
-            ret += '# BCR dependencies\n'
-            for dep, dep_version in self.bcr_deps.items():
-                ret += 'bazel_dep(name = "{0}", version = "{1}")\n'.format(dep, dep_version)
-        if self.rcr_deps:
-            ret += '\n# RCR Dependencies\n'
-            for dep, dep_version in self.rcr_deps.items():
-                ret += 'bazel_dep(name = "{0}.{1}", version = "{2}")\n'.format(dep, self.release_distro, dep_version)
-        return ret
 
     def _generate_strip_prefix(self):
         """
@@ -158,7 +136,34 @@ class Module:
         integrity =  self._calculate_sha256_from_file(tarball)
         return integrity
 
-    def _generate_source_json(self):
+
+    def _generate_overlay(self):
+        """
+        Generate the overlays
+        """
+        overlay = {}
+        for rel_path, content in self.overlays.items():
+            overlay_path = self.overlay_dir / rel_path
+            overlay_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(overlay_path, 'w') as f:
+                f.write(content)
+            overlay[rel_path] = self._calculate_sha256_from_file(overlay_path)
+        return overlay
+
+    def _generate_patches(self):
+        """
+        Generate the patches
+        """
+        patches = {}
+        for rel_path, content in self.patches.items():
+            patch_path = self.patches_dir / rel_path
+            patch_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(patch_path, 'w') as f:
+                f.write(content)
+            patches[rel_path] = self._calculate_sha256_from_file(patch_path)
+        return patches
+
+    def _write_source_json(self):
         """
         Generates the source.json contents for the current Bazel module.
         """
@@ -172,32 +177,19 @@ class Module:
         if self.patches:
             source_json["patches"] = self._generate_patches()
             source_json["patch_strip"] = 1
-        return source_json
 
-    def _generate_overlay(self):
-        """
-        Generate the overlays
-        """
-        overlay = {}
-        for rel_path, content in self.overlay.items():
-            overlay[rel_path] = self._calculate_sha256_from_string(content)
-        return overlay
+        self.source_json_path.parent.mkdir(parents=True, exist_ok=True)
 
-    def _generate_patches(self):
-        """
-        Generate the patches
-        """
-        patches = {}
-        for rel_path, content in self.patches.items():
-            patches[rel_path] = self._calculate_sha256_from_string(content)
-        return patches
+        with open(self.source_json_path, 'w') as f:
+            json.dump(source_json, f, indent=4)
+            f.write('\n')
 
-    def _update_metatada_json(self):
+    def _write_metadata_json(self):
         """
         Update the metadata.json file for the current Bazel module version, if needed.
         """
         metadata = {
-            "homepage": self.url,
+            "homepage": self.module_url,
             "maintainers": [
                 {
                     "email": "simmers@intrinsic.ai",
@@ -217,13 +209,42 @@ class Module:
                 except:
                     pass
 
-        if self.module_version not in metadata["versions"]:
-            metadata["versions"].append(self.module_version)
+        if self.package_version not in metadata["versions"]:
+            metadata["versions"].append(self.package_version)
             metadata["versions"].sort()
+
+        self.metadata_json_path.parent.mkdir(parents=True, exist_ok=True)
 
         with open(self.metadata_json_path, 'w') as f:
             json.dump(metadata, f, indent=4)
             f.write('\n')
+
+    def _write_module_dot_bazel(self):
+        """
+        Generates the MODULE.bazel contents for the current Bazel module.
+        """
+        ret = self.get_copyright_header()
+        ret += "# ROS package information\n"
+        ret += 'module(\n'
+        ret += '    name = "{0}",\n'.format(self.module_name)
+        ret += '    version = "{0}.{1}",\n'.format(self.release_distro, self.module_version)
+        ret += '    bazel_compatibility = [">=7.2.1"],\n'
+        ret += ')\n'
+        if self.bcr_deps:
+            ret += '\n# BCR dependencies\n'
+            for dep in sorted(self.bcr_deps.keys()):
+                ret += 'bazel_dep(name = "{0}", version = "{1}")\n'.format(
+                    dep, self.bcr_deps[dep])
+        if self.rcr_deps:
+            ret += '\n# RCR Dependencies\n'
+            for dep in sorted(self.rcr_deps.keys()):
+                ret += 'bazel_dep(name = "{0}", version = "{1}.{2}")\n'.format(
+                    dep, self.release_distro, self.rcr_deps[dep])
+
+        self.module_file_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(self.module_file_path, 'w') as f:
+            f.write(ret)
 
     def add_dependency(self, name: str):
         """
@@ -277,8 +298,7 @@ class Module:
                 self.bcr_deps[bcr_name] = self.bcr_sources[bcr_name].versions[-1]
         # Second, if this is a ROS package, add it as a dependency.
         elif name in self.ros_sources:
-            self.rcr_deps[name] = "{0}.{1}".format(
-                self.release_distro, self.ros_sources[name].version)
+            self.rcr_deps[name] = "{0}".format(self.ros_sources[name].version)
         # If we get there, then there's been a problem.
         else:
             print(f"Unknown key: {name}")
@@ -287,6 +307,6 @@ class Module:
         """
         Generate the module.
         """
-        self._generate_module_dot_bazel()
-        self._generate_source_json()
-        self._update_metatada_json()
+        self._write_module_dot_bazel()
+        self._write_source_json()
+        self._write_metadata_json()

@@ -45,12 +45,12 @@ class PackageModule(Module):
             release_date=release_date,
             module_name=module_name,
             module_version=module_version,
-            module_url=module_url
+            module_url=module_url,
+            package_version="{0}.{1}".format(release_distro, module_version)
         )
 
         # All packages must use rosdistro as a dependency.
-        self.rcr_deps["rosdistro"] = "{0}.{1}".format(
-            self.release_distro, self.release_date)
+        self.rcr_deps["rosdistro"] = self.release_date
 
         # All packages must have an empty build file.
         self.overlays["BUILD.bazel"] = self.get_copyright_header()

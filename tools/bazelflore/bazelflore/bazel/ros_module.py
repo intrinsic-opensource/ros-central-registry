@@ -42,5 +42,6 @@ class RosModule(Module):
             release_date=release_date,
             module_name="ros",
             module_version="{0}.{1}".format(release_distro, release_date),
-            module_url="https://github.com/ros2/ros2/archive/refs/tags/{0}.tar.gz".format(release_distro)
+            module_url="https://github.com/ros2/ros2/archive/refs/tags/{0}.tar.gz".format(release_distro),
+            package_version="{0}.{1}".format(release_distro, release_date)
         )

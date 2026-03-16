@@ -43,5 +43,6 @@ class RosdistroModule(Module):
             module_name="rosdistro",
             module_version="{0}.{1}".format(release_distro, release_date),
             module_url="https://github.com/ros/rosdistro/archive/refs/tags/{0}/{1}.tar.gz".format(
-                release_distro, release_date)
+                release_distro, release_date),
+            package_version="{0}.{1}".format(release_distro, release_date)
         )
