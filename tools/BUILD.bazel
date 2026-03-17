@@ -50,45 +50,6 @@ py_binary(
     srcs = ["manage_submodules.py"],
 )
 
-#### RELEASE TOOLING (WORK IN PROGRESS) ##################################
-
-# This is a wrapper around superflore's gen-bazel generator. It is intended
-# to be run in the following way:
-# > bazel run //tools:superflore-gen-bazel --  \
-#   --ros-release rolling/2026-01-21 \
-#   --dry-run \
-#   --no-branch \
-#   --no-commit \
-#   --output-repository-path $PWD
-# It will then create a new branch in the registry repo with the generated
-# bazel files.
-py_binary(
-    name = "superflore-gen-bazel",
-    srcs = glob(["superflore/superflore/**/*.py"]),
-    imports = ["superflore"],
-    main = "superflore/superflore/generators/bazel/run.py",
-    deps = [
-        requirement("catkin_pkg"),
-        requirement("docker"),
-        requirement("flake8-import-order"),
-        requirement("flake8"),
-        requirement("gitpython"),
-        requirement("packaging"),
-        requirement("pep8"),
-        requirement("pygithub"),
-        requirement("pynose"),
-        requirement("pyyaml"),
-        requirement("requests"),
-        requirement("rosdep"),
-        requirement("rosdistro"),
-        requirement("rosinstall_generator"),
-        requirement("rospkg"),
-        requirement("setuptools"),
-        requirement("termcolor"),
-        requirement("xmltodict"),
-    ],
-)
-
 #### INTERFACE AUTOGEN TOOLING ############################################
 
 # Generates BUILD.bazel files for ROS 2 interface definitions (.msg, .srv,
@@ -118,15 +79,6 @@ py_binary(
 
 #### UBUNTU PYTHON PACKAGES TOOLING ######################################
 
-# Scrapes the Ubuntu snapshot archive for all python3-* packages available
-# for a given Ubuntu version on a given date, and writes them as pip-style
-# requirements (package==version) to an output file. Run in the following
-# way:
-# > bazel run //tools:ubuntu_python_packages -- \
-#   --ubuntu-version 24.04 \
-#   --date 2026-01-21 \
-#   --output $PWD/requirements.in
-
 py_library(
     name = "bazelflore",
     srcs = glob(["bazelflore/bazelflore/**/*.py"]),
@@ -138,11 +90,88 @@ py_library(
     ],
 )
 
+# STEP 1 : Bootstrap a release
+##########################################################################
+# This probes rosdistro to get a release tag, then looks up Debian package
+# versions at the time of release, and transforms this to a set of BCR and
+# RCR packages. It thens sets up all packages for the release. Example:
+#
+# > bazel run //tools:release_bootstrap -- $PWD
+#   --ros-release-distro rolling \
+#   --ros-release-date 2026-01-21 \
+#   --ubuntu-distro noble \
+#   --ubuntu-architecture amd64
+#
+# Then look at the new modules in the 'modules' folder.
+#
 py_binary(
-    name = "bootstrap",
-    srcs = ["bazelflore/main.py"],
+    name = "release_bootstrap",
+    srcs = ["release_bootstrap.py"],
     deps = [
         ":bazelflore",
         requirement("yaspin"),
     ],
+)
+
+# STEP 2 : Migrate a release
+##########################################################################
+# Take an existing release and create a new patch release with updated
+# package versions, by copying the overlays and patches from an the latest
+# distro release to the new release to create a patch release. This also
+# autogenerates the interface BUILD files for the new release, avoiding
+# the need to do this manually by hand, which is laborious.
+#
+# Example:
+#
+# > bazel run //tools:release_migrate -- $PWD \
+#   --release lyrical.2026-05-15 \
+#   --from-distro rolling \
+#   --autogen-interfaces
+#
+# Then look at the new modules in the 'modules' folder.
+#
+py_binary(
+    name = "release_migrate",
+    srcs = ["release_migrate.py"],
+    deps = [
+        ":bazelflore",
+        requirement("yaspin"),
+    ],
+)
+
+# STEP 3 : Set up a patch workspace.
+########################################################################
+# This creates a separate Bazel workspace in the folder "workspaces". It
+# supports the "bazel vendor" command to populate a local checkout that
+# you can edit and test in place. The idea is that you iterate here.
+#
+# Example:
+#
+# > bazel run //tools:workspace_setup -- \
+#   --rcr-base $PWD \
+#   --release rolling.2026-01-21
+#   [repo1] [repo2] ...
+#
+# Look at the workspaces/rolling.2026-01-21.bcr.X
+#
+py_binary(
+    name = "workspace_setup",
+    srcs = ["bazelflore/workspace_setup.py"],
+)
+
+# STEP 4 : Apply a patch workspace.
+########################################################################
+# After you have finished iterating on a patch workspace, you can apply
+# it to the release.
+#
+# Example:
+#
+# > bazel run //tools:workspace_apply --
+#   --rcr-base $PWD \
+#   --release rolling.2026-01-21
+#   [repo1] [repo2] ...
+#
+py_binary(
+    name = "workspace_apply",
+    srcs = ["bazelflore/workspace_apply.py"],
 )

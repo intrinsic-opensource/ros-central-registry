@@ -48,6 +48,9 @@ class RosModule(Module):
             package_version="{0}.{1}".format(release_distro, release_date)
         )
 
+        # All packages must use rosdistro as a dependency.
+        self.rcr_deps["rosdistro"] = self.release_date
+
         # Add all ROS sources as dependencies.
         for name in sorted(self.ros_sources.keys()):
             if name not in ROS_TO_BAZEL_MAPPING.keys():

@@ -19,7 +19,8 @@ Generic module creator for the "ros" module.
 from pathlib import Path
 from typing import Dict, Set
 import re
-from bazelflore.bazel.constants import ROS_TO_BAZEL_MAPPING, get_copyright_header
+from bazelflore.utils.copyright import get_copyright_header
+from bazelflore.bazel.constants import ROS_TO_BAZEL_MAPPING
 from bazelflore.bazel.module import Module
 from bazelflore.sources.bcr import BcrSource
 from bazelflore.sources.deb import DebSource

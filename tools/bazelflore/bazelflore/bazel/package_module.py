@@ -15,7 +15,7 @@
 
 from pathlib import Path
 from typing import Dict
-from bazelflore.bazel.constants import get_copyright_header
+from bazelflore.utils.copyright import get_copyright_header
 from bazelflore.bazel.module import Module
 from bazelflore.sources.bcr import BcrSource
 from bazelflore.sources.deb import DebSource
@@ -52,6 +52,3 @@ class PackageModule(Module):
 
         # All packages must use rosdistro as a dependency.
         self.rcr_deps["rosdistro"] = self.release_date
-
-        # All packages must have an empty build file.
-        self.overlays["BUILD.bazel"] = get_copyright_header()

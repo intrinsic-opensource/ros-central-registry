@@ -22,6 +22,9 @@ import hashlib
 import urllib
 from pathlib import Path
 from typing import Dict
+from bazelflore.utils.copyright import get_copyright_header
+from bazelflore.utils.bzlmod import add_version_to_metadata_json
+from bazelflore.utils.bzlmod import calculate_integrity_hash_for_file
 from bazelflore.sources.bcr import BcrSource
 from bazelflore.sources.ros import RosSource
 from bazelflore.sources.deb import DebSource
@@ -81,14 +84,6 @@ class Module:
         self.overlays = {}
         self.patches = {}
 
-    def _calculate_sha256_from_file(self, file_path):
-        """Calculate a bazel sha256 hash from a file."""
-        sha256_hash = hashlib.sha256()
-        with open(file_path, "rb") as f:
-            for byte_block in iter(lambda: f.read(4096), b""):
-                sha256_hash.update(byte_block)
-        return "sha256-" + base64.b64encode(sha256_hash.digest()).decode()
-
     def _generate_strip_prefix(self):
         """
         Generates the strip_prefix for the current Bazel module.
@@ -116,7 +111,7 @@ class Module:
         Generates the integrity hash for the current Bazel module.
         """
         tarball = self._download_package_tarball()
-        integrity =  self._calculate_sha256_from_file(tarball)
+        integrity =  calculate_integrity_hash_for_file(tarball)
         return integrity
 
 
@@ -130,7 +125,7 @@ class Module:
             overlay_path.parent.mkdir(parents=True, exist_ok=True)
             with open(overlay_path, 'w') as f:
                 f.write(content)
-            overlay[rel_path] = self._calculate_sha256_from_file(overlay_path)
+            overlay[rel_path] = calculate_integrity_hash_for_file(overlay_path)
         return overlay
 
     def _generate_patches(self):
@@ -143,7 +138,7 @@ class Module:
             patch_path.parent.mkdir(parents=True, exist_ok=True)
             with open(patch_path, 'w') as f:
                 f.write(content)
-            patches[rel_path] = self._calculate_sha256_from_file(patch_path)
+            patches[rel_path] = calculate_integrity_hash_for_file(patch_path)
         return patches
 
     def _write_source_json(self):
@@ -171,6 +166,12 @@ class Module:
         """
         Update the metadata.json file for the current Bazel module version, if needed.
         """
+
+        # First try and add it to the versions. Returns successful if the version is
+        # added or already exists. Otherwise, we need to create the file.
+        if add_version_to_metadata_json(self.metadata_json_path, self.package_version):
+            return
+
         metadata = {
             "homepage": self.module_url,
             "maintainers": [
@@ -181,23 +182,11 @@ class Module:
                     "name": "Andrew Symington"
                 }
             ],
-            "versions": [],
+            "versions": [
+                self.package_version
+            ],
             "yanked_versions": {}
         }
-        
-        if self.metadata_json_path.exists():
-            with open(self.metadata_json_path, 'r') as f:
-                try:
-                    metadata = json.load(f)
-                except:
-                    pass
-
-        if self.package_version not in metadata["versions"]:
-            metadata["versions"].append(self.package_version)
-            metadata["versions"].sort()
-
-        self.metadata_json_path.parent.mkdir(parents=True, exist_ok=True)
-
         with open(self.metadata_json_path, 'w') as f:
             json.dump(metadata, f, indent=4)
             f.write('\n')
