@@ -42,7 +42,7 @@ class RosdistroModule(Module):
             release_distro=release_distro,
             release_date=release_date,
             module_name="rosdistro",
-            module_version="{0}.{1}".format(release_distro, release_date),
+            module_version=release_date, # Note: <distro>. gets appended!
             module_url="https://github.com/ros/rosdistro/archive/refs/tags/{0}/{1}.tar.gz".format(
                 release_distro, release_date),
             package_version="{0}.{1}".format(release_distro, release_date)

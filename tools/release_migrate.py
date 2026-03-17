@@ -30,6 +30,8 @@ from yaspin.spinners import Spinners
 from bazelflore.utils.bzlmod import add_version_to_metadata_json
 from bazelflore.utils.bzlmod import regenerate_integrity_hashes
 from bazelflore.utils.bzlmod import add_boilerplate_build_file
+from bazelflore.utils.bzlmod import increment_version
+from bazelflore.utils.bzlmod import scan_module_for_dependencies
 
 def _check_release_is_valid(working_directory: Path, release: str) -> Optional[Path]:
     """
@@ -112,42 +114,11 @@ def _find_previous_release(working_directory: Path, release: str, distro: Option
     # Return the release directory that was chosen.
     return candidate_patch_releases[0][2]
 
-def _scan_release_for_packages(release_dir: Path) -> Dict[str, str]:
-    """
-    Recursively scan the release directory for packages.
-
-    Returns a list of package names.
-    """
-    packages = {}
-    with open(release_dir / "MODULE.bazel", 'r') as f:
-        content = f.read()
-        matches = re.findall(r'bazel_dep\(\s*name\s*=\s*"([^"]+)"\s*,\s*version\s*=\s*"([^"]+)"', content)
-        for name, version in matches:
-            packages[name] = version
-    return packages
-
-def _increment_version(version: str) -> str:
-    """
-    Increment the version of a package.
-    """
-    version_parts = version.split(".")
-    if len(version_parts) < 2:
-        RuntimeError(f"Malformed version: {version}")
-    
-    # If this has already been patched, increment the patch version.
-    if version_parts[-2] == "rcr":
-        curr_patch_version = int(version_parts[-1])
-        next_patch_version = current_patch_version + 1
-        return ".".join(version_parts[:-1] + [next_patch_version])
-
-    # Otherwise, this is the first patch release.
-    return "{0}.rcr.0".format(version)
-
 def _package_migrate(package_dir: Path, package_base_version: str, package_old_version: str):
     """
     Migrate a package from package_base_version -> package_old_version
     """
-    package_new_version = _increment_version(package_old_version)
+    package_new_version = increment_version(package_old_version)
 
     # Add the version to metadata.json
     add_version_to_metadata_json(package_dir / "metadata.json", package_new_version)
@@ -175,7 +146,7 @@ def _package_create(package_dir: Path, package_base_version: str):
     """
     Create a new package from package_base_version
     """
-    package_new_version = _increment_version(package_base_version)
+    package_new_version = increment_version(package_base_version)
 
     # Add the version to metadata.json
     add_version_to_metadata_json(package_dir / "metadata.json", package_new_version)
@@ -195,6 +166,41 @@ def _package_create(package_dir: Path, package_base_version: str):
     # Regenerate the integrity hashes
     return package_new_version
 
+def _update_package_dependencies(module_file: Path, package_name, old_packages: Dict[str, str], new_packages: Dict[str, str]):
+    """
+    Update the bazel_dep() calls in a package's MODULE.bazel file to point to new deps.
+    """
+
+    with open(module_file, 'r') as f:
+        content = f.read()
+    
+    old_module_definition = """
+module(
+    name = "{0}",
+    version = "{1}",
+    bazel_compatibility = [">=7.2.1"],
+)
+""".format(package_name, old_packages[package_name])
+
+    new_module_definition = """
+module(
+    name = "{0}",
+    version = "{1}",
+    bazel_compatibility = [">=7.2.1"],
+)
+""".format(package_name, new_packages[package_name])
+
+    content = content.replace(old_module_definition, new_module_definition)
+    for package_name in new_packages.keys():
+        content = content.replace(
+            'bazel_dep(name = "{0}", version = "{1}")'.format(
+                package_name, old_packages[package_name]),
+            'bazel_dep(name = "{0}", version = "{1}")'.format(
+                package_name, new_packages[package_name]))
+
+    with open(module_file, 'w') as f:
+        f.write(content)
+
 def main():
 
     # Gather arguments
@@ -210,12 +216,13 @@ def main():
         help="Migrate from a distro other than the one in the release string",
     )
     args = parser.parse_args()
+    new_release = f'{args.release}.rcr.0'
 
-    with yaspin(text="Migrating release {0}".format(args.release), color="cyan") as sp:
+    with yaspin(text="Migrating release {0} to {1}".format(args.release, new_release), color="cyan") as sp:
 
         sp.write("> Ensuring target release is valid")
-        maybe_base_dir = _check_release_is_valid(args.working_directory, args.release)
-        if maybe_base_dir is None:
+        base_dir = _check_release_is_valid(args.working_directory, args.release)
+        if base_dir is None:
             raise RuntimeError("Release {0} exists or already has patches.".format(args.release))
         sp.write("> Release exists and there are no patches, continuing")
 
@@ -223,34 +230,39 @@ def main():
         sp.write("> New patch release will be cut with name {0}".format(new_dir.name))
 
         sp.write("> Scanning target release for packages")
-        new_packages = _scan_release_for_packages(maybe_base_dir)
-        sp.write("> Found {0} packages".format(len(new_packages)))
+        base_packages = scan_module_for_dependencies(base_dir)
+        base_packages["ros"] = args.release
+        sp.write("> Found {0} packages".format(len(base_packages)))
 
         sp.write("> Checking for previous patch release")
         maybe_old_dir = _find_previous_release(args.working_directory, args.release, args.from_distro)
-        old_packages = {}
+        prev_packages = {}
         if maybe_old_dir is None:   
             sp.write("> No suitable previous patch release found")
         else:
             sp.write("> Found previous patch release: {0}".format(maybe_old_dir.name))
             sp.write("> Scanning previous patch release for packages")
-            old_packages = _scan_release_for_packages(maybe_old_dir)
-            sp.write("> Found {0} packages".format(len(old_packages)))
+            prev_packages = scan_module_for_dependencies(maybe_old_dir)
+            prev_packages["ros"] = maybe_old_dir.name
+            sp.write("> Found {0} packages".format(len(prev_packages)))
 
+        # As we migrate packages, we need to keep track of the old and new versions
+        # to update the dependencies after the migration has occured.
         sp.write("> Migrating modules")
-        for package_name, package_base_version in new_packages.items():
+        old_packages = {}
+        new_packages = {}
+        for package_name, package_base_version in base_packages.items():
             sp.write("> Processing {0}".format(package_name))
             package_dir = args.working_directory / "modules" / package_name
-            if package_name in old_packages:
-                package_old_version = old_packages[package]
+            if package_name in prev_packages.keys():
                 package_new_version = _package_migrate(
                     package_dir,
                     package_base_version,
-                    package_old_version
+                    prev_packages[package_name]
                 )
                 sp.write("  + Migrated {0}@{1} -> {0}@{2}".format(
-                    package_name, package_old_version, package_new_version))
-                pass
+                    package_name, prev_packages[package_name], package_new_version))
+                old_packages[package_name] = prev_packages[package_name]
             else:
                 package_new_version = _package_create(
                     package_dir,
@@ -258,10 +270,22 @@ def main():
                 )
                 sp.write("  + Created new package {0}@{1}".format(
                     package_name, package_new_version))
+                old_packages[package_name] = package_base_version
             regenerate_integrity_hashes(package_dir / package_new_version)
             sp.write("  + Regenerated integrity hashes for {0}@{1}".format(
                 package_name, package_new_version))
-        
+            new_packages[package_name] = package_new_version
+
+
+        # Run through all MODULE.bazel files replacing any bazel_dep calls to old
+        # package versions with the new package versions.
+        sp.write("> Updating dependencies")
+        for package_name, package_new_version in new_packages.items():
+            module_file = args.working_directory / "modules" / package_name / package_new_version / "MODULE.bazel"
+            _update_package_dependencies(module_file, package_name, old_packages, new_packages)
+            sp.write("  + Updated dependencies for {0}@{1}".format(
+                package_name, package_new_version))
+
         sp.ok("✔")
 
 

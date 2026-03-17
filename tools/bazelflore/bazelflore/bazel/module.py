@@ -84,12 +84,6 @@ class Module:
         self.overlays = {}
         self.patches = {}
 
-    def _generate_strip_prefix(self):
-        """
-        Generates the strip_prefix for the current Bazel module.
-        """
-        return "{0}-release-upstream-{1}".format(self.module_name, self.module_version)
-
     def _download_package_tarball(self):
         """
         Downloads the tarball of a specific commit from a GitHub repository.
@@ -106,14 +100,21 @@ class Module:
                 raise Exception("Failed to download tarball: {} :: {}".format(self.module_url, exc))
         return cache_file
 
-    def _generate_integrity(self):
+    def _generate_integrity_and_strip_prefix(self):
         """
-        Generates the integrity hash for the current Bazel module.
+        Generates the integrity hash and strip prefix for the current Bazel module.
         """
         tarball = self._download_package_tarball()
         integrity =  calculate_integrity_hash_for_file(tarball)
-        return integrity
 
+        # TODO(asymingt): scan the tarball all package.xml files. Find one with the string
+        # <name>{self.module_name}</name>. If you find this, then the strip prefix is
+        # the directory that contains this package.xml file. If you don't find it then the
+        # strip prefix is {self.release_distro}.{self.release_date}.
+        
+
+
+        return integrity, strip_prefix
 
     def _generate_overlay(self):
         """

@@ -156,7 +156,11 @@ py_binary(
 #
 py_binary(
     name = "workspace_setup",
-    srcs = ["bazelflore/workspace_setup.py"],
+    srcs = ["workspace_setup.py"],
+    deps = [
+        ":bazelflore",
+        requirement("yaspin"),
+    ],
 )
 
 # STEP 4 : Apply a patch workspace.
@@ -172,6 +176,10 @@ py_binary(
 #   [repo1] [repo2] ...
 #
 py_binary(
-    name = "workspace_apply",
-    srcs = ["bazelflore/workspace_apply.py"],
+    name = "workspace_patch",
+    srcs = ["workspace_patch.py"],
+    deps = [
+        ":bazelflore",
+        requirement("yaspin"),
+    ],
 )

@@ -15,7 +15,9 @@
 import base64
 import hashlib
 import json
+import re
 from pathlib import Path
+from typing import Dict
 from bazelflore.utils.copyright import get_copyright_header
 
 def calculate_integrity_hash_for_file(file_path: Path) -> str:
@@ -81,7 +83,7 @@ def regenerate_integrity_hashes(module_dir: Path) -> bool:
             source[name] = {}
             for targ_file in targ_dir.iterdir():
                 if targ_file.is_file():
-                    rel_path = targ_file.relative_to(module_dir)
+                    rel_path = targ_file.relative_to(targ_dir)
                     source[name][str(rel_path)] = calculate_integrity_hash_for_file(targ_file)
 
     # Overwrite the source.json file.
@@ -99,3 +101,32 @@ def add_boilerplate_build_file(overlay_dir: Path) -> bool:
     with open(overlay_dir / "BUILD.bazel", 'w') as f:
         f.write(get_copyright_header())
     return True
+
+def increment_version(version: str) -> str:
+    """
+    Increment the version of a package.
+    """
+    version_parts = version.split(".")
+    if len(version_parts) < 2:
+        RuntimeError(f"Malformed version: {version}")
+    
+    # If this has already been patched, increment the patch version.
+    if version_parts[-2] == "rcr":
+        curr_patch_version = int(version_parts[-1])
+        next_patch_version = str(curr_patch_version + 1)
+        return ".".join(version_parts[:-1] + [next_patch_version])
+
+    # Otherwise, this is the first patch release.
+    return "{0}.rcr.0".format(version)
+
+def scan_module_for_dependencies(module_dir: Path) -> Dict[str, str]:
+    """
+    Returns a list of package names and their versions.
+    """
+    packages = {}
+    with open(module_dir / "MODULE.bazel", 'r') as f:
+        content = f.read()
+        matches = re.findall(r'bazel_dep\(\s*name\s*=\s*"([^"]+)"\s*,\s*version\s*=\s*"([^"]+)"', content)
+        for name, version in matches:
+            packages[name] = version
+    return packages

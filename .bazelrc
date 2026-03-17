@@ -74,6 +74,3 @@ test:ci --flaky_test_attempts=5
 
 # Allow for local testing of distribution.
 common:distribution --target_pattern_file=distribution.txt
-
-# Vendoring for development
-import %workspace%/vendor/.bazelrc
