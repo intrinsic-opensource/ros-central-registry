@@ -252,8 +252,10 @@ def main():
         old_packages = {}
         new_packages = {}
         for package_name, package_base_version in base_packages.items():
+            package_dir = args.working_directory / 'modules' / package_name
+            if not package_dir.exists():
+                continue
             sp.write("> Processing {0}".format(package_name))
-            package_dir = args.working_directory / "modules" / package_name
             if package_name in prev_packages.keys():
                 package_new_version = _package_migrate(
                     package_dir,

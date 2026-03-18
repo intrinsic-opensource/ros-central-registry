@@ -12,6 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# All ROS packages have these included by default.
+DEPS_GENERAL = {
+    "bazel_skylib": "1.9.0",
+    "platforms": "1.0.0",
+    "rules_shell": "0.6.1",
+}
+
+# Python language dependencies
+PY_FILE_SUFFIXES = (".py", ".pyc", ".pyw", ".pyd", ".pyi", ".ipynb", ".pyx", ".pyo", ".px")
+PY_BCR_DEPS = {
+    "aspect_rules_py": "1.9.1",
+    "rules_python": "1.9.0",
+}
+
+# C++ language dependencies
+CC_FILE_SUFFIXES = (".h", ".hh", ".hxx", ".hpp", ".h++", ".c", ".cc", ".cpp", ".cxx", ".c++")
+CC_BCR_DEPS = {
+    "cmake_configure_file": "0.1.6",
+    "google_benchmark": "1.9.5",
+    "googletest": "1.17.0.bcr.2",
+    "rules_cc": "0.2.17",
+}
+
+# Rust language dependencies.
+RS_FILE_SUFFIXES = (".rs", ".rlib")
+RS_BCR_DEPS = {
+    "rules_rs": "0.0.44",
+    "rules_rust": "0.69.0",
+}
+
 # List of packages for PCL wildcard matches.
 PCL_DEPS = ["pcl"]
 

@@ -28,7 +28,6 @@ from bazelflore.bazel.constants import ROS_TO_BAZEL_MAPPING
 from bazelflore.bazel.package_module import PackageModule
 from bazelflore.bazel.ros_module import RosModule
 from bazelflore.bazel.rosdistro_module import RosdistroModule
-from bazelflore.bazel.vendor_file import VendorFile
 from bazelflore.sources.bcr import BcrWorker
 from bazelflore.sources.deb import DebWorker, COMPONENTS
 from bazelflore.sources.ros import RosWorker

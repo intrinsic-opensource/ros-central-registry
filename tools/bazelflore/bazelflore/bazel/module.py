@@ -17,11 +17,13 @@ Generic module creator for bazel.
 """
 
 import json
+import re
 import base64
 import hashlib
+import tarfile
 import urllib
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List, Tuple
 from bazelflore.utils.copyright import get_copyright_header
 from bazelflore.utils.bzlmod import add_version_to_metadata_json
 from bazelflore.utils.bzlmod import calculate_integrity_hash_for_file
@@ -77,7 +79,7 @@ class Module:
         self.ros_sources = ros_sources
 
         # Transformed dependency information.
-        self.bcr_deps = {}
+        self.bcr_deps = DEPS_GENERAL.copy()
         self.rcr_deps = {}
 
         # Overlay and patch information.
@@ -100,21 +102,36 @@ class Module:
                 raise Exception("Failed to download tarball: {} :: {}".format(self.module_url, exc))
         return cache_file
 
-    def _generate_integrity_and_strip_prefix(self):
+    def _process_tarball(self) -> Tuple[str, str, Dict[str, str]]:
         """
         Generates the integrity hash and strip prefix for the current Bazel module.
         """
         tarball = self._download_package_tarball()
         integrity =  calculate_integrity_hash_for_file(tarball)
+        strip_prefix = f"rosdistro-{self.release_distro}-{self.release_date}"
+        bcr_language_deps = {}
+        try:
+            with tarfile.open(tarball, "r:*") as tar:
+                for member in tar:
+                    if member.name.endswith("package.xml"):
+                        f = tar.extractfile(member)
+                        if f is not None:
+                            content = f.read().decode("utf-8", errors="ignore")
+                            if re.search(r"<name>\s*" + re.escape(self.module_name) + r"\s*</name>", content):
+                                strip_prefix = Path(member.name).parent.as_posix()
+                                if strip_prefix == ".":
+                                    strip_prefix = ""
+                                break
+                    if member.name.lower().endswith(CC_FILE_SUFFIXES):
+                        bcr_language_deps.update(CC_BCR_DEPS)
+                    if member.name.lower().endswith(PY_FILE_SUFFIXES):
+                        bcr_language_deps.update(PY_BCR_DEPS)
+                    if member.name.lower().endswith(RS_FILE_SUFFIXES):
+                        bcr_language_deps.update(RS_BCR_DEPS)
 
-        # TODO(asymingt): scan the tarball all package.xml files. Find one with the string
-        # <name>{self.module_name}</name>. If you find this, then the strip prefix is
-        # the directory that contains this package.xml file. If you don't find it then the
-        # strip prefix is {self.release_distro}.{self.release_date}.
-        
-
-
-        return integrity, strip_prefix
+        except Exception as e:
+            print(f"Warning: failed to read tarball {tarball} for {self.module_name}: {e}")
+        return integrity, strip_prefix, bcr_language_deps
 
     def _generate_overlay(self):
         """
@@ -142,14 +159,14 @@ class Module:
             patches[rel_path] = calculate_integrity_hash_for_file(patch_path)
         return patches
 
-    def _write_source_json(self):
+    def _write_source_json(self, integrity, strip_prefix):
         """
         Generates the source.json contents for the current Bazel module.
         """
         source_json = {
-            "integrity": self._generate_integrity(),
+            "integrity": integrity,
             "url": self.module_url,
-            "strip_prefix": self._generate_strip_prefix(),
+            "strip_prefix": strip_prefix,
         }
         if self.overlays:
             source_json["overlay"] = self._generate_overlay()
@@ -192,7 +209,7 @@ class Module:
             json.dump(metadata, f, indent=4)
             f.write('\n')
 
-    def _write_module_dot_bazel(self):
+    def _write_module_dot_bazel(self, bcr_language_deps : Dict[str, str]):
         """
         Generates the MODULE.bazel contents for the current Bazel module.
         """
@@ -203,6 +220,7 @@ class Module:
         ret += '    version = "{0}.{1}",\n'.format(self.release_distro, self.module_version)
         ret += '    bazel_compatibility = [">=7.2.1"],\n'
         ret += ')\n'
+        self.bcr_deps.update(bcr_language_deps)
         if self.bcr_deps:
             ret += '\n# BCR dependencies\n'
             for dep in sorted(self.bcr_deps.keys()):
@@ -288,6 +306,7 @@ class Module:
         """
         Generate the module.
         """
-        self._write_module_dot_bazel()
-        self._write_source_json()
+        integrity, strip_prefix, bcr_language_deps = self._process_tarball()
+        self._write_module_dot_bazel(bcr_language_deps)
+        self._write_source_json(integrity, strip_prefix)
         self._write_metadata_json()
