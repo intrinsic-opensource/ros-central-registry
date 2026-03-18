@@ -143,22 +143,23 @@ py_binary(
 ########################################################################
 # This creates a separate Bazel workspace in the folder "workspaces". It
 # supports the "bazel vendor" command to populate a local checkout that
-# you can edit and test in place.
+# you can edit and test in place. It takes the release name, finds the
+# latest patch version for that release, and creates a new workspace with
+# and incremented patch version.
 #
 # Example:
 #
-# > bazel run //tools:workspace_setup -- \
-#   --rcr-base $PWD \
-#   --release rolling.2026-01-21 \
-#   [--vendor rclcpp]
+# > bazel run //tools:workspace_setup -- $PWD \
+#   --release rolling.2026-01-21 [--vendor rclcpp rclpy rclc]
 #
-# Look at the workspaces set up for you at:
-# - workspaces/rolling.2026-01-21              # vanilla workspace.
-# - workspaces/rolling.2026-01-21.bcr.X        # patch workspace.
+# Assuming the OLD patch version is found to be rolling.2026-01-21.bcr.5
+# then this will create these two workspaces for you:
 #
-# NOTE: all edits you make should go in the patch workspace. The vanilla
-# workspace is read-only, designed to be a baseline from which to
-# create patches when the patch roll-up is done pre-commit.
+# - workspaces/rolling.2026-01-21              # REF workspace.
+# - workspaces/rolling.2026-01-21.bcr.6        # NEW patch workspace.
+#
+# NOTE: all edits you make should go in the NEW patch workspace, which
+# will already contain all edits up to rolling.2026-01-21.bcr.5.
 #
 py_binary(
     name = "workspace_setup",
@@ -169,16 +170,35 @@ py_binary(
     ],
 )
 
+# STEP 5: Run 'bazel vendor' in the workspaces.
+########################################################################
+# > pushd workspaces/rolling.2026-01-21
+# > bazel vendor
+# > popd
+# > pushd workspaces/rolling.2026-01-21.bcr.6
+# > bazel vendor
+# > popd
+
+# STEP 6: Run 'bazel build' in the workspaces.
+########################################################################
+# > pushd workspaces/rolling.2026-01-21.bcr.6
+# <make some changes to ./vendor/rclcpp+>
+# > bazel build @rclcpp//...
+# > popd
+
 # STEP 4 : Apply a patch workspace.
 ########################################################################
 # After you have finished iterating on a patch workspace, you can apply
-# it to the release.
+# it to the release. THis code will compare the REF and NEW workspaces
+# to find the changes that you made. It will then transform these into
+# patches and overlays. If the patches and overlays are different from
+# the existing patches and overlays in OLD, then a new patch version for
+# the module will be created.
 #
 # Example:
 #
-# > bazel run //tools:workspace_apply --
-#   --rcr-base $PWD \
-#   --release rolling.2026-01-21.bcr.X
+# > bazel run //tools:workspace_patch -- $PWD \
+#   --workspace rolling.2026-01-21.bcr.6 [--vendor rclcpp rclpy rclc]
 #
 py_binary(
     name = "workspace_patch",

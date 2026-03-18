@@ -219,52 +219,56 @@ def main():
     new_release = f'{args.release}.rcr.0'
 
     with yaspin(text="Migrating release {0} to {1}".format(args.release, new_release), color="cyan") as sp:
+        # REF: rolling.2026-01-21.        (bare release without patches)
+        # OLD: rolling.2026-01-21,bcr.2   (what to start with)
+        # NEW: rolling.2026-01-21.bcr.3   (what we are adding)
+        modules_dir = args.working_directory / "modules"
 
-        sp.write("> Ensuring target release is valid")
-        base_dir = _check_release_is_valid(args.working_directory, args.release)
-        if base_dir is None:
+        sp.write("> Ensuring REF release is valid")
+        ref_dir = _check_release_is_valid(args.working_directory, args.release)
+        if ref_dir is None:
             raise RuntimeError("Release {0} exists or already has patches.".format(args.release))
         sp.write("> Release exists and there are no patches, continuing")
 
-        new_dir = args.working_directory / 'modules' / 'ros' / f'{args.release}.rcr.0'
-        sp.write("> New patch release will be cut with name {0}".format(new_dir.name))
+        sp.write("> Scanning REF release for packages")
+        ref_packages = scan_module_for_dependencies(ref_dir / 'MODULE.bazel', modules_dir)
+        ref_packages["ros"] = args.release
+        sp.write("> Found {0} packages in REF release".format(len(ref_packages)))
 
-        sp.write("> Scanning target release for packages")
-        base_packages = scan_module_for_dependencies(base_dir)
-        base_packages["ros"] = args.release
-        sp.write("> Found {0} packages".format(len(base_packages)))
-
-        sp.write("> Checking for previous patch release")
-        maybe_old_dir = _find_previous_release(args.working_directory, args.release, args.from_distro)
-        prev_packages = {}
-        if maybe_old_dir is None:   
-            sp.write("> No suitable previous patch release found")
+        sp.write("> Checking for OLD release")
+        old_dir = _find_previous_release(args.working_directory, args.release, args.from_distro)
+        old_packages = {}
+        if old_dir is None:   
+            sp.write("> No suitable OLD release found")
         else:
-            sp.write("> Found previous patch release: {0}".format(maybe_old_dir.name))
-            sp.write("> Scanning previous patch release for packages")
-            prev_packages = scan_module_for_dependencies(maybe_old_dir)
-            prev_packages["ros"] = maybe_old_dir.name
-            sp.write("> Found {0} packages".format(len(prev_packages)))
+            sp.write("> Found OLD release: {0}".format(old_dir.name))
+            sp.write("> Scanning OLD release for packages")
+            old_packages = scan_module_for_dependencies(old_dir / 'MODULE.bazel', modules_dir)
+            old_packages["ros"] = old_dir.name
+            sp.write("> Found {0} packages in OLD release".format(len(old_packages)))
+
+        new_dir = args.working_directory / 'modules' / 'ros' / f'{args.release}.rcr.0'
+        sp.write("> Adding NEW release {0}".format(new_dir.name))
 
         # As we migrate packages, we need to keep track of the old and new versions
         # to update the dependencies after the migration has occured.
         sp.write("> Migrating modules")
-        old_packages = {}
-        new_packages = {}
-        for package_name, package_base_version in base_packages.items():
+        prev_packages = {}
+        next_packages = {}
+        for package_name, package_base_version in ref_packages.items():
             package_dir = args.working_directory / 'modules' / package_name
             if not package_dir.exists():
                 continue
             sp.write("> Processing {0}".format(package_name))
-            if package_name in prev_packages.keys():
+            if package_name in old_packages.keys():
                 package_new_version = _package_migrate(
                     package_dir,
                     package_base_version,
-                    prev_packages[package_name]
+                    old_packages[package_name]
                 )
                 sp.write("  + Migrated {0}@{1} -> {0}@{2}".format(
-                    package_name, prev_packages[package_name], package_new_version))
-                old_packages[package_name] = prev_packages[package_name]
+                    package_name, old_packages[package_name], package_new_version))
+                prev_packages[package_name] = old_packages[package_name]
             else:
                 package_new_version = _package_create(
                     package_dir,
@@ -272,19 +276,19 @@ def main():
                 )
                 sp.write("  + Created new package {0}@{1}".format(
                     package_name, package_new_version))
-                old_packages[package_name] = package_base_version
+                prev_packages[package_name] = package_base_version
             regenerate_integrity_hashes(package_dir / package_new_version)
             sp.write("  + Regenerated integrity hashes for {0}@{1}".format(
                 package_name, package_new_version))
-            new_packages[package_name] = package_new_version
+            next_packages[package_name] = package_new_version
 
 
         # Run through all MODULE.bazel files replacing any bazel_dep calls to old
         # package versions with the new package versions.
         sp.write("> Updating dependencies")
-        for package_name, package_new_version in new_packages.items():
+        for package_name, package_new_version in next_packages.items():
             module_file = args.working_directory / "modules" / package_name / package_new_version / "MODULE.bazel"
-            _update_package_dependencies(module_file, package_name, old_packages, new_packages)
+            _update_package_dependencies(module_file, package_name, prev_packages, next_packages)
             sp.write("  + Updated dependencies for {0}@{1}".format(
                 package_name, package_new_version))
 

@@ -25,45 +25,8 @@ from yaspin import yaspin
 from yaspin.spinners import Spinners
 from bazelflore.utils.bzlmod import increment_version
 from bazelflore.utils.bzlmod import scan_module_for_dependencies
+from bazelflore.utils.bzlmod import find_latest_patch
 from bazelflore.utils.copyright import get_copyright_header
-
-def _find_latest_patch(working_directory: Path, release: str) -> Optional[Path]:
-    """
-    Find the latest patch for the given release.
-    """
-    modules_dir = working_directory / "modules" / "ros"
-
-    # Extract the distro and date from the distribution.
-    release_parts = release.split(".")
-    if len(release_parts) != 2:
-        raise RuntimeError("{0} is not in the format <distribution>.<date>".format(release))
-    needle_distro, needle_date_str = release_parts
-    needle_date = datetime.datetime.strptime(needle_date_str, "%Y-%m-%d")
-
-    # Find all candidate patch releases.
-    candidate_patch_releases = []
-    for x in modules_dir.iterdir():
-        if not x.is_dir():
-            continue
-        release = x.name
-        release_parts = release.split(".")
-        if len(release_parts) != 4:
-            continue
-        haystack_distro, haystack_date, _, haystack_patch = release_parts
-        haystack_date = datetime.datetime.strptime(haystack_date, "%Y-%m-%d")
-        if haystack_distro == needle_distro and haystack_date == needle_date:
-            candidate_patch_releases.append((haystack_date, int(haystack_patch), release))
-
-    # We have no candidates, so there is no previous release. This should only
-    # ever happen when we run this for the very first time for a distro.
-    if not candidate_patch_releases:
-        return None
-
-    # Sort by date descending, then patch version descending
-    candidate_patch_releases.sort(key=lambda x: (x[0], x[1]), reverse=True)
-
-    # Return the release directory that was chosen.
-    return candidate_patch_releases[0][2]
 
 def _setup_workspace(
     workspace_dir: Path,
@@ -191,12 +154,13 @@ def main():
         # REF: rolling.2026-01-21.        (bare release without patches)
         # OLD: rolling.2026-01-21,bcr.2   (what to start with)
         # NEW: rolling.2026-01-21.bcr.3   (what we are adding)
+        modules_dir = args.working_directory / "modules"
 
         # Find all the packages in the REF release and make sure there is a vendored workspace.
         # in place to use a reference when calculating patch sets.
         sp.write("> Scanning REF release '{0}' for packages".format(args.release))
         ref_dir = args.working_directory / "modules" / "ros" / args.release
-        ref_packages = scan_module_for_dependencies(ref_dir)
+        ref_packages = scan_module_for_dependencies(ref_dir / 'MODULE.bazel', modules_dir)
         ref_packages["ros"] = args.release
         sp.write("> Found {0} packages".format(len(ref_packages)))
         sp.write("> Setting up workspace {0} for development".format(args.release))
@@ -213,13 +177,13 @@ def main():
         # We need to find the latest patch set for the given release, as we will be building
         # on top of these patches to create our new patch set.
         sp.write("> Finding OLD release")
-        old_patch = _find_latest_patch(args.working_directory, args.release)
+        old_patch = find_latest_patch(args.working_directory, args.release)
         if old_patch is None:
             raise RuntimeError("Please bootstrap {0} to create {0}.rcr.0".format(args.release))
         sp.write("> Found OLD release {0}".format(old_patch))
         sp.write("> Scanning OLD release for packages")
         old_dir = args.working_directory / "modules" / "ros" / old_patch
-        old_packages = scan_module_for_dependencies(old_dir)
+        old_packages = scan_module_for_dependencies(old_dir / 'MODULE.bazel', modules_dir)
         old_packages["ros"] = args.release
         sp.write("> Found {0} packages in OLD release".format(len(old_packages)))
 
