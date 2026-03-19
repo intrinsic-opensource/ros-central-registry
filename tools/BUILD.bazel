@@ -208,3 +208,22 @@ py_binary(
         requirement("yaspin"),
     ],
 )
+
+# STEP 4 : Revert a patch workspace.
+########################################################################
+# This removes a patch from the modules folder. It will remove all patches
+# and overlays associated with the given patch version.
+#
+# Example:
+#
+# > bazel run //tools:workspace_revert -- $PWD \
+#   --workspace rolling.2026-01-21.bcr.6
+#
+py_binary(
+    name = "workspace_revert",
+    srcs = ["workspace_revert.py"],
+    deps = [
+        ":bazelflore",
+        requirement("yaspin"),
+    ],
+)

@@ -53,6 +53,25 @@ def add_version_to_metadata_json(metadata_json_path: Path, package_version: str)
             f.write('\n')
     return True
 
+def remove_version_from_metadata_json(metadata_json_path: Path, package_version: str) -> bool:
+    """
+    Update the metadata.json file for the current Bazel module version, if needed.
+    Returns True if the file was updated, False otherwise.
+    """
+    if not metadata_json_path.exists():
+        return False
+    with open(metadata_json_path, 'r') as f:
+        try:
+            metadata = json.load(f)
+        except:
+            return False
+    if package_version in metadata["versions"]:
+        metadata["versions"].remove(package_version)
+        with open(metadata_json_path, 'w') as f:
+            json.dump(metadata, f, indent=4)
+            f.write('\n')
+    return True
+
 def regenerate_integrity_hashes(module_dir: Path) -> bool:
     """
     Regenerate the integrity hashes for the module directory.
