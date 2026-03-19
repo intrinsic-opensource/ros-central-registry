@@ -32,6 +32,7 @@ from bazelflore.utils.bzlmod import regenerate_integrity_hashes
 from bazelflore.utils.bzlmod import add_boilerplate_build_file
 from bazelflore.utils.bzlmod import increment_version
 from bazelflore.utils.bzlmod import scan_module_for_dependencies
+from bazelflore.utils.bzlmod import update_package_dependencies
 
 def _check_release_is_valid(working_directory: Path, release: str) -> Optional[Path]:
     """
@@ -166,41 +167,6 @@ def _package_create(package_dir: Path, package_base_version: str):
     # Regenerate the integrity hashes
     return package_new_version
 
-def _update_package_dependencies(module_file: Path, package_name, old_packages: Dict[str, str], new_packages: Dict[str, str]):
-    """
-    Update the bazel_dep() calls in a package's MODULE.bazel file to point to new deps.
-    """
-
-    with open(module_file, 'r') as f:
-        content = f.read()
-    
-    old_module_definition = """
-module(
-    name = "{0}",
-    version = "{1}",
-    bazel_compatibility = [">=7.2.1"],
-)
-""".format(package_name, old_packages[package_name])
-
-    new_module_definition = """
-module(
-    name = "{0}",
-    version = "{1}",
-    bazel_compatibility = [">=7.2.1"],
-)
-""".format(package_name, new_packages[package_name])
-
-    content = content.replace(old_module_definition, new_module_definition)
-    for package_name in new_packages.keys():
-        content = content.replace(
-            'bazel_dep(name = "{0}", version = "{1}")'.format(
-                package_name, old_packages[package_name]),
-            'bazel_dep(name = "{0}", version = "{1}")'.format(
-                package_name, new_packages[package_name]))
-
-    with open(module_file, 'w') as f:
-        f.write(content)
-
 def main():
 
     # Gather arguments
@@ -282,13 +248,12 @@ def main():
                 package_name, package_new_version))
             next_packages[package_name] = package_new_version
 
-
         # Run through all MODULE.bazel files replacing any bazel_dep calls to old
         # package versions with the new package versions.
         sp.write("> Updating dependencies")
         for package_name, package_new_version in next_packages.items():
             module_file = args.working_directory / "modules" / package_name / package_new_version / "MODULE.bazel"
-            _update_package_dependencies(module_file, package_name, prev_packages, next_packages)
+            update_package_dependencies(module_file, package_name, prev_packages, next_packages)
             sp.write("  + Updated dependencies for {0}@{1}".format(
                 package_name, package_new_version))
 

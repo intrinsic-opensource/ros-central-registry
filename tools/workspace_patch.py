@@ -32,6 +32,7 @@ from bazelflore.utils.bzlmod import get_module_diff
 from bazelflore.utils.bzlmod import load_patches_and_overlays
 from bazelflore.utils.bzlmod import regenerate_integrity_hashes
 from bazelflore.utils.bzlmod import add_version_to_metadata_json
+from bazelflore.utils.bzlmod import update_package_dependencies
 
 def main():
 
@@ -196,13 +197,18 @@ def main():
                     updated_modules[package_name] = new_package_version
                     updated_at_least_one_module_version = True
 
-        sp.write("> Need to update {0} modules with new dependencies".format(len(updated_modules)))
+        # Run through all MODULE.bazel files replacing any bazel_dep calls to old
+        # package versions with the new package versions.
+        sp.write("> Updating dependencies")
+        prev_modules = {k: old_packages[k] for k in updated_modules.keys()}
+        for package_name in sorted(updated_modules.keys()):
+            package_new_version = updated_modules[package_name]
+            module_file = args.working_directory / "modules" / package_name / package_new_version / "MODULE.bazel"
+            update_package_dependencies(module_file, package_name, prev_modules, updated_modules)
+            sp.write("  + Updated dependencies for {0}@{1}".format(
+                package_name, package_new_version))
+        sp.write("> Updated {0} modules with new dependencies".format(len(updated_modules)))
 
-        # TODO(asymingt
-        # Now we need to update all bazel_dep calls in all RCR modules to point to the new versions.
-        # sp.write("> Updating bazel_dep calls in all RCR modules to point to new modules")
-        # for package_name, new_package_version in updated_modules.items():
-        # update_bazel_dep_calls(old_module_file, new_module_file)
         sp.ok("✔")
 
 

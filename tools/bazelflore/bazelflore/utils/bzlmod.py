@@ -254,3 +254,38 @@ def load_patches_and_overlays(module_dir: Path) -> Tuple[Dict[str, str], Dict[st
             with open(module_dir / augmentation_type / path, 'r') as f:
                 augmentations[augmentation_type][path] = f.read()
     return augmentations["patches"], augmentations["overlay"]
+
+def update_package_dependencies(module_file: Path, package_name, old_packages: Dict[str, str], new_packages: Dict[str, str]):
+    """
+    Update the bazel_dep() calls in a package's MODULE.bazel file to point to new deps.
+    """
+
+    with open(module_file, 'r') as f:
+        content = f.read()
+    
+    old_module_definition = """
+module(
+    name = "{0}",
+    version = "{1}",
+    bazel_compatibility = [">=7.2.1"],
+)
+""".format(package_name, old_packages[package_name])
+
+    new_module_definition = """
+module(
+    name = "{0}",
+    version = "{1}",
+    bazel_compatibility = [">=7.2.1"],
+)
+""".format(package_name, new_packages[package_name])
+
+    content = content.replace(old_module_definition, new_module_definition)
+    for package_name in new_packages.keys():
+        content = content.replace(
+            'bazel_dep(name = "{0}", version = "{1}")'.format(
+                package_name, old_packages[package_name]),
+            'bazel_dep(name = "{0}", version = "{1}")'.format(
+                package_name, new_packages[package_name]))
+
+    with open(module_file, 'w') as f:
+        f.write(content)
