@@ -16,7 +16,7 @@ import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 
-from example.msg import ExampleMsg
+from example.msg import ExampleMessage
 
 
 class ExampleRosSubscriber(Node):
@@ -24,14 +24,14 @@ class ExampleRosSubscriber(Node):
     def __init__(self):
         super().__init__('example_ros_subscriber_py')
         self.subscription = self.create_subscription(
-            ExampleMsg,
+            ExampleMessage,
             'topic',
             self.listener_callback,
             10)
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
-        self.get_logger().info('I heard: "%s"' % msg.message)
+        self.get_logger().info('I heard: "%s"' % msg.message.data)
 
 
 def main(args=None):
