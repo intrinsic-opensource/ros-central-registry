@@ -114,13 +114,13 @@ def regenerate_integrity_hashes(module_dir: Path) -> bool:
         f.write('\n')
     return True
 
-def add_boilerplate_build_file(overlay_dir: Path) -> bool:
+def add_boilerplate_build_file(build_file: Path) -> bool:
     """
     Add a boilerplate BUILD.bazel file to the overlay directory.
     """
-    if not overlay_dir.exists():
+    if build_file.exists():
         return False
-    with open(overlay_dir / "BUILD.bazel", 'w') as f:
+    with open(build_file, 'w') as f:
         f.write(get_copyright_header())
     return True
 
@@ -232,7 +232,6 @@ def get_module_diff(ref_package_dir : Path, new_package_dir : Path) -> Tuple[Dic
         if ref_path.exists():
             if filecmp.cmp(ref_path, new_path):
                 continue
-            
             with open(ref_path, 'r') as f_ref, open(new_path, 'r') as f_new:
                 diff_lines = difflib.unified_diff(
                     f_ref.readlines(),

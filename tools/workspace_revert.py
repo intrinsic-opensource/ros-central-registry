@@ -38,7 +38,7 @@ from bazelflore.utils.bzlmod import remove_version_from_metadata_json
 def _get_all_previous_patch_versions(working_directory: Path, release: str) -> Optional[List[str]]:
     """
     Check if the given version string is a valid patch version. This means that
-    it must end in .rcr.X, where X is a positive integer greater than 0.
+    it must end in .rcr.X, where X is a non-negative integer.
     """
     version_parts = release.split(".")
     if len(version_parts) < 2:
@@ -105,14 +105,6 @@ def main():
             shutil.rmtree(package_dir / package_version, ignore_errors=True)
             remove_version_from_metadata_json(package_dir / "metadata.json", package_version)
             sp.write("> Removed {0} version {1}".format(package_name, package_version))
-
-        # Find all the packages in the REF release
-        # sp.write("> Scanning REF release for packages")
-        # ref_packages = scan_module_for_dependencies(ref_dir / 'MODULE.bazel', modules_dir)
-        # ref_packages["ros"] = release
-        # sp.write("> Found {0} REF packages".format(len(ref_packages)))
-
-
         sp.ok("✔")
 
 

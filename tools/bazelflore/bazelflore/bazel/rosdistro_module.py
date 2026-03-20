@@ -48,5 +48,19 @@ class RosdistroModule(Module):
             package_version="{0}.{1}".format(release_distro, release_date)
         )
 
-        # All packages must have an empty build file.
-        self.overlays["BUILD.bazel"] = get_copyright_header()
+        # Create a requirements.in file
+        requirements_dot_in_file = self.overlay_dir / "requirements.in"
+        requirements_dot_in_file.parent.mkdir(parents=True, exist_ok=True)
+        pip_deps = {}
+        for package_name, ros_source in self.ros_sources.items():
+            for dep in ros_source.dependencies:
+                if dep.startswith(("python3", "python-")):
+                    try:
+                        pip_key = self.deb_sources[dep].source
+                        pip_ver = self.deb_sources[dep].version
+                        pip_deps[pip_key] = pip_ver
+                    except KeyError:
+                        print("Could not find debian with key: {0}".format(dep))
+        with open(requirements_dot_in_file, "w") as f:
+            for pip_key, pip_ver in sorted(pip_deps.items()):
+                f.write("{0}=={1}\n".format(pip_key, pip_ver))

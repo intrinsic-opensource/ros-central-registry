@@ -110,7 +110,7 @@ vendor --vendor_dir=vendor {0}
 
 # BCR deps
 bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "protobuf", version = "34.0.bcr.1")
+bazel_dep(name = "protobuf", version = "34.1")
 bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,21 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Generates BUILD.bazel files for ROS 2 interface definitions.
+"""
+Generates BUILD.bazel files for ROS 2 interface definitions.
 
 This tool iterates through subdirectories of a specified directory, locating
 ROS 2 interface files (.msg, .srv, .action, .idl) and generating the
 corresponding BUILD.bazel files with appropriate Bazel rules and dependencies.
 
 Usage:
-    python interface_autogen.py <directory> [subdirectory ...]
+    python helper_interface_autogen.py <directory> --workspace <workspace>
 
 Examples:
-    # Process all subdirectories in ./submodules:
-    python interface_autogen.py ./submodules
-
-    # Process only specific subdirectories:
-    python interface_autogen.py ./submodules geometry_msgs sensor_msgs
+    python helper_interface_autogen.py $PWD --workspace rolling.2026-01-21.bcr.6
 """
 
 import argparse
@@ -155,38 +151,15 @@ def detect_rosidl_runtime(package_dir):
     if os.path.exists(module_bazel):
         with open(module_bazel, "r") as f:
             content = f.read()
-            # Look for bazel_dep(name = "rosidl_core_runtime"
-            if re.search(r'bazel_dep\(\s*name\s*=\s*["\']rosidl_core_runtime["\']', content):
-                return "@rosidl_core_runtime//:defs.bzl"
-            # Look for bazel_dep(name = "rosidl_default_runtime"
-            if re.search(r'bazel_dep\(\s*name\s*=\s*["\']rosidl_default_runtime["\']', content):
-                return "@rosidl_default_runtime//:defs.bzl"
+            # Look for bazel_dep(name = "rosidl_core_generators"
+            if re.search(r'bazel_dep\(\s*name\s*=\s*["\']rosidl_core_generators["\']', content):
+                return "@rosidl_core_generators//:defs.bzl"
             # Look for bazel_dep(name = "rosidl_default_generators"
             if re.search(r'bazel_dep\(\s*name\s*=\s*["\']rosidl_default_generators["\']', content):
                 return "@rosidl_default_generators//:defs.bzl"
+    return None
 
-    # Default to rosidl_default_runtime if unknown.
-    return "@rosidl_default_runtime//:defs.bzl"
-
-
-def extract_dependencies(filepath, package_root, interface_map):
-    """Parse a ROS 2 interface file and extract external and internal dependencies.
-
-    Reads the interface file line by line, skipping comments, blank lines,
-    section separators (---), and constant definitions.
-
-    Args:
-        filepath: Path to the interface file (.msg, .srv, .action, .idl).
-        package_root: Root directory of the ROS package.
-        interface_map: Dict mapping interface names to their relative directories.
-
-    Returns:
-        A sorted list of unique dependency strings.
-    """
-    return extract_dependencies_v2(filepath, package_root, interface_map, "", {})
-
-
-def extract_dependencies_v2(filepath, package_root, interface_map, current_pkg_name, global_interface_map):
+def extract_dependencies(filepath, package_root, interface_map, current_pkg_name, global_interface_map):
     """Parse a ROS 2 interface file and extract external and internal dependencies.
 
     Reads the interface file line by line, skipping comments, blank lines,
@@ -300,28 +273,12 @@ def find_interface_files(directory):
 
     return sorted(interface_files)
 
-
-def generate_build_target(filename, filepath, package_root, interface_map):
-    """Generate a single Bazel rule string for an interface file.
-
-    Args:
-        filename: The interface file name (e.g., "Header.msg").
-        filepath: Full path to the interface file.
-        package_root: Root directory of the ROS package.
-        interface_map: Dict mapping interface names to their relative directories.
-
-    Returns:
-        A string containing the Bazel rule definition.
-    """
-    return generate_build_target_v2(filename, filepath, package_root, interface_map, "", {})
-
-
-def generate_build_target_v2(filename, filepath, package_root, interface_map, current_pkg_name, global_interface_map):
+def generate_build_target(filename, filepath, package_root, interface_map, current_pkg_name, global_interface_map):
     """Generate a single Bazel rule string for an interface file.
     """
     name, ext = os.path.splitext(filename)
     rule_name = EXTENSION_TO_RULE[ext]
-    deps = extract_dependencies_v2(filepath, package_root, interface_map, current_pkg_name, global_interface_map)
+    deps = extract_dependencies(filepath, package_root, interface_map, current_pkg_name, global_interface_map)
 
     lines = []
     lines.append(f"{rule_name}(")
@@ -338,26 +295,7 @@ def generate_build_target_v2(filename, filepath, package_root, interface_map, cu
     return "\n".join(lines)
 
 
-def generate_build_file(interface_dir, package_root, interface_map):
-    """Generate the complete BUILD.bazel content for a directory.
-
-    Collects all interface files in the directory, determines which Bazel
-    rules are needed, and writes the appropriate load statements followed
-    by the rule definitions.
-
-    Args:
-        interface_dir: Path to the directory containing interface files.
-        package_root: Root directory of the ROS package.
-        interface_map: Dict mapping interface names to their relative directories.
-
-    Returns:
-        The complete BUILD.bazel file content as a string, or None if no
-        interface files were found.
-    """
-    return generate_build_file_v2(interface_dir, package_root, interface_map, "", {}, "@rosidl_default_runtime//:defs.bzl")
-
-
-def generate_build_file_v2(interface_dir, package_root, interface_map, current_pkg_name, global_interface_map, runtime_bzl):
+def generate_build_file(interface_dir, package_root, interface_map, current_pkg_name, global_interface_map, runtime_bzl):
     """Generate the complete BUILD.bazel content for a directory.
     """
     files = find_interface_files(interface_dir)
@@ -400,7 +338,7 @@ def generate_build_file_v2(interface_dir, package_root, interface_map, current_p
     targets = []
     for filename in files:
         filepath = os.path.join(interface_dir, filename)
-        targets.append(generate_build_target_v2(
+        targets.append(generate_build_target(
             filename, filepath, package_root, interface_map, current_pkg_name, global_interface_map))
 
     parts.append("\n\n".join(targets))
@@ -409,7 +347,7 @@ def generate_build_file_v2(interface_dir, package_root, interface_map, current_p
     return "\n".join(parts)
 
 
-def process_directory(base_dir, subdirs=None):
+def process_directory(working_directory : Path, workspace : str):
     """Process a directory tree, generating BUILD.bazel files for interfaces.
 
     Walks through subdirectories of the base directory. For each package
@@ -424,50 +362,29 @@ def process_directory(base_dir, subdirs=None):
     Returns:
         A count of how many BUILD.bazel files were generated.
     """
-    base_dir = os.path.abspath(base_dir)
-    generated_count = 0
-
-    if not os.path.isdir(base_dir):
+    base_dir = working_directory / 'workspace' / workspace / 'vendor'
+    if not base_dir.exists():
         print(f"Error: '{base_dir}' is not a directory.", file=sys.stderr)
         return 0
 
-    # Collect directories to process.
-    if subdirs:
-        # If specific subdirectories are given, use those exactly.
-        dirs_to_process = []
-        for sub in subdirs:
-            subpath = os.path.join(base_dir, sub)
-            if os.path.isdir(subpath):
-                dirs_to_process.append(subpath)
-            else:
-                print(
-                    f"Warning: subdirectory '{sub}' not found in "
-                    f"'{base_dir}', skipping.",
-                    file=sys.stderr,
-                )
-        dirs_to_process.sort()
-    else:
-        # Otherwise, list all subdirectories, applying skip rules.
-        dirs_to_process = []
-        for entry in sorted(os.listdir(base_dir)):
-            # Skip directories starting with '_' or 'bazel-'.
-            if entry.startswith("_") or entry.startswith("bazel-"):
-                continue
-            entry_path = os.path.join(base_dir, entry)
-            if os.path.isdir(entry_path):
-                dirs_to_process.append(entry_path)
-
-    base_dir = os.path.abspath(base_dir)
+    # Otherwise, list all subdirectories, applying skip rules.
+    dirs_to_process = []
+    for entry in sorted(base_dir.iterdir()):
+        # Skip directories starting with '_' or 'bazel-'.
+        if entry.name.startswith("_") or entry.name.startswith("bazel-"):
+            continue
+        if entry.is_dir():
+            dirs_to_process.append(entry)
     generated_count = 0
 
     # First pass: Build global interface map for all packages.
     global_interface_map = {}
     for package_dir in dirs_to_process:
-        package_name = os.path.basename(package_dir)
+        package_name = package_dir.name
         global_interface_map[package_name] = map_package_interfaces(package_dir)
 
     for package_dir in dirs_to_process:
-        package_name = os.path.basename(package_dir)
+        package_name = package_dir.name
         interface_map = global_interface_map[package_name]
 
         # Collect all unique directories containing interface files within the package.
@@ -482,34 +399,34 @@ def process_directory(base_dir, subdirs=None):
 
             runtime_bzl = detect_rosidl_runtime(package_dir)
 
-            interface_path = os.path.join(package_dir, rel_dir)
+            interface_path = package_dir / rel_dir
             
-            content = generate_build_file_v2(
+            content = generate_build_file(
                 interface_path, package_dir, interface_map, package_name, global_interface_map, runtime_bzl)
             if content is None:
                 continue
 
-            build_file = os.path.join(interface_path, "BUILD.bazel")
+            build_file = interface_path / "BUILD.bazel"
             with open(build_file, "w") as f:
                 f.write(content)
 
-            relative_path = os.path.relpath(build_file, base_dir)
+            relative_path = build_file.relative_to(base_dir)
             print(f"Generated: {relative_path}")
             generated_count += 1
 
         # Also check if the package directory itself contains interface files
         # (not in a msg/srv/action subdirectory).
         runtime_bzl = detect_rosidl_runtime(package_dir)
-        content = generate_build_file_v2(package_dir, package_dir, interface_map, package_name, global_interface_map, runtime_bzl)
+        content = generate_build_file(package_dir, package_dir, interface_map, package_name, global_interface_map, runtime_bzl)
         if content is not None:
-            build_file = os.path.join(package_dir, "BUILD.bazel")
+            build_file = package_dir / "BUILD.bazel"
             # Only write if there isn't already a BUILD.bazel for this dir
             # that we'd be overwriting (from the subdirectory processing).
-            if not os.path.exists(build_file):
+            if not build_file.exists():
                 with open(build_file, "w") as f:
                     f.write(content)
 
-                relative_path = os.path.relpath(build_file, base_dir)
+                relative_path = build_file.relative_to(base_dir)
                 print(f"Generated: {relative_path}")
                 generated_count += 1
 
@@ -527,12 +444,14 @@ def main():
         ),
     )
     parser.add_argument(
-        "directory",
+        "working_directory",
         help="Root directory to scan for interface files.",
+        type=Path,
     )
     parser.add_argument(
-        "subdirectories",
-        nargs="*",
+        "--workspace",
+        type=str,
+        required=True,
         help=(
             "Optional list of specific subdirectories to process. "
             "If not specified, all subdirectories are processed "
@@ -541,10 +460,7 @@ def main():
     )
 
     args = parser.parse_args()
-
-    subdirs = args.subdirectories if args.subdirectories else None
-    count = process_directory(args.directory, subdirs)
-
+    count = process_directory(args.working_directory, args.workspace)
     print(f"\nGenerated {count} BUILD.bazel file(s).")
 
 

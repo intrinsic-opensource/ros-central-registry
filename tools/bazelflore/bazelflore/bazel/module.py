@@ -36,6 +36,7 @@ class Module:
     """
     Generic Bazel module creator for ROS releases.
     """
+
     def __init__(self,
                  working_directory: Path,
                  bcr_sources: Dict[str, BcrSource],
@@ -74,9 +75,9 @@ class Module:
         self.module_url = module_url
 
         # Dependency information.
-        self.bcr_sources = bcr_sources
-        self.deb_sources = deb_sources
-        self.ros_sources = ros_sources
+        self.bcr_sources = bcr_sources.copy()
+        self.deb_sources = deb_sources.copy()
+        self.ros_sources = ros_sources.copy()
 
         # Transformed dependency information.
         self.bcr_deps = DEPS_GENERAL.copy()
@@ -112,6 +113,8 @@ class Module:
         bcr_language_deps = {}
         try:
             with tarfile.open(tarball, "r:*") as tar:
+                # Find the package.xml containing the desired package_name,
+                # and the parent directory will be the strip prefix.
                 for member in tar:
                     if member.name.endswith("package.xml"):
                         f = tar.extractfile(member)
@@ -122,13 +125,16 @@ class Module:
                                 if strip_prefix == ".":
                                     strip_prefix = ""
                                 break
-                    if member.name.lower().endswith(CC_FILE_SUFFIXES):
-                        bcr_language_deps.update(CC_BCR_DEPS)
-                    if member.name.lower().endswith(PY_FILE_SUFFIXES):
-                        bcr_language_deps.update(PY_BCR_DEPS)
-                    if member.name.lower().endswith(RS_FILE_SUFFIXES):
-                        bcr_language_deps.update(RS_BCR_DEPS)
-
+                # Iterate over all members in the <strip_prefix> folder in the tar
+                # file to obtain the likely language dependencies.
+                for member in tar:
+                    if member.name.startswith(strip_prefix):
+                        if member.name.lower().endswith(CC_FILE_SUFFIXES):
+                            bcr_language_deps.update(CC_BCR_DEPS)
+                        if member.name.lower().endswith(PY_FILE_SUFFIXES):
+                            bcr_language_deps.update(PY_BCR_DEPS)
+                        if member.name.lower().endswith(RS_FILE_SUFFIXES):
+                            bcr_language_deps.update(RS_BCR_DEPS)
         except Exception as e:
             print(f"Warning: failed to read tarball {tarball} for {self.module_name}: {e}")
         return integrity, strip_prefix, bcr_language_deps

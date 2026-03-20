@@ -74,10 +74,7 @@ def main():
     with yaspin(text="Bootstrapping new release", color="cyan") as sp:
         sp.write("> Setting up ubuntu worker")
         deb_worker = DebWorker(args.working_directory, args.ubuntu_distro, args.ubuntu_architecture, args.ros_release_date)
-        deb_sources = {}
-        for component in COMPONENTS:
-            sp.write("> Fetching ubuntu component: {0}".format(component))
-            deb_sources.update(deb_worker.fetch_packages(component))
+        deb_sources = deb_worker.fetch_packages()
         sp.write("> Collected info about {0} debians".format(len(deb_sources)))
 
         sp.write("> Scanning BCR for latest module versions")
@@ -86,7 +83,7 @@ def main():
         sp.write("> Collected info about {0} modules".format(len(bcr_sources)))
 
         sp.write("> Setting up rosdistro snapshot")
-        ros_worker = RosWorker(args.working_directory, args.ros_release_distro, args.ros_release_date)
+        ros_worker = RosWorker(args.working_directory, args.ubuntu_distro, args.ros_release_distro, args.ros_release_date)
         ros_sources = ros_worker.fetch_packages()
         sp.write("> Collected info about {0} packages".format(len(ros_sources)))
 

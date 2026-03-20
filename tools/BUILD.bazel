@@ -50,16 +50,30 @@ py_binary(
     srcs = ["manage_submodules.py"],
 )
 
-#### INTERFACE AUTOGEN TOOLING ############################################
+#### HELPER TOOLING ################################################
 
 # Generates BUILD.bazel files for ROS 2 interface definitions (.msg, .srv,
 # .action, .idl). Scans subdirectories for interface files, parses their
 # field types to discover cross-package dependencies, and emits the
 # appropriate Bazel rules. Run in the following way:
-# > bazel run //tools:interface_autogen -- $PWD/submodules/common_interfaces
+#
+# > bazel run //tools:helper_interface_autogen -- $PWD \
+#       --workspace rolling.2026-01-21.bcr.6
+#
 py_binary(
-    name = "interface_autogen",
-    srcs = ["interface_autogen.py"],
+    name = "helper_interface_autogen",
+    srcs = ["helper_interface_autogen.py"],
+)
+
+# Strips out all existing Starlark code to avoid destructive interference
+# between existing Bazel builds and what the RCR overlays.
+#
+# > bazel run //tools:helper_strip_starlark_files -- $PWD \
+#       --workspace rolling.2026-01-21.bcr.6
+#
+py_binary(
+    name = "helper_strip_starlark_files",
+    srcs = ["helper_strip_starlark_files.py"],
 )
 
 #### UBUNTU PYTHON PACKAGES TOOLING ######################################
@@ -85,6 +99,7 @@ py_library(
     imports = ["bazelflore"],
     deps = [
         requirement("requests"),
+        requirement("rosdep"),
         requirement("rosdistro"),
         requirement("rosinstall_generator"),
     ],

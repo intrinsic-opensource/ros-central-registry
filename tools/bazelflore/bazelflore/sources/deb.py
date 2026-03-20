@@ -26,6 +26,12 @@ from collections import namedtuple
 from pathlib import Path
 from typing import Dict
 
+URLS = (
+    "http://repos.ros.org/repos/ros_bootstrap/dists/{distro}/main/binary-{architecture}/Packages.gz",
+    "http://packages.ros.org/ros2/ubuntu/dists/{distro}/main/binary-{architecture}/Packages.gz",
+    "https://snapshot.ubuntu.com/ubuntu/{snapshot_id}/dists/{suite}/{component}/binary-{architecture}/Packages.gz",
+)
+
 COMPONENTS = ["main", "restricted", "universe", "multiverse"]
 
 POCKETS = ["", "-updates"]
@@ -57,7 +63,7 @@ class DebWorker:
 
 
     def _fetch_packages_gz(self, working_directory: Path, snapshot_id: str, distro: str, architecture: str,
-                        pocket: str, component: str) -> bytes:
+                        url: str, pocket: str, component: str) -> bytes:
         """
         Download and return the raw contents of a Packages.gz file.
         
@@ -72,19 +78,24 @@ class DebWorker:
         Returns:
             The raw contents of the Packages.gz file.
         """
+        
         suite = f"{distro}{pocket}"
         cache_dir = working_directory / ".cache"
-        cache_file = cache_dir / f"{snapshot_id}_{suite}_{component}_{architecture}.gz"
-
+        if url.startswith("http://packages.ros.org/ros2"):
+            cache_file = cache_dir / f"{snapshot_id}_ros_{distro}_{architecture}.gz"
+        else:
+            cache_file = cache_dir / f"{snapshot_id}_ubuntu_{suite}_{component}_{architecture}.gz"
+        url_str = url.format(
+            snapshot_id=snapshot_id,
+            distro=distro,
+            suite=suite,
+            component=component,
+            architecture=architecture,
+        )
         if cache_file.exists():
             return cache_file.read_bytes()
-
-        url = (
-            f"https://snapshot.ubuntu.com/ubuntu/{snapshot_id}"
-            f"/dists/{suite}/{component}/binary-{architecture}/Packages.gz"
-        )
         try:
-            with urllib.request.urlopen(url, timeout=60) as resp:
+            with urllib.request.urlopen(url_str, timeout=60) as resp:
                 data = resp.read()
                 if data:
                     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -187,23 +198,26 @@ class DebWorker:
         version = version.rstrip("+-")
         return version
 
-    def fetch_packages(self, component: str) -> Dict[str, DebSource]:
+    def fetch_packages(self) -> Dict[str, DebSource]:
         """
         Fetch and parse all packages from the snapshot into a {name : DebSource} dictionary.
         """
         all_debs: Dict[str, DebSource] = {}
-        for pocket in POCKETS:
-            data = self._fetch_packages_gz(
-                self.working_directory, 
-                self.snapshot_id, 
-                self.distro, 
-                self.architecture, 
-                pocket, 
-                component
-            )
-            debs = self._parse_packages(data)    
-            for name, info in debs.items():
-                if name in all_debs and all_debs[name].version > info.version:
-                    continue
-                all_debs[name] = info
+        for url in URLS:
+            for component in COMPONENTS:
+                for pocket in POCKETS:
+                    data = self._fetch_packages_gz(
+                        self.working_directory, 
+                        self.snapshot_id, 
+                        self.distro, 
+                        self.architecture, 
+                        url,
+                        pocket, 
+                        component
+                    )
+                    debs = self._parse_packages(data)
+                    for name, info in debs.items():
+                        if name in all_debs and all_debs[name].version > info.version:
+                            continue
+                        all_debs[name] = info
         return all_debs

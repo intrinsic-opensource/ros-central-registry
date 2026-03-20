@@ -34,7 +34,7 @@ from bazelflore.utils.bzlmod import increment_version
 from bazelflore.utils.bzlmod import scan_module_for_dependencies
 from bazelflore.utils.bzlmod import update_package_dependencies
 
-def _check_release_is_valid(working_directory: Path, release: str) -> Optional[Path]:
+def _check_release_is_valid(working_directory: Path, release: str, overwrite: bool = False) -> Optional[Path]:
     """
     Check if the release already exists.
 
@@ -51,7 +51,7 @@ def _check_release_is_valid(working_directory: Path, release: str) -> Optional[P
             release_exists = True
         if x.name.startswith(f"{release}.rcr."):
             patch_exists = True
-    if release_exists and not patch_exists:
+    if release_exists and (not patch_exists or overwrite):
         return modules_dir / release
     return None
 
@@ -115,23 +115,19 @@ def _find_previous_release(working_directory: Path, release: str, distro: Option
     # Return the release directory that was chosen.
     return candidate_patch_releases[0][2]
 
-def _package_migrate(package_dir: Path, package_base_version: str, package_old_version: str):
+def _package_migrate(package_dir: Path, package_ref_version: str, package_old_version: str):
     """
     Migrate a package from package_base_version -> package_old_version
+
+    Keep the MODULE.bazel and source.json, Python and Cargo environments from the REF version,
+    but move the patches and overlay directories from the OLD version, which may be attached
+    to a different release (hence we only copy the patches and overlays, not the whole dir).
     """
     package_new_version = increment_version(package_old_version)
 
-    # Add the version to metadata.json
+    # Add the version to metadata.json and make sure a folder exists for it.
     add_version_to_metadata_json(package_dir / "metadata.json", package_new_version)
-    
-    # Create the new version directory
     (package_dir / package_new_version).mkdir(parents=True, exist_ok=True)
-
-    # Copy the MODULE.bazel from the "base version"
-    for copyfile in ['MODULE.bazel', 'source.json']:
-        shutil.copy(
-            package_dir / package_base_version / copyfile,
-            package_dir / package_new_version / copyfile)
 
     # Copy patches and overlay directories from the "old version"
     for copydir in ['patches', 'overlay']:
@@ -143,28 +139,58 @@ def _package_migrate(package_dir: Path, package_base_version: str, package_old_v
     # Regenerate the integrity hashes
     return package_new_version
 
-def _package_create(package_dir: Path, package_base_version: str):
+def _package_migrate(package_dir: Path, package_ref_version: str, package_old_version: Optional[str] = None):
     """
-    Create a new package from package_base_version
+    Create a new package from package_ref_version
     """
-    package_new_version = increment_version(package_base_version)
+    # Determine the new version based on if we already have a package_old_version.
+    if package_old_version is None:
+        package_new_version = increment_version(package_ref_version)
+    else:
+        package_new_version = increment_version(package_old_version)
+
+    # Get paths to overlay directories
+    ref_overlay_dir = package_dir / package_ref_version / 'overlay'
+    new_overlay_dir = package_dir / package_new_version / 'overlay'
+
+    # Make sure we have a new folder for the package.
+    (package_dir / package_new_version).mkdir(parents=True, exist_ok=True)
 
     # Add the version to metadata.json
     add_version_to_metadata_json(package_dir / "metadata.json", package_new_version)
 
-    # Create the new version directory
-    (package_dir / package_new_version / 'overlay').mkdir(parents=True, exist_ok=True)
-
-    # Copy the MODULE.bazel from the "base version"
+    # Copy the MODULE.bazel from the "reference version"
     for copyfile in ['MODULE.bazel', 'source.json']:
         shutil.copy(
-            package_dir / package_base_version / copyfile,
+            package_dir / package_ref_version / copyfile,
             package_dir / package_new_version / copyfile)
 
-    # Add a boilerplate BUILD file.
-    add_boilerplate_build_file(package_dir / package_new_version / 'overlay')
+    # If this is the first time we've ever seen this package, create a boilerplate BUILD file.
+    if package_old_version:
+        for copydir in ['patches', 'overlay']:
+            if (package_dir / package_old_version / copydir).exists():
+                shutil.copytree(
+                    package_dir / package_old_version / copydir,
+                    package_dir / package_new_version / copydir)
 
-    # Regenerate the integrity hashes
+    # Copy the MODULE.bazel and source.json from the "reference version". This is to handle
+    # the case where the "old version" is the last release, which may have stale dependencies.
+    for copyfile in [
+        'MODULE.bazel',
+        'source.json',
+        'overlay/Cargo.toml',
+        'overlay/Cargo.lock',
+        'overlay/requirements.in',
+        'overlay/requirements.txt',
+    ]:
+        ref_file = package_dir / package_ref_version / copyfile
+        new_file = package_dir / package_new_version / copyfile
+        if ref_file.exists():
+            new_file.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(ref_file, new_file)
+
+    # Regenerate the integrity hashes and return the new version.
+    regenerate_integrity_hashes(package_dir / package_new_version)
     return package_new_version
 
 def main():
@@ -181,17 +207,22 @@ def main():
         "--from-distro",
         help="Migrate from a distro other than the one in the release string",
     )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Overwrite the workspace directory if it exists",
+    )
     args = parser.parse_args()
     new_release = f'{args.release}.rcr.0'
 
     with yaspin(text="Migrating release {0} to {1}".format(args.release, new_release), color="cyan") as sp:
         # REF: rolling.2026-01-21.        (bare release without patches)
-        # OLD: rolling.2026-01-21,bcr.2   (what to start with)
+        # OLD: rolling.2026-01-21.bcr.2   (what to start with)
         # NEW: rolling.2026-01-21.bcr.3   (what we are adding)
         modules_dir = args.working_directory / "modules"
 
         sp.write("> Ensuring REF release is valid")
-        ref_dir = _check_release_is_valid(args.working_directory, args.release)
+        ref_dir = _check_release_is_valid(args.working_directory, args.release, args.overwrite)
         if ref_dir is None:
             raise RuntimeError("Release {0} exists or already has patches.".format(args.release))
         sp.write("> Release exists and there are no patches, continuing")
@@ -217,43 +248,31 @@ def main():
         sp.write("> Adding NEW release {0}".format(new_dir.name))
 
         # As we migrate packages, we need to keep track of the old and new versions
-        # to update the dependencies after the migration has occured.
+        # to update the dependencies after the migration has occurred.
         sp.write("> Migrating modules")
-        prev_packages = {}
-        next_packages = {}
+        new_packages = {}
         for package_name, package_base_version in ref_packages.items():
             package_dir = args.working_directory / 'modules' / package_name
             if not package_dir.exists():
                 continue
-            sp.write("> Processing {0}".format(package_name))
-            if package_name in old_packages.keys():
-                package_new_version = _package_migrate(
-                    package_dir,
-                    package_base_version,
-                    old_packages[package_name]
-                )
+            package_new_version = _package_migrate(
+                package_dir,
+                package_base_version,
+                old_packages[package_name] if package_name in old_packages else None
+            )
+            if package_name in old_packages:
                 sp.write("  + Migrated {0}@{1} -> {0}@{2}".format(
                     package_name, old_packages[package_name], package_new_version))
-                prev_packages[package_name] = old_packages[package_name]
             else:
-                package_new_version = _package_create(
-                    package_dir,
-                    package_base_version
-                )
-                sp.write("  + Created new package {0}@{1}".format(
-                    package_name, package_new_version))
-                prev_packages[package_name] = package_base_version
-            regenerate_integrity_hashes(package_dir / package_new_version)
-            sp.write("  + Regenerated integrity hashes for {0}@{1}".format(
-                package_name, package_new_version))
-            next_packages[package_name] = package_new_version
+                sp.write("  + Created {0}@{1}".format(package_name, package_new_version))
+            new_packages[package_name] = package_new_version
 
         # Run through all MODULE.bazel files replacing any bazel_dep calls to old
         # package versions with the new package versions.
         sp.write("> Updating dependencies")
-        for package_name, package_new_version in next_packages.items():
+        for package_name, package_new_version in new_packages.items():
             module_file = args.working_directory / "modules" / package_name / package_new_version / "MODULE.bazel"
-            update_package_dependencies(module_file, package_name, prev_packages, next_packages)
+            update_package_dependencies(module_file, package_name, ref_packages, new_packages)
             sp.write("  + Updated dependencies for {0}@{1}".format(
                 package_name, package_new_version))
 
