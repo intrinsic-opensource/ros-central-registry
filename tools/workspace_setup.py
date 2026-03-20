@@ -54,12 +54,11 @@ def _setup_workspace(
     with open(dot_bazelversion_file, 'w') as f:
         f.write("9.0.0")
 
-    # Create a .bazelignore file
-    # dot_bazelignore_file = workspace_dir / ".bazelignore"
-    # with open(dot_bazelignore_file, 'w') as f:
-    #     f.write("base\n")
-    #     f.write("feat\n")
-
+    # Create a BUILD.bazel file
+    build_dot_bazel_file = workspace_dir / "BUILD.bazel"
+    with open(build_dot_bazel_file, 'w') as f:
+        f.write(get_copyright_header())
+        
     # Create a .bazelrc file
     dot_bazelrc_file = workspace_dir / ".bazelrc"
     with open(dot_bazelrc_file, 'w') as f:
@@ -123,6 +122,20 @@ register_toolchains("@llvm_toolchain//:all")
 """)
         for package in sorted(packages.keys()):
             f.write("bazel_dep(name = \"{0}\", version = \"{1}\")\n".format(package, packages[package]))
+        f.write("\n# include(\":dev.MODULE.bazel\")")
+
+    # Create a dev.MODULE.bazel file that forces a local_path_override fto
+    # the vendored package. This allows you to iterate and test as you go.
+    dev_module_dot_bazel_file = workspace_dir / "dev.MODULE.bazel"
+    with open(dev_module_dot_bazel_file, 'w') as f:
+        f.write(get_copyright_header())
+        for package in sorted(packages.keys()):
+            f.write("""
+local_path_override(
+    module_name = \"{0}\",
+    path = \"./vendor/{0}+\",
+)
+""".format(package))
 
     # Return how many packages were vendored.
     return len(vendor) if vendor is not None else len(packages)
