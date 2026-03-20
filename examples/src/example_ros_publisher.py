@@ -16,23 +16,23 @@ import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 
-from example.msg import ExampleMsg
+from example.msg import ExampleMessage
 
 
 class ExampleRosPublisher(Node):
 
     def __init__(self):
         super().__init__('example_ros_publisher_py')
-        self.publisher_ = self.create_publisher(ExampleMsg, 'topic', 10)
+        self.publisher_ = self.create_publisher(ExampleMessage, 'topic', 10)
         timer_period = 0.5  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
 
     def timer_callback(self):
-        msg = ExampleMsg()
-        msg.message = 'Hello, world! from Python: %d' % self.i
+        msg = ExampleMessage()
+        msg.message.data = 'Hello, world! from Python: %d' % self.i
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing: "%s"' % msg.message)
+        self.get_logger().info('Publishing: "%s"' % msg.message.data)
         self.i += 1
 
 
