@@ -4,7 +4,7 @@
     "strip_prefix": "rclcpp-30.0.0/rclcpp_action",
     "overlay": {
         "BUILD.bazel": "sha256-7TAiy1laMp+FalP5eYLoO23kukm6GXTmrJY+dazG8RM=",
-        "MODULE.bazel": "sha256-3CoImtNvxRWcsGCZ/CkN3yQ7ajchhFSsuJXHhphf2bY="
+        "MODULE.bazel": "sha256-vzJ6NCNBfOJXCuTUZan5TtucHfSbEP0JXJIQjyjAZm8="
     },
     "patches": {
         "fix_test_test_server_goal_handle_cpp.patch": "sha256-wMt+WVH/HzJXF3tcELcfnc+0LcAvKDsVkrlGZm7P9Hc="

@@ -40,7 +40,6 @@ def _rosidl_generator_py_aspect_impl(target, ctx):
         templates_hdrs = ["_{}.py", "_{}.__init__.py"],
         templates_srcs = ["_{}_s.c", "_{}_s.ep.rosidl_typesupport_c.c"],
         additional = ["--typesupport-impls=rosidl_typesupport_c"],
-        debug = True,
     )
 
     # Unpack the generated python files - there are two files per message. One is the
@@ -72,11 +71,15 @@ def _rosidl_generator_py_aspect_impl(target, ctx):
         include_dirs = [],
     )
 
-    # We need the import path relative to the runfiles root.
-    import_path = paths.join(
-        target.label.workspace_root.removeprefix("external/"),
-        target.label.package,
-    )
+    # We need the import path relative to the runfiles root, and this is different
+    # depending on whether the target is in the main workspace or an external one.
+    if target.label.workspace_root:
+        import_path = paths.join(
+            target.label.workspace_root.removeprefix("external/"),
+            target.label.package,
+        )
+    else:
+        import_path = paths.join("_main", target.label.package)
 
     # Return the depset of python interfaces and extension modules. These will be
     # aggregated by the rule and placed in the runfile path as needed.
