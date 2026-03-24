@@ -1,7 +1,5 @@
-docs/modules
+modules
 bazel-*
-MODULE.bazel.lock
+**/MODULE.bazel.lock
 *.sh
 .vscode
-thirdparty/toolchains_llvm
-thirdparty/valgrind
