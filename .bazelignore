@@ -1,6 +1,5 @@
 .github
 .cache
 modules
-releases
 submodules
 workspace
