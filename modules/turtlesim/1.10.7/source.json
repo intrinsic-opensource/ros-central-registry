@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-Ho2Ofvr55jG5hNzTbmumuraMdtc+Q5+IM4oQFx6FLls=",
+    "url": "https://github.com/ros2-gbp/ros_tutorials-release/archive/refs/tags/upstream/1.10.7.tar.gz",
+    "strip_prefix": "ros_tutorials-release-upstream-1.10.7/turtlesim"
+}

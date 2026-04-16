@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-P2xmVGUT3Ty+xneUkyAcnVGzcHu/uNU0NKk0xKCX3kQ=",
+    "url": "https://github.com/ros2-gbp/resource_retriever_service-release/archive/refs/tags/upstream/0.0.1.tar.gz",
+    "strip_prefix": "resource_retriever_service-release-upstream-0.0.1/resource_retriever_interfaces"
+}

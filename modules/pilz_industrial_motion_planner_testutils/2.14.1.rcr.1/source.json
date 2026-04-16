@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-yHvaEQgn+RwodAfWdg002mZ6nL3v7f4CdOn6sfKvgac=",
+    "url": "https://github.com/ros2-gbp/moveit2-release/archive/refs/tags/upstream/2.14.1.tar.gz",
+    "strip_prefix": "moveit2-release-upstream-2.14.1/moveit_planners/pilz_industrial_motion_planner_testutils",
+    "overlay": {
+        "BUILD.bazel": "sha256-9CaPiXerFBjWHZTfBXqpEP9MsS5pUhZKd6i4DTN6nks="
+    }
+}

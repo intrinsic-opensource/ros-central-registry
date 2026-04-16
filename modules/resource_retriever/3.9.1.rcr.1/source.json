@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Ag5DxsZEMUdoTakzX7GrZau+TzMqRIlLa7ka4qn2+RM=",
+    "url": "https://github.com/ros2-gbp/resource_retriever-release/archive/refs/tags/upstream/3.9.1.tar.gz",
+    "strip_prefix": "resource_retriever-release-upstream-3.9.1/resource_retriever",
+    "overlay": {
+        "BUILD.bazel": "sha256-tdyzGvg24PG1+5QZ5Z0eMdtplzKoM1yWnLXMiFHF4pw="
+    }
+}

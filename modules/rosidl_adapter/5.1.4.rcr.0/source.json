@@ -1,0 +1,19 @@
+{
+    "integrity": "sha256-sU5W5UZ+JqkDEPjzUzWTPUI0FHSt39mri9dBSbnhAYA=",
+    "url": "https://github.com/ros2-gbp/rosidl-release/archive/refs/tags/upstream/5.1.4.tar.gz",
+    "strip_prefix": "rosidl-release-upstream-5.1.4/rosidl_adapter",
+    "overlay": {
+        "defs.bzl": "sha256-xmQs3Os3g/Nu/n34p3kkokivBaZY0Koyeragv3nxa0k=",
+        "tools.bzl": "sha256-h/NemoJOXNRjEVYR35wLT2Whe2G3oh1kKQqufSCBiYo=",
+        "types.bzl": "sha256-OMrNf68IO6Es4E2obs7YqyXK6CyMc1rfJy284ff6YCs=",
+        "BUILD.bazel": "sha256-1kXLY5S/2cRryj1lO0oGHgLUMJpJmxX0U67skO9OOkk=",
+        "rules.bzl": "sha256-1SRch1sV5b2Ya/+YmB8WZlcUJN0b1xl/1z54IJMnU/k=",
+        "aspects.bzl": "sha256-p0vG/U4Z9AztjajGYLVIGJB8188r6nCJeJeA35O/vg8="
+    },
+    "patches": {
+        "scripts__msg2idl__py.patch": "sha256-521haPEiSQ/KX9VFbWaqSWL1EHO09hC4YJbxxmeb6vU=",
+        "scripts__action2idl__py.patch": "sha256-yTDN1otBJaeD8zMaYXQOavNdsrO2jYtoGlj0cFfTg7s=",
+        "test__test_cli_extensions__py.patch": "sha256-MSaftkBnFgibyq/6PT2o6a+ardeqIB9i68tvGWLa0is=",
+        "scripts__srv2idl__py.patch": "sha256-nSdqwoyNaJYcWFVdxmJplQoIhXjaejOKGfHerqLxk9Y="
+    }
+}

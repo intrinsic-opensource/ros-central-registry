@@ -1,0 +1,37 @@
+--- ament_pep257/main.py
++++ ament_pep257/main.py
+@@ -56,6 +56,16 @@
+ 
+ 
+ def main(argv=sys.argv[1:]):
++    default_path = os.curdir
++    if 'TEST_SRCDIR' in os.environ and 'BAZEL_TARGET' in os.environ:
++        target = os.environ['BAZEL_TARGET']
++        repo_name = target.split('//')[0].lstrip('@')
++        if not repo_name:
++            repo_name = os.environ.get('TEST_WORKSPACE', '_main')
++        default_path = os.path.relpath(
++            os.path.join(os.environ['TEST_SRCDIR'], repo_name)
++        )
++
+     parser = argparse.ArgumentParser(
+         description='Check docstrings against the style conventions in PEP 257.',
+         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+@@ -94,7 +104,7 @@
+     parser.add_argument(
+         'paths',
+         nargs='*',
+-        default=[os.curdir],
++        default=[default_path],
+         help='The files or directories to check. For directories, files ending '
+              "in '.py' will be considered.")
+     parser.add_argument(
+@@ -121,7 +131,7 @@
+     if not (args.ignore or args.select) and args.convention == 'ament':
+         args.ignore = ','.join(_ament_ignore)
+ 
+-    excludes = [os.path.abspath(e) for e in args.excludes]
++    excludes = [os.path.abspath(os.path.join(default_path, e)) for e in args.excludes]
+     report = generate_pep257_report(args.paths, excludes, args.ignore, args.select,
+                                     args.convention, args.add_ignore, args.add_select)
+     error_count = sum(len(r[1]) for r in report)

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-MO4r5Aa3uLJBmsuBqRbP0pu2RW9ojKJ2w1C4fffshhM=",
+    "url": "https://github.com/ros2-gbp/turtlebot3_autorace-release/archive/refs/tags/upstream/1.2.2.tar.gz",
+    "strip_prefix": "turtlebot3_autorace-release-upstream-1.2.2/turtlebot3_autorace_camera"
+}

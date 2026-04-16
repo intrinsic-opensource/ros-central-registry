@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-8AbmMnQJhGbrWNpHQMuRhCpeIzlEtNvBVWIGpZ9alQE=",
+    "url": "https://github.com/ros2-gbp/coin_d4_driver-release/archive/refs/tags/upstream/1.0.1.tar.gz",
+    "strip_prefix": "coin_d4_driver-release-upstream-1.0.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-/qihWeRHlvD7HO8xGvFzz+msVhNkLlzvy/9x/F0zuGM="
+    }
+}

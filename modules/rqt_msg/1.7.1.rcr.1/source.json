@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-/jpcduE1PQ/QxRy+fq94hjBWv8L/9OURZ1oV5tvX2SI=",
+    "url": "https://github.com/ros2-gbp/rqt_msg-release/archive/refs/tags/upstream/1.7.1.tar.gz",
+    "strip_prefix": "rqt_msg-release-upstream-1.7.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-EabLY8CyhNKqgkWOGZ2Kh8K9QbgHdN75luDy3AATtLg="
+    }
+}

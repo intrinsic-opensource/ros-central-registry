@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-A7ZvbkgFZQkInLJAf78GdybbSD20qL3ZuYp9AHI+UJc=",
+    "url": "https://github.com/ros2-gbp/autoware_auto_msgs-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "autoware_auto_msgs-release-upstream-1.0.0/autoware_auto_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-EujkzP+rIatJYkKP4Yis0lxKkgBIWZ6CTEwnYPfnWS8="
+    }
+}

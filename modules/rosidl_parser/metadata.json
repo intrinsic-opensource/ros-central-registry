@@ -1,0 +1,19 @@
+{
+    "homepage": "https://github.com/ros2-gbp/rosidl-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "5.1.2",
+        "5.1.2.rcr.0",
+        "5.1.2.rcr.1",
+        "5.1.4",
+        "5.1.4.rcr.0"
+    ],
+    "yanked_versions": {}
+}

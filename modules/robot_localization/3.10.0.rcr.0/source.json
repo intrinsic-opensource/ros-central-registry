@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-XvxR3GVUAHpPnNabt/OOTZ85u9o59WXrr7tW/Wy+HJk=",
+    "url": "https://github.com/ros2-gbp/robot_localization-release/archive/refs/tags/upstream/3.10.0.tar.gz",
+    "strip_prefix": "robot_localization-release-upstream-3.10.0"
+}

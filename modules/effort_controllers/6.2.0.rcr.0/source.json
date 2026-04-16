@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-hVeJQpvqMWxmMyJbBA4e3rQL4VV9SGpZhxEu4jbMVPs=",
+    "url": "https://github.com/ros2-gbp/ros2_controllers-release/archive/refs/tags/upstream/6.2.0.tar.gz",
+    "strip_prefix": "ros2_controllers-release-upstream-6.2.0/effort_controllers"
+}

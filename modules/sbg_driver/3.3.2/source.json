@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-F7vo2bbgrBONy7KnkEJ5z/M65wKlMEVbwhR6yC1ty8M=",
+    "url": "https://github.com/SBG-Systems/sbg_ros2-release/archive/refs/tags/upstream/3.3.2.tar.gz",
+    "strip_prefix": "sbg_ros2-release-upstream-3.3.2"
+}

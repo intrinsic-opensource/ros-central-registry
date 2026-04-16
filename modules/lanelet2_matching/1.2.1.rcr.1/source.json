@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-5bNxouaUdGv9/rDAa4rUayOU/3QMWWt6gn+CuudCrk4=",
+    "url": "https://github.com/ros2-gbp/lanelet2-release/archive/refs/tags/upstream/1.2.1.tar.gz",
+    "strip_prefix": "lanelet2-release-upstream-1.2.1/lanelet2_matching",
+    "overlay": {
+        "BUILD.bazel": "sha256-XAOndlK1mRWOglU5xVAlAPpNszLoQo/pqCcNn3UR7wE="
+    }
+}

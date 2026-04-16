@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-7/kN5/R3QpZMJGwH8e7U4WFd0eoXYmzpmjOSR1nyzpM=",
+    "url": "https://github.com/ros2-gbp/ros_canopen-release/archive/refs/tags/upstream/2.0.0.tar.gz",
+    "strip_prefix": "ros_canopen-release-upstream-2.0.0/can_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE="
+    }
+}

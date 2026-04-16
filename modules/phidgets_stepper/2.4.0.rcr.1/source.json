@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-ZyQdpwOFrpyaGmIfTB/6pzHqVCsUgYfXoXQ6SugSRYY=",
+    "url": "https://github.com/ros2-gbp/phidgets_drivers-release/archive/refs/tags/upstream/2.4.0.tar.gz",
+    "strip_prefix": "phidgets_drivers-release-upstream-2.4.0/phidgets_stepper",
+    "overlay": {
+        "BUILD.bazel": "sha256-LLCiHWpOusOItBDKesW3YMfxOLgZglFQEeOWEr2Zbt4="
+    }
+}

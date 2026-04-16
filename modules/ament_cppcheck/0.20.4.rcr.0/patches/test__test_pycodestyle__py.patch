@@ -1,0 +1,9 @@
+--- test/test_pycodestyle.py
++++ test/test_pycodestyle.py
+@@ -18,5 +18,5 @@
+ 
+ @pytest.mark.linter
+ def test_pycodestyle():
+-    rc = main(argv=['.', 'test'])
++    rc = main(argv=[])
+     assert rc == 0, 'Found code style errors / warnings'

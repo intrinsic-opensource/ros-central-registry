@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-nIbDz7UrgnV1KNYJmyd1/bSnwRkfrpFWvhgnwogIJAI=",
+    "url": "https://github.com/ros2-gbp/yasmin-release/archive/refs/tags/upstream/4.2.3.tar.gz",
+    "strip_prefix": "yasmin-release-upstream-4.2.3/yasmin_editor"
+}

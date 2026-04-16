@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-R+QJRTRAY97DAnkWVrMmJNzWysZwllLR28nTExCnxGY=",
+    "url": "https://github.com/ros2-gbp/ros2_control-release/archive/refs/tags/upstream/6.5.1.tar.gz",
+    "strip_prefix": "ros2_control-release-upstream-6.5.1/hardware_interface"
+}

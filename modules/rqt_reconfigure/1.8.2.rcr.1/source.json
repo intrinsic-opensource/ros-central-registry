@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-7UhczrhEidu1XAfNxYMNy3dk4v0+rLtamvNbGn2dSmE=",
+    "url": "https://github.com/ros2-gbp/rqt_reconfigure-release/archive/refs/tags/upstream/1.8.2.tar.gz",
+    "strip_prefix": "rqt_reconfigure-release-upstream-1.8.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-CM0CdNBxVTmcLbBZ/E4L/uUd64vIGKfFxz44ZdWkmpo="
+    }
+}

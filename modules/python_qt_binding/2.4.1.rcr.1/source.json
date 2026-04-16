@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-o3cePsCqj56V6lqQvEZ18jjw0Vvd4nJ6h1smTu9Zemc=",
+    "url": "https://github.com/ros2-gbp/python_qt_binding-release/archive/refs/tags/upstream/2.4.1.tar.gz",
+    "strip_prefix": "python_qt_binding-release-upstream-2.4.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-WJ1yly2AypPeC1N67b1juVGZ9vOMDmDGbyCGvfu4/Bo="
+    }
+}

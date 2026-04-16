@@ -1,0 +1,29 @@
+{
+    "integrity": "sha256-iOMXSu+uFVLqYpNefgYE1svKoyWUfhDKagYW2z97f6g=",
+    "url": "https://github.com/ros2-gbp/rcl-release/archive/refs/tags/upstream/10.2.6.tar.gz",
+    "strip_prefix": "rcl-release-upstream-10.2.6/rcl",
+    "overlay": {
+        "BUILD.bazel": "sha256-NF3XRfwBWfvD1w+0hMd7X2TVd+xu8OKN4ZZT+BLe2Jk="
+    },
+    "patches": {
+        "test__rcl__test_wait__cpp.patch": "sha256-dVHHVZfwbJaUwwUbz6w60HQwXO06Prkd7ZQzo+15a/Y=",
+        "test__rcl__test_rmw_impl_id_check_func__cpp.patch": "sha256-OaPGprr03o74SFffNEzXOETW8dC9uRdBus6rufify/0=",
+        "test__rcl__test_subscription__cpp.patch": "sha256-iDiwQcg+EIESKFOAj5pO3IiH7oy4CMdIrrNxoj7iDUc=",
+        "test__rcl__test_init__cpp.patch": "sha256-kmcKTcqRqEkELyeuhRULS4d+45rbbsWmjVHLwMKWcgo=",
+        "test__rcl__test_arguments__cpp.patch": "sha256-pTsVPYiCWMUk5HFmsVeH98ajPpBR2lk2DVpWKNjqbyA=",
+        "test__rcl__test_logging__cpp.patch": "sha256-6U+BvEDIZc1xWUazg1udv5mk4oZkZYzZQmkOv6KKe/E=",
+        "test__rcl__test_security__cpp.patch": "sha256-t70iFT0UjBt0BikXjeAjhijDIQpI6Sv27JFzG8eDhNw=",
+        "test__rcl__test_context__cpp.patch": "sha256-xGppAMwVcRvNeIedoNF/eaozZweiJtuUxmYO+NoVTsQ=",
+        "test__rcl__test_publisher_wait_all_ack__cpp.patch": "sha256-riJi2FeoMPTZqhh3yW9prZ4KAQVG1w3MTsYBc+IycXU=",
+        "test__rcl__test_publisher__cpp.patch": "sha256-a2TMF2WxsQ6uMTPY8GCfiCFtrWlErQxirxY15XEbyYw=",
+        "test__rcl__test_service_event_publisher__cpp.patch": "sha256-v93HtzYKz8ddXPd0jRLCA4WX7b/B5L6dv0y1ySOruHw=",
+        "test__rcl__test_type_description_conversions__cpp.patch": "sha256-mKjt3z4O6etbhVyCkcixeSGK5QNZ1zNl2SYW2clhqNw=",
+        "test__rcl__test_info_by_topic__cpp.patch": "sha256-u+1Nf5+Tp7nhLQpxOv9NZvdJb10GQHSMXWpbx/sKz34=",
+        "test__rcl__test_guard_condition__cpp.patch": "sha256-TMP7FwV5TATseLap6I3sCxydrZqDASH25vizU1lbruw=",
+        "test__rcl__test_validate_enclave_name__cpp.patch": "sha256-EW9xTORmU2mEVBSrsWHjFEWYeqeVZNHRzz3cNGjWQUE=",
+        "test__rcl__test_node__cpp.patch": "sha256-4iSFi/+R2R3CY4B2R4xGdGyxxISVf9k4vbPMeBlqTXw=",
+        "test__rcl__test_domain_id__cpp.patch": "sha256-37AGRCo9FH0XvybtNrAro16wf9Zg2qSDhlAJSaNDgYE=",
+        "test__rcl__test_service__cpp.patch": "sha256-/5G4LkYQtusDFQVpt0X8llb9xpPRZk8pUHgS5ux2a94=",
+        "test__rcl__test_expand_topic_name__cpp.patch": "sha256-oSnAdR6X8ovvjtiEdo2WJa6NfwJXIApKbqKH9ctbHnw="
+    }
+}

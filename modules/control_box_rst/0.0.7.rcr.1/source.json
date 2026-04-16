@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-7UGgl25RO4RUzS8Yqw3ccHKs1/vpS7jkH28QPJzi3yw=",
+    "url": "https://github.com/ros2-gbp/control_box_rst-release/archive/refs/tags/upstream/0.0.7.tar.gz",
+    "strip_prefix": "control_box_rst-release-upstream-0.0.7",
+    "overlay": {
+        "BUILD.bazel": "sha256-3v2OD9Yyw5vS7yL6vihl3i2LB//gBN8YPvNPlfgvuO4="
+    }
+}

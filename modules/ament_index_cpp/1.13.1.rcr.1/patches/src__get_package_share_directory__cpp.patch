@@ -1,0 +1,19 @@
+--- src/get_package_share_directory.cpp
++++ src/get_package_share_directory.cpp
+@@ -16,7 +16,7 @@
+ 
+ #include <filesystem>
+ #include <string>
+-
++#include <iostream>
+ #include "ament_index_cpp/get_package_prefix.hpp"
+ 
+ namespace ament_index_cpp
+@@ -36,6 +36,7 @@
+ {
+   std::filesystem::path result;
+   get_package_prefix(package_name, result);
++  std::cout << result << std::endl;
+   path = result / "share" / package_name;
+ }
+ 

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-TLL1U0YFGTMKUtywZeq74XLhS/7l5/KPrR2n1fx1Uc4=",
+    "url": "https://github.com/ros2-gbp/joint_state_publisher-release/archive/refs/tags/upstream/2.4.1.tar.gz",
+    "strip_prefix": "joint_state_publisher-release-upstream-2.4.1/joint_state_publisher",
+    "overlay": {
+        "BUILD.bazel": "sha256-rATKAotYP9aTL0e5E2LGH9w3QXU8Evl/IRbKtToJOQs="
+    }
+}

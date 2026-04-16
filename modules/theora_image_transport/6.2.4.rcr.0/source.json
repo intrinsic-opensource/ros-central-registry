@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-18suseMJpf7fvwkti76mYs4+DFCzx8q22Kxz8Y1cFNw=",
+    "url": "https://github.com/ros2-gbp/image_transport_plugins-release/archive/refs/tags/upstream/6.2.4.tar.gz",
+    "strip_prefix": "image_transport_plugins-release-upstream-6.2.4/theora_image_transport",
+    "overlay": {
+        "BUILD.bazel": "sha256-CHeFoYjznvm6cpXhgJUVlbqUHEYLP95RZ8/0NLsRULY="
+    }
+}

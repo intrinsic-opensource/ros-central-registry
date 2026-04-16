@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-iOMXSu+uFVLqYpNefgYE1svKoyWUfhDKagYW2z97f6g=",
+    "url": "https://github.com/ros2-gbp/rcl-release/archive/refs/tags/upstream/10.2.6.tar.gz",
+    "strip_prefix": "rcl-release-upstream-10.2.6/rcl_lifecycle"
+}

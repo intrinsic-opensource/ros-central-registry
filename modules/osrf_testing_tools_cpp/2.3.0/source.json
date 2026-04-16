@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-bJhAFCyfC5ieFHwWUhc9r4AWQfnsdltz12GdYEMjDbI=",
+    "url": "https://github.com/ros2-gbp/osrf_testing_tools_cpp-release/archive/refs/tags/upstream/2.3.0.tar.gz",
+    "strip_prefix": "osrf_testing_tools_cpp-release-upstream-2.3.0/osrf_testing_tools_cpp"
+}

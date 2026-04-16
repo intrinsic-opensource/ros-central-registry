@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-c/QpU3e3SstCH8I/tEud6sgXkXZEZd2JNTfSi/VKbTo=",
+    "url": "https://github.com/ros2-gbp/rmf_demos-release/archive/refs/tags/upstream/2.8.2.tar.gz",
+    "strip_prefix": "rmf_demos-release-upstream-2.8.2/rmf_demos_tasks"
+}

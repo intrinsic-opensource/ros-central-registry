@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-fa8V/F3UmfexfiOYhpxrmY1l/ztsGiS54W91zEF9LEY=",
+    "url": "https://github.com/ros2-gbp/gtsam-release/archive/refs/tags/upstream/4.3.0.tar.gz",
+    "strip_prefix": "gtsam-release-upstream-4.3.0"
+}

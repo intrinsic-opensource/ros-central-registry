@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-y3Kyqhf5ldNh1eBQYIv9uWtZG3urlgbojhbvt4ZyV2o=",
+    "url": "https://github.com/ros2-gbp/gscam-release/archive/refs/tags/upstream/2.0.2.tar.gz",
+    "strip_prefix": "gscam-release-upstream-2.0.2"
+}

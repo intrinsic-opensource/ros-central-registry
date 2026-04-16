@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-exN/xsP74YU/a/F9dLn9NeaH2scYCX3AMUAja+FpJgQ=",
+    "url": "https://github.com/ros2-gbp/plotjuggler-release/archive/refs/tags/upstream/3.14.4.tar.gz",
+    "strip_prefix": "plotjuggler-release-upstream-3.14.4",
+    "overlay": {
+        "BUILD.bazel": "sha256-b7jKFKL4OwfWiRHjr/iT1oV6vpp+4rz+IboVL12gJK4="
+    }
+}

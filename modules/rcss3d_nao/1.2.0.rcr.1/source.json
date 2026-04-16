@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-ORylFVV2LUOZ6CGjHm4XFRhEi94T9rq9+1zJuocwySM=",
+    "url": "https://github.com/ros2-gbp/rcss3d_nao-release/archive/refs/tags/upstream/1.2.0.tar.gz",
+    "strip_prefix": "rcss3d_nao-release-upstream-1.2.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-pQdDgUKB6yanOhxzY1tNjMYxJxSegwcS9gFdhah1PZY="
+    }
+}

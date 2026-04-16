@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-KWuG+AziOhqr+PTwtzGEmBmOjdn9Q9V1zi1kKeBX14U=",
+    "url": "https://github.com/ros2-gbp/filters-release/archive/refs/tags/upstream/2.2.2.tar.gz",
+    "strip_prefix": "filters-release-upstream-2.2.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-o18uiDUMI2VeErUQG0nXXTaZIf68kfz+wEURHFkdj3w="
+    }
+}

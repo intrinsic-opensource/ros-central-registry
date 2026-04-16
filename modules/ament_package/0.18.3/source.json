@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-VJge9vAr5hAxuB62uTgrdSBmxnSBuwYLz0XMgYL7Tzc=",
+    "url": "https://github.com/ros2-gbp/ament_package-release/archive/refs/tags/upstream/0.18.3.tar.gz",
+    "strip_prefix": "ament_package-release-upstream-0.18.3"
+}

@@ -1,0 +1,11 @@
+--- src/class_loader.cpp
++++ src/class_loader.cpp
+@@ -82,7 +82,7 @@
+ 
+ bool ClassLoader::isLibraryLoaded() const
+ {
+-  return class_loader::impl::isLibraryLoaded(getLibraryPath(), this);
++  return load_ref_count_ > 0;
+ }
+ 
+ bool ClassLoader::isLibraryLoadedByAnyClassloader() const

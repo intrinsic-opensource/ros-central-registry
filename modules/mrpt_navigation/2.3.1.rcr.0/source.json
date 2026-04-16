@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-9zV6TAPhwtQhGzrqkdMj/CObgYWH1VLXlpgB8MLC4no=",
+    "url": "https://github.com/ros2-gbp/mrpt_navigation-release/archive/refs/tags/upstream/2.3.1.tar.gz",
+    "strip_prefix": "mrpt_navigation-release-upstream-2.3.1/mrpt_navigation",
+    "overlay": {
+        "BUILD.bazel": "sha256-sQhoYjsyHGC1x74VTuakEa9j0xsQF1CpK0MQi8sj5Eo="
+    }
+}

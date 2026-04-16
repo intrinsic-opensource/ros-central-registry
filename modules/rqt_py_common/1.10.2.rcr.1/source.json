@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-IJiP6WXxQpVkrc3jrT7bMaGGKjBlcsXSp0RI8cr2cTc=",
+    "url": "https://github.com/ros2-gbp/rqt-release/archive/refs/tags/upstream/1.10.2.tar.gz",
+    "strip_prefix": "rqt-release-upstream-1.10.2/rqt_py_common",
+    "overlay": {
+        "BUILD.bazel": "sha256-dpCgsgfhxrJppnhWniR/aILKysph0hBCh/8w7TZQ7h8="
+    }
+}

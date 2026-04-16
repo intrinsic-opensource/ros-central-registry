@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-3zS4IC6gVslbX4QJpIefYLvm4NCVrGa2oUn9ZO8iqCs=",
+    "url": "https://github.com/ros2-gbp/rqt_runtime_monitor-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "rqt_runtime_monitor-release-upstream-1.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-XDivsB3pPOhs9bYp3w8hbJIUIdhdChAhDEFNBvbBZIs="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-RO87uRuLoWbtsifuW1MrwkzCs1zKXWvdnSF3dl15Opg=",
+    "url": "https://github.com/ros2-gbp/performance_test_fixture-release/archive/refs/tags/upstream/0.4.1.tar.gz",
+    "strip_prefix": "performance_test_fixture-release-upstream-0.4.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-sqwzpiYyDNR3zd2qSJ7UX/LmLDOHnS8/fOhVGygV49c="
+    }
+}

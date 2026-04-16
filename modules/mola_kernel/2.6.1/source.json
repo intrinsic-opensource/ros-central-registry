@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-SzJJCqg6rhYZF0gW8K8gyMTchSxOFDWi9YmVb/y+D1E=",
+    "url": "https://github.com/ros2-gbp/mola-release/archive/refs/tags/upstream/2.6.1.tar.gz",
+    "strip_prefix": "mola-release-upstream-2.6.1/mola_kernel"
+}

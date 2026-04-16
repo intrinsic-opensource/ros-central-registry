@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-9mj5PTHihBCp7jjNRyrLToiCSIbSc+VBeAIsoAmWBnQ=",
+    "url": "https://github.com/ros2-gbp/joy_tester-release/archive/refs/tags/upstream/0.0.2.tar.gz",
+    "strip_prefix": "joy_tester-release-upstream-0.0.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-qDANMIIuuj+yxbmcwlirXj3EiNnEj/vbHTdOCqMpbn4="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-25EETbXh+DOCIFzG9zy22yg1ljbZxHANSdfvqXWUppc=",
+    "url": "https://github.com/ros2-gbp/leo_common-release/archive/refs/tags/upstream/3.2.0.tar.gz",
+    "strip_prefix": "leo_common-release-upstream-3.2.0/leo_description",
+    "overlay": {
+        "BUILD.bazel": "sha256-LgjSwcwA4kridlhTcvVjSKJc+uaKnCAfWK3a28QBhUI="
+    }
+}

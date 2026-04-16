@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-nIbDz7UrgnV1KNYJmyd1/bSnwRkfrpFWvhgnwogIJAI=",
+    "url": "https://github.com/ros2-gbp/yasmin-release/archive/refs/tags/upstream/4.2.3.tar.gz",
+    "strip_prefix": "yasmin-release-upstream-4.2.3/yasmin_factory",
+    "overlay": {
+        "BUILD.bazel": "sha256-U9cwWGQzqSKlf9k2BmaR4yjefwu7RtiWYVPn+6AKyX4="
+    }
+}

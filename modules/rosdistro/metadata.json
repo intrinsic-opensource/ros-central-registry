@@ -1,0 +1,19 @@
+{
+    "homepage": "https://github.com/ros/rosdistro",
+    "maintainers": [
+        {
+            "email": "simmers@intrinsic.ai",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "rolling.2026-01-21",
+        "rolling.2026-01-21.rcr.0",
+        "rolling.2026-01-21.rcr.1",
+        "rolling.2026-04-15",
+        "rolling.2026-04-15.rcr.0"
+    ],
+    "yanked_versions": {}
+}

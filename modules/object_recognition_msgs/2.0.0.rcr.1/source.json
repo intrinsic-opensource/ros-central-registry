@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-US1AENMhWzbyefka2dxQF2FzyA7rx0tsTE0Jt4ocYiw=",
+    "url": "https://github.com/ros2-gbp/object_recognition_msgs-release/archive/refs/tags/upstream/2.0.0.tar.gz",
+    "strip_prefix": "object_recognition_msgs-release-upstream-2.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-Rmn+/9axcUeKdijnYsEfCnQPEOIwq0xzCYjOf03VtYE="
+    }
+}

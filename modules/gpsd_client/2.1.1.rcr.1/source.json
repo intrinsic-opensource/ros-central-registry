@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-YmnVYaDY5/nB05dFZlc+IA60mQBCN5XuglFK+SpQX5I=",
+    "url": "https://github.com/ros2-gbp/gps_umd-release/archive/refs/tags/upstream/2.1.1.tar.gz",
+    "strip_prefix": "gps_umd-release-upstream-2.1.1/gpsd_client",
+    "overlay": {
+        "BUILD.bazel": "sha256-eqI0MnN0xHM5r476U7bgnVSKnmTHfG2mv5sgcmL+ceY="
+    }
+}

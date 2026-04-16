@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-cuasQqLvOtMX7xXFkWbcEjm3IhaU/3oY/e02FDlpzxo=",
+    "url": "https://github.com/ros2-gbp/navigation_msgs-release/archive/refs/tags/upstream/2.6.0.tar.gz",
+    "strip_prefix": "navigation_msgs-release-upstream-2.6.0/map_msgs"
+}

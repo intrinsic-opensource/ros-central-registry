@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-2a7Q4XWn3GGZ1F/f5SMVagvZjUnebmpBjIubABFdgzA=",
+    "url": "https://github.com/ros2-gbp/flex_sync-release/archive/refs/tags/upstream/2.0.1.tar.gz",
+    "strip_prefix": "flex_sync-release-upstream-2.0.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-LdWxBVAbWzSBydgHXc6V0Uqc1C8/iHbtymS0KHySYTg="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-bRX+Cva2n+xcDdECHBqLeBivoR7ls245+BeLKrtlukc=",
+    "url": "https://github.com/ros2-gbp/ros2_control-release/archive/refs/tags/upstream/6.3.2.tar.gz",
+    "strip_prefix": "ros2_control-release-upstream-6.3.2/hardware_interface_testing",
+    "overlay": {
+        "BUILD.bazel": "sha256-lNf/Bw0Ba8JIVam6djkSCwRl9o5Gdnk8HA0B0+29aAw="
+    }
+}

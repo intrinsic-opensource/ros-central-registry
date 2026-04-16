@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Z7i9bxdNYIqXKpjmV0+2cr32G+83vHQSOzTfrpcFWPM=",
+    "url": "https://github.com/ros2-gbp/rosidl_rust-release/archive/refs/tags/upstream/0.4.9.tar.gz",
+    "strip_prefix": "rosidl_rust-release-upstream-0.4.9/rosidl_generator_rs",
+    "overlay": {
+        "BUILD.bazel": "sha256-yMP0W0bZBQXZwBrpOuJjp5HXr6T4mTLLIzY/CVapYBM="
+    }
+}

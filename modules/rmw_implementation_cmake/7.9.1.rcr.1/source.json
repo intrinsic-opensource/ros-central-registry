@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-cvatTiPDbXYV4IEQxE1h/Mc4d3cZOITBpbh+OUktXfc=",
+    "url": "https://github.com/ros2-gbp/rmw-release/archive/refs/tags/upstream/7.9.1.tar.gz",
+    "strip_prefix": "rmw-release-upstream-7.9.1/rmw_implementation_cmake",
+    "overlay": {
+        "BUILD.bazel": "sha256-cgVjSmIuA+l/wB9N5vUXGMmEdaydKuUGnH0AeatmIUM="
+    }
+}

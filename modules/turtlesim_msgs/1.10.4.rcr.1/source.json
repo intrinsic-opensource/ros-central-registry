@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-4kljxWewoSaApuiQ6sm1L3zCv0xcNdk5ZZhsLRnsiMs=",
+    "url": "https://github.com/ros2-gbp/ros_tutorials-release/archive/refs/tags/upstream/1.10.4.tar.gz",
+    "strip_prefix": "ros_tutorials-release-upstream-1.10.4/turtlesim_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-llGbCbkstRxexxmLWky0L+Xi0CtGBi4+l3RMXETFiK8="
+    }
+}

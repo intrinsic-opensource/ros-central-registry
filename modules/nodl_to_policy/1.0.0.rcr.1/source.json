@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-aXZ/Upn+LXcQyBP7oUDnzCZRvxZVlGKAgqhlQ9kZREU=",
+    "url": "https://github.com/ros2-gbp/nodl_to_policy-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "nodl_to_policy-release-upstream-1.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-7gFkZ22kmAWvbVBoYIObLuMisjGp99RzEIfrmohVqL4="
+    }
+}

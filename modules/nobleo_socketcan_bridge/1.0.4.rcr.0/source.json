@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-otkEkGfr3LcE11iPX6YaQ6FvvYcU6xfjqcXCBa9ogF0=",
+    "url": "https://github.com/ros2-gbp/nobleo_socketcan_bridge-release/archive/refs/tags/upstream/1.0.4.tar.gz",
+    "strip_prefix": "nobleo_socketcan_bridge-release-upstream-1.0.4",
+    "overlay": {
+        "BUILD.bazel": "sha256-AUm7P4HIgM0mvnbCnOESgbsELAFEO2y8mHvZei2xxkk="
+    }
+}

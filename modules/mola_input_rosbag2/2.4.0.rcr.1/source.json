@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-zCMO3Itc7rLpjqiFhgxbv0aW5WGUBKtLtRpLLQJm8cs=",
+    "url": "https://github.com/ros2-gbp/mola-release/archive/refs/tags/upstream/2.4.0.tar.gz",
+    "strip_prefix": "mola-release-upstream-2.4.0/mola_input_rosbag2",
+    "overlay": {
+        "BUILD.bazel": "sha256-VaJ6RTdsogqetOWn3nZNL2BRG2kFJ2dmabu9cR8t03A="
+    }
+}

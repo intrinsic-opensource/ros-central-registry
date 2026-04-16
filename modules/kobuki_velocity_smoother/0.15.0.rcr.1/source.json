@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-GeWLWA8sJFXLPfI99GdhBekXnN2z3gqQsWrODoMKF6g=",
+    "url": "https://github.com/ros2-gbp/kobuki_velocity_smoother-release/archive/refs/tags/upstream/0.15.0.tar.gz",
+    "strip_prefix": "kobuki_velocity_smoother-release-upstream-0.15.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-RUoFJAYtsto1FdgYfLjskpbZ5hiOrsfO61n6cTO4vQY="
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-ggKnbdLd8lFMVd9GACXakn/a2Kp7GvyAwpdlaW4ekCo=",
+    "url": "https://github.com/ros2-gbp/acado_vendor-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "acado_vendor-release-upstream-1.0.0"
+}

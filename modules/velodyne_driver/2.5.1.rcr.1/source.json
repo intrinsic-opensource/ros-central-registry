@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-dAElODPv3o1p15c2XTddZsVRpwoMthaFH6rPhsj4JQg=",
+    "url": "https://github.com/ros2-gbp/velodyne-release/archive/refs/tags/upstream/2.5.1.tar.gz",
+    "strip_prefix": "velodyne-release-upstream-2.5.1/velodyne_driver",
+    "overlay": {
+        "BUILD.bazel": "sha256-VFAL3Uazwj9c7K8SLBxG+u/zSfNv/h5xqJa7XnkmWjQ="
+    }
+}

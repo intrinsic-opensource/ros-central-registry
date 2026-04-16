@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-5PRxYcr05uaeALAVdZs11C7EWH8BmeHEv1+ulF3pPQA=",
+    "url": "https://github.com/ros2-gbp/ntpd_driver-release/archive/refs/tags/upstream/2.3.0.tar.gz",
+    "strip_prefix": "ntpd_driver-release-upstream-2.3.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-HKWjif9WvCs7pfa4pk+Kee1x5kjQ2MXC8IzE37VCFT0="
+    }
+}

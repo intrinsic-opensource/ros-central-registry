@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-k/Ua9e8Vl0gIdb+zSSpBXOrE4SR+r5S707WYoq/Hq3Q=",
+    "url": "https://github.com/ros2-gbp/nao_interfaces-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "nao_interfaces-release-upstream-1.0.0/nao_command_msgs"
+}

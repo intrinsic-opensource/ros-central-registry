@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-B4/r5ohxZUJWGd3QDmkiNxytEA8CGtaH6V5xzNvF5x0=",
+    "url": "https://github.com/ros2-gbp/rqt_action-release/archive/refs/tags/upstream/2.4.1.tar.gz",
+    "strip_prefix": "rqt_action-release-upstream-2.4.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-LPSsxaj19Bj/h8OGlwEVtMHag7RQwb/4Z3+yIOxTAks="
+    }
+}

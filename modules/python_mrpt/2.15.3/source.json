@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-ORpYcWoTTNtKSQeH7o5IYDJGPbuFjd76KshgGY8ex9c=",
+    "url": "https://github.com/ros2-gbp/python_mrpt_ros-release/archive/refs/tags/upstream/2.15.3.tar.gz",
+    "strip_prefix": "python_mrpt_ros-release-upstream-2.15.3/python_mrpt"
+}

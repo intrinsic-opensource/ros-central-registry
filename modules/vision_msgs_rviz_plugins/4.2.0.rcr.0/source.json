@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-AIbRfrmRVPy+S5WX1tlCP0H2n+FDDsqbhmtRMebOnRQ=",
+    "url": "https://github.com/ros2-gbp/vision_msgs-release/archive/refs/tags/upstream/4.2.0.tar.gz",
+    "strip_prefix": "vision_msgs-release-upstream-4.2.0/vision_msgs_rviz_plugins"
+}

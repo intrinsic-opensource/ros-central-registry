@@ -1,0 +1,17 @@
+{
+    "homepage": "https://github.com/ros2-gbp/hebi_cpp_api-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "3.16.0",
+        "3.16.0.rcr.0",
+        "3.16.0.rcr.1"
+    ],
+    "yanked_versions": {}
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-WSg/apl10jU+Ingh+lQghwYAR4hUoy+aBCyTzcYiTO4=",
+    "url": "https://github.com/ros2-gbp/robot_state_publisher-release/archive/refs/tags/upstream/3.5.5.tar.gz",
+    "strip_prefix": "robot_state_publisher-release-upstream-3.5.5",
+    "overlay": {
+        "BUILD.bazel": "sha256-aH1AniB6TOzt/Cv12zTc5u8ejDY+YaYRPP+4Cyvjkpk="
+    }
+}

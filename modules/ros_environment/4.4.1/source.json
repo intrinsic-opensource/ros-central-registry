@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-XsQmyEjNjlkLjZ8vPbus2JXuF61m4Zo3IwptPA8L0gI=",
+    "url": "https://github.com/ros2-gbp/ros_environment-release/archive/refs/tags/upstream/4.4.1.tar.gz",
+    "strip_prefix": "ros_environment-release-upstream-4.4.1"
+}

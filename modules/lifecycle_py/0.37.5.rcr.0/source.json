@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-PXuIA2DLz2X/zmf00JkUo69a07eu8NG48eilww/e6Y8=",
+    "url": "https://github.com/ros2-gbp/demos-release/archive/refs/tags/upstream/0.37.5.tar.gz",
+    "strip_prefix": "demos-release-upstream-0.37.5/lifecycle_py"
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-D2AN7z00OXFm+8XLuM8xwSJoSPSS8kBJO6XJXwSAaME=",
+    "url": "https://github.com/ros2-gbp/ros2_snapshot-release/archive/refs/tags/upstream/0.0.6.tar.gz",
+    "strip_prefix": "ros2_snapshot-release-upstream-0.0.6"
+}

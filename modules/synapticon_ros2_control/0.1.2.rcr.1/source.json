@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-mF9j/UD75WEfkLOxq72yPvV0dDLc9FvsQ+o/6yPHPzE=",
+    "url": "https://github.com/ros2-gbp/synapticon_ros2_control-release/archive/refs/tags/upstream/0.1.2.tar.gz",
+    "strip_prefix": "synapticon_ros2_control-release-upstream-0.1.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-KjWf7E4knFSeEstW5HWWRNg6r0lsGwQ4n20pjPinOgM="
+    }
+}

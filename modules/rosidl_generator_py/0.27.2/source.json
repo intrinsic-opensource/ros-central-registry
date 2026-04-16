@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-eLre3T5/HS6ahpu7xL8p0YU9m9O1PCvUMhzRqBYIxYo=",
+    "url": "https://github.com/ros2-gbp/rosidl_python-release/archive/refs/tags/upstream/0.27.2.tar.gz",
+    "strip_prefix": "rosidl_python-release-upstream-0.27.2/rosidl_generator_py"
+}

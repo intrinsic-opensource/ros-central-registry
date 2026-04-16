@@ -1,0 +1,24 @@
+{
+    "integrity": "sha256-QJZI4orYfzGiYWu0mv+nO9nJZdQPNQEEJmgIAxH7eR4=",
+    "url": "https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/upstream/30.1.4.tar.gz",
+    "strip_prefix": "rclcpp-release-upstream-30.1.4/rclcpp",
+    "overlay": {
+        "BUILD.bazel": "sha256-1jpOQp+ir1nRELb+qyMYGwG6zG/CMA5xmegVln7vnfs="
+    },
+    "patches": {
+        "test__rclcpp__test_generic_service__cpp.patch": "sha256-kfJJrK8aTn3s88wUudYC4HCbv1VaRWHQl9rC7JOa1c4=",
+        "test__rclcpp__test_intra_process_manager__cpp.patch": "sha256-bXa2P1WqBoGfYc+AZYzSBw0Eguvw99BNiwBljCUr4Z4=",
+        "test__rclcpp__test_parameter_client__cpp.patch": "sha256-pSecS6VRUjY09Hk1M96QS3xcsuIWjuizmHr4UmgvGiM=",
+        "test__rclcpp__wait_set_policies__test_storage_policy_common__cpp.patch": "sha256-jEqqj3BxVEKqd14pE55MReRMRH4GWYD9pjw7eNlBbbk=",
+        "test__rclcpp__test_client_common__cpp.patch": "sha256-lRIqJl8DdpUQ4hAuQp5nqHjj41zPAc9snLffDGf4N9g=",
+        "test__rclcpp__node_interfaces__test_does_not_compile__get_node_topics_interface_const_ptr_wrapped_node__cpp.patch": "sha256-BfKvEm0H5JOsIqsH1W3J6T3yLvv4THgk29yMq6PeIFM=",
+        "test__rclcpp__test_generic_client__cpp.patch": "sha256-0FXyG2Rlob0RqoXOaaZj5xYe+44g3ovECLVQMulaIlA=",
+        "test__rclcpp__node_interfaces__test_node_parameters__cpp.patch": "sha256-RrwbrQ1KqQ61qXC714xBVtVnxs/WuzwMPxbYb+C08Uw=",
+        "test__rclcpp__test_generic_pubsub__cpp.patch": "sha256-bUzG0PecG+jhws+JJzj6GZVGPBnRTYHWIubruC5zgt0=",
+        "test__rclcpp__test_parameter_service__cpp.patch": "sha256-6tFSwKwFP2BCfszdw+U+P9DD+5S5W/SrR+6zGeFhezI=",
+        "test__rclcpp__node_interfaces__test_does_not_compile__get_node_topics_interface_const_ref_wrapped_node__cpp.patch": "sha256-ol4Q/LOaoR+2AtHTJlzw/cxzBEeXtN1QRJ0pJGYu23E=",
+        "test__rclcpp__node_interfaces__test_node_graph__cpp.patch": "sha256-QdN40GDnLfYIyPcVvcuH7OUNQJUnPqnO3S867aBQQDI=",
+        "test__rclcpp__test_typesupport_helpers__cpp.patch": "sha256-PPj1Qso+i6p/kiUbb9tDz4lLG8YZev4Ig99OUTq0pw8=",
+        "test__rclcpp__test_node__cpp.patch": "sha256-eUyA+3cztTxWTkpqfeW3/Wr7AH9lzkDq02DWthyXPAA="
+    }
+}

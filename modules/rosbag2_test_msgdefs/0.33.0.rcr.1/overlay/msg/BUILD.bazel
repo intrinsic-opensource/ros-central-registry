@@ -1,0 +1,36 @@
+load("@rosidl_default_generators//:defs.bzl", "ros_message")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(glob([
+    "*.idl",
+    "*.msg",
+]))
+
+ros_message(
+    name = "BasicIdl",
+    src = "BasicIdl.idl",
+)
+
+ros_message(
+    name = "BasicMsg",
+    src = "BasicMsg.msg",
+)
+
+ros_message(
+    name = "ComplexIdl",
+    src = "ComplexIdl.idl",
+    deps = [":BasicIdl"],
+)
+
+ros_message(
+    name = "ComplexMsg",
+    src = "ComplexMsg.msg",
+    deps = [":BasicMsg"],
+)
+
+ros_message(
+    name = "ComplexMsgDependsOnIdl",
+    src = "ComplexMsgDependsOnIdl.msg",
+    deps = [":BasicIdl"],
+)

@@ -1,0 +1,17 @@
+{
+    "homepage": "https://github.com/ros2-gbp/leo_common-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "3.2.0",
+        "3.2.0.rcr.0",
+        "3.2.0.rcr.1"
+    ],
+    "yanked_versions": {}
+}

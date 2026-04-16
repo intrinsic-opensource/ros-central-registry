@@ -1,0 +1,17 @@
+{
+    "integrity": "sha256-MrMgMJJ7wMfp/JxjLX2Ghn+ZodgH/VyR2Bx1x84+OxM=",
+    "url": "https://github.com/ros2-gbp/cartographer-release/archive/refs/tags/upstream/2.0.9004.tar.gz",
+    "strip_prefix": "cartographer-release-upstream-2.0.9004",
+    "patches": {
+        "Dockerfile__trusty__bazel.patch": "sha256-YxbDpXHm2vuongzZf4GKk4CfxdVLUPrubzs9KJ4lths=",
+        "cartographer__BUILD__bazel.patch": "sha256-H4Q4z4aPZ20ueAZG5BFtcJtXLsrT7W17mRlY/NEiowc=",
+        "cartographer__cloud__BUILD__bazel.patch": "sha256-16n2YpA54P7g+4xkPtXnbkaFYqoI35pLmj/pfIt/D8Q=",
+        "bazel__third_party__pixman__BUILD__bazel.patch": "sha256-fR5IG715gTcsOhMghsfmD//b4fzgetW7RYK73OYTc4c=",
+        "bazel__repositories__bzl.patch": "sha256-I+sUEt4BIzN7wLueMNCcQhpwSiODVO3Gxp79+VuqwPE=",
+        "WORKSPACE.patch": "sha256-XPS4CD6jJIm5AmUHXcKefmdmVgkDCp+nHIGVYBBZKgE=",
+        "bazel__third_party__cairo__BUILD__bazel.patch": "sha256-0tg9XlHwYqHSJElD4d+y5z7Ov0e6Um88VU9Omyt/Ryc=",
+        "BUILD__bazel.patch": "sha256-75krazUTkgLRcJ+I1oJy4zuIWMdx7fOYyv1GaeE2Zpk=",
+        "bazel__third_party__BUILD__bazel.patch": "sha256-ZEKH6gJ+ij7xY3MYLttSPXjwlgU36PdrMZP635xT5aE=",
+        "bazel__third_party__fontconfig__BUILD__bazel.patch": "sha256-sskRxaYXdqSzX1wgDUTi++627VuHUGmsMvW5B92ylNQ="
+    }
+}

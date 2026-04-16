@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-kXn6Jg0HybLDkg3X7FNM7f/UBmCkj8nQ1XH0jbeuhfY=",
+    "url": "https://github.com/ros2-gbp/web_video_server-release/archive/refs/tags/upstream/2.1.1.tar.gz",
+    "strip_prefix": "web_video_server-release-upstream-2.1.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-nxHiD+tmvkDuzTdyGJnxn2rnToGVJ/bzRmuPqs4Hh4w="
+    }
+}

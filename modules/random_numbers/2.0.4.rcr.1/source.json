@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-tCJHW2A3UQrF6Vr7fbe0R6rZ7TNhyuiMIzrfJcZbja8=",
+    "url": "https://github.com/ros2-gbp/random_numbers-release/archive/refs/tags/upstream/2.0.4.tar.gz",
+    "strip_prefix": "random_numbers-release-upstream-2.0.4",
+    "overlay": {
+        "BUILD.bazel": "sha256-fnZQIf0cF7+hR1Rq6OWxqRfaBh8Ks4kRpqjQC3fAHxU="
+    }
+}

@@ -1,0 +1,93 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+load("@rosdistro//ament:defs.bzl", "ament_package")
+
+load("@rosdistro//cc:defs.bzl", "ros_local_defines")
+load("@rosdistro//python:defs.bzl", "py_pytest")
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_binary(
+    name = "lifecycle_talker",
+    srcs = ["src/lifecycle_talker.cpp"],
+    local_defines = ros_local_defines(),
+    deps = [
+        "@lifecycle_msgs//:cc",
+        "@rclcpp//:rclcpp_library",
+        "@rclcpp_lifecycle//:rclcpp_lifecycle_library",
+        "@std_msgs//:cc",
+    ],
+)
+
+cc_binary(
+    name = "lifecycle_listener",
+    srcs = ["src/lifecycle_listener.cpp"],
+    local_defines = ros_local_defines(),
+    deps = [
+        "@lifecycle_msgs//:cc",
+        "@rclcpp//:rclcpp_library",
+        "@std_msgs//:cc",
+    ],
+)
+
+cc_binary(
+    name = "lifecycle_service_client",
+    srcs = ["src/lifecycle_service_client.cpp"],
+    local_defines = ros_local_defines(),
+    deps = [
+        "@lifecycle_msgs//:cc",
+        "@rclcpp//:rclcpp_library",
+    ],
+)
+
+[
+    py_pytest(
+        name = f.split("/")[-1].removesuffix(".py"),
+        srcs = [f],
+        data = [
+            ":lifecycle_listener",
+            ":lifecycle_service_client",
+            ":lifecycle_talker",
+        ] + glob(["launch/*"]),
+        deps = [
+            "@rules_python//python/runfiles",
+        ],
+    )
+    for f in glob(
+        ["test/test_*.py"],
+        allow_empty = True,
+    )
+]
+
+
+### PACKAGING
+
+ament_package(
+    name = "ament_package",
+    package_xml = "package.xml",
+    executables = [":lifecycle_talker", ":lifecycle_listener", ":lifecycle_service_client"],
+    deps = [
+        "@ament_cmake//:ament_package",
+        "@ament_lint_auto//:ament_package",
+        "@ament_lint_common//:ament_package",
+        "@lifecycle_msgs//:ament_package",
+        "@rclcpp//:ament_package",
+        "@rclcpp_lifecycle//:ament_package",
+        "@ros_testing//:ament_package",
+        "@rosdistro//:ament_package",
+        "@std_msgs//:ament_package",
+    ]
+)

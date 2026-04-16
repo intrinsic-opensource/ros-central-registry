@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-QhwOdK2+zwr9Fsufdk/W0+iktQbHyzQyLVrsyNIEFeI=",
+    "url": "https://github.com/ros2-gbp/demos-release/archive/refs/tags/upstream/0.37.8.tar.gz",
+    "strip_prefix": "demos-release-upstream-0.37.8/quality_of_service_demo/rclpy",
+    "overlay": {
+        "BUILD.bazel": "sha256-KEnq6ZcFLNtEimnFv3geeR6vyiQsLwNa427Ax8XQwQE="
+    }
+}

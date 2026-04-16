@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-GAxr1oj8e5B1rLGw5I3joVNK1b3gzfxwgfb1pyV41pU=",
+    "url": "https://github.com/ros2-gbp/jacro-release/archive/refs/tags/upstream/0.2.0.tar.gz",
+    "strip_prefix": "jacro-release-upstream-0.2.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-gkXjkkF2uHad8b9vsr1YaHmxUAC23tv3t8tDwSIImQc="
+    }
+}

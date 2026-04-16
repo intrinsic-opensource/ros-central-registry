@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-cKxSZQTK2TUSD7mXQkEAwhCCtHCNCDHz7Vz4Rg3/okQ=",
+    "url": "https://github.com/ros2-gbp/rcpputils-release/archive/refs/tags/upstream/2.14.3.tar.gz",
+    "strip_prefix": "rcpputils-release-upstream-2.14.3"
+}

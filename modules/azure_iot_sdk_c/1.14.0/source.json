@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-R0+RY7Cb8qtS+01N5/a+BZUjcHGmS0n5pwty7LOMtgE=",
+    "url": "https://github.com/ros2-gbp/azure_iot_sdk_c-release/archive/refs/tags/upstream/1.14.0.tar.gz",
+    "strip_prefix": "azure_iot_sdk_c-release-upstream-1.14.0"
+}

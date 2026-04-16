@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-N6zFw4wg9Mi57yC8VD5cpGzRsUQ7Bl2u7/4YYA9PGFQ=",
+    "url": "https://github.com/ros2-gbp/autoware_adapi_msgs-release/archive/refs/tags/upstream/1.9.0.tar.gz",
+    "strip_prefix": "autoware_adapi_msgs-release-upstream-1.9.0/autoware_adapi_version_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-90BJ6EMs6oqp1szgpvr8Axuyu1rjG+a6xMLOTHU04h0="
+    }
+}

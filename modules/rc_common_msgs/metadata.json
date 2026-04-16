@@ -1,0 +1,17 @@
+{
+    "homepage": "https://github.com/ros2-gbp/rc_common_msgs_ros2-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "0.5.3",
+        "0.5.3.rcr.0",
+        "0.5.3.rcr.1"
+    ],
+    "yanked_versions": {}
+}

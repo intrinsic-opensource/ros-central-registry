@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-xhJRDh0NhecKIrt3X0BgQNbv8aVLX3oFCN9WA2+k2eg=",
+    "url": "https://github.com/ros2-gbp/rmf_internal_msgs-release/archive/refs/tags/upstream/4.0.0.tar.gz",
+    "strip_prefix": "rmf_internal_msgs-release-upstream-4.0.0/rmf_obstacle_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-Ref+dsLXXfh4Oyf/Z9wK1tGHWwTvc/bTP/c/PmmCI+M="
+    }
+}

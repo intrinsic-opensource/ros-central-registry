@@ -1,0 +1,16 @@
+--- src/parse.c
++++ src/parse.c
+@@ -18,6 +18,13 @@
+ #include <string.h>
+ 
+ #include <yaml.h>
++
++// Dummy function to force exporting yaml_emitter_emit
++void rcl_yaml_param_parser_dummy_use_emitter(void) {
++    yaml_emitter_t emitter;
++    yaml_event_t event;
++    yaml_emitter_emit(&emitter, &event);
++}
+ 
+ #include "rcutils/allocator.h"
+ #include "rcutils/error_handling.h"

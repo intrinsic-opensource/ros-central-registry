@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-xxnBxS060IkwBRWhMDGgeSlR2Xs3ynbRrP7fGxweXBU=",
+    "url": "https://github.com/ros2-gbp/ament_cmake-release/archive/refs/tags/upstream/2.8.7.tar.gz",
+    "strip_prefix": "ament_cmake-release-upstream-2.8.7/ament_cmake_google_benchmark",
+    "overlay": {
+        "BUILD.bazel": "sha256-Gc8+bPQKLz4i6JjH/H/cFZpMXBLlrqmT76Ks5B1GRBU="
+    }
+}

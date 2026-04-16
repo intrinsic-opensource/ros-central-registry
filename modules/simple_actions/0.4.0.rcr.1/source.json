@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-eGP2MuQ2mQq5N0eeF9cWTKyNHjk8qKFl5UuhONo1e2M=",
+    "url": "https://github.com/ros2-gbp/simple_actions-release/archive/refs/tags/upstream/0.4.0.tar.gz",
+    "strip_prefix": "simple_actions-release-upstream-0.4.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-xr+55CYpCwVHLC9+zi3Ymndtctq7kuhF5orNDgiwou4="
+    }
+}

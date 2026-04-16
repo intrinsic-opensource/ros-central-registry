@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-2sdN+zN3KazQuPmhSLO810rCZDH3uoJSYoUmGAy7huI=",
+    "url": "https://github.com/ros2-gbp/rmw_desert-release/archive/refs/tags/upstream/4.0.0.tar.gz",
+    "strip_prefix": "rmw_desert-release-upstream-4.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-3ORCTtTwJO2qsF9++/7eNWyeAwxlQ5ZQ4+tE4S/92qw="
+    }
+}

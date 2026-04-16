@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-3ZwuUTEzdR0djTA7b1RHRq1np3eH77wl2eSwDY8Edi8=",
+    "url": "https://github.com/ros2-gbp/ros_ign-release/archive/refs/tags/upstream/3.0.8.tar.gz",
+    "strip_prefix": "ros_ign-release-upstream-3.0.8/ros_gz_bridge",
+    "overlay": {
+        "BUILD.bazel": "sha256-XpGV9RiZ6kQvFL4QufTs0hF2eydmwqC5wr7v5b1T7go="
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-qLg+LL4QfQtvjPmvhd2vrNkP+zq4af/rk83qdBHJZPg=",
+    "url": "https://github.com/ros2-gbp/turtle_nest-release/archive/refs/tags/upstream/1.2.1.tar.gz",
+    "strip_prefix": "turtle_nest-release-upstream-1.2.1/turtle_nest"
+}

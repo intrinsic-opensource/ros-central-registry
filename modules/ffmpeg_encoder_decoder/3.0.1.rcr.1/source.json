@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-WjyTcVChNGIo+onMHisWGd43r3HDAa+IRLejJ2FFta0=",
+    "url": "https://github.com/ros2-gbp/ffmpeg_encoder_decoder-release/archive/refs/tags/upstream/3.0.1.tar.gz",
+    "strip_prefix": "ffmpeg_encoder_decoder-release-upstream-3.0.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-E2Mq+LV4uMDVPmofBzHQSswv2O/LVAp2DNXnc0nM2no="
+    }
+}

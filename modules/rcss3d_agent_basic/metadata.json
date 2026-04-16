@@ -1,0 +1,17 @@
+{
+    "homepage": "https://github.com/ros2-gbp/rcss3d_agent-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "0.4.1",
+        "0.4.1.rcr.0",
+        "0.4.1.rcr.1"
+    ],
+    "yanked_versions": {}
+}

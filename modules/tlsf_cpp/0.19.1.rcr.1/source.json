@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-198IIfysnVTe5PBerj9sRsBJmfOodzc1Dosw53TWQm0=",
+    "url": "https://github.com/ros2-gbp/realtime_support-release/archive/refs/tags/upstream/0.19.1.tar.gz",
+    "strip_prefix": "realtime_support-release-upstream-0.19.1/tlsf_cpp",
+    "overlay": {
+        "BUILD.bazel": "sha256-+h28wTNEoXPRzPx2SdWMGIGw7Vfzxx42CY7NLsLdt2g="
+    }
+}

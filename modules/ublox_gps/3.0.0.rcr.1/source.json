@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Qt+7/4RUEf033QvU/EwpUD1XbgnkVNVQTglWjQU1xB8=",
+    "url": "https://github.com/ros2-gbp/ublox-release/archive/refs/tags/upstream/3.0.0.tar.gz",
+    "strip_prefix": "ublox-release-upstream-3.0.0/ublox_gps",
+    "overlay": {
+        "BUILD.bazel": "sha256-IMtViPgXau0jyYmpoWGLpShO/jfvNh1XAhm9d6CTWsE="
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "homepage": "https://github.com/b-robotized/ads_vendor-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "1.0.2",
+        "1.0.2.rcr.0"
+    ],
+    "yanked_versions": {}
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-WhF//0WDvrPjlfmiVA3Ul6KK0Z/5kNSnhRf8rT+Wf90=",
+    "url": "https://github.com/ros2-gbp/rqt_bag-release/archive/refs/tags/upstream/2.2.2.tar.gz",
+    "strip_prefix": "rqt_bag-release-upstream-2.2.2/rqt_bag_plugins",
+    "overlay": {
+        "BUILD.bazel": "sha256-un9W1U4DZ0q6wTJ1hrWTa8a4JGINbcguuGzElstVSUA="
+    }
+}

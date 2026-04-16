@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-892u3xVQxVEVoyH/dqclJgg0IfNwBNRPNb6Pi98k8hE=",
+    "url": "https://github.com/ros2-gbp/ament_index-release/archive/refs/tags/upstream/1.13.3.tar.gz",
+    "strip_prefix": "ament_index-release-upstream-1.13.3/ament_index_python"
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-05YA+5Z52hRFfI55ucumz8SB5XEH2ILdaxgCidSzgLY=",
+    "url": "https://github.com/ros2-gbp/mrpt_ros-release/archive/refs/tags/upstream/2.15.5.tar.gz",
+    "strip_prefix": "mrpt_ros-release-upstream-2.15.5/mrpt_libhwdrivers",
+    "overlay": {
+        "BUILD.bazel": "sha256-aaTcM7khRWFr/DnHonsrd3z+ZdWHCrPBa3ifUELQb7A="
+    }
+}

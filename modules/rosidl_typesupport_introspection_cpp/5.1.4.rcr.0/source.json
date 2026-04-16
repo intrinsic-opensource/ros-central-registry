@@ -1,0 +1,14 @@
+{
+    "integrity": "sha256-sU5W5UZ+JqkDEPjzUzWTPUI0FHSt39mri9dBSbnhAYA=",
+    "url": "https://github.com/ros2-gbp/rosidl-release/archive/refs/tags/upstream/5.1.4.tar.gz",
+    "strip_prefix": "rosidl-release-upstream-5.1.4/rosidl_typesupport_introspection_cpp",
+    "overlay": {
+        "defs.bzl": "sha256-fB3DeWPVrW9YBhCHdfe2JbsO44MKW4nSCL1+osv4gYY=",
+        "types.bzl": "sha256-8YqLOmG+PbewLaGm+nBTEFh9fbvY7e/uIwv5lyi1ONQ=",
+        "BUILD.bazel": "sha256-zz2UMf4xgfhXna+vPnp6yUf9iTsvAbvIJHtSrwnWcgk=",
+        "aspects.bzl": "sha256-DR4grO6FL/0bJS4PUrJf/Ke+8ODaJeX73+HYrkjizh8="
+    },
+    "patches": {
+        "rosidl_typesupport_introspection_cpp____init____py.patch": "sha256-LjPCASLYfbH/r7Q/IF/tqQcpCHqOnsJU3VcoXrJ0HFk="
+    }
+}

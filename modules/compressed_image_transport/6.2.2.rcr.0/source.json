@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-2F/OBzNtfRpvW+88tKEnUfrPj3B8uSA3QkmgQLqQZSE=",
+    "url": "https://github.com/ros2-gbp/image_transport_plugins-release/archive/refs/tags/upstream/6.2.2.tar.gz",
+    "strip_prefix": "image_transport_plugins-release-upstream-6.2.2/compressed_image_transport"
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-EwCOQE1MmMjmkOk3XJ2h0NOaG2u16FahuDHk987DxAs=",
+    "url": "https://github.com/ros2-gbp/odom_to_tf_ros2-release/archive/refs/tags/upstream/1.0.8.tar.gz",
+    "strip_prefix": "odom_to_tf_ros2-release-upstream-1.0.8",
+    "overlay": {
+        "BUILD.bazel": "sha256-KXLesyQOky/bnGInEoLzuD0k+R9SI9krZmpkoyLObCM="
+    }
+}

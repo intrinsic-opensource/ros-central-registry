@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-D4LEmwNyEdVYwKwFG+eiQ7fxHKUlT2p5v1farPsfypk=",
+    "url": "https://github.com/ros2-gbp/qt_gui_core-release/archive/refs/tags/upstream/2.10.4.tar.gz",
+    "strip_prefix": "qt_gui_core-release-upstream-2.10.4/qt_gui",
+    "overlay": {
+        "BUILD.bazel": "sha256-SC4++h84UI4Q7xgIhDb49iZ8oLGIzuJ+qfYlYO3Yzd8="
+    }
+}

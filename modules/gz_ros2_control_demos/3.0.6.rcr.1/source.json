@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-46SHbHwwcvKT1sIqu9yo0scSWxY1M9ISq7mRc0Wm2lc=",
+    "url": "https://github.com/ros2-gbp/ign_ros2_control-release/archive/refs/tags/upstream/3.0.6.tar.gz",
+    "strip_prefix": "ign_ros2_control-release-upstream-3.0.6/gz_ros2_control_demos",
+    "overlay": {
+        "BUILD.bazel": "sha256-YOL+cCIoCAYtzm+yfjCYGHR6AShsq1zQHnvfT66O2J0="
+    }
+}

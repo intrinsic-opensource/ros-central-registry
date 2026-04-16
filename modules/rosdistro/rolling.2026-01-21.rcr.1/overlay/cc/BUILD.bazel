@@ -1,0 +1,245 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(glob(["*.bzl"]))
+
+# fastcdr
+
+alias(
+    name = "fastcdr_library",
+    actual = "@fastcdr//:fastcdr",
+)
+
+cc_shared_library(
+    name = "fastcdr",
+    exports_filter = [":fastcdr_library"],
+    deps = [":fastcdr_library"],
+)
+
+# fastdds
+
+alias(
+    name = "fastdds_library",
+    actual = "@fastdds//:fastdds",
+)
+
+cc_shared_library(
+    name = "fastdds",
+    dynamic_deps = [
+        ":fastcdr",
+        ":sqlite3",
+        ":tinyxml2",
+    ],
+    exports_filter = [":fastdds_library"],
+    deps = [":fastdds_library"],
+)
+
+# tinyxml2
+
+alias(
+    name = "tinyxml2_library",
+    actual = "@tinyxml2//:tinyxml2",
+)
+
+cc_shared_library(
+    name = "tinyxml2",
+    exports_filter = [":tinyxml2_library"],
+    deps = [":tinyxml2_library"],
+)
+
+# yaml-cpp
+
+alias(
+    name = "yaml-cpp_library",
+    actual = "@yaml-cpp//:yaml-cpp",
+)
+
+cc_shared_library(
+    name = "yaml-cpp",
+    exports_filter = [":yaml-cpp_library"],
+    deps = [":yaml-cpp_library"],
+)
+
+# lz4
+
+alias(
+    name = "lz4_library",
+    actual = "@lz4//:lz4",
+)
+
+cc_shared_library(
+    name = "lz4",
+    exports_filter = [":lz4_library"],
+    deps = [":lz4_library"],
+)
+
+alias(
+    name = "lz4_hc_library",
+    actual = "@lz4//:lz4_hc",
+)
+
+cc_shared_library(
+    name = "lz4_hc",
+    dynamic_deps = [":lz4"],
+    exports_filter = [":lz4_hc_library"],
+    deps = [":lz4_hc_library"],
+)
+
+alias(
+    name = "lz4_frame_library",
+    actual = "@lz4//:lz4_frame",
+)
+
+cc_shared_library(
+    name = "lz4_frame",
+    dynamic_deps = [
+        ":lz4",
+        ":lz4_hc",
+    ],
+    exports_filter = [":lz4_frame_library"],
+    deps = [":lz4_frame_library"],
+)
+
+# mcap
+
+cc_library(
+    name = "mcap_library",
+    srcs = ["mcap_impl.cpp"],
+    copts = ["-std=c++17"],
+    deps = ["@mcap"],
+)
+
+cc_shared_library(
+    name = "mcap",
+    dynamic_deps = [
+        ":lz4_frame",
+        ":zstd",
+    ],
+    exports_filter = [":mcap_library"],
+    deps = [":mcap_library"],
+)
+
+# zstd
+
+alias(
+    name = "zstd_library",
+    actual = "@zstd//:zstd",
+)
+
+cc_shared_library(
+    name = "zstd",
+    exports_filter = [":zstd_library"],
+    deps = [":zstd_library"],
+)
+
+# sqlite3
+
+alias(
+    name = "sqlite3_library",
+    actual = "@sqlite3//:sqlite3",
+)
+
+cc_shared_library(
+    name = "sqlite3",
+    exports_filter = [":sqlite3_library"],
+    deps = [":sqlite3_library"],
+)
+
+# console_bridge
+
+alias(
+    name = "console_bridge_library",
+    actual = "@console_bridge//:console_bridge",
+)
+
+cc_shared_library(
+    name = "console_bridge",
+    exports_filter = [":console_bridge_library_library"],
+    deps = [":console_bridge_library"],
+)
+
+# curl
+
+alias(
+    name = "curl_library",
+    actual = "@curl//:curl",
+)
+
+cc_shared_library(
+    name = "curl",
+    exports_filter = [":curl_library"],
+    deps = [":curl_library"],
+)
+
+# zlib
+
+alias(
+    name = "zlib_library",
+    actual = "@zlib//:z",
+)
+
+cc_shared_library(
+    name = "zlib",
+    exports_filter = [":zlib_library"],
+    deps = [":zlib_library"],
+)
+
+# protobuf
+
+alias(
+    name = "protobuf_library",
+    actual = "@protobuf//:protobuf",
+)
+
+cc_shared_library(
+    name = "protobuf",
+    dynamic_deps = [":zlib"],
+    exports_filter = [":protobuf_library"],
+    deps = [":protobuf_library"],
+)
+
+# opencv
+
+alias(
+    name = "opencv_library",
+    actual = "@opencv//:opencv",
+)
+
+cc_shared_library(
+    name = "opencv",
+    dynamic_deps = [
+        ":protobuf",
+        ":zlib",
+    ],
+    exports_filter = [":opencv_library"],
+    deps = [":opencv_library"],
+)
+
+# opencv
+
+cc_library(
+    name = "sdl2_library",
+    copts = ["-std=c11"],
+    deps = ["@sdl2"],
+)
+
+cc_shared_library(
+    name = "sdl2",
+    exports_filter = [":sdl2_library"],
+    deps = [":sdl2_library"],
+)

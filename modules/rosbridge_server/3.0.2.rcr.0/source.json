@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-T63dgiCmvW3PUP+VbsWsH/s6LwhPH4GjArAU9y0g0zA=",
+    "url": "https://github.com/ros2-gbp/rosbridge_suite-release/archive/refs/tags/upstream/3.0.2.tar.gz",
+    "strip_prefix": "rosbridge_suite-release-upstream-3.0.2/rosbridge_server"
+}

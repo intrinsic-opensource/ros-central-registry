@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Zn07ZdLAk0JpQh+b20q7i2AItsNRUudUD0KGeKt947A=",
+    "url": "https://github.com/ros2-gbp/ros_battery_monitoring-release/archive/refs/tags/upstream/1.1.0.tar.gz",
+    "strip_prefix": "ros_battery_monitoring-release-upstream-1.1.0/battery_state_broadcaster",
+    "overlay": {
+        "BUILD.bazel": "sha256-Ae+KBDfz8PaAjD0eMjSJMY/Y5KB5/9MmqPTj6T/4yr0="
+    }
+}

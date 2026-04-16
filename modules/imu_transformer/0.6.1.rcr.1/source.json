@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-aJImq+bjBeCCCk8X673RwvwMPvzEJ1Dud+/8i5VXp88=",
+    "url": "https://github.com/ros2-gbp/imu_pipeline-release/archive/refs/tags/upstream/0.6.1.tar.gz",
+    "strip_prefix": "imu_pipeline-release-upstream-0.6.1/imu_transformer",
+    "overlay": {
+        "BUILD.bazel": "sha256-FW1bSLomrQUg/E9xuDcn15+9wa8xq84Qm6+iOdhfsSE="
+    }
+}

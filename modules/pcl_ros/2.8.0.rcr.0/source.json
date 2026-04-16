@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-S9uLrdeHd3X+l/LryBnNHXfQnfz7TOUcynCGObxdk8c=",
+    "url": "https://github.com/ros2-gbp/perception_pcl-release/archive/refs/tags/upstream/2.8.0.tar.gz",
+    "strip_prefix": "perception_pcl-release-upstream-2.8.0/pcl_ros",
+    "overlay": {
+        "BUILD.bazel": "sha256-/2QcgqEkejV98r6lM4P/PsQkz/fqgK79Xw11LY72DI0="
+    }
+}

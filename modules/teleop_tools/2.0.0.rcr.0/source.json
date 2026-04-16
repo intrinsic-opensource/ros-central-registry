@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-cmk73JVga2oEM64woE/l91YaFo1wr3iuwu3cOtBZwtQ=",
+    "url": "https://github.com/ros2-gbp/teleop_tools-release/archive/refs/tags/upstream/2.0.0.tar.gz",
+    "strip_prefix": "teleop_tools-release-upstream-2.0.0/teleop_tools"
+}

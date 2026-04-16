@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Cai056xU8SBvN0Czv79/GkvNnZmRcBGiBp6L2Ap0sbU=",
+    "url": "https://github.com/ros2-gbp/angles-release/archive/refs/tags/upstream/1.16.1.tar.gz",
+    "strip_prefix": "angles-release-upstream-1.16.1/angles",
+    "overlay": {
+        "BUILD.bazel": "sha256-HnV4qjhpWaf+aEPjhvebOI8URUa+tEI6j4bJA6/4ObU="
+    }
+}

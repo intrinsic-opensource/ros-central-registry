@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-AU/nMzW8e6+ItZ0HPTFu1b/X/1MAjXU0TDK9yFunHwk=",
+    "url": "https://github.com/ros2-gbp/system_modes-release/archive/refs/tags/upstream/0.9.0.tar.gz",
+    "strip_prefix": "system_modes-release-upstream-0.9.0/system_modes_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-ryvGYbPFIbBQqOykHjJCJEW4Yy9Yn1znvk20KnClXsA="
+    }
+}

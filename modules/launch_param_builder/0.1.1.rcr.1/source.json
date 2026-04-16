@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-QTZWkjVi1rTCDaqiqAJ0/dVqWW3eckKZXX9Nd0XQC8w=",
+    "url": "https://github.com/ros2-gbp/launch_param_builder-release/archive/refs/tags/upstream/0.1.1.tar.gz",
+    "strip_prefix": "launch_param_builder-release-upstream-0.1.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-b2QN2S5M+l9qL4AwVuRcxLVy1u/Wbwdz412VHH4iQsE="
+    }
+}

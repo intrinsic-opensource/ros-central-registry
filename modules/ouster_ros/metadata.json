@@ -1,0 +1,19 @@
+{
+    "homepage": "https://github.com/ros2-gbp/ouster-ros-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "0.13.15",
+        "0.13.15.rcr.0",
+        "0.13.15.rcr.1",
+        "0.14.2",
+        "0.14.2.rcr.0"
+    ],
+    "yanked_versions": {}
+}

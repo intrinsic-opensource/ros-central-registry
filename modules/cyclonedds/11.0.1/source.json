@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-8O+1vi/s0URlNIeb1ZuELRlC2M0fOK5Ihzu2RrvtDKU=",
+    "url": "https://github.com/ros2-gbp/cyclonedds-release/archive/refs/tags/upstream/11.0.1.tar.gz",
+    "strip_prefix": "cyclonedds-release-upstream-11.0.1"
+}

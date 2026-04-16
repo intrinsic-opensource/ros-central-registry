@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-1ZLtjVftHty9bx3bsT7x4DWK4R3NzoDG4i84stsypXY=",
+    "url": "https://github.com/ros2-gbp/rmw_zenoh-release/archive/refs/tags/upstream/0.10.2.tar.gz",
+    "strip_prefix": "rmw_zenoh-release-upstream-0.10.2/zenoh_security_tools",
+    "overlay": {
+        "BUILD.bazel": "sha256-hQGq2oFL4J3UmQTrFNHAYyEcKDNs/XS+WwZkr6HWcNE="
+    }
+}

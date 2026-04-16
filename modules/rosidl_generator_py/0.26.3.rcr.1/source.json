@@ -1,0 +1,19 @@
+{
+    "integrity": "sha256-rqU5RxWMYZpAxV+vWyUkhS7ijrutZsWnAn17BxFkD60=",
+    "url": "https://github.com/ros2-gbp/rosidl_python-release/archive/refs/tags/upstream/0.26.3.tar.gz",
+    "strip_prefix": "rosidl_python-release-upstream-0.26.3/rosidl_generator_py",
+    "overlay": {
+        "defs.bzl": "sha256-9wcLuuzNyN/cD4hmx3YapdpM1SSBmOMdJllHzWgorL8=",
+        "types.bzl": "sha256-OpnD0njWkggAlFqBS564e8EqZRpk+CWSCr35WvhAvSE=",
+        "BUILD.bazel": "sha256-9v+JesQx3w2hKG2N43lbf/B5GGM34BAH/+M3e4a2gDo=",
+        "sitecustomize.py": "sha256-Z2MHID48GAzjCetaWzydwzJNFLI4vW262gMZtPny0r4=",
+        "aspects.bzl": "sha256-7Nd9dZp7AmHcbiSA4yoqoV8GC0JpH6HqOyzNuIcWi/o="
+    },
+    "patches": {
+        "rosidl_generator_py__generate_py_impl__py.patch": "sha256-dZuudlzTQi0ZHZ6rDA7cxKbgVa6GRiCQIR/mlTiS3Hg=",
+        "rosidl_generator_py__import_type_support_impl__py.patch": "sha256-R/llwT8M76AF7it7eihg9D8iss06e5QAhP3QGjEqf/M=",
+        "resource___srv__py__em.patch": "sha256-mqi4ZBai8A4RceQE5OWlLMK4lCDMk+5H4+13fBfpnYU=",
+        "resource___action__py__em.patch": "sha256-CvyeTpZTZyOMOmsNMOno3WdqL95GPKcV59VR2wcQnq8=",
+        "resource___msg__py__em.patch": "sha256-0cV49Fk8wRFj89nPCggFkgpKVjdLX0pxDIMLWqKGZjU="
+    }
+}

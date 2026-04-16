@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-WPoC3WrUfJBrZm0X/IgdUiuMrLolja9cH6o4xDd0sXU=",
+    "url": "https://github.com/ros2-gbp/examples-release/archive/refs/tags/upstream/0.21.3.tar.gz",
+    "strip_prefix": "examples-release-upstream-0.21.3/rclcpp/services/minimal_service",
+    "overlay": {
+        "BUILD.bazel": "sha256-kXahFp7Kce2IYB5m63+1+g7GMxaaNou7V4OaD5zhwuE="
+    }
+}

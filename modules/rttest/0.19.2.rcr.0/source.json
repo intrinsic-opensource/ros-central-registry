@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-lsoDhbnjimmqtmm7uh93ctH3vkdZFUPBm15gwqTWAEc=",
+    "url": "https://github.com/ros2-gbp/realtime_support-release/archive/refs/tags/upstream/0.19.2.tar.gz",
+    "strip_prefix": "realtime_support-release-upstream-0.19.2/rttest",
+    "overlay": {
+        "BUILD.bazel": "sha256-xC786/fw/RUx7+x4QAi8baDmpAcoZQmfIJ8GeFIYnp4="
+    }
+}

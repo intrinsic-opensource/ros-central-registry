@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-3uNuhDuNkWZ54/aIRvPy2JMA2tgULCxevsHI+gBm0ds=",
+    "url": "https://github.com/ros2-gbp/realsense-ros-release/archive/refs/tags/upstream/4.56.4.tar.gz",
+    "strip_prefix": "realsense-ros-release-upstream-4.56.4/realsense2_description",
+    "overlay": {
+        "BUILD.bazel": "sha256-8sqtPcLytunYeFF7zjfF5S/Uc5C4l/OWHiVIUQSbd4w="
+    }
+}

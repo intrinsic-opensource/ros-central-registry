@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-kPXDio6YPf9amKjS3yL76YCnCLz6OTsesAdWSg2i1eo=",
+    "url": "https://github.com/ros2-gbp/rmf_ros2-release/archive/refs/tags/upstream/2.11.1.tar.gz",
+    "strip_prefix": "rmf_ros2-release-upstream-2.11.1/rmf_charging_schedule"
+}

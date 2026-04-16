@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-T8uy45ce/6MCQsJhLKyMCbcIRWMM/D+vMu2V78MPbQE=",
+    "url": "https://github.com/ros2-gbp/fastcdr-release/archive/refs/tags/upstream/2.3.5.tar.gz",
+    "strip_prefix": "fastcdr-release-upstream-2.3.5"
+}

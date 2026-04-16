@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-ClvEPxYIq3YtjvStDS94eBEvsacWy8FbQfMlHYj+I+8=",
+    "url": "https://github.com/ros2-gbp/behaviortree_cpp_v4-release/archive/refs/tags/upstream/4.8.3.tar.gz",
+    "strip_prefix": "behaviortree_cpp_v4-release-upstream-4.8.3",
+    "overlay": {
+        "BUILD.bazel": "sha256-0+RVnZ0Wol+oPUq35B3UtMqwdS1lCJWqUPLNlWKWZvg="
+    }
+}

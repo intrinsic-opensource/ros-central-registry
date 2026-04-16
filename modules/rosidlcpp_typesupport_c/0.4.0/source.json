@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-F8d0myOx5e4Shim7Elw7Gt27mK6/m49un3JEj+y7cNA=",
+    "url": "https://github.com/ros2-gbp/rosidlcpp-release/archive/refs/tags/upstream/0.4.0.tar.gz",
+    "strip_prefix": "rosidlcpp-release-upstream-0.4.0/rosidlcpp_typesupport_c"
+}

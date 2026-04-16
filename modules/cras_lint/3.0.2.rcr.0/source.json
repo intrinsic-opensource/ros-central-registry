@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-g48p3ycfDTnBpCu6h147xzYbZTfcqh/qyo/apbUDyo4=",
+    "url": "https://github.com/ros2-gbp/cras_ros_utils-release/archive/refs/tags/upstream/3.0.2.tar.gz",
+    "strip_prefix": "cras_ros_utils-release-upstream-3.0.2/cras_lint"
+}

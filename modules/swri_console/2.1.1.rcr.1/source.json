@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-YmeZN7uHWJE4rgwnWnwDDjHKsvi5xypmKoKtWYIRxUQ=",
+    "url": "https://github.com/ros2-gbp/swri_console-release/archive/refs/tags/upstream/2.1.1.tar.gz",
+    "strip_prefix": "swri_console-release-upstream-2.1.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-u+zRIN1o1BtzDd/rU6R0W00SJvywz5WaZ0lSHGUuePI="
+    }
+}

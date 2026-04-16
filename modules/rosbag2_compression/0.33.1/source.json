@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-gy8CWzrmNS4OW48ifvpIOxEsWE9yTlMGTZvmUCbRa5M=",
+    "url": "https://github.com/ros2-gbp/rosbag2-release/archive/refs/tags/upstream/0.33.1.tar.gz",
+    "strip_prefix": "rosbag2-release-upstream-0.33.1/rosbag2_compression"
+}

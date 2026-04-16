@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-CU3qlpmCzOYla2EQA20553vbxI0J+b1OU9xhJviJWbE=",
+    "url": "https://github.com/ros2-gbp/control_toolbox-release/archive/refs/tags/upstream/6.1.0.tar.gz",
+    "strip_prefix": "control_toolbox-release-upstream-6.1.0/control_toolbox",
+    "overlay": {
+        "BUILD.bazel": "sha256-pbEne4eikl630RUeK3SVYZF/5lyJ8rukQHnKXIHIp9o="
+    }
+}

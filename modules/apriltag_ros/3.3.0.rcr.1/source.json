@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-g+yBXBTjsLR9powhnGfpuUbPx5EAU+HonoE8QFe2sME=",
+    "url": "https://github.com/ros2-gbp/apriltag_ros-release/archive/refs/tags/upstream/3.3.0.tar.gz",
+    "strip_prefix": "apriltag_ros-release-upstream-3.3.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-JU7PVZDk6EdRHGje3E0kwrbVZUGvL55KXDQR4LoQHh0="
+    }
+}

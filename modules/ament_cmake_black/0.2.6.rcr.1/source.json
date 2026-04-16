@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-HsU+RKOBQxmU0CHz3q+A/qunQ9ryDkSNUlw0DNIdVxQ=",
+    "url": "https://github.com/ros2-gbp/ament_black-release/archive/refs/tags/upstream/0.2.6.tar.gz",
+    "strip_prefix": "ament_black-release-upstream-0.2.6/ament_cmake_black",
+    "overlay": {
+        "BUILD.bazel": "sha256-+80PQTXlAM20St9P4JhI1yRDg8mYOlx52Pve5Rmpz0U="
+    }
+}

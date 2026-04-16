@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-l9BUQFIsvq/5gNcRTtxEGblBV7iR1Jt35MuLGiJZIqw=",
+    "url": "https://github.com/ros2-gbp/rosidl_typesupport-release/archive/refs/tags/upstream/3.4.1.tar.gz",
+    "strip_prefix": "rosidl_typesupport-release-upstream-3.4.1/rosidl_typesupport_c"
+}

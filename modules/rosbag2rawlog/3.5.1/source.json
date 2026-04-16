@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-j+VIB4pLWw/H5DJoIebe/S6MYMAyhm+oErvRYKHL+7g=",
+    "url": "https://github.com/ros2-gbp/mrpt_ros_bridge-release/archive/refs/tags/upstream/3.5.1.tar.gz",
+    "strip_prefix": "mrpt_ros_bridge-release-upstream-3.5.1/rosbag2rawlog"
+}

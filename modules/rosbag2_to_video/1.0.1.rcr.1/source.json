@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-P/FEKBvt5vS3ja9fSjgCdenw1C0VU71Ly1b7Jy3SGQo=",
+    "url": "https://github.com/ros2-gbp/rosbag2_to_video-release/archive/refs/tags/upstream/1.0.1.tar.gz",
+    "strip_prefix": "rosbag2_to_video-release-upstream-1.0.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-/etDZbQOb3thcuYUttnwDZnr3CmGCjEDHuaTx5YXs9Y="
+    }
+}

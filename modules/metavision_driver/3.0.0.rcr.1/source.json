@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-JqgRhNjL1ZwI8BLrpLKovEsz+w58P0ZGMuyyESkBMvI=",
+    "url": "https://github.com/ros2-gbp/metavision_driver-release/archive/refs/tags/upstream/3.0.0.tar.gz",
+    "strip_prefix": "metavision_driver-release-upstream-3.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-kXi9kZ1HdoxE96XAWA7fDOPczGX9GpiMsuuh1oJJsr0="
+    }
+}

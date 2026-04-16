@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-kiFXqxzLosUSODKz68JJrDMSvyH9raVl62VKpgYZR/U=",
+    "url": "https://github.com/ros2-gbp/off_highway_sensor_drivers-release/archive/refs/tags/upstream/1.1.0.tar.gz",
+    "strip_prefix": "off_highway_sensor_drivers-release-upstream-1.1.0/off_highway_radar_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-mkbI8SCeMYN2yqg3LVKsCeiTa0X3l0J38/pdjY6RR8o="
+    }
+}

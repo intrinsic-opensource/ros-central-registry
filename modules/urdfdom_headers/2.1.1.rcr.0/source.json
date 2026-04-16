@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-deOz9OdnZ248ThncQa8tBaQt2Dwk+BV9O4asYBjvu4Q=",
+    "url": "https://github.com/ros2-gbp/urdfdom_headers-release/archive/refs/tags/upstream/2.1.1.tar.gz",
+    "strip_prefix": "urdfdom_headers-release-upstream-2.1.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-Vm8bE3MyyYkoR/99zQFwkhjf5dVHP1iJQIDFZo0v6jc="
+    }
+}

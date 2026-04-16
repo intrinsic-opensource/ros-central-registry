@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-EApLJePo8CFhfYUXu/ikU3A2N3mgUGnRb4Xu0dZuNds=",
+    "url": "https://github.com/ros2-gbp/rqt_gauges-release/archive/refs/tags/upstream/0.0.3.tar.gz",
+    "strip_prefix": "rqt_gauges-release-upstream-0.0.3",
+    "overlay": {
+        "BUILD.bazel": "sha256-afu1MfkmL78xYfEp2NBtgsQs8dgBTi3ZyWBtJ6IHifo="
+    }
+}

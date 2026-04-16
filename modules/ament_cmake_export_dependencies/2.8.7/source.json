@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-xxnBxS060IkwBRWhMDGgeSlR2Xs3ynbRrP7fGxweXBU=",
+    "url": "https://github.com/ros2-gbp/ament_cmake-release/archive/refs/tags/upstream/2.8.7.tar.gz",
+    "strip_prefix": "ament_cmake-release-upstream-2.8.7/ament_cmake_export_dependencies"
+}

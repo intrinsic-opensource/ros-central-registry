@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-n5dF0OBNFuAZp1tLuZYWO/8/P2BxA54UU/sos9nF67Y=",
+    "url": "https://github.com/ros2-gbp/rosbag2_broll-release/archive/refs/tags/upstream/0.1.0.tar.gz",
+    "strip_prefix": "rosbag2_broll-release-upstream-0.1.0/broll",
+    "overlay": {
+        "BUILD.bazel": "sha256-0xVQ3hFQPMZopy6zi2A3LzvUpy5xDCTB0K7IoYer5vE="
+    }
+}

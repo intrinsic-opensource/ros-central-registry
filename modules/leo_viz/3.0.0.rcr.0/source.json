@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-uhG5sQ2mDENrcFZ78HlmZ4GEiunlC9KBZLgN+ePcoEY=",
+    "url": "https://github.com/ros2-gbp/leo_desktop-release/archive/refs/tags/upstream/3.0.0.tar.gz",
+    "strip_prefix": "leo_desktop-release-upstream-3.0.0/leo_viz"
+}

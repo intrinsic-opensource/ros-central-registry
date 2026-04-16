@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-WIUN1lWQtgKMIX4gQ0mdF/+P4AzcbOOslgDz1etzpZU=",
+    "url": "https://github.com/ros2-gbp/twist_mux-release/archive/refs/tags/upstream/4.4.0.tar.gz",
+    "strip_prefix": "twist_mux-release-upstream-4.4.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-ULM6XCrp/OmjJpmerLh/OI9csvNzjY8M3DCH9yyFO/E="
+    }
+}

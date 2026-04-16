@@ -1,0 +1,12 @@
+{
+    "integrity": "sha256-B9RjnQgA8lk2eqPUusUiieddtLNPQ95aYts5kV1VqHY=",
+    "url": "https://github.com/ros2-gbp/rclpy-release/archive/refs/tags/upstream/10.0.9.tar.gz",
+    "strip_prefix": "rclpy-release-upstream-10.0.9/rclpy",
+    "overlay": {
+        "BUILD.bazel": "sha256-8RZ4T1d7CsUyXs7E7W/aOacgazSpNJse4lEyo+6krfg="
+    },
+    "patches": {
+        "rclpy__impl__implementation_singleton__py.patch": "sha256-OpabaKGcbl2SzgZ0EvDskK1NXCaxWHppZKULiShTMg4=",
+        "test__test_type_description_service__py.patch": "sha256-rwZSOic+XN/NwDTjYugaLwxr8+04BkmXwBS7AQJ9+tQ="
+    }
+}

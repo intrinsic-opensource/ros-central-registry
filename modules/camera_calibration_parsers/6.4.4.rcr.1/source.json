@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-dQXQ/qXU117LOZRFT0TZ/FMjJOLdQNh9LKnLY6bLUIo=",
+    "url": "https://github.com/ros2-gbp/image_common-release/archive/refs/tags/upstream/6.4.4.tar.gz",
+    "strip_prefix": "image_common-release-upstream-6.4.4/camera_calibration_parsers",
+    "overlay": {
+        "BUILD.bazel": "sha256-0BKaOXoYN+YTVONq79o+Ivxct+y2LxTde3im/dYAz/0="
+    }
+}

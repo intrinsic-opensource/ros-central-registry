@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-cNJWLOojdo1C9owOwNk8LBJTVuZAlLFHe9PkOfsXi1Q=",
+    "url": "https://github.com/ros2-gbp/toppra-release/archive/refs/tags/upstream/0.6.7.tar.gz",
+    "strip_prefix": "toppra-release-upstream-0.6.7/cpp"
+}

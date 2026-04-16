@@ -1,0 +1,11 @@
+{
+    "integrity": "sha256-97coo1de+waLNqzbNDvYqd292dARq9ey9YznXxDPpis=",
+    "url": "https://github.com/ros2-gbp/rcl_logging-release/archive/refs/tags/upstream/3.3.2.tar.gz",
+    "strip_prefix": "rcl_logging-release-upstream-3.3.2/rcl_logging_spdlog",
+    "overlay": {
+        "BUILD.bazel": "sha256-uWW7Kw0u7pu3tBWEb9nRGKqmhKSAOiUSzVTKCqwty4s="
+    },
+    "patches": {
+        "test__test_logging_interface__cpp.patch": "sha256-DxJ68DpkjKnWrsCSqRy0VsgHIImWUEHa3OrTMS33G0o="
+    }
+}

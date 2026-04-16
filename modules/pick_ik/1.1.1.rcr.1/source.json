@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-6NyCKd1vFf6GeN8WDU1MSxcexceA0i8qdioYPK1VQOI=",
+    "url": "https://github.com/ros2-gbp/pick_ik-release/archive/refs/tags/upstream/1.1.1.tar.gz",
+    "strip_prefix": "pick_ik-release-upstream-1.1.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-Gn4NN8v+mCiz10gfe66V0kNS82hnsTpyQ9aPB1qHJ6A="
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "homepage": "https://github.com/ros2-gbp/librealsense2-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "2.56.4",
+        "2.56.4.rcr.0",
+        "2.56.4.rcr.1",
+        "2.57.7",
+        "2.57.7.rcr.0"
+    ],
+    "yanked_versions": {}
+}

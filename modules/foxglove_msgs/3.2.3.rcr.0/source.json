@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-N9HhldUebywpeo081fvoIC+iJxzETkGDlHNQBDs4s+Y=",
+    "url": "https://github.com/ros2-gbp/foxglove_bridge-release/archive/refs/tags/upstream/3.2.3.tar.gz",
+    "strip_prefix": "foxglove_bridge-release-upstream-3.2.3/ros/src/foxglove_msgs"
+}

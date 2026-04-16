@@ -1,0 +1,4 @@
+--- thirdparty/protobuf/third_party/BUILD
++++ /dev/null
+@@ -1 +0,0 @@
+-exports_files(["six.BUILD", "zlib.BUILD"])

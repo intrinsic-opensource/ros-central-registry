@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-8jykAz/sgQfiV34+At+lAwAJd9pJJ+noUorTwqvSPhg=",
+    "url": "https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/upstream/5.9.1.tar.gz",
+    "strip_prefix": "common_interfaces-release-upstream-5.9.1/sensor_msgs"
+}

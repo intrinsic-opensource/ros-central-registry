@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-vLg7Jybu+9MXipfeplkxD+XS+IskyfNYSBFC6iyXmg4=",
+    "url": "https://github.com/ros2-gbp/launch-release/archive/refs/tags/upstream/3.9.7.tar.gz",
+    "strip_prefix": "launch-release-upstream-3.9.7/launch_testing",
+    "overlay": {
+        "BUILD.bazel": "sha256-Aq4HHxxvIUQ+ml78o1ZLEiys1ckfoOlfKFdty0wJtz8="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-QAjynb6RZwdqzOwsDK12mHYsyX0/5OrTIadTskLnNCE=",
+    "url": "https://github.com/ros2-gbp/simple_launch-release/archive/refs/tags/upstream/1.11.1.tar.gz",
+    "strip_prefix": "simple_launch-release-upstream-1.11.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-AKqW0RZQK7cMS9ce+2Kq2kRRVnMynmn5jw/hwvDLLNc="
+    }
+}

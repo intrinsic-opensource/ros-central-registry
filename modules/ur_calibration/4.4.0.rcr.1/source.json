@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-jNUSGQbelTp3YC7VZ781bDJHv8/yDau+5sVJK+50mTo=",
+    "url": "https://github.com/ros2-gbp/Universal_Robots_ROS2_Driver-release/archive/refs/tags/upstream/4.4.0.tar.gz",
+    "strip_prefix": "Universal_Robots_ROS2_Driver-release-upstream-4.4.0/ur_calibration",
+    "overlay": {
+        "BUILD.bazel": "sha256-b3PgiR81i7Ob+Id7tdrq9nc1+4TfQTt2VSObuc5aw0g="
+    }
+}

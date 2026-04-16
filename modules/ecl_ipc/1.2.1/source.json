@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-dK/w2yf0PckOY4LGonwkPl7OYQL1VK+Lf2PSIIxFNM4=",
+    "url": "https://github.com/ros2-gbp/ecl_core-release/archive/refs/tags/upstream/1.2.1.tar.gz",
+    "strip_prefix": "ecl_core-release-upstream-1.2.1/ecl_ipc"
+}

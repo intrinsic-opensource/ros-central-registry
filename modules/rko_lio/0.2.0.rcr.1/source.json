@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-sLth2Xd2uV4bPq1/dyLm9Eeg9dRv/Y01uiFSPw0RZB4=",
+    "url": "https://github.com/ros2-gbp/rko_lio-release/archive/refs/tags/upstream/0.2.0.tar.gz",
+    "strip_prefix": "rko_lio-release-upstream-0.2.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-cAXAaT/v9udVMaWOGT+9lB+BIQr01Jo9fpai8UTGrc4="
+    }
+}

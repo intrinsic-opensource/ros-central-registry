@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-pP6VV5ZJHnLI1w/yhmpdFVCE3TK/MAQTWr1spx3ymT8=",
+    "url": "https://github.com/ros2-gbp/generate_parameter_library-release/archive/refs/tags/upstream/0.8.0.tar.gz",
+    "strip_prefix": "generate_parameter_library-release-upstream-0.8.0/generate_parameter_library_py"
+}

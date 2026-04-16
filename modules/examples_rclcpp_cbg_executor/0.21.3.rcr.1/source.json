@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-WPoC3WrUfJBrZm0X/IgdUiuMrLolja9cH6o4xDd0sXU=",
+    "url": "https://github.com/ros2-gbp/examples-release/archive/refs/tags/upstream/0.21.3.tar.gz",
+    "strip_prefix": "examples-release-upstream-0.21.3/rclcpp/executors/cbg_executor",
+    "overlay": {
+        "BUILD.bazel": "sha256-HV43x5zA7XeM7HnTHjQCXkjIKlIDaJsD/BD81Ef44as="
+    }
+}

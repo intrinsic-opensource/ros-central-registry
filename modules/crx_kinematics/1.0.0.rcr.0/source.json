@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-HibeBrck4HE5RJqg3rnrwuzujhFZm7gUfZb1x6dUbj0=",
+    "url": "https://github.com/ros2-gbp/crx_kinematics-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "crx_kinematics-release-upstream-1.0.0/crx_kinematics"
+}

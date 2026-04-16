@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-ZUIso5/CRzi45sohAkLtECgM9nVrVLuWt+Pf+kVNoPo=",
+    "url": "https://github.com/ros2-gbp/mujoco_ros2_control-release/archive/refs/tags/upstream/0.0.2.tar.gz",
+    "strip_prefix": "mujoco_ros2_control-release-upstream-0.0.2/mujoco_ros2_control"
+}

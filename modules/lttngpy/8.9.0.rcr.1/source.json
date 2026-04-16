@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Qjr3UfHtOig+ywueWbYna4ijj9RK5H7K0otw1rHfXMg=",
+    "url": "https://github.com/ros2-gbp/ros2_tracing-release/archive/refs/tags/upstream/8.9.0.tar.gz",
+    "strip_prefix": "ros2_tracing-release-upstream-8.9.0/lttngpy",
+    "overlay": {
+        "BUILD.bazel": "sha256-iT8eCDQ6c5D1It9iLCj0rqw65tplmWOsVfdPoO2DUpo="
+    }
+}

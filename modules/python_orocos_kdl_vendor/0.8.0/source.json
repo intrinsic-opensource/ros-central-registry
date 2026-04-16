@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-ObbX1yehDHPB0wEQ69lL/ArSmZ2qCG9bQo0cX3qzuoc=",
+    "url": "https://github.com/ros2-gbp/orocos_kdl_vendor-release/archive/refs/tags/upstream/0.8.0.tar.gz",
+    "strip_prefix": "orocos_kdl_vendor-release-upstream-0.8.0/python_orocos_kdl_vendor"
+}

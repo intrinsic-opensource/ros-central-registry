@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-fUUr9oVXFUrpgbaMzuD8j0M2hzbt9oftia+13j11t44=",
+    "url": "https://github.com/ros2-gbp/rqt_image_view-release/archive/refs/tags/upstream/2.0.4.tar.gz",
+    "strip_prefix": "rqt_image_view-release-upstream-2.0.4",
+    "overlay": {
+        "BUILD.bazel": "sha256-dPPpaCM049oapUZ3HDXlRkdnRIqD0ONP0VjjUtRai2w="
+    }
+}

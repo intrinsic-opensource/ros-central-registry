@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-Enb5G89/1gEeeZh1g5re+muLRnI+psYcJJ9Ln04uxrA=",
+    "url": "https://github.com/ros2-gbp/apriltag_detector-release/archive/refs/tags/upstream/3.0.4.tar.gz",
+    "strip_prefix": "apriltag_detector-release-upstream-3.0.4/apriltag_draw"
+}

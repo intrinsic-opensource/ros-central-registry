@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-PABjfwGIaR28md9CmpOTZECtihfK58s0Ur0+CystO80=",
+    "url": "https://github.com/ros2-gbp/realsense-ros-release/archive/refs/tags/upstream/4.57.7.tar.gz",
+    "strip_prefix": "realsense-ros-release-upstream-4.57.7/realsense2_camera"
+}

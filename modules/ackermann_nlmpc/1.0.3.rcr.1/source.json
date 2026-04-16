@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-xtDaQNnWb8f5FykD42mK8wO7nhH1upqXZn6KQPkn3Ek=",
+    "url": "https://github.com/ros2-gbp/ackmerann_nlmpc-release/archive/refs/tags/upstream/1.0.3.tar.gz",
+    "strip_prefix": "ackmerann_nlmpc-release-upstream-1.0.3/ackermann_nlmpc",
+    "overlay": {
+        "BUILD.bazel": "sha256-4Q+CBKZEd9+FYl6YouSVS25lBReRhRCYKY2L6eI1Gxc="
+    }
+}

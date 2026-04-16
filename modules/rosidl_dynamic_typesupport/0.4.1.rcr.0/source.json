@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Zcmx+3JW6k08p32duOblwDeDZnhjA1hfe+4pVS1jEIQ=",
+    "url": "https://github.com/ros2-gbp/rosidl_dynamic_typesupport-release/archive/refs/tags/upstream/0.4.1.tar.gz",
+    "strip_prefix": "rosidl_dynamic_typesupport-release-upstream-0.4.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-R/R24pGVjcNH+SZYJTabR4Ztu3Ra5IF4vYrJmANe83s="
+    }
+}

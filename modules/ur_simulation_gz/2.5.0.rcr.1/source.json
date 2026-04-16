@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-iguGxrl5srN3OGb8K2XkjPzdnrdyDouCKRKvAo6MALY=",
+    "url": "https://github.com/ros2-gbp/ur_simulation_gz-release/archive/refs/tags/upstream/2.5.0.tar.gz",
+    "strip_prefix": "ur_simulation_gz-release-upstream-2.5.0/ur_simulation_gz",
+    "overlay": {
+        "BUILD.bazel": "sha256-Wu3V80Rd0ORoxBIhnOb34A1xXlGzP46tGuOw3r1RTkg="
+    }
+}

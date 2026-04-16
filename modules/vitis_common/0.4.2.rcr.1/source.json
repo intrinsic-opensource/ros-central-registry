@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-GYe/1/UoPrXnv8z5++TSMJ0KCX9Aud9gfWoA3gM+WGQ=",
+    "url": "https://github.com/ros2-gbp/vitis_common-release/archive/refs/tags/upstream/0.4.2.tar.gz",
+    "strip_prefix": "vitis_common-release-upstream-0.4.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-2Rw7rSZwbn8wIk7Dv0uHmnreqh70d9xe8U+5WwHY+y0="
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-EgyvoLxDagYXql92XcBcLVD6YBoQsmcEncBGTVWf7o0=",
+    "url": "https://github.com/ros2-gbp/sros2-release/archive/refs/tags/upstream/0.16.3.tar.gz",
+    "strip_prefix": "sros2-release-upstream-0.16.3/sros2_cmake"
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-eKWC/JkZDM1IGyvBAzH+8vjxCTxnBEaJr64gDuZLbv0=",
+    "url": "https://github.com/ros2-gbp/rosidl_dynamic_typesupport_fastrtps-release/archive/refs/tags/upstream/0.5.1.tar.gz",
+    "strip_prefix": "rosidl_dynamic_typesupport_fastrtps-release-upstream-0.5.1"
+}

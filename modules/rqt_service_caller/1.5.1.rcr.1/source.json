@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-NkXzduA1XzASI7jvqCXCo2YFQI8yZOVds/Yj0uBE0KU=",
+    "url": "https://github.com/ros2-gbp/rqt_service_caller-release/archive/refs/tags/upstream/1.5.1.tar.gz",
+    "strip_prefix": "rqt_service_caller-release-upstream-1.5.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-GysVDPOUZoKCoYCbnDwAc1lLnDz6Jr9RIXWTfaikn1w="
+    }
+}

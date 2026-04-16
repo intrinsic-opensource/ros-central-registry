@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-iCUrzgHLgbVUmUbmpksrxGIpeYW2T4qHIhpTO5Cd4k0=",
+    "url": "https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/upstream/0.4.2.tar.gz",
+    "strip_prefix": "rosidl_core-release-upstream-0.4.2/rosidl_core_runtime",
+    "overlay": {
+        "BUILD.bazel": "sha256-BIDymd7B8GCduYI8Lus3tLYFG2HysxochK6MTicW1lI="
+    }
+}

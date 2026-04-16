@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-jDik393YHxm+sT255eNZgKVB5VV4fePgdck+l7pjrWk=",
+    "url": "https://github.com/ros2-gbp/pinocchio-release/archive/refs/tags/upstream/3.8.0.tar.gz",
+    "strip_prefix": "pinocchio-release-upstream-3.8.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-2ZG1pvERwEDfJjjTg6cwaGsCzLkktjVIcMroXPnvuxw="
+    }
+}

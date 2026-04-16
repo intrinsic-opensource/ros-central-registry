@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Qooty6XGrHWKeQ4cLxZy8V6zcw/2rwgOPNdW3z5ptFM=",
+    "url": "https://github.com/ros2-gbp/flir_camera_driver-release/archive/refs/tags/upstream/3.0.4.tar.gz",
+    "strip_prefix": "flir_camera_driver-release-upstream-3.0.4/spinnaker_camera_driver",
+    "overlay": {
+        "BUILD.bazel": "sha256-Rqbfdnsk7p4lM1CRoVfBTAwEO3NmdHZBxMrvsvmhtLA="
+    }
+}

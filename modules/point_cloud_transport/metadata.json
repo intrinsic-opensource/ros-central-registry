@@ -1,0 +1,19 @@
+{
+    "homepage": "https://github.com/ros2-gbp/point_cloud_transport-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "5.3.2",
+        "5.3.2.rcr.0",
+        "5.3.2.rcr.1",
+        "5.4.0",
+        "5.4.0.rcr.0"
+    ],
+    "yanked_versions": {}
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-409zKMDAp2TnOSs2uOJTe+4F2+nxpBGWorNnKM+9uC8=",
+    "url": "https://github.com/ros2-gbp/tf2_web_republisher-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "tf2_web_republisher-release-upstream-1.0.0/tf2_web_republisher",
+    "overlay": {
+        "BUILD.bazel": "sha256-2Fm2720hvZGsIph/ql2Oy4oAeX8mK7CDsEgR1AfF2ok="
+    }
+}

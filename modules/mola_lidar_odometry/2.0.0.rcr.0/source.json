@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-rqcCi2yuxkXeGLBQ41ZdpVNakhJE6fLETx7adntEWcY=",
+    "url": "https://github.com/ros2-gbp/mola_lidar_odometry-release/archive/refs/tags/upstream/2.0.0.tar.gz",
+    "strip_prefix": "mola_lidar_odometry-release-upstream-2.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-wyw6hp0o20F86b0Gzmin3H0DQbpxnIRoc1OecuHcTh8="
+    }
+}

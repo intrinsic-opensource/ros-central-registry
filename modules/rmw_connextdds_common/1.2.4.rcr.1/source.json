@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-q6VbrifgyBIX5q3HVrLvuBoTNrgeKhNal3ut1u1q+iA=",
+    "url": "https://github.com/ros2-gbp/rmw_connextdds-release/archive/refs/tags/upstream/1.2.4.tar.gz",
+    "strip_prefix": "rmw_connextdds-release-upstream-1.2.4/rmw_connextdds_common",
+    "overlay": {
+        "BUILD.bazel": "sha256-37WmPfOb0z6NYoa+9VwdxE5cz/1KXPkOgMU21XYzZF0="
+    }
+}

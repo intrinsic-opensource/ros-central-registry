@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-t1REBnBWW7CzeuhYWehzYnQTiSeALfdKKAO0JswX+us=",
+    "url": "https://github.com/ros2-gbp/simulation_interfaces-release/archive/refs/tags/upstream/2.0.0.tar.gz",
+    "strip_prefix": "simulation_interfaces-release-upstream-2.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-9GDWN1drIhxl4TnNsoS2WWWIEKnk431M4PJNOoZ2Ybg="
+    }
+}

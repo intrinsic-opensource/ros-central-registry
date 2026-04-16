@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-yMP9IhC09XQLoiY89B8D8naiglRmWvuvir+fRsK/tr8=",
+    "url": "https://github.com/ros2-gbp/ai_worker-release/archive/refs/tags/upstream/1.1.14.tar.gz",
+    "strip_prefix": "ai_worker-release-upstream-1.1.14/ffw_joystick_controller"
+}

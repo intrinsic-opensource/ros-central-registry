@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-dpkEDwH3nkUC11W7/wlbFGo+to2+ubcj93e/YgjggDU=",
+    "url": "https://github.com/ros2-gbp/point_cloud_transport-release/archive/refs/tags/upstream/5.3.2.tar.gz",
+    "strip_prefix": "point_cloud_transport-release-upstream-5.3.2/point_cloud_transport_py",
+    "overlay": {
+        "BUILD.bazel": "sha256-qHWmKIEmMaIXUWVq8hd7h4CVACK9guaY5u1V4EBxFjs="
+    }
+}

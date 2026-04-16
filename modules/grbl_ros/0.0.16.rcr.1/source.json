@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-irS/vsYFN6asKXgP/bYTafOs+5aEMpCot2nx5dZEWEk=",
+    "url": "https://github.com/ros2-gbp/grbl_ros-release/archive/refs/tags/upstream/0.0.16.tar.gz",
+    "strip_prefix": "grbl_ros-release-upstream-0.0.16",
+    "overlay": {
+        "BUILD.bazel": "sha256-dP/ADIBrpW1zTUc5BCvCknfw36K3lM/V1JC/9l5m1EE="
+    }
+}

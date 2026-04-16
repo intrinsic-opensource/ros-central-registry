@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-G6AU/isTw5ICvqKdwM6pHeLyCr7IzJ4YEXFLUmtd0vo=",
+    "url": "https://github.com/ros2-gbp/mvsim-release/archive/refs/tags/upstream/0.15.0.tar.gz",
+    "strip_prefix": "mvsim-release-upstream-0.15.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-UqU/nxIDHcKnCqDRqYhxS5WYtXWDavPqFNTBlPAFCkA="
+    }
+}

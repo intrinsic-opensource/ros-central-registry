@@ -1,0 +1,17 @@
+--- thirdparty/yaml-cpp/test/BUILD.bazel
++++ /dev/null
+@@ -1,14 +0,0 @@
+-cc_test(
+-    name = "test",
+-    srcs = glob([
+-        "*.cpp",
+-        "*.h",
+-        "integrations/*.cpp",
+-        "node/*.cpp",
+-    ]),
+-    deps = [
+-        "//:yaml-cpp",
+-        "//:yaml-cpp_internal",
+-        "@com_google_googletest//:gtest_main",
+-    ],
+-)

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-jmtXyl4ooO2o7knvkB4At4mi4xFreG3w+0c+HYSrz48=",
+    "url": "https://github.com/ros2-gbp/soccer_interfaces-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "soccer_interfaces-release-upstream-1.0.0/soccer_vision_3d_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-DLJovPxppa7sGOD4uQZsP7OsiF3WLdPdchjcjXnvp0M="
+    }
+}

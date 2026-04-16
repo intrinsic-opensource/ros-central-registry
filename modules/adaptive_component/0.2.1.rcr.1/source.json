@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-1zEQkQ/S45iIYwCoQwYSRW8QkQdLCd8Ltk+/V1Obaco=",
+    "url": "https://github.com/ros2-gbp/adaptive_component-release/archive/refs/tags/upstream/0.2.1.tar.gz",
+    "strip_prefix": "adaptive_component-release-upstream-0.2.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-K2e+MRSAa1ErqFk1Qjir2FCFalhPy8lY9LESjnMDoNk="
+    }
+}

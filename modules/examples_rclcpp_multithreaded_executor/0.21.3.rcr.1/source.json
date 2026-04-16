@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-WPoC3WrUfJBrZm0X/IgdUiuMrLolja9cH6o4xDd0sXU=",
+    "url": "https://github.com/ros2-gbp/examples-release/archive/refs/tags/upstream/0.21.3.tar.gz",
+    "strip_prefix": "examples-release-upstream-0.21.3/rclcpp/executors/multithreaded_executor",
+    "overlay": {
+        "BUILD.bazel": "sha256-1bg5WRK0SS08ekk659opRavs40cAgz0qQf9GyvLwe6E="
+    }
+}

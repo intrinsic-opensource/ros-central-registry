@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-bLiQZLCmYwsLtINpnrwzde7q33z3isLl/UMy6F19DbQ=",
+    "url": "https://github.com/ros2-gbp/libhri-release/archive/refs/tags/upstream/2.9.0.tar.gz",
+    "strip_prefix": "libhri-release-upstream-2.9.0/hri"
+}

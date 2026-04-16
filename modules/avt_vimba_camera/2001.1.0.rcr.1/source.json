@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-fR0+dbIpblGY2gZ5Ejt8dDCIIMVYNhSxhI4ffnXZKB0=",
+    "url": "https://github.com/ros2-gbp/avt_vimba_camera-release/archive/refs/tags/upstream/2001.1.0.tar.gz",
+    "strip_prefix": "avt_vimba_camera-release-upstream-2001.1.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-W/1/18hfekzFuTUM+cmQZhGZEGX3baeflGt4GCPLUpM="
+    }
+}

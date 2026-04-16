@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-movY8GpNfBdflHvSEvjNG6db5S0E7CpyHfd8Cv3pnOg=",
+    "url": "https://github.com/ros/rosdistro/archive/refs/tags/rolling/2026-01-21.tar.gz",
+    "strip_prefix": "rosdistro-rolling-2026-01-21",
+    "overlay": {
+        "BUILD.bazel": "sha256-AidB6eYkaR/rMV9RBBd1Ea14s7Cn9bFQPrhSUauPrB4=",
+        "requirements.in": "sha256-AbUznm6ippdA+s/OWK6g8uGhIJXdEI2kGx0/UHP+Hh0=",
+        "requirements.txt": "sha256-XhTzywv4jvtuuFx4D/px+K8zOqt7efjatFTAuo5YGak="
+    }
+}

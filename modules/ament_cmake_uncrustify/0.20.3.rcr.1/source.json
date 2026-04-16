@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-VZJIVuR1Q1V6xxJSC6aMakYqz2siX7PwnI8e/F8r3YY=",
+    "url": "https://github.com/ros2-gbp/ament_lint-release/archive/refs/tags/upstream/0.20.3.tar.gz",
+    "strip_prefix": "ament_lint-release-upstream-0.20.3/ament_cmake_uncrustify",
+    "overlay": {
+        "BUILD.bazel": "sha256-+8UBye+ptwF9AbyqIz61BuXU5vkNMZKRSU/STTRQJVk="
+    }
+}

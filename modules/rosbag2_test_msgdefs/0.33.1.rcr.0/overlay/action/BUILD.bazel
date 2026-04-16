@@ -1,0 +1,32 @@
+load("@rosidl_default_generators//:defs.bzl", "ros_action")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(glob(["*.action"]))
+
+ros_action(
+    name = "BasicAction",
+    src = "BasicAction.action",
+    deps = [
+        "//msg:BasicIdl",
+        "//msg:BasicMsg",
+    ],
+)
+
+ros_action(
+    name = "ComplexActionIdl",
+    src = "ComplexActionIdl.action",
+    deps = [
+        "//msg:BasicIdl",
+        "//msg:BasicMsg",
+    ],
+)
+
+ros_action(
+    name = "ComplexActionMsg",
+    src = "ComplexActionMsg.action",
+    deps = [
+        "//msg:BasicIdl",
+        "//msg:BasicMsg",
+    ],
+)

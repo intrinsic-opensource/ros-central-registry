@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-Tjdm0Qfq5S/ExgNs4GedUcgGs+jSNk+MHu+DvKMDF50=",
+    "url": "https://github.com/ros2-gbp/urdfdom-release/archive/refs/tags/upstream/5.0.3.tar.gz",
+    "strip_prefix": "urdfdom-release-upstream-5.0.3"
+}

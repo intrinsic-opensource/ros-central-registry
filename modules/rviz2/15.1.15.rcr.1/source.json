@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-nVHahurmRiB0kcnz6bkg978ifV1VcNztFnkTb8vwlQ8=",
+    "url": "https://github.com/ros2-gbp/rviz-release/archive/refs/tags/upstream/15.1.15.tar.gz",
+    "strip_prefix": "rviz-release-upstream-15.1.15/rviz2",
+    "overlay": {
+        "BUILD.bazel": "sha256-aJAPbFGIdHlM4q9TU20auLGoXRocyUTs1qdis2fByO8="
+    }
+}

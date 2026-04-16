@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-nQpVv3tY6mSpLwa+ppSMlVYYwFC1JzKQ/hnCY+m4TX4=",
+    "url": "https://github.com/ros2-gbp/tlsf-release/archive/refs/tags/upstream/0.11.1.tar.gz",
+    "strip_prefix": "tlsf-release-upstream-0.11.1/tlsf",
+    "overlay": {
+        "BUILD.bazel": "sha256-VafTJut/HwUuQCkk0bERDiQCqGT5C+qyu/u9ax78S1o="
+    }
+}

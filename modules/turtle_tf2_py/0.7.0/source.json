@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-xZPSnJjfhGWRsiSqnlU8S/h13tobwI9Gj9SRl6bty+M=",
+    "url": "https://github.com/ros2-gbp/geometry_tutorials-release/archive/refs/tags/upstream/0.7.0.tar.gz",
+    "strip_prefix": "geometry_tutorials-release-upstream-0.7.0/turtle_tf2_py"
+}

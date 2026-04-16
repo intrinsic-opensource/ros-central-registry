@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-JkvajAhlVDMIEcznhFblUef+COEbCpm9IVTUEJwWpFU=",
+    "url": "https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/upstream/0.45.6.tar.gz",
+    "strip_prefix": "geometry2-release-upstream-0.45.6/tf2_py",
+    "overlay": {
+        "BUILD.bazel": "sha256-/DTXyhSe7e7Kn1WD7jdkxOEWxMa7jgE/ifNCcory2Ms="
+    }
+}

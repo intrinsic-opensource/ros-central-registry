@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-3M7hhmeykBX5vzdtoutNZc8JA5h8v53oU2klhYNZLc4=",
+    "url": "https://github.com/ros2-gbp/fastdds-release/archive/refs/tags/upstream/3.6.0.tar.gz",
+    "strip_prefix": "fastdds-release-upstream-3.6.0"
+}

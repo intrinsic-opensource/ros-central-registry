@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-bRX+Cva2n+xcDdECHBqLeBivoR7ls245+BeLKrtlukc=",
+    "url": "https://github.com/ros2-gbp/ros2_control-release/archive/refs/tags/upstream/6.3.2.tar.gz",
+    "strip_prefix": "ros2_control-release-upstream-6.3.2/controller_manager_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-xb9QO+WClmiFWg91lK6xbpyjzThy/9gaRy24OibGKw4="
+    }
+}

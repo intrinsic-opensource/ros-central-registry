@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-dwNnVlaPJuNmq48pdhAg65iwmqPTI8Kg0EwOzKvRHiA=",
+    "url": "https://github.com/ros2-gbp/coal-release/archive/refs/tags/upstream/3.0.2.tar.gz",
+    "strip_prefix": "coal-release-upstream-3.0.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-pb/KNusAYnJ7aIjebs+vOoDdQe1OgG+RAFaYfPe/75I="
+    }
+}

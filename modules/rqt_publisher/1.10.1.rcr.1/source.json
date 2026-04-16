@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-mbbDwTOiUqAjqFJaHwMXZTsuQtBLP3RpWngmUxwDdD4=",
+    "url": "https://github.com/ros2-gbp/rqt_publisher-release/archive/refs/tags/upstream/1.10.1.tar.gz",
+    "strip_prefix": "rqt_publisher-release-upstream-1.10.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-AT+rSLwoXKBHei3rKOkW9Aqg20yj/Al5/IZDPlhBV08="
+    }
+}

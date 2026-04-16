@@ -1,0 +1,19 @@
+{
+    "homepage": "https://github.com/ros2-gbp/qml_ros2_plugin-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "2.25.2",
+        "2.25.2.rcr.0",
+        "2.25.2.rcr.1",
+        "3.26.30",
+        "3.26.30.rcr.0"
+    ],
+    "yanked_versions": {}
+}

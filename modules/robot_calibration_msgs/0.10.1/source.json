@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-2JD/z/+w32EjSHywp5J2U8kqp1l6SKJB2NabL7v6dcc=",
+    "url": "https://github.com/ros2-gbp/robot_calibration-release/archive/refs/tags/upstream/0.10.1.tar.gz",
+    "strip_prefix": "robot_calibration-release-upstream-0.10.1/robot_calibration_msgs"
+}

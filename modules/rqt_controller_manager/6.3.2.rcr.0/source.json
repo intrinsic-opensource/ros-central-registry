@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-bRX+Cva2n+xcDdECHBqLeBivoR7ls245+BeLKrtlukc=",
+    "url": "https://github.com/ros2-gbp/ros2_control-release/archive/refs/tags/upstream/6.3.2.tar.gz",
+    "strip_prefix": "ros2_control-release-upstream-6.3.2/rqt_controller_manager"
+}

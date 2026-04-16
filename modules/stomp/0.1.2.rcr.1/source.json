@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-jw3hAeakrb2fH+N/NHYfheG6sLv0P2jwuxMvxm3+c+Q=",
+    "url": "https://github.com/ros2-gbp/stomp-release/archive/refs/tags/upstream/0.1.2.tar.gz",
+    "strip_prefix": "stomp-release-upstream-0.1.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-HXEF5yU3OnGE93wBOLlG9z+6sDve2Dd760jFs7ME5HA="
+    }
+}

@@ -1,0 +1,38 @@
+--- ament_index_python/search_paths.py
++++ ament_index_python/search_paths.py
+@@ -13,6 +13,7 @@
+ # limitations under the License.
+ 
+ import os
++from pathlib import Path
+ from typing import List
+ 
+ from .constants import AMENT_PREFIX_PATH_ENV_VAR
+@@ -20,13 +21,25 @@
+ 
+ def get_search_paths() -> List[str]:
+     """
+-    Get the paths from the environment variable '{AMENT_PREFIX_PATH_ENV_VAR}'.
++    Get the paths from the environment variable.
++
++    In a Bazel context AMENT_PREFIX_PATH should not be set. If this is the case, then
++    we need to poke for a MANIFEST file, and use the current work directory as a
++    stand-in search path for package data.
+ 
+     :returns: list of paths
+     :raises: :exc:`EnvironmentError`
+-    """.format(AMENT_PREFIX_PATH_ENV_VAR=AMENT_PREFIX_PATH_ENV_VAR)
++    """
+     ament_prefix_path = os.environ.get(AMENT_PREFIX_PATH_ENV_VAR)
+     if not ament_prefix_path:
++        runfiles_dir = os.environ.get("RUNFILES_DIR")
++        test_workspace = os.environ.get("TEST_WORKSPACE")
++        if runfiles_dir and test_workspace:
++            return [os.path.join(runfiles_dir, test_workspace)]
++        p1 = Path.cwd()
++        p2 = Path("../MANIFEST")
++        if (p1 / p2).is_file():
++            return [str(p1)]
+         raise EnvironmentError(
+             "Environment variable '{}' is not set or empty".format(AMENT_PREFIX_PATH_ENV_VAR))
+ 

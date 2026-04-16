@@ -1,0 +1,17 @@
+{
+    "homepage": "https://github.com/SBG-Systems/sbg_ros2-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "3.3.2",
+        "3.3.2.rcr.0",
+        "3.3.2.rcr.1"
+    ],
+    "yanked_versions": {}
+}

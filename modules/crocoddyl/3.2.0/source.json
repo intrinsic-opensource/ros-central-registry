@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-TtkjsUmMEZyfn3//xkbRwSMXiej/RQ1wecZG9kbJYbU=",
+    "url": "https://github.com/ros2-gbp/crocoddyl-release/archive/refs/tags/upstream/3.2.0.tar.gz",
+    "strip_prefix": "crocoddyl-release-upstream-3.2.0"
+}

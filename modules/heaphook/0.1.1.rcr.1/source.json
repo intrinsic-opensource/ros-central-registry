@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-zB1jwkKWQ+gDVDMQD0uDln4jzlHfHH9L2+3QJDzzmco=",
+    "url": "https://github.com/ros2-gbp/heaphook-release/archive/refs/tags/upstream/0.1.1.tar.gz",
+    "strip_prefix": "heaphook-release-upstream-0.1.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-t0YDUy5yRNSNm5JbqYxkZaqlflwrt5I7wVbosWy2BHg="
+    }
+}

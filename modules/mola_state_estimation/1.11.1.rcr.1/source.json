@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-2/q1jGxdZXHmTLpDNdL1pFFnxqTnrqpAYfwIrxN05PQ=",
+    "url": "https://github.com/ros2-gbp/mola_state_estimation-release/archive/refs/tags/upstream/1.11.1.tar.gz",
+    "strip_prefix": "mola_state_estimation-release-upstream-1.11.1/mola_state_estimation",
+    "overlay": {
+        "BUILD.bazel": "sha256-xNpLDxIrWvs+laZg/bPVONEXAB+hT54O+6OMBU5jBY8="
+    }
+}

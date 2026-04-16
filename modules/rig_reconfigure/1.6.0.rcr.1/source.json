@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-3jIryt/KNtHvoRtK2a6YZ6hGmdkRSxIG5eJJsaWihQw=",
+    "url": "https://github.com/ros2-gbp/rig_reconfigure-release/archive/refs/tags/upstream/1.6.0.tar.gz",
+    "strip_prefix": "rig_reconfigure-release-upstream-1.6.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-U3BT+pv/zFWg+JZ4x5qZEjKTE1sb6VZWFZSRXsRcuCw="
+    }
+}

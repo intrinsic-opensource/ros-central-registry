@@ -1,0 +1,15 @@
+{
+    "integrity": "sha256-KFRfyvqITt2apHsM1CbzWVnzze6OBui6FnLxH+0VkR4=",
+    "url": "https://github.com/ros2-gbp/performance_test-release/archive/refs/tags/upstream/2.3.0.tar.gz",
+    "strip_prefix": "performance_test-release-upstream-2.3.0/performance_test",
+    "patches": {
+        "third_party__rapidjson__BUILD__bazel.patch": "sha256-4XkjhH94MkX5Z47syzTg4AOaU16DPrD0bIOFbLkuiMw=",
+        "third_party__tabulate__BUILD__bazel.patch": "sha256-nW0vo68OnZaQ7FO/cW8zurkl6kVKSeszwcCxqqLaJyk=",
+        "msg__BUILD__bazel.patch": "sha256-AWskg7CTAhIS/G8+ka0p/K7bP7WhxBCGX3zXgKBaiYo=",
+        "defs__bzl.patch": "sha256-LKpMVkbazYDrJ+06cv8zUhsdAAgFEOt4aSuzKernMuw=",
+        "third_party__sole__BUILD__bazel.patch": "sha256-FvoebOSMOH1OikdNRGM+1ShU36OP0boST5/lu8qTKDQ=",
+        "plugins__demo__BUILD__bazel.patch": "sha256-1ZSn3aLRu31qg3CKl27LPV3NbUuuTDJQGLxTgpA6tgg=",
+        "BUILD__bazel.patch": "sha256-sYEKvdH/0QDrUTkDY9GpwySskaPJd8QNZsAJ+ofafOM=",
+        "third_party__tclap__BUILD__bazel.patch": "sha256-NAcPq8iI+fs0D2b4oModFrYbQEQBNUjW1mgm2GmqfSU="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-qosZLbK303JPfnQ8z7IkMi/EfC1+DNX+SCQmEMGD+Q4=",
+    "url": "https://github.com/ros2-gbp/py_trees_ros_interfaces-release/archive/refs/tags/upstream/2.1.1.tar.gz",
+    "strip_prefix": "py_trees_ros_interfaces-release-upstream-2.1.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-Iyhhhtfpz0Z5TgvFrUovQmb3mHNM7f7KwF8uXVsorgM="
+    }
+}

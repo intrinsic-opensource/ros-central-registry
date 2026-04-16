@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-wVh5Pe4Ug1qINfahGGsoMl6tCIhi7tE9RDwbGzTru5Y=",
+    "url": "https://github.com/ros2-gbp/micro_ros_diagnostics-release/archive/refs/tags/upstream/0.3.0.tar.gz",
+    "strip_prefix": "micro_ros_diagnostics-release-upstream-0.3.0/micro_ros_diagnostic_msgs"
+}

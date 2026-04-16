@@ -1,0 +1,19 @@
+{
+    "homepage": "https://github.com/ros2-gbp/rcutils-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "7.0.5",
+        "7.0.5.rcr.0",
+        "7.0.5.rcr.1",
+        "7.0.9",
+        "7.0.9.rcr.0"
+    ],
+    "yanked_versions": {}
+}

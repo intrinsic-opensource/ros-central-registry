@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-iCUrzgHLgbVUmUbmpksrxGIpeYW2T4qHIhpTO5Cd4k0=",
+    "url": "https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/upstream/0.4.2.tar.gz",
+    "strip_prefix": "rosidl_core-release-upstream-0.4.2/rosidl_core_generators",
+    "overlay": {
+        "defs.bzl": "sha256-nY6CGda1MrvckB3f/fZgJ+PpgVCDlCHbcrDjNGOfuTg=",
+        "BUILD.bazel": "sha256-kUaCf/sRuvdQmz8W2AncmnlUEpvA0Mh5zAKW4PJHhHg=",
+        "rules.bzl": "sha256-kHIMKpqhVkuvbCxkFU6vJsqxC1/jQ502F3fglkewtD8="
+    }
+}

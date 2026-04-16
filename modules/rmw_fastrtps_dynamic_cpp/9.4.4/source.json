@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-Dg/0dyY3ldobXHGPl0vEzTNi6WPzZjPyMH+fF3alP4M=",
+    "url": "https://github.com/ros2-gbp/rmw_fastrtps-release/archive/refs/tags/upstream/9.4.4.tar.gz",
+    "strip_prefix": "rmw_fastrtps-release-upstream-9.4.4/rmw_fastrtps_dynamic_cpp"
+}

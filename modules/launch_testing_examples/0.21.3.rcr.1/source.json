@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-WPoC3WrUfJBrZm0X/IgdUiuMrLolja9cH6o4xDd0sXU=",
+    "url": "https://github.com/ros2-gbp/examples-release/archive/refs/tags/upstream/0.21.3.tar.gz",
+    "strip_prefix": "examples-release-upstream-0.21.3/launch_testing/launch_testing_examples",
+    "overlay": {
+        "BUILD.bazel": "sha256-2vksHYIX6+/TABNO6BQdzGEZBbhnnLXuUd8Z45e9Npk="
+    }
+}

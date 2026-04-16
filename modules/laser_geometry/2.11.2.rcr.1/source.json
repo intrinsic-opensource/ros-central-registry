@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-a12rmz6FVxalafKgrujFLfVpGvVsuCnj0sCjVTlwIjY=",
+    "url": "https://github.com/ros2-gbp/laser_geometry-release/archive/refs/tags/upstream/2.11.2.tar.gz",
+    "strip_prefix": "laser_geometry-release-upstream-2.11.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-qQUeuMBSqoAZXVXhSY4q5bBgSlxAHXMiNjYIEaSo4Y0="
+    }
+}

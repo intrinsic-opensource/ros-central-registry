@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-BX1RFgRQsA5tF4HiHoMiQdDiJwcodblPe1m4Fvv+dK8=",
+    "url": "https://github.com/ros2-gbp/kompass-release/archive/refs/tags/upstream/0.4.0.tar.gz",
+    "strip_prefix": "kompass-release-upstream-0.4.0/kompass",
+    "overlay": {
+        "BUILD.bazel": "sha256-iSRfbXkyeliXggDy+yj+cTwWzBYW463ZDO9cQ0xu6Qw="
+    }
+}

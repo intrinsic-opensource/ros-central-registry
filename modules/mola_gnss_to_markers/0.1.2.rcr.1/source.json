@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-x1znOx7ot/Y0a3GZsC92XWeWiGpQYMbfWMcAf7N6UHE=",
+    "url": "https://github.com/ros2-gbp/mola_gnss_to_markers-release/archive/refs/tags/upstream/0.1.2.tar.gz",
+    "strip_prefix": "mola_gnss_to_markers-release-upstream-0.1.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-zaaXxm2YKVwuPyjqFb8vwTCaizgMPN90jFA4HaqkMp4="
+    }
+}

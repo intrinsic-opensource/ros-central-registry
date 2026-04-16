@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Mw2rCGsnpNf+KWxwHF6Kah28h+GWIMfwC1xU9/wPwbU=",
+    "url": "https://github.com/ros2-gbp/sros2-release/archive/refs/tags/upstream/0.16.4.tar.gz",
+    "strip_prefix": "sros2-release-upstream-0.16.4/sros2_cmake",
+    "overlay": {
+        "BUILD.bazel": "sha256-i3bTdZSrpJqCfNY2s6k3YRKPnDGSkcpks8mMz5x79kc="
+    }
+}

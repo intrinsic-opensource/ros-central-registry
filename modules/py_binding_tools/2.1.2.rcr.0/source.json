@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-sPKwdVCf/hMgL1LwX3fMb71pPejSkjm22L0RXByRWKc=",
+    "url": "https://github.com/ros2-gbp/py_binding_tools-release/archive/refs/tags/upstream/2.1.2.tar.gz",
+    "strip_prefix": "py_binding_tools-release-upstream-2.1.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-Is+NktXD5pmbQVZNDc2MHjOSOREBLqtwRAVr1PAyZ9E="
+    }
+}

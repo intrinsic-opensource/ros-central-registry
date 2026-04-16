@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-GkawkMae7kK+GcTDhXAd6JjAMvDRo2DCEVSw2TaN3ck=",
+    "url": "https://github.com/ros2-gbp/ros2_kortex-release/archive/refs/tags/upstream/0.2.5.tar.gz",
+    "strip_prefix": "ros2_kortex-release-upstream-0.2.5/kortex_api"
+}

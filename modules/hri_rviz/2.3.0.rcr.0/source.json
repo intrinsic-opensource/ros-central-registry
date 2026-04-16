@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-K8lan2QMGd93MRfQSMJWq3KC4WCk6bgREJUCC/3WqvM=",
+    "url": "https://github.com/ros2-gbp/hri_rviz-release/archive/refs/tags/upstream/2.3.0.tar.gz",
+    "strip_prefix": "hri_rviz-release-upstream-2.3.0"
+}

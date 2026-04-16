@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-F4u9S/GbLCv33A8ajbG7sGdbOG3c18kXz/wWm72D0pM=",
+    "url": "https://github.com/ros2-gbp/mrpt_ros_bridge-release/archive/refs/tags/upstream/3.1.1.tar.gz",
+    "strip_prefix": "mrpt_ros_bridge-release-upstream-3.1.1/rosbag2rawlog",
+    "overlay": {
+        "BUILD.bazel": "sha256-B3GtqUozfJP6dP6cJ8xXkWl/Vk8PeZj13sm104JFjig="
+    }
+}

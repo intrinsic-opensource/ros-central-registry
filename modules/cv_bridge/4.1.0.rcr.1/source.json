@@ -1,0 +1,12 @@
+{
+    "integrity": "sha256-XH9st9SUtvhNbD1qI9NG28m7JwcRTBv31NaDWGh4ri8=",
+    "url": "https://github.com/ros2-gbp/vision_opencv-release/archive/refs/tags/upstream/4.1.0.tar.gz",
+    "strip_prefix": "vision_opencv-release-upstream-4.1.0/cv_bridge",
+    "overlay": {
+        "BUILD.bazel": "sha256-7U9ww8pnnPtnzQq9uOgChiXw/VeY1PvtShreT+um844="
+    },
+    "patches": {
+        "src__cv_bridge__cpp.patch": "sha256-eoJWLrnfmhqgO3jC4Rly9cIEFTetkapNjB/ocLuc+xc=",
+        "test__test_dynamic_scaling__cpp.patch": "sha256-FHyVAEDyym0aIr+ZKGKrsn21Ge0MvFehUNWg8lCyzTg="
+    }
+}

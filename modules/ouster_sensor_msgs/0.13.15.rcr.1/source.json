@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-LJ2SmamBm/yfWjhL0ys5kW0Ls14fWyNSXIl0pfPFnUY=",
+    "url": "https://github.com/ros2-gbp/ouster-ros-release/archive/refs/tags/upstream/0.13.15.tar.gz",
+    "strip_prefix": "ouster-ros-release-upstream-0.13.15/ouster-sensor-msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE="
+    }
+}

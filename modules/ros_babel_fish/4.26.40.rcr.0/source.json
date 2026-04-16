@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-jd12d0QZh6Hor2YKUFdlRABFkhpVuv/iH50gcAbtVUE=",
+    "url": "https://github.com/ros2-gbp/ros_babel_fish-release/archive/refs/tags/upstream/4.26.40.tar.gz",
+    "strip_prefix": "ros_babel_fish-release-upstream-4.26.40/ros_babel_fish",
+    "overlay": {
+        "BUILD.bazel": "sha256-0atnAFkEywT4kQSt3h9KaeO32hjXZ6MWrtAL1ksD24Q="
+    }
+}

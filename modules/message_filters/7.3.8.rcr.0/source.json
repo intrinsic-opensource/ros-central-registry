@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-+jevIz8SrM9C/vExTLYojoZqAOsu4JJ+Y8nSS7bWGQc=",
+    "url": "https://github.com/ros2-gbp/ros2_message_filters-release/archive/refs/tags/upstream/7.3.8.tar.gz",
+    "strip_prefix": "ros2_message_filters-release-upstream-7.3.8",
+    "overlay": {
+        "BUILD.bazel": "sha256-UF+lm3vyAWfiZThywkRLw0lwfeO+o7lk9MtAuIzRhy4="
+    }
+}

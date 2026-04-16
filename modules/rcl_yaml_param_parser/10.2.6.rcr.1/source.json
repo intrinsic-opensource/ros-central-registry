@@ -1,0 +1,16 @@
+{
+    "integrity": "sha256-iOMXSu+uFVLqYpNefgYE1svKoyWUfhDKagYW2z97f6g=",
+    "url": "https://github.com/ros2-gbp/rcl-release/archive/refs/tags/upstream/10.2.6.tar.gz",
+    "strip_prefix": "rcl-release-upstream-10.2.6/rcl_yaml_param_parser",
+    "overlay": {
+        "BUILD.bazel": "sha256-fkjaY2zkABR38M7gcHbTHIH3IdbyOcTADqcyEymLzDY="
+    },
+    "patches": {
+        "test__test_parser_multiple_params__cpp.patch": "sha256-Fo3h4hBqJbWoRewN1CgmlCrkcav7XqtDJ/+m6KYy9/U=",
+        "test__test_parser__cpp.patch": "sha256-qiyCpIyY6eRaMsdD/dq+9z2h9SoraOhOBHzCNXYwLHk=",
+        "test__test_parser_multiple_nodes__cpp.patch": "sha256-p3cvRcPRTar8WnnJM03obEyFenBbwaikrIHcV6APxi4=",
+        "test__test_parse_yaml__cpp.patch": "sha256-v8KA/T/C2eIR52E1qjT8z6qLcWqZRBIHlm5yTXoDyLs=",
+        "test__test_parse__cpp.patch": "sha256-1B0JDX6ROESjT1T9As/Wyckl2WLxmPAg6HR0ZszTKn0=",
+        "src__parse__c.patch": "sha256-tc1c+Njm/TyGl9WVTAWovUnJ0lQM2yrkCNATcACXpoU="
+    }
+}

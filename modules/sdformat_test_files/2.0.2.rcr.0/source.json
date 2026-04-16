@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-VdLVscWNShAsIwA2TNx3GKmPEPxBZiD5T4jLwnFaDNo=",
+    "url": "https://github.com/ros2-gbp/sdformat_urdf-release/archive/refs/tags/upstream/2.0.2.tar.gz",
+    "strip_prefix": "sdformat_urdf-release-upstream-2.0.2/sdformat_test_files"
+}

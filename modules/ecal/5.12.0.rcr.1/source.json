@@ -1,0 +1,35 @@
+{
+    "integrity": "sha256-hYGx269daLn77gZGxoIO6lLvhxricwoOD3+ufF8O+Mw=",
+    "url": "https://github.com/ros2-gbp/ecal-release/archive/refs/tags/upstream/5.12.0.tar.gz",
+    "strip_prefix": "ecal-release-upstream-5.12.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-3v2OD9Yyw5vS7yL6vihl3i2LB//gBN8YPvNPlfgvuO4="
+    },
+    "patches": {
+        "thirdparty__googletest__WORKSPACE.patch": "sha256-0qd40fHwDG7n4dZz6/HmKHSp3yEjy+MK6T/JhbdDkIo=",
+        "thirdparty__googletest__googletest__test__BUILD__bazel.patch": "sha256-UX0pLFmgkdHFvSEPquy6k/tiw/cCYhZoLyG4n6ZR8cg=",
+        "thirdparty__protobuf__examples__BUILD.patch": "sha256-SZMZig4gMM+abgcqj71RQxJuNkYRj2SWZ7Xpbx1Xj08=",
+        "thirdparty__yaml-cpp__WORKSPACE.patch": "sha256-O19VuS9hhNSaF5gm4BeL1PgVVrkowZIh9bGSZDrRDzg=",
+        "thirdparty__protobuf__third_party__googletest__BUILD__bazel.patch": "sha256-ISr/VoNh+bm6u8PkMCE1sttQarm1DFrsWm4cZpo66QI=",
+        "thirdparty__protobuf__third_party__googletest__googletest__test__BUILD__bazel.patch": "sha256-AffZstJ1aVuU+R1s6nbocIBFMcLAYsEqaVng7nCjXQ8=",
+        "thirdparty__protobuf__third_party__googletest__WORKSPACE.patch": "sha256-LoCA6YVy/2U4l4zmlsCPbMzuxsU0sJ6hPTKJs+PLFLQ=",
+        "thirdparty__yaml-cpp__BUILD__bazel.patch": "sha256-bJL3PxsRnTGsMcj8eGyz1/P3t1a0irN60VBdz/jA7Ho=",
+        "thirdparty__protobuf__util__python__BUILD.patch": "sha256-jVMLbrKv8YDxFSGnKwwKviGZQfVBz6r3SWdhYSKntk0=",
+        "thirdparty__protobuf__cc_proto_blacklist_test__bzl.patch": "sha256-5R2pXDcqqlh1BvAmBEbtJGGdrX85SoRPzBU2ofMfK9c=",
+        "thirdparty__googletest__BUILD__bazel.patch": "sha256-q4TtdDAuokFVMnHbqwrwaj3nHUp+D73iF/3YS4gTGno=",
+        "thirdparty__protobuf__third_party__googletest__googlemock__test__BUILD__bazel.patch": "sha256-C6/kCbpNXUkW2MLDfU7tmk3j8o2jczH9KJvs1PNhTiU=",
+        "thirdparty__protobuf__BUILD.patch": "sha256-/DE/wqaaMO5Qeben9TA+v/EoakcV3YvvipPmtJRMVTQ=",
+        "thirdparty__yaml-cpp__test__BUILD__bazel.patch": "sha256-LgLjRQCxb6Oip3uzh7SD+mu3a7w6N2TJeOHMrzBXkmA=",
+        "thirdparty__yaml-cpp__test__gtest-1__11__0__BUILD__bazel.patch": "sha256-GndwFtlmDCzFq7/GEAMFxAfUa57gWYm6/4Rltfq2Hps=",
+        "thirdparty__yaml-cpp__test__gtest-1__11__0__WORKSPACE.patch": "sha256-kyjwY+tdxpt+Tp2VyoN6SNUIWtjKHOLfO2JI5QMD+2A=",
+        "thirdparty__protobuf__compiler_config_setting__bzl.patch": "sha256-D7Ls81EnKAbEiqlxVmPX2VvL+JKY1ZxdCPPQlwcAL7o=",
+        "thirdparty__yaml-cpp__test__gtest-1__11__0__googletest__test__BUILD__bazel.patch": "sha256-pYFYYLwiNcs/yx0mhGS+odEsZrPtW3LRNdMbSS03mOc=",
+        "thirdparty__googletest__googlemock__test__BUILD__bazel.patch": "sha256-wNx8zkXy5bcEL/m214qVss/f+VIqKqUyZV89dd2f790=",
+        "thirdparty__protobuf__protobuf_deps__bzl.patch": "sha256-gCDE/+YlQsZL4DJIpgGUL7EHquxKDt7SPXEi64gfPns=",
+        "thirdparty__protobuf__protobuf__bzl.patch": "sha256-kurV1K5OyjuS097NeW1y0WJcdZleqt5Y/NBQo2wxp/A=",
+        "thirdparty__protobuf__examples__WORKSPACE.patch": "sha256-Dw2cJAifMYTP6C1QjVb8QbGALlZD1XpQuXhqIEkwHZg=",
+        "thirdparty__protobuf__third_party__BUILD.patch": "sha256-hUOcHrRqX7MVI/9fPEIpozOn5FEUDhUabXa2Ybeb9/o=",
+        "thirdparty__protobuf__WORKSPACE.patch": "sha256-KwYutruzjloTWVxgW5BoB5MXxKiaIq46wJgwoEzcHyc=",
+        "thirdparty__yaml-cpp__test__gtest-1__11__0__googlemock__test__BUILD__bazel.patch": "sha256-HG5L4B3fVicqz3GvjG4k7dFw6XYiTGoovhoJbLmY6cQ="
+    }
+}

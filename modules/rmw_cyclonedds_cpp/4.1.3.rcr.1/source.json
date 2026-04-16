@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-RE0/5mwRPozlaGZ3VkFfzNHDhzRI05DVq06uo+dCyCI=",
+    "url": "https://github.com/ros2-gbp/rmw_cyclonedds-release/archive/refs/tags/upstream/4.1.3.tar.gz",
+    "strip_prefix": "rmw_cyclonedds-release-upstream-4.1.3/rmw_cyclonedds_cpp",
+    "overlay": {
+        "BUILD.bazel": "sha256-pwom0jaSu874qJI5xYm31PUkNXa3EaoOCyTLBdK3FD8="
+    }
+}

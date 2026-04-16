@@ -1,0 +1,17 @@
+{
+    "integrity": "sha256-l9BUQFIsvq/5gNcRTtxEGblBV7iR1Jt35MuLGiJZIqw=",
+    "url": "https://github.com/ros2-gbp/rosidl_typesupport-release/archive/refs/tags/upstream/3.4.1.tar.gz",
+    "strip_prefix": "rosidl_typesupport-release-upstream-3.4.1/rosidl_typesupport_cpp",
+    "overlay": {
+        "defs.bzl": "sha256-BU3o0AR7xFKMeV//2C7G+lZlfOf4Ansne2SrVebVnS0=",
+        "types.bzl": "sha256-/qjld705v4IIkmLSBnn76va8JjMoO8N1EPkvM9I3XR8=",
+        "BUILD.bazel": "sha256-3/nxK7mpU5PKOTu5gBgf+LUO90j2KQBjq1melMwOh8k=",
+        "aspects.bzl": "sha256-8fynzwnrwNAEaBI7IanvYp5ksLVKl1js6eZszuBlFYs="
+    },
+    "patches": {
+        "rosidl_typesupport_cpp____init____py.patch": "sha256-xEfG0aG8LOFQ0QqbqnAP7EiCis+7ytSn8P4+EVtQjtI=",
+        "src__type_support_dispatch__hpp.patch": "sha256-SXvLgX6/LGraUYD9oi1jFFRRhF76FOW9ghcKmCqnkpA=",
+        "resource__msg__type_support__cpp__em.patch": "sha256-RR81UySbqCeKgndQflMqGfnTGSYaaAsK0UFZDVyHiUA=",
+        "resource__srv__type_support__cpp__em.patch": "sha256-6BTz4B6c2kl0LI7yagWE2xYuYntBXWxriv3jsCh50Tk="
+    }
+}

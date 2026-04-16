@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-T63dgiCmvW3PUP+VbsWsH/s6LwhPH4GjArAU9y0g0zA=",
+    "url": "https://github.com/ros2-gbp/rosbridge_suite-release/archive/refs/tags/upstream/3.0.2.tar.gz",
+    "strip_prefix": "rosbridge_suite-release-upstream-3.0.2/rosapi_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-Wmri8o8thcOuOh/BSvloneL4xzqKxMdrBbvf+2ox7xQ="
+    }
+}

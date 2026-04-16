@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-hx8L98iD9nPm1h+UI65oWBG3Qtw/z9SSmnwm7loA7Ls=",
+    "url": "https://github.com/ros2-gbp/ament_vitis-release/archive/refs/tags/upstream/0.10.1.tar.gz",
+    "strip_prefix": "ament_vitis-release-upstream-0.10.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-VOFJOYJ5hn6SdDdlfFkYUQi7cnFFBIExVhwQ8Lwm1Q0="
+    }
+}

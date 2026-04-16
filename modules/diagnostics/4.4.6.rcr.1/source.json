@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-iH7SsIZ+SwkgGjwMNk3829IPuALuypMJHUYsA3uEYQc=",
+    "url": "https://github.com/ros2-gbp/diagnostics-release/archive/refs/tags/upstream/4.4.6.tar.gz",
+    "strip_prefix": "diagnostics-release-upstream-4.4.6/diagnostics",
+    "overlay": {
+        "BUILD.bazel": "sha256-8UY/lAm5uLeyJmsaYUG14z1gLmTcowL2d3Njd5RGGr0="
+    }
+}

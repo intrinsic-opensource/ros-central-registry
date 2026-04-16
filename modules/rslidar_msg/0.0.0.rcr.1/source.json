@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-8F03phI5khtQt9bnCEZu7+HryE7nO4VApjBx+T4c2bM=",
+    "url": "https://github.com/ros2-gbp/rslidar_msg-release/archive/refs/tags/upstream/0.0.0.tar.gz",
+    "strip_prefix": "rslidar_msg-release-upstream-0.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-xoprBMIFKzH3IveON2gMQfbaEr5i/qCZqGaP/1lEu2w="
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-axtjWXtd5AgZ/tldiuttgNNnfR4jP2A8FAb8xDPRMBE=",
+    "url": "https://github.com/ros2-gbp/moveit_resources-release/archive/refs/tags/upstream/3.1.1.tar.gz",
+    "strip_prefix": "moveit_resources-release-upstream-3.1.1/dual_arm_panda_moveit_config"
+}

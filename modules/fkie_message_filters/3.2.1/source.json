@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-y62cpYFNgaJ5TiT+N64fBfRWk114TeJ7BgX/s/zBc6M=",
+    "url": "https://github.com/ros2-gbp/fkie_message_filters-release/archive/refs/tags/upstream/3.2.1.tar.gz",
+    "strip_prefix": "fkie_message_filters-release-upstream-3.2.1/fkie_message_filters"
+}

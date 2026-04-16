@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-t/JPtw4z0dkpmjiacnC4fjvFwqT0anW7NeOkQB1gRUk=",
+    "url": "https://github.com/ros2-gbp/interactive_markers-release/archive/refs/tags/upstream/2.8.2.tar.gz",
+    "strip_prefix": "interactive_markers-release-upstream-2.8.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-ILsmz7ww5nOn/gjM6SSalGX7LioxoU8T2XCo0KakGg4="
+    }
+}

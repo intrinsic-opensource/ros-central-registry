@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-rK4nHawrEfJB/qN0ojyS03cfgx1LbVW2KwOvgh4oKog=",
+    "url": "https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/upstream/0.40.4.tar.gz",
+    "strip_prefix": "ros2cli-release-upstream-0.40.4/ros2lifecycle_test_fixtures",
+    "overlay": {
+        "BUILD.bazel": "sha256-F2O8XIK8A/MVTZLOh0MYSMdOpVchQXvX8rUDo7AncQw="
+    }
+}

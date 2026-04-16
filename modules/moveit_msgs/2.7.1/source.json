@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-fI6LDbD+9bBOmzBKskD5IjKtRxBYkCowJhrVHWM7zJE=",
+    "url": "https://github.com/ros2-gbp/moveit_msgs-release/archive/refs/tags/upstream/2.7.1.tar.gz",
+    "strip_prefix": "moveit_msgs-release-upstream-2.7.1"
+}

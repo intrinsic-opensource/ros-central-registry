@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-PwLte9nNJE02V44IXgY1OowjVzULVrEnmr8w4yNHMr8=",
+    "url": "https://github.com/ros2-gbp/hatchbed_common-release/archive/refs/tags/upstream/0.1.2.tar.gz",
+    "strip_prefix": "hatchbed_common-release-upstream-0.1.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-HR9MrF4AOOwuRqbR05pRcI85lc+6HoUJ3G1/psE6MSA="
+    }
+}

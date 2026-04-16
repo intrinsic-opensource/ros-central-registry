@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-yMP9IhC09XQLoiY89B8D8naiglRmWvuvir+fRsK/tr8=",
+    "url": "https://github.com/ros2-gbp/ai_worker-release/archive/refs/tags/upstream/1.1.14.tar.gz",
+    "strip_prefix": "ai_worker-release-upstream-1.1.14/ffw_moveit_config",
+    "overlay": {
+        "BUILD.bazel": "sha256-lN9U0DjZxW4uet9/3zgUvsrEecDZv3XK3OutHkoVQ9c="
+    }
+}

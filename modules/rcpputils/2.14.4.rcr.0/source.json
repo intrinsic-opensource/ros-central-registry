@@ -1,0 +1,11 @@
+{
+    "integrity": "sha256-f4hWJSHVFA60vKdFHxZZYUhrpLLuwabqarB971IfQA4=",
+    "url": "https://github.com/ros2-gbp/rcpputils-release/archive/refs/tags/upstream/2.14.4.tar.gz",
+    "strip_prefix": "rcpputils-release-upstream-2.14.4",
+    "overlay": {
+        "BUILD.bazel": "sha256-16cEk2Gtrw1AcpKo+LvcL0vCu5EJpOajSm0SckseyNw="
+    },
+    "patches": {
+        "test__test_filesystem_helper_std__cpp.patch": "sha256-9+mVb2YAD+zg6uv/GKIh0mS203rlQ7SbL8cVLo6OUeI="
+    }
+}

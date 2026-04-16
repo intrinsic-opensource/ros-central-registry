@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-7bJkCQseH1mTmxby2iGbrqPxcsFpOyr7oEmAgsYUQsc=",
+    "url": "https://github.com/ros2-gbp/transport_drivers-release/archive/refs/tags/upstream/1.2.0.tar.gz",
+    "strip_prefix": "transport_drivers-release-upstream-1.2.0/udp_driver"
+}

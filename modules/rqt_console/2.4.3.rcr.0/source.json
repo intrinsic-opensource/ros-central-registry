@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-VIB5gCl2ti+nM7FW6cSFXLzVl9t7TLAl5zBni2Tf01A=",
+    "url": "https://github.com/ros2-gbp/rqt_console-release/archive/refs/tags/upstream/2.4.3.tar.gz",
+    "strip_prefix": "rqt_console-release-upstream-2.4.3",
+    "overlay": {
+        "BUILD.bazel": "sha256-OiE/ezBz2am+BbGzPr4fwpXKSZ2lfiO+894tVCIb46Y="
+    }
+}

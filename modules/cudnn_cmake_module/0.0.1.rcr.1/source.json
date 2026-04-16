@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-+DsiXhm4pZElAbWYruvKML7j0TCmpPKK1thp/tYcg+c=",
+    "url": "https://github.com/ros2-gbp/cudnn_cmake_module-release/archive/refs/tags/upstream/0.0.1.tar.gz",
+    "strip_prefix": "cudnn_cmake_module-release-upstream-0.0.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-SXfhVFKRWHV0GeiVhixHB5FlUQP7fweK+jI3ZfZ9R1Y="
+    }
+}

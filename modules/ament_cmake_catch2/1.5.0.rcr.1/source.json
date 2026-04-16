@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-5vCon3Y0yCuVPNYgDk+NSYP7aWC3JbBKfJeBbOngFXQ=",
+    "url": "https://github.com/ros2-gbp/ament_cmake_catch2-release/archive/refs/tags/upstream/1.5.0.tar.gz",
+    "strip_prefix": "ament_cmake_catch2-release-upstream-1.5.0/ament_cmake_catch2",
+    "overlay": {
+        "BUILD.bazel": "sha256-IOK4nhew4YpGVVD66OB3QC7wQuAXlc8k89HS27f1D6U="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-OcysRchWstr6NfUbWw1md7BL9ips7o4ZF7qcOITyd8U=",
+    "url": "https://github.com/ros2-gbp/geometric_shapes-release/archive/refs/tags/upstream/2.3.3.tar.gz",
+    "strip_prefix": "geometric_shapes-release-upstream-2.3.3",
+    "overlay": {
+        "BUILD.bazel": "sha256-UEw5zMJBw3awuyMFwZJrBArQTvT04oUpMexkVlw0D/w="
+    }
+}

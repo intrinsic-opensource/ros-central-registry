@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-9GVEYhsSeGhJMWQXr9zPshh1xk+fS4ZXFiBtPbQGB/0=",
+    "url": "https://github.com/ros2-gbp/openni2_camera-release/archive/refs/tags/upstream/2.3.0.tar.gz",
+    "strip_prefix": "openni2_camera-release-upstream-2.3.0/openni2_camera",
+    "overlay": {
+        "BUILD.bazel": "sha256-B/LjDL5E+bXf/EuSuX+E+SM7Zf2TTax0u6DreHqzKqo="
+    }
+}

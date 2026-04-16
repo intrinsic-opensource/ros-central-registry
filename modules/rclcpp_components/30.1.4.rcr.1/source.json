@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-QJZI4orYfzGiYWu0mv+nO9nJZdQPNQEEJmgIAxH7eR4=",
+    "url": "https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/upstream/30.1.4.tar.gz",
+    "strip_prefix": "rclcpp-release-upstream-30.1.4/rclcpp_components",
+    "overlay": {
+        "defs.bzl": "sha256-nqdjMueEqXl1X+eX42wF9Q5LH8m0riVC5j0eI0Zj6ec=",
+        "BUILD.bazel": "sha256-nWoqfPYx2/9OYeC+177Jd6036vULL9i7LIQNYVDwRZM=",
+        "rules.bzl": "sha256-PtEFOlk+V0QaCBFLOnT8pizQyr8rkCJVbeySlUIhVhQ="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-yoMN050stxq6Ia/08PbxxyUyBBBs/wUyrb3pA1EGUw0=",
+    "url": "https://github.com/ros2-gbp/Pangolin-release/archive/refs/tags/upstream/0.9.5.tar.gz",
+    "strip_prefix": "Pangolin-release-upstream-0.9.5",
+    "overlay": {
+        "BUILD.bazel": "sha256-3v2OD9Yyw5vS7yL6vihl3i2LB//gBN8YPvNPlfgvuO4="
+    }
+}

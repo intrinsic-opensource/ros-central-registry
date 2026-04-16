@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-uNuowJxsGgMOT14cq9E5+s7ZAb7rtrMisBr+uKdK/kg=",
+    "url": "https://github.com/ros2-gbp/log_view-release/archive/refs/tags/upstream/0.2.5.tar.gz",
+    "strip_prefix": "log_view-release-upstream-0.2.5",
+    "overlay": {
+        "BUILD.bazel": "sha256-HIrTz9tKg59WeYO2ItZL5PS7wU4zazS0UkOQiQhhWA4="
+    }
+}

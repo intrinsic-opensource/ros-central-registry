@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-ET0el1N0hBHN/6ZKxySeWTMrX4/t+yFX1V1RVJ17zqU=",
+    "url": "https://github.com/asymingt/rosdistro/archive/refs/tags/rolling/2026-04-15.tar.gz",
+    "strip_prefix": "rosdistro-rolling-2026-04-15",
+    "overlay": {
+        "BUILD.bazel": "sha256-g+bl3q6htNfpTSMBdSP8HJxvys04j6a3SKP4zPA5zK4="
+    }
+}

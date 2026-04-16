@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-BJA8sya4HafKv+xqKecNhPMWXRP4JrcUE9f21keoGGM=",
+    "url": "https://github.com/ros2-gbp/moveit_task_constructor-release/archive/refs/tags/upstream/0.1.4.tar.gz",
+    "strip_prefix": "moveit_task_constructor-release-upstream-0.1.4/visualization",
+    "overlay": {
+        "BUILD.bazel": "sha256-MrJs/6Puinh0X+r5jVPKReCTSSxTCzB1CMq7avvlppo="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-F4/fFxZuv/kCrvt1gLpwcAnd36qNB84ygo0Nan2bRMI=",
+    "url": "https://github.com/ros2-gbp/rclc-release/archive/refs/tags/upstream/6.3.0.tar.gz",
+    "strip_prefix": "rclc-release-upstream-6.3.0/rclc_parameter",
+    "overlay": {
+        "BUILD.bazel": "sha256-bxH43o5ca8XJNGaJfsEdW1RU5N+toCOOfXQ0vYKf0ws="
+    }
+}

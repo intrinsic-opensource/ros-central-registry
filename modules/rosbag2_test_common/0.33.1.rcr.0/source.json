@@ -1,0 +1,12 @@
+{
+    "integrity": "sha256-gy8CWzrmNS4OW48ifvpIOxEsWE9yTlMGTZvmUCbRa5M=",
+    "url": "https://github.com/ros2-gbp/rosbag2-release/archive/refs/tags/upstream/0.33.1.tar.gz",
+    "strip_prefix": "rosbag2-release-upstream-0.33.1/rosbag2_test_common",
+    "overlay": {
+        "BUILD.bazel": "sha256-wuaeFxNIVLytwYF+32w+lG6ZUcUv63s5bbAsV86Jlu4="
+    },
+    "patches": {
+        "include__rosbag2_test_common__temporary_directory_fixture__hpp.patch": "sha256-+QeFIpEsogVYKrNOdyPJ7NoBCLmWiWtPKoPA7TBeDp4=",
+        "include__rosbag2_test_common__process_execution_helpers_unix__hpp.patch": "sha256-sSKP+x8bOvDb57X7Z8M0OYFLdfHeMT+lqetq2Vk2dE4="
+    }
+}

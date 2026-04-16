@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-l5fknX+Pylfph97gm9WInwGCJfKsXB0iLr+pSciZ0XA=",
+    "url": "https://github.com/ros2-gbp/image_pipeline-release/archive/refs/tags/upstream/7.1.3.tar.gz",
+    "strip_prefix": "image_pipeline-release-upstream-7.1.3/image_publisher",
+    "overlay": {
+        "BUILD.bazel": "sha256-0DeTNbYPSfan14Q+ad80O3EY0TKkUt4iDpgs2xlF1Dc="
+    }
+}

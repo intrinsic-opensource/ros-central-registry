@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-/agDBzL1Fs21+oFwZvZ+Hvjx2UCINpS/nwMx6ipSnik=",
+    "url": "https://github.com/ros2-gbp/srdfdom-release/archive/refs/tags/upstream/2.0.9.tar.gz",
+    "strip_prefix": "srdfdom-release-upstream-2.0.9"
+}

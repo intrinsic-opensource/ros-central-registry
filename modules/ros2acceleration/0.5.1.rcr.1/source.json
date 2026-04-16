@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-RWQrWz8M+wmcjRlGRmD2Hr36EPh4+VcL/hPLPKg9xFE=",
+    "url": "https://github.com/ros2-gbp/ros2acceleration-release/archive/refs/tags/upstream/0.5.1.tar.gz",
+    "strip_prefix": "ros2acceleration-release-upstream-0.5.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-gtapuIgBsRWIacz+blww9ZD8RuuDQVU65cr8EHN2tCM="
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-XRAzVNcukKJBOnMSJ/FH5BKEM2eWryH3EhMrLvv9o0s=",
+    "url": "https://github.com/ros2-gbp/ecl_tools-release/archive/refs/tags/upstream/1.0.3.tar.gz",
+    "strip_prefix": "ecl_tools-release-upstream-1.0.3/ecl_build"
+}

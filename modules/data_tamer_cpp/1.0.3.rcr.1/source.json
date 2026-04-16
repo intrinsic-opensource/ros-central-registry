@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-YVWURhCe8ifG9ktce603lTN1cSp9kt6+nYfoU4UDQQU=",
+    "url": "https://github.com/ros2-gbp/data_tamer-release/archive/refs/tags/upstream/1.0.3.tar.gz",
+    "strip_prefix": "data_tamer-release-upstream-1.0.3/data_tamer_cpp",
+    "overlay": {
+        "BUILD.bazel": "sha256-QL7XhV456+BJuo3QwkIXTPB5eg6+KYg0Agd96jEQmeo="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-TgioNACOXmMgBZXHSbmrd0Gh6iP8VK3VEkucNERIYY4=",
+    "url": "https://github.com/ros2-gbp/ur_msgs-release/archive/refs/tags/upstream/2.3.0.tar.gz",
+    "strip_prefix": "ur_msgs-release-upstream-2.3.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-pDiVuELPJpXLZi3v5gliOkno6AQGck2zSF/oQ8/xgvA="
+    }
+}

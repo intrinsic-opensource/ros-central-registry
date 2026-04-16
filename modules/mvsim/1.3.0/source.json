@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-61yKR6xFpavjf+MZe+vTsQhycsJIrqYRtSpTP8Neq8Y=",
+    "url": "https://github.com/ros2-gbp/mvsim-release/archive/refs/tags/upstream/1.3.0.tar.gz",
+    "strip_prefix": "mvsim-release-upstream-1.3.0"
+}

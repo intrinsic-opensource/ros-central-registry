@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-C4QtPj8NWng1s61lT3F7GS77FPqCS0Fx74lebLVSuAU=",
+    "url": "https://github.com/ros2-gbp/protobuf_comm-release/archive/refs/tags/upstream/0.9.3.tar.gz",
+    "strip_prefix": "protobuf_comm-release-upstream-0.9.3"
+}

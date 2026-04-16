@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-HgYFlPyWxUITj1GiOjK+OL0n3aIVmV95rWMohhUXkzA=",
+    "url": "https://github.com/ros2-gbp/laser_filters-release/archive/refs/tags/upstream/2.3.1.tar.gz",
+    "strip_prefix": "laser_filters-release-upstream-2.3.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-MdRCoJ66puJ5R7aa09fldggdRCPu2HFVa9Bex5Xgd/M="
+    }
+}

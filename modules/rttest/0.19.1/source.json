@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-198IIfysnVTe5PBerj9sRsBJmfOodzc1Dosw53TWQm0=",
+    "url": "https://github.com/ros2-gbp/realtime_support-release/archive/refs/tags/upstream/0.19.1.tar.gz",
+    "strip_prefix": "realtime_support-release-upstream-0.19.1/rttest"
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-y3D6gkIyaK9M8pTSSwoM04tpZ6OY2B1Lxl6BlXe46dA=",
+    "url": "https://github.com/ros2-gbp/rmf_demos-release/archive/refs/tags/upstream/2.8.0.tar.gz",
+    "strip_prefix": "rmf_demos-release-upstream-2.8.0/rmf_demos_assets",
+    "overlay": {
+        "BUILD.bazel": "sha256-oL1mjs/f1qlSbsnNeQ9m0pAzP5Qrdsnr5RluCYGp174="
+    }
+}

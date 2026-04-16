@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-rS6QAXl7mw2W6My7ViWnGry8/EuBFoWziXB749c5jjE=",
+    "url": "https://github.com/ros2-gbp/marti_common-release/archive/refs/tags/upstream/3.8.7.tar.gz",
+    "strip_prefix": "marti_common-release-upstream-3.8.7/swri_roscpp",
+    "overlay": {
+        "BUILD.bazel": "sha256-u5TFtZ5RoZuDFAhKDLlr45BZZTTfsoGwBhraBxvodHE="
+    }
+}

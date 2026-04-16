@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-dxm26Dck5OiiWB2zQ76kyJeW03Z2G05wvmEXj9k2hIM=",
+    "url": "https://github.com/ros2-gbp/network_bridge-release/archive/refs/tags/upstream/3.0.0.tar.gz",
+    "strip_prefix": "network_bridge-release-upstream-3.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-eZJUSrFkdoig8DozMNdHdY9++btJx0pRCyC6Pd4iGWE="
+    }
+}

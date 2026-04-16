@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-E6v2wnclFNZGfUQ5bm2YMNYfrMluk5NmqmkT2wIf7+0=",
+    "url": "https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release/archive/refs/tags/upstream/3.9.3.tar.gz",
+    "strip_prefix": "rosidl_typesupport_fastrtps-release-upstream-3.9.3/rosidl_typesupport_fastrtps_c"
+}

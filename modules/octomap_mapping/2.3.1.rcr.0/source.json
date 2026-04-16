@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-weRSfMIbr8UQOvQPN8OY9iosX+w6OvZ6giljm3vxTcY=",
+    "url": "https://github.com/ros2-gbp/octomap_mapping-release/archive/refs/tags/upstream/2.3.1.tar.gz",
+    "strip_prefix": "octomap_mapping-release-upstream-2.3.1/octomap_mapping",
+    "overlay": {
+        "BUILD.bazel": "sha256-xXiD+BLO8vQYEdMXm22y+BEeSxatzJLhv5H+IAnFQ90="
+    }
+}

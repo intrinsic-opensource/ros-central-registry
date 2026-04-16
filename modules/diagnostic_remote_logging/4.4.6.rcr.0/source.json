@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-iH7SsIZ+SwkgGjwMNk3829IPuALuypMJHUYsA3uEYQc=",
+    "url": "https://github.com/ros2-gbp/diagnostics-release/archive/refs/tags/upstream/4.4.6.tar.gz",
+    "strip_prefix": "diagnostics-release-upstream-4.4.6/diagnostic_remote_logging"
+}

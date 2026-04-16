@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-SCdQ20AswYIa/0n1XXOwBRggK36YAwO2gwn02rytsRY=",
+    "url": "https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/upstream/0.45.7.tar.gz",
+    "strip_prefix": "geometry2-release-upstream-0.45.7/tf2_ros",
+    "overlay": {
+        "BUILD.bazel": "sha256-2vZg1OX1dq1NCB/wCFkzmkIJ0o65gp2y3dCPNYmXj+0="
+    }
+}

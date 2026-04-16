@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-XK77rTNg3TzpppEKy//rbuJuFbj+0zNbzkz+HXHdOx0=",
+    "url": "https://github.com/ros2-gbp/rqt_tf_tree-release/archive/refs/tags/upstream/1.0.6.tar.gz",
+    "strip_prefix": "rqt_tf_tree-release-upstream-1.0.6",
+    "overlay": {
+        "BUILD.bazel": "sha256-IYSYuHwpu1KBQadXonLfjL4ZHiv2j+OqCMGdRfmm3/s="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-PVHslITR8roO1LBHL0Zd+9+v9Zc1wjHPl1TDc6lQals=",
+    "url": "https://github.com/ros2-gbp/Universal_Robots_Client_Library-release/archive/refs/tags/upstream/2.6.1.tar.gz",
+    "strip_prefix": "Universal_Robots_Client_Library-release-upstream-2.6.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-oL1mjs/f1qlSbsnNeQ9m0pAzP5Qrdsnr5RluCYGp174="
+    }
+}

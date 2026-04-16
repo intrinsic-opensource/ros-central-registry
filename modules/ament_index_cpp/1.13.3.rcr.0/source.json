@@ -1,0 +1,14 @@
+{
+    "integrity": "sha256-892u3xVQxVEVoyH/dqclJgg0IfNwBNRPNb6Pi98k8hE=",
+    "url": "https://github.com/ros2-gbp/ament_index-release/archive/refs/tags/upstream/1.13.3.tar.gz",
+    "strip_prefix": "ament_index-release-upstream-1.13.3/ament_index_cpp",
+    "overlay": {
+        "BUILD.bazel": "sha256-/2ScasRRp/DIzJ0OHacLJXmNDuTlG4+aONBxYdcId8o="
+    },
+    "patches": {
+        "test__utest__cpp.patch": "sha256-NngU1xIaUG/+hD8rjZiyiGiAsWgDfgPq9tF/LtYySEU=",
+        "src__get_package_share_directory__cpp.patch": "sha256-zS+MZZ90y/O10vRBvG8vMUr9U05N34g+4W7mROcny+8=",
+        "test__utest_deprecated__cpp.patch": "sha256-u5B6Rjbr778nDTAKWznyU1XamRSwlS3hFUtMaDXtkeU=",
+        "src__get_search_paths__cpp.patch": "sha256-dOkcPMpu9riL24Eljc3tgc2Cnw/QdJ1J7BuW7E34fBc="
+    }
+}

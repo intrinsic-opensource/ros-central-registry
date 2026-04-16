@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-816OZTFge0yGQd112rWCvWnb+GOz0Epl3n8Q5G27wa8=",
+    "url": "https://github.com/ros2-gbp/ublox_dgnss-release/archive/refs/tags/upstream/0.7.3.tar.gz",
+    "strip_prefix": "ublox_dgnss-release-upstream-0.7.3/ublox_dgnss_node",
+    "overlay": {
+        "BUILD.bazel": "sha256-enIXN46q4+HlPKBvqK4WXh04yzasqVK0jbaSFIXVE+o="
+    }
+}

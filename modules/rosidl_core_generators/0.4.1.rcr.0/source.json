@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-8eOW9ReX0mTMS0nWro/9ABTbwV+/5ZWcPwr3S2A/iUY=",
+    "url": "https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/upstream/0.4.1.tar.gz",
+    "strip_prefix": "rosidl_core-release-upstream-0.4.1/rosidl_core_generators"
+}

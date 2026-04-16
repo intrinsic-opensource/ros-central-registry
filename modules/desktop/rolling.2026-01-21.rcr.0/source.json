@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-IihpfjMNaJYNwYhZoQvK50ahCkV0r197leq/64/4sQY=",
+    "url": "https://github.com/ros2-gbp/variants-release/archive/refs/tags/upstream/0.13.0.tar.gz",
+    "strip_prefix": "variants-release-upstream-0.13.0/desktop"
+}

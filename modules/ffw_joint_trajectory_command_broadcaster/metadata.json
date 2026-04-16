@@ -1,0 +1,17 @@
+{
+    "homepage": "https://github.com/ros2-gbp/ai_worker-release",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "1.1.14",
+        "1.1.14.rcr.0",
+        "1.1.14.rcr.1"
+    ],
+    "yanked_versions": {}
+}

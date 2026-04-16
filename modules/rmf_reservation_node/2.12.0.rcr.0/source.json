@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-cyPuPIXJV9JejkJrd65tsVDrPcIdicpx1Vq4or2B/7M=",
+    "url": "https://github.com/ros2-gbp/rmf_ros2-release/archive/refs/tags/upstream/2.12.0.tar.gz",
+    "strip_prefix": "rmf_ros2-release-upstream-2.12.0/rmf_reservation_node",
+    "overlay": {
+        "BUILD.bazel": "sha256-2C4g09NNMY+acwYM6ea9sQB4cZ+VW56fXs7DX17HO9I="
+    }
+}

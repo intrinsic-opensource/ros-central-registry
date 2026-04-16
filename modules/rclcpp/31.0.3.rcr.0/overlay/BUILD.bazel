@@ -1,0 +1,290 @@
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+load("@aspect_rules_py//py:defs.bzl", "py_binary")
+load("@pip_ros//:requirements.bzl", "requirement")
+load("@rosdistro//ament:defs.bzl", "ament_index", "ament_package")
+load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps", "ros_local_defines")
+load("@rules_build_error//lang/cc:defs.bzl", "cc_build_error_test")
+load("@rules_build_error//matcher:defs.bzl", "matcher")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(["package.xml"])
+
+### PREPROCESSING
+
+INTERFACES = [
+    "node_base_interface",
+    "node_clock_interface",
+    "node_graph_interface",
+    "node_logging_interface",
+    "node_parameters_interface",
+    "node_services_interface",
+    "node_time_source_interface",
+    "node_timers_interface",
+    "node_topics_interface",
+    "node_type_descriptions_interface",
+    "node_waitables_interface",
+]
+
+genrule(
+    name = "create_script",
+    outs = ["interface_generator.py"],
+    cmd = """
+echo 'import sys
+import em
+em.invoke(["-D", f"interface_name=\\"{sys.argv[1]}\\"", "-o", sys.argv[2], sys.argv[3]])
+' > $(location :interface_generator.py)""",
+)
+
+py_binary(
+    name = "interface_generator",
+    srcs = [":create_script"],
+    main = "interface_generator.py",
+    deps = [
+        requirement("empy"),
+    ],
+)
+
+[
+    genrule(
+        name = "interface_get_{}".format(interface_name),
+        srcs = ["resource/get_interface.hpp.em"],
+        outs = ["include/rclcpp/node_interfaces/get_{}.hpp".format(interface_name)],
+        cmd = "{tool} {interface_name} {output_file} {input_template}".format(
+            input_template = "$(location :resource/get_interface.hpp.em)",
+            interface_name = interface_name,
+            output_file = "$(location :include/rclcpp/node_interfaces/get_{}.hpp)".format(interface_name),
+            tool = "$(location interface_generator)",
+        ),
+        tools = [":interface_generator"],
+    )
+    for interface_name in INTERFACES
+]
+
+[
+    genrule(
+        name = "interface_traits_{}".format(interface_name),
+        srcs = ["resource/interface_traits.hpp.em"],
+        outs = ["include/rclcpp/node_interfaces/{}_traits.hpp".format(interface_name)],
+        cmd = "{tool} {interface_name} {output_file} {input_template}".format(
+            input_template = "$(location :resource/interface_traits.hpp.em)",
+            interface_name = interface_name,
+            output_file = "$(location :include/rclcpp/node_interfaces/{}_traits.hpp)".format(interface_name),
+            tool = "$(location interface_generator)",
+        ),
+        tools = [":interface_generator"],
+    )
+    for interface_name in INTERFACES
+]
+
+### LIBRARIES
+
+HEADERS = glob(["include/**/*.hpp"]) + [
+    "include/rclcpp/node_interfaces/get_{}.hpp".format(i)
+    for i in INTERFACES
+] + [
+    "include/rclcpp/node_interfaces/{}_traits.hpp".format(i)
+    for i in INTERFACES
+]
+
+DEPENDENCIES = {
+    "@ament_index_cpp//:ament_index_cpp": "@ament_index_cpp//:ament_index_cpp_library",
+    "@libstatistics_collector//:libstatistics_collector": "@libstatistics_collector//:libstatistics_collector_library",
+    "@rcl_logging_interface//:rcl_logging_interface": "@rcl_logging_interface//:rcl_logging_interface_library",
+    "@rcl_yaml_param_parser//:rcl_yaml_param_parser": "@rcl_yaml_param_parser//:rcl_yaml_param_parser_library",
+    "@rcl//:rcl": "@rcl//:rcl_library",
+    "@rcpputils//:rcpputils": "@rcpputils//:rcpputils_library",
+    "@rcutils//:rcutils": "@rcutils//:rcutils_library",
+    "@rmw//:rmw": "@rmw//:rmw_library",
+    "@rmw_implementation//:rmw_implementation": "@rmw_implementation//:rmw_implementation_library",
+    "@rosidl_dynamic_typesupport//:rosidl_dynamic_typesupport": "@rosidl_dynamic_typesupport//:rosidl_dynamic_typesupport_library",
+    "@rosidl_runtime_c//:rosidl_runtime_c": "@rosidl_runtime_c//:rosidl_runtime_c_library",
+    "@rosidl_runtime_cpp//:rosidl_runtime_cpp": "@rosidl_runtime_cpp//:rosidl_runtime_cpp_library",
+    "@rosidl_typesupport_c//:rosidl_typesupport_c": "@rosidl_typesupport_c//:rosidl_typesupport_c_library",
+    "@rosidl_typesupport_cpp//:rosidl_typesupport_cpp": "@rosidl_typesupport_cpp//:rosidl_typesupport_cpp_library",
+    "@tracetools//:tracetools": "@tracetools//:tracetools_library",
+}
+
+cc_library(
+    name = "type_adapter",
+    hdrs = ["include/rclcpp/type_adapter.hpp"],
+    includes = ["include"],
+)
+
+cc_library(
+    name = "rclcpp_library",
+    srcs = glob(["src/**/*.hpp"]) + [
+        "src/rclcpp/any_executable.cpp",
+        "src/rclcpp/callback_group.cpp",
+        "src/rclcpp/client.cpp",
+        "src/rclcpp/clock.cpp",
+        "src/rclcpp/context.cpp",
+        "src/rclcpp/contexts/default_context.cpp",
+        "src/rclcpp/create_generic_client.cpp",
+        "src/rclcpp/detail/add_guard_condition_to_rcl_wait_set.cpp",
+        "src/rclcpp/detail/resolve_intra_process_buffer_type.cpp",
+        "src/rclcpp/detail/resolve_parameter_overrides.cpp",
+        "src/rclcpp/detail/rmw_implementation_specific_payload.cpp",
+        "src/rclcpp/detail/rmw_implementation_specific_publisher_payload.cpp",
+        "src/rclcpp/detail/rmw_implementation_specific_subscription_payload.cpp",
+        "src/rclcpp/detail/utilities.cpp",
+        "src/rclcpp/duration.cpp",
+        "src/rclcpp/dynamic_typesupport/dynamic_message.cpp",
+        "src/rclcpp/dynamic_typesupport/dynamic_message_type.cpp",
+        "src/rclcpp/dynamic_typesupport/dynamic_message_type_builder.cpp",
+        "src/rclcpp/dynamic_typesupport/dynamic_message_type_support.cpp",
+        "src/rclcpp/dynamic_typesupport/dynamic_serialization_support.cpp",
+        "src/rclcpp/event.cpp",
+        "src/rclcpp/event_handler.cpp",
+        "src/rclcpp/exceptions/exceptions.cpp",
+        "src/rclcpp/executable_list.cpp",
+        "src/rclcpp/executor.cpp",
+        "src/rclcpp/executor_options.cpp",
+        "src/rclcpp/executors.cpp",
+        "src/rclcpp/executors/executor_entities_collection.cpp",
+        "src/rclcpp/executors/executor_entities_collector.cpp",
+        "src/rclcpp/executors/executor_notify_waitable.cpp",
+        "src/rclcpp/executors/multi_threaded_executor.cpp",
+        "src/rclcpp/executors/single_threaded_executor.cpp",
+        "src/rclcpp/expand_topic_or_service_name.cpp",
+        "src/rclcpp/experimental/executors/events_executor/events_executor.cpp",
+        "src/rclcpp/experimental/timers_manager.cpp",
+        "src/rclcpp/future_return_code.cpp",
+        "src/rclcpp/generic_client.cpp",
+        "src/rclcpp/generic_publisher.cpp",
+        "src/rclcpp/generic_service.cpp",
+        "src/rclcpp/generic_subscription.cpp",
+        "src/rclcpp/graph_listener.cpp",
+        "src/rclcpp/guard_condition.cpp",
+        "src/rclcpp/init_options.cpp",
+        "src/rclcpp/intra_process_manager.cpp",
+        "src/rclcpp/logger.cpp",
+        "src/rclcpp/logging_mutex.cpp",
+        "src/rclcpp/memory_strategies.cpp",
+        "src/rclcpp/memory_strategy.cpp",
+        "src/rclcpp/message_info.cpp",
+        "src/rclcpp/network_flow_endpoint.cpp",
+        "src/rclcpp/node.cpp",
+        "src/rclcpp/node_interfaces/node_base.cpp",
+        "src/rclcpp/node_interfaces/node_clock.cpp",
+        "src/rclcpp/node_interfaces/node_graph.cpp",
+        "src/rclcpp/node_interfaces/node_logging.cpp",
+        "src/rclcpp/node_interfaces/node_parameters.cpp",
+        "src/rclcpp/node_interfaces/node_services.cpp",
+        "src/rclcpp/node_interfaces/node_time_source.cpp",
+        "src/rclcpp/node_interfaces/node_timers.cpp",
+        "src/rclcpp/node_interfaces/node_topics.cpp",
+        "src/rclcpp/node_interfaces/node_type_descriptions.cpp",
+        "src/rclcpp/node_interfaces/node_waitables.cpp",
+        "src/rclcpp/node_options.cpp",
+        "src/rclcpp/parameter.cpp",
+        "src/rclcpp/parameter_client.cpp",
+        "src/rclcpp/parameter_descriptor_wrapper.cpp",
+        "src/rclcpp/parameter_event_handler.cpp",
+        "src/rclcpp/parameter_events_filter.cpp",
+        "src/rclcpp/parameter_map.cpp",
+        "src/rclcpp/parameter_service.cpp",
+        "src/rclcpp/parameter_value.cpp",
+        "src/rclcpp/publisher_base.cpp",
+        "src/rclcpp/qos.cpp",
+        "src/rclcpp/qos_overriding_options.cpp",
+        "src/rclcpp/rate.cpp",
+        "src/rclcpp/serialization.cpp",
+        "src/rclcpp/serialized_message.cpp",
+        "src/rclcpp/service.cpp",
+        "src/rclcpp/signal_handler.cpp",
+        "src/rclcpp/subscription_base.cpp",
+        "src/rclcpp/subscription_intra_process_base.cpp",
+        "src/rclcpp/time.cpp",
+        "src/rclcpp/time_source.cpp",
+        "src/rclcpp/timer.cpp",
+        "src/rclcpp/type_support.cpp",
+        "src/rclcpp/typesupport_helpers.cpp",
+        "src/rclcpp/utilities.cpp",
+        "src/rclcpp/wait_set_policies/detail/write_preferring_read_write_lock.cpp",
+        "src/rclcpp/waitable.cpp",
+    ],
+    hdrs = HEADERS,
+    implementation_deps = [
+        "@ament_index_cpp//:ament_index_cpp_library",
+        "@rcl_logging_interface//:rcl_logging_interface_library",
+    ],
+    includes = ["include"],
+    local_defines = ros_local_defines(),
+    textual_hdrs = ["src/rclcpp/intra_process_manager.cpp"],
+    deps = DEPENDENCIES.values() + [
+        "@builtin_interfaces//:cc",
+        "@rcl_interfaces//:cc",
+        "@rosgraph_msgs//:cc",
+        "@statistics_msgs//:cc",
+    ],
+)
+
+cc_shared_library(
+    name = "rclcpp",
+    dynamic_deps = DEPENDENCIES.keys(),
+    exports_filter = [":rclcpp_library"],
+    deps = [":rclcpp_library"],
+)
+
+collect_transitive_dynamic_deps(
+    name = "transitive_dynamic_deps",
+    dynamic_deps = [":rclcpp"],
+    visibility = ["//visibility:private"],
+)
+
+
+### PACKAGING
+
+ament_package(
+    name = "ament_package",
+    package_xml = "package.xml",
+    headers = HEADERS,
+    libraries = [":rclcpp"],
+    deps = [
+        "@ament_cmake_gen_version_h//:ament_package",
+        "@ament_cmake_google_benchmark//:ament_package",
+        "@ament_cmake_gtest//:ament_package",
+        "@ament_cmake_ros//:ament_package",
+        "@ament_index_cpp//:ament_package",
+        "@ament_lint_auto//:ament_package",
+        "@ament_lint_common//:ament_package",
+        "@builtin_interfaces//:ament_package",
+        "@libstatistics_collector//:ament_package",
+        "@performance_test_fixture//:ament_package",
+        "@rcl//:ament_package",
+        "@rcl_interfaces//:ament_package",
+        "@rcl_logging_interface//:ament_package",
+        "@rcl_yaml_param_parser//:ament_package",
+        "@rcpputils//:ament_package",
+        "@rcutils//:ament_package",
+        "@rmw//:ament_package",
+        "@rmw_implementation//:ament_package",
+        "@rmw_implementation_cmake//:ament_package",
+        "@rosdistro//:ament_package",
+        "@rosgraph_msgs//:ament_package",
+        "@rosidl_default_generators//:ament_package",
+        "@rosidl_dynamic_typesupport//:ament_package",
+        "@rosidl_runtime_c//:ament_package",
+        "@rosidl_runtime_cpp//:ament_package",
+        "@rosidl_typesupport_c//:ament_package",
+        "@rosidl_typesupport_cpp//:ament_package",
+        "@statistics_msgs//:ament_package",
+        "@test_msgs//:ament_package",
+        "@tracetools//:ament_package",
+    ]
+)

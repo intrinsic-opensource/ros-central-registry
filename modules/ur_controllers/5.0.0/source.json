@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-5+m6BLz5nN99619GCDFGO5sInZiWxqZMlvv168YeUuE=",
+    "url": "https://github.com/ros2-gbp/Universal_Robots_ROS2_Driver-release/archive/refs/tags/upstream/5.0.0.tar.gz",
+    "strip_prefix": "Universal_Robots_ROS2_Driver-release-upstream-5.0.0/ur_controllers"
+}

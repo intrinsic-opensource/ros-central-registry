@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-KfZBAxSShsjmbrHtC01bIVwcVCRhK7N/5+Ww/QDRr0A=",
+    "url": "https://github.com/ros2-gbp/urdf_launch-release/archive/refs/tags/upstream/0.1.2.tar.gz",
+    "strip_prefix": "urdf_launch-release-upstream-0.1.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-OtWo5AKr6PgEigSFNtjJBQFHZ+KuxP5rGWdBYICLMlI="
+    }
+}

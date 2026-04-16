@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-1Q+kS8DFlCVfv1LonpB1dqQm98sJ6p9xsRTMpmWIY+E=",
+    "url": "https://github.com/ros2-gbp/graph_monitor-release/archive/refs/tags/upstream/0.2.3.tar.gz",
+    "strip_prefix": "graph_monitor-release-upstream-0.2.3/rmw_stats_shim",
+    "overlay": {
+        "BUILD.bazel": "sha256-/X2ZL7AQ9V6vqay8ywAdi2x/aq6r8xqm/SLAsYzuv+Y="
+    }
+}

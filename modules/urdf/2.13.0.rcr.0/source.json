@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-ns06ZFIKk3opSSthPI0WVwKZ4Tip6SrM+ejvz4SifcY=",
+    "url": "https://github.com/ros2-gbp/urdf-release/archive/refs/tags/upstream/2.13.0.tar.gz",
+    "strip_prefix": "urdf-release-upstream-2.13.0/urdf"
+}

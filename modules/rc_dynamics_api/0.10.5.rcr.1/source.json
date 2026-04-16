@@ -1,0 +1,16 @@
+{
+    "integrity": "sha256-6qubEO/4xWSJlHmljUJNSi9vqNNqKCR+I0zcdtVkV34=",
+    "url": "https://github.com/ros2-gbp/rc_dynamics_api-release/archive/refs/tags/upstream/0.10.5.tar.gz",
+    "strip_prefix": "rc_dynamics_api-release-upstream-0.10.5",
+    "overlay": {
+        "BUILD.bazel": "sha256-3v2OD9Yyw5vS7yL6vihl3i2LB//gBN8YPvNPlfgvuO4="
+    },
+    "patches": {
+        "rc_dynamics_api__opt__protobuf__util__python__BUILD.patch": "sha256-AL8L9Uj7nBLzulnBGYlOoGoZTmqdBnHqEd9yEokOrHk=",
+        "rc_dynamics_api__opt__protobuf__WORKSPACE.patch": "sha256-YQIk6OAzl3dN63CMMnkcDsi3W2Ou1Qfnp8Hatagip5M=",
+        "rc_dynamics_api__opt__protobuf__examples__WORKSPACE.patch": "sha256-wse5FeNeMPsiOr1qN6a9CYQZPu1VPeAStrIgvvYc0Ys=",
+        "rc_dynamics_api__opt__protobuf__protobuf__bzl.patch": "sha256-Fw5tJXrseWb2ZEp6RiSIxsx6vtdyeZgJ4y0EhqnWE/w=",
+        "rc_dynamics_api__opt__protobuf__BUILD.patch": "sha256-DI/H/9QUuY7cX7RvWeEeIgWlMedKopDjp/4h9UmWEPU=",
+        "rc_dynamics_api__opt__protobuf__examples__BUILD.patch": "sha256-dsDII1vkbAswGGPcNO8Eknm8ZcFxg7H9S6r797sXWuk="
+    }
+}

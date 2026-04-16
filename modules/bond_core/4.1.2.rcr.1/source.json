@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-D8g5cfCuFCnWhjtpobWmA+26I9jckcv/2X3KEMIqF/c=",
+    "url": "https://github.com/ros2-gbp/bond_core-release/archive/refs/tags/upstream/4.1.2.tar.gz",
+    "strip_prefix": "bond_core-release-upstream-4.1.2/bond_core",
+    "overlay": {
+        "BUILD.bazel": "sha256-v0JAL8D1n8hqrvR+vZwER5xXqWHuw7Wv7E+AnEBgvzM="
+    }
+}

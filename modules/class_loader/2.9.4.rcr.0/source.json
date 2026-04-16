@@ -1,0 +1,13 @@
+{
+    "integrity": "sha256-ijpHf9dOSCq6/hHOf+1stzGcgXlDnTDgXwQGAuEMpuc=",
+    "url": "https://github.com/ros2-gbp/class_loader-release/archive/refs/tags/upstream/2.9.4.tar.gz",
+    "strip_prefix": "class_loader-release-upstream-2.9.4",
+    "overlay": {
+        "defs.bzl": "sha256-us3jLmfnFkbgzCIXaY46JMmcUb54iPLiXHKF0WzXPBw=",
+        "BUILD.bazel": "sha256-hhqeXqM5zrJftgSqwDEJY9DN0bfqmPAq1C/rhDqkvyM="
+    },
+    "patches": {
+        "src__class_loader__cpp.patch": "sha256-XDth+/cUsgVorzSsXe6IGTTD6vmMsDRz0nxHvXpWsCc=",
+        "include__class_loader__class_loader_core__hpp.patch": "sha256-F9UEJ09WhbYouzbhTrliUTGJ4rrbzE7HfufPy564zyc="
+    }
+}
