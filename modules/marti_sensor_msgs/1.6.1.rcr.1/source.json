@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/marti_messages-release/archive/refs/tags/upstream/1.6.1.tar.gz",
     "strip_prefix": "marti_messages-release-upstream-1.6.1/marti_sensor_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-oji3X1QQ4APDO1zu/VTLI9VFJ+hYWM9eZN86Afy21Dg="
+        "BUILD.bazel": "sha256-oji3X1QQ4APDO1zu/VTLI9VFJ+hYWM9eZN86Afy21Dg=",
+        "srv/BUILD.bazel": "sha256-/M7xdqpE/aj+o3b2hAjjp/qg7Ehw+1oYZ+Dbf9l0GaM=",
+        "msg/BUILD.bazel": "sha256-WSy3Az37ARYFvD8M8v5NokxocKdwt6kpp4pfS6HWTfg="
     }
 }

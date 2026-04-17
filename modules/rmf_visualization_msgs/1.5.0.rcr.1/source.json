@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/rmf_visualization_msgs-release/archive/refs/tags/upstream/1.5.0.tar.gz",
     "strip_prefix": "rmf_visualization_msgs-release-upstream-1.5.0/rmf_visualization_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-C5AKbqVwRPoa+C7xqoJYxoXxeBJI/ExeNsZAtyuhcv0="
+        "BUILD.bazel": "sha256-C5AKbqVwRPoa+C7xqoJYxoXxeBJI/ExeNsZAtyuhcv0=",
+        "msg/BUILD.bazel": "sha256-uEJn5p7zalZ/GryVhnb0kKMp7UDZ5bfTaHtvCZrO7Z4="
     }
 }

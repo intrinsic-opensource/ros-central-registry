@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/rmf_internal_msgs-release/archive/refs/tags/upstream/4.0.0.tar.gz",
     "strip_prefix": "rmf_internal_msgs-release-upstream-4.0.0/rmf_workcell_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-C5AKbqVwRPoa+C7xqoJYxoXxeBJI/ExeNsZAtyuhcv0="
+        "BUILD.bazel": "sha256-C5AKbqVwRPoa+C7xqoJYxoXxeBJI/ExeNsZAtyuhcv0=",
+        "msg/BUILD.bazel": "sha256-jYE+TWsB707GoIHVXyaziFPDIpKwJpNcnZUgpYvylYU="
     }
 }

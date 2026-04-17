@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/foxglove_bridge-release/archive/refs/tags/upstream/3.2.6.tar.gz",
     "strip_prefix": "foxglove_bridge-release-upstream-3.2.6/ros/src/foxglove_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-VR9PFd4KXOidXbeHGyd0fV/6xAc4dh/+33rp6ln+HwQ="
+        "BUILD.bazel": "sha256-VR9PFd4KXOidXbeHGyd0fV/6xAc4dh/+33rp6ln+HwQ=",
+        "ros2/BUILD.bazel": "sha256-2PQfkzWjIG4XMBO1DsVKMK8k20Z3sAKbi6QXCg/bGK8="
     }
 }

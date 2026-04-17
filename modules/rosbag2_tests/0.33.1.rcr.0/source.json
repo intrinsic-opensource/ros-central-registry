@@ -6,7 +6,6 @@
         "BUILD.bazel": "sha256-hV2l6VVmH5BeZpb2OCF1muA3vm6+4NQeTyy5Q7JKcXk="
     },
     "patches": {
-        "test__rosbag2_tests__test_rosbag2_play_end_to_end__cpp.patch": "sha256-9wxiq8MDMXk8OliuUUNOsveaBVZlNi95YeCWmGvAkic=",
         "test__rosbag2_tests__test_rosbag2_info_end_to_end__cpp.patch": "sha256-LVfCxtCpU+bewrBSXi16xEW1mm/PVJ/7cVLMk5aWD7s="
     }
 }

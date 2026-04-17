@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/astuff_sensor_msgs-release/archive/refs/tags/upstream/4.0.0.tar.gz",
     "strip_prefix": "astuff_sensor_msgs-release-upstream-4.0.0/derived_object_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-R5RLrTUFESX9SZC98hPexbBGu+1G1KsYTH+A2JCPyjo="
+        "BUILD.bazel": "sha256-R5RLrTUFESX9SZC98hPexbBGu+1G1KsYTH+A2JCPyjo=",
+        "msg/BUILD.bazel": "sha256-hEYGPuEsvrBt3AC5I79DFxY2Wa4Z312hYwCMkaP+4vw="
     }
 }

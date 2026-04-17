@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/pcl_msgs-release/archive/refs/tags/upstream/1.0.0.tar.gz",
     "strip_prefix": "pcl_msgs-release-upstream-1.0.0",
     "overlay": {
-        "BUILD.bazel": "sha256-RjOlbHEN65dssve8xgjsrGztycahR7TXattcgvpuMvQ="
+        "BUILD.bazel": "sha256-RjOlbHEN65dssve8xgjsrGztycahR7TXattcgvpuMvQ=",
+        "srv/BUILD.bazel": "sha256-+MivtW1i7G4CznwEnozoBOZn9zUSvNOTL0Ipff2K0yQ=",
+        "msg/BUILD.bazel": "sha256-aUVdiutHsyLTHDHfLdBCq992nM2t8XnSf0RPEMXSw1A="
     }
 }

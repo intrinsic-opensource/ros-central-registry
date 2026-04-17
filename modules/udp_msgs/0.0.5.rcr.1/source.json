@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/udp_msgs-release/archive/refs/tags/upstream/0.0.5.tar.gz",
     "strip_prefix": "udp_msgs-release-upstream-0.0.5",
     "overlay": {
-        "BUILD.bazel": "sha256-R82QpoQq1zFM8IcOlrRwU+oKqN91UKKmkg6UNXpdUCc="
+        "BUILD.bazel": "sha256-R82QpoQq1zFM8IcOlrRwU+oKqN91UKKmkg6UNXpdUCc=",
+        "srv/BUILD.bazel": "sha256-1URw0iAq9rIWuq+ZBzPTqgRC+f6X8WYXZvyutPJ8KtA=",
+        "msg/BUILD.bazel": "sha256-pG/ZzNXF/tcpS/0eub6kHSz3x+1kh1qZKY6C9+aNTTA="
     }
 }

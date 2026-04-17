@@ -3,7 +3,8 @@
     "url": "https://github.com/ros2-gbp/rcl-release/archive/refs/tags/upstream/10.2.6.tar.gz",
     "strip_prefix": "rcl-release-upstream-10.2.6/rcl_yaml_param_parser",
     "overlay": {
-        "BUILD.bazel": "sha256-fkjaY2zkABR38M7gcHbTHIH3IdbyOcTADqcyEymLzDY="
+        "BUILD.bazel": "sha256-fkjaY2zkABR38M7gcHbTHIH3IdbyOcTADqcyEymLzDY=",
+        "test/locate_test_assets.h": "sha256-ia47EJ5WscWEKv5VP+9UjtdG+ga+IKU/wGktwux1vjA="
     },
     "patches": {
         "test__test_parser_multiple_params__cpp.patch": "sha256-Fo3h4hBqJbWoRewN1CgmlCrkcav7XqtDJ/+m6KYy9/U=",

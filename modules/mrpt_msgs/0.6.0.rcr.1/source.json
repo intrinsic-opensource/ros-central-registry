@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/mrpt_msgs-release/archive/refs/tags/upstream/0.6.0.tar.gz",
     "strip_prefix": "mrpt_msgs-release-upstream-0.6.0",
     "overlay": {
-        "BUILD.bazel": "sha256-qeG/o/NoBonl00akLeyqe7OQ2BNzGYBj0e7LWoysiok="
+        "BUILD.bazel": "sha256-qeG/o/NoBonl00akLeyqe7OQ2BNzGYBj0e7LWoysiok=",
+        "msg-common/BUILD.bazel": "sha256-U67MbAZXaVsOLh+J9WorGCaGn3MwoMmtH9WU/rUdfTo=",
+        "srv/BUILD.bazel": "sha256-cli0HBpcl/vanknT0kDqqIybi0Yw2xRNtbcxz1GZdVM=",
+        "msg-ros2/BUILD.bazel": "sha256-A0lsEsmeIuGDaFUjgFI2vrSQStmp89ZkmHzIjXipIYg="
     }
 }

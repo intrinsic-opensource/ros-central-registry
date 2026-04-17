@@ -4,8 +4,5 @@
     "strip_prefix": "ament_lint-release-upstream-0.20.4/ament_copyright",
     "overlay": {
         "BUILD.bazel": "sha256-GW60IyKfMzdIIX/5nHUwycZ31SX+xHRQvtLar2lgVrY="
-    },
-    "patches": {
-        "ament_copyright__main__py.patch": "sha256-bfkdh+uT90O5hETMw2Bb/zLV8eFO/6RyUXtppwv8DmQ="
     }
 }

@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/off_highway_sensor_drivers-release/archive/refs/tags/upstream/1.3.0.tar.gz",
     "strip_prefix": "off_highway_sensor_drivers-release-upstream-1.3.0/off_highway_general_purpose_radar_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE="
+        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE=",
+        "msg/BUILD.bazel": "sha256-TgkZHElOZ7TEWEIiWw83PebZsdErMVHDum/iCnYJVZE="
     }
 }

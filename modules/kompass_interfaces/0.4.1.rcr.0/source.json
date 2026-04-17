@@ -3,6 +3,14 @@
     "url": "https://github.com/ros2-gbp/kompass-release/archive/refs/tags/upstream/0.4.1.tar.gz",
     "strip_prefix": "kompass-release-upstream-0.4.1/kompass_interfaces",
     "overlay": {
-        "BUILD.bazel": "sha256-4xXVD0g7keCqe8pNA5sCuj4VBaBmu16+Xqt6q89z9G4="
+        "BUILD.bazel": "sha256-4xXVD0g7keCqe8pNA5sCuj4VBaBmu16+Xqt6q89z9G4=",
+        "srv/prediction/BUILD.bazel": "sha256-FryeH1hnRKrczljYFx8z/1V2LBxkKU8DuKv94lCPKKQ=",
+        "srv/mapping/BUILD.bazel": "sha256-Yar+lR/OXcjRgUoYJUbUziItg/acUNfvEK2UNN3EL24=",
+        "srv/motion/BUILD.bazel": "sha256-IuyLOS0PORCCYx1hEdExX/jYzwqea9ugWsIHGQl9P3U=",
+        "srv/control/BUILD.bazel": "sha256-VdPpo9OM5RzGlTzVKuZshR7Ng+HdXY8aflXJjfoyx8s=",
+        "action/BUILD.bazel": "sha256-wLjN4EgThhCObjstBdc4XyszEojsJLvUCnE9ut9sMSg=",
+        "msg/prediction/BUILD.bazel": "sha256-GcNzTN9Ruz5vgnpnoLkIr6R0AMsXg3Lf442x6VNjT/c=",
+        "msg/motion/BUILD.bazel": "sha256-amfA/lV6YLc/Y7bShz4WrXw9a/Q2MmvLXHMeqYLxcvk=",
+        "msg/map/BUILD.bazel": "sha256-KiMICQ+VcwOTqXMPrm0bJSiu4q8pjpD3nTwVDqUCwlA="
     }
 }

@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/upstream/2.4.2.tar.gz",
     "strip_prefix": "rcl_interfaces-release-upstream-2.4.2/rosgraph_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-xrauSPxuh1r3eud2Uvoy0SCm6ivet1Ci+s7QiBdNtV0="
+        "BUILD.bazel": "sha256-xrauSPxuh1r3eud2Uvoy0SCm6ivet1Ci+s7QiBdNtV0=",
+        "msg/BUILD.bazel": "sha256-HO+5nHPjqrEr2K3v5LGThhP0V9Oc3wgf6d/JuvTPGkE="
     }
 }

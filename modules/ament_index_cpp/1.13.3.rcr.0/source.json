@@ -7,8 +7,6 @@
     },
     "patches": {
         "test__utest__cpp.patch": "sha256-NngU1xIaUG/+hD8rjZiyiGiAsWgDfgPq9tF/LtYySEU=",
-        "src__get_package_share_directory__cpp.patch": "sha256-zS+MZZ90y/O10vRBvG8vMUr9U05N34g+4W7mROcny+8=",
-        "test__utest_deprecated__cpp.patch": "sha256-u5B6Rjbr778nDTAKWznyU1XamRSwlS3hFUtMaDXtkeU=",
-        "src__get_search_paths__cpp.patch": "sha256-dOkcPMpu9riL24Eljc3tgc2Cnw/QdJ1J7BuW7E34fBc="
+        "test__utest_deprecated__cpp.patch": "sha256-u5B6Rjbr778nDTAKWznyU1XamRSwlS3hFUtMaDXtkeU="
     }
 }

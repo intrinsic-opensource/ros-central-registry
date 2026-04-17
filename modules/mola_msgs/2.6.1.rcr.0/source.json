@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/mola-release/archive/refs/tags/upstream/2.6.1.tar.gz",
     "strip_prefix": "mola-release-upstream-2.6.1/mola_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-AP7bB/JvyrgIMsQHRKrNbtFlObDE0sblg+6XEUM2oi0="
+        "BUILD.bazel": "sha256-AP7bB/JvyrgIMsQHRKrNbtFlObDE0sblg+6XEUM2oi0=",
+        "srv/BUILD.bazel": "sha256-15sX3tO66vFbNU2DXNx9WraU582wf6vjndkTb8NfDE0="
     }
 }

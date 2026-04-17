@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/upstream/5.9.2.tar.gz",
     "strip_prefix": "common_interfaces-release-upstream-5.9.2/geometry_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-t677YxqZ6DHiM8YIdir7U7MB+TgYsJWwgp82+FrJFHA="
+        "BUILD.bazel": "sha256-t677YxqZ6DHiM8YIdir7U7MB+TgYsJWwgp82+FrJFHA=",
+        "msg/BUILD.bazel": "sha256-ndP0NqW64HR+FJatBLoGuUjz6rWsGXZhBFPjbNM4+bo="
     }
 }

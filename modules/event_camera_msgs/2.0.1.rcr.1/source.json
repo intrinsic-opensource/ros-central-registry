@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/event_camera_msgs-release/archive/refs/tags/upstream/2.0.1.tar.gz",
     "strip_prefix": "event_camera_msgs-release-upstream-2.0.1",
     "overlay": {
-        "BUILD.bazel": "sha256-R82QpoQq1zFM8IcOlrRwU+oKqN91UKKmkg6UNXpdUCc="
+        "BUILD.bazel": "sha256-R82QpoQq1zFM8IcOlrRwU+oKqN91UKKmkg6UNXpdUCc=",
+        "msg_ros2/BUILD.bazel": "sha256-6JgaS/shNCCk7OUWr6T/1yhoiHmxDlZRp023iRI4xLU="
     }
 }

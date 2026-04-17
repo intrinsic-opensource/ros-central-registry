@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/upstream/5.9.2.tar.gz",
     "strip_prefix": "common_interfaces-release-upstream-5.9.2/sensor_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-Lygqp0UYy/iznIzSqjG0gKZRref2T5PmgPy/0yDZnbc="
+        "BUILD.bazel": "sha256-Lygqp0UYy/iznIzSqjG0gKZRref2T5PmgPy/0yDZnbc=",
+        "srv/BUILD.bazel": "sha256-uxzWygX6L0KfG+rn3aRjbLsJMUaQKIjArzlHOKFCsas=",
+        "msg/BUILD.bazel": "sha256-ZBVSzlQ4V8E7vZoQI5Xo6xu3TDtq3QzgV/NgLf/lkZ4="
     }
 }

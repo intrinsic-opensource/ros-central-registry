@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/graph_monitor-release/archive/refs/tags/upstream/0.2.3.tar.gz",
     "strip_prefix": "graph_monitor-release-upstream-0.2.3/rosgraph_monitor_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-T7lVP6w4GahUVCJ+y12Kr743sLHlSa4rTWqkeNwGizQ="
+        "BUILD.bazel": "sha256-T7lVP6w4GahUVCJ+y12Kr743sLHlSa4rTWqkeNwGizQ=",
+        "msg/BUILD.bazel": "sha256-pvH8czePi6WIsdcFNQzqlCQYKxg6tTSAKXUm1XjqO5E="
     }
 }

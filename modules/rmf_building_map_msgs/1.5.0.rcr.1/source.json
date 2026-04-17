@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/rmf_building_map_msgs-release/archive/refs/tags/upstream/1.5.0.tar.gz",
     "strip_prefix": "rmf_building_map_msgs-release-upstream-1.5.0/rmf_building_map_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-MUo7ZlSOAUNJfSVHhoiQ/HjBODvW8JYGP9iVWb47xnc="
+        "BUILD.bazel": "sha256-MUo7ZlSOAUNJfSVHhoiQ/HjBODvW8JYGP9iVWb47xnc=",
+        "srv/BUILD.bazel": "sha256-sTVrLcQApvOxu1KHW0Iplc89ZV7bhdgq4M8C/DgllZI=",
+        "msg/BUILD.bazel": "sha256-CYHBusli6o8vQDjdMdQ+Gy0BH0KBO32WOoV5jaucfjY="
     }
 }

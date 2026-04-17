@@ -6,7 +6,8 @@
         "defs.bzl": "sha256-8CBAnc5PQx/NBJZ3c3+iuMsU0IGa/u1gOEvmo6PGboU=",
         "types.bzl": "sha256-8O/PQcDa/owNnBQ1VSOBcKf6eD2pDRT+UWzaYcrN/Eo=",
         "BUILD.bazel": "sha256-8SL0W2VGgDpvILGHZqrhME+YQuo7Efh87b9iFFqAkmE=",
-        "aspects.bzl": "sha256-47D8cYLyG3l42LrxIXZsW0B672a4rFRrDVcRKUNR9m4="
+        "aspects.bzl": "sha256-47D8cYLyG3l42LrxIXZsW0B672a4rFRrDVcRKUNR9m4=",
+        "test/msg/BUILD.bazel": "sha256-9nEFAT5vzZJtPwqJCT1X0YOlhIJlJ2/6iDVJwmQCi5o="
     },
     "patches": {
         "src__type_support_dispatch__hpp.patch": "sha256-M9PtCekVXzhwb928bg4THv48aQQTOjDTKXsUnp+hYI4=",

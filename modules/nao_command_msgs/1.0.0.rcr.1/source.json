@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/nao_interfaces-release/archive/refs/tags/upstream/1.0.0.tar.gz",
     "strip_prefix": "nao_interfaces-release-upstream-1.0.0/nao_command_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE="
+        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE=",
+        "msg/BUILD.bazel": "sha256-JBr/ygOWNHJpzSPY6ap8C9ZGHcAvd3bAtZ4+pdtzmG8="
     }
 }

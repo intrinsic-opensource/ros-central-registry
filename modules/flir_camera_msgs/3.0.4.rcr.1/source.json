@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/flir_camera_driver-release/archive/refs/tags/upstream/3.0.4.tar.gz",
     "strip_prefix": "flir_camera_driver-release-upstream-3.0.4/flir_camera_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-JcqUsJ17BqhLUpHpv52UojeqjphGRl7ljtG1SJ5wNnA="
+        "BUILD.bazel": "sha256-JcqUsJ17BqhLUpHpv52UojeqjphGRl7ljtG1SJ5wNnA=",
+        "msg/BUILD.bazel": "sha256-KV8pvkWFOTIxPRto6B5abkXAxGwh/Q2+49QCM4aOgV8="
     }
 }

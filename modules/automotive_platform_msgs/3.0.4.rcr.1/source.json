@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/automotive_autonomy_msgs-release/archive/refs/tags/upstream/3.0.4.tar.gz",
     "strip_prefix": "automotive_autonomy_msgs-release-upstream-3.0.4/automotive_platform_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-jLcEBPcd87zS8AvkDkdEU+PtBIr1BMpVv+de23MrEX0="
+        "BUILD.bazel": "sha256-jLcEBPcd87zS8AvkDkdEU+PtBIr1BMpVv+de23MrEX0=",
+        "msg/BUILD.bazel": "sha256-eUjdk/Llyhuc7wzcZiLiMnH1iaA/+uXmj4PZYC8N0jg="
     }
 }

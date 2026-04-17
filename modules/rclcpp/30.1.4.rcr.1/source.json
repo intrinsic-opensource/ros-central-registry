@@ -3,7 +3,9 @@
     "url": "https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/upstream/30.1.4.tar.gz",
     "strip_prefix": "rclcpp-release-upstream-30.1.4/rclcpp",
     "overlay": {
-        "BUILD.bazel": "sha256-1jpOQp+ir1nRELb+qyMYGwG6zG/CMA5xmegVln7vnfs="
+        "BUILD.bazel": "sha256-1jpOQp+ir1nRELb+qyMYGwG6zG/CMA5xmegVln7vnfs=",
+        "test/locate_test_assets.hpp": "sha256-J2XuAG6kFos7tUIL8y0aM+AfHucJvGkGAjklcj7Nlv0=",
+        "test/msg/BUILD.bazel": "sha256-4HxsATeKEa5dM+N7iBU7ibRjBOiDfaU7PK6FO+GwBJQ="
     },
     "patches": {
         "test__rclcpp__test_generic_service__cpp.patch": "sha256-kfJJrK8aTn3s88wUudYC4HCbv1VaRWHQl9rC7JOa1c4=",

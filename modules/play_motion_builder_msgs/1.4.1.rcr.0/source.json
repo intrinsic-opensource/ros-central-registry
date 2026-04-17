@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/play_motion_builder-release/archive/refs/tags/upstream/1.4.1.tar.gz",
     "strip_prefix": "play_motion_builder-release-upstream-1.4.1/play_motion_builder_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-QuH/e2dwaufPsrw7fnoEn6AlD0AqhPce9z91UBIldoc="
+        "BUILD.bazel": "sha256-QuH/e2dwaufPsrw7fnoEn6AlD0AqhPce9z91UBIldoc=",
+        "srv/BUILD.bazel": "sha256-VpbgAe23bDOF4zWmmIh3puFdSpYQ1ifU+iQikxXYG24=",
+        "action/BUILD.bazel": "sha256-gX6eMUHvUq0kIgOSBlJvQTi3w1ahMM0qdpzx4zd+KSQ=",
+        "msg/BUILD.bazel": "sha256-tZpulXbW+pwTwSLE+Vrzqafvu16Lr6EiAyFobeD87N0="
     }
 }

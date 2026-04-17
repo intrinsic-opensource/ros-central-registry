@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/velodyne-release/archive/refs/tags/upstream/2.5.1.tar.gz",
     "strip_prefix": "velodyne-release-upstream-2.5.1/velodyne_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-JcqUsJ17BqhLUpHpv52UojeqjphGRl7ljtG1SJ5wNnA="
+        "BUILD.bazel": "sha256-JcqUsJ17BqhLUpHpv52UojeqjphGRl7ljtG1SJ5wNnA=",
+        "msg/BUILD.bazel": "sha256-sErsY8iVvO832+cu/bqMhuqmtV97vxPf9e1u5Zob96M="
     }
 }

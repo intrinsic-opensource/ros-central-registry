@@ -3,6 +3,10 @@
     "url": "https://github.com/ros2-gbp/test_interface_files-release/archive/refs/tags/upstream/0.14.1.tar.gz",
     "strip_prefix": "test_interface_files-release-upstream-0.14.1",
     "overlay": {
-        "BUILD.bazel": "sha256-MkcBH6xfWLnXJ28JzMCUxqN74NLjv54FXdBDVnpsQIU="
+        "BUILD.bazel": "sha256-MkcBH6xfWLnXJ28JzMCUxqN74NLjv54FXdBDVnpsQIU=",
+        "srv/BUILD.bazel": "sha256-SJadjFFTG75LEAmZp6fu0Wi3Df8KCNQ4pp3suWNdiPc=",
+        "idl/BUILD.bazel": "sha256-zoPfAMuT4s5000faaYosPypHIjC/gnz6/BIJ1JVrQVo=",
+        "action/BUILD.bazel": "sha256-8NrMO0kL3RzhTc1SQm7jWNRuH1GOyzyk8Qq8RGkUg9c=",
+        "msg/BUILD.bazel": "sha256-HD2jZZ4kp47WCPUUl7utqkTBDGg8krE/7aKuub6VK6g="
     }
 }

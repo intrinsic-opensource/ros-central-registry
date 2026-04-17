@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/mqtt_client-release/archive/refs/tags/upstream/2.4.1.tar.gz",
     "strip_prefix": "mqtt_client-release-upstream-2.4.1/mqtt_client_interfaces",
     "overlay": {
-        "BUILD.bazel": "sha256-Onhi1XsHlsyWR/s8oaQy/kpE2Kul2p6hWCzJvoLpSeQ="
+        "BUILD.bazel": "sha256-Onhi1XsHlsyWR/s8oaQy/kpE2Kul2p6hWCzJvoLpSeQ=",
+        "srv/BUILD.bazel": "sha256-fA6fqnupnZ3P6PbEgjsWUm0bfsvj4Vu6N4hL5dMVznI=",
+        "srv/ros2/BUILD.bazel": "sha256-DDrusT3F8vFNWCQ7PSSzHiRTog6YWloyWj70jGYpS4I=",
+        "msg/BUILD.bazel": "sha256-0+ZzLebXm4CeNDus6UkwpN1Wby4Ug+lgqVLzwBPvzQ0="
     }
 }

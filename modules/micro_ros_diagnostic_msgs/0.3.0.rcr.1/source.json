@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/micro_ros_diagnostics-release/archive/refs/tags/upstream/0.3.0.tar.gz",
     "strip_prefix": "micro_ros_diagnostics-release-upstream-0.3.0/micro_ros_diagnostic_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-8lEHmtuXgzytN1tPn2hTfke2SehDBlpsZMV+iuJ41DI="
+        "BUILD.bazel": "sha256-8lEHmtuXgzytN1tPn2hTfke2SehDBlpsZMV+iuJ41DI=",
+        "srv/BUILD.bazel": "sha256-eQvbN2GM179x2FCce8jdRQUseNk0pkMALfiFya9fMgM=",
+        "msg/BUILD.bazel": "sha256-0EbwUzqh8cqtG+FRPDm398/zJqyFteQB7p/hhwhtjoE="
     }
 }

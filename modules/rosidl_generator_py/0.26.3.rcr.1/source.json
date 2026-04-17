@@ -7,7 +7,8 @@
         "types.bzl": "sha256-OpnD0njWkggAlFqBS564e8EqZRpk+CWSCr35WvhAvSE=",
         "BUILD.bazel": "sha256-9v+JesQx3w2hKG2N43lbf/B5GGM34BAH/+M3e4a2gDo=",
         "sitecustomize.py": "sha256-Z2MHID48GAzjCetaWzydwzJNFLI4vW262gMZtPny0r4=",
-        "aspects.bzl": "sha256-7Nd9dZp7AmHcbiSA4yoqoV8GC0JpH6HqOyzNuIcWi/o="
+        "aspects.bzl": "sha256-7Nd9dZp7AmHcbiSA4yoqoV8GC0JpH6HqOyzNuIcWi/o=",
+        "msg/BUILD.bazel": "sha256-kJ3QXFll1cN6Q2UWQUgeZ6LE4ku7g+Z1dZINC9zeCwA="
     },
     "patches": {
         "rosidl_generator_py__generate_py_impl__py.patch": "sha256-dZuudlzTQi0ZHZ6rDA7cxKbgVa6GRiCQIR/mlTiS3Hg=",

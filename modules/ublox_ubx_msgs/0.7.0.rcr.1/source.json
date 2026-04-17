@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/ublox_dgnss-release/archive/refs/tags/upstream/0.7.0.tar.gz",
     "strip_prefix": "ublox_dgnss-release-upstream-0.7.0/ublox_ubx_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-PRsq6kmbBpx9lxUv50kxr5Vzn2er3KZ3Vp2+g3gtzO0="
+        "BUILD.bazel": "sha256-PRsq6kmbBpx9lxUv50kxr5Vzn2er3KZ3Vp2+g3gtzO0=",
+        "msg/BUILD.bazel": "sha256-4t8oE1fX5434buJI5hPOqaFJSpGpauEXRvY0YeVutKE="
     }
 }

@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/cob_common-release/archive/refs/tags/upstream/2.8.12.tar.gz",
     "strip_prefix": "cob_common-release-upstream-2.8.12/cob_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-iy5CH0UUcJfv/UUCZWAeAFB/GUJBcmRIkFRJM4TFqts="
+        "BUILD.bazel": "sha256-iy5CH0UUcJfv/UUCZWAeAFB/GUJBcmRIkFRJM4TFqts=",
+        "msg/BUILD.bazel": "sha256-AcaSbmg2X+JR+Cb/2BCMfTIc7pW4LQ/6r3MQXDPcexU="
     }
 }

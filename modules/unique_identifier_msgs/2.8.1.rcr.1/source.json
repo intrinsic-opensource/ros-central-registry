@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/unique_identifier_msgs-release/archive/refs/tags/upstream/2.8.1.tar.gz",
     "strip_prefix": "unique_identifier_msgs-release-upstream-2.8.1",
     "overlay": {
-        "BUILD.bazel": "sha256-mPZVnbXp9AbaKKU2dKgcapdecgWeIKwniUNl4ufD/Lk="
+        "BUILD.bazel": "sha256-mPZVnbXp9AbaKKU2dKgcapdecgWeIKwniUNl4ufD/Lk=",
+        "msg/BUILD.bazel": "sha256-Cd0yWqotw1XEnlr3d+n4e9F/9zS4e7YtJdvyw8Py5wo="
     }
 }

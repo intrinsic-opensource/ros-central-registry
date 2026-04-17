@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/raspimouse2-release/archive/refs/tags/upstream/2.0.0.tar.gz",
     "strip_prefix": "raspimouse2-release-upstream-2.0.0/raspimouse_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-DcAj/yVLoOFyohUeTvrdBhVtj0KwNaJ4Wc1jd74Sz7k="
+        "BUILD.bazel": "sha256-DcAj/yVLoOFyohUeTvrdBhVtj0KwNaJ4Wc1jd74Sz7k=",
+        "msg/BUILD.bazel": "sha256-bJO8mj7j0mOTRNLCf5W+zily2DEbi4a90JOzgSos8hg="
     }
 }

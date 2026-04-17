@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/marker_msgs-release/archive/refs/tags/upstream/0.0.8.tar.gz",
     "strip_prefix": "marker_msgs-release-upstream-0.0.8",
     "overlay": {
-        "BUILD.bazel": "sha256-Ref+dsLXXfh4Oyf/Z9wK1tGHWwTvc/bTP/c/PmmCI+M="
+        "BUILD.bazel": "sha256-Ref+dsLXXfh4Oyf/Z9wK1tGHWwTvc/bTP/c/PmmCI+M=",
+        "msg/BUILD.bazel": "sha256-ffvI7CLmsmE6QmBZzkhQstfUiz0AA2tehxVY71ai+lc="
     }
 }

@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/radar_msgs-release/archive/refs/tags/upstream/0.2.2.tar.gz",
     "strip_prefix": "radar_msgs-release-upstream-0.2.2",
     "overlay": {
-        "BUILD.bazel": "sha256-PM1OjeyfJGjYUl/b+8j6ysSUklmYD8NzIaG1KYGwtS8="
+        "BUILD.bazel": "sha256-PM1OjeyfJGjYUl/b+8j6ysSUklmYD8NzIaG1KYGwtS8=",
+        "msg/BUILD.bazel": "sha256-W7U9rT315A1yB3CUDp3vIUgHhKr2qId86Ww7xolV6DQ="
     }
 }

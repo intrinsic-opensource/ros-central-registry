@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/simulation_interfaces-release/archive/refs/tags/upstream/2.1.0.tar.gz",
     "strip_prefix": "simulation_interfaces-release-upstream-2.1.0",
     "overlay": {
-        "BUILD.bazel": "sha256-9GDWN1drIhxl4TnNsoS2WWWIEKnk431M4PJNOoZ2Ybg="
+        "BUILD.bazel": "sha256-9GDWN1drIhxl4TnNsoS2WWWIEKnk431M4PJNOoZ2Ybg=",
+        "srv/BUILD.bazel": "sha256-xk/GhOhJyN4qndPuFYnRphEFS75JQ6rB/GSUqgqCtKA=",
+        "action/BUILD.bazel": "sha256-KvB882B2qoveZOGEHX+UDIAaxY1bYzueu104kDLclDA=",
+        "msg/BUILD.bazel": "sha256-gxqwlOcyEF/SiLCaujf3/uuaw2tTnr1AWs/5JWrrAkI="
     }
 }

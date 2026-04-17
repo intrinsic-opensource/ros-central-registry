@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/tuw_msgs-release/archive/refs/tags/upstream/0.2.6.tar.gz",
     "strip_prefix": "tuw_msgs-release-upstream-0.2.6/tuw_nav_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-DKWfS11c/NSU6CPZ9q87w6NEuPDodhB7yKSddMvcQQA="
+        "BUILD.bazel": "sha256-DKWfS11c/NSU6CPZ9q87w6NEuPDodhB7yKSddMvcQQA=",
+        "msg/BUILD.bazel": "sha256-QSVP7eDtBKKn9UIngdpLy70EQYp7nbcoN4bu0qTIteo="
     }
 }

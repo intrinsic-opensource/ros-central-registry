@@ -5,6 +5,20 @@
     "overlay": {
         "BUILD.bazel": "sha256-AidB6eYkaR/rMV9RBBd1Ea14s7Cn9bFQPrhSUauPrB4=",
         "requirements.in": "sha256-AbUznm6ippdA+s/OWK6g8uGhIJXdEI2kGx0/UHP+Hh0=",
-        "requirements.txt": "sha256-XhTzywv4jvtuuFx4D/px+K8zOqt7efjatFTAuo5YGak="
+        "requirements.txt": "sha256-XhTzywv4jvtuuFx4D/px+K8zOqt7efjatFTAuo5YGak=",
+        "cc/defs.bzl": "sha256-CjrpSPeKNH5pafkHqlXGz+AYRso+FtJ8L1nZ8azsNBE=",
+        "cc/macros.bzl": "sha256-9p6Q4mwMMxZTpGngr7SyFlzgPBFzzuECSkCQPPujkJU=",
+        "cc/types.bzl": "sha256-rdlVPpnZM5fBfMRUrqSa+9GASlfn/i+mpMv4pul5+BI=",
+        "cc/BUILD.bazel": "sha256-Qo8L/HHmG9cWwY5gj2bUrM+MOLCo94yLN9x3CHP8Peo=",
+        "cc/rules.bzl": "sha256-fv/Rr4wxPynC9f+SjxWZkuJYY0DC/31PjFFKg4vC0vE=",
+        "cc/aspects.bzl": "sha256-3ZYy2k+bwCogeto/A7ipoOE+GD7br4BDrv54sfwJwjY=",
+        "cc/mcap_impl.cpp": "sha256-/qFEIYCpqc9IB5xJpJUL6SXUnyVrTjFXc1dpyScZwKQ=",
+        "python/defs.bzl": "sha256-FlOqKavTbRjkQxuIa0TJmE4rUw5cup9zs6A5cb+OrHk=",
+        "python/pytest_main.py": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+        "python/BUILD.bazel": "sha256-sP0ROcpNAotSp6EXjdHOsl43n2pyM6JfMNZtThCLGDY=",
+        "ament/defs.bzl": "sha256-jkS4lOR/PGKRoQcEkm7W2I0y4FGOVcKr4lScBHaPohA=",
+        "ament/BUILD.bazel": "sha256-ECvrn7FbsuaQMxarEQVcwHnxQ0i5Lm4u9jxWQQuzHyE=",
+        "ament/ament_index.bzl": "sha256-v/GLYYg9GFe8zLuGJog01Tg3lWaSt2NCK+U/qWeML+A=",
+        "ament/ament_package.bzl": "sha256-87QO2602ZPY8S7fyW8bx099idEZSMwEdLYLIScOgOv8="
     }
 }

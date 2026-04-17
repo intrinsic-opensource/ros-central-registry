@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/mrpt_navigation-release/archive/refs/tags/upstream/2.3.0.tar.gz",
     "strip_prefix": "mrpt_navigation-release-upstream-2.3.0/mrpt_nav_interfaces",
     "overlay": {
-        "BUILD.bazel": "sha256-BFexjVKe7r+20rxIrkf6o5/LQtrPw3uXAZqvqMBbYWM="
+        "BUILD.bazel": "sha256-BFexjVKe7r+20rxIrkf6o5/LQtrPw3uXAZqvqMBbYWM=",
+        "srv/BUILD.bazel": "sha256-oeO2/lRbicnOCqMiMURQKAjCpjwgEqpGB5Jwn0cdYio=",
+        "action/BUILD.bazel": "sha256-rm66A+0RnT/hM1DBFdcgHBzRk0fcJ0DPmdeGOYrteCU=",
+        "msg/BUILD.bazel": "sha256-IawZYVLEx7RQ1i/3ihFnWQTrEIckLGRhgGQzjtCKS08="
     }
 }

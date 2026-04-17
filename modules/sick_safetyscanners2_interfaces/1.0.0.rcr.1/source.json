@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/sick_safetyscanners2_interfaces-release/archive/refs/tags/upstream/1.0.0.tar.gz",
     "strip_prefix": "sick_safetyscanners2_interfaces-release-upstream-1.0.0",
     "overlay": {
-        "BUILD.bazel": "sha256-IkEHeSM57RANdTag05d5ISjP/8PtHesr3n6wkpfHnJw="
+        "BUILD.bazel": "sha256-IkEHeSM57RANdTag05d5ISjP/8PtHesr3n6wkpfHnJw=",
+        "srv/BUILD.bazel": "sha256-JdYESR56yF52kSvX/iPHokcSqUXFl/W5pR6TkFXDln0=",
+        "msg/BUILD.bazel": "sha256-OgIeM6NWiS9+Za0FsVEnJSDPjWMZs2WSHc8YEQTZmjA="
     }
 }

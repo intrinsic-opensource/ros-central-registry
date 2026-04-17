@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/object_recognition_msgs-release/archive/refs/tags/upstream/2.0.0.tar.gz",
     "strip_prefix": "object_recognition_msgs-release-upstream-2.0.0",
     "overlay": {
-        "BUILD.bazel": "sha256-Rmn+/9axcUeKdijnYsEfCnQPEOIwq0xzCYjOf03VtYE="
+        "BUILD.bazel": "sha256-Rmn+/9axcUeKdijnYsEfCnQPEOIwq0xzCYjOf03VtYE=",
+        "srv/BUILD.bazel": "sha256-jhWBzBsXSqZT/yoaFBHJ/Y25a9ZX/sC7O5li1oMDe/M=",
+        "action/BUILD.bazel": "sha256-3/YY+c2GUzvJB4xZJSJox6p8W1rRhwLfvjWVtUoVgZk=",
+        "msg/BUILD.bazel": "sha256-8zU6le97A0Of+o124Qz8hXS1Llkb57tM0OlQ80lmNws="
     }
 }

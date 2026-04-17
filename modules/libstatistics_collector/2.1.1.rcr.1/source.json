@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/libstatistics_collector-release/archive/refs/tags/upstream/2.1.1.tar.gz",
     "strip_prefix": "libstatistics_collector-release-upstream-2.1.1",
     "overlay": {
-        "BUILD.bazel": "sha256-R145oUdNKrZTyrJCd6RJcU39fF0xPd3L4Z60lAJy+kc="
+        "BUILD.bazel": "sha256-R145oUdNKrZTyrJCd6RJcU39fF0xPd3L4Z60lAJy+kc=",
+        "test/msg/BUILD.bazel": "sha256-7rFp3ApuGrM83Ay3Y7CmKj2IMRpMbWIyRnSmSUqS1LI="
     }
 }

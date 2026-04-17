@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/four_wheel_steering_msgs-release/archive/refs/tags/upstream/2.0.1.tar.gz",
     "strip_prefix": "four_wheel_steering_msgs-release-upstream-2.0.1",
     "overlay": {
-        "BUILD.bazel": "sha256-Onhi1XsHlsyWR/s8oaQy/kpE2Kul2p6hWCzJvoLpSeQ="
+        "BUILD.bazel": "sha256-Onhi1XsHlsyWR/s8oaQy/kpE2Kul2p6hWCzJvoLpSeQ=",
+        "msg/BUILD.bazel": "sha256-+UGTI3qCz8s4wFwgkbvQ/RCQmapQDJ2IbVWahrGvwrM="
     }
 }

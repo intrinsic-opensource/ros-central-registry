@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/rosbag2-release/archive/refs/tags/upstream/0.33.1.tar.gz",
     "strip_prefix": "rosbag2-release-upstream-0.33.1/rosbag2_performance/rosbag2_performance_benchmarking_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-o+0fwNdQyOs42WIIdOo9xIVU9vXEo2thpSzD17xrl3Y="
+        "BUILD.bazel": "sha256-o+0fwNdQyOs42WIIdOo9xIVU9vXEo2thpSzD17xrl3Y=",
+        "msg/BUILD.bazel": "sha256-hXG7m7fxeqS1jv0fWEyYZzN6adKv679ZYJcbyVyh0gw="
     }
 }

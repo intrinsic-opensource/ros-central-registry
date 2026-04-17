@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/demos-release/archive/refs/tags/upstream/0.37.8.tar.gz",
     "strip_prefix": "demos-release-upstream-0.37.8/pendulum_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-HbDLQFkXO+pufCqAHyE+Jlgh+DbbwsWXqO5F5v/F0nA="
+        "BUILD.bazel": "sha256-HbDLQFkXO+pufCqAHyE+Jlgh+DbbwsWXqO5F5v/F0nA=",
+        "msg/BUILD.bazel": "sha256-bz43X3gnubUfxgrevAaXOALWwhhSUsGAQiGYd7E0d/Q="
     }
 }

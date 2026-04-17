@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/tf2_web_republisher-release/archive/refs/tags/upstream/1.0.0.tar.gz",
     "strip_prefix": "tf2_web_republisher-release-upstream-1.0.0/tf2_web_republisher_interfaces",
     "overlay": {
-        "BUILD.bazel": "sha256-bK/azeVSANO3hQxNF5D0qXylz4tYwwKL8hf/N9wmcbg="
+        "BUILD.bazel": "sha256-bK/azeVSANO3hQxNF5D0qXylz4tYwwKL8hf/N9wmcbg=",
+        "srv/BUILD.bazel": "sha256-kdUrVh3x3preARxPNRHeWm5ShZxaEH4R5MGPKt/gEwc=",
+        "action/BUILD.bazel": "sha256-rGrrelrBZr1eFbZ40boF/T20cjRJacLQb7phvW/nxrY=",
+        "msg/BUILD.bazel": "sha256-xxptr+1uDxGQuJGNVbbMEsWDck1Z7arIp3M1/NdgFnQ="
     }
 }

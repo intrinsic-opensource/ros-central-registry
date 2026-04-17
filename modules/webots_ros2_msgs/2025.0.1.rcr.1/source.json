@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/webots_ros2-release/archive/refs/tags/upstream/2025.0.1.tar.gz",
     "strip_prefix": "webots_ros2-release-upstream-2025.0.1/webots_ros2_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-YGs2ok7pmSS9HTT0n7/B2rFD4XgZQDXG3BENBS5WxqE="
+        "BUILD.bazel": "sha256-YGs2ok7pmSS9HTT0n7/B2rFD4XgZQDXG3BENBS5WxqE=",
+        "srv/BUILD.bazel": "sha256-JKm2PRhY+N0upcrPgwkYucpND50EM4U3cf6UBpPzt1Q=",
+        "msg/BUILD.bazel": "sha256-OETDKqOcbaEVnXabvu2cCGPwMfmS8XBzeHdod9ze6L8="
     }
 }

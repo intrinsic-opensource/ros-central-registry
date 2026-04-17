@@ -6,7 +6,6 @@
         "BUILD.bazel": "sha256-8RZ4T1d7CsUyXs7E7W/aOacgazSpNJse4lEyo+6krfg="
     },
     "patches": {
-        "rclpy__impl__implementation_singleton__py.patch": "sha256-OpabaKGcbl2SzgZ0EvDskK1NXCaxWHppZKULiShTMg4=",
-        "test__test_type_description_service__py.patch": "sha256-rwZSOic+XN/NwDTjYugaLwxr8+04BkmXwBS7AQJ9+tQ="
+        "rclpy__impl__implementation_singleton__py.patch": "sha256-OpabaKGcbl2SzgZ0EvDskK1NXCaxWHppZKULiShTMg4="
     }
 }

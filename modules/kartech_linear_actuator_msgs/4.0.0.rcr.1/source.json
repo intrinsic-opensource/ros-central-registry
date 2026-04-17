@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/astuff_sensor_msgs-release/archive/refs/tags/upstream/4.0.0.tar.gz",
     "strip_prefix": "astuff_sensor_msgs-release-upstream-4.0.0/kartech_linear_actuator_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-jLcEBPcd87zS8AvkDkdEU+PtBIr1BMpVv+de23MrEX0="
+        "BUILD.bazel": "sha256-jLcEBPcd87zS8AvkDkdEU+PtBIr1BMpVv+de23MrEX0=",
+        "msg/BUILD.bazel": "sha256-YFreOzLoTJ2Gm8enO1pyBEPD9WFskpj5j5JYwW2tFNU="
     }
 }

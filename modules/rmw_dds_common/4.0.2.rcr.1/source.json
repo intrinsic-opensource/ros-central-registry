@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/rmw_dds_common-release/archive/refs/tags/upstream/4.0.2.tar.gz",
     "strip_prefix": "rmw_dds_common-release-upstream-4.0.2/rmw_dds_common",
     "overlay": {
-        "BUILD.bazel": "sha256-oGjlnFPR9avpwJCuw0Dz5K5UNfw21Ed54pV4ApAe7CQ="
+        "BUILD.bazel": "sha256-oGjlnFPR9avpwJCuw0Dz5K5UNfw21Ed54pV4ApAe7CQ=",
+        "msg/BUILD.bazel": "sha256-q6Mpyq9fomnHrnNmAtVsB9SvgyOBb/9ItAnvrdbpmCU="
     }
 }

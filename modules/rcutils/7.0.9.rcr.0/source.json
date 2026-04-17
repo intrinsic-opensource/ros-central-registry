@@ -3,11 +3,13 @@
     "url": "https://github.com/ros2-gbp/rcutils-release/archive/refs/tags/upstream/7.0.9.tar.gz",
     "strip_prefix": "rcutils-release-upstream-7.0.9",
     "overlay": {
-        "BUILD.bazel": "sha256-gPtf8J0fscYLIZ5TBbjkHHaN8whsyHB6tMGSg0yUWRE="
+        "BUILD.bazel": "sha256-gPtf8J0fscYLIZ5TBbjkHHaN8whsyHB6tMGSg0yUWRE=",
+        "src/runfiles.c": "sha256-4BDknz5m9MSgcdgJtFR9jl1DnIXPfRYLCXeFLX15gzs=",
+        "test/locate_test_assets.h": "sha256-xm3tB/I+9VgV9CwPVDT2dP+r0BJpFuezPgkze0Z+J/I=",
+        "include/rcutils/runfiles.h": "sha256-MAa3qQUADk1JVGZ8n5N0bp/aRP+ko4so3tNJgFFPePg="
     },
     "patches": {
         "test__test_filesystem__cpp.patch": "sha256-wE4LuPHbe1VOFzmubCEfDL/U7Wj/Wlof8ECe7b0kamI=",
-        "test__test_time__cpp.patch": "sha256-R9inRUxPv9cyKHX/9rjRl19t6X7mkGlHuxz7DTjiJis=",
         "test__test_process__cpp.patch": "sha256-1TV45SLoSVqD1Bu4nwpWhuZCOzwSw0RTjDb2XMrf6bY=",
         "src__shared_library__c.patch": "sha256-uDmnOpN5Kf3IEFjd8mZ6aouh6nguoZpFDvu1mvE320M=",
         "test__test_logging_custom_env__cpp.patch": "sha256-3bKUsVMYiOBOsOFj87DFkx4FbVfLgSriPGcU0AlfRUs="

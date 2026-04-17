@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/py_trees_ros_interfaces-release/archive/refs/tags/upstream/2.1.1.tar.gz",
     "strip_prefix": "py_trees_ros_interfaces-release-upstream-2.1.1",
     "overlay": {
-        "BUILD.bazel": "sha256-Iyhhhtfpz0Z5TgvFrUovQmb3mHNM7f7KwF8uXVsorgM="
+        "BUILD.bazel": "sha256-Iyhhhtfpz0Z5TgvFrUovQmb3mHNM7f7KwF8uXVsorgM=",
+        "srv/BUILD.bazel": "sha256-9UfCoNjsgFscg6GcTaI145FV2uZczK9lA13T5xrEOkg=",
+        "action/BUILD.bazel": "sha256-f549E8PkLbt+o9VuoMunqKWKzzJCc+R329cScdNTaes=",
+        "msg/BUILD.bazel": "sha256-fNyxujcguTUc2zX5LygxI3xhYYUF3hDMhi2Vtt6kdF4="
     }
 }

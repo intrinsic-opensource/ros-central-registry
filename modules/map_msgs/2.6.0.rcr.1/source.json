@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/navigation_msgs-release/archive/refs/tags/upstream/2.6.0.tar.gz",
     "strip_prefix": "navigation_msgs-release-upstream-2.6.0/map_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-FV8juMMoFxetFWZ+1VzRpqNuoUd2vquNvNDwlmv1CcI="
+        "BUILD.bazel": "sha256-FV8juMMoFxetFWZ+1VzRpqNuoUd2vquNvNDwlmv1CcI=",
+        "srv/BUILD.bazel": "sha256-aIGzpfS6vujZI8ICc/EzR0PDM9jjI/j24f6IIu44fMY=",
+        "msg/BUILD.bazel": "sha256-oBt0EWm3+Ct/xT+ln0gL9u5Sytpp+z/OnS6xkwItpig="
     }
 }

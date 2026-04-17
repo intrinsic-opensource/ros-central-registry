@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/autoware_msgs-release/archive/refs/tags/upstream/1.11.0.tar.gz",
     "strip_prefix": "autoware_msgs-release-upstream-1.11.0/autoware_localization_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-XPpWMOSYqaVNtBLHKE+61ixvYu8LEg0RPRh5A7mmMpg="
+        "BUILD.bazel": "sha256-XPpWMOSYqaVNtBLHKE+61ixvYu8LEg0RPRh5A7mmMpg=",
+        "srv/BUILD.bazel": "sha256-sPUvTl/a4c7htVW80OgEHduxkkIG6EZSA5U2/oHcgkQ=",
+        "msg/BUILD.bazel": "sha256-ExLPzgG40CALwbzoOoEE+IqChEbNWmO0JfjhGhhrm+w="
     }
 }

@@ -6,7 +6,6 @@
         "BUILD.bazel": "sha256-+Yo+LVh2rCjfyMlbYrlU1cqypYapowWDo8DJqgrBX2I="
     },
     "patches": {
-        "ament_index_python__search_paths__py.patch": "sha256-OjhiB5wtzp1E8yXMSPDvLv3Wr/rVm1jvT3Ktxbg8X6o=",
         "test__test_ament_index_python__py.patch": "sha256-co93I5ETQNI8EUv1zZRf1ojwy+qsYWiYaP/50s25dbg="
     }
 }

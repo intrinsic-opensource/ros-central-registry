@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/upstream/2.4.4.tar.gz",
     "strip_prefix": "rcl_interfaces-release-upstream-2.4.4/composition_interfaces",
     "overlay": {
-        "BUILD.bazel": "sha256-czp9VUCwfoUi44uiltO0mEHNoPgYJhmClI8wmWCdUQo="
+        "BUILD.bazel": "sha256-czp9VUCwfoUi44uiltO0mEHNoPgYJhmClI8wmWCdUQo=",
+        "srv/BUILD.bazel": "sha256-nbqVI4NoM8+XC8DHqXs++Q7EPFIMhvuNIjxV09DQeKU="
     }
 }

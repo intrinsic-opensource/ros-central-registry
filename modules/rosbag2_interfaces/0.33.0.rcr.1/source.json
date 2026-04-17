@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/rosbag2-release/archive/refs/tags/upstream/0.33.0.tar.gz",
     "strip_prefix": "rosbag2-release-upstream-0.33.0/rosbag2_interfaces",
     "overlay": {
-        "BUILD.bazel": "sha256-HG6gAMsT7TtTPThWoe3uZbgDARyFLCagaWUVZ3aH9cQ="
+        "BUILD.bazel": "sha256-HG6gAMsT7TtTPThWoe3uZbgDARyFLCagaWUVZ3aH9cQ=",
+        "srv/BUILD.bazel": "sha256-Yrn/wrdEePMwSd9HVzeSjv3KRRMkNs6UubLigM+koW4=",
+        "msg/BUILD.bazel": "sha256-4LSMaDILlu3OQI79w8eLuUhkulRrwdC1HMYxAFffJ6Y="
     }
 }

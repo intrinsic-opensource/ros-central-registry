@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/find_object_2d-release/archive/refs/tags/upstream/0.7.4.tar.gz",
     "strip_prefix": "find_object_2d-release-upstream-0.7.4",
     "overlay": {
-        "BUILD.bazel": "sha256-FsuHVSQUGlwIX8OB/Xkm8e94uSjEQn984KAk2m2Tnf8="
+        "BUILD.bazel": "sha256-FsuHVSQUGlwIX8OB/Xkm8e94uSjEQn984KAk2m2Tnf8=",
+        "msg/BUILD.bazel": "sha256-fPCSPcxTQd7/qGIGssJRvVWptNq0xBvRQl+5WJt4aQE="
     }
 }

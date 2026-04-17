@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/moveit_task_constructor-release/archive/refs/tags/upstream/0.1.5.tar.gz",
     "strip_prefix": "moveit_task_constructor-release-upstream-0.1.5/msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-jUSqpFImXxxVACAFuHltAqJITaC2wXg193pFC2+pW0k="
+        "BUILD.bazel": "sha256-jUSqpFImXxxVACAFuHltAqJITaC2wXg193pFC2+pW0k=",
+        "srv/BUILD.bazel": "sha256-7YiV02L0vDYZKzcyDk6DG32q2fM6pEmfOnV40fPQ/3c=",
+        "action/BUILD.bazel": "sha256-vl1wEXWFWAzINcf9uFykuSglqvy4xFM1g4AMl5nUlx0=",
+        "msg/BUILD.bazel": "sha256-M1xVuIr8V6KPXhZz+Kq6S0SOfqAmY27+weGFyFtYHW0="
     }
 }

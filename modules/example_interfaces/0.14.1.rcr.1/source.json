@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/example_interfaces-release/archive/refs/tags/upstream/0.14.1.tar.gz",
     "strip_prefix": "example_interfaces-release-upstream-0.14.1",
     "overlay": {
-        "BUILD.bazel": "sha256-pOHR+q+gqOH2/frrYtgN3+mIJLKfh7YZHlnHxmGp6NI="
+        "BUILD.bazel": "sha256-pOHR+q+gqOH2/frrYtgN3+mIJLKfh7YZHlnHxmGp6NI=",
+        "srv/BUILD.bazel": "sha256-9TBzsbZoCYw7gGKhIn3xDx7aY8pXkObQlk0ZStlsdO8=",
+        "action/BUILD.bazel": "sha256-rrLZAbB7/b/WEZiL/9E3D5ZByxQH8fcV3B5addPwWCc=",
+        "msg/BUILD.bazel": "sha256-9D3R0ITW4qcEagSVkzLEijgzo7kvsRVdrWXYRyR0Mak="
     }
 }

@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/vision_msgs-release/archive/refs/tags/upstream/4.2.0.tar.gz",
     "strip_prefix": "vision_msgs-release-upstream-4.2.0/vision_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-tdnwWQCl72zhMRUlBST8lVWPQ6ZxshQdFbdAZWiAn1w="
+        "BUILD.bazel": "sha256-tdnwWQCl72zhMRUlBST8lVWPQ6ZxshQdFbdAZWiAn1w=",
+        "msg/BUILD.bazel": "sha256-u0eXyfhYwBaaZKi4MZBuTQun19vCYtAhr7vcI3ABK/Y="
     }
 }

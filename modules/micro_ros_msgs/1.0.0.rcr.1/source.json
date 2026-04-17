@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/micro_ros_msgs-release/archive/refs/tags/upstream/1.0.0.tar.gz",
     "strip_prefix": "micro_ros_msgs-release-upstream-1.0.0",
     "overlay": {
-        "BUILD.bazel": "sha256-DcAj/yVLoOFyohUeTvrdBhVtj0KwNaJ4Wc1jd74Sz7k="
+        "BUILD.bazel": "sha256-DcAj/yVLoOFyohUeTvrdBhVtj0KwNaJ4Wc1jd74Sz7k=",
+        "msg/BUILD.bazel": "sha256-Za5B2RCWohNSid5+tb8hnswnlhVgniowIcnClZ35090="
     }
 }

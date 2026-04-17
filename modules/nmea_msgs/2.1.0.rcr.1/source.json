@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/nmea_msgs-release/archive/refs/tags/upstream/2.1.0.tar.gz",
     "strip_prefix": "nmea_msgs-release-upstream-2.1.0",
     "overlay": {
-        "BUILD.bazel": "sha256-ppACI9tNCilBKeIaA/XXSQL/zbkgls8aHwyW/sva2lA="
+        "BUILD.bazel": "sha256-ppACI9tNCilBKeIaA/XXSQL/zbkgls8aHwyW/sva2lA=",
+        "msg/BUILD.bazel": "sha256-JzTpo4x+ZovBM1xMmwz1tPhE0AK6bYPiBHK7CTpqoOs="
     }
 }

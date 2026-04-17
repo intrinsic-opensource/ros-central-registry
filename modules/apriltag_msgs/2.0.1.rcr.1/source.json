@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/apriltag_msgs-release/archive/refs/tags/upstream/2.0.1.tar.gz",
     "strip_prefix": "apriltag_msgs-release-upstream-2.0.1",
     "overlay": {
-        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE="
+        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE=",
+        "msg/BUILD.bazel": "sha256-5eMm4NoXb2wsbJJnKzur+28EMoegN9SFIfI2TkYNG4A="
     }
 }

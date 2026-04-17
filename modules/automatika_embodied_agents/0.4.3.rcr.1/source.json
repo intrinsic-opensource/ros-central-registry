@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/automatika_embodied_agents-release/archive/refs/tags/upstream/0.4.3.tar.gz",
     "strip_prefix": "automatika_embodied_agents-release-upstream-0.4.3",
     "overlay": {
-        "BUILD.bazel": "sha256-qbbRHlSgDbq5RtUPJEk1s9IcsZ/g65oGoscLtMqEMdQ="
+        "BUILD.bazel": "sha256-qbbRHlSgDbq5RtUPJEk1s9IcsZ/g65oGoscLtMqEMdQ=",
+        "msg/BUILD.bazel": "sha256-5dPJqahFmMKF5yriTvhlO6Z6fF7R1wLT+a3db8cyC30="
     }
 }

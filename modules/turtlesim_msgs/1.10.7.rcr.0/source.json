@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/ros_tutorials-release/archive/refs/tags/upstream/1.10.7.tar.gz",
     "strip_prefix": "ros_tutorials-release-upstream-1.10.7/turtlesim_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-llGbCbkstRxexxmLWky0L+Xi0CtGBi4+l3RMXETFiK8="
+        "BUILD.bazel": "sha256-llGbCbkstRxexxmLWky0L+Xi0CtGBi4+l3RMXETFiK8=",
+        "srv/BUILD.bazel": "sha256-QuuCHethqERGnFccSvZ3HFd1jo4tv47eNac96P2hJIc=",
+        "action/BUILD.bazel": "sha256-C0xth0hkRwgWDeOxLeqcwEbKl2U3DBT3b9VHSnCJO2k=",
+        "msg/BUILD.bazel": "sha256-VSO9S9dmDXNNTuv/H+dXhxHZvZc6FL9aqu4X9GqQdwk="
     }
 }

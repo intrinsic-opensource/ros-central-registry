@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/game_controller_spl-release/archive/refs/tags/upstream/5.0.0.tar.gz",
     "strip_prefix": "game_controller_spl-release-upstream-5.0.0/game_controller_spl_interfaces",
     "overlay": {
-        "BUILD.bazel": "sha256-DcAj/yVLoOFyohUeTvrdBhVtj0KwNaJ4Wc1jd74Sz7k="
+        "BUILD.bazel": "sha256-DcAj/yVLoOFyohUeTvrdBhVtj0KwNaJ4Wc1jd74Sz7k=",
+        "msg/BUILD.bazel": "sha256-iyAHbkQz9pMWXDN2tmOyAgkCcopJ70uXAyGgsBn096M="
     }
 }

@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/yasmin-release/archive/refs/tags/upstream/4.2.3.tar.gz",
     "strip_prefix": "yasmin-release-upstream-4.2.3/yasmin_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-gaZba4DiVXJoY0HaZT6xSoXkGyzcheKDXEa+em7QS0A="
+        "BUILD.bazel": "sha256-gaZba4DiVXJoY0HaZT6xSoXkGyzcheKDXEa+em7QS0A=",
+        "msg/BUILD.bazel": "sha256-/Zdc5aKL4fV0R3wHERfuuabZLKRd6DHS10OIbWDIqIA="
     }
 }

@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/ackmerann_nlmpc-release/archive/refs/tags/upstream/1.0.3.tar.gz",
     "strip_prefix": "ackmerann_nlmpc-release-upstream-1.0.3/ackermann_nlmpc_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-Onhi1XsHlsyWR/s8oaQy/kpE2Kul2p6hWCzJvoLpSeQ="
+        "BUILD.bazel": "sha256-Onhi1XsHlsyWR/s8oaQy/kpE2Kul2p6hWCzJvoLpSeQ=",
+        "msg/BUILD.bazel": "sha256-WkTB16CEo8YPlhWzFf3nr2bx0i/zFz2yS82U0UEbe8k="
     }
 }

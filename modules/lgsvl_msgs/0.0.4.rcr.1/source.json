@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/lgsvl_msgs-release/archive/refs/tags/upstream/0.0.4.tar.gz",
     "strip_prefix": "lgsvl_msgs-release-upstream-0.0.4",
     "overlay": {
-        "BUILD.bazel": "sha256-hEQlymfzdP53N3vwAeUKGL4LdloCojsiPHjI8P38eiM="
+        "BUILD.bazel": "sha256-hEQlymfzdP53N3vwAeUKGL4LdloCojsiPHjI8P38eiM=",
+        "msg/BUILD.bazel": "sha256-0EjoVUGvasQ8WE/j2jWril/tOpjRp/UQzJDuhrbVMq4="
     }
 }

@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/autoware_adapi_msgs-release/archive/refs/tags/upstream/1.9.0.tar.gz",
     "strip_prefix": "autoware_adapi_msgs-release-upstream-1.9.0/autoware_adapi_version_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-90BJ6EMs6oqp1szgpvr8Axuyu1rjG+a6xMLOTHU04h0="
+        "BUILD.bazel": "sha256-90BJ6EMs6oqp1szgpvr8Axuyu1rjG+a6xMLOTHU04h0=",
+        "srv/BUILD.bazel": "sha256-Jfd2PnqYQz3ylls0H6PONsCFhWdEl0hpdqXHxAzV8dc="
     }
 }

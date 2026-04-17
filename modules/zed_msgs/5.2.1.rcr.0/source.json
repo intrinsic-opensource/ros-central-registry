@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/zed-ros2-interfaces-release/archive/refs/tags/upstream/5.2.1.tar.gz",
     "strip_prefix": "zed-ros2-interfaces-release-upstream-5.2.1",
     "overlay": {
-        "BUILD.bazel": "sha256-k9UbfQ0qQba57S4cOdtvvHys5g+E7Cpnv4BYhcGF3B4="
+        "BUILD.bazel": "sha256-k9UbfQ0qQba57S4cOdtvvHys5g+E7Cpnv4BYhcGF3B4=",
+        "srv/BUILD.bazel": "sha256-SMkER16sl3KIVnVauXP5RVypV2fgv+p62I84/YP6Krs=",
+        "msg/BUILD.bazel": "sha256-rN+xTgEmGLpasxssctuvtYyFMcv9JSKa+ENZtgdJznE="
     }
 }

@@ -4,8 +4,5 @@
     "strip_prefix": "ament_lint-release-upstream-0.20.4/ament_flake8",
     "overlay": {
         "BUILD.bazel": "sha256-RF5IKXWrqlq7UvHSUJ0S/sneR83olPBs1NV2MP3Y98A="
-    },
-    "patches": {
-        "ament_flake8__main__py.patch": "sha256-LAhmre0dh1Yn5qb8E2bkfJ92jOgVj6ktuBkr2zenfgc="
     }
 }

@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/aruco_ros-release/archive/refs/tags/upstream/5.0.5.tar.gz",
     "strip_prefix": "aruco_ros-release-upstream-5.0.5/aruco_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-mkbI8SCeMYN2yqg3LVKsCeiTa0X3l0J38/pdjY6RR8o="
+        "BUILD.bazel": "sha256-mkbI8SCeMYN2yqg3LVKsCeiTa0X3l0J38/pdjY6RR8o=",
+        "msg/BUILD.bazel": "sha256-PgM6tJy1SDf/X38oH/lzONeqCQnPe1lhwqF3VNJ87IA="
     }
 }

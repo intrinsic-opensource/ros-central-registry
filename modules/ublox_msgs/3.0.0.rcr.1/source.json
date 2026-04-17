@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/ublox-release/archive/refs/tags/upstream/3.0.0.tar.gz",
     "strip_prefix": "ublox-release-upstream-3.0.0/ublox_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-Btv7j0ETOzPTzbjYYgTMPKIC9MFQxb1YrhtyUqdIPss="
+        "BUILD.bazel": "sha256-Btv7j0ETOzPTzbjYYgTMPKIC9MFQxb1YrhtyUqdIPss=",
+        "msg/BUILD.bazel": "sha256-MFxZIowU73+mcLhQeZUaIDq3IqfcA98A5UUoUbIdqak="
     }
 }

@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/rosbridge_suite-release/archive/refs/tags/upstream/3.0.2.tar.gz",
     "strip_prefix": "rosbridge_suite-release-upstream-3.0.2/rosapi_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-Wmri8o8thcOuOh/BSvloneL4xzqKxMdrBbvf+2ox7xQ="
+        "BUILD.bazel": "sha256-Wmri8o8thcOuOh/BSvloneL4xzqKxMdrBbvf+2ox7xQ=",
+        "srv/BUILD.bazel": "sha256-zxAlbnvzQz7V0ta/B+yi2iU7/kUTqoCTi52KvOaX0fI=",
+        "msg/BUILD.bazel": "sha256-DcrORxaPfxh70xd0QNEGHzzsCnsnk8WojsFudx51nt4="
     }
 }

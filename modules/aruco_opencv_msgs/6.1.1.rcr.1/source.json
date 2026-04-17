@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/aruco_opencv-release/archive/refs/tags/upstream/6.1.1.tar.gz",
     "strip_prefix": "aruco_opencv-release-upstream-6.1.1/aruco_opencv_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-b+Jd3LO+qG8rou7lpK2KYjvxXjZZ7bJiKPWGEGU0Mok="
+        "BUILD.bazel": "sha256-b+Jd3LO+qG8rou7lpK2KYjvxXjZZ7bJiKPWGEGU0Mok=",
+        "msg/BUILD.bazel": "sha256-+y2WG/DGFVXIlieZBjfop865OKNAHCzcsMcySby+zRU="
     }
 }

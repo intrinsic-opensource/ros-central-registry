@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/rcss3d_agent-release/archive/refs/tags/upstream/0.4.1.tar.gz",
     "strip_prefix": "rcss3d_agent-release-upstream-0.4.1/rcss3d_agent_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-Wmri8o8thcOuOh/BSvloneL4xzqKxMdrBbvf+2ox7xQ="
+        "BUILD.bazel": "sha256-Wmri8o8thcOuOh/BSvloneL4xzqKxMdrBbvf+2ox7xQ=",
+        "msg/BUILD.bazel": "sha256-9Rvw70f/C9yKGRHM+2XN843IdA5nD+35Tf53RwxSjfo="
     }
 }

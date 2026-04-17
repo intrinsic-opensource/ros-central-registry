@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/septentrio_gnss_driver_ros2-release/archive/refs/tags/upstream/1.4.6.tar.gz",
     "strip_prefix": "septentrio_gnss_driver_ros2-release-upstream-1.4.6",
     "overlay": {
-        "BUILD.bazel": "sha256-ybZ4Th/dNxIEJUZB2eIYoZxYlX1z74EFLBt/TgIgn1U="
+        "BUILD.bazel": "sha256-ybZ4Th/dNxIEJUZB2eIYoZxYlX1z74EFLBt/TgIgn1U=",
+        "msg/BUILD.bazel": "sha256-0cemMhCH3CDb6cSnIyhS/TQ+77sdNc1/CyyKXZoP0po="
     }
 }

@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/sick_safevisionary_ros2-release/archive/refs/tags/upstream/1.0.3.tar.gz",
     "strip_prefix": "sick_safevisionary_ros2-release-upstream-1.0.3/sick_safevisionary_interfaces",
     "overlay": {
-        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE="
+        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE=",
+        "msg/BUILD.bazel": "sha256-ADG7dXjYp8Vqbb9XAeRNiHZlAlO0z+okBMm7Yr6rcz0="
     }
 }

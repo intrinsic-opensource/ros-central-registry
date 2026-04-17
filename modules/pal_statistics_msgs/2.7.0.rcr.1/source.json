@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/pal_statistics-release/archive/refs/tags/upstream/2.7.0.tar.gz",
     "strip_prefix": "pal_statistics-release-upstream-2.7.0/pal_statistics_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE="
+        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE=",
+        "msg/BUILD.bazel": "sha256-iQiwxXR5iVRvlKuC53CXDaLqV0SPQ+7a/yR4WchqocU="
     }
 }

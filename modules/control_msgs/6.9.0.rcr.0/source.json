@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/control_msgs-release/archive/refs/tags/upstream/6.9.0.tar.gz",
     "strip_prefix": "control_msgs-release-upstream-6.9.0/control_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-QcK1vYYn+n+qx/tczX3SJZ7tECM6MAnHolYC1NeT9eI="
+        "BUILD.bazel": "sha256-QcK1vYYn+n+qx/tczX3SJZ7tECM6MAnHolYC1NeT9eI=",
+        "srv/BUILD.bazel": "sha256-iwkVqoLjKnf7AP3VxFP4HDNFfmIkjO9/AQDEIPetVJk=",
+        "action/BUILD.bazel": "sha256-jfCcn9EGfOdsZ0WF4eBsr8HJuSnd4camhsibktZNsJA=",
+        "msg/BUILD.bazel": "sha256-oczt9IY/ySCW/eMTOFexuzTTgXwKcJBlhF0hn1ZXT8o="
     }
 }

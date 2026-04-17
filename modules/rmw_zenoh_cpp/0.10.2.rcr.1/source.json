@@ -3,7 +3,8 @@
     "url": "https://github.com/ros2-gbp/rmw_zenoh-release/archive/refs/tags/upstream/0.10.2.tar.gz",
     "strip_prefix": "rmw_zenoh-release-upstream-0.10.2/rmw_zenoh_cpp",
     "overlay": {
-        "BUILD.bazel": "sha256-dRPWDhE5Xek6HVidjqbezcEsIsR+1O1smAVvNhIS6tw="
+        "BUILD.bazel": "sha256-dRPWDhE5Xek6HVidjqbezcEsIsR+1O1smAVvNhIS6tw=",
+        "src/detail/rmw_context_impl_s.cpp.orig": "sha256-rfvZT7I4eLl40CLEUlTdd/1KMn2QgFK3cUKcUQ9cMSY="
     },
     "patches": {
         "src__detail__rmw_context_impl_s__cpp.patch": "sha256-yW7prXxsbLJEsh0SMl95fd2V1MZvOvWKDsFTdkqc/dI="

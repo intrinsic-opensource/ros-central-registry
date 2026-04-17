@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/bond_core-release/archive/refs/tags/upstream/4.1.2.tar.gz",
     "strip_prefix": "bond_core-release-upstream-4.1.2/bond",
     "overlay": {
-        "BUILD.bazel": "sha256-JcqUsJ17BqhLUpHpv52UojeqjphGRl7ljtG1SJ5wNnA="
+        "BUILD.bazel": "sha256-JcqUsJ17BqhLUpHpv52UojeqjphGRl7ljtG1SJ5wNnA=",
+        "msg/BUILD.bazel": "sha256-hPtPVkps0M14OZs2FdL5hZ8kLYlw2inGoLewiVlN3Ow="
     }
 }

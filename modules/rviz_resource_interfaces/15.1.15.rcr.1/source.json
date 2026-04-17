@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/rviz-release/archive/refs/tags/upstream/15.1.15.tar.gz",
     "strip_prefix": "rviz-release-upstream-15.1.15/rviz_resource_interfaces",
     "overlay": {
-        "BUILD.bazel": "sha256-BHJQTFN0dWbL2H7m0kF/Yl2kn4zUu8OqimFZmcCE72g="
+        "BUILD.bazel": "sha256-BHJQTFN0dWbL2H7m0kF/Yl2kn4zUu8OqimFZmcCE72g=",
+        "srv/BUILD.bazel": "sha256-LOoOG6xp9Lhp1bWsKA4vnwYBS7Aj/dS5ZEbv+AeBYzg="
     }
 }

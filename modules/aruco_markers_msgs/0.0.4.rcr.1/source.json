@@ -3,6 +3,7 @@
     "url": "https://github.com/namo-robotics/aruco_markers-release/archive/refs/tags/upstream/0.0.4.tar.gz",
     "strip_prefix": "aruco_markers-release-upstream-0.0.4/aruco_markers_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-mkbI8SCeMYN2yqg3LVKsCeiTa0X3l0J38/pdjY6RR8o="
+        "BUILD.bazel": "sha256-mkbI8SCeMYN2yqg3LVKsCeiTa0X3l0J38/pdjY6RR8o=",
+        "msg/BUILD.bazel": "sha256-QmUA4oYLoKfe2vtjV4hNwVOFAaeNq0s0ZP1axa1pKFg="
     }
 }

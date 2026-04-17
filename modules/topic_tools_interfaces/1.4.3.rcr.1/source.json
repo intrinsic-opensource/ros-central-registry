@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/topic_tools-release/archive/refs/tags/upstream/1.4.3.tar.gz",
     "strip_prefix": "topic_tools-release-upstream-1.4.3/topic_tools_interfaces",
     "overlay": {
-        "BUILD.bazel": "sha256-aAsezbcv24ZbDv8Kdnb4IsMkAiysGpc9kaT5+HxOOs4="
+        "BUILD.bazel": "sha256-aAsezbcv24ZbDv8Kdnb4IsMkAiysGpc9kaT5+HxOOs4=",
+        "srv/BUILD.bazel": "sha256-5mn7QLWYcAJ9wPx5lyACRoWDPdj1OgNX8S5tuy3H7pk="
     }
 }

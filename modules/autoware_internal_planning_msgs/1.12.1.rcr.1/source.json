@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/autoware_internal_msgs-release/archive/refs/tags/upstream/1.12.1.tar.gz",
     "strip_prefix": "autoware_internal_msgs-release-upstream-1.12.1/autoware_internal_planning_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-LEIYlNgsfdN1IIMgcrqhJ8dnMrPKq0G/2hszQpqiAuY="
+        "BUILD.bazel": "sha256-LEIYlNgsfdN1IIMgcrqhJ8dnMrPKq0G/2hszQpqiAuY=",
+        "srv/BUILD.bazel": "sha256-ChjuKT84UEcsT3q7tiDGNfD13gppL4iWeD2eq80BOUQ=",
+        "msg/BUILD.bazel": "sha256-NJhf3w9HBQRVf2Osl6r6+rwNQ7pbE6sUWGuKoG+MX6U="
     }
 }

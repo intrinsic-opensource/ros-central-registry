@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/actuator_msgs-release/archive/refs/tags/upstream/0.0.1.tar.gz",
     "strip_prefix": "actuator_msgs-release-upstream-0.0.1",
     "overlay": {
-        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE="
+        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE=",
+        "msg/BUILD.bazel": "sha256-ehvnIGBNnVCXLiqraExXpLxLFb2VoM2RSIQMNwgDYGw="
     }
 }

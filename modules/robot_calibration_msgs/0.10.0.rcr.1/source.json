@@ -3,6 +3,8 @@
     "url": "https://github.com/ros2-gbp/robot_calibration-release/archive/refs/tags/upstream/0.10.0.tar.gz",
     "strip_prefix": "robot_calibration-release-upstream-0.10.0/robot_calibration_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-z5+Jx/maHQagzy3ZpBfCy6jrovoph9czMEoGhWjsQWk="
+        "BUILD.bazel": "sha256-z5+Jx/maHQagzy3ZpBfCy6jrovoph9czMEoGhWjsQWk=",
+        "action/BUILD.bazel": "sha256-YA4bbfAw+LkZYsNlYQVDRxdnIir7dPhODGXzabZfdxw=",
+        "msg/BUILD.bazel": "sha256-CEk467GcBItxcG3DxdUcx66rOC0wAbwC7P+TCAXENIM="
     }
 }

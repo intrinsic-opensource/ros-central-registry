@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/joystick_drivers-release/archive/refs/tags/upstream/3.3.0.tar.gz",
     "strip_prefix": "joystick_drivers-release-upstream-3.3.0/wiimote_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-OmQ5zy6G8uVpJ0kjOtNfyKAxheVgbC9Vs49I8abSdew="
+        "BUILD.bazel": "sha256-OmQ5zy6G8uVpJ0kjOtNfyKAxheVgbC9Vs49I8abSdew=",
+        "msg/BUILD.bazel": "sha256-gcnl2DusCHvAmmbX3rG8vfCtnU+SsNyERboJFbQXQUY="
     }
 }

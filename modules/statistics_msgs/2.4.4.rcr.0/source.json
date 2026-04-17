@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/upstream/2.4.4.tar.gz",
     "strip_prefix": "rcl_interfaces-release-upstream-2.4.4/statistics_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-jb+B1jMrNTuEd3xMGH2mpWb8N17C/gAFd8NArmfLTzk="
+        "BUILD.bazel": "sha256-jb+B1jMrNTuEd3xMGH2mpWb8N17C/gAFd8NArmfLTzk=",
+        "msg/BUILD.bazel": "sha256-0/gT7El3CotFV3rAYWT/Ya0wD32Ijhx5OyZteN5cgX0="
     }
 }

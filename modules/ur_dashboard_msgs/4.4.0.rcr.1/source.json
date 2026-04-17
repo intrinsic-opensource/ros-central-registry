@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/Universal_Robots_ROS2_Driver-release/archive/refs/tags/upstream/4.4.0.tar.gz",
     "strip_prefix": "Universal_Robots_ROS2_Driver-release-upstream-4.4.0/ur_dashboard_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-3HMWWSjQEZOcDut4QXWWDeNpONF4Ys5ECiamXPpISAI="
+        "BUILD.bazel": "sha256-3HMWWSjQEZOcDut4QXWWDeNpONF4Ys5ECiamXPpISAI=",
+        "srv/BUILD.bazel": "sha256-Paw37b12iGtXiCJpAJoHGZQQQT26gbEV4pmQJAX1H8g=",
+        "action/BUILD.bazel": "sha256-gtmZjBPxyrUKelpGJTmk5+vqZocev/OvuV6GCo8uumw=",
+        "msg/BUILD.bazel": "sha256-4toFEivn5ElL4LAhY4JIA+H2xnelWGe+P3UOcmhXEzY="
     }
 }

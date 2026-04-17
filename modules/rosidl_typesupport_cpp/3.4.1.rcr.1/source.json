@@ -6,7 +6,8 @@
         "defs.bzl": "sha256-BU3o0AR7xFKMeV//2C7G+lZlfOf4Ansne2SrVebVnS0=",
         "types.bzl": "sha256-/qjld705v4IIkmLSBnn76va8JjMoO8N1EPkvM9I3XR8=",
         "BUILD.bazel": "sha256-3/nxK7mpU5PKOTu5gBgf+LUO90j2KQBjq1melMwOh8k=",
-        "aspects.bzl": "sha256-8fynzwnrwNAEaBI7IanvYp5ksLVKl1js6eZszuBlFYs="
+        "aspects.bzl": "sha256-8fynzwnrwNAEaBI7IanvYp5ksLVKl1js6eZszuBlFYs=",
+        "test/msg/BUILD.bazel": "sha256-9nEFAT5vzZJtPwqJCT1X0YOlhIJlJ2/6iDVJwmQCi5o="
     },
     "patches": {
         "rosidl_typesupport_cpp____init____py.patch": "sha256-xEfG0aG8LOFQ0QqbqnAP7EiCis+7ytSn8P4+EVtQjtI=",

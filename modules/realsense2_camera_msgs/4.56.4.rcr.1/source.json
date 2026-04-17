@@ -3,6 +3,9 @@
     "url": "https://github.com/ros2-gbp/realsense-ros-release/archive/refs/tags/upstream/4.56.4.tar.gz",
     "strip_prefix": "realsense-ros-release-upstream-4.56.4/realsense2_camera_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-9Fpj+ltt2Vkw/Z/5b8vtmmUqwjBybTUBmps4ijSTuSE="
+        "BUILD.bazel": "sha256-9Fpj+ltt2Vkw/Z/5b8vtmmUqwjBybTUBmps4ijSTuSE=",
+        "srv/BUILD.bazel": "sha256-7uBdSatYcmmep6UBSVEmcomlaPka3hZ3YZWrYoKZ9GE=",
+        "action/BUILD.bazel": "sha256-A8NmxfqG9eyDz3Qy16rF7E5RLoVRPKH0mNrRnEKqZjY=",
+        "msg/BUILD.bazel": "sha256-QBG/wEczv51KbEG+LvOGG2kIWeM42/oMrdtVQRmQAik="
     }
 }

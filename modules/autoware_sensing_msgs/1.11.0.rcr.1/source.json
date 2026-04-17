@@ -3,6 +3,7 @@
     "url": "https://github.com/ros2-gbp/autoware_msgs-release/archive/refs/tags/upstream/1.11.0.tar.gz",
     "strip_prefix": "autoware_msgs-release-upstream-1.11.0/autoware_sensing_msgs",
     "overlay": {
-        "BUILD.bazel": "sha256-XtnIj2Sk90ThwiYCgWIY1O/IbCiyqIVIY0q75uGi1Wo="
+        "BUILD.bazel": "sha256-XtnIj2Sk90ThwiYCgWIY1O/IbCiyqIVIY0q75uGi1Wo=",
+        "msg/BUILD.bazel": "sha256-AZB8I8R/19kbEbEcGUAAdpYwOS2uGmJEIfMfpJJsaJM="
     }
 }

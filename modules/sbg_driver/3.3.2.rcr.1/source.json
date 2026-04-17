@@ -3,6 +3,7 @@
     "url": "https://github.com/SBG-Systems/sbg_ros2-release/archive/refs/tags/upstream/3.3.2.tar.gz",
     "strip_prefix": "sbg_ros2-release-upstream-3.3.2",
     "overlay": {
-        "BUILD.bazel": "sha256-0FsFFalWgS3kkCSplxeU3+pG7BZr5MfRZ4GAc+stLAE="
+        "BUILD.bazel": "sha256-0FsFFalWgS3kkCSplxeU3+pG7BZr5MfRZ4GAc+stLAE=",
+        "msg/BUILD.bazel": "sha256-6Y6WWld6UdPHiplEStNR9vATjFA3sZvMgHYzB88ahA0="
     }
 }
