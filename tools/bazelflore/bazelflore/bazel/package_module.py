@@ -47,8 +47,6 @@ class PackageModule(Module):
             module_name=module_name,
             module_version=module_version,
             module_url=module_url,
-            package_version="{0}.{1}".format(release_distro, module_version)
+            package_version="{0}".format(module_version)
         )
 
-        # All packages must use rosdistro as a dependency.
-        self.rcr_deps["rosdistro"] = self.release_date

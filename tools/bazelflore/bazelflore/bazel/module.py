@@ -87,6 +87,9 @@ class Module:
         self.overlays = {}
         self.patches = {}
 
+        # Custom MODULE.bazel file content.
+        self.custom_module_bazel = None
+
     def _download_package_tarball(self):
         """
         Downloads the tarball of a specific commit from a GitHub repository.
@@ -103,18 +106,15 @@ class Module:
                 raise Exception("Failed to download tarball: {} :: {}".format(self.module_url, exc))
         return cache_file
 
-    def _process_tarball(self) -> Tuple[str, str, Dict[str, str]]:
+    def _process_tarball(self) -> Tuple[str, str]:
         """
         Generates the integrity hash and strip prefix for the current Bazel module.
         """
         tarball = self._download_package_tarball()
         integrity =  calculate_integrity_hash_for_file(tarball)
         strip_prefix = f"rosdistro-{self.release_distro}-{self.release_date}"
-        bcr_language_deps = {}
         try:
             with tarfile.open(tarball, "r:*") as tar:
-                # Find the package.xml containing the desired package_name,
-                # and the parent directory will be the strip prefix.
                 for member in tar:
                     if member.name.endswith("package.xml"):
                         f = tar.extractfile(member)
@@ -125,19 +125,9 @@ class Module:
                                 if strip_prefix == ".":
                                     strip_prefix = ""
                                 break
-                # Iterate over all members in the <strip_prefix> folder in the tar
-                # file to obtain the likely language dependencies.
-                for member in tar:
-                    if member.name.startswith(strip_prefix):
-                        if member.name.lower().endswith(CC_FILE_SUFFIXES):
-                            bcr_language_deps.update(CC_BCR_DEPS)
-                        if member.name.lower().endswith(PY_FILE_SUFFIXES):
-                            bcr_language_deps.update(PY_BCR_DEPS)
-                        if member.name.lower().endswith(RS_FILE_SUFFIXES):
-                            bcr_language_deps.update(RS_BCR_DEPS)
         except Exception as e:
             print(f"Warning: failed to read tarball {tarball} for {self.module_name}: {e}")
-        return integrity, strip_prefix, bcr_language_deps
+        return integrity, strip_prefix
 
     def _generate_overlay(self):
         """
@@ -196,11 +186,21 @@ class Module:
         if add_version_to_metadata_json(self.metadata_json_path, self.package_version):
             return
 
+        # Derive from the homepage URL from the GBP repo.
+        homepage_url = self.module_url
+        parsed = urllib.parse.urlparse(homepage_url)
+        if parsed.netloc == "github.com":
+            path_parts = parsed.path.strip('/').split('/')
+            if len(path_parts) >= 2:
+                new_path = '/' + '/'.join(path_parts[:2])
+                homepage_url = urllib.parse.urlunparse((parsed.scheme, parsed.netloc, new_path, '', '', ''))
+
+        # Construct the metadata
         metadata = {
-            "homepage": self.module_url,
+            "homepage": homepage_url,
             "maintainers": [
                 {
-                    "email": "simmers@intrinsic.ai",
+                    "email": "simmers@google.com",
                     "github": "asymingt",
                     "github_user_id": 37671,
                     "name": "Andrew Symington"
@@ -215,7 +215,7 @@ class Module:
             json.dump(metadata, f, indent=4)
             f.write('\n')
 
-    def _write_module_dot_bazel(self, bcr_language_deps : Dict[str, str]):
+    def _write_module_dot_bazel(self):
         """
         Generates the MODULE.bazel contents for the current Bazel module.
         """
@@ -223,96 +223,47 @@ class Module:
         ret += "# ROS package information\n"
         ret += 'module(\n'
         ret += '    name = "{0}",\n'.format(self.module_name)
-        ret += '    version = "{0}.{1}",\n'.format(self.release_distro, self.module_version)
+        ret += '    version = "{0}",\n'.format(self.module_version)
         ret += '    bazel_compatibility = [">=7.2.1"],\n'
         ret += ')\n'
-        self.bcr_deps.update(bcr_language_deps)
         if self.bcr_deps:
             ret += '\n# BCR dependencies\n'
-            for dep in sorted(self.bcr_deps.keys()):
+            for dep_name in sorted(self.bcr_deps.keys()):
                 ret += 'bazel_dep(name = "{0}", version = "{1}")\n'.format(
-                    dep, self.bcr_deps[dep])
-        if self.rcr_deps:
+                    dep_name, self.bcr_deps[dep_name])
+        if self.custom_module_bazel:
+            ret += self.custom_module_bazel
+        elif self.rcr_deps:
             ret += '\n# RCR Dependencies\n'
-            for dep in sorted(self.rcr_deps.keys()):
-                ret += 'bazel_dep(name = "{0}", version = "{1}.{2}")\n'.format(
-                    dep, self.release_distro, self.rcr_deps[dep])
+            for dep_name in sorted(self.rcr_deps.keys()):
+                ret += 'bazel_dep(name = "{0}", version = "{1}")\n'.format(
+                    dep_name, self.rcr_deps[dep_name])
+            if self.module_name != 'rosdistro':
+                ret += """
+bazel_dep(name = "rosdistro", version = "{0}.{1}")
 
+pip_ros = use_extension("@rosdistro//python:defs.bzl", "pip_ros")
+use_repo(pip_ros, "pip_ros")
+""".format(self.release_distro, self.release_date)
         self.module_file_path.parent.mkdir(parents=True, exist_ok=True)
 
         with open(self.module_file_path, 'w') as f:
             f.write(ret)
 
-    def add_dependency(self, name: str):
+    def add_dependency(self, name: str, version: str):
         """
         Add a dependency to the current Bazel module. The input name is
         a rosdep key, and the logic in this function decides whether it
         should be mapped to a BCR module, a RCR module, or be omitted
         entirely. It also resolves the correction version for the dep.
         """
-
-        # The rosdep key may map to ne or more BCR modules. If this
-        # ends up being empty, then we assume the dep is RCR.
-        bcr_names = []
-
-        # Test a bunch of different conditions to determine what to do.
-        if name in ROS_TO_BAZEL_MAPPING:
-            if ROS_TO_BAZEL_MAPPING[name] is None:
-                # This means that we intentionally ignore this dep
-                return
-            bcr_names.extend(ROS_TO_BAZEL_MAPPING[name])
-        elif name in self.ros_sources.keys():
-            # This avoid the next conditionals catching ROS packages
-            # incorrectly. Examples of the false matches would be:
-            # - boost_geometry_util
-            # - pcl_conversions
-            # - pcl_msgs
-            # - pcl_ros
-            pass
-        elif name.startswith("libboost-") \
-            or name.startswith("boost"):
-            bcr_names.extend(BOOST_DEPS)
-        elif name.startswith("libqt5") \
-            or name.startswith("qt5") \
-            or name.startswith("qtbase5") \
-            or name.startswith("qttools5") \
-            or name.startswith("qtdeclarative5") \
-            or name.startswith("qtmultimedia5") \
-            or name.startswith("pyqt5"):
-            bcr_names.extend(QT5_DEPS)
-        elif name.startswith("libqt6") \
-            or name.startswith("qt6") \
-            or name.startswith("qtbase6") \
-            or name.startswith("qttools6") \
-            or name.startswith("qtdeclarative6") \
-            or name.startswith("qtmultimedia6") \
-            or name.startswith("pyqt6"):
-            bcr_names.extend(QT6_DEPS)
-        elif name.startswith("pcl") \
-            or name.startswith("libpcl"):
-            bcr_names.extend(PCL_DEPS)
-        elif name.startswith("python3-") \
-            or name.startswith("python-"):
-            bcr_names.extend(PYTHON_DEPS)
-
-        # First, check to see if we should be adding BCR deps.
-        if bcr_names:
-            for bcr_name in bcr_names:
-                # TODO(asymingt) - make this a bit more robust by using
-                # MVS to resolve the nearest version.
-                self.bcr_deps[bcr_name] = self.bcr_sources[bcr_name].versions[-1]
-        # Second, if this is a ROS package, add it as a dependency.
-        elif name in self.ros_sources:
-            self.rcr_deps[name] = "{0}".format(self.ros_sources[name].version)
-        # If we get there, then there's been a problem.
-        else:
-            print(f"Unknown key: {name}")
+        self.rcr_deps[name] = version
 
     def generate_module(self):
         """
         Generate the module.
         """
-        integrity, strip_prefix, bcr_language_deps = self._process_tarball()
-        self._write_module_dot_bazel(bcr_language_deps)
+        integrity, strip_prefix = self._process_tarball()
+        self._write_module_dot_bazel()
         self._write_source_json(integrity, strip_prefix)
         self._write_metadata_json()

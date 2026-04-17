@@ -29,7 +29,7 @@ from typing import Dict
 URLS = (
     "http://repos.ros.org/repos/ros_bootstrap/dists/{distro}/main/binary-{architecture}/Packages.gz",
     "http://packages.ros.org/ros2/ubuntu/dists/{distro}/main/binary-{architecture}/Packages.gz",
-    "https://snapshot.ubuntu.com/ubuntu/{snapshot_id}/dists/{suite}/{component}/binary-{architecture}/Packages.gz",
+    "http://archive.ubuntu.com/ubuntu/dists/{suite}/{component}/binary-{architecture}/Packages.gz",
 )
 
 COMPONENTS = ["main", "restricted", "universe", "multiverse"]

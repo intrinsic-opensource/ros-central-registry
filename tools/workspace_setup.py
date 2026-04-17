@@ -18,9 +18,10 @@ Setup a new workspace for a RCR patch set.
 
 import argparse
 import datetime
+import re
 from pathlib import Path
 from termcolor import COLORS, HIGHLIGHTS
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Set
 from yaspin import yaspin
 from yaspin.spinners import Spinners
 from bazelflore.utils.bzlmod import increment_version
@@ -28,10 +29,46 @@ from bazelflore.utils.bzlmod import scan_module_for_dependencies
 from bazelflore.utils.bzlmod import find_latest_patch
 from bazelflore.utils.copyright import get_copyright_header
 
+BAZEL_VERSION = "9.0.2"
+
+VARIANTS = {
+    "core" : "ros_core",
+    "base" : "ros_base",
+    "desktop" : "desktop",
+    "desktop_full" : "desktop_full",
+    "perception" : "perception",
+    "simulation" : "simulation",
+}           
+
+def calculate_packages_for_variant(module_dir : Path, start_name: str, start_version: Path) -> Set[str]:
+    """
+    Performs a BFS traversal starting from the given module name and version to collect
+    all transitive dependencies.
+    """
+    visited = set()
+    queue = [(start_name, module_dir / start_name / start_version / 'MODULE.bazel')]
+    while queue:
+        current_name, current_file = queue.pop(0)
+        if current_name in visited:
+            continue
+        visited.add(current_name)
+        if not current_file.exists():
+            continue
+        with open(current_file, "r") as f:
+            content = f.read()            
+            deps = re.findall(r'bazel_dep\(name\s*=\s*"([^"]+)"\s*,\s*version\s*=\s*"([^"]+)"\)', content)
+            for next_name, next_version in deps:
+                next_file = module_dir / next_name / next_version / 'MODULE.bazel'
+                if next_file.exists():
+                    if next_name not in visited:
+                        queue.append((next_name, next_file))
+    return sorted(list(visited))
+
 def _setup_workspace(
     workspace_dir: Path,
     module_name: str,
     module_version: str,
+    variants: Dict[str, List[str]],
     packages: Dict[str, str],
     vendor: Optional[List[str]] = None,
     skip_if_exists: bool = False,
@@ -52,36 +89,52 @@ def _setup_workspace(
     # Create a .bazelversion file
     dot_bazelversion_file = workspace_dir / ".bazelversion"
     with open(dot_bazelversion_file, 'w') as f:
-        f.write("9.0.0")
+        f.write(BAZEL_VERSION)
 
     # Create a BUILD.bazel file
     build_dot_bazel_file = workspace_dir / "BUILD.bazel"
     with open(build_dot_bazel_file, 'w') as f:
         f.write(get_copyright_header())
-        
+
+    # Create configuration files for each ROS variant.
+    for variant_name, variant_packages in variants.items():
+        configuration_file = workspace_dir / f"ros-{variant_name}.txt"
+        with open(configuration_file, 'w') as f:
+            f.write("\n".join([f"@{p}//..." for p in variant_packages]))
+
     # Create a .bazelrc file
     dot_bazelrc_file = workspace_dir / ".bazelrc"
     with open(dot_bazelrc_file, 'w') as f:
-        repo_args = [
-            f"\t--repo=@{p} \\" for p in sorted(packages.keys())
-            if vendor is None or p in vendor
-        ]
+        repo_args = "\n".join(
+            [
+                f"\t--repo=@{p} \\"
+                for p in sorted(packages.keys())
+                if vendor is None or p in vendor
+            ]
+        )
+        variant_args = "\n".join(
+            [
+                f"common:{k} --target_pattern_file=ros-{k}.txt"
+                for k in variants.keys()
+            ]
+        )
         f.write(get_copyright_header())
         f.write("""
-common --registry=file://%workspace%/../.. --registry=https://bcr.bazel.build
+common --check_direct_dependencies=off
+common --registry=file://%workspace%/../..  --registry=https://bcr.bazel.build
 common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
 common --remote_upload_local_results=false
 common --remote_cache_compression=true
+common --test_env=ROS_DISTRO="rolling"
 common --test_env=ROS_HOME=".ros"
+common --test_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --incompatible_default_to_explicit_init_py
 common --incompatible_strict_action_env
-test --sandbox_default_allow_network=true
-build --cxxopt="-std=c++17"
-build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
+test --sandbox_default_allow_network=false
 build --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
-common:distribution --target_pattern_file=distribution.txt
-vendor --vendor_dir=vendor {0}
-""".format("\n".join(repo_args)))
+{0}
+vendor --vendor_dir=vendor {1}
+""".format(variant_args, repo_args))
 
     # Create a VENDOR.bazel file
     vendor_dot_bazel = workspace_dir / "vendor" / "VENDOR.bazel"
@@ -90,13 +143,6 @@ vendor --vendor_dir=vendor {0}
         for package in sorted(packages.keys()):
             if vendor is None or package in vendor:
                 f.write("pin(\"@@{0}\")\n".format(package))
-
-    # Create a distribution.txt file
-    distribution_txt_file = workspace_dir / "distribution.txt"
-    with open(distribution_txt_file, 'w') as f:
-        for package in sorted(packages.keys()):
-            if vendor is None or package in vendor:
-                f.write("@{0}//...\n".format(package))
 
     # Create a MODULE.bazel file
     module_dot_bazel_files = workspace_dir / "MODULE.bazel"
@@ -108,15 +154,46 @@ vendor --vendor_dir=vendor {0}
 )
 
 # BCR deps
+bazel_dep(name = "aspect_rules_py", version = "1.11.2")
+bazel_dep(name = "bazel_skylib", version = "1.9.0")
+bazel_dep(name = "cmake_configure_file", version = "0.1.7")
+bazel_dep(name = "google_benchmark", version = "1.9.5")
+bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
+bazel_dep(name = "llvm", version = "0.7.1")
 bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "protobuf", version = "34.1")
+bazel_dep(name = "rules_cc", version = "0.2.17")
+bazel_dep(name = "rules_pkg", version = "1.2.0")
+bazel_dep(name = "rules_python", version = "1.9.0")
+bazel_dep(name = "rules_qt", version = "0.0.6")
+bazel_dep(name = "rules_rs", version = "0.0.56")
+bazel_dep(name = "rules_rust", version = "0.69.0")
+bazel_dep(name = "rules_shell", version = "0.7.1")
 bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 
+# Setup C and C++
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(llvm_version = "20.1.7")
 use_repo(llvm, "llvm_toolchain")
 
 register_toolchains("@llvm_toolchain//:all")
+
+# Setup python
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    is_default = True,
+    python_version = "3.12",
+)
+
+# Setup pip
+pip_ros = use_extension("@rosdistro//python:defs.bzl", "pip_ros")
+use_repo(pip_ros, "pip_ros")
+
+# Setup rust
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.85.0"],
+)
 
 # RCR deps
 """)
@@ -175,13 +252,25 @@ def main():
         ref_dir = args.working_directory / "modules" / "ros" / args.release
         ref_packages = scan_module_for_dependencies(ref_dir / 'MODULE.bazel', modules_dir)
         ref_packages["ros"] = args.release
+        ref_packages["rosdistro"] = args.release
         sp.write("> Found {0} packages".format(len(ref_packages)))
+
+        # Create configuration files for each ROS variant.
+        sp.write("> Detecting variants")
+        variants = {}
+        for variant_name, variant_package in VARIANTS.items():
+            variants[variant_name] = calculate_packages_for_variant(
+                modules_dir, variant_package, ref_packages[variant_package])
+            sp.write("    {0}: {1} packages".format(variant_name, len(variants[variant_name])))
+
+        # Set up development workspace.
         sp.write("> Setting up workspace {0} for development".format(args.release))
         ref_workspace_dir = args.working_directory / "workspace" / args.release
         ref_count = _setup_workspace(
             workspace_dir=ref_workspace_dir,
             module_name="rcr",
             module_version=args.release,
+            variants=variants,
             packages=ref_packages,
             skip_if_exists=True
         )
@@ -198,6 +287,7 @@ def main():
         old_dir = args.working_directory / "modules" / "ros" / old_patch
         old_packages = scan_module_for_dependencies(old_dir / 'MODULE.bazel', modules_dir)
         old_packages["ros"] = args.release
+        old_packages["rosdistro"] = args.release
         sp.write("> Found {0} packages in OLD release".format(len(old_packages)))
 
         # Find the new patch version.
@@ -214,6 +304,7 @@ def main():
             workspace_dir=new_workspace_dir,
             module_name="rcr",
             module_version=new_patch,   
+            variants=variants,
             packages=old_packages,      # We build off the OLD release.
             vendor=args.packages,       # Only vendor these specific packages
             skip_if_exists=False,       # This patch set must exist

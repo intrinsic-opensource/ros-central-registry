@@ -18,7 +18,6 @@ Generic module creator for the "ros" module.
 
 from pathlib import Path
 from typing import Dict
-from bazelflore.bazel.constants import ROS_TO_BAZEL_MAPPING
 from bazelflore.bazel.module import Module
 from bazelflore.sources.bcr import BcrSource
 from bazelflore.sources.deb import DebSource
@@ -42,16 +41,8 @@ class RosModule(Module):
             release_distro=release_distro,
             release_date=release_date,
             module_name="ros",
-            module_version=release_date, # Note: <distro>. gets appended!
-            module_url="https://github.com/ros/rosdistro/archive/refs/tags/{0}/{1}.tar.gz".format(
+            module_version="{0}.{1}".format(release_distro, release_date),
+            module_url="https://github.com/asymingt/rosdistro/archive/refs/tags/{0}/{1}.tar.gz".format(
                 release_distro, release_date),
             package_version="{0}.{1}".format(release_distro, release_date)
         )
-
-        # All packages must use rosdistro as a dependency.
-        self.rcr_deps["rosdistro"] = self.release_date
-
-        # Add all ROS sources as dependencies.
-        for name in sorted(self.ros_sources.keys()):
-            if name not in ROS_TO_BAZEL_MAPPING.keys():
-                self.add_dependency(name)
