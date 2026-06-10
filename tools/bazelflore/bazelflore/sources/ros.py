@@ -46,6 +46,20 @@ FORBIDDEN_DEPS = [
     'actionlib_msgs',
 ]
 
+# These are additional dependencies that we need to hard-code in order to
+# make the IDL pipelines work correctly.
+EXTRA_PACKAGES_DEPS = {
+    "rosidl_generator_c" : ["rosidl_runtime_c"],
+    "rosidl_typesupport_cpp" : ["rosidl_generator_cpp"],
+}
+
+# Packages that mask BCR packages, which can't happen.
+IGNORED_PACKAGES = [
+    "cyclonedds",
+    "fastcdr",
+    "fastdds",
+]
+
 class RosWorker:
     def __init__(self, working_directory: Path, ubuntu_distro: str, ros_distro: str, ros_release_date: str):
         """Initialize the module."""
@@ -108,6 +122,9 @@ class RosWorker:
         packages: Dict[str, RosSource] = {}
         
         for pkg_name in self.package_names:
+            # Skip packages that are being vendored by rosdistro/cc:<x> targets.
+            if pkg_name in IGNORED_PACKAGES:
+                continue
 
             # Get information about the release package.
             release_package = self.rosdistro.release_packages[pkg_name]
@@ -146,7 +163,9 @@ class RosWorker:
             os_deps: Set[str] = set()
             for ros_key in pkg_deps:
                 if ros_key in self.package_names:
-                    os_deps.add(ros_key)
+                    # Skip packages that are being vendored by rosdistro/cc:<x> targets.
+                    if ros_key not in IGNORED_PACKAGES:
+                        os_deps.add(ros_key)
                 elif ros_key not in FORBIDDEN_DEPS:
                     try:
                         installer_key, rule = self.view.lookup(ros_key).get_rule_for_platform(
@@ -155,6 +174,10 @@ class RosWorker:
                             os_deps.add(os_dep)
                     except Exception as e:
                         print(f"Warning: could not resolve rosdep key '{ros_key}': {e}")
+
+            # Insert additional deps as needed.
+            if pkg_name in EXTRA_PACKAGES_DEPS.keys():
+                os_deps.update(EXTRA_PACKAGES_DEPS[pkg_name])
 
             # Package metadata.
             packages[pkg_name] = RosSource(

@@ -233,20 +233,40 @@ class Module:
                     dep_name, self.bcr_deps[dep_name])
         if self.custom_module_bazel:
             ret += self.custom_module_bazel
-        elif self.rcr_deps:
+        else:
             ret += '\n# RCR Dependencies\n'
-            for dep_name in sorted(self.rcr_deps.keys()):
-                ret += 'bazel_dep(name = "{0}", version = "{1}")\n'.format(
-                    dep_name, self.rcr_deps[dep_name])
-            if self.module_name != 'rosdistro':
-                ret += """
-bazel_dep(name = "rosdistro", version = "{0}.{1}")
+            for dep_name in sorted(list(self.rcr_deps.keys()) + ['rosdistro']):
+                if dep_name == "rosdistro":
+                    version = "{0}.{1}".format(self.release_distro, self.release_date)
+                else:
+                    version = self.rcr_deps[dep_name]
+                ret += 'bazel_dep(name = "{0}", version = "{1}")\n'.format(dep_name, version)
+            ret += """\n
+# Setup Python
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    is_default = True,
+    python_version = "3.12",
+)
 
+# Setup Pip
 pip_ros = use_extension("@rosdistro//python:defs.bzl", "pip_ros")
 use_repo(pip_ros, "pip_ros")
-""".format(self.release_distro, self.release_date)
-        self.module_file_path.parent.mkdir(parents=True, exist_ok=True)
 
+# Setup Qt6
+qt = use_extension("@rules_qt//extension:qt.bzl", "fetch")
+qt.install(
+    name = "qt_linux_x86_64",
+    build_file = "@rules_qt//extension:qt/6.8.3/linux_x86_64.BUILD",
+    os = "linux",
+    version = "6.8.3",
+)
+use_repo(qt, "qt_linux_x86_64")
+register_toolchains("@rules_qt//tools:all")
+"""
+
+        # Write file.
+        self.module_file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.module_file_path, 'w') as f:
             f.write(ret)
 

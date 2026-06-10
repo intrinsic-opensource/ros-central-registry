@@ -128,6 +128,7 @@ common --remote_cache_compression=true
 common --test_env=ROS_DISTRO="rolling"
 common --test_env=ROS_HOME=".ros"
 common --test_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
+common --test_env=LD_LIBRARY_PATH=lib
 common --incompatible_default_to_explicit_init_py
 common --incompatible_strict_action_env
 test --sandbox_default_allow_network=false
@@ -161,7 +162,9 @@ bazel_dep(name = "google_benchmark", version = "1.9.5")
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 bazel_dep(name = "llvm", version = "0.7.1")
 bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "protobuf", version = "35.0-rc1")
 bazel_dep(name = "rules_cc", version = "0.2.17")
+bazel_dep(name = "rules_go", version = "0.60.0") # fixes a bug
 bazel_dep(name = "rules_pkg", version = "1.2.0")
 bazel_dep(name = "rules_python", version = "1.9.0")
 bazel_dep(name = "rules_qt", version = "0.0.6")
@@ -170,11 +173,20 @@ bazel_dep(name = "rules_rust", version = "0.69.0")
 bazel_dep(name = "rules_shell", version = "0.7.1")
 bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 
+# Things that we need to get into the BCR.
+local_path_override(
+    module_name = "imgui",
+    path = "../../submodules/imgui",
+)
+local_path_override(
+    module_name = "ogre",
+    path = "../../submodules/ogre",
+)
+
 # Setup C and C++
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(llvm_version = "20.1.7")
 use_repo(llvm, "llvm_toolchain")
-
 register_toolchains("@llvm_toolchain//:all")
 
 # Setup python
@@ -199,7 +211,7 @@ rust.toolchain(
 """)
         for package in sorted(packages.keys()):
             f.write("bazel_dep(name = \"{0}\", version = \"{1}\")\n".format(package, packages[package]))
-        f.write("\n# include(\":dev.MODULE.bazel\")")
+        f.write("\n# include(\"//:dev.MODULE.bazel\")")
 
     # Create a dev.MODULE.bazel file that forces a local_path_override fto
     # the vendored package. This allows you to iterate and test as you go.

@@ -20,6 +20,7 @@ DEPS_GENERAL = {
     "google_benchmark": "1.9.5",
     "googletest": "1.17.0.bcr.2",
     "llvm": "0.7.1",
+    "protobuf": "35.0-rc1",
     "platforms": "1.0.0",
     "rules_build_error": "0.11.0",
     "rules_cc": "0.2.17",
