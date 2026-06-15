@@ -99,14 +99,22 @@ def regenerate_integrity_hashes(module_dir: Path) -> bool:
         pass
 
     # Perform the integrity check for the overlay and patches.
+    has_patches = False
     for name in ["overlay", "patches"]:
         targ_dir = module_dir / name
         if targ_dir.exists():
             source[name] = {}
-            for targ_file in targ_dir.iterdir():
+            for targ_file in targ_dir.rglob('*'):
                 if targ_file.is_file():
                     rel_path = targ_file.relative_to(targ_dir)
                     source[name][str(rel_path)] = calculate_integrity_hash_for_file(targ_file)
+                    if name == "patches":
+                        has_patches = True
+
+    if has_patches:
+        source["patch_strip"] = 1
+    elif "patch_strip" in source:
+        del source["patch_strip"]
 
     # Overwrite the source.json file.
     with open(source_json_path, 'w') as f:
