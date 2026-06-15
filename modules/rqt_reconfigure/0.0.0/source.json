@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-Eqm5B5nPbycsNECUgU23xIblOc9zMo8aOe9QgB8VdQ4=",
+    "url": "https://github.com/ros2-gbp/rqt_reconfigure-release/archive/refs/tags/upstream/1.8.4.tar.gz",
+    "strip_prefix": "rqt_reconfigure-release-upstream-1.8.4"
+}

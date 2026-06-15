@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-GYS0QoIVfu7+PaJzTcU29YCqbb11fh7JWl/HWk9VJtI=",
+    "url": "https://github.com/ros2-gbp/osrf_pycommon-release/archive/refs/tags/upstream/2.1.7.tar.gz",
+    "strip_prefix": "osrf_pycommon-release-upstream-2.1.7"
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-7s3cQ+ZgRH4DvBIJbqzKvO7bzUqmz2R9w5hWadx3MWc=",
+    "url": "https://github.com/ros2-gbp/image_pipeline-release/archive/refs/tags/upstream/7.1.3.tar.gz",
+    "strip_prefix": "image_pipeline-release-upstream-7.1.3/stereo_image_proc"
+}

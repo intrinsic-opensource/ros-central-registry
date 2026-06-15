@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-N4qx/ycUjf9vaRPLZw9v/aHxj+rY3qZyxtix3He1g0A=",
+    "url": "https://github.com/ros2-gbp/rviz-release/archive/refs/tags/upstream/15.2.0.tar.gz",
+    "strip_prefix": "rviz-release-upstream-15.2.0/rviz_rendering"
+}

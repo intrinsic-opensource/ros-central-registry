@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-9UPEZlBeErbDtYF2bf4byEHeuPWyDOURvaXQTZ1QPEw=",
+    "url": "https://github.com/ros2-gbp/rmf_visualization-release/archive/refs/tags/upstream/2.5.1.tar.gz",
+    "strip_prefix": "rmf_visualization-release-upstream-2.5.1/rmf_visualization_floorplans"
+}

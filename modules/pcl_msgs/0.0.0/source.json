@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-WSKRINMaV332SyckdOGzfeXxQbxhVxFvpvZneScrTxY=",
+    "url": "https://github.com/ros2-gbp/pcl_msgs-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "pcl_msgs-release-upstream-1.0.0"
+}

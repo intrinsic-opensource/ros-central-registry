@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-WghoMFPUu19OWuSs7+UsmPsNZ9pnakgx6qEFiCK93MQ=",
+    "url": "https://github.com/ros2-gbp/keyboard_handler-release/archive/refs/tags/upstream/0.5.0.tar.gz",
+    "strip_prefix": "keyboard_handler-release-upstream-0.5.0/keyboard_handler"
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-ed0UTuG0/Z97QsujACn2lpdVxIFoFtrxZcZWm6Huy7w=",
+    "url": "https://github.com/ros2-gbp/gps_umd-release/archive/refs/tags/upstream/2.1.2.tar.gz",
+    "strip_prefix": "gps_umd-release-upstream-2.1.2/gps_msgs"
+}

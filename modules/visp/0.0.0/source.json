@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-n7Je73NQY+1cJ6NFKvicFtEFG+w7/6WgR7pNOXbp8js=",
+    "url": "https://github.com/ros2-gbp/visp-release/archive/refs/tags/upstream/3.7.0.tar.gz",
+    "strip_prefix": "visp-release-upstream-3.7.0"
+}

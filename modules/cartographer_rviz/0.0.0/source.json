@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-ZFkAxgq8SpK4Qrfsoqx/hw0DzIfGOzbGwRGPe65fKlA=",
+    "url": "https://github.com/ros2-gbp/cartographer_ros-release/archive/refs/tags/upstream/2.0.9003.tar.gz",
+    "strip_prefix": "cartographer_ros-release-upstream-2.0.9003/cartographer_rviz"
+}

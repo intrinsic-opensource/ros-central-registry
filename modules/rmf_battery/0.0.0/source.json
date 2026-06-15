@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-6nc34h4Op6+ciemo228L6CF25/jbFQaacwf2t93/+0c=",
+    "url": "https://github.com/ros2-gbp/rmf_battery-release/archive/refs/tags/upstream/0.4.0.tar.gz",
+    "strip_prefix": "rmf_battery-release-upstream-0.4.0/rmf_battery"
+}

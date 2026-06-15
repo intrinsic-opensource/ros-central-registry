@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-nHtb3L01+DHjTSXP/uKhWh7TchodA2sBOoJU3GdW7Mo=",
+    "url": "https://github.com/ros2-gbp/libcamera-release/archive/refs/tags/upstream/0.7.0.tar.gz",
+    "strip_prefix": "libcamera-release-upstream-0.7.0"
+}

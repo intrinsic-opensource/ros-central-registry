@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-e+c0vsBEYrRhofdXGkNo4P43BSeJJSYCgqwJ7k0jn6g=",
+    "url": "https://github.com/ros2-gbp/rcutils-release/archive/refs/tags/upstream/7.0.9.tar.gz",
+    "strip_prefix": "rcutils-release-upstream-7.0.9"
+}

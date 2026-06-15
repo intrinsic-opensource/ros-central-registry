@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-+6nV2Ui7k8rm8rQJKXPBHoQhV4/tJQW7nxUVrIE7KcY=",
+    "url": "https://github.com/ros2-gbp/vrpn-release/archive/refs/tags/upstream/7.35.0.tar.gz",
+    "strip_prefix": "vrpn-release-upstream-7.35.0"
+}

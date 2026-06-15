@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-CbZRuLwfXdJBaz+WnoEKk1z8d99T6K37i6MYx4uhGJM=",
+    "url": "https://github.com/ros2-gbp/ruckig-release/archive/refs/tags/upstream/0.9.2.tar.gz",
+    "strip_prefix": "ruckig-release-upstream-0.9.2"
+}

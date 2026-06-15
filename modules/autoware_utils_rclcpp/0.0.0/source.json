@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-WZaCy/QyxtsfiuJLxq29I6kjhWhwCRb0zJ60/DQNLvE=",
+    "url": "https://github.com/ros2-gbp/autoware_utils-release/archive/refs/tags/upstream/1.4.2.tar.gz",
+    "strip_prefix": "autoware_utils-release-upstream-1.4.2/autoware_utils_rclcpp"
+}
