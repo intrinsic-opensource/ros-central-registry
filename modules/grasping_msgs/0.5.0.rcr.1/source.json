@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-F4AAn1o87vrM5XoRqOHWrOrrrLl4q/w8x0jETdLptuY=",
+    "url": "https://github.com/ros2-gbp/grasping_msgs-release/archive/refs/tags/upstream/0.5.0.tar.gz",
+    "strip_prefix": "grasping_msgs-release-upstream-0.5.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-MNZ0CNwMWHonuG3+sp7bTNlVTgJ19yhtdPH5si3Ltmw="
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "integrity": "sha256-gy8CWzrmNS4OW48ifvpIOxEsWE9yTlMGTZvmUCbRa5M=",
+    "url": "https://github.com/ros2-gbp/rosbag2-release/archive/refs/tags/upstream/0.33.1.tar.gz",
+    "strip_prefix": "rosbag2-release-upstream-0.33.1/rosbag2_tests",
+    "overlay": {
+        "ros2": "sha256-Avx8xZuS9asYKI39j/93MBrgiEI4v3XSjqazfR5D7co=",
+        "BUILD.bazel": "sha256-Cm/q5/iVyO4it4eFbtHSLHp0/+S4lGt+3bq2XTfRD0k="
+    },
+    "patches": {
+        "test__rosbag2_tests__test_rosbag2_play_end_to_end__cpp.patch": "sha256-PQIIvtSN8hVEemWRWY9IKHFOPMAjl3siR+G7Yzn9VNU=",
+        "test__rosbag2_tests__test_rosbag2_info_end_to_end__cpp.patch": "sha256-iswQlA2bkfY/ZpnBKfwMg82aAl9emNj7k3Uce0j8QJU="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-TW62AUOXLFLOObp1FOb71cpkWbd6md+fcfWnxaY29NY=",
+    "url": "https://github.com/ros2-gbp/rviz_2d_overlay_plugins-release/archive/refs/tags/upstream/1.4.1.tar.gz",
+    "strip_prefix": "rviz_2d_overlay_plugins-release-upstream-1.4.1/rviz_2d_overlay_plugins",
+    "overlay": {
+        "BUILD.bazel": "sha256-+XLi0lXORDuB3DkYmE+Ddkc1buxnfRi5ANGiw8LIa5o="
+    }
+}

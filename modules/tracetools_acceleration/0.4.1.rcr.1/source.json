@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-OjglWChEBYLoUZqj05X+X7kVxqSY5cExQ8nsW0gzzkY=",
+    "url": "https://github.com/ros2-gbp/tracetools_acceleration-release/archive/refs/tags/upstream/0.4.1.tar.gz",
+    "strip_prefix": "tracetools_acceleration-release-upstream-0.4.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-9FskyttTAH0neTUi6ljwvVoabx+qJ9yglEbKiBlZ+Oo="
+    }
+}

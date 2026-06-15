@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-aTQidK03LupxxMeRFzDcdCicjcJKKPlZ09FpYqVgK9Q=",
+    "url": "https://github.com/ros2-gbp/rosidl_defaults-release/archive/refs/tags/upstream/1.8.1.tar.gz",
+    "strip_prefix": "rosidl_defaults-release-upstream-1.8.1/rosidl_default_generators",
+    "overlay": {
+        "defs.bzl": "sha256-MwVIQGGq+QThNxyRWusuR08pOxaZ7mOPzwOuJ6U1E2M=",
+        "BUILD.bazel": "sha256-i3r9LPdHovKooeHIhwctQ0/uPrqU+k3IrKp4lN0mFrI="
+    }
+}

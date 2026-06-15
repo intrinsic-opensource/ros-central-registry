@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-R5eSGPZW7xEdHjuf03Wgo8YmK5EB+kcdZfScKGkTmYY=",
+    "url": "https://github.com/ros2-gbp/mola_test_datasets-release/archive/refs/tags/upstream/0.4.2.tar.gz",
+    "strip_prefix": "mola_test_datasets-release-upstream-0.4.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-6qS51nyB/R+HeOKIDfKdQB455a/n9O1R2k0baQ+cPJM="
+    }
+}

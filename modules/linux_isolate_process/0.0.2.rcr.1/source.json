@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-048UkA/WlIPKcmhTEHm3BEs5KS+lsMzx4wokRpaxdm8=",
+    "url": "https://github.com/ros2-gbp/linux_isolate_process-release/archive/refs/tags/upstream/0.0.2.tar.gz",
+    "strip_prefix": "linux_isolate_process-release-upstream-0.0.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-Thh1dBiT+N73/BDnjNoUFnn9uoGg0prfDxG87kjY4xM="
+    }
+}

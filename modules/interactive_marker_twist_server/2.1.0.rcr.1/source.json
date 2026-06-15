@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-oeANSk95wH1B4/uSVcCSMJY6IFliWh6NgUETFRv271g=",
+    "url": "https://github.com/ros2-gbp/interactive_marker_twist_server-release/archive/refs/tags/upstream/2.1.0.tar.gz",
+    "strip_prefix": "interactive_marker_twist_server-release-upstream-2.1.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-JPNa6arNcHbxMtX/hoxAIvnqfk9ROW/F8tUlWN+22dY="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-C3cQtzKJ1SlKQmMjkP0uP6/VrLVFPFLBktMuIQP6Pik=",
+    "url": "https://github.com/ros2-gbp/moveit_visual_tools-release/archive/refs/tags/upstream/4.1.2.tar.gz",
+    "strip_prefix": "moveit_visual_tools-release-upstream-4.1.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-sK1lLarEqfEIp28ITe+bkJg062A8k63+rknQ87rRipI="
+    }
+}

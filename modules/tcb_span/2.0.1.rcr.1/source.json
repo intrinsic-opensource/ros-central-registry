@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-sQ2j9ubZcby/j8HDXXg5nYuykZ6LZioPOz+OE0PYfsA=",
+    "url": "https://github.com/ros2-gbp/cpp_polyfills-release/archive/refs/tags/upstream/2.0.1.tar.gz",
+    "strip_prefix": "cpp_polyfills-release-upstream-2.0.1/tcb_span",
+    "overlay": {
+        "BUILD.bazel": "sha256-VwHMueOwuewNhaFowm8Pxdr5IRR1eboOttxIvnTFxFk="
+    }
+}

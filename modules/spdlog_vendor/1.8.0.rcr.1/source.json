@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Yan4ML6aJO97imwN3eFMPtuPdNohGq7QqWjxT6DkWgQ=",
+    "url": "https://github.com/ros2-gbp/spdlog_vendor-release/archive/refs/tags/upstream/1.8.0.tar.gz",
+    "strip_prefix": "spdlog_vendor-release-upstream-1.8.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-lqcV30/Xv7MKliEpNqHvRaW2RMI0GpxuQOOIR4vMFHo="
+    }
+}

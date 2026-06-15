@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-LLqIuoDf0B9q66/fiLlGAdDorqa3U+oqdSbGBVn7mQE=",
+    "url": "https://github.com/ros2-gbp/mrpt_ros-release/archive/refs/tags/upstream/2.15.13.tar.gz",
+    "strip_prefix": "mrpt_ros-release-upstream-2.15.13/mrpt_libposes",
+    "overlay": {
+        "BUILD.bazel": "sha256-tA2/DHgaR5QRy1tCRdITn0NBhV72tU0OX28znn8JIG0="
+    }
+}

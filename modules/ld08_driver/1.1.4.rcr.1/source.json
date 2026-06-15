@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-4pBM9HSs/szleJz+yTFeeMj4lRFCdtaNKVTfeynjflM=",
+    "url": "https://github.com/ros2-gbp/ld08_driver-release/archive/refs/tags/upstream/1.1.4.tar.gz",
+    "strip_prefix": "ld08_driver-release-upstream-1.1.4",
+    "overlay": {
+        "BUILD.bazel": "sha256-Nf504l/rw+txqAca2FOblJkH/rPU8EmTf5LDo3SgCeY="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-+sxmS6q6s3c2bpI6XsusDaOa5jjsnD+/SpfAyZGmbMU=",
+    "url": "https://github.com/ros2-gbp/dynamixel_sdk-release/archive/refs/tags/upstream/4.0.3.tar.gz",
+    "strip_prefix": "dynamixel_sdk-release-upstream-4.0.3/ros/dynamixel_sdk_examples",
+    "overlay": {
+        "BUILD.bazel": "sha256-Nx1lbtjO/BasYQXs6GyJECI89VDW/XY9oj3fwud8mCY="
+    }
+}

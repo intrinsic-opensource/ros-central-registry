@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-v8vrxjLSJjtciXw5xu2PqWPqlixBnmJsBozPH69NjJc=",
+    "url": "https://github.com/ros2-gbp/ament_cmake_ros-release/archive/refs/tags/upstream/0.15.6.tar.gz",
+    "strip_prefix": "ament_cmake_ros-release-upstream-0.15.6/ament_cmake_ros_core",
+    "overlay": {
+        "BUILD.bazel": "sha256-dGwsjgm48QBAmNToWtBaSvkTj4nHS/iHr/KAic/KSYc="
+    }
+}

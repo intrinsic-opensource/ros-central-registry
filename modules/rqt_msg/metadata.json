@@ -10,7 +10,8 @@
     ],
     "versions": [
         "1.7.2",
-        "1.7.2.rcr.0"
+        "1.7.2.rcr.0",
+        "1.7.2.rcr.1"
     ],
     "yanked_versions": {}
 }

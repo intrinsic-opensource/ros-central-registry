@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-PotPSlH3hwX8WDCSCMtMWqbKboEp/2PNMMvv7l1AVFM=",
+    "url": "https://github.com/ros2-gbp/dual_laser_merger-release/archive/refs/tags/upstream/0.0.1.tar.gz",
+    "strip_prefix": "dual_laser_merger-release-upstream-0.0.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-s48iJHcUs369eB4LLkrEA3+H8Q5ePvFVSpKnGkQU7uA="
+    }
+}

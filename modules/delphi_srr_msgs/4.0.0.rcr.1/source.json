@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-E40Uhai5iYh9Fauw67qoFgkaevueBYHe9c2Dwb4WtDg=",
+    "url": "https://github.com/ros2-gbp/astuff_sensor_msgs-release/archive/refs/tags/upstream/4.0.0.tar.gz",
+    "strip_prefix": "astuff_sensor_msgs-release-upstream-4.0.0/delphi_srr_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-jLcEBPcd87zS8AvkDkdEU+PtBIr1BMpVv+de23MrEX0="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-oPF96hcl0hQ7I6lgJOV77yIFjGdVsEIqkcN+SnIjuCQ=",
+    "url": "https://github.com/ros2-gbp/rqt_robot_dashboard-release/archive/refs/tags/upstream/0.6.1.tar.gz",
+    "strip_prefix": "rqt_robot_dashboard-release-upstream-0.6.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-22I9ztBD1N/Cgifk4jhIiOrIKlZrxWU3lxBt3QQe0LI="
+    }
+}

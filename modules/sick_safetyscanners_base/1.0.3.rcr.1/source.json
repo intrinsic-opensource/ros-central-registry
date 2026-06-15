@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-7RSbzpoH4lgF66vgTZ4TVdnBIywVvqTUUr1QkEn56x4=",
+    "url": "https://github.com/ros2-gbp/sick_safetyscanners_base-release/archive/refs/tags/upstream/1.0.3.tar.gz",
+    "strip_prefix": "sick_safetyscanners_base-release-upstream-1.0.3",
+    "overlay": {
+        "BUILD.bazel": "sha256-3v2OD9Yyw5vS7yL6vihl3i2LB//gBN8YPvNPlfgvuO4="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-4tcRlVGHtsYe1fJVGtu/foPquJiwoXrESBL69MOJIH8=",
+    "url": "https://github.com/ros2-gbp/robotraconteur_companion-release/archive/refs/tags/upstream/0.4.2.tar.gz",
+    "strip_prefix": "robotraconteur_companion-release-upstream-0.4.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-NcD3HqSdnJqpjkXvGfJd4gOu38p+9qmZPHXeddR+u2A="
+    }
+}

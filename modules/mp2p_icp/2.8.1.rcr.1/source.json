@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-N8pVCYJgSQkjO53AQhj/xxSAD+BeV1AMFm5O02wQZMA=",
+    "url": "https://github.com/ros2-gbp/mp2p_icp-release/archive/refs/tags/upstream/2.8.1.tar.gz",
+    "strip_prefix": "mp2p_icp-release-upstream-2.8.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-f3579syhXPEOuGvLSt1vs+SxLFNnLl5Qyd3dKs/8TXM="
+    }
+}

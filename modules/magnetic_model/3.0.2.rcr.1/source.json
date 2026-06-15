@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-AsJcJJ+mkjB3uuEJ0yHtbPKJnVWIJAR5inO+yAnJLUM=",
+    "url": "https://github.com/ros2-gbp/compass-release/archive/refs/tags/upstream/3.0.2.tar.gz",
+    "strip_prefix": "compass-release-upstream-3.0.2/magnetic_model",
+    "overlay": {
+        "BUILD.bazel": "sha256-U6UloQiiqKOcAk2fL2Yu3Du998OxQkKO8MIgq41NC9g="
+    }
+}

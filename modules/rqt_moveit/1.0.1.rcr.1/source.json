@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-/RWTyDDGRA9YrUVtspLW9x7WyUds2m4+nkyrXQH8msU=",
+    "url": "https://github.com/ros2-gbp/rqt_moveit-release/archive/refs/tags/upstream/1.0.1.tar.gz",
+    "strip_prefix": "rqt_moveit-release-upstream-1.0.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-8Y7o2PHLg0FjmXGVY4yyM8EWg3n4yPYnlzNF6p4fyZk="
+    }
+}

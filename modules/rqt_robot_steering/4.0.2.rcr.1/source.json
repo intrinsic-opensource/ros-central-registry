@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-VNfjA1cRYeauH3MpWUXVtOFWK/dL5rSgPAIJKmNFJNQ=",
+    "url": "https://github.com/ros2-gbp/rqt_robot_steering-release/archive/refs/tags/upstream/4.0.2.tar.gz",
+    "strip_prefix": "rqt_robot_steering-release-upstream-4.0.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-AluGGgF8BXBX9KAbk9IOG1lK8asVEHSKIL304q3r/Ug="
+    }
+}

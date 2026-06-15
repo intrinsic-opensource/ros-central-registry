@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-yHvaEQgn+RwodAfWdg002mZ6nL3v7f4CdOn6sfKvgac=",
+    "url": "https://github.com/ros2-gbp/moveit2-release/archive/refs/tags/upstream/2.14.1.tar.gz",
+    "strip_prefix": "moveit2-release-upstream-2.14.1/moveit_ros/moveit_servo",
+    "overlay": {
+        "BUILD.bazel": "sha256-gngUlnReeKGAM97w5478UTQao8cq+ZVgmD8mLjcVMGQ="
+    }
+}

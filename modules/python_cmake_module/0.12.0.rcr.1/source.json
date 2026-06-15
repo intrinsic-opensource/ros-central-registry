@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-odU3JOEgbhhIz5oQ4AmD5YvDx5OM4eX9Xo5Vw4U3SMg=",
+    "url": "https://github.com/ros2-gbp/python_cmake_module-release/archive/refs/tags/upstream/0.12.0.tar.gz",
+    "strip_prefix": "python_cmake_module-release-upstream-0.12.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-cgVjSmIuA+l/wB9N5vUXGMmEdaydKuUGnH0AeatmIUM="
+    }
+}

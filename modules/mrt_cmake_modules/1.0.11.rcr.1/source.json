@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-2ETkE+QwPTqIHurZPP1HNiYIF05ybwPZeUxJzUtqbiY=",
+    "url": "https://github.com/ros2-gbp/mrt_cmake_modules-release/archive/refs/tags/upstream/1.0.11.tar.gz",
+    "strip_prefix": "mrt_cmake_modules-release-upstream-1.0.11",
+    "overlay": {
+        "BUILD.bazel": "sha256-KS/X2+nyU6/kXq6BIpPqFMfQKWyvH54er1mte+6zheQ="
+    }
+}

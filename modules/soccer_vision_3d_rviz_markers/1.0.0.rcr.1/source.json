@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-+diyDI2jSaRUwwXU2nk62fY3TMEW+8nL2G5mjMhcBY8=",
+    "url": "https://github.com/ros2-gbp/soccer_vision_3d_rviz_markers-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "soccer_vision_3d_rviz_markers-release-upstream-1.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-LhKBG3SPOR0/lsbh/iR5C88eyRtjpv1kDBD5P+aRQi8="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-pEyDioOk5YuiKKqTgWvEGO4UtxmfvyOXsEsgOPTvDRU=",
+    "url": "https://github.com/ros2-gbp/sick_safevisionary_ros2-release/archive/refs/tags/upstream/1.0.3.tar.gz",
+    "strip_prefix": "sick_safevisionary_ros2-release-upstream-1.0.3/sick_safevisionary_driver",
+    "overlay": {
+        "BUILD.bazel": "sha256-WQGoiKz+HsbcRpClVJLCHsBtwASo+VUcvaelW4m1cSc="
+    }
+}

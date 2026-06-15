@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-5o1ov+8OosKDjjzl+TOnNQdeH+QKmNGwSyezg1zdYV0=",
+    "url": "https://github.com/ros2-gbp/tuw_msgs-release/archive/refs/tags/upstream/0.2.6.tar.gz",
+    "strip_prefix": "tuw_msgs-release-upstream-0.2.6/tuw_object_map_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-EoX83vWj+LTetGt0N9dhas9tq1TM+MsC+/qOl+GJZtE="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-R+QJRTRAY97DAnkWVrMmJNzWysZwllLR28nTExCnxGY=",
+    "url": "https://github.com/ros2-gbp/ros2_control-release/archive/refs/tags/upstream/6.5.1.tar.gz",
+    "strip_prefix": "ros2_control-release-upstream-6.5.1/joint_limits",
+    "overlay": {
+        "BUILD.bazel": "sha256-G8UAv7Z9QqR7BhiCMfGRcBHB/11ptAPmcDTCPajmUdM="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Xaa6h/NV1UIq4P7jqvQbgCJk6KQHCn1vkW180tITb+4=",
+    "url": "https://github.com/ros2-gbp/ackermann_msgs-release/archive/refs/tags/upstream/2.0.2.tar.gz",
+    "strip_prefix": "ackermann_msgs-release-upstream-2.0.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-hY7n7cOynApw9hUKNJPEscTXKsQ0Y7eXQw7yLQp/5fc="
+    }
+}

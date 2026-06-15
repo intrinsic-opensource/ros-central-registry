@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-GT5fQGHTAYPsDSAAFmSGlJFAf3YyDLJTUfP1r2ILZOw=",
+    "url": "https://github.com/ros2-gbp/depthimage_to_laserscan-release/archive/refs/tags/upstream/2.5.1.tar.gz",
+    "strip_prefix": "depthimage_to_laserscan-release-upstream-2.5.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-ZClTkH9Tm9zGYSc39K/mIqPgiHU/fTBf6MM1GYGB/Qs="
+    }
+}

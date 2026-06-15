@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-b36cJtVPncUhJHbcWjkd4CjXFdaSm2IelFBRiPvKGNA=",
+    "url": "https://github.com/ros2-gbp/py_trees-release/archive/refs/tags/upstream/2.4.0.tar.gz",
+    "strip_prefix": "py_trees-release-upstream-2.4.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-3v2OD9Yyw5vS7yL6vihl3i2LB//gBN8YPvNPlfgvuO4="
+    }
+}

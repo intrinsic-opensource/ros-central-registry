@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-7/AITQU9tvbkqtI+gDSvEGoNiXnNi5v16TTmQh1srjY=",
+    "url": "https://github.com/ros2-gbp/at_sonde_ros_driver-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "at_sonde_ros_driver-release-upstream-1.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-aVtmacjBv1+zM02zHszjNq+pR323St4x8Eya2lBHPvk="
+    }
+}

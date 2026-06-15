@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-L9hljQ53kLC7o8TTzsIRDxj6kCbkyE7rwf+PDrg0CXM=",
+    "url": "https://github.com/ros2-gbp/odri_master_board_sdk-release/archive/refs/tags/upstream/1.0.7.tar.gz",
+    "strip_prefix": "odri_master_board_sdk-release-upstream-1.0.7/sdk/master_board_sdk",
+    "overlay": {
+        "BUILD.bazel": "sha256-3v2OD9Yyw5vS7yL6vihl3i2LB//gBN8YPvNPlfgvuO4="
+    }
+}

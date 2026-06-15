@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-1tkROGB2XCDVT8qxQmuyqcfe/bAZb5FzqCHIlEheIgs=",
+    "url": "https://github.com/ros2-gbp/event_camera_renderer-release/archive/refs/tags/upstream/3.0.0.tar.gz",
+    "strip_prefix": "event_camera_renderer-release-upstream-3.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-UGcFmkfBwdvNfFGUFwECS3yOWhdMBoKiIRz9z7buO10="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-aSSFfWfoQ46ILjZVLcXY6A9FCjMo85hdpAhc5e6Tu4Y=",
+    "url": "https://github.com/ros2-gbp/eigen3_cmake_module-release/archive/refs/tags/upstream/0.5.1.tar.gz",
+    "strip_prefix": "eigen3_cmake_module-release-upstream-0.5.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-k0EfwgVPp3DysLFnyLmggV8bS+jgxwAJgM9kELCoDgI="
+    }
+}

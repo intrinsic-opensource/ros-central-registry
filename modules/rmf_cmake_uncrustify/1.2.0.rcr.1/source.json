@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-dCOqnUbrcgtULwCwRBdVPSb+nOkwQg4KQ6e+ydlthgs=",
+    "url": "https://github.com/ros2-gbp/rmf_cmake_uncrustify-release/archive/refs/tags/upstream/1.2.0.tar.gz",
+    "strip_prefix": "rmf_cmake_uncrustify-release-upstream-1.2.0/rmf_cmake_uncrustify",
+    "overlay": {
+        "BUILD.bazel": "sha256-+8UBye+ptwF9AbyqIz61BuXU5vkNMZKRSU/STTRQJVk="
+    }
+}

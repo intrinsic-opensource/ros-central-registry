@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-jIDYttSdctYYVvUUDC710v4Y8zkEKqWU+CcdHeRGVOg=",
+    "url": "https://github.com/ros2-gbp/usb_cam-release/archive/refs/tags/upstream/0.8.1.tar.gz",
+    "strip_prefix": "usb_cam-release-upstream-0.8.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-FOFQd+qZlvQBeZZQ3FP5oRIvczajWkuzBjNTSY1AEw8="
+    }
+}

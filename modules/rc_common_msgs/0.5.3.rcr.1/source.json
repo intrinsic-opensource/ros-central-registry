@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-AjYvZo5JLtaVUmiGCqBMTZE8GsheKQPF2vw+8fZIM78=",
+    "url": "https://github.com/ros2-gbp/rc_common_msgs_ros2-release/archive/refs/tags/upstream/0.5.3.tar.gz",
+    "strip_prefix": "rc_common_msgs_ros2-release-upstream-0.5.3",
+    "overlay": {
+        "BUILD.bazel": "sha256-hY7n7cOynApw9hUKNJPEscTXKsQ0Y7eXQw7yLQp/5fc="
+    }
+}

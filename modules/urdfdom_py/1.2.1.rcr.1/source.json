@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Nsw62Z+pLTyeDGJAEFOqkWn5+N1Y0L4i7JV09rirLDk=",
+    "url": "https://github.com/ros2-gbp/urdfdom_py-release/archive/refs/tags/upstream/1.2.1.tar.gz",
+    "strip_prefix": "urdfdom_py-release-upstream-1.2.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-KlLm/xGFer8wPY6ELGC3G5i3W8UMz1TFHRaMBCLDvCE="
+    }
+}

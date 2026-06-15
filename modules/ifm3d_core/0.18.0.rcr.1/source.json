@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Rxu18jpWhrNsHwP2YZAc7dThUpaW29Onx7+P5Jt0xF8=",
+    "url": "https://github.com/ros2-gbp/ifm3d-release/archive/refs/tags/upstream/0.18.0.tar.gz",
+    "strip_prefix": "ifm3d-release-upstream-0.18.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-ivdDjp7v69dOUzOrnnyccwUsuAIqsmwjkGqTPSDvAV8="
+    }
+}

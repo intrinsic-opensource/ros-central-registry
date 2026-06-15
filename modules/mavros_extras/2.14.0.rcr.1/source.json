@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-5oq5poyhoBb0qZFiOpKXmDV+LP0ih9sQgQUSnNZTRQY=",
+    "url": "https://github.com/ros2-gbp/mavros-release/archive/refs/tags/upstream/2.14.0.tar.gz",
+    "strip_prefix": "mavros-release-upstream-2.14.0/mavros_extras",
+    "overlay": {
+        "BUILD.bazel": "sha256-udOW+We7elpRQdKkPbnduCaMPbC8nFR0kIwyuwcP/ao="
+    }
+}

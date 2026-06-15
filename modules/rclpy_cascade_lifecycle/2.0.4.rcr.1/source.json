@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-PacMfjbs0lU9lvdRA2GMmtGsbme0WKu1LNScqm8tVv8=",
+    "url": "https://github.com/ros2-gbp/cascade_lifecycle-release/archive/refs/tags/upstream/2.0.4.tar.gz",
+    "strip_prefix": "cascade_lifecycle-release-upstream-2.0.4/rclpy_cascade_lifecycle",
+    "overlay": {
+        "BUILD.bazel": "sha256-BTW5IkR7S7ttJA14fjV4Equ4aD4Bj6kiVO18lbNcFPU="
+    }
+}

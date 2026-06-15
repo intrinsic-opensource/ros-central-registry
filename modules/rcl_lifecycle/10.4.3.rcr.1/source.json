@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-7mZ95QEeWv6vQv/mnvy92ojDl2WU7URM9HVZ1jTZFIc=",
+    "url": "https://github.com/ros2-gbp/rcl-release/archive/refs/tags/upstream/10.4.3.tar.gz",
+    "strip_prefix": "rcl-release-upstream-10.4.3/rcl_lifecycle",
+    "overlay": {
+        "BUILD.bazel": "sha256-2wSwh06hRjliOwo7J5Ps/186ibce9HTmQYxU42wo7GU="
+    }
+}

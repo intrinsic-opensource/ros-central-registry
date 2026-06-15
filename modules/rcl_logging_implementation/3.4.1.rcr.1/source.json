@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-3PuVGoENvLfB3JB4RU16cU2QJFkJtn+kzY8h/1YxJng=",
+    "url": "https://github.com/ros2-gbp/rcl_logging-release/archive/refs/tags/upstream/3.4.1.tar.gz",
+    "strip_prefix": "rcl_logging-release-upstream-3.4.1/rcl_logging_implementation",
+    "overlay": {
+        "BUILD.bazel": "sha256-sNroELoU58BlvGs/7lmzQAvt8P+q8l53L/hfVU4h9cM="
+    }
+}

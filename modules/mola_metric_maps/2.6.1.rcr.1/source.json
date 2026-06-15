@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-SzJJCqg6rhYZF0gW8K8gyMTchSxOFDWi9YmVb/y+D1E=",
+    "url": "https://github.com/ros2-gbp/mola-release/archive/refs/tags/upstream/2.6.1.tar.gz",
+    "strip_prefix": "mola-release-upstream-2.6.1/mola_metric_maps",
+    "overlay": {
+        "BUILD.bazel": "sha256-Cm9+wJowJafMv3o6KXzbf5/h7eDf61EpWZkbVxkEOGw="
+    }
+}

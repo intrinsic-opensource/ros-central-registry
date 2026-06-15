@@ -1,0 +1,83 @@
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Imports
+
+load("@rosdistro//ament:defs.bzl", "ament_index", "ament_package")
+load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps", "ros_local_defines")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+### LIBRARY
+
+HEADERS = glob(["include/**/*.hpp"])
+
+DEPENDENCIES = {
+    "@rcutils//:rcutils": "@rcutils//:rcutils_library",
+}
+
+cc_library(
+    name = "rcpputils_library",
+    srcs = [
+        "src/asserts.cpp",
+        "src/env.cpp",
+        "src/filesystem_helper.cpp",
+        "src/find_library.cpp",
+        "src/process.cpp",
+        "src/shared_library.cpp",
+        "src/thread_name.cpp",
+    ],
+    hdrs = HEADERS,
+    includes = ["include"],
+    local_defines = ros_local_defines(),
+    deps = DEPENDENCIES.values(),
+)
+
+cc_shared_library(
+    name = "rcpputils",
+    dynamic_deps = DEPENDENCIES.keys(),
+    exports_filter = [":rcpputils_library"],
+    deps = [":rcpputils_library"],
+)
+
+collect_transitive_dynamic_deps(
+    name = "transitive_dynamic_deps",
+    dynamic_deps = [":rcpputils"],
+    visibility = ["//visibility:private"],
+)
+
+
+### PACKAGING
+
+ament_package(
+    name = "ament_package",
+    package_xml = "package.xml",
+    headers = HEADERS,
+    libraries = [":rcpputils"],
+    deps = [
+        "@ament_cmake//:ament_package",
+        "@ament_cmake_copyright//:ament_package",
+        "@ament_cmake_cppcheck//:ament_package",
+        "@ament_cmake_cpplint//:ament_package",
+        "@ament_cmake_gen_version_h//:ament_package",
+        "@ament_cmake_gtest//:ament_package",
+        "@ament_cmake_lint_cmake//:ament_package",
+        "@ament_cmake_ros_core//:ament_package",
+        "@ament_cmake_uncrustify//:ament_package",
+        "@ament_cmake_xmllint//:ament_package",
+        "@rcutils//:ament_package",
+        "@rosdistro//:ament_package",
+    ]
+)

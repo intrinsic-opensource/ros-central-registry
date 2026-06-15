@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-P/5PUQj+8DMwuO9v1hw1zSiFIyNblMFB7zeiyCCAN6Y=",
+    "url": "https://github.com/ros2-gbp/nmea_navsat_driver-release/archive/refs/tags/upstream/2.0.1.tar.gz",
+    "strip_prefix": "nmea_navsat_driver-release-upstream-2.0.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-AWa4QF+UQqDSNOgSNYifNtnAlw36Qc3pUpqFv+hck9U="
+    }
+}

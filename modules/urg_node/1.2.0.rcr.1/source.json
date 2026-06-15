@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-hss/OqzohsnDH6di7bs5w4VXX8oT6Z8l6IKvDwLJ++A=",
+    "url": "https://github.com/ros2-gbp/urg_node-release/archive/refs/tags/upstream/1.2.0.tar.gz",
+    "strip_prefix": "urg_node-release-upstream-1.2.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-B8BKWI4Vb9h1TDexLE0HgAxRT9uZp9/T+U0n5WXb3MQ="
+    }
+}

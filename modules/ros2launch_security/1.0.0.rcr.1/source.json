@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-fNeSZk7FwaOjFudZzV8RTrBe0F2VmA/YTFvMl2aYCP8=",
+    "url": "https://github.com/ros2-gbp/ros2launch_security-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "ros2launch_security-release-upstream-1.0.0/ros2launch_security",
+    "overlay": {
+        "BUILD.bazel": "sha256-D3LHfw+5tEwQQqe7OwjNLoBGtj02nprvW0RvhaLBtmk="
+    }
+}

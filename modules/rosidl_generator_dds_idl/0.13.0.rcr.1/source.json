@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-OZOhPpxNjBQamm8e2sCuvcNqvv73Ps6rHPYLSLCY+jU=",
+    "url": "https://github.com/ros2-gbp/rosidl_dds-release/archive/refs/tags/upstream/0.13.0.tar.gz",
+    "strip_prefix": "rosidl_dds-release-upstream-0.13.0/rosidl_generator_dds_idl",
+    "overlay": {
+        "BUILD.bazel": "sha256-8JNUhpuQLlDYnpTYvyQahtH/oT2K3DeA0l/Cb4UB2OQ="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-MWQc37FzX3EqstufQZcMFHJiPNGdSTl6IXqQ4x32biQ=",
+    "url": "https://github.com/ros2-gbp/async_web_server_cpp-release/archive/refs/tags/upstream/2.0.1.tar.gz",
+    "strip_prefix": "async_web_server_cpp-release-upstream-2.0.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-SE1K/Or8L8shwqAvauR1YPDiDxndSXeGWsqHwzKdsU0="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-xz1jiqAUXFJWB8nxwcjflgogC/bdht5thPOYn2BKw5o=",
+    "url": "https://github.com/ros2-gbp/kdl_parser_py-release/archive/refs/tags/upstream/3.0.0.tar.gz",
+    "strip_prefix": "kdl_parser_py-release-upstream-3.0.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-0XkavbIYSgLkKfVZ3u1d/XRTB3c6icj39DH/SP9zNUI="
+    }
+}

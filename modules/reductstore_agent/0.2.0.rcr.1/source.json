@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-CfcmDIxI/n+JIGdMRY0scsHM7B6jYgeSmmK7RPdt2oo=",
+    "url": "https://github.com/ros2-gbp/reductstore_agent-release/archive/refs/tags/upstream/0.2.0.tar.gz",
+    "strip_prefix": "reductstore_agent-release-upstream-0.2.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-QNRRv2avgRuI7JRZJPhAWvMJxqL1qc0j/2iThW0ze/k="
+    }
+}

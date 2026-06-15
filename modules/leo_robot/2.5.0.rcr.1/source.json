@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-rGyMz9qJ1gZ6zWiptbFx6SACh+Hh4rsMDFSTNj/KDgE=",
+    "url": "https://github.com/ros2-gbp/leo_robot-release/archive/refs/tags/upstream/2.5.0.tar.gz",
+    "strip_prefix": "leo_robot-release-upstream-2.5.0/leo_robot",
+    "overlay": {
+        "BUILD.bazel": "sha256-BDtH5o+Cwf6nSKhgUEA8kphs1sKPMkKfJK7ODQkoxPw="
+    }
+}

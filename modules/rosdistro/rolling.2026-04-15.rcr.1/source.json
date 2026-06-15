@@ -1,0 +1,16 @@
+{
+    "integrity": "sha256-ET0el1N0hBHN/6ZKxySeWTMrX4/t+yFX1V1RVJ17zqU=",
+    "url": "https://github.com/asymingt/rosdistro/archive/refs/tags/rolling/2026-04-15.tar.gz",
+    "strip_prefix": "rosdistro-rolling-2026-04-15",
+    "overlay": {
+        "libzmq_build.patch": "sha256-GoMu/NEhTjzQBeUm3AnyuzX9+9h8AtGuPHw5Ci4r77k=",
+        "cppzmq_build.patch": "sha256-lmSOyChvr5N3xII3iAQpBUHGO5jImVfjA8dJJHMnVBE=",
+        "BUILD.bazel": "sha256-1c+RiEnvFvc7IKJ9PegI61VtKW4vzFDPCXQrT4Kt/Bs=",
+        "libzmq_module.patch": "sha256-aMjZ9KHtXKVokaOQ5AvOUINYGJIv0JL9GpfcZSTrTnY=",
+        "MODULE.bazel.lock": "sha256-mpyIRu+X0NpHKR2VAo4Pxs9xLezQehoVd4gXjxmK55c=",
+        "requirements.in": "sha256-0FBNCCUjKBxkjXBOog6omRpTIY12rrcaK/FFPOFlKvI=",
+        "cppzmq_module.patch": "sha256-/HI0du88vt3AR3kaRRo1fTBtHrAXn1+JQ2cUIOGHDB4=",
+        "ogg_visibility.patch": "sha256-Uteu9QkqyisXBYGGJbVIOPiwnPQ1oqtC4Hf9vrdIVu8=",
+        "requirements.txt": "sha256-h7+3UrUgoXNWn8B1ogD+JGjf7uQekBWWQjjRC7ZUcSA="
+    }
+}

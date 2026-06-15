@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-5/jPnAC9o6E7gxVdxis0NzuOsn5tvlEOEsZVxiL0GF4=",
+    "url": "https://github.com/ros2-gbp/example_interfaces-release/archive/refs/tags/upstream/0.14.1.tar.gz",
+    "strip_prefix": "example_interfaces-release-upstream-0.14.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-pOHR+q+gqOH2/frrYtgN3+mIJLKfh7YZHlnHxmGp6NI="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-jJW7W8uPx84ViTkD4Kfi+t86nfJOSrAsR0jMp25zT/o=",
+    "url": "https://github.com/ros2-gbp/flexbe_behavior_engine-release/archive/refs/tags/upstream/4.0.3.tar.gz",
+    "strip_prefix": "flexbe_behavior_engine-release-upstream-4.0.3/flexbe_testing",
+    "overlay": {
+        "BUILD.bazel": "sha256-q9C+Bz6rTHtRJYSiQUExRaMyH9zwsanNBmeYKfb7CXI="
+    }
+}

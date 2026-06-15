@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-0MFG4vbge+00BatOm3lQfGnXQibwsqqOMIh9Hs8jfWk=",
+    "url": "https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/upstream/2.4.4.tar.gz",
+    "strip_prefix": "rcl_interfaces-release-upstream-2.4.4/statistics_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-jb+B1jMrNTuEd3xMGH2mpWb8N17C/gAFd8NArmfLTzk="
+    }
+}

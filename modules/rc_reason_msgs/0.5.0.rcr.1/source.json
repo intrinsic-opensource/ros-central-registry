@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-C4m3B0ePfQAKHsHhwJmb+rC0BjAgmuLqj34GepKsGls=",
+    "url": "https://github.com/ros2-gbp/rc_reason_clients-release/archive/refs/tags/upstream/0.5.0.tar.gz",
+    "strip_prefix": "rc_reason_clients-release-upstream-0.5.0/rc_reason_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-SvLQzddGCvMsSE1YBRN5VN/2d8WW6gDqSLsZXCA+6UY="
+    }
+}

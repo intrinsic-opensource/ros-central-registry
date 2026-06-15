@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-4XdgoZgbF5Eya9Qew8gJ2PxHbfhRmw4Bx/Ebdn8NjZM=",
+    "url": "https://github.com/ros2-gbp/tensorrt_cmake_module-release/archive/refs/tags/upstream/0.0.5.tar.gz",
+    "strip_prefix": "tensorrt_cmake_module-release-upstream-0.0.5",
+    "overlay": {
+        "BUILD.bazel": "sha256-SXfhVFKRWHV0GeiVhixHB5FlUQP7fweK+jI3ZfZ9R1Y="
+    }
+}

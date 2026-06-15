@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-ql4nwPMk0od7kK9a/X/qmp4dbFts/ix1PbAtkgc5o78=",
+    "url": "https://github.com/ros2-gbp/visp-release/archive/refs/tags/upstream/3.7.0.tar.gz",
+    "strip_prefix": "visp-release-upstream-3.7.0",
+    "overlay": {
+        "BUILD.bazel": "sha256-3v2OD9Yyw5vS7yL6vihl3i2LB//gBN8YPvNPlfgvuO4="
+    }
+}

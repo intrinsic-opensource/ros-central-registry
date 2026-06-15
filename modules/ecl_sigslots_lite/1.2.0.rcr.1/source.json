@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-VOZPKtua7ckLaxT+ftI8FfG5/f1hDy2G/mgvxO6HfcI=",
+    "url": "https://github.com/ros2-gbp/ecl_lite-release/archive/refs/tags/upstream/1.2.0.tar.gz",
+    "strip_prefix": "ecl_lite-release-upstream-1.2.0/ecl_sigslots_lite",
+    "overlay": {
+        "BUILD.bazel": "sha256-LY0KAkVgylvsKbfYlgHFAnJtDmGOCADsfEy2bg7L6nM="
+    }
+}

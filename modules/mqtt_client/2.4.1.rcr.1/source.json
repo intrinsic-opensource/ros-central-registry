@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-iU0ERRhhandThIMrQL+peWbYplZgm8a1gUdU2d1kkRY=",
+    "url": "https://github.com/ros2-gbp/mqtt_client-release/archive/refs/tags/upstream/2.4.1.tar.gz",
+    "strip_prefix": "mqtt_client-release-upstream-2.4.1/mqtt_client",
+    "overlay": {
+        "BUILD.bazel": "sha256-88jIU1XJ0S97N2xqd36SUeHldE++X+7iGwz2SJZjFbY="
+    }
+}

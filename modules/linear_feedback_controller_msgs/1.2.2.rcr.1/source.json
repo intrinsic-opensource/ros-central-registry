@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-XnMq/Hb3e5N/p3l88+hT6Er1sQh8RTrbrViOT69s8CY=",
+    "url": "https://github.com/ros2-gbp/linear-feedback-controller-msgs-release/archive/refs/tags/upstream/1.2.2.tar.gz",
+    "strip_prefix": "linear-feedback-controller-msgs-release-upstream-1.2.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-+9XlkBMNUdhBHrnsoB2qUR5qmO017BFs8WwwBBcqHL4="
+    }
+}

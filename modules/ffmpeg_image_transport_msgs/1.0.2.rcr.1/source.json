@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-WpTa4oCRkMwzk83q5jePbCcM6HIWVmmczZlLcpPRC78=",
+    "url": "https://github.com/ros2-gbp/ffmpeg_image_transport_msgs-release/archive/refs/tags/upstream/1.0.2.tar.gz",
+    "strip_prefix": "ffmpeg_image_transport_msgs-release-upstream-1.0.2",
+    "overlay": {
+        "BUILD.bazel": "sha256-AIRnyYmOV/jWEGUhmabp1GynQpWZCyrwhhVN8t76tvE="
+    }
+}

@@ -10,7 +10,8 @@
     ],
     "versions": [
         "0.7.0",
-        "0.7.0.rcr.0"
+        "0.7.0.rcr.0",
+        "0.7.0.rcr.1"
     ],
     "yanked_versions": {}
 }

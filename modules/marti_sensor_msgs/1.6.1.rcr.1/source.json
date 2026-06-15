@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-BD6tcVlUcCJVOK2mUWrjhh3bOT+LbkgN26wTYPf/nVg=",
+    "url": "https://github.com/ros2-gbp/marti_messages-release/archive/refs/tags/upstream/1.6.1.tar.gz",
+    "strip_prefix": "marti_messages-release-upstream-1.6.1/marti_sensor_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-oji3X1QQ4APDO1zu/VTLI9VFJ+hYWM9eZN86Afy21Dg="
+    }
+}

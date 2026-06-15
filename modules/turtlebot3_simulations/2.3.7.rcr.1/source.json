@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-uoYADbebi+dVs54k75+DstZtzTdJD1Qz9IJBZ9N61Z8=",
+    "url": "https://github.com/ros2-gbp/turtlebot3_simulations-release/archive/refs/tags/upstream/2.3.7.tar.gz",
+    "strip_prefix": "turtlebot3_simulations-release-upstream-2.3.7/turtlebot3_simulations",
+    "overlay": {
+        "BUILD.bazel": "sha256-ObIFtFELEIyv0oZNqGFQG8+rKp46Ubyu/CXduh/PlYw="
+    }
+}

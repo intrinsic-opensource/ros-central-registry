@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-A/KVuwhfB8LP6g8UvVwRJdaEuFqX1baeB6YeHGmViCc=",
+    "url": "https://github.com/ros2-gbp/plotjuggler_msgs-release/archive/refs/tags/upstream/0.2.3.tar.gz",
+    "strip_prefix": "plotjuggler_msgs-release-upstream-0.2.3",
+    "overlay": {
+        "BUILD.bazel": "sha256-pDy2yOeMkUmZfv+Rj3Ma2KWA7iGHvq9KekmkFJ2CcZE="
+    }
+}

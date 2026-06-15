@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-aCU4BdhbiLEyhMazSKQaUBNZLPaK+L/HmksMqfbzHSA=",
+    "url": "https://github.com/ros2-gbp/ardrone_ros-release/archive/refs/tags/upstream/2.0.3.tar.gz",
+    "strip_prefix": "ardrone_ros-release-upstream-2.0.3/src/ardrone_sdk",
+    "overlay": {
+        "BUILD.bazel": "sha256-oL1mjs/f1qlSbsnNeQ9m0pAzP5Qrdsnr5RluCYGp174="
+    }
+}

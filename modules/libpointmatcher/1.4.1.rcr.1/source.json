@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-bQK9WsmgulN69I88u2oftMJ1KOICfehkqtQ1R6XDfDU=",
+    "url": "https://github.com/ros2-gbp/libpointmatcher-release/archive/refs/tags/upstream/1.4.1.tar.gz",
+    "strip_prefix": "libpointmatcher-release-upstream-1.4.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-S9WMxBntqduIuXQQfMq+slkcifos8PxDCakIfVA7bQA="
+    }
+}

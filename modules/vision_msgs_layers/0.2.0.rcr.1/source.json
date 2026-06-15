@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-xumxVtUYPjqM3ICnGewfdvJiniraGnx4T9d9jo+lels=",
+    "url": "https://github.com/ros2-gbp/vision_msgs_layers-release/archive/refs/tags/upstream/0.2.0.tar.gz",
+    "strip_prefix": "vision_msgs_layers-release-upstream-0.2.0/vision_msgs_layers",
+    "overlay": {
+        "BUILD.bazel": "sha256-Me8uZ2Vnhl61vnKEPF57BNNXyX6eBvcJr8wNWbWuNj4="
+    }
+}

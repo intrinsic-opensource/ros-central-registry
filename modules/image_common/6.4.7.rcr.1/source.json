@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-/9a8QJbmBKbWM+qzhdOFhQRjMoc8eSD5uZk59nhShpE=",
+    "url": "https://github.com/ros2-gbp/image_common-release/archive/refs/tags/upstream/6.4.7.tar.gz",
+    "strip_prefix": "image_common-release-upstream-6.4.7/image_common",
+    "overlay": {
+        "BUILD.bazel": "sha256-e2odB3FEoxBWMtFkQJJaZEOzs9VeXs2lFB4K8X3Ypr4="
+    }
+}

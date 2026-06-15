@@ -1,0 +1,11 @@
+{
+    "integrity": "sha256-RuHe6AXHGM8cYeGIBhMZa/AqIzPmk4VLtRia4cO0RHg=",
+    "url": "https://github.com/ros2-gbp/rqt_plot-release/archive/refs/tags/upstream/1.7.4.tar.gz",
+    "strip_prefix": "rqt_plot-release-upstream-1.7.4",
+    "overlay": {
+        "BUILD.bazel": "sha256-uIYHW9o77HEChFVuTJcHEaGbyFL/Z8JIGhD7dHpyS8o="
+    },
+    "patches": {
+        "src__rqt_plot__main__py.patch": "sha256-y8h4O86IRNRndnm8H8ZsEIUP6JRtsf/jB2tyCttCASM="
+    }
+}

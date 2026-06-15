@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-rKdjMRUHb9OL4mmV8BN7WZ0JnZ/Y7cHak+kRH5ibB3Q=",
+    "url": "https://github.com/ros2-gbp/open_manipulator-release/archive/refs/tags/upstream/4.1.2.tar.gz",
+    "strip_prefix": "open_manipulator-release-upstream-4.1.2/ros2_controller/om_spring_actuator_controller",
+    "overlay": {
+        "BUILD.bazel": "sha256-waU5Tpwly7cspgJOZxSbm5uGNk6r1afe1Nk4tA07IWM="
+    }
+}

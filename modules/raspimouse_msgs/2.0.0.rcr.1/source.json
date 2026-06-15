@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-zcxG0xgj6Sexnr2QxJjrlngO4cacI13jE9Zw6tsxc3E=",
+    "url": "https://github.com/ros2-gbp/raspimouse2-release/archive/refs/tags/upstream/2.0.0.tar.gz",
+    "strip_prefix": "raspimouse2-release-upstream-2.0.0/raspimouse_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-DcAj/yVLoOFyohUeTvrdBhVtj0KwNaJ4Wc1jd74Sz7k="
+    }
+}

@@ -17,28 +17,37 @@ module(
     version = "rolling.2026-04-15.rcr.1",
 )
 
-# BCR merged.
+# BCR dependencies for this package
 
 bazel_dep(name = "aspect_rules_py", version = "1.11.2")
-bazel_dep(name = "bazel_skylib", version = "1.9.0")
-bazel_dep(name = "cmake_configure_file", version = "0.1.7")
-bazel_dep(name = "google_benchmark", version = "1.9.5")
-bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
-bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "protobuf", version = "35.0-rc1")
 bazel_dep(name = "rules_cc", version = "0.2.17")
 bazel_dep(name = "rules_python", version = "1.9.0")
-bazel_dep(name = "rules_qt", version = "0.0.6")
 bazel_dep(name = "rules_rs", version = "0.0.56")
 bazel_dep(name = "rules_rust", version = "0.69.0")
-bazel_dep(name = "rules_shell", version = "0.7.1")
 bazel_dep(name = "llvm", version = "0.8.6")
 
-# LLVM
+## RCR deps
 
+# Load the release
+bazel_dep(name = "ros", version = "rolling.2026-04-15.rcr.1")
+
+# Make the following packages visible to this project.
+bazel_dep(name = "rclc", version="0.0.0")
+bazel_dep(name = "rclcpp", version="0.0.0")
+bazel_dep(name = "rclpy", version="0.0.0")
+bazel_dep(name = "rosidl_generator_c", version="0.0.0")
+bazel_dep(name = "rosidl_generator_cpp", version="0.0.0")
+bazel_dep(name = "rosidl_generator_py", version="0.0.0")
+bazel_dep(name = "rosidl_generator_rs", version="0.0.0")
+bazel_dep(name = "sensor_msgs", version="0.0.0")
+
+## BOOTSTRAP
+
+# Register our hermetic compiler (clang)
 register_toolchains("@llvm//toolchain:all")
 
-# Python
+# Python / pip
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
@@ -49,22 +58,10 @@ python.toolchain(
 pip_ros = use_extension("@rosdistro//python:defs.bzl", "pip_ros")
 use_repo(pip_ros, "pip_ros")
 
-# Rust
+# Rust / crates
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
     edition = "2021",
     versions = ["1.85.0"],
 )
-
-# Qt6
-
-qt = use_extension("@rules_qt//extension:qt.bzl", "fetch")
-qt.install(
-    name = "qt_linux_x86_64",
-    build_file = "@rules_qt//extension:qt/6.8.3/linux_x86_64.BUILD",
-    os = "linux",
-    version = "6.8.3",
-)
-use_repo(qt, "qt_linux_x86_64")
-register_toolchains("@rules_qt//tools:all")
