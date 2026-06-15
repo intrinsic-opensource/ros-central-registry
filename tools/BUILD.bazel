@@ -14,8 +14,16 @@
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 load("@pip_ros_central_registry//:requirements.bzl", "requirement")
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 
 package(default_visibility = ["//visibility:public"])
+
+compile_pip_requirements(
+    name = "requirements",
+    requirements_in = "//:requirements.in",
+    requirements_txt = "//:requirements.txt",
+    visibility = ["//visibility:public"],
+)
 
 #### DEVELOPER PREVIEW TOOLING (DEPRECATED) ##############################
 

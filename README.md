@@ -33,3 +33,34 @@ We currently support C, C++ and Python client nodes, as well as the generation o
 ```
 bazel query //examples/...
 ```
+
+# Performance
+
+For the DESKTOP release:
+
+colcon build
+------------
+
+Summary: 372 packages finished [24min 16s]
+  14 packages had stderr output: foonathan_memory_vendor google_benchmark_vendor gz_cmake_vendor gz_math_vendor gz_utils_vendor iceoryx_binding_c iceoryx_introspection iceoryx_posh mimick_vendor rmw_cyclonedds_cpp rviz_common rviz_ogre_vendor test_tracetools zenoh_cpp_vendor
+
+real    24m16.665s
+user    486m11.886s
+sys     148m31.031s
+
+
+colcon test
+-----------
+
+Summary: 372 packages finished [42min 7s]
+  7 packages had stderr output: launch_pytest qt_dotgraph ros2bag rqt_console rqt_topic test_launch_ros tf2_tools
+  11 packages had test failures: rclcpp ros2doctor ros2interface ros2param ros2service ros2topic sros2 test_rclcpp test_tracetools test_tracetools_launch topic_monitor
+
+real    42m9.380s
+user    340m33.065s
+sys     34m16.369s
+ubuntu@b5ad802dc826:~/lyrical$ 
+
+
+bazel build
+-----------

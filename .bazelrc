@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Augment the BCR with a few of our own modules in the docs folder.
-common --registry=file://%workspace% --registry=https://bcr.bazel.build
+common --registry=https://bcr.bazel.build --registry=https://intrinsic-opensource.github.io/ros-central-registry
 
 # Remote cache.
 common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
@@ -36,6 +36,7 @@ test --sandbox_default_allow_network=true
 
 # Use C++17 standard by default across the whole repo.
 build --cxxopt="-std=c++17"
+build --dynamic_mode=off
 
 # Ensure that we use toolchains_llvm instead of the host toolchain.
 build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"

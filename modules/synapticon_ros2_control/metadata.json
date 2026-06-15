@@ -1,5 +1,5 @@
 {
-    "homepage": "https://github.com/ros2-gbp/synapticon_ros2_control-release",
+    "homepage": "https://github.com/synapticon/synapticon_ros2_control-release",
     "maintainers": [
         {
             "email": "simmers@google.com",
@@ -9,9 +9,6 @@
         }
     ],
     "versions": [
-        "0.1.2",
-        "0.1.2.rcr.0",
-        "0.1.2.rcr.1",
         "0.3.0",
         "0.3.0.rcr.0"
     ],
