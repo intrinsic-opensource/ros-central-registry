@@ -21,7 +21,8 @@ module(
 
 bazel_dep(name = "aspect_rules_py", version = "1.11.2")
 bazel_dep(name = "protobuf", version = "35.0-rc1")
-bazel_dep(name = "rules_cc", version = "0.2.17")
+bazel_dep(name = "rules_cc", version = "0.2.18")
+bazel_dep(name = "rules_go", version = "0.60.0")
 bazel_dep(name = "rules_python", version = "1.9.0")
 bazel_dep(name = "rules_rs", version = "0.0.56")
 bazel_dep(name = "rules_rust", version = "0.69.0")
@@ -32,15 +33,16 @@ bazel_dep(name = "llvm", version = "0.8.6")
 # Load the release
 bazel_dep(name = "ros", version = "rolling.2026-04-15.rcr.1")
 
-# Make the following packages visible to this project.
+# Make the following packages visible to this project. We use the dummy package
+# version "0.0.0" to satisfy Bazel's need for a version, but be guaranteed that
+# whatever is transitively imported by "ros" overrides this dummy version.
 bazel_dep(name = "rclc", version="0.0.0")
 bazel_dep(name = "rclcpp", version="0.0.0")
 bazel_dep(name = "rclpy", version="0.0.0")
-bazel_dep(name = "rosidl_generator_c", version="0.0.0")
-bazel_dep(name = "rosidl_generator_cpp", version="0.0.0")
-bazel_dep(name = "rosidl_generator_py", version="0.0.0")
-bazel_dep(name = "rosidl_generator_rs", version="0.0.0")
+bazel_dep(name = "rosdistro", version="0.0.0")
+bazel_dep(name = "rosidl_core_generators", version="0.0.0")
 bazel_dep(name = "sensor_msgs", version="0.0.0")
+bazel_dep(name = "std_msgs", version="0.0.0")
 
 ## BOOTSTRAP
 
