@@ -1,0 +1,15 @@
+{
+    "homepage": "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf",
+    "maintainers": [
+        {
+            "email": "simmers@google.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "versions": [
+        "1.0.0"
+    ],
+    "yanked_versions": {}
+}

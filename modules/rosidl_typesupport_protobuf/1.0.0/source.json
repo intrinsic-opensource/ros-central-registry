@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-C/01A0m81jBwFumT8pAmXI3PeCM+yqLM83PXBh4X/DE=",
+    "url": "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/refs/tags/v1.0.0.tar.gz",
+    "strip_prefix": "rosidl_typesupport_protobuf-1.0.0/rosidl_typesupport_protobuf"
+}
