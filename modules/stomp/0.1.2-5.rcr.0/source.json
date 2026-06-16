@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-hrHit6nIASWYGBB4jYJ29T3ztFnkX1mgfpt+dzwwcGI=",
+    "url": "https://github.com/ros2-gbp/stomp-release/archive/refs/tags/release/lyrical/stomp/0.1.2-5.tar.gz",
+    "strip_prefix": "stomp-release-release-lyrical-stomp-0.1.2-5",
+    "overlay": {
+        "BUILD.bazel": "sha256-HXEF5yU3OnGE93wBOLlG9z+6sDve2Dd760jFs7ME5HA="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Y5mT0a0+VuGrlIC0ehVtFchYwzlMhschMvY3vFogQGQ=",
+    "url": "https://github.com/ros2-gbp/mola_state_estimation-release/archive/refs/tags/release/lyrical/mola_gtsam_factors/2.4.2-1.tar.gz",
+    "strip_prefix": "mola_state_estimation-release-release-lyrical-mola_gtsam_factors-2.4.2-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-u+doAGqvMAD4F1raljAI/3Lj7gw2tZ6nL6Ux4A9qJpU="
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-qDCm64fCWzFt+L78HsJGzXu7coRo+hzZz0pVHVcsEPM=",
+    "url": "https://github.com/ros2-gbp/rmf_internal_msgs-release/archive/refs/tags/release/lyrical/rmf_lift_msgs/4.0.0-3.tar.gz",
+    "strip_prefix": "rmf_internal_msgs-release-release-lyrical-rmf_lift_msgs-4.0.0-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-C5AKbqVwRPoa+C7xqoJYxoXxeBJI/ExeNsZAtyuhcv0=",
+        "msg/BUILD.bazel": "sha256-OsmspkdmxDmUrxCL27N5/cEM2nRdNZScshIPG4u/J4I="
+    }
+}

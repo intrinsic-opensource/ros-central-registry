@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-FU8PgQ/NIeKt56NZCnpNzzqrIxeCEiOUmMp1KYrecQg=",
+    "url": "https://github.com/ros2-gbp/geometry2-release/archive/refs/tags/release/lyrical/tf2_py/0.45.7-3.tar.gz",
+    "strip_prefix": "geometry2-release-release-lyrical-tf2_py-0.45.7-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-/DTXyhSe7e7Kn1WD7jdkxOEWxMa7jgE/ifNCcory2Ms="
+    }
+}

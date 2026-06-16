@@ -119,8 +119,63 @@ class RosWorker:
         Fetch all packages in the distro and return a dictionary of packages.
         """
 
-        packages: Dict[str, RosSource] = {}
-        
+        # Our base package set includes the e-ecal/rosidl_typesupport_protobuf project, which enables
+        # ROS message to .proto conversion proto type adapters.
+        packages: Dict[str, RosSource] = {
+            "rosidl_adapter_proto": RosSource(
+                version = "1.0.0",
+                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/refs/tags/v1.0.0.tar.gz",
+                dependencies = [
+                    "ament_cmake_pytest",
+                    "ament_cmake",
+                    "rosidl_cli",
+                    "rosidl_cmake",
+                    "rosidl_parser",
+                ],
+            ),
+            "rosidl_typesupport_protobuf": RosSource(
+                version = "1.0.0",
+                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/refs/tags/v1.0.0.tar.gz",
+                dependencies = [
+                    "ament_cmake",
+                    "rosidl_generator_c",
+                ],
+            ),
+            "rosidl_typesupport_protobuf_c": RosSource(
+                version = "1.0.0",
+                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/refs/tags/v1.0.0.tar.gz",
+                dependencies = [
+                    "ament_cmake_gtest",
+                    "ament_cmake",
+                    "rmw",
+                    "rosidl_adapter_proto",
+                    "rosidl_cmake",
+                    "rosidl_generator_cpp",
+                    "rosidl_parser",
+                    "rosidl_runtime_cpp",
+                    "rosidl_typesupport_interface",
+                    "rosidl_typesupport_protobuf",
+                    "rosidl_typesupport_introspection_cpp",
+                ],
+            ),
+            "rosidl_typesupport_protobuf_cpp": RosSource(
+                version = "1.0.0",
+                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/refs/tags/v1.0.0.tar.gz",
+                dependencies = [
+                    "ament_cmake_gtest",
+                    "ament_cmake",
+                    "rmw",
+                    "rosidl_adapter_proto",
+                    "rosidl_cmake",
+                    "rosidl_generator_cpp",
+                    "rosidl_parser",
+                    "rosidl_runtime_cpp",
+                    "rosidl_typesupport_interface",
+                    "rosidl_typesupport_protobuf",
+                ],
+            ),
+        }
+
         for pkg_name in self.package_names:
             # Skip packages that are being vendored by rosdistro/cc:<x> targets.
             if pkg_name in IGNORED_PACKAGES:
@@ -132,11 +187,15 @@ class RosWorker:
             # Get the release repository name.
             repo = self.rosdistro.repositories[release_package.repository_name].release_repository
 
-            # Package version and URL.
-            pkg_version = repo.version.split("-")[0]
-            pkg_url = '{url}/archive/refs/tags/{tag}.tar.gz'.format(
+            # Version, including the patch number.
+            pkg_version = repo.version
+
+            # Stable URL to the source tarball.
+            pkg_url = '{url}/archive/refs/tags/release/{ros_distro}/{pkg_name}/{pkg_version}.tar.gz'.format(
                 url=repo.url.replace('.git', ''),
-                tag='upstream/{0}'.format(pkg_version)
+                ros_distro=self.ros_distro,
+                pkg_name=pkg_name,
+                pkg_version=pkg_version
             )
 
             # Get dependencies for various package.xml properties.
@@ -183,7 +242,7 @@ class RosWorker:
             packages[pkg_name] = RosSource(
                 pkg_version,
                 pkg_url,
-                os_deps
+                os_deps,
             )
 
         return packages

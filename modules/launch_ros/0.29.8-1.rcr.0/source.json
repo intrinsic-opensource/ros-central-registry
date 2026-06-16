@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-+DzjgdWnLF0jfsX3wWA6SvXvGqcQm2W1MFXY85BoyMQ=",
+    "url": "https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/lyrical/launch_ros/0.29.8-1.tar.gz",
+    "strip_prefix": "launch_ros-release-release-lyrical-launch_ros-0.29.8-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-0ssh2AIZ77IiJRqfPlC84/+1irK58I4IGBbCNgu9je0="
+    }
+}

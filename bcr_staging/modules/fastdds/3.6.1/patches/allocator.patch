@@ -1,0 +1,73 @@
+diff --git a/src/cpp/utils/collections/FixedSizeQueue.hpp b/src/cpp/utils/collections/FixedSizeQueue.hpp
+index 378cbcd..92bcdef 100644
+--- a/src/cpp/utils/collections/FixedSizeQueue.hpp
++++ b/src/cpp/utils/collections/FixedSizeQueue.hpp
+@@ -346,7 +346,7 @@ public:
+             return false;
+         }
+         --head_;
+-        allocator_.construct(&(*head_), val);
++        std::allocator_traits<allocator_type>::construct(allocator_, &(*head_), val);
+         ++size_;
+         return true;
+     }
+@@ -386,7 +386,7 @@ public:
+             return false;
+         }
+         --head_;
+-        allocator_.construct(&(*head_), std::forward<Args &&>(args)...);
++        std::allocator_traits<allocator_type>::construct(allocator_, &(*head_), std::forward<Args &&>(args)...);
+         ++size_;
+         return true;
+     }
+@@ -406,7 +406,7 @@ public:
+             return false;
+         }
+-        allocator_.construct(&(*tail_), val);
++        std::allocator_traits<allocator_type>::construct(allocator_, &(*tail_), val);
+         ++tail_;
+         ++size_;
+         return true;
+@@ -446,7 +446,7 @@ public:
+             return false;
+         }
+-        allocator_.construct(&(*tail_), std::forward<Args &&>(args)...);
++        std::allocator_traits<allocator_type>::construct(allocator_, &(*tail_), std::forward<Args &&>(args)...);
+         ++tail_;
+         ++size_;
+         return true;
+@@ -464,7 +464,7 @@ public:
+             return false;
+         }
+-        allocator_.destroy(&(*head_));
++        std::allocator_traits<allocator_type>::destroy(allocator_, &(*head_));
+         ++head_;
+         --size_;
+         return true;
+@@ -483,7 +483,7 @@ public:
+             return false;
+         }
+         --tail_;
+-        allocator_.destroy(&(*tail_));
++        std::allocator_traits<allocator_type>::destroy(allocator_, &(*tail_));
+         --size_;
+         return true;
+     }
+@@ -652,7 +652,7 @@ public:
+             ++head_;
+             memmove(&(*head_), &(*old_head), (pos - old_head) * sizeof(value_type));
+ 
+-            allocator_.destroy(&(*old_head));
++            std::allocator_traits<allocator_type>::destroy(allocator_, &(*old_head));
+             --size_;
+             iterator next = pos;
+             return ++next;
+@@ -664,7 +664,7 @@ public:
+             memmove(&(*pos), &(*next), (tail_ - pos) * sizeof(value_type));
+ 
+             --tail_;
+-            allocator_.destroy(&(*tail_));
++            std::allocator_traits<allocator_type>::destroy(allocator_, &(*tail_));
+             --size_;
+             return pos;
+         }

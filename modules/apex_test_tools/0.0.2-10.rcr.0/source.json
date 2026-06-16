@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-5up29BevGegWeo/Bje/xkjEpt9jGLeX55pS0dhIOccE=",
+    "url": "https://github.com/ros2-gbp/apex_test_tools-release/archive/refs/tags/release/lyrical/apex_test_tools/0.0.2-10.tar.gz",
+    "strip_prefix": "apex_test_tools-release-release-lyrical-apex_test_tools-0.0.2-10",
+    "overlay": {
+        "BUILD.bazel": "sha256-UEUc9tbRK7FDhBirmvWz5sFP74Z/KA6PBXTt0+s8q94="
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-+UKKrYzulbwEMRi6qr5WY3LJ7L1FcUkt0XXX/3lWQaI=",
+    "url": "https://github.com/ros2-gbp/gz_plugin_vendor-release/archive/refs/tags/release/lyrical/gz_plugin_vendor/0.3.1-3.tar.gz",
+    "strip_prefix": "gz_plugin_vendor-release-release-lyrical-gz_plugin_vendor-0.3.1-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-oz5F3cdkVaN6Ua/dIip8VG6sc3lfsCp9SGIFV/DFZqo="
+    }
+}

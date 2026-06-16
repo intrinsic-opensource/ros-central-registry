@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-ZORBMhaHgblQdOLhZbo7rnup6F0Z6zIKgVSIgwsolx0=",
+    "url": "https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/release/lyrical/rosidl_core_generators/0.4.3-3.tar.gz",
+    "strip_prefix": "rosidl_core-release-release-lyrical-rosidl_core_generators-0.4.3-3",
+    "overlay": {
+        "defs.bzl": "sha256-AJ0yqcMXbA+f5R0Se0i0fkWsqVRT7Sks9rpvUP4E200=",
+        "BUILD.bazel": "sha256-kUaCf/sRuvdQmz8W2AncmnlUEpvA0Mh5zAKW4PJHhHg=",
+        "rules.bzl": "sha256-uvsfPHr+WV8IinIVX+B9TJpHwNhcVIpvds3/dDbJkq8="
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-PjK0XrXYQyxtdDxr6gKf9qEWWHYlDBNWSA8t7pkPLHs=",
+    "url": "https://github.com/ros2-gbp/rmf_visualization_msgs-release/archive/refs/tags/release/lyrical/rmf_visualization_msgs/1.5.0-3.tar.gz",
+    "strip_prefix": "rmf_visualization_msgs-release-release-lyrical-rmf_visualization_msgs-1.5.0-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-C5AKbqVwRPoa+C7xqoJYxoXxeBJI/ExeNsZAtyuhcv0=",
+        "msg/BUILD.bazel": "sha256-uEJn5p7zalZ/GryVhnb0kKMp7UDZ5bfTaHtvCZrO7Z4="
+    }
+}

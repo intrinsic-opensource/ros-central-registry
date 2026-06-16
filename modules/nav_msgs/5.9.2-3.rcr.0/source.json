@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-KyVB37eeaqlYPAOxQxLjlpioi+ng7EFv9+AfwMIfeB4=",
+    "url": "https://github.com/ros2-gbp/common_interfaces-release/archive/refs/tags/release/lyrical/nav_msgs/5.9.2-3.tar.gz",
+    "strip_prefix": "common_interfaces-release-release-lyrical-nav_msgs-5.9.2-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-zmpH4IOChlVJxL1va2IXzs6cMnIayP48/bqlebl+nUM=",
+        "srv/BUILD.bazel": "sha256-X38/joqHSu91jxH+jye2Jnv7ODVZ88criRV7PnegR6g=",
+        "msg/BUILD.bazel": "sha256-5p8tMFGRdHXgaNNiGVh7NvYgfkjXbecze1ies35cKuE="
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-V6VeWOopefSgd5Pclq/RiT9bliFC9ROgTmykh5865vc=",
+    "url": "https://github.com/ros2-gbp/compass-release/archive/refs/tags/release/lyrical/compass_interfaces/3.0.3-1.tar.gz",
+    "strip_prefix": "compass-release-release-lyrical-compass_interfaces-3.0.3-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-Ef0Tg/vjqtKCpk9mUyAtg53V/zhzWQmg6M80mqEKjFc=",
+        "msg/BUILD.bazel": "sha256-xEsGXrY4NuRXh5XH4ktaoFxaavpwR/Y6HbwinRYbuCg="
+    }
+}

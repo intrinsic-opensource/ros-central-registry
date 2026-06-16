@@ -1,0 +1,11 @@
+{
+    "integrity": "sha256-33/p8xjauI7f4nQcey5XwoyLvAN3QxmLulcbG1nwEUw=",
+    "url": "https://github.com/ros2-gbp/moveit_msgs-release/archive/refs/tags/release/lyrical/moveit_msgs/2.7.1-3.tar.gz",
+    "strip_prefix": "moveit_msgs-release-release-lyrical-moveit_msgs-2.7.1-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-I/5aeMO+UdSGE1Cmb3ys3/zm7g4kMXmLMbdZ64yFQ9A=",
+        "srv/BUILD.bazel": "sha256-cDLQa/qIakj/MqzrPEZ1UiB83SMUt4YclOGz+pqaeug=",
+        "action/BUILD.bazel": "sha256-bPhZVTOgfPPGSyPve8B5tqWw802mm6JB8sqr7SJ9FaY=",
+        "msg/BUILD.bazel": "sha256-ihEmMDB+CJfyuWtUMqij+SECqs9c+psPQqGeEX3Ulr4="
+    }
+}

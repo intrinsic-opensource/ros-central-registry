@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Yf5Mc0Rh2kmnqaXWAY3foMif6L/x6HztumO+ubpTSqI=",
+    "url": "https://github.com/ros2-gbp/flex_sync-release/archive/refs/tags/release/lyrical/flex_sync/2.0.1-3.tar.gz",
+    "strip_prefix": "flex_sync-release-release-lyrical-flex_sync-2.0.1-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-LdWxBVAbWzSBydgHXc6V0Uqc1C8/iHbtymS0KHySYTg="
+    }
+}

@@ -29,7 +29,7 @@ from bazelflore.utils.bzlmod import scan_module_for_dependencies
 from bazelflore.utils.bzlmod import find_latest_patch
 from bazelflore.utils.copyright import get_copyright_header
 
-BAZEL_VERSION = "9.0.2"
+BAZEL_VERSION = "9.1.1"
 
 VARIANTS = {
     "core" : "ros_core",
@@ -62,6 +62,9 @@ def calculate_packages_for_variant(module_dir : Path, start_name: str, start_ver
                 if next_file.exists():
                     if next_name not in visited:
                         queue.append((next_name, next_file))
+    # We don't want rosdistro in the variant because it contains more dependencies
+    # than we need for the variant, and so will lead to compile errors.
+    visited.remove("rosdistro") 
     return sorted(list(visited))
 
 def _setup_workspace(
@@ -120,20 +123,92 @@ def _setup_workspace(
         )
         f.write(get_copyright_header())
         f.write("""
+## BUILD OPTIONS
+
+# Ensure that we use toolchains_llvm instead of the host toolchain.
+build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
+
+# Our bazel distribution provides conversion utilities for transforming
+# ROS messages to .proto files. This prevent protobuf from trying to
+# recompile itself in response to environment changes.
+build --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
+
+# This tells our hermetic LLVM compiler to stub some GCC functions that
+# are used in several places around the ROS Bazel workspace/
+build --@llvm//config:experimental_stub_libgcc_s=True
+
+# Include the realtime library when linking (until fixed in FastDDS).
+build --linkopt="-lrt"
+
+# Use C++20 standard by default across the whole repo.
+build --cxxopt="-std=c++20"
+
+## TEST OPTIONS
+
+# This restricts our test sandboxes from accessing the network, which is
+# important if you want to prevent destructive interference on the ROS
+# messaging system between tests running in parallel
+test --sandbox_default_allow_network=false
+
+## COMMON OPTIONS
+
+# This tells Bazel to look locally for RCR modules at the root of this
+# project, additional "staged" BCR modules in the bcr_staging folder
+# in this workspace, and ultimately at the BCR for the rest.
+common --registry=file://%workspace%/../..             \
+			 --registry=file://%workspace%/../../bcr_staging \
+       --registry=https://bcr.bazel.build
+
+# This suppresses warnings that bazel emits when two dependencies rely
+# on different versions of a single module
 common --check_direct_dependencies=off
-common --registry=file://%workspace%/../..  --registry=https://bcr.bazel.build
+
+# This provides read-only access to a shared Bazel remote cache offered
+# by Intrinsic. It helps speed up fresh checkouts from upstream.
 common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
 common --remote_upload_local_results=false
 common --remote_cache_compression=true
+
+# Critical ROS environment variables needed at test-time.
 common --test_env=ROS_DISTRO="rolling"
 common --test_env=ROS_HOME=".ros"
 common --test_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --test_env=LD_LIBRARY_PATH=lib
+
+# Critical ROS environment variables needed at run-time.
+common --run_env=ROS_DISTRO="rolling"
+common --run_env=ROS_HOME=".ros"
+common --run_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
+common --run_env=LD_LIBRARY_PATH=lib
+
+# Propagate select X11 variables through to the test sandbox, so that
+# any test that uses the display has access to it.
+common --test_env=DISPLAY
+common --test_env=XAUTHORITY
+common --test_env=WAYLAND_DISPLAY
+
+# Our approach to message generation works on a per-message dependency
+# chain. We need to be able to merge messages into 
 common --incompatible_default_to_explicit_init_py
+
+# This restricts the environment variables available to build actions, 
+# keeping the build environment more hermetic.
 common --incompatible_strict_action_env
-test --sandbox_default_allow_network=false
-build --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
+
 {0}
+
+## VENDOR OPTIONS
+
+# This is mainly for developers. It allows you to run 'bazel vendor' to
+# download and patch all upstream BCR and RCR modules into a 'vendor'
+# folder. After you do this, then you can edit the source in place to
+# test by adding the following to your MODULE.bazel file:
+#
+#  local_path_override(
+#     module_name = "action_msgs",
+#     path = "./vendor/action_msgs+",
+#  )
+#
 vendor --vendor_dir=vendor {1}
 """.format(variant_args, repo_args))
 
@@ -154,58 +229,59 @@ vendor --vendor_dir=vendor {1}
     version = "{module_version}",
 )
 
-# BCR deps
+# BCR
+
 bazel_dep(name = "aspect_rules_py", version = "1.11.2")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "cmake_configure_file", version = "0.1.7")
 bazel_dep(name = "google_benchmark", version = "1.9.5")
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
-bazel_dep(name = "llvm", version = "0.7.1")
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "protobuf", version = "35.0-rc1")
 bazel_dep(name = "rules_cc", version = "0.2.17")
-bazel_dep(name = "rules_go", version = "0.60.0") # fixes a bug
+bazel_dep(name = "rules_go", version = "0.60.0")
 bazel_dep(name = "rules_pkg", version = "1.2.0")
 bazel_dep(name = "rules_python", version = "1.9.0")
 bazel_dep(name = "rules_qt", version = "0.0.6")
 bazel_dep(name = "rules_rs", version = "0.0.56")
 bazel_dep(name = "rules_rust", version = "0.69.0")
 bazel_dep(name = "rules_shell", version = "0.7.1")
-bazel_dep(name = "toolchains_llvm", version = "1.6.0")
+bazel_dep(name = "llvm", version = "0.8.6")
 
-# Things that we need to get into the BCR.
-local_path_override(
-    module_name = "imgui",
-    path = "../../submodules/imgui",
-)
-local_path_override(
-    module_name = "ogre",
-    path = "../../submodules/ogre",
-)
+# LLVM
 
-# Setup C and C++
-llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
-llvm.toolchain(llvm_version = "20.1.7")
-use_repo(llvm, "llvm_toolchain")
-register_toolchains("@llvm_toolchain//:all")
+register_toolchains("@llvm//toolchain:all")
 
-# Setup python
+# Python
+
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
     is_default = True,
     python_version = "3.12",
 )
 
-# Setup pip
 pip_ros = use_extension("@rosdistro//python:defs.bzl", "pip_ros")
 use_repo(pip_ros, "pip_ros")
 
-# Setup rust
+# Rust
+
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
     edition = "2021",
     versions = ["1.85.0"],
 )
+
+# Qt6
+
+qt = use_extension("@rules_qt//extension:qt.bzl", "fetch")
+qt.install(
+    name = "qt_linux_x86_64",
+    build_file = "@rules_qt//extension:qt/6.8.3/linux_x86_64.BUILD",
+    os = "linux",
+    version = "6.8.3",
+)
+use_repo(qt, "qt_linux_x86_64")
+register_toolchains("@rules_qt//tools:all")
 
 # RCR deps
 """)

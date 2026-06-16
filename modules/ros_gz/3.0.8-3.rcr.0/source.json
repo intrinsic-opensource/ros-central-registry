@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-lCnv6qCw07RLMqlKGqrOcSUEJ6l3cwIOqw00W9m4Gmg=",
+    "url": "https://github.com/ros2-gbp/ros_ign-release/archive/refs/tags/release/lyrical/ros_gz/3.0.8-3.tar.gz",
+    "strip_prefix": "ros_ign-release-release-lyrical-ros_gz-3.0.8-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-00Cpw0ZJOqSkAh/suD/ZwKxXKOhWW54adDtQ0yiVGUQ="
+    }
+}
