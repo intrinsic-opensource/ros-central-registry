@@ -13,36 +13,18 @@
 # limitations under the License.
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary")
+load("@protobuf//bazel:py_proto_library.bzl", "py_proto_library")
 load("@rosidl_core_generators//:defs.bzl", "c_ros_library", "cc_proto_ros_library", "cc_ros_library", "py_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 package(default_visibility = ["//visibility:public"])
 
-# Generate .proto files for the ros_interface in ./msg/BUILD.bazel.
+# C examples (note that c_ros_library includes proto type support)
 
 c_ros_library(
     name = "example_ros_c_msgs",
     deps = ["//msg:ExampleMessage"],
 )
-
-cc_ros_library(
-    name = "example_ros_cc_msgs",
-    deps = ["//msg:ExampleMessage"],
-)
-
-py_ros_library(
-    name = "example_ros_py_msgs",
-    deps = ["//msg:ExampleMessage"],
-)
-
-# Protobuf pipeline offers C++ and a typesupport adapter.
-
-cc_proto_ros_library(
-    name = "example_cc_proto",
-    deps = ["//msg:ExampleMessage"],
-)
-
-# C examples (note that c_ros_library includes proto type support)
 
 cc_binary(
     name = "example_ros_publisher_c",
@@ -62,7 +44,12 @@ cc_binary(
     ],
 )
 
-# C++ examples (note that cc_ros_library includes proto type support)
+# C++ examples
+
+cc_ros_library(
+    name = "example_ros_cc_msgs",
+    deps = ["//msg:ExampleMessage"],
+)
 
 cc_binary(
     name = "example_ros_publisher_cc",
@@ -82,7 +69,15 @@ cc_binary(
     ],
 )
 
-# Python examples
+# Python examples - please note  you must use the py_library, py_binary,
+# py_test etc. rules from rules_aspect_py and not rules_python. This is
+# because we use namespaced packages and a sitecustomize to route imports
+# to the correct package, which is not supported by rules_python.
+
+py_ros_library(
+    name = "example_ros_py_msgs",
+    deps = ["//msg:ExampleMessage"],
+)
 
 py_binary(
     name = "example_ros_publisher_py",
@@ -104,7 +99,20 @@ py_binary(
     ],
 )
 
-# Protobuf pipeline example
+# Protobuf pipeline example - the "cc_proto_ros_library" is a special
+# rule that provides a ProtoInfo, CcInfo and DefaultInfo. The ProtoInfo
+# allows you to list the target in the deps of other proto rules (eg.
+# py_proto_library) to use ROS messages in a protocol buffer context.
+# The CcInfo provides ROS and Protobuf C++ bindings, and a typeadapter
+# that enables you to send protocol buffer messages directly through
+# ROS; under the hood it takes care of conversion for you. The last
+# DefaultInfo provider are the typesupport shared objects that need to
+# be present in the runfiles in order for ROS typesupport.
+
+cc_proto_ros_library(
+    name = "example_cc_proto",
+    deps = ["//msg:ExampleMessage"],
+)
 
 cc_binary(
     name = "example_proto_publisher_cc",
@@ -122,4 +130,17 @@ cc_binary(
         ":example_cc_proto",
         "@rclcpp//:rclcpp_library",
     ],
+)
+
+# GEre is 
+
+py_proto_library(
+    name = "example_py_proto",
+    deps = [":example_cc_proto"],
+)
+
+py_binary(
+    name = "example_proto_py_export",
+    srcs = ["src/example_proto_py_export.py"],
+    deps = [":example_py_proto"],
 )
