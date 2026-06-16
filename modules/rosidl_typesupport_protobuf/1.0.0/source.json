@@ -1,5 +1,5 @@
 {
-    "integrity": "sha256-C/01A0m81jBwFumT8pAmXI3PeCM+yqLM83PXBh4X/DE=",
-    "url": "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/refs/tags/v1.0.0.tar.gz",
-    "strip_prefix": "rosidl_typesupport_protobuf-1.0.0/rosidl_typesupport_protobuf"
+    "integrity": "sha256-WuQGEmDTMZbu7NJ2oHCz+A7ft/VGPutTHXaw+kOgLoo=",
+    "url": "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/e3de421144f1dd080f234a8a03a2de90bf31314f.tar.gz",
+    "strip_prefix": "rosidl_typesupport_protobuf-e3de421144f1dd080f234a8a03a2de90bf31314f/rosidl_typesupport_protobuf"
 }

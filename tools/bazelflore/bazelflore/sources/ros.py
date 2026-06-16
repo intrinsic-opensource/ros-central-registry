@@ -47,13 +47,18 @@ FORBIDDEN_DEPS = [
 ]
 
 # These are additional dependencies that we need to hard-code in order to
-# make the IDL pipelines work correctly.
+# make the IDL pipelines work correctly in Bazel.
 EXTRA_PACKAGES_DEPS = {
     "rosidl_generator_c" : ["rosidl_runtime_c"],
     "rosidl_typesupport_cpp" : ["rosidl_generator_cpp"],
+    "rosidl_core_generators" : [
+        "rosidl_adapter",
+        "rosidl_adapter_proto",
+        "rosidl_typesupport_protobuf"
+    ],
 }
 
-# Packages that mask BCR packages, which can't happen.
+# ROS packages whose name masks a BCR package, which breaks our workflow.
 IGNORED_PACKAGES = [
     "cyclonedds",
     "fastcdr",
@@ -124,26 +129,29 @@ class RosWorker:
         packages: Dict[str, RosSource] = {
             "rosidl_adapter_proto": RosSource(
                 version = "1.0.0",
-                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/refs/tags/v1.0.0.tar.gz",
+                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/e3de421144f1dd080f234a8a03a2de90bf31314f.tar.gz",
                 dependencies = [
                     "ament_cmake_pytest",
                     "ament_cmake",
                     "rosidl_cli",
                     "rosidl_cmake",
                     "rosidl_parser",
+                    "rosidl_pycommon",
                 ],
             ),
             "rosidl_typesupport_protobuf": RosSource(
                 version = "1.0.0",
-                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/refs/tags/v1.0.0.tar.gz",
+                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/e3de421144f1dd080f234a8a03a2de90bf31314f.tar.gz",
                 dependencies = [
                     "ament_cmake",
                     "rosidl_generator_c",
+                    "rosidl_pycommon",
+                    "rosidl_runtime_c",
                 ],
             ),
             "rosidl_typesupport_protobuf_c": RosSource(
                 version = "1.0.0",
-                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/refs/tags/v1.0.0.tar.gz",
+                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/e3de421144f1dd080f234a8a03a2de90bf31314f.tar.gz",
                 dependencies = [
                     "ament_cmake_gtest",
                     "ament_cmake",
@@ -152,6 +160,8 @@ class RosWorker:
                     "rosidl_cmake",
                     "rosidl_generator_cpp",
                     "rosidl_parser",
+                    "rosidl_pycommon",
+                    "rosidl_runtime_c",
                     "rosidl_runtime_cpp",
                     "rosidl_typesupport_interface",
                     "rosidl_typesupport_protobuf",
@@ -160,7 +170,7 @@ class RosWorker:
             ),
             "rosidl_typesupport_protobuf_cpp": RosSource(
                 version = "1.0.0",
-                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/refs/tags/v1.0.0.tar.gz",
+                url = "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf/archive/e3de421144f1dd080f234a8a03a2de90bf31314f.tar.gz",
                 dependencies = [
                     "ament_cmake_gtest",
                     "ament_cmake",
@@ -169,6 +179,7 @@ class RosWorker:
                     "rosidl_cmake",
                     "rosidl_generator_cpp",
                     "rosidl_parser",
+                    "rosidl_pycommon",
                     "rosidl_runtime_cpp",
                     "rosidl_typesupport_interface",
                     "rosidl_typesupport_protobuf",
