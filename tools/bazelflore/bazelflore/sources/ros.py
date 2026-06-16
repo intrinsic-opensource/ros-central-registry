@@ -54,7 +54,9 @@ EXTRA_PACKAGES_DEPS = {
     "rosidl_core_generators" : [
         "rosidl_adapter",
         "rosidl_adapter_proto",
-        "rosidl_typesupport_protobuf"
+        "rosidl_generator_type_description",
+        "rosidl_typesupport_protobuf_c",
+        "rosidl_typesupport_protobuf_cpp",
     ],
 }
 
