@@ -13,41 +13,33 @@
 # limitations under the License.
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary")
-load("@rosidl_core_generators//:defs.bzl", "c_ros_library", "cc_ros_library", "py_ros_library")
+load("@rosidl_core_generators//:defs.bzl", "c_ros_library", "cc_proto_ros_library", "cc_ros_library", "py_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 package(default_visibility = ["//visibility:public"])
 
 # Generate .proto files for the ros_interface in ./msg/BUILD.bazel.
 
-# proto_ros_library(
-#     name = "example_proto_files",
-#     deps = [
-#         "//examples/msg:ExampleMessage",
-#     ],
-# )
-
-# Generate language bindings to the ros_interface in ./msg/BUILD.bazel.
-
 c_ros_library(
     name = "example_ros_c_msgs",
-    deps = [
-        "//msg:ExampleMessage",
-    ],
+    deps = ["//msg:ExampleMessage"],
 )
 
 cc_ros_library(
     name = "example_ros_cc_msgs",
-    deps = [
-        "//msg:ExampleMessage",
-    ],
+    deps = ["//msg:ExampleMessage"],
 )
 
 py_ros_library(
     name = "example_ros_py_msgs",
-    deps = [
-        "//msg:ExampleMessage",
-    ],
+    deps = ["//msg:ExampleMessage"],
+)
+
+# Protobuf pipeline offers C++ and a typesupport adapter.
+
+cc_proto_ros_library(
+    name = "example_cc_proto",
+    deps = ["//msg:ExampleMessage"],
 )
 
 # C examples (note that c_ros_library includes proto type support)
@@ -57,7 +49,7 @@ cc_binary(
     srcs = ["src/example_ros_publisher.c"],
     deps = [
         ":example_ros_c_msgs",
-        "@rclc",
+        "@rclc//:rclc_library",
     ],
 )
 
@@ -66,7 +58,7 @@ cc_binary(
     srcs = ["src/example_ros_subscriber.c"],
     deps = [
         ":example_ros_c_msgs",
-        "@rclc",
+        "@rclc//:rclc_library",
     ],
 )
 
@@ -77,7 +69,7 @@ cc_binary(
     srcs = ["src/example_ros_publisher.cc"],
     deps = [
         ":example_ros_cc_msgs",
-        "@rclcpp",
+        "@rclcpp//:rclcpp_library",
     ],
 )
 
@@ -86,7 +78,7 @@ cc_binary(
     srcs = ["src/example_ros_subscriber.cc"],
     deps = [
         ":example_ros_cc_msgs",
-        "@rclcpp",
+        "@rclcpp//:rclcpp_library",
     ],
 )
 
@@ -112,22 +104,22 @@ py_binary(
     ],
 )
 
-# # Protobuf pipeline example
+# Protobuf pipeline example
 
-# cc_binary(
-#     name = "example_proto_publisher_cc",
-#     srcs = ["src/example_proto_publisher.cc"],
-#     deps = [
-#         ":example_ros_cc_msgs",
-#         "@rclcpp",
-#     ],
-# )
+cc_binary(
+    name = "example_proto_publisher_cc",
+    srcs = ["src/example_proto_publisher.cc"],
+    deps = [
+        ":example_cc_proto",
+        "@rclcpp//:rclcpp_library",
+    ],
+)
 
-# cc_binary(
-#     name = "example_proto_subscriber_cc",
-#     srcs = ["src/example_proto_subscriber.cc"],
-#     deps = [
-#         ":example_ros_cc_msgs",
-#         "@rclcpp",
-#     ],
-# )
+cc_binary(
+    name = "example_proto_subscriber_cc",
+    srcs = ["src/example_proto_subscriber.cc"],
+    deps = [
+        ":example_cc_proto",
+        "@rclcpp//:rclcpp_library",
+    ],
+)

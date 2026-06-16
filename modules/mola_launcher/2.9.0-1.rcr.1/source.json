@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-chtdlhsOt2I8jzqfpDF4OFNQCymiZK03kIiakg5yl+s=",
+    "url": "https://github.com/ros2-gbp/mola-release/archive/refs/tags/release/lyrical/mola_launcher/2.9.0-1.tar.gz",
+    "strip_prefix": "mola-release-release-lyrical-mola_launcher-2.9.0-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-97N0v+cx0WKf/dukq8Nh0tZ1Ed+ZVoaAJaiIH9gJi2M="
+    }
+}

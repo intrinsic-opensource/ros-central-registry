@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-jdylrl6fCQtaVSCfFvHC5aYNukaBaoehVoGlwqCTQRg=",
+    "url": "https://github.com/ros2-gbp/automatika_embodied_agents-release/archive/refs/tags/release/lyrical/automatika_embodied_agents/0.7.0-3.tar.gz",
+    "strip_prefix": "automatika_embodied_agents-release-release-lyrical-automatika_embodied_agents-0.7.0-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-qbbRHlSgDbq5RtUPJEk1s9IcsZ/g65oGoscLtMqEMdQ=",
+        "action/BUILD.bazel": "sha256-M3p9or+3HEc8ZfQMFFzDzhkSQJLY8ki8sF1FHmeTLOY=",
+        "msg/BUILD.bazel": "sha256-5dPJqahFmMKF5yriTvhlO6Z6fF7R1wLT+a3db8cyC30="
+    }
+}

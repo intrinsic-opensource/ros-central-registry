@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-YEmgShsm2ziUUiE0GI1ZmwcrU3Mzy0eHpPYptcJapkg=",
+    "url": "https://github.com/ros2-gbp/motion_capture_tracking-release/archive/refs/tags/release/lyrical/motion_capture_tracking_interfaces/1.0.8-1.tar.gz",
+    "strip_prefix": "motion_capture_tracking-release-release-lyrical-motion_capture_tracking_interfaces-1.0.8-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-Ref+dsLXXfh4Oyf/Z9wK1tGHWwTvc/bTP/c/PmmCI+M=",
+        "msg/BUILD.bazel": "sha256-41Lv8wSjM6cZtoSMcL0bL/epYHGNOsvOmz1YtUKz3fc="
+    }
+}

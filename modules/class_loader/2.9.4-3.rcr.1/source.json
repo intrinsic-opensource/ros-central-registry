@@ -1,0 +1,14 @@
+{
+    "integrity": "sha256-1KN05F8x71IP0wg4XhA+akmc7q/AWK6GX8VwmfREMzs=",
+    "url": "https://github.com/ros2-gbp/class_loader-release/archive/refs/tags/release/lyrical/class_loader/2.9.4-3.tar.gz",
+    "strip_prefix": "class_loader-release-release-lyrical-class_loader-2.9.4-3",
+    "overlay": {
+        "defs.bzl": "sha256-us3jLmfnFkbgzCIXaY46JMmcUb54iPLiXHKF0WzXPBw=",
+        "BUILD.bazel": "sha256-0B225DkFM58fVEtW7jmfGXLVFfcHca5kBFuHqGTNyT4="
+    },
+    "patches": {
+        "src__class_loader__cpp.patch": "sha256-nTTevx0fTdElBthJLz0KfDsnspGLH9owDclzvthNd2k=",
+        "include__class_loader__class_loader_core__hpp.patch": "sha256-UyFWUuNJ6tOcbjm8dBKvIe7gUCBHrw2BW7J1yp5HUtw="
+    },
+    "patch_strip": 1
+}

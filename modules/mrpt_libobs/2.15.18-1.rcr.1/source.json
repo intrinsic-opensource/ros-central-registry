@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-WwCymqMoqJOLYn4xNwgAHyfdjo0BwMzOYBiu2BSf2dk=",
+    "url": "https://github.com/ros2-gbp/mrpt_ros-release/archive/refs/tags/release/lyrical/mrpt_libobs/2.15.18-1.tar.gz",
+    "strip_prefix": "mrpt_ros-release-release-lyrical-mrpt_libobs-2.15.18-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-7bvtgb3kHI9pEI/kJaTNJYseUjDMKI8FN11b1Vpku3w="
+    }
+}

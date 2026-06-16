@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-HV0K6XvNJqd2rwWDw0txihGPbMcYyFGlxrMa6KuGBts=",
+    "url": "https://github.com/ros2-gbp/ament_lint-release/archive/refs/tags/release/lyrical/ament_cmake_pycodestyle/0.20.6-1.tar.gz",
+    "strip_prefix": "ament_lint-release-release-lyrical-ament_cmake_pycodestyle-0.20.6-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-x7Vgqx3Uzq0EDox/8TlDJf8Vnh41tuLBpH+MyE1l+5w="
+    }
+}

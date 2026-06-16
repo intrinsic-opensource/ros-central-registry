@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-GBvR3M5jqPWfwJyTiGMIVG2a8Ft5W6G1jSMwckCltv8=",
+    "url": "https://github.com/ros2-gbp/rosbridge_suite-release/archive/refs/tags/release/lyrical/rosapi/4.2.0-1.tar.gz",
+    "strip_prefix": "rosbridge_suite-release-release-lyrical-rosapi-4.2.0-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-W0AxWSgcU4jRIjyncjJ7hRRFZEyy0mMDVmH0MGdR42Y="
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "integrity": "sha256-eGZogDCM8u8Ot9Z1yUwYX7TIpAvF6SFz4ouh0dQaZmc=",
+    "url": "https://github.com/asymingt/rosdistro/archive/refs/tags/lyrical/2026-06-08.tar.gz",
+    "strip_prefix": "rosdistro-lyrical-2026-06-08",
+    "overlay": {
+        "libzmq_build.patch": "sha256-GoMu/NEhTjzQBeUm3AnyuzX9+9h8AtGuPHw5Ci4r77k=",
+        "cppzmq_build.patch": "sha256-lmSOyChvr5N3xII3iAQpBUHGO5jImVfjA8dJJHMnVBE=",
+        "BUILD.bazel": "sha256-1c+RiEnvFvc7IKJ9PegI61VtKW4vzFDPCXQrT4Kt/Bs=",
+        "libzmq_module.patch": "sha256-aMjZ9KHtXKVokaOQ5AvOUINYGJIv0JL9GpfcZSTrTnY=",
+        "MODULE.bazel.lock": "sha256-mpyIRu+X0NpHKR2VAo4Pxs9xLezQehoVd4gXjxmK55c=",
+        "requirements.in": "sha256-0FBNCCUjKBxkjXBOog6omRpTIY12rrcaK/FFPOFlKvI=",
+        "cppzmq_module.patch": "sha256-/HI0du88vt3AR3kaRRo1fTBtHrAXn1+JQ2cUIOGHDB4=",
+        "ogg_visibility.patch": "sha256-Uteu9QkqyisXBYGGJbVIOPiwnPQ1oqtC4Hf9vrdIVu8=",
+        "requirements.txt": "sha256-h7+3UrUgoXNWn8B1ogD+JGjf7uQekBWWQjjRC7ZUcSA=",
+        "cc/defs.bzl": "sha256-CjrpSPeKNH5pafkHqlXGz+AYRso+FtJ8L1nZ8azsNBE=",
+        "cc/macros.bzl": "sha256-9p6Q4mwMMxZTpGngr7SyFlzgPBFzzuECSkCQPPujkJU=",
+        "cc/types.bzl": "sha256-rdlVPpnZM5fBfMRUrqSa+9GASlfn/i+mpMv4pul5+BI=",
+        "cc/BUILD.bazel": "sha256-KZfsTjWrcNkmwaOHULdBPpV0k7flrmXab/QNdZGj8LQ=",
+        "cc/rules.bzl": "sha256-QQqwkKTjrTt/Qep1FXo9d1g2fIjm6yoUhhIP3bVtVzY=",
+        "cc/aspects.bzl": "sha256-3ZYy2k+bwCogeto/A7ipoOE+GD7br4BDrv54sfwJwjY=",
+        "cc/mcap_impl.cpp": "sha256-/qFEIYCpqc9IB5xJpJUL6SXUnyVrTjFXc1dpyScZwKQ=",
+        "python/defs.bzl": "sha256-FlOqKavTbRjkQxuIa0TJmE4rUw5cup9zs6A5cb+OrHk=",
+        "python/pytest_main.py": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+        "python/BUILD.bazel": "sha256-sP0ROcpNAotSp6EXjdHOsl43n2pyM6JfMNZtThCLGDY=",
+        "ament/defs.bzl": "sha256-FzZiHMxdUx62oNfSnTGOYlLeWn+o8IRaLoNfM0NUKgU=",
+        "ament/BUILD.bazel": "sha256-ECvrn7FbsuaQMxarEQVcwHnxQ0i5Lm4u9jxWQQuzHyE=",
+        "ament/ament_resource.bzl": "sha256-wMFexM/FViPScF6aK+87rovqF9RUlKVK1h1biO7iJh8=",
+        "ament/ament_index.bzl": "sha256-Six/5w1f8PY3ILeq3bhM+jiJPN0wD2xSq/3HJ3AAofs=",
+        "ament/ament_package.bzl": "sha256-87QO2602ZPY8S7fyW8bx099idEZSMwEdLYLIScOgOv8="
+    }
+}

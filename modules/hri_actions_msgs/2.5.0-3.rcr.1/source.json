@@ -1,0 +1,11 @@
+{
+    "integrity": "sha256-4inTcf94zffsqbIIXb5ROFgNN8GzTR5vQQJtOw2EjpE=",
+    "url": "https://github.com/ros2-gbp/hri_actions_msgs-release/archive/refs/tags/release/lyrical/hri_actions_msgs/2.5.0-3.tar.gz",
+    "strip_prefix": "hri_actions_msgs-release-release-lyrical-hri_actions_msgs-2.5.0-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-PEl0B9lDmzqLhY1ybcNI/qKceVS2n0elcq504vvz6kA=",
+        "srv/BUILD.bazel": "sha256-kDXmS+1vIjf5YNQ5oCR+nn9ksZPxzxIl4g9GWOSlt6Q=",
+        "action/BUILD.bazel": "sha256-KgLd4uFdvtLfhp4MNZo0lII1RXOkQMOHTuMke7m5mQw=",
+        "msg/BUILD.bazel": "sha256-LGK8fy63tHRgjO21kUBVA/h/PppnyHMPQaAIlK4Avho="
+    }
+}

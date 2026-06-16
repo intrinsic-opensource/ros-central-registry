@@ -1,0 +1,11 @@
+{
+    "integrity": "sha256-fX1IyrAWOOZUDar4naefF8Pt9qeI/pXJXPzpuNwBQAM=",
+    "url": "https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2cli_test_interfaces/0.40.7-1.tar.gz",
+    "strip_prefix": "ros2cli-release-release-lyrical-ros2cli_test_interfaces-0.40.7-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-ubUfwCao9pxVRTxGOO4AcXFbl4oOZUh5VjRDmGpPRdw=",
+        "srv/BUILD.bazel": "sha256-YIKMIwp2aXgM/pbTbxYnpvh+F67Vw+oO1MFRPZU+LmE=",
+        "action/BUILD.bazel": "sha256-3Ktf/m6RYekbmRTPnc5T12vOvwLS2Nti9MvwSCEDgsk=",
+        "msg/BUILD.bazel": "sha256-KGMlNontSlP3Q4Mx6r78BhSUFh3nj/Bbbukek56b9fA="
+    }
+}

@@ -14,7 +14,6 @@
 
 module(
     name = "rcr-examples",
-    version = "rolling.2026-04-15.rcr.1",
 )
 
 # BCR dependencies for this package
@@ -31,7 +30,7 @@ bazel_dep(name = "llvm", version = "0.8.6")
 ## RCR deps
 
 # Load the release
-bazel_dep(name = "ros", version = "rolling.2026-04-15.rcr.1")
+bazel_dep(name = "ros", version = "lyrical.2026-06-08.rcr.1")
 
 # Make the following packages visible to this project. We use the dummy package
 # version "0.0.0" to satisfy Bazel's need for a version, but be guaranteed that

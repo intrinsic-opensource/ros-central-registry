@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-aLcxV4+0sjdPl+QXXKaeOa9+bfT+Z7OCRiSjYmaI/5s=",
+    "url": "https://github.com/ros2-gbp/aruco_ros-release/archive/refs/tags/release/lyrical/aruco_msgs/5.0.5-3.tar.gz",
+    "strip_prefix": "aruco_ros-release-release-lyrical-aruco_msgs-5.0.5-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-mkbI8SCeMYN2yqg3LVKsCeiTa0X3l0J38/pdjY6RR8o=",
+        "msg/BUILD.bazel": "sha256-PgM6tJy1SDf/X38oH/lzONeqCQnPe1lhwqF3VNJ87IA="
+    }
+}

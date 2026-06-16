@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-i0kz7K2hVBI5rddIfUsLrJwgBwaFUehODR7ULUp0+vE=",
+    "url": "https://github.com/ros2-gbp/rosidl-release/archive/refs/tags/release/lyrical/rosidl_parser/5.2.1-1.tar.gz",
+    "strip_prefix": "rosidl-release-release-lyrical-rosidl_parser-5.2.1-1",
+    "overlay": {
+        "defs.bzl": "sha256-UahJMxBWRALo7Gw/8iQjuUFLE+aUGHl/f+/i6sgQTM0=",
+        "BUILD.bazel": "sha256-NknYrbUO4r/7gj3x+M8IPJZ8SAyDkC5VcTb0mrzKgkw="
+    }
+}

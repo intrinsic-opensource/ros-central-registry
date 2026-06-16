@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-NkGL7GmgJPiUhd/fLqrjqysz51AqumpP79EdcuaFaaU=",
+    "url": "https://github.com/ros2-gbp/simple_actions-release/archive/refs/tags/release/lyrical/simple_actions/0.5.0-3.tar.gz",
+    "strip_prefix": "simple_actions-release-release-lyrical-simple_actions-0.5.0-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-BXv1x2r+iD3nx7DicCzU8A+GbswOfV9G1x6thHLg6+8="
+    }
+}

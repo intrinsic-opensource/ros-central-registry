@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-lXBclszcGO+MMOeXPcYgF1WgMMg17cG2gePWy+V6KPc=",
+    "url": "https://github.com/ros2-gbp/ros2_control-release/archive/refs/tags/release/lyrical/hardware_interface_testing/6.7.1-1.tar.gz",
+    "strip_prefix": "ros2_control-release-release-lyrical-hardware_interface_testing-6.7.1-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-lNf/Bw0Ba8JIVam6djkSCwRl9o5Gdnk8HA0B0+29aAw="
+    }
+}

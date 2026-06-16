@@ -1,0 +1,11 @@
+{
+    "integrity": "sha256-NhRU4OasZdAuZ7pY75Z5IqciJ1Gz+VtnfoEknRqCgPA=",
+    "url": "https://github.com/ros2-gbp/autoware_auto_msgs-release/archive/refs/tags/release/lyrical/autoware_auto_msgs/1.0.0-8.tar.gz",
+    "strip_prefix": "autoware_auto_msgs-release-release-lyrical-autoware_auto_msgs-1.0.0-8",
+    "overlay": {
+        "BUILD.bazel": "sha256-EujkzP+rIatJYkKP4Yis0lxKkgBIWZ6CTEwnYPfnWS8=",
+        "srv/BUILD.bazel": "sha256-iJX714S/nlh0MxMqgw51yvWmr8ZTl1Yl6toOOsXkTgM=",
+        "action/BUILD.bazel": "sha256-bZVfaQNWEoLyA49XNWxmBiIF18/UDwt0i2ssSB6GmB4=",
+        "msg/BUILD.bazel": "sha256-We9vIMURYaw1IpaDdGGnUVW8eaFP0o5ECA6WDQIqlMQ="
+    }
+}

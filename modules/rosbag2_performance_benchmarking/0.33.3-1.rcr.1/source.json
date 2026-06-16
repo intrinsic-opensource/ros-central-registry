@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-1CRekDirLCXG5xfMaR+Brr8e6TkihoXiI6/ZZPEPWug=",
+    "url": "https://github.com/ros2-gbp/rosbag2-release/archive/refs/tags/release/lyrical/rosbag2_performance_benchmarking/0.33.3-1.tar.gz",
+    "strip_prefix": "rosbag2-release-release-lyrical-rosbag2_performance_benchmarking-0.33.3-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-wZw6E9SAmQsk5rPAS9GI9G2v9O89oI8EDxI/Unq3LKo="
+    }
+}

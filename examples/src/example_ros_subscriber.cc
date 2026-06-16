@@ -30,6 +30,7 @@ public:
       };
     subscription_ =
       this->create_subscription<example::msg::ExampleMessage>("topic", 10, topic_callback);
+    RCLCPP_INFO(this->get_logger(), "Subscriber node started. Waiting for messages...");
   }
 
 private:

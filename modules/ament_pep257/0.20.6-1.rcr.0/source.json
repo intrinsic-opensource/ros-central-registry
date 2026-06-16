@@ -5,8 +5,4 @@
     "overlay": {
         "BUILD.bazel": "sha256-jBXileSpcdQex7ZzJj6owiW3BxOX88phI5LvScqg4Q4="
     }
-    // "patches": {
-    //     "ament_pep257__main__py.patch": "sha256-NiXOjEJqW5t50bK0HgdqMiajl45+gZqw4bXKuy2LA5U="
-    // },
-    // "patch_strip": 1
 }
