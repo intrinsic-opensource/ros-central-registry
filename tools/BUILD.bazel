@@ -1,4 +1,4 @@
-# Copyright 2025 Open Source Robotics Foundation, Inc.
+# Copyright 2026 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,51 +14,8 @@
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 load("@pip_ros_central_registry//:requirements.bzl", "requirement")
-load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 
 package(default_visibility = ["//visibility:public"])
-
-compile_pip_requirements(
-    name = "requirements",
-    requirements_in = "//:requirements.in",
-    requirements_txt = "//:requirements.txt",
-    visibility = ["//visibility:public"],
-)
-
-#### DEVELOPER PREVIEW TOOLING (DEPRECATED) ##############################
-
-# Runs through all packages in the registry_scraper_data.yaml, calculating
-# a diff between the rolling-bazel branch of the submodule in the registry
-# and the upstream version of the package. It then converts this diff to
-# patches and overlays, and constructs a versioned Bazel module for each
-# package in the 'modules' folder of the repo. Run in the following way:
-# > bazel run //tools:manage_submodules -- $PWD
-py_binary(
-    name = "regenerate_modules",
-    srcs = ["registry_scraper_tool.py"],
-    data = [
-        "registry_scraper_data.yaml",
-    ],
-    main = "registry_scraper_tool.py",
-    deps = [
-        "@rosdistro//bazel/python:gitpython",
-        "@rosdistro//bazel/python:pyyaml",
-        "@rosdistro//bazel/python:urllib3",
-        "@rules_python//python/runfiles",
-    ],
-)
-
-# Tool for performing bulk updates to the registry's git submodules. Offers
-# three verbs: "clean", "commit" and "push" used in the following way:
-# > bazel run //tools:manage_submodules -- $PWD clean
-# > bazel run //tools:manage_submodules -- $PWD commit rolling-bazel
-# > bazel run //tools:manage_submodules -- $PWD push rolling-bazel
-py_binary(
-    name = "manage_submodules",
-    srcs = ["manage_submodules.py"],
-)
-
-#### HELPER TOOLING ################################################
 
 # Generates BUILD.bazel files for ROS 2 interface definitions (.msg, .srv,
 # .action, .idl). Scans subdirectories for interface files, parses their

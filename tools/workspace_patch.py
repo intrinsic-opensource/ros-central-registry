@@ -58,9 +58,9 @@ def main():
     args = parser.parse_args()
 
     with yaspin(text="Generating patch set from workspace", color="cyan") as sp:
-        # REF: rolling.2026-01-21.        (bare release without patches)
-        # OLD: rolling.2026-01-21,bcr.2   (what to start with)
-        # NEW: rolling.2026-01-21.bcr.3   (what we are adding)
+        # REF: rolling.2026-01-21         (bare release without patches)
+        # OLD: rolling.2026-01-21.rcr.2   (what to start with)
+        # NEW: rolling.2026-01-21.rcr.3   (what we are adding)
         modules_dir = args.working_directory / "modules"
 
         # Find the release from the given workspace.
