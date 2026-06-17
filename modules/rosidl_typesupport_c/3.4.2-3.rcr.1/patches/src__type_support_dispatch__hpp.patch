@@ -48,7 +48,7 @@
  
  extern const char * typesupport_identifier;
  
-@@ -55,39 +81,83 @@
+@@ -55,39 +81,88 @@
        }
        rcpputils::SharedLibrary * lib = nullptr;
  
@@ -103,7 +103,7 @@
 -
 -        std::string library_name;
 +        const std::string library_name = runfiles->Rlocation(
-+          runfiles_prefix + "lib" + package_name + "_s__rosidl_typesupport_c.so");
++          runfiles_prefix + package_name + "_s__rosidl_typesupport_c.so");
          try {
 -          library_name = rcpputils::get_platform_library_name(library_basename);
 -        } catch (const std::exception & e) {
@@ -113,7 +113,26 @@
 -          return nullptr;
 -        }
 -
--        try {
++          auto lib = new rcpputils::SharedLibrary(library_name);
++          if (lib->has_symbol(map->symbol_name[i])) {
++            map->data[i] = lib;
++          } else {
++            delete lib;
++          }
++        } catch (const std::runtime_error & e) {
++          RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
++            "Could not load library %s: %s", library_name.c_str(), e.what());
++        } catch (const std::bad_alloc & e) {
++          RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
++            "Could not load library %s: %s", library_name.c_str(), e.what());
++        }
++      }
++
++      // Fall back to the typesupport library.
++      if (!map->data[i]) {
++        const std::string library_name = runfiles->Rlocation(
++          runfiles_prefix + "lib" + package_name + "__" + typesupport_name + ".so");
+         try {
 -          lib = new rcpputils::SharedLibrary(library_name);
 +          map->data[i] = new rcpputils::SharedLibrary(library_name);
          } catch (const std::runtime_error & e) {
@@ -124,22 +143,9 @@
            RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
              "Could not load library %s: %s", library_name.c_str(), e.what());
 -          return nullptr;
-         }
+-        }
 -        map->data[i] = lib;
-       }
-+
-+      // Fall back to the typesupport library.
-+      if (!map->data[i]) {
-+        const std::string library_name = runfiles->Rlocation(
-+          runfiles_prefix + "lib" + package_name + "__" + typesupport_name + ".so");
-+        try {
-+          map->data[i] = new rcpputils::SharedLibrary(library_name);
-+        } catch (const std::runtime_error & e) {
-+          RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
-+            "Could not load library %s: %s", library_name.c_str(), e.what());
-+        } catch (const std::bad_alloc & e) {
-+          RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
-+            "Could not load library %s: %s", library_name.c_str(), e.what());
+-      }
 +        }
 +      }
 +
@@ -155,3 +161,11 @@
        auto clib = static_cast<const rcpputils::SharedLibrary *>(map->data[i]);
        lib = const_cast<rcpputils::SharedLibrary *>(clib);
  
+@@ -110,6 +185,7 @@
+       typedef const TypeSupport * (* funcSignature)(void);
+       funcSignature func = reinterpret_cast<funcSignature>(sym);
+       const TypeSupport * ts = func();
++      rcutils_reset_error();
+       return ts;
+     }
+   }

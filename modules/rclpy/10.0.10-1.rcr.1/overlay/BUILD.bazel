@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rosdistro//ament:defs.bzl", "ament_package")
+load("@rosdistro//ament:defs.bzl", "ament_index", "ament_package")
 
 load("@aspect_rules_py//py:defs.bzl", "py_image_layer", "py_library")
 load("@pip_ros//:requirements.bzl", "requirement")
@@ -31,12 +31,6 @@ DEPENDENCIES = {
     "@rcutils//:rcutils": "@rcutils//:rcutils_library",
 }
 
-collect_transitive_dynamic_deps(
-    name = "transitive_dynamic_deps",
-    dynamic_deps = DEPENDENCIES.keys(),
-    visibility = ["//visibility:private"],
-)
-
 cc_library(
     name = "rclpy_bindings_library",
     srcs = glob([
@@ -53,21 +47,38 @@ cc_library(
     ],
 )
 
+collect_transitive_dynamic_deps(
+    name = "transitive_dynamic_deps",
+    dynamic_deps = DEPENDENCIES.keys(),
+    visibility = ["//visibility:private"],
+)
+
 cc_shared_library(
     name = "rclpy_bindings",
-    dynamic_deps = [":transitive_dynamic_deps"],
     exports_filter = [":rclpy_bindings_library"],
     shared_lib_name = "rclpy/_rclpy_pybind11.so",
     visibility = ["//visibility:private"],
     deps = [":rclpy_bindings_library"],
 )
 
+ament_index(
+    name = "ament_index",
+    deps = [
+        "@rcl_action//:ament_package",
+        "@rcl_lifecycle//:ament_package",
+        "@rcl_logging_interface//:ament_package",
+        "@rcl//:ament_package",
+        "@rcpputils//:ament_package",
+        "@rcutils//:ament_package",
+    ]
+)
+
 py_library(
     name = "rclpy",
     srcs = glob(["rclpy/**/*.py"]),
     data = [
+        ":ament_index",
         ":rclpy_bindings",
-        ":transitive_dynamic_deps",
     ],
     imports = ["."],
     deps = [
