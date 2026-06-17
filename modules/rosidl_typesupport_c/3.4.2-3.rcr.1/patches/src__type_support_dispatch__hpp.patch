@@ -48,7 +48,7 @@
  
  extern const char * typesupport_identifier;
  
-@@ -55,39 +81,88 @@
+@@ -55,39 +81,47 @@
        }
        rcpputils::SharedLibrary * lib = nullptr;
  
@@ -64,33 +64,13 @@
 +          return ts;
 +        }
 +      }
-+      
-+     /* Secondly, check to see if there is a pybind11 extension with the
++
++      /* Secondly, check to see if there is a pybind11 extension with the
 +         typesupport statically compiled in. */
 +      const std::string package_name(map->package_name);
 +      const std::string typesupport_name(identifier);
-+      const std::optional<std::string> test_workspace = get_env_variable("TEST_WORKSPACE");
-+      std::string error;
-+      auto runfiles = test_workspace
-+        ? Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error) 
-+        : Runfiles::Create("ignore-argv[0]", BAZEL_CURRENT_REPOSITORY, &error);
 +
-+      // Parse package_name (format: "{ros_pkg}__{type}__{name}") to extract
-+      // the module repository name and interface type subdirectory. External
-+      // Bazel modules use "{ros_pkg}+/{type}/" as their runfiles prefix.
-+      std::string runfiles_prefix = "_main/";
-+      auto first_sep = package_name.find("__");
-+      if (first_sep != std::string::npos) {
-+        std::string ros_pkg = package_name.substr(0, first_sep);
-+        auto second_sep = package_name.find("__", first_sep + 2);
-+        if (second_sep != std::string::npos) {
-+          std::string iface_type = package_name.substr(first_sep + 2, second_sep - first_sep - 2);
-+          // Try external module path first (e.g. "rosgraph_msgs+/msg/")
-+          runfiles_prefix = ros_pkg + "+/" + iface_type + "/";
-+        }
-+      }
-+
-+      // Try load statically from the pybind extension.
++      // Fall back to the typesupport library.
        if (!map->data[i]) {
 -        char library_basename[1024];
 -        int ret = rcutils_snprintf(
@@ -102,8 +82,7 @@
 -        }
 -
 -        std::string library_name;
-+        const std::string library_name = runfiles->Rlocation(
-+          runfiles_prefix + package_name + "_s__rosidl_typesupport_c.so");
++        const std::string library_name = "lib" + package_name + "__" + typesupport_name + ".so";
          try {
 -          library_name = rcpputils::get_platform_library_name(library_basename);
 -        } catch (const std::exception & e) {
@@ -113,26 +92,7 @@
 -          return nullptr;
 -        }
 -
-+          auto lib = new rcpputils::SharedLibrary(library_name);
-+          if (lib->has_symbol(map->symbol_name[i])) {
-+            map->data[i] = lib;
-+          } else {
-+            delete lib;
-+          }
-+        } catch (const std::runtime_error & e) {
-+          RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
-+            "Could not load library %s: %s", library_name.c_str(), e.what());
-+        } catch (const std::bad_alloc & e) {
-+          RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
-+            "Could not load library %s: %s", library_name.c_str(), e.what());
-+        }
-+      }
-+
-+      // Fall back to the typesupport library.
-+      if (!map->data[i]) {
-+        const std::string library_name = runfiles->Rlocation(
-+          runfiles_prefix + "lib" + package_name + "__" + typesupport_name + ".so");
-         try {
+-        try {
 -          lib = new rcpputils::SharedLibrary(library_name);
 +          map->data[i] = new rcpputils::SharedLibrary(library_name);
          } catch (const std::runtime_error & e) {
@@ -143,11 +103,9 @@
            RCUTILS_SET_ERROR_MSG_WITH_FORMAT_STRING(
              "Could not load library %s: %s", library_name.c_str(), e.what());
 -          return nullptr;
--        }
+         }
 -        map->data[i] = lib;
--      }
-+        }
-+      }
+       }
 +
 +      // We can't load the library, so bail with error.
 +      if (!map->data[i]) {
@@ -161,7 +119,7 @@
        auto clib = static_cast<const rcpputils::SharedLibrary *>(map->data[i]);
        lib = const_cast<rcpputils::SharedLibrary *>(clib);
  
-@@ -110,6 +185,7 @@
+@@ -110,6 +144,7 @@
        typedef const TypeSupport * (* funcSignature)(void);
        funcSignature func = reinterpret_cast<funcSignature>(sym);
        const TypeSupport * ts = func();

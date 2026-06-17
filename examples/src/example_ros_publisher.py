@@ -30,9 +30,9 @@ class ExampleRosPublisher(Node):
 
     def timer_callback(self):
         msg = ExampleMessage()
-        msg.message = 'Hello, world! from Python: %d' % self.i
+        msg.message.data = 'Hello, world! from Python: %d' % self.i
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing: "%s"' % msg.message)
+        self.get_logger().info('Publishing: "%s"' % msg.message.data)
         self.i += 1
 
 

@@ -112,9 +112,15 @@ def _cc_proto_ros_library(ctx):
             CcInfo(linking_context = dynamic_linking_context),
         ],
     )
+    symlinks = {}
+    for file in depset(transitive = direct_libraries).to_list():
+        symlinks["lib/" + file.basename] = file
     default_info = DefaultInfo(
         files = depset(transitive = direct_libraries),
-        runfiles = ctx.runfiles(transitive_files = depset(transitive = direct_libraries)),
+        runfiles = ctx.runfiles(
+            symlinks = symlinks,
+            transitive_files = depset(transitive = direct_libraries),
+        ),
     )
     return [proto_info, cc_info, default_info]
 
@@ -162,9 +168,15 @@ def _c_ros_library(ctx):
             CcInfo(linking_context = dynamic_linking_context),
         ],
     )
+    symlinks = {}
+    for file in depset(transitive = direct_libraries).to_list():
+        symlinks["lib/" + file.basename] = file
     default_info = DefaultInfo(
         files = depset(transitive = direct_libraries),
-        runfiles = ctx.runfiles(transitive_files = depset(transitive = direct_libraries)),
+        runfiles = ctx.runfiles(
+            symlinks = symlinks,
+            transitive_files = depset(transitive = direct_libraries),
+        ),
     )
     return [cc_info, default_info]
 
@@ -209,9 +221,15 @@ def _cc_ros_library(ctx):
             CcInfo(linking_context = dynamic_linking_context),
         ],
     )
+    symlinks = {}
+    for file in depset(transitive = direct_libraries).to_list():
+        symlinks["lib/" + file.basename] = file
     default_info = DefaultInfo(
         files = depset(transitive = direct_libraries),
-        runfiles = ctx.runfiles(transitive_files = depset(transitive = direct_libraries)),
+        runfiles = ctx.runfiles(
+            symlinks = symlinks,
+            transitive_files = depset(transitive = direct_libraries),
+        ),
     )
     return [cc_info, default_info]
 
@@ -256,9 +274,23 @@ def _py_ros_library_rule_impl(ctx):
             CcInfo(linking_context = dynamic_linking_context),
         ],
     )
+    symlinks = {}
+    for file in depset(transitive = direct_libraries).to_list():
+        symlinks["lib/" + file.basename] = file
+    runfiles = ctx.runfiles(
+        symlinks = symlinks,
+        transitive_files = depset(transitive = direct_libraries),
+    )
+    for dep in ctx.attr._py_deps:
+        if DefaultInfo in dep:
+            runfiles = runfiles.merge(dep[DefaultInfo].default_runfiles)
+    for dep in ctx.attr.deps:
+        if DefaultInfo in dep:
+            runfiles = runfiles.merge(dep[DefaultInfo].default_runfiles)
+
     default_info = DefaultInfo(
         files = depset(transitive = direct_libraries),
-        runfiles = ctx.runfiles(transitive_files = depset(transitive = direct_libraries)),
+        runfiles = runfiles,
     )
     rosidl_py_info = PyInfo(
         imports = depset(
@@ -361,17 +393,16 @@ def _rs_ros_library_rule_impl(ctx):
     )
     
     # Dynamically-loaded typesupports are included as runfiles.
+    symlinks = {}
+    for file in depset(transitive = direct_libraries).to_list():
+        symlinks["lib/" + file.basename] = file
     default_info = DefaultInfo(
-        files = depset(
-            transitive = direct_libraries
-        ),
+        files = depset(transitive = direct_libraries),
         runfiles = ctx.runfiles(
-            transitive_files = depset(
-                transitive = direct_libraries
-            )
+            symlinks = symlinks,
+            transitive_files = depset(transitive = direct_libraries),
         ),
     )
-
     return [crate_info, default_info]
 
 rs_ros_library = rule(

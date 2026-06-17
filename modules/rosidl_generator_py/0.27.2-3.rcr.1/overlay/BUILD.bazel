@@ -40,6 +40,7 @@ py_library(
     deps = [
         ":hook",
         "@ament_index_python",
+        "@rosidl_buffer_py",
         "@rosidl_cli",
         "@rosidl_generator_c",
         "@rosidl_parser",
