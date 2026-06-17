@@ -19,7 +19,7 @@ load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 package(default_visibility = ["//visibility:public"])
 
-# C examples (note that c_ros_library includes proto type support)
+# C examples
 
 c_ros_library(
     name = "example_ros_c_msgs",
