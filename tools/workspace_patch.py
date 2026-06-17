@@ -69,7 +69,7 @@ def main():
         sp.write("> Found REF: {0} (this is the reference bootstrapped release)".format(ref_patch))
 
         # Given the release, we need to find the OLD and NEW patch versions.
-        old_patch = find_latest_patch(args.working_directory, ref_patch)
+        old_patch = find_latest_patch(args.working_directory, ref_patch, args.overwrite)
         sp.write("> Found OLD: {0} (this is the last patch release)".format(old_patch))
         
         # Make sure the workspace exists

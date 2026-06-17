@@ -168,7 +168,7 @@ def scan_module_for_dependencies(
     return packages
 
 
-def find_latest_patch(working_directory: Path, release: str) -> Optional[Path]:
+def find_latest_patch(working_directory: Path, release: str, overwrite: bool = False) -> Optional[Path]:
     """
     Find the latest patch for the given release.
     """
@@ -204,7 +204,7 @@ def find_latest_patch(working_directory: Path, release: str) -> Optional[Path]:
     candidate_patch_releases.sort(key=lambda x: (x[0], x[1]), reverse=True)
 
     # Return the release directory that was chosen.
-    return candidate_patch_releases[0][2]
+    return candidate_patch_releases[1 if overwrite else 0][2]
 
 def find_release(workspace: str) -> str:
     """
