@@ -17,13 +17,10 @@
  #include <stdexcept>
  #include <string>
  
-@@ -29,8 +33,30 @@
+@@ -29,8 +33,27 @@
  #include "rosidl_typesupport_c/identifier.h"
  #include "rosidl_typesupport_c/type_support_map.h"
  
-+#include "rules_cc/cc/runfiles/runfiles.h"
-+
-+using rules_cc::cc::runfiles::Runfiles;
 +
  namespace rosidl_typesupport_c
  {
@@ -48,7 +45,7 @@
  
  extern const char * typesupport_identifier;
  
-@@ -55,39 +81,47 @@
+@@ -55,39 +78,47 @@
        }
        rcpputils::SharedLibrary * lib = nullptr;
  
@@ -119,7 +116,7 @@
        auto clib = static_cast<const rcpputils::SharedLibrary *>(map->data[i]);
        lib = const_cast<rcpputils::SharedLibrary *>(clib);
  
-@@ -110,6 +144,7 @@
+@@ -110,6 +141,7 @@
        typedef const TypeSupport * (* funcSignature)(void);
        funcSignature func = reinterpret_cast<funcSignature>(sym);
        const TypeSupport * ts = func();

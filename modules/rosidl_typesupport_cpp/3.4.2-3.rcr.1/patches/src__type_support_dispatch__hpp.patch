@@ -16,13 +16,10 @@
  #include <stdexcept>
  #include <string>
  
-@@ -27,8 +32,30 @@
+@@ -27,8 +32,27 @@
  #include "rcutils/snprintf.h"
  #include "rosidl_typesupport_c/type_support_map.h"
  
-+#include "rules_cc/cc/runfiles/runfiles.h"
-+
-+using rules_cc::cc::runfiles::Runfiles;
 +
  namespace rosidl_typesupport_cpp
  {
@@ -47,7 +44,7 @@
  
  extern const char * typesupport_identifier;
  
-@@ -53,39 +80,47 @@
+@@ -53,39 +77,47 @@
        }
        rcpputils::SharedLibrary * lib = nullptr;
  

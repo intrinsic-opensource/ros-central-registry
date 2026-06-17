@@ -240,7 +240,10 @@ cc_library(
 cc_shared_library(
     name = "rclcpp",
     dynamic_deps = DEPENDENCIES.keys(),
-    exports_filter = [":rclcpp_library"],
+    exports_filter = [
+        ":rclcpp_library",
+        "@rules_cc//cc/runfiles",
+    ],
     deps = [":rclcpp_library"],
 )
 

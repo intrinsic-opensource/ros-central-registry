@@ -45,18 +45,13 @@ cc_library(
     ]),
     hdrs = HEADERS,
     includes = ["include"],
-    deps = DEPENDENCIES.values() + [
-        "@rules_cc//cc/runfiles",
-    ],
+    deps = DEPENDENCIES.values(),
 )
 
 cc_shared_library(
     name = "rosidl_typesupport_c",
     dynamic_deps = DEPENDENCIES.keys(),
-    exports_filter = [
-        ":rosidl_typesupport_c_library",
-        "@rules_cc//cc/runfiles",
-    ],
+    exports_filter = [":rosidl_typesupport_c_library"],
     deps = [":rosidl_typesupport_c_library"],
 )
 

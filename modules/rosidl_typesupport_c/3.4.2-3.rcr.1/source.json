@@ -6,12 +6,12 @@
     "overlay": {
         "defs.bzl": "sha256-8CBAnc5PQx/NBJZ3c3+iuMsU0IGa/u1gOEvmo6PGboU=",
         "types.bzl": "sha256-8O/PQcDa/owNnBQ1VSOBcKf6eD2pDRT+UWzaYcrN/Eo=",
-        "BUILD.bazel": "sha256-8SL0W2VGgDpvILGHZqrhME+YQuo7Efh87b9iFFqAkmE=",
+        "BUILD.bazel": "sha256-BXK7gXiqfe9H6rfPVB7Da+wt+aIMvsJndS40ZCNuXTw=",
         "aspects.bzl": "sha256-Cb15T9Fh8ZJZJPUW0EQe+GberqL5yZDRgloBW/6ML2o=",
         "test/msg/BUILD.bazel": "sha256-9nEFAT5vzZJtPwqJCT1X0YOlhIJlJ2/6iDVJwmQCi5o="
     },
     "patches": {
-        "src__type_support_dispatch__hpp.patch": "sha256-tzYoFHwP44q8K0NFZTuiAd/sk3jK0ycb+zgvtyZb2PQ=",
+        "src__type_support_dispatch__hpp.patch": "sha256-z0Um+6MyDuuJLx+eB1CmV97uTX+QPYx/ufupalQygOE=",
         "resource__msg__type_support__cpp__em.patch": "sha256-OtdxUT9fxghbrD2f6NVKtkILdGZ3e/ENefklzC+gAuM=",
         "rosidl_typesupport_c____init____py.patch": "sha256-FNzKlfPkns5EAoMxy1th/mqbO4h9hCXG499R6rZN9Qk=",
         "resource__srv__type_support__cpp__em.patch": "sha256-/rglpFl8SSXrsfuGr2lWo63EZyN5nylSunm2SXogWps="

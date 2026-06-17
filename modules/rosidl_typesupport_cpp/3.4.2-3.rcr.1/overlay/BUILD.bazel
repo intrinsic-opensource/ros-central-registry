@@ -49,9 +49,7 @@ cc_library(
     hdrs = HEADERS,
     includes = ["include"],
     local_defines = ros_local_defines(),
-    deps = DEPENDENCIES.values() + [
-        "@rules_cc//cc/runfiles",
-    ],
+    deps = DEPENDENCIES.values(),
 )
 
 cc_shared_library(
