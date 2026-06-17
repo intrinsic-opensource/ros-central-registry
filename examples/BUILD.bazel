@@ -132,7 +132,8 @@ cc_binary(
     ],
 )
 
-# GEre is 
+# Python Protobuf pipeline example - shows how to build and use Python
+# Protobuf bindings from a cc_proto_ros_library target.
 
 py_proto_library(
     name = "example_py_proto",
