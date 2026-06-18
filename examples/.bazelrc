@@ -32,13 +32,13 @@ common --remote_upload_local_results=false
 common --remote_cache_compression=true
 
 # Critical ROS environment variables needed at test-time.
-common --test_env=ROS_DISTRO="rolling"
+common --test_env=ROS_DISTRO="lyrical"
 common --test_env=ROS_HOME=".ros"
 common --test_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --test_env=LD_LIBRARY_PATH=lib
 
 # Critical ROS environment variables needed at run-time.
-common --run_env=ROS_DISTRO="rolling"
+common --run_env=ROS_DISTRO="lyrical"
 common --run_env=ROS_HOME=".ros"
 common --run_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --run_env=LD_LIBRARY_PATH=lib

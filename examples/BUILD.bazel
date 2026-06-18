@@ -16,6 +16,7 @@ load("@aspect_rules_py//py:defs.bzl", "py_binary")
 load("@protobuf//bazel:py_proto_library.bzl", "py_proto_library")
 load("@rosidl_core_generators//:defs.bzl", "c_ros_library", "cc_proto_ros_library", "cc_ros_library", "py_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -144,4 +145,38 @@ py_binary(
     name = "example_proto_py_export",
     srcs = ["src/example_proto_py_export.py"],
     deps = [":example_py_proto"],
+)
+
+# In future we're going to offer an interactive shell that drops you into
+# interactive terminal that has a transitive set of package data available
+# in the runfile directory.
+
+sh_binary(
+    name = "shell",
+    target_compatible_with = ["@platforms//os:linux"],
+    srcs = ["shell_unix.sh"],
+    data = [
+        "@examples_rclcpp_async_client//:ament_package",
+        "@examples_rclcpp_cbg_executor//:ament_package",
+        "@examples_rclcpp_minimal_action_client//:ament_package",
+        "@examples_rclcpp_minimal_action_server//:ament_package",
+        "@examples_rclcpp_minimal_client//:ament_package",
+        "@examples_rclcpp_minimal_composition//:ament_package",
+        "@examples_rclcpp_minimal_publisher//:ament_package",
+        "@examples_rclcpp_minimal_service//:ament_package",
+        "@examples_rclcpp_minimal_subscriber//:ament_package",
+        "@examples_rclcpp_minimal_timer//:ament_package",
+        "@examples_rclcpp_multithreaded_executor//:ament_package",
+        "@examples_rclcpp_wait_set//:ament_package",
+        "@examples_rclpy_executors//:ament_package",
+        "@examples_rclpy_guard_conditions//:ament_package",
+        "@examples_rclpy_minimal_action_client//:ament_package",
+        "@examples_rclpy_minimal_action_server//:ament_package",
+        "@examples_rclpy_minimal_client//:ament_package",
+        "@examples_rclpy_minimal_publisher//:ament_package",
+        "@examples_rclpy_minimal_service//:ament_package",
+        "@examples_rclpy_minimal_subscriber//:ament_package",
+        "@examples_rclpy_pointcloud_publisher//:ament_package",
+        "@examples_tf2_py//:ament_package",
+    ]        
 )
