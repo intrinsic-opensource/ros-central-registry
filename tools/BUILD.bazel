@@ -17,6 +17,23 @@ load("@pip_ros_central_registry//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:public"])
 
+# Helper function to make sure that the ament_package call at the end of
+# a BUILD.bazel file includes all dependency targets.
+
+py_binary(
+    name = "helper_ament_package",
+    srcs = ["helper_ament_package.py"],
+)
+
+# Remove releases and their transitive dependencies from the registry
+# taking care not to remove a transitive dependency that is used by another
+# release that remains in the registry,
+
+py_binary(
+    name = "helper_cleanup_registry",
+    srcs = ["helper_cleanup_registry.py"],
+)
+
 # Generates BUILD.bazel files for ROS 2 interface definitions (.msg, .srv,
 # .action, .idl). Scans subdirectories for interface files, parses their
 # field types to discover cross-package dependencies, and emits the
