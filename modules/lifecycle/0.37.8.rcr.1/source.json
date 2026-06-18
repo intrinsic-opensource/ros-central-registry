@@ -1,8 +1,0 @@
-{
-    "integrity": "sha256-QhwOdK2+zwr9Fsufdk/W0+iktQbHyzQyLVrsyNIEFeI=",
-    "url": "https://github.com/ros2-gbp/demos-release/archive/refs/tags/upstream/0.37.8.tar.gz",
-    "strip_prefix": "demos-release-upstream-0.37.8/lifecycle",
-    "overlay": {
-        "BUILD.bazel": "sha256-RA5/HFm1lAtie7cZPFTzg30lQ+3x+cSmX49gpvqVTO0="
-    }
-}

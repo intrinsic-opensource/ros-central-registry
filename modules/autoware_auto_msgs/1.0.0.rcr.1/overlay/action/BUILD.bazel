@@ -1,9 +1,0 @@
-load("@rosidl_default_generators//:defs.bzl", "ros_idl")
-
-package(default_visibility = ["//visibility:public"])
-
-
-ros_idl(
-    name = "PlanTrajectory",
-    src = "PlanTrajectory.idl",
-)

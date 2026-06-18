@@ -1,8 +1,0 @@
-{
-    "integrity": "sha256-5WZYdgLokXhPrZXpVJBJ1Wgfgar9ZcsJ/myXol4eU2o=",
-    "url": "https://github.com/ros2-gbp/actuator_msgs-release/archive/refs/tags/upstream/0.0.1.tar.gz",
-    "strip_prefix": "actuator_msgs-release-upstream-0.0.1",
-    "overlay": {
-        "BUILD.bazel": "sha256-dRdYVja5NDOfSaXNRj8gsbBgm4vLg7OrMBveTZY02gU="
-    }
-}

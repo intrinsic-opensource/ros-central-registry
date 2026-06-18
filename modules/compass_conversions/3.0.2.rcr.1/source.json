@@ -1,8 +1,0 @@
-{
-    "integrity": "sha256-AsJcJJ+mkjB3uuEJ0yHtbPKJnVWIJAR5inO+yAnJLUM=",
-    "url": "https://github.com/ros2-gbp/compass-release/archive/refs/tags/upstream/3.0.2.tar.gz",
-    "strip_prefix": "compass-release-upstream-3.0.2/compass_conversions",
-    "overlay": {
-        "BUILD.bazel": "sha256-61AgdNrUexn1oKJcHhZSB/SP85zGFV9XB61tLmqQotw="
-    }
-}

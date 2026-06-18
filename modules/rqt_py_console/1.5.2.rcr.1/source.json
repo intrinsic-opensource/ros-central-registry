@@ -1,8 +1,0 @@
-{
-    "integrity": "sha256-QT1iLB32Ls349fzcfw+Nug/tmvYT/CuAmZekChWXssk=",
-    "url": "https://github.com/ros2-gbp/rqt_py_console-release/archive/refs/tags/upstream/1.5.2.tar.gz",
-    "strip_prefix": "rqt_py_console-release-upstream-1.5.2",
-    "overlay": {
-        "BUILD.bazel": "sha256-3ITS99OjV+RmKzjL0GlsSosldr4wmjY1+YhcaQ9F5eQ="
-    }
-}

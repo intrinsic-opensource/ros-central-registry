@@ -1,9 +1,0 @@
-{
-    "integrity": "sha256-KFRfyvqITt2apHsM1CbzWVnzze6OBui6FnLxH+0VkR4=",
-    "url": "https://github.com/ros2-gbp/performance_test-release/archive/refs/tags/upstream/2.3.0.tar.gz",
-    "strip_prefix": "performance_test-release-upstream-2.3.0/performance_test",
-    "patches": {
-        "msg__BUILD__bazel.patch": "sha256-vfCVQQi7nnpdbOZEeF/Rgtt0c2Tk6YfCSWMNHzypUjw=",
-        "BUILD__bazel.patch": "sha256-w3hGxgkPaJKD6JmDxaYw24qV5BFI/84zxBk0tGN47G0="
-    }
-}
