@@ -38,7 +38,7 @@ test --sandbox_default_allow_network=true
 # Use C++17 standard by default across the whole repo.
 build --cxxopt="-std=c++17"
 
-# Ensure that we use toolchains_llvm instead of the host toolchain.
+# Ensure that we use the hermetic LLVM C++ toolchain instead of the host toolchain.
 build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
 
 # Tell Bazel to use the pre-compiled binary instead of building from source
