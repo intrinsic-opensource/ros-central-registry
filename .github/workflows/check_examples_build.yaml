@@ -37,7 +37,7 @@ jobs:
       with:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
-        repository-cache: false
+        repository-cache: true
     - name: Check that the examples build correctly
       run: |
         cd examples
