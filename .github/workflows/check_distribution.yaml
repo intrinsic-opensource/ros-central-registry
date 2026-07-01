@@ -61,9 +61,9 @@ jobs:
         docker-images: true
         swap-storage: true
     - name: Checkout repository and submodules
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
-        fetch-depth: 0
+        fetch-depth: 1
     - name: Authenticate to Google Cloud
       uses: "google-github-actions/auth@71fee32a0bb7e97b4d33d548e7d957010649d8fa"
       with:
@@ -71,7 +71,7 @@ jobs:
         service_account: github-automation-bot@gha-intrinsic-opensource-rcr.iam.gserviceaccount.com
         create_credentials_file: true
     - name: Setup Bazel
-      uses: bazel-contrib/setup-bazel@0.15.0
+      uses: bazel-contrib/setup-bazel@0.19.0
       with:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
