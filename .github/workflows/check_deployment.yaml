@@ -38,7 +38,7 @@ jobs:
       with:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
-        repository-cache: false
+        repository-cache: true
     - name: Regenerate docs
       run: bazel build //docs:html
     - name: Merge docs, modules and bcr_staging

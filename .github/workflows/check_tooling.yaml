@@ -37,6 +37,6 @@ jobs:
       with:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
-        repository-cache: false
+        repository-cache: true
     - name: Run tests
       run: bazel test //...
