@@ -14,6 +14,8 @@
 
 name: check_tooling
 run-name: Check all tooling (CI, documentation, developer)
+env:
+  ANDROID_HOME: ""
 on:
   pull_request:
     branches:
@@ -37,4 +39,4 @@ jobs:
         disk-cache: ${{ github.workflow }}
         repository-cache: false
     - name: Run tests
-      run: bazel --nosystem_rc --nohome_rc test //...
+      run: bazel test //...
