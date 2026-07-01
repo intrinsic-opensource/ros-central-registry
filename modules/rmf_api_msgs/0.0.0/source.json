@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-jKYWWPSG0whgzagepMSgZ0nU3laZimy6I9OyCzJxtWE=",
+    "url": "https://github.com/ros2-gbp/rmf_api_msgs-release/archive/refs/tags/upstream/0.5.0.tar.gz",
+    "strip_prefix": "rmf_api_msgs-release-upstream-0.5.0/rmf_api_msgs"
+}

@@ -1,0 +1,21 @@
+load("@rosidl_default_generators//:defs.bzl", "ros_idl")
+
+package(default_visibility = ["//visibility:public"])
+
+ros_idl(
+    name = "ModifyTrajectory",
+    src = "ModifyTrajectory.idl",
+)
+
+ros_idl(
+    name = "HADMapService",
+    src = "HADMapService.idl",
+    deps = [
+        "@//msg:",
+    ],
+)
+
+ros_idl(
+    name = "AutonomyModeChange",
+    src = "AutonomyModeChange.idl",
+)

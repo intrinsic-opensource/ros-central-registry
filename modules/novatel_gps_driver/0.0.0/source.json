@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-8YdHaOlxC2lJld+2Urm8SofSQqZr2Un45VTnz66A9DE=",
+    "url": "https://github.com/ros2-gbp/novatel_gps_driver-release/archive/refs/tags/upstream/4.2.0.tar.gz",
+    "strip_prefix": "novatel_gps_driver-release-upstream-4.2.0/novatel_gps_driver"
+}

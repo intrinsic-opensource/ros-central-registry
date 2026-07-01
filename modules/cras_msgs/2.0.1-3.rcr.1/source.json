@@ -1,0 +1,12 @@
+{
+    "integrity": "sha256-Ag0CNpM4xy8HiKybDaqV63nqyRLNiQbmgp7HuQrdpfY=",
+    "url": "https://github.com/ros2-gbp/cras_msgs-release/archive/refs/tags/release/lyrical/cras_msgs/2.0.1-3.tar.gz",
+    "strip_prefix": "cras_msgs-release-release-lyrical-cras_msgs-2.0.1-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-q0S0qCav8uvHX5z6mE7fC42fAP8x9ZhyoBP95ldLezc=",
+        "msg/BUILD.bazel": "sha256-08cwlCeuIydpg+CrE9czqL/e6XVfUeXng32PtMiwV/M=",
+        "msg_ros1/BUILD.bazel": "sha256-Xq032dSc3XJSjzZwiNhjotwHnpN79ZvEcLQf5ZCxmd0=",
+        "msg_ros2/msg/BUILD.bazel": "sha256-GiPeiO4QYxwd0WIZUp1C7qqs2ujwiQnZVNGroUxvLGM=",
+        "srv/BUILD.bazel": "sha256-B3BU/GdjVe5iBHKyBnGwtPK+62g+e5OdzXRIPMBl2sw="
+    }
+}

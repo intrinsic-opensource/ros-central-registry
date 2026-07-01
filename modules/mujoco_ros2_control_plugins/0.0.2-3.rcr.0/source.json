@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-APWA06PBahpWepDMYtTi9IzKBsAqTJTWO2nEeTScVSE=",
+    "url": "https://github.com/ros2-gbp/mujoco_ros2_control-release/archive/refs/tags/release/lyrical/mujoco_ros2_control_plugins/0.0.2-3.tar.gz",
+    "strip_prefix": "mujoco_ros2_control-release-release-lyrical-mujoco_ros2_control_plugins-0.0.2-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-zwt9HWiwRy0yJ5KsWnqoC3+7IcjwrDMCa4xH7nrAFFw="
+    }
+}

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rosidl_cmake//:rules.bzl", "ros_interface")
+load("@rosidl_core_generators//:defs.bzl", "ros_interface")
 
 package(default_visibility = ["//visibility:public"])
 

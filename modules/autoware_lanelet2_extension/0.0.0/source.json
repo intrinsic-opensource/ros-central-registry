@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-3NmACPgrL9s25be0bAwgbDCt9MOdh7JtFFT+sOBk6CM=",
+    "url": "https://github.com/ros2-gbp/autoware_lanelet2_extension-release/archive/refs/tags/upstream/0.7.2.tar.gz",
+    "strip_prefix": "autoware_lanelet2_extension-release-upstream-0.7.2/autoware_lanelet2_extension"
+}

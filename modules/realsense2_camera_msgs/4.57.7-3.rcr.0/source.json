@@ -1,0 +1,11 @@
+{
+    "integrity": "sha256-73REpLteVdpLNf7DljrLQZWYQ+Nko3d9yXi0+OIohzM=",
+    "url": "https://github.com/ros2-gbp/realsense-ros-release/archive/refs/tags/release/lyrical/realsense2_camera_msgs/4.57.7-3.tar.gz",
+    "strip_prefix": "realsense-ros-release-release-lyrical-realsense2_camera_msgs-4.57.7-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-dr+3kQXnVs5vIR2Pl4BSn6y5U2lZU6sV+3qjBeyXIKI=",
+        "action/BUILD.bazel": "sha256-A8NmxfqG9eyDz3Qy16rF7E5RLoVRPKH0mNrRnEKqZjY=",
+        "msg/BUILD.bazel": "sha256-QBG/wEczv51KbEG+LvOGG2kIWeM42/oMrdtVQRmQAik=",
+        "srv/BUILD.bazel": "sha256-CptxUq2V6v55JesUpYZrcGTvSdJPhNOKwwZ6WW69aO4="
+    }
+}

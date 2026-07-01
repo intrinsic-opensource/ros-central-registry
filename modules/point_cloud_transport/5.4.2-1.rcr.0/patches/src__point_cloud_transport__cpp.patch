@@ -1,0 +1,13 @@
+--- a/src/point_cloud_transport.cpp
++++ b/src/point_cloud_transport.cpp
+@@ -74,8 +74,8 @@
+ {
+ }
+ 
+-static std::unique_ptr<PointCloudTransportLoader> kImpl =
+-  std::make_unique<PointCloudTransportLoader>();
++static PointCloudTransportLoader * kImpl = new PointCloudTransportLoader();
++
+ 
+ Publisher create_publisher(
+   std::shared_ptr<rclcpp::Node> node,

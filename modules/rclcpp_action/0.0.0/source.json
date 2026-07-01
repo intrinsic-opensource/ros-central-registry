@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-UUztolAoQw5PRooO4BOsjtEFhrUn69M4QvOFfGJZTQs=",
+    "url": "https://github.com/ros2-gbp/rclcpp-release/archive/refs/tags/upstream/31.0.3.tar.gz",
+    "strip_prefix": "rclcpp-release-upstream-31.0.3/rclcpp_action"
+}

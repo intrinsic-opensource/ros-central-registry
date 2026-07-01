@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-XHxNRljAD3Qs1wspbwOAnrI9sx+dp58OnmH1EIIIpM0=",
+    "url": "https://github.com/ros2-gbp/rmw_connextdds-release/archive/refs/tags/upstream/1.2.4.tar.gz",
+    "strip_prefix": "rmw_connextdds-release-upstream-1.2.4/rti_connext_dds_cmake_module"
+}

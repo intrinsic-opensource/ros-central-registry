@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-Z99ULYRgUMExAaYVXDIye+kuUSZcbxaVIXkk6CmKd0I=",
+    "url": "https://github.com/ros2-gbp/ros2_message_filters-release/archive/refs/tags/upstream/7.3.8.tar.gz",
+    "strip_prefix": "ros2_message_filters-release-upstream-7.3.8"
+}

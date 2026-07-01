@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-afa9G91BrWP0awRyjj7BnsgR4Uzdel7rdUvn8ZRrxKE=",
+    "url": "https://github.com/ros2-gbp/aws_sdk_cpp_vendor-release/archive/refs/tags/upstream/0.2.1.tar.gz",
+    "strip_prefix": "aws_sdk_cpp_vendor-release-upstream-0.2.1"
+}

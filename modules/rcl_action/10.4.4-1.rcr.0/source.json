@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-KWig31E5DZ4XxNmANJgOWMleK9WA9l3s6aelWoTIo3M=",
+    "url": "https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/lyrical/rcl_action/10.4.4-1.tar.gz",
+    "strip_prefix": "rcl-release-release-lyrical-rcl_action-10.4.4-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-/6eJZ8dZYoOZzxhXUnYH3mlb18JgthFUxeferPR6hjc="
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-1dqEKJ4Z6XrD1PzRkDWXpS7oLfsVGB5GkORJKFvnmzs=",
+    "url": "https://github.com/ros2-gbp/ntrip_client-release/archive/refs/tags/upstream/1.4.1.tar.gz",
+    "strip_prefix": "ntrip_client-release-upstream-1.4.1"
+}

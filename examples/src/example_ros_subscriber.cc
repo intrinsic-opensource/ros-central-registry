@@ -1,4 +1,4 @@
-// Copyright 2025 Open Source Robotics Foundation, Inc.
+// Copyright 2026 Open Source Robotics Foundation, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ public:
       };
     subscription_ =
       this->create_subscription<example::msg::ExampleMessage>("topic", 10, topic_callback);
+    RCLCPP_INFO(this->get_logger(), "Subscriber node started. Waiting for messages...");
   }
 
 private:

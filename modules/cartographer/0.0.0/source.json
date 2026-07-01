@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-MrMgMJJ7wMfp/JxjLX2Ghn+ZodgH/VyR2Bx1x84+OxM=",
+    "url": "https://github.com/ros2-gbp/cartographer-release/archive/refs/tags/upstream/2.0.9004.tar.gz",
+    "strip_prefix": "cartographer-release-upstream-2.0.9004"
+}

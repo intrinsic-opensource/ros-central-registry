@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-0+H2R1CRf7rjJd8lbJAkxqeQPsTpwe6YJy3nRfLihyg=",
+    "url": "https://github.com/ros2-gbp/ros2_tracing-release/archive/refs/tags/upstream/8.10.1.tar.gz",
+    "strip_prefix": "ros2_tracing-release-upstream-8.10.1/tracetools_trace"
+}

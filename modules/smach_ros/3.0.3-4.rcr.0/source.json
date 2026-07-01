@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-LRdA6ZaJOWHfOI86RyuC6tVVlSMmPHN478AYbewz0Zo=",
+    "url": "https://github.com/ros2-gbp/executive_smach-release/archive/refs/tags/release/lyrical/smach_ros/3.0.3-4.tar.gz",
+    "strip_prefix": "executive_smach-release-release-lyrical-smach_ros-3.0.3-4",
+    "overlay": {
+        "BUILD.bazel": "sha256-T3cC2QG40O89RrJ1dSSZdI7KZOgUA017seik+ixtaB8="
+    }
+}

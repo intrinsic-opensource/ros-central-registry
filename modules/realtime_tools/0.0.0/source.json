@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-XyE3KYJxipsmvQcWanH5V5Qm2/ODv98cW7s7fbO/vNw=",
+    "url": "https://github.com/ros2-gbp/realtime_tools-release/archive/refs/tags/upstream/5.2.0.tar.gz",
+    "strip_prefix": "realtime_tools-release-upstream-5.2.0/realtime_tools"
+}

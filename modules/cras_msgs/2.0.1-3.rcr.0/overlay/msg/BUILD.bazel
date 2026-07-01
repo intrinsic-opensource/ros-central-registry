@@ -1,0 +1,87 @@
+load("@rosidl_default_generators//:defs.bzl", "ros_message")
+
+package(default_visibility = ["//visibility:public"])
+
+ros_message(
+    name = "Heartbeat",
+    src = "Heartbeat.msg",
+    deps = [
+        "@std_msgs//msg:Header",
+    ],
+)
+
+ros_message(
+    name = "Brightness",
+    src = "Brightness.msg",
+)
+
+ros_message(
+    name = "Voltage",
+    src = "Voltage.msg",
+)
+
+ros_message(
+    name = "Power",
+    src = "Power.msg",
+)
+
+ros_message(
+    name = "PowerSwitchStateStamped",
+    src = "PowerSwitchStateStamped.msg",
+    deps = [
+        "//msg:PowerSwitchState",
+        "@std_msgs//msg:Header",
+    ],
+)
+
+ros_message(
+    name = "ElectricCurrentStamped",
+    src = "ElectricCurrentStamped.msg",
+    deps = [
+        "@std_msgs//msg:Header",
+    ],
+)
+
+ros_message(
+    name = "BrightnessStamped",
+    src = "BrightnessStamped.msg",
+    deps = [
+        "//msg:Brightness",
+        "@std_msgs//msg:Header",
+    ],
+)
+
+ros_message(
+    name = "ColorRGBAStamped",
+    src = "ColorRGBAStamped.msg",
+    deps = [
+        "@std_msgs//msg:ColorRGBA",
+        "@std_msgs//msg:Header",
+    ],
+)
+
+ros_message(
+    name = "PowerSwitchState",
+    src = "PowerSwitchState.msg",
+)
+
+ros_message(
+    name = "VoltageStamped",
+    src = "VoltageStamped.msg",
+    deps = [
+        "@std_msgs//msg:Header",
+    ],
+)
+
+ros_message(
+    name = "ElectricCurrent",
+    src = "ElectricCurrent.msg",
+)
+
+ros_message(
+    name = "PowerStamped",
+    src = "PowerStamped.msg",
+    deps = [
+        "@std_msgs//msg:Header",
+    ],
+)

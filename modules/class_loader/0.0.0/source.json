@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-ijpHf9dOSCq6/hHOf+1stzGcgXlDnTDgXwQGAuEMpuc=",
+    "url": "https://github.com/ros2-gbp/class_loader-release/archive/refs/tags/upstream/2.9.4.tar.gz",
+    "strip_prefix": "class_loader-release-upstream-2.9.4"
+}

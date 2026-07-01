@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-7QjHPlB0B7yQgpqkVbHoZvaMJDTsPOctQizzNOXKZUI=",
+    "url": "https://github.com/ros2-gbp/ros2_message_filters-release/archive/refs/tags/release/lyrical/message_filters/7.4.1-1.tar.gz",
+    "strip_prefix": "ros2_message_filters-release-release-lyrical-message_filters-7.4.1-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-EF7LIMvWPLDxlYPiswz0I0TaWEww+c9Yc+LNwqAWqJU="
+    }
+}

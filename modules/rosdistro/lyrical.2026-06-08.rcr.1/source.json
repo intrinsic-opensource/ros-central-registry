@@ -1,0 +1,30 @@
+{
+    "integrity": "sha256-eGZogDCM8u8Ot9Z1yUwYX7TIpAvF6SFz4ouh0dQaZmc=",
+    "url": "https://github.com/asymingt/rosdistro/archive/refs/tags/lyrical/2026-06-08.tar.gz",
+    "strip_prefix": "rosdistro-lyrical-2026-06-08",
+    "overlay": {
+        "BUILD.bazel": "sha256-zudBTQNjwTS29Y9yW+LQfiSgDRYg0jSMOP96TFHySaA=",
+        "ament/BUILD.bazel": "sha256-ECvrn7FbsuaQMxarEQVcwHnxQ0i5Lm4u9jxWQQuzHyE=",
+        "ament/ament_index.bzl": "sha256-3d6xPppqnmrvWZLs/etKOoUNoRie4JbDG0IRZQOiAFk=",
+        "ament/ament_package.bzl": "sha256-87QO2602ZPY8S7fyW8bx099idEZSMwEdLYLIScOgOv8=",
+        "ament/ament_resource.bzl": "sha256-3n2jJdUVUJz9zXJKpSLSF5LG/qc8Psblp9ekz0fWu6k=",
+        "ament/defs.bzl": "sha256-LKkaEcPY8WboF9qKgwQDH50nHezBgmsVkYt1jCEJRQM=",
+        "cc/BUILD.bazel": "sha256-KZfsTjWrcNkmwaOHULdBPpV0k7flrmXab/QNdZGj8LQ=",
+        "cc/aspects.bzl": "sha256-3ZYy2k+bwCogeto/A7ipoOE+GD7br4BDrv54sfwJwjY=",
+        "cc/defs.bzl": "sha256-CjrpSPeKNH5pafkHqlXGz+AYRso+FtJ8L1nZ8azsNBE=",
+        "cc/macros.bzl": "sha256-9p6Q4mwMMxZTpGngr7SyFlzgPBFzzuECSkCQPPujkJU=",
+        "cc/mcap_impl.cpp": "sha256-/qFEIYCpqc9IB5xJpJUL6SXUnyVrTjFXc1dpyScZwKQ=",
+        "cc/rules.bzl": "sha256-QQqwkKTjrTt/Qep1FXo9d1g2fIjm6yoUhhIP3bVtVzY=",
+        "cc/types.bzl": "sha256-rdlVPpnZM5fBfMRUrqSa+9GASlfn/i+mpMv4pul5+BI=",
+        "cppzmq_build.patch": "sha256-lmSOyChvr5N3xII3iAQpBUHGO5jImVfjA8dJJHMnVBE=",
+        "cppzmq_module.patch": "sha256-/HI0du88vt3AR3kaRRo1fTBtHrAXn1+JQ2cUIOGHDB4=",
+        "libzmq_build.patch": "sha256-GoMu/NEhTjzQBeUm3AnyuzX9+9h8AtGuPHw5Ci4r77k=",
+        "libzmq_module.patch": "sha256-aMjZ9KHtXKVokaOQ5AvOUINYGJIv0JL9GpfcZSTrTnY=",
+        "ogg_visibility.patch": "sha256-Uteu9QkqyisXBYGGJbVIOPiwnPQ1oqtC4Hf9vrdIVu8=",
+        "python/BUILD.bazel": "sha256-sP0ROcpNAotSp6EXjdHOsl43n2pyM6JfMNZtThCLGDY=",
+        "python/defs.bzl": "sha256-FlOqKavTbRjkQxuIa0TJmE4rUw5cup9zs6A5cb+OrHk=",
+        "python/pytest_main.py": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+        "requirements.in": "sha256-0FBNCCUjKBxkjXBOog6omRpTIY12rrcaK/FFPOFlKvI=",
+        "requirements.txt": "sha256-h7+3UrUgoXNWn8B1ogD+JGjf7uQekBWWQjjRC7ZUcSA="
+    }
+}

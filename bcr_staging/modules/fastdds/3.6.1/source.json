@@ -1,0 +1,12 @@
+{
+    "url": "https://github.com/eProsima/Fast-DDS/archive/refs/tags/v3.6.1.tar.gz",
+    "integrity": "sha256-o1rY57vFqzS7A4myyr6gXlXGIpoR1PU5aAziMAUyVgo=",
+    "strip_prefix": "Fast-DDS-3.6.1",
+    "overlay": {
+        "BUILD.bazel": "sha256-i+cd2Ofxfn9FpNz0Ob4/94kbFoB6taurRiuE0Cu/lHI="
+    },
+    "patches": {
+        "allocator.patch": "sha256-WvQ4Ii62tmpiLguX4gbXC9y75hJN9TY5JJedmd/KOag="
+    },
+    "patch_strip": 1
+}

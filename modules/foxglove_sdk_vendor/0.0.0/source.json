@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-7n8e0DHRDgHmGhN2NV5CHPvixxWQotCE4+7FOBYqUag=",
+    "url": "https://github.com/ros2-gbp/foxglove_sdk_vendor-release/archive/refs/tags/upstream/0.2.0.tar.gz",
+    "strip_prefix": "foxglove_sdk_vendor-release-upstream-0.2.0"
+}

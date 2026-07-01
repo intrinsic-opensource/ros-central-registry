@@ -13,76 +13,51 @@
 # limitations under the License.
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary")
-load("@rosidl_adapter_proto//:rules.bzl", "proto_ros_library")
-load("@rosidl_generator_c//:rules.bzl", "c_ros_library")
-load("@rosidl_generator_cpp//:rules.bzl", "cc_ros_library")
-load("@rosidl_generator_py//:rules.bzl", "py_ros_library")
+load("@protobuf//bazel:py_proto_library.bzl", "py_proto_library")
+load("@rosidl_core_generators//:defs.bzl", "c_ros_library", "cc_proto_ros_library", "cc_ros_library", "py_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 
 package(default_visibility = ["//visibility:public"])
 
-# Generate .proto files for the ros_interface in ./msg/BUILD.bazel.
-
-proto_ros_library(
-    name = "example_proto_files",
-    deps = [
-        "//examples/msg:ExampleMessage",
-    ],
-)
-
-# Generate language bindings to the ros_interface in ./msg/BUILD.bazel.
+# C examples
 
 c_ros_library(
     name = "example_ros_c_msgs",
-    deps = [
-        "//examples/msg:ExampleMessage",
-    ],
+    deps = ["//msg:ExampleMessage"],
 )
-
-cc_ros_library(
-    name = "example_ros_cc_msgs",
-    deps = [
-        "//examples/msg:ExampleMessage",
-    ],
-)
-
-py_ros_library(
-    name = "example_ros_py_msgs",
-    deps = [
-        "//examples/msg:ExampleMessage",
-    ],
-)
-
-# C examples (note that c_ros_library includes proto type support)
 
 cc_binary(
     name = "example_ros_publisher_c",
     srcs = ["src/example_ros_publisher.c"],
-    copts = ["-Wno-unused"],
     deps = [
         ":example_ros_c_msgs",
-        "@rclc",
+        "@rclc//:rclc_library",
     ],
 )
 
 cc_binary(
     name = "example_ros_subscriber_c",
     srcs = ["src/example_ros_subscriber.c"],
-    copts = ["-Wno-unused"],
     deps = [
         ":example_ros_c_msgs",
-        "@rclc",
+        "@rclc//:rclc_library",
     ],
 )
 
-# C++ examples (note that cc_ros_library includes proto type support)
+# C++ examples
+
+cc_ros_library(
+    name = "example_ros_cc_msgs",
+    deps = ["//msg:ExampleMessage"],
+)
 
 cc_binary(
     name = "example_ros_publisher_cc",
     srcs = ["src/example_ros_publisher.cc"],
     deps = [
         ":example_ros_cc_msgs",
-        "@rclcpp",
+        "@rclcpp//:rclcpp_library",
     ],
 )
 
@@ -91,11 +66,19 @@ cc_binary(
     srcs = ["src/example_ros_subscriber.cc"],
     deps = [
         ":example_ros_cc_msgs",
-        "@rclcpp",
+        "@rclcpp//:rclcpp_library",
     ],
 )
 
-# Python examples
+# Python examples - please note  you must use the py_library, py_binary,
+# py_test etc. rules from rules_aspect_py and not rules_python. This is
+# because we use namespaced packages and a sitecustomize to route imports
+# to the correct package, which is not supported by rules_python.
+
+py_ros_library(
+    name = "example_ros_py_msgs",
+    deps = ["//msg:ExampleMessage"],
+)
 
 py_binary(
     name = "example_ros_publisher_py",
@@ -117,14 +100,27 @@ py_binary(
     ],
 )
 
-# Protobuf pipeline example
+# Protobuf pipeline example - the "cc_proto_ros_library" is a special
+# rule that provides a ProtoInfo, CcInfo and DefaultInfo. The ProtoInfo
+# allows you to list the target in the deps of other proto rules (eg.
+# py_proto_library) to use ROS messages in a protocol buffer context.
+# The CcInfo provides ROS and Protobuf C++ bindings, and a typeadapter
+# that enables you to send protocol buffer messages directly through
+# ROS; under the hood it takes care of conversion for you. The last
+# DefaultInfo provider are the typesupport shared objects that need to
+# be present in the runfiles in order for ROS typesupport.
+
+cc_proto_ros_library(
+    name = "example_cc_proto",
+    deps = ["//msg:ExampleMessage"],
+)
 
 cc_binary(
     name = "example_proto_publisher_cc",
     srcs = ["src/example_proto_publisher.cc"],
     deps = [
-        ":example_ros_cc_msgs",
-        "@rclcpp",
+        ":example_cc_proto",
+        "@rclcpp//:rclcpp_library",
     ],
 )
 
@@ -132,7 +128,55 @@ cc_binary(
     name = "example_proto_subscriber_cc",
     srcs = ["src/example_proto_subscriber.cc"],
     deps = [
-        ":example_ros_cc_msgs",
-        "@rclcpp",
+        ":example_cc_proto",
+        "@rclcpp//:rclcpp_library",
     ],
+)
+
+# Python Protobuf pipeline example - shows how to build and use Python
+# Protobuf bindings from a cc_proto_ros_library target.
+
+py_proto_library(
+    name = "example_py_proto",
+    deps = [":example_cc_proto"],
+)
+
+py_binary(
+    name = "example_proto_py_export",
+    srcs = ["src/example_proto_py_export.py"],
+    deps = [":example_py_proto"],
+)
+
+# In future we're going to offer an interactive shell that drops you into
+# interactive terminal that has a transitive set of package data available
+# in the runfile directory.
+
+sh_binary(
+    name = "shell",
+    srcs = ["shell_unix.sh"],
+    data = [
+        "@examples_rclcpp_async_client//:ament_package",
+        "@examples_rclcpp_cbg_executor//:ament_package",
+        "@examples_rclcpp_minimal_action_client//:ament_package",
+        "@examples_rclcpp_minimal_action_server//:ament_package",
+        "@examples_rclcpp_minimal_client//:ament_package",
+        "@examples_rclcpp_minimal_composition//:ament_package",
+        "@examples_rclcpp_minimal_publisher//:ament_package",
+        "@examples_rclcpp_minimal_service//:ament_package",
+        "@examples_rclcpp_minimal_subscriber//:ament_package",
+        "@examples_rclcpp_minimal_timer//:ament_package",
+        "@examples_rclcpp_multithreaded_executor//:ament_package",
+        "@examples_rclcpp_wait_set//:ament_package",
+        "@examples_rclpy_executors//:ament_package",
+        "@examples_rclpy_guard_conditions//:ament_package",
+        "@examples_rclpy_minimal_action_client//:ament_package",
+        "@examples_rclpy_minimal_action_server//:ament_package",
+        "@examples_rclpy_minimal_client//:ament_package",
+        "@examples_rclpy_minimal_publisher//:ament_package",
+        "@examples_rclpy_minimal_service//:ament_package",
+        "@examples_rclpy_minimal_subscriber//:ament_package",
+        "@examples_rclpy_pointcloud_publisher//:ament_package",
+        "@examples_tf2_py//:ament_package",
+    ],
+    target_compatible_with = ["@platforms//os:linux"],
 )

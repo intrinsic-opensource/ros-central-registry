@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-PkQorovgKGjXHqFsIxawa/tmrx8M8WFB1HaX7d379PQ=",
+    "url": "https://github.com/ros2-gbp/executive_smach-release/archive/refs/tags/upstream/3.0.3.tar.gz",
+    "strip_prefix": "executive_smach-release-upstream-3.0.3/smach_msgs"
+}

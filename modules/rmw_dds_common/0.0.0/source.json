@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-AfKUWZl+n/xIiOCbK0Aoi8I+aqJD5EhHCotvGX1nDS0=",
+    "url": "https://github.com/ros2-gbp/rmw_dds_common-release/archive/refs/tags/upstream/6.0.0.tar.gz",
+    "strip_prefix": "rmw_dds_common-release-upstream-6.0.0/rmw_dds_common"
+}
