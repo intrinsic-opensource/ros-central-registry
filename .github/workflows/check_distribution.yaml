@@ -39,7 +39,6 @@ jobs:
       fail-fast: false
       matrix:
         bazel:
-        - 7.x
         - 8.x
         - 9.x
         ros:
@@ -47,8 +46,8 @@ jobs:
         os:
         - ubuntu-26.04
         - ubuntu-26.04-arm
+        - macos-26-intel
         - macos-26
-        - macos-26-arm
     steps:
     - name: Free disk space
       uses: jlumbroso/free-disk-space@v1.3.1
