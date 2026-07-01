@@ -50,6 +50,7 @@ jobs:
         - macos-26
     steps:
     - name: Free disk space
+      if: runner.os == 'Linux'
       uses: jlumbroso/free-disk-space@v1.3.1
       with:
         tool-cache: true
