@@ -58,7 +58,6 @@ py_binary(
     srcs = ["helper_strip_starlark_files.py"],
 )
 
-
 #### UBUNTU PYTHON PACKAGES TOOLING ######################################
 
 py_library(
