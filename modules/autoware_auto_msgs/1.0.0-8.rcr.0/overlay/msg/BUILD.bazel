@@ -1,0 +1,98 @@
+load("@rosidl_default_generators//:defs.bzl", "ros_idl")
+
+package(default_visibility = ["//visibility:public"])
+
+ros_idl(
+    name = "RawControlCommand",
+    src = "RawControlCommand.idl",
+)
+
+ros_idl(
+    name = "VehicleStateReport",
+    src = "VehicleStateReport.idl",
+)
+
+ros_idl(
+    name = "DiagnosticHeader",
+    src = "DiagnosticHeader.idl",
+)
+
+ros_idl(
+    name = "Trajectory",
+    src = "Trajectory.idl",
+)
+
+ros_idl(
+    name = "Complex32",
+    src = "Complex32.idl",
+)
+
+ros_idl(
+    name = "HADMapBin",
+    src = "HADMapBin.idl",
+)
+
+ros_idl(
+    name = "VehicleStateCommand",
+    src = "VehicleStateCommand.idl",
+)
+
+ros_idl(
+    name = "ControlDiagnostic",
+    src = "ControlDiagnostic.idl",
+)
+
+ros_idl(
+    name = "VehicleOdometry",
+    src = "VehicleOdometry.idl",
+)
+
+ros_idl(
+    name = "MapPrimitive",
+    src = "MapPrimitive.idl",
+)
+
+ros_idl(
+    name = "VehicleKinematicState",
+    src = "VehicleKinematicState.idl",
+)
+
+ros_idl(
+    name = "BoundingBox",
+    src = "BoundingBox.idl",
+)
+
+ros_idl(
+    name = "HighLevelControlCommand",
+    src = "HighLevelControlCommand.idl",
+)
+
+ros_idl(
+    name = "VehicleControlCommand",
+    src = "VehicleControlCommand.idl",
+)
+
+ros_idl(
+    name = "Route",
+    src = "Route.idl",
+)
+
+ros_idl(
+    name = "TrajectoryPoint",
+    src = "TrajectoryPoint.idl",
+)
+
+ros_idl(
+    name = "PointClusters",
+    src = "PointClusters.idl",
+)
+
+ros_idl(
+    name = "Quaternion32",
+    src = "Quaternion32.idl",
+)
+
+ros_idl(
+    name = "BoundingBoxArray",
+    src = "BoundingBoxArray.idl",
+)

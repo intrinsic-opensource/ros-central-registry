@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-/MAJ8O7yQjo27vsxudElOCO4eh8kxJq0OYp8R67IhY8=",
+    "url": "https://github.com/ros2-gbp/proxsuite-release/archive/refs/tags/upstream/0.6.5.tar.gz",
+    "strip_prefix": "proxsuite-release-upstream-0.6.5"
+}

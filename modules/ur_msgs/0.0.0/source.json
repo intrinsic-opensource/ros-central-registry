@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-EjIvdGjkPOOfSXL1GXC5ONdtQdiXjHlUKiz3vD2wkxI=",
+    "url": "https://github.com/ros2-gbp/ur_msgs-release/archive/refs/tags/upstream/2.5.0.tar.gz",
+    "strip_prefix": "ur_msgs-release-upstream-2.5.0"
+}

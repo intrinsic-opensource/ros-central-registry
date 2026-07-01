@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-QOvvwSE/tmrZCasGPMrN6Z5ebbdIB1duMsAMnnrn0WE=",
+    "url": "https://github.com/ros2-gbp/dynamixel_hardware-release/archive/refs/tags/upstream/0.6.0.tar.gz",
+    "strip_prefix": "dynamixel_hardware-release-upstream-0.6.0/dynamixel_hardware"
+}

@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-ERWPAOV60QEle3q/UpqOx9upUBNqX3YjEZm2V/9y0DM=",
+    "url": "https://github.com/ros2-gbp/osrf_testing_tools_cpp-release/archive/refs/tags/release/lyrical/osrf_testing_tools_cpp/2.3.1-1.tar.gz",
+    "strip_prefix": "osrf_testing_tools_cpp-release-release-lyrical-osrf_testing_tools_cpp-2.3.1-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-o0lY1bUDPg9Jbvm0w0rtFsk0T/BKXol3C5+PU7jf7LI="
+    }
+}

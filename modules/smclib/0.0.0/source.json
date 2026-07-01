@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-u6dKoD2mCSzEQXXDK/HwBiBlAwL1RyI5fxKod8Ejnvw=",
+    "url": "https://github.com/ros2-gbp/bond_core-release/archive/refs/tags/upstream/4.4.0.tar.gz",
+    "strip_prefix": "bond_core-release-upstream-4.4.0/smclib"
+}

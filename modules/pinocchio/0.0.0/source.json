@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-x6hSP/uquujwMEsrCNncN8TQKhdX2yqIIDVzljw/3A0=",
+    "url": "https://github.com/ros2-gbp/pinocchio-release/archive/refs/tags/upstream/3.9.0.tar.gz",
+    "strip_prefix": "pinocchio-release-upstream-3.9.0"
+}

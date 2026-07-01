@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-usQ1mtbV5kB0l+JuNPkPZN+sOqJgDNvD/iu9t2GF5HE=",
+    "url": "https://github.com/ros2-gbp/rospy_message_converter-release/archive/refs/tags/upstream/2.0.2.tar.gz",
+    "strip_prefix": "rospy_message_converter-release-upstream-2.0.2/rclpy_message_converter"
+}

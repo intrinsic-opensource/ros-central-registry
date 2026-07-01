@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-Ng/T/QoPugAqccLWDu8N6YQtUgJWjffPPXQn8da/5vg=",
+    "url": "https://github.com/ros2-gbp/topic_based_hardware-release/archive/refs/tags/upstream/1.0.0.tar.gz",
+    "strip_prefix": "topic_based_hardware-release-upstream-1.0.0/cm_topic_hardware_component"
+}

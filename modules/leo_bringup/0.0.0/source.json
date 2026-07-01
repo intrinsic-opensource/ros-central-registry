@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-2hgL+Epb4N/o7w80GGzS52tu5a7SLe6rzgixpHQGduk=",
+    "url": "https://github.com/ros2-gbp/leo_robot-release/archive/refs/tags/upstream/2.5.0.tar.gz",
+    "strip_prefix": "leo_robot-release-upstream-2.5.0/leo_bringup"
+}

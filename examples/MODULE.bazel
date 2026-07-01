@@ -1,0 +1,93 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+module(
+    name = "rcr-examples",
+)
+
+# BCR deps
+
+bazel_dep(name = "aspect_rules_py", version = "1.11.2")
+bazel_dep(name = "llvm", version = "0.8.6")
+bazel_dep(name = "platforms", version = "1.1.0")
+bazel_dep(name = "protobuf", version = "35.0-rc1")
+bazel_dep(name = "rules_cc", version = "0.2.18")
+bazel_dep(name = "rules_go", version = "0.60.0")
+bazel_dep(name = "rules_python", version = "1.9.0")
+bazel_dep(name = "rules_rs", version = "0.0.56")
+bazel_dep(name = "rules_rust", version = "0.69.0")
+bazel_dep(name = "rules_shell", version = "0.8.0")
+
+## RCR deps
+
+# Load the 'perception' variant for lyrical/2026-06-08.
+bazel_dep(name = "ros", version = "lyrical.2026-06-08.rcr.1")
+
+# Make the following packages visible to this project. We use the dummy package
+# version "0.0.0" to satisfy Bazel's need for a version, but be guaranteed that
+# whatever is transitively imported by "ros" overrides this dummy version.
+#   see: https://github.com/bazelbuild/bazel/issues/28881
+bazel_dep(name = "examples_rclcpp_async_client", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_cbg_executor", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_minimal_action_client", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_minimal_action_server", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_minimal_client", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_minimal_composition", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_minimal_publisher", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_minimal_service", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_minimal_subscriber", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_minimal_timer", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_multithreaded_executor", version = "0.0.0")
+bazel_dep(name = "examples_rclcpp_wait_set", version = "0.0.0")
+bazel_dep(name = "examples_rclpy_executors", version = "0.0.0")
+bazel_dep(name = "examples_rclpy_guard_conditions", version = "0.0.0")
+bazel_dep(name = "examples_rclpy_minimal_action_client", version = "0.0.0")
+bazel_dep(name = "examples_rclpy_minimal_action_server", version = "0.0.0")
+bazel_dep(name = "examples_rclpy_minimal_client", version = "0.0.0")
+bazel_dep(name = "examples_rclpy_minimal_publisher", version = "0.0.0")
+bazel_dep(name = "examples_rclpy_minimal_service", version = "0.0.0")
+bazel_dep(name = "examples_rclpy_minimal_subscriber", version = "0.0.0")
+bazel_dep(name = "examples_rclpy_pointcloud_publisher", version = "0.0.0")
+bazel_dep(name = "examples_tf2_py", version = "0.0.0")
+bazel_dep(name = "rclc", version = "0.0.0")
+bazel_dep(name = "rclcpp", version = "0.0.0")
+bazel_dep(name = "rclpy", version = "0.0.0")
+bazel_dep(name = "rosdistro", version = "0.0.0")
+bazel_dep(name = "rosidl_core_generators", version = "0.0.0")
+bazel_dep(name = "sensor_msgs", version = "0.0.0")
+bazel_dep(name = "std_msgs", version = "0.0.0")
+
+## BOOTSTRAP
+
+# Register our hermetic compiler (clang)
+register_toolchains("@llvm//toolchain:all")
+
+# Python / pip
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    is_default = True,
+    python_version = "3.12",
+)
+
+pip_ros = use_extension("@rosdistro//python:defs.bzl", "pip_ros")
+use_repo(pip_ros, "pip_ros")
+
+# Rust / crates
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.85.0"],
+)

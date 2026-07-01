@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-FkyfDjVXbCD4zO324eqAQ2AyeP4PibFCmgoyzrVl11o=",
+    "url": "https://github.com/ros2-gbp/microstrain_inertial-release/archive/refs/tags/upstream/4.8.0.tar.gz",
+    "strip_prefix": "microstrain_inertial-release-upstream-4.8.0/microstrain_inertial_rqt"
+}

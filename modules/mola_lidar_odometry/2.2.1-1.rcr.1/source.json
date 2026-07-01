@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-ad+LlXkncaGa+JsevaHr2G9paGvUWA8Z1IseXuEmHaI=",
+    "url": "https://github.com/ros2-gbp/mola_lidar_odometry-release/archive/refs/tags/release/lyrical/mola_lidar_odometry/2.2.1-1.tar.gz",
+    "strip_prefix": "mola_lidar_odometry-release-release-lyrical-mola_lidar_odometry-2.2.1-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-c+eS8iQdmPSEboR2pwJxp8mA3kLj4mGBLmnYfEj8Aag="
+    }
+}

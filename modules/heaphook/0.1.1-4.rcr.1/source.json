@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-wMhgRjp1As5Api9myRjUgnU8FVzlNWJBgcF8t+Wgirw=",
+    "url": "https://github.com/ros2-gbp/heaphook-release/archive/refs/tags/release/lyrical/heaphook/0.1.1-4.tar.gz",
+    "strip_prefix": "heaphook-release-release-lyrical-heaphook-0.1.1-4",
+    "overlay": {
+        "BUILD.bazel": "sha256-iSqYKhrYB6i3SDzF/hXyaHN/7EdY3Wi3HS0vaD/YBMM="
+    }
+}

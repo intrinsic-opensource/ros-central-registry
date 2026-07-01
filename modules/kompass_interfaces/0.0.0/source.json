@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-8LSm0C1xS4CpkfCeeJNcTGGMdR2OBHhEXAkti7fR5No=",
+    "url": "https://github.com/ros2-gbp/kompass-release/archive/refs/tags/upstream/0.4.1.tar.gz",
+    "strip_prefix": "kompass-release-upstream-0.4.1/kompass_interfaces"
+}

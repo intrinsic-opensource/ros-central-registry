@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-+8uN2WQgTw+ihRbtjzP6FzEI+K2R+1fz5jPLAF3zR0U=",
+    "url": "https://github.com/ros2-gbp/rtabmap-release/archive/refs/tags/upstream/0.22.1.tar.gz",
+    "strip_prefix": "rtabmap-release-upstream-0.22.1"
+}

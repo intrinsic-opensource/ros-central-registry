@@ -1,0 +1,82 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+## COMMON OPTIONS
+
+# This suppresses warnings that bazel emits when two dependencies rely
+# on different versions of a single module
+common --check_direct_dependencies=off
+
+# This tells Bazel to look locally for RCR modules at the root of this
+# project, additional "staged" BCR modules in the bcr_staging folder
+# in this workspace, and ultimately at the BCR for the rest.
+common --registry=file://%workspace%/..             \
+       --registry=file://%workspace%/../bcr_staging \
+       --registry=https://bcr.bazel.build
+
+# This provides read-only access to a shared Bazel remote cache offered
+# by Intrinsic. It helps speed up fresh checkouts from upstream.
+common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
+common --remote_upload_local_results=false
+common --remote_cache_compression=true
+
+# Critical ROS environment variables needed at test-time.
+common --test_env=ROS_DISTRO="lyrical"
+common --test_env=ROS_HOME=".ros"
+common --test_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
+common --test_env=LD_LIBRARY_PATH=lib
+
+# Critical ROS environment variables needed at run-time.
+common --run_env=ROS_DISTRO="lyrical"
+common --run_env=ROS_HOME=".ros"
+common --run_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
+common --run_env=LD_LIBRARY_PATH=lib
+
+# Propagate select X11 variables through to the test sandbox, so that
+# any test that uses the display has access to it.
+common --test_env=DISPLAY
+common --test_env=XAUTHORITY
+common --test_env=WAYLAND_DISPLAY
+
+# Our approach to message generation works on a per-message dependency
+# chain. We need to be able to merge messages into 
+common --incompatible_default_to_explicit_init_py
+
+# This restricts the environment variables available to build actions, 
+# keeping the build environment more hermetic.
+common --incompatible_strict_action_env
+
+## BUILD OPTIONS
+
+# Ensure that we use toolchains_llvm instead of the host toolchain.
+build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
+
+# Our bazel distribution provides conversion utilities for transforming
+# ROS messages to .proto files. This prevent protobuf from trying to
+# recompile itself in response to environment changes.
+build --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
+
+# This tells our hermetic LLVM compiler to stub some GCC functions that
+# are used in several places around the ROS Bazel workspace/
+build --@llvm//config:experimental_stub_libgcc_s=True
+
+# Include the realtime library when linking (until fixed in FastDDS).
+build --linkopt="-lrt"
+
+## TEST OPTIONS
+
+# This restricts our test sandboxes from accessing the network, which is
+# important if you want to prevent destructive interference on the ROS
+# messaging system between tests running in parallel
+test --sandbox_default_allow_network=false

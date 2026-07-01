@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-PVAw0Ugkbw8bNpRzWI3fw5QN848UdB5eYE2oJuCcl5k=",
+    "url": "https://github.com/ros2-gbp/pluginlib-release/archive/refs/tags/upstream/5.8.4.tar.gz",
+    "strip_prefix": "pluginlib-release-upstream-5.8.4/ros2plugin"
+}

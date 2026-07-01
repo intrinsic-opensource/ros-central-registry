@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-aWa7Qum68FJAmCtrqGIQA4c73Dq/zEQVrbnR0Xxp0ss=",
+    "url": "https://github.com/ros2-gbp/cartographer-release/archive/refs/tags/release/lyrical/cartographer/2.0.9004-3.tar.gz",
+    "strip_prefix": "cartographer-release-release-lyrical-cartographer-2.0.9004-3",
+    "patches": {
+        "BUILD__bazel.patch": "sha256-ZJfVeEsDQUvRXbZe8/giV1NtSaizebsyQOJD+LARuIY="
+    },
+    "patch_strip": 1
+}

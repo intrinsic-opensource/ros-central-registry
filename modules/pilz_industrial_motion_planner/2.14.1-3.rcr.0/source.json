@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-3liknpWmPQr3mA453US9Y3lWG/CIqPnfRvwsTHYtVaw=",
+    "url": "https://github.com/ros2-gbp/moveit2-release/archive/refs/tags/release/lyrical/pilz_industrial_motion_planner/2.14.1-3.tar.gz",
+    "strip_prefix": "moveit2-release-release-lyrical-pilz_industrial_motion_planner-2.14.1-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-klLKpwZ9OCfgkzjwWI0LSZG3GExdyv/pG9oqN54mv6Y="
+    }
+}

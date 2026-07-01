@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-bN3LM/9QuZIoDw3tWgXZVCvyj9OD9zj8xz5QQM8yusU=",
+    "url": "https://github.com/ros2-gbp/ros_ign-release/archive/refs/tags/upstream/3.0.8.tar.gz",
+    "strip_prefix": "ros_ign-release-upstream-3.0.8/ros_gz_sim_demos"
+}

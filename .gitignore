@@ -1,5 +1,6 @@
-modules
 bazel-*
-**/MODULE.bazel.lock
-*.sh
+MODULE.bazel.lock
 .vscode
+.cache
+workspace/**
+**/__pycache__/**

@@ -1,0 +1,13 @@
+{
+    "integrity": "sha256-QLkPqnNA8KyLiwn+OT4EaIq20DsSXwCVfsx0EE2IBrc=",
+    "url": "https://github.com/ros2-gbp/image_pipeline-release/archive/refs/tags/release/lyrical/image_proc/7.1.6-1.tar.gz",
+    "strip_prefix": "image_pipeline-release-release-lyrical-image_proc-7.1.6-1",
+    "patch_strip": 1,
+    "overlay": {
+        "BUILD.bazel": "sha256-MeDhBGEsErclrPNGzNVj37LyOeJ0dOwa39vwf/xGtZQ="
+    },
+    "patches": {
+        "test__rostest__cpp.patch": "sha256-KPQsmtViccbuvdLcEnxEz6kR2/NMp7Yn2TcdXHLpdGk=",
+        "test__test_rectify__cpp.patch": "sha256-Lydsyc58+UQVcO7NZV9tUEKXQuqyfaCGSb7ZPoDdA2E="
+    }
+}

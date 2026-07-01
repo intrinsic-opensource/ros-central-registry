@@ -1,0 +1,32 @@
+load("@rosidl_default_generators//:defs.bzl", "ros_service")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(glob(["*.srv"]))
+
+ros_service(
+    name = "BasicSrv",
+    src = "BasicSrv.srv",
+    deps = [
+        "//msg:BasicIdl",
+        "//msg:BasicMsg",
+    ],
+)
+
+ros_service(
+    name = "ComplexSrvIdl",
+    src = "ComplexSrvIdl.srv",
+    deps = [
+        "//msg:BasicIdl",
+        "//msg:BasicMsg",
+    ],
+)
+
+ros_service(
+    name = "ComplexSrvMsg",
+    src = "ComplexSrvMsg.srv",
+    deps = [
+        "//msg:BasicIdl",
+        "//msg:BasicMsg",
+    ],
+)
