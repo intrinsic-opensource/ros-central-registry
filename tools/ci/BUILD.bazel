@@ -40,4 +40,3 @@ py_binary(
     name = "setup_workspace",
     srcs = ["setup_workspace.py"],
 )
-
