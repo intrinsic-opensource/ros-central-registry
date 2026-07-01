@@ -35,3 +35,9 @@ py_test(
         ":check_pr_modules_lib",
     ],
 )
+
+py_binary(
+    name = "setup_workspace",
+    srcs = ["setup_workspace.py"],
+)
+
