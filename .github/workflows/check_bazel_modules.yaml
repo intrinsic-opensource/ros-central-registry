@@ -14,6 +14,8 @@
 
 name: check_bazel_modules
 run-name: Checks that changes to Bazel modules abide by certain rules
+env:
+  ANDROID_HOME: ""
 on:
   pull_request:
     branches:
@@ -50,7 +52,7 @@ jobs:
         done
     - name: Run PR modules check
       run: |
-        bazel --nosystem_rc --nohome_rc run //tools/ci:check_pr_modules -- \
+        bazel run //tools/ci:check_pr_modules -- \
             --diff-status /tmp/diff_status.txt \
             --old-metadata-dir /tmp/old_metadata \
             --directory "${{ matrix.directory }}"

@@ -14,6 +14,8 @@
 
 name: check_deployment
 run-name: Checks documents build and deploys if necessary
+env:
+  ANDROID_HOME: ""
 on:
   pull_request:
     branches:
@@ -38,7 +40,7 @@ jobs:
         disk-cache: ${{ github.workflow }}
         repository-cache: false
     - name: Regenerate docs
-      run: bazel --nosystem_rc --nohome_rc build //docs:html
+      run: bazel build //docs:html
     - name: Merge docs, modules and bcr_staging
       run: |
         mkdir -p ./deploy/modules

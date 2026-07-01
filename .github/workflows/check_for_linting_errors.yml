@@ -14,6 +14,8 @@
 
 name: check_for_linting_errors
 run-name: Checks that there are no buildifier linting errors
+env:
+  ANDROID_HOME: ""
 on:
   pull_request:
     branches:
