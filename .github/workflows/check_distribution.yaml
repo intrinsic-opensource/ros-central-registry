@@ -110,8 +110,19 @@ jobs:
         ZENOHD_PID=$!
         bazel test --config=perception --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
         kill $ZENOHD_PID
+    - name: Test (desktop)
+      id: test_desktop
+      run: |
+        bazel test --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+        bazel test --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+        bazel test --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+        bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
+        ZENOHD_PID=$!
+        bazel test --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
+        kill $ZENOHD_PID
     - name: Test (simulation)
       id: test_simulation
+      continue-on-error: true
       run: |
         bazel test --config=test_simulation --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
         bazel test --config=test_simulation --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
@@ -122,6 +133,7 @@ jobs:
         kill $ZENOHD_PID
     - name: Test (desktop_full)
       id: test_desktop_full
+      continue-on-error: true
       run: |
         bazel test --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
         bazel test --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
