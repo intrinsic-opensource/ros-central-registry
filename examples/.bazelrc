@@ -15,7 +15,9 @@
 ## COMMON OPTIONS
 
 # This suppresses warnings that bazel emits when two dependencies rely
-# on different versions of a single module
+# on different versions of a single module. This is what allows us to
+# load 0.0.0 versions of RCR package and have bazel resolve the correct
+# package for the ROS distribution we are using.
 common --check_direct_dependencies=off
 
 # This tells Bazel to look locally for RCR modules at the root of this

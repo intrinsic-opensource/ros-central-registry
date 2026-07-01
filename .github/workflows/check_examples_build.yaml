@@ -14,6 +14,8 @@
 
 name: check_examples_build
 run-name: Checks that the targets in the "examples" folder build.
+env:
+  ANDROID_HOME: ""
 on:
   pull_request:
     branches:
@@ -36,7 +38,7 @@ jobs:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
         repository-cache: false
-    - name: Run PR modules check
+    - name: Check that the examples build correctly
       run: |
         cd examples
-        bazel --nosystem_rc --nohome_rc build //...
+        bazel build //...
