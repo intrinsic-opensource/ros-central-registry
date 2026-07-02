@@ -148,6 +148,7 @@ common --remote_upload_local_results=true
 common --remote_cache_compression=true
 common --google_default_credentials
 common --flaky_test_attempts=5
+common --jobs=2
 
 ## CONFIG OPTIONS FOR VARIANTS
 common:core --target_pattern_file=ros-core.txt
