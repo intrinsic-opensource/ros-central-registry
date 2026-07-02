@@ -150,7 +150,7 @@ common --google_default_credentials
 common --flaky_test_attempts=5
 
 # Our CI workers struggle with test parallelism.
-test --local_test_jobs=2
+test --local_test_jobs=1
 
 ## CONFIG OPTIONS FOR VARIANTS
 common:core --target_pattern_file=ros-core.txt
