@@ -48,7 +48,10 @@ cc_shared_library(
     dynamic_deps = [":transitive_dynamic_deps"],
     exports_filter = [":tf2_py_bindings_library"],
     linkopts = select({
-        "@platforms//os:osx": ["-undefined", "dynamic_lookup"],
+        "@platforms//os:osx": [
+            "-undefined",
+            "dynamic_lookup",
+        ],
         "//conditions:default": [],
     }),
     shared_lib_name = "tf2_py/_tf2_py.so",

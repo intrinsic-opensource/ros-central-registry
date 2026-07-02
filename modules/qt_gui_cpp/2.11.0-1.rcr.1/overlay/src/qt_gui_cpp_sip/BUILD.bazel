@@ -94,7 +94,10 @@ cc_shared_library(
     dynamic_deps = DEPENDENCIES.keys(),
     exports_filter = [":qt_gui_cpp_sip_library"],
     linkopts = select({
-        "@platforms//os:osx": ["-undefined", "dynamic_lookup"],
+        "@platforms//os:osx": [
+            "-undefined",
+            "dynamic_lookup",
+        ],
         "//conditions:default": [],
     }),
     shared_lib_name = "libqt_gui_cpp_sip.so",
