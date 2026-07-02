@@ -63,7 +63,7 @@ jobs:
     - name: Checkout repository and submodules
       uses: actions/checkout@v7
       with:
-        fetch-depth: 1
+        fetch-depth: 0
     - name: Authenticate to Google Cloud
       uses: "google-github-actions/auth@71fee32a0bb7e97b4d33d548e7d957010649d8fa"
       with:
