@@ -55,6 +55,10 @@ collect_transitive_dynamic_deps(
 cc_shared_library(
     name = "rclpy_bindings",
     exports_filter = [":rclpy_bindings_library"],
+    linkopts = select({
+        "@platforms//os:osx": ["-undefined", "dynamic_lookup"],
+        "//conditions:default": [],
+    }),
     shared_lib_name = "rclpy/_rclpy_pybind11.so",
     visibility = ["//visibility:private"],
     deps = [":rclpy_bindings_library"],
