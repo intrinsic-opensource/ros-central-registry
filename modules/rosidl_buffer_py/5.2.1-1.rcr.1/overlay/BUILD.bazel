@@ -31,13 +31,6 @@ cc_library(
     name = "rcl_buffer_py_bindings_library",
     srcs = glob(["src/**/*.cpp"]),
     includes = ["."],
-    linkopts = select({
-        "@platforms//os:osx": [
-            "-undefined",
-            "dynamic_lookup",
-        ],
-        "//conditions:default": [],
-    }),
     visibility = ["//visibility:private"],
     deps = DEPENDENCIES.values() + [
         "@rosdistro//cc:pybind11",
@@ -49,6 +42,13 @@ cc_shared_library(
     dynamic_deps = DEPENDENCIES.keys(),
     exports_filter = [":rcl_buffer_py_bindings_library"],
     shared_lib_name = "rosidl_buffer/_rosidl_buffer_py.so",
+    user_link_flags = select({
+        "@platforms//os:osx": [
+            "-undefined",
+            "dynamic_lookup",
+        ],
+        "//conditions:default": [],
+    }),
     visibility = ["//visibility:private"],
     deps = [":rcl_buffer_py_bindings_library"],
 )

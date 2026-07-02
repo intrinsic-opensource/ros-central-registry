@@ -37,13 +37,6 @@ cc_library(
         "src/rclpy/**/*.hpp",
     ]),
     includes = ["src/rclpy"],
-    linkopts = select({
-        "@platforms//os:osx": [
-            "-undefined",
-            "dynamic_lookup",
-        ],
-        "//conditions:default": [],
-    }),
     visibility = ["//visibility:private"],
     deps = DEPENDENCIES.values() + [
         "@lifecycle_msgs//:c",
@@ -63,6 +56,13 @@ cc_shared_library(
     name = "rclpy_bindings",
     exports_filter = [":rclpy_bindings_library"],
     shared_lib_name = "rclpy/_rclpy_pybind11.so",
+    user_link_flags = select({
+        "@platforms//os:osx": [
+            "-undefined",
+            "dynamic_lookup",
+        ],
+        "//conditions:default": [],
+    }),
     visibility = ["//visibility:private"],
     deps = [":rclpy_bindings_library"],
 )

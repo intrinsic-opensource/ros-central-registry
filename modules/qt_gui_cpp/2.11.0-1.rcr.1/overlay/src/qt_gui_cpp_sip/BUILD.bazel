@@ -79,13 +79,6 @@ cc_library(
         "build",
         "build/libqt_gui_cpp_sip",
     ],
-    linkopts = select({
-        "@platforms//os:osx": [
-            "-undefined",
-            "dynamic_lookup",
-        ],
-        "//conditions:default": [],
-    }),
     local_defines = ros_local_defines(),
     deps = DEPENDENCIES.values() + [
         "//:qt_gui_cpp",
@@ -101,5 +94,12 @@ cc_shared_library(
     dynamic_deps = DEPENDENCIES.keys(),
     exports_filter = [":qt_gui_cpp_sip_library"],
     shared_lib_name = "libqt_gui_cpp_sip.so",
+    user_link_flags = select({
+        "@platforms//os:osx": [
+            "-undefined",
+            "dynamic_lookup",
+        ],
+        "//conditions:default": [],
+    }),
     deps = [":qt_gui_cpp_sip_library"],
 )
