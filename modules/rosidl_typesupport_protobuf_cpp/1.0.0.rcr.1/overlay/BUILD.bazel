@@ -93,7 +93,7 @@ cc_test(
     name = "test_wstring_conversion",
     srcs = ["test/test_wstring_conversion.cpp"],
     dynamic_deps = [":transitive_dynamic_deps"],
-    deps = DEPENDENCIES.keys() + [
+    deps = DEPENDENCIES.values() + [
         ":rosidl_typesupport_protobuf_cpp_library",
         "@googletest//:gtest",
         "@googletest//:gtest_main",

@@ -93,7 +93,7 @@ rosidl_typesupport_protobuf_c_aspect = aspect(
         ),
         "_c_deps": attr.label_list(
             default = [
-                Label("@rosidl_typesupport_protobuf_c"),
+                Label("@rosidl_typesupport_protobuf_c//:rosidl_typesupport_protobuf_c_library"),
             ],
             providers = [CcInfo],
         ),

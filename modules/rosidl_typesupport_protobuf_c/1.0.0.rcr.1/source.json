@@ -4,8 +4,8 @@
     "strip_prefix": "rosidl_typesupport_protobuf-e3de421144f1dd080f234a8a03a2de90bf31314f/rosidl_typesupport_protobuf_c",
     "overlay": {
         "types.bzl": "sha256-Dav7sXwLGcYtzfiW8zhR/MBPqnIFM2aoF0Emss35ZyA=",
-        "BUILD.bazel": "sha256-WlI2oG00ynLKZhO1QC7ADjjLs26aA9BGxT6PPnftCNY=",
-        "aspects.bzl": "sha256-Uax+J0Cronh4StBBR9lHltEdcmMem4TQUs0Frgn6y8M="
+        "BUILD.bazel": "sha256-UU3J54H+hCnFWyEgqtFEdays/p8qlWCOWe/jBJc+hKs=",
+        "aspects.bzl": "sha256-dKC/pWzDlcEXR4r+mTkkjDabHbTDsuZ8OAyWvNrbd0Y="
     },
     "patches": {
         "resource__msg__rosidl_typesupport_protobuf_c__hpp__em.patch": "sha256-TA52rGIaW14KMR58JEHIf1bgP3W++/idD2rq9OeHmEw=",
