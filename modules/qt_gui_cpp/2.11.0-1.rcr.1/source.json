@@ -6,7 +6,7 @@
     "overlay": {
         "BUILD.bazel": "sha256-+A/A+Nw263jB3VtTdRXxjM3w4cxR6A+K954IvJWZT84=",
         "src/qt_gui_cpp_shiboken/shiboken6_wrapper.py": "sha256-wQEGorje8XenwGMXM9A9C+bUgFs5Ym/L/JQWsep6LS0=",
-        "src/qt_gui_cpp_sip/BUILD.bazel": "sha256-XUH91Q7JucOl8hEfrMVZd5PtajsOikSgqE+1gWIUyRA="
+        "src/qt_gui_cpp_sip/BUILD.bazel": "sha256-dZ/Q7eccHewFk+A5LRdnATdeFUbWwMHEFoE0wQI5EpU="
     },
     "patches": {
         "test__test_imports_shiboken__py.patch": "sha256-KXdsAQoUXc2ToWiwh/aMYqOKDtSxG/L3ztVU8IHAQQE=",
