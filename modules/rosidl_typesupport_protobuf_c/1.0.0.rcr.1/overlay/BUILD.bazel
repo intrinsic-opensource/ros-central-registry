@@ -13,7 +13,8 @@
 # limitations under the License.
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps", "ros_local_defines")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -26,17 +27,27 @@ exports_files(
     srcs = ["resource/rosidl_typesupport_protobuf_c__visibility_control.h.in"],
 )
 
+DEPENDENCIES = {
+    "@rmw//:rmw": "@rmw//:rmw_library",
+    "@rosidl_runtime_c//:rosidl_runtime_c": "@rosidl_runtime_c//:rosidl_runtime_c_library",
+    "@rosidl_runtime_cpp//:rosidl_runtime_cpp": "@rosidl_runtime_cpp//:rosidl_runtime_cpp_library",
+    "@rosidl_typesupport_protobuf//:rosidl_typesupport_protobuf": "@rosidl_typesupport_protobuf//:rosidl_typesupport_protobuf_library",
+}
+
 cc_library(
-    name = "rosidl_typesupport_protobuf_c",
+    name = "rosidl_typesupport_protobuf_c_library",
     srcs = glob(["src/**"]),
     hdrs = glob(["include/**"]),
     includes = ["include"],
-    deps = [
-        "@rmw",
-        "@rosidl_runtime_c",
-        "@rosidl_runtime_cpp",
-        "@rosidl_typesupport_protobuf",
-    ],
+    local_defines = ros_local_defines(),
+    deps = DEPENDENCIES.values(),
+)
+
+cc_shared_library(
+    name = "rosidl_typesupport_protobuf_c",
+    dynamic_deps = DEPENDENCIES.keys(),
+    exports_filter = [":rosidl_typesupport_protobuf_c_library"],
+    deps = [":rosidl_typesupport_protobuf_c_library"],
 )
 
 py_library(
@@ -62,11 +73,18 @@ py_binary(
     deps = [":rosidl_typesupport_protobuf_c_py"],
 )
 
+collect_transitive_dynamic_deps(
+    name = "transitive_dynamic_deps",
+    dynamic_deps = [":rosidl_typesupport_protobuf_c"],
+    visibility = ["//visibility:private"],
+)
+
 cc_test(
     name = "test_wstring_conversion",
     srcs = ["test/test_wstring_conversion.cpp"],
-    deps = [
-        ":rosidl_typesupport_protobuf_c",
+    dynamic_deps = [":transitive_dynamic_deps"],
+    deps = DEPENDENCIES.values() + [
+        ":rosidl_typesupport_protobuf_c_library",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],

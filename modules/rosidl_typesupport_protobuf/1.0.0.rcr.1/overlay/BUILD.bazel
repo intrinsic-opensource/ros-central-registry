@@ -59,7 +59,7 @@ py_library(
 ament_package(
     name = "ament_package",
     headers = HEADERS,
-    libraries = [":rosidl_typesupport_protobuf_cpp"],
+    libraries = [":rosidl_typesupport_protobuf"],
     package_xml = "package.xml",
     deps = [
         "@ament_cmake//:ament_package",
