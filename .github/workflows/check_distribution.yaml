@@ -14,6 +14,8 @@
 
 name: check_distribution
 run-name: Perform a build across platforms, bazel versions and variants.
+env:
+  ANDROID_HOME: ""
 on:
   push:
     branches:
