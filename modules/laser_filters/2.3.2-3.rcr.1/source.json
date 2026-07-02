@@ -8,7 +8,7 @@
     },
     "patches": {
         "test__test_scan_filter_chain__cpp.patch": "sha256-QWiZOmJQThDG5nVv/sJ+yVJwTlvvfyvwHFCWhNYw+/A=",
-        "test__test_scan_shadows_filter__cpp.patch": "sha256-GmcPVM91lcHHk+gf/MFVyvKZgCRi0epDiesyt7isMqg=",
+        "test__test_scan_shadows_filter__cpp.patch": "sha256-1hLkr7kPd/TWKLAPxlsFDYKh77Qvw33NnPuLF/3BrbM=",
         "test__test_speckle_filter__cpp.patch": "sha256-Ryu0hHlRm+UMoYU1M8v0szLwYY2C85zbB6sabUU87qw="
     }
 }
