@@ -37,10 +37,19 @@ def _rosidl_typesupport_protobuf_c_aspect_impl(target, ctx):
         template_visibility_control = ctx.file._c_typesupport_protobuf_visibility_template,
     )
 
-    deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
-    deps.append(target[RosProtoInfo].cc_info)
-    deps.append(target[RosCBindingsInfo].cc_info)
-    deps.append(target[RosCcBindingsInfo].cc_info)
+    # rosidl_typesupport_protobuf_c_library is only needed for its headers
+    # here -- linking it in statically would duplicate its global state
+    # into every message's typesupport fragment. Route it through
+    # header_only_deps/dynamic_dep_libraries so every fragment links
+    # against the single canonical shared library instead. See
+    # generate_compilation_information's docstring.
+    header_only_deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
+
+    deps = [
+        target[RosProtoInfo].cc_info,
+        target[RosCBindingsInfo].cc_info,
+        target[RosCcBindingsInfo].cc_info,
+    ]
     for dep in ctx.rule.attr.deps:
         if RosCTypesupportProtobufInfo in dep:
             deps.append(dep[RosCTypesupportProtobufInfo].cc_info)
@@ -55,6 +64,8 @@ def _rosidl_typesupport_protobuf_c_aspect_impl(target, ctx):
         hdrs = hdrs,
         srcs = srcs,
         deps = deps,
+        header_only_deps = header_only_deps,
+        dynamic_dep_libraries = ctx.attr._cc_shared_dep[DefaultInfo].files.to_list(),
         include_dirs = include_dirs,
     )
 
@@ -96,6 +107,9 @@ rosidl_typesupport_protobuf_c_aspect = aspect(
                 Label("@rosidl_typesupport_protobuf_c//:rosidl_typesupport_protobuf_c_library"),
             ],
             providers = [CcInfo],
+        ),
+        "_cc_shared_dep": attr.label(
+            default = Label("@rosidl_typesupport_protobuf_c//:rosidl_typesupport_protobuf_c"),
         ),
     },
     required_providers = [RosInterfaceInfo],

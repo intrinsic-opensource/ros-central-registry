@@ -1,11 +1,15 @@
 --- a/src/get_search_paths.cpp
 +++ b/src/get_search_paths.cpp
-@@ -14,15 +14,49 @@
+@@ -14,9 +14,17 @@
  
  #include "ament_index_cpp/get_search_paths.hpp"
  
 +#include <unistd.h> // For readlink
 +#include <limits.h> // For PATH_MAX
++
++#if defined(__APPLE__)
++#include <mach-o/dyld.h> // For _NSGetExecutablePath
++#endif
 +
  #include <cstdlib>
  #include <filesystem>
@@ -14,10 +18,10 @@
  #include <sstream>
  #include <stdexcept>
  #include <string>
- 
+@@ -24,6 +32,36 @@
  namespace ament_index_cpp
  {
-+
+ 
 +// Cross-platform way of obtaining the full path to the current executable. Returns
 +// std::nullopt if we can't determine the path. We need this to determine if a
 +// .runfiles/MANIFEST file exists in the current directory.
@@ -47,10 +51,11 @@
 +  }
 +  return std::nullopt;
 +}
- 
++
  std::list<std::filesystem::path>
  get_searcheable_paths()
-@@ -38,6 +72,25 @@
+ {
+@@ -38,6 +76,25 @@
    _dupenv_s(&ament_prefix_path, &ament_prefix_path_size, env_var);
  #endif
    if (!ament_prefix_path || std::string(ament_prefix_path).empty()) {

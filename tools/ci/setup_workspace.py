@@ -118,6 +118,23 @@ common --incompatible_default_to_explicit_init_py
 # keeping the build environment more hermetic.
 common --incompatible_strict_action_env
 
+# Use a shared cache for bazel builds, which speeds up CI builds.
+common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
+common --remote_cache_compression=true
+common --remote_upload_local_results=false
+
+# CI specific options for remote caching and credentials.
+common:ci --remote_upload_local_results=true
+common:ci --google_default_credentials
+
+# We support the following variants of ROS distributions. This allows you
+# to build or test the entire variant with a --config flag.
+{variants}
+
+# Automatically pick configurations for the platform running bazel.
+# For example, macos on macos, linux on linux, etc.
+common --enable_platform_specific_config
+
 ## BUILD OPTIONS
 
 # Ensure that we use toolchains_llvm instead of the host toolchain.
@@ -132,33 +149,50 @@ build --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
 # are used in several places around the ROS Bazel workspace/
 build --@llvm//config:experimental_stub_libgcc_s=True
 
-# Include the realtime library when linking (until fixed in FastDDS).
-build --linkopt="-lrt"
+# ld64's two-level namespace requires every undefined symbol in a .dylib to
+# be resolvable among the libraries passed directly to its link command.
+# Our rosidl-generated cc_shared_library targets commonly need symbols from
+# libraries that are several dynamic_deps hops away, which the ELF loader on
+# Linux resolves transitively at process load time with no issue. On Darwin
+# we fall back to flat-namespace symbol lookup at load time instead.
+build:macos --linkopt=-Wl,-undefined,dynamic_lookup
+
+# Our hermetic LLVM toolchain ships a minimal macOS sysroot with no Apple
+# framework headers/libs at all (Apple's frameworks can't be freely
+# redistributed). Some dependencies (e.g. crates pulled in by zenoh-c) need
+# IOKit/CoreFoundation, so point the compiler and linker at this machine's
+# Command Line Tools SDK for framework resolution.
+#
+# NOTE: this hardcodes a path specific to this machine's SDK install and
+# breaks build hermeticity/reproducibility -- it's here for local testing
+# only, and needs a portable replacement (or a real vendored/allowed
+# framework source) before landing on modules.
+build:macos --copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+build:macos --linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+
+# --copt/--linkopt above only reach target-configured actions. Build tools
+# like zenoh-c's cargo build script compile "for tool" (exec configuration)
+# and need the host-config equivalents to see the same framework path.
+build:macos --host_copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+build:macos --host_linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
 
 ## TEST OPTIONS
 
 # This restricts our test sandboxes from accessing the network, which is
 # important if you want to prevent destructive interference on the ROS
-# messaging system between tests running in parallel
+# messaging system between tests running in parallel. On Linux, this still
+# permits loopback, so DDS discovery over loopback keeps working. macOS's has
+# profile only carves out plain "localhost:*" traffic, not UDP
+# multicast groups, which is what FastRTPS's discovery protocol actually
+# uses -- so multi-node/multi-context tests (e.g. rcl_action's graph tests)
+# hang until they hit their own timeout under the sandbox. For the tests that
+# need real multicast discovery, we use "no-sandbox" + "exclusive" tags on
+# just the handful of tests that need real multicast discovery.
 test --sandbox_default_allow_network=false
 
-# CONFIG OPTIONS FOR CI WORKER
-common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
-common --remote_upload_local_results=true
-common --remote_cache_compression=true
-common --google_default_credentials
-common --flaky_test_attempts=5
-
-# Our CI workers struggle with test parallelism.
-test --local_test_jobs=1
-
-## CONFIG OPTIONS FOR VARIANTS
-common:core --target_pattern_file=ros-core.txt
-common:base --target_pattern_file=ros-base.txt
-common:desktop --target_pattern_file=ros-desktop.txt
-common:desktop_full --target_pattern_file=ros-desktop_full.txt
-common:perception --target_pattern_file=ros-perception.txt
-common:simulation --target_pattern_file=ros-simulation.txt
+# CI specific quirks
+test:ci --flaky_test_attempts=5
+test:ci --local_test_jobs=1
 """
 
 def get_copyright_header() -> str:
@@ -326,8 +360,12 @@ rust.toolchain(
 
     # Write .bazelrc
     distro = args.release.split(".")[0]
+    variants = "\n".join(
+        f"common:{variant_name} --target_pattern_file=ros-{variant_name}.txt"
+        for variant_name in VARIANTS
+    )
     with open(target_workspace / ".bazelrc", "w") as f:
-        f.write(BAZELRC_TEMPLATE.format(distro=distro))
+        f.write(BAZELRC_TEMPLATE.format(distro=distro, variants=variants))
 
     print("Workspace setup complete.")
 

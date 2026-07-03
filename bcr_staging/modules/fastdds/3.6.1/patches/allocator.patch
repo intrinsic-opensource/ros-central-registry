@@ -20,7 +20,7 @@ index 378cbcd..92bcdef 100644
          ++size_;
          return true;
      }
-@@ -406,7 +406,7 @@ public:
+@@ -406,6 +406,6 @@ public:
              return false;
          }
 -        allocator_.construct(&(*tail_), val);
@@ -28,7 +28,7 @@ index 378cbcd..92bcdef 100644
          ++tail_;
          ++size_;
          return true;
-@@ -446,7 +446,7 @@ public:
+@@ -446,6 +446,6 @@ public:
              return false;
          }
 -        allocator_.construct(&(*tail_), std::forward<Args &&>(args)...);
@@ -36,7 +36,7 @@ index 378cbcd..92bcdef 100644
          ++tail_;
          ++size_;
          return true;
-@@ -464,7 +464,7 @@ public:
+@@ -464,6 +464,6 @@ public:
              return false;
          }
 -        allocator_.destroy(&(*head_));

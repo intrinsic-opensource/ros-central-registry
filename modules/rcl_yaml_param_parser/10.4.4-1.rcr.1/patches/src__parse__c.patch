@@ -1,0 +1,39 @@
+--- a/src/parse.c
++++ b/src/parse.c
+@@ -20,6 +20,9 @@
+ 
+ #ifdef _WIN32
+ #include <windows.h>
++#elif defined(__APPLE__)
++// Apple's libc doesn't implement C11 threads.h; fall back to pthread_once.
++#include <pthread.h>
+ #else
+ #include <threads.h>
+ #endif
+@@ -802,6 +805,14 @@
+   c_locale = _create_locale(LC_NUMERIC, "C");
+   return TRUE;
+ }
++#elif defined(__APPLE__)
++static locale_t c_locale = 0;
++static pthread_once_t c_locale_once_flag = PTHREAD_ONCE_INIT;
++
++static void init_c_locale(void)
++{
++  c_locale = newlocale(LC_NUMERIC_MASK, "C", 0);
++}
+ #else
+ static locale_t c_locale = 0;
+ static once_flag c_locale_once_flag = ONCE_FLAG_INIT;
+@@ -834,7 +845,11 @@
+ 
+   return _strtod_l(nptr, endptr, c_locale);
+ #else
++#if defined(__APPLE__)
++  pthread_once(&c_locale_once_flag, init_c_locale);
++#else
+   call_once(&c_locale_once_flag, init_c_locale);
++#endif
+ 
+   if (0 == c_locale) {
+     if (NULL != endptr) {
