@@ -30,7 +30,7 @@ jobs:
       checks: write
       contents: read
       id-token: write
-    name: ${{ matrix.ros }}_-${{ matrix.bazel }}_${{ matrix.os }}
+    name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -45,6 +45,10 @@ jobs:
         - 9.x
         ros:
         - lyrical.2026-06-08.rcr.1
+        variant:
+        - core
+        - base
+        - perception
         os:
         - ubuntu-26.04
         - ubuntu-26.04-arm
@@ -83,75 +87,28 @@ jobs:
       working-directory: .
       run: |
         bazel run //tools/ci:setup_workspace -- --release ${{ matrix.ros }}
-    - name: Test (core)
-      id: test_core
+    - name: Build
+      id: build
+      run: |
+        bazel build --config ci --config=${{ matrix.variant }}
+    - name: Test (rmw_fastrtps_cpp)
+      id: test_rmw_fastrtps_cpp
+      run: |
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+    - name: Test (rmw_fastrtps_dynamic_cpp)
+      id: test_rmw_fastrtps_dynamic_cpp
       continue-on-error: true
       run: |
-        bazel build --config ci --config=core
-        bazel test --config ci --config=core --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config ci --config=core --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config ci --config=core --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-        bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
-        ZENOHD_PID=$!
-        bazel test --config ci --config=core --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
-        kill $ZENOHD_PID
-    - name: Test (base)
-      id: test_base
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+    - name: Test (rmw_cyclonedds_cpp)
+      id: test_rmw_cyclonedds_cpp
       continue-on-error: true
       run: |
-        bazel build --config ci --config=base
-        bazel test --config ci --config=base --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config ci --config=base --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config ci --config=base --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-        bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
-        ZENOHD_PID=$!
-        bazel test --config ci --config=base --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
-        kill $ZENOHD_PID
-    - name: Test (perception)
-      id: test_perception
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+    - name: Test (rmw_zenoh_cpp)
+      id: test_rmw_zenoh_cpp
       continue-on-error: true
       run: |
-        bazel build --config ci --config=perception
-        bazel test --config ci --config=perception --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config ci --config=perception --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config ci --config=perception --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
         bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
-        ZENOHD_PID=$!
-        bazel test --config ci --config=perception --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
-        kill $ZENOHD_PID
-    - name: Test (desktop)
-      id: test_desktop
-      continue-on-error: true
-      run: |
-        bazel build --config ci --config=desktop
-        bazel test --config ci --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config ci --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config ci --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-        bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
-        ZENOHD_PID=$!
-        bazel test --config ci --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
-        kill $ZENOHD_PID
-    - name: Test (simulation)
-      id: test_simulation
-      continue-on-error: true
-      run: |
-        bazel build --config ci --config=simulation
-        bazel test --config ci --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config ci --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config ci --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-        bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
-        ZENOHD_PID=$!
-        bazel test --config ci --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
-        kill $ZENOHD_PID
-    - name: Test (desktop_full)
-      id: test_desktop_full
-      continue-on-error: true
-      run: |
-        bazel build --config ci --config=desktop_full
-        bazel test --config ci --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config ci --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config ci --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-        bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
-        ZENOHD_PID=$!
-        bazel test --config ci --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
-        kill $ZENOHD_PID
+        trap "pkill -f rmw_zenohd 2>/dev/null || true" EXIT
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp

@@ -9,7 +9,7 @@
         "ament/ament_package.bzl": "sha256-87QO2602ZPY8S7fyW8bx099idEZSMwEdLYLIScOgOv8=",
         "ament/ament_resource.bzl": "sha256-3n2jJdUVUJz9zXJKpSLSF5LG/qc8Psblp9ekz0fWu6k=",
         "ament/defs.bzl": "sha256-LKkaEcPY8WboF9qKgwQDH50nHezBgmsVkYt1jCEJRQM=",
-        "cc/BUILD.bazel": "sha256-KZfsTjWrcNkmwaOHULdBPpV0k7flrmXab/QNdZGj8LQ=",
+        "cc/BUILD.bazel": "sha256-af0OpcMKyE15xdKMPdukvcDgUkRHxaPYrBAyC0qmWa8=",
         "cc/aspects.bzl": "sha256-3ZYy2k+bwCogeto/A7ipoOE+GD7br4BDrv54sfwJwjY=",
         "cc/defs.bzl": "sha256-CjrpSPeKNH5pafkHqlXGz+AYRso+FtJ8L1nZ8azsNBE=",
         "cc/macros.bzl": "sha256-9p6Q4mwMMxZTpGngr7SyFlzgPBFzzuECSkCQPPujkJU=",
