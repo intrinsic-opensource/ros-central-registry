@@ -77,7 +77,7 @@ jobs:
       with:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
-        repository-cache: true
+        repository-cache: false
     - name: Prepare workspace
       id: prepare_workspace
       working-directory: .
