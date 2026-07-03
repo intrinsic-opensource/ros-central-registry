@@ -105,6 +105,16 @@ cc_library(
         ],
         includes = ["src/rcl"],
         local_defines = ros_local_defines() + ["RMW_TIMESTAMPS_SUPPORTED=1"],
+        # test_graph exercises real cross-node ROS graph discovery, which
+        # needs actual (multicast) network access -- Bazel's sandbox on
+        # Darwin blocks that entirely (unlike Linux, which still permits
+        # loopback). "exclusive" avoids the follow-on problem of un-
+        # sandboxed DDS traffic colliding with other concurrently-running
+        # DDS tests.
+        tags = [
+            "no-sandbox",
+            "exclusive",
+        ] if test == "test_graph" else [],
         deps = DEPENDENCIES.values() + [
             ":rcl_library",
             ":wait_for_entity_helpers",

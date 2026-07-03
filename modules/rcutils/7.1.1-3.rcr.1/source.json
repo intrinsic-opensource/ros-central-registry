@@ -4,16 +4,16 @@
     "strip_prefix": "rcutils-release-release-lyrical-rcutils-7.1.1-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-+p52zVQblbyxIBkWsosFv8BXakVFYKCG47C8KlKO7Mo=",
+        "BUILD.bazel": "sha256-HRx9u1W1spsZXmG+z1m4Gwt3Co+UDFdw4xEKqVgZyOw=",
+        "test/locate_test_assets.h": "sha256-xm3tB/I+9VgV9CwPVDT2dP+r0BJpFuezPgkze0Z+J/I=",
         "include/rcutils/runfiles.h": "sha256-MAa3qQUADk1JVGZ8n5N0bp/aRP+ko4so3tNJgFFPePg=",
-        "src/runfiles.c": "sha256-4BDknz5m9MSgcdgJtFR9jl1DnIXPfRYLCXeFLX15gzs=",
-        "test/locate_test_assets.h": "sha256-xm3tB/I+9VgV9CwPVDT2dP+r0BJpFuezPgkze0Z+J/I="
+        "src/runfiles.c": "sha256-vsK237r/LuhB/ASRl3cVwYSfyKugSVQo4pNJh2MnEb0="
     },
     "patches": {
-        "src__shared_library__c.patch": "sha256-U0E2KOV2zS99SHT/Ib+7QzKkzJZG5UHGWqa5zrLlGUc=",
         "src__testing__fault_injection__c.patch": "sha256-jWrYnJxCK3wT6LyKxBPU0T1y+17YBFgLK5qTDBIgOGo=",
+        "test__test_process__cpp.patch": "sha256-QfN/USPLVK26hvNw5C1PbOSAkpcZT6l6R0HeiRjEe/Y=",
         "test__test_filesystem__cpp.patch": "sha256-qTGQZBaynJ3iS1/5NvT7ez3PQcLzh8zYxdgmwYbPqDE=",
-        "test__test_logging_custom_env__cpp.patch": "sha256-y0Syk1EOZC5GooY/yZrKeZUMtEpy+oqHp4cpBJKDnq8=",
-        "test__test_process__cpp.patch": "sha256-QfN/USPLVK26hvNw5C1PbOSAkpcZT6l6R0HeiRjEe/Y="
+        "src__shared_library__c.patch": "sha256-U0E2KOV2zS99SHT/Ib+7QzKkzJZG5UHGWqa5zrLlGUc=",
+        "test__test_logging_custom_env__cpp.patch": "sha256-y0Syk1EOZC5GooY/yZrKeZUMtEpy+oqHp4cpBJKDnq8="
     }
 }

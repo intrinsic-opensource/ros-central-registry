@@ -87,71 +87,71 @@ jobs:
       id: test_core
       continue-on-error: true
       run: |
-        bazel build --config=core
-        bazel test --config=core --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config=core --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config=core --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+        bazel build --config ci --config=core
+        bazel test --config ci --config=core --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+        bazel test --config ci --config=core --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+        bazel test --config ci --config=core --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
         bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
         ZENOHD_PID=$!
-        bazel test --config=core --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
+        bazel test --config ci --config=core --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
         kill $ZENOHD_PID
     - name: Test (base)
       id: test_base
       continue-on-error: true
       run: |
-        bazel build --config=base
-        bazel test --config=base --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config=base --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config=base --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+        bazel build --config ci --config=base
+        bazel test --config ci --config=base --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+        bazel test --config ci --config=base --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+        bazel test --config ci --config=base --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
         bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
         ZENOHD_PID=$!
-        bazel test --config=base --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
+        bazel test --config ci --config=base --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
         kill $ZENOHD_PID
     - name: Test (perception)
       id: test_perception
       continue-on-error: true
       run: |
-        bazel build --config=perception
-        bazel test --config=perception --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config=perception --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config=perception --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+        bazel build --config ci --config=perception
+        bazel test --config ci --config=perception --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+        bazel test --config ci --config=perception --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+        bazel test --config ci --config=perception --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
         bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
         ZENOHD_PID=$!
-        bazel test --config=perception --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
+        bazel test --config ci --config=perception --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
         kill $ZENOHD_PID
     - name: Test (desktop)
       id: test_desktop
       continue-on-error: true
       run: |
-        bazel build --config=desktop
-        bazel test --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+        bazel build --config ci --config=desktop
+        bazel test --config ci --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+        bazel test --config ci --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+        bazel test --config ci --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
         bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
         ZENOHD_PID=$!
-        bazel test --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
+        bazel test --config ci --config=desktop --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
         kill $ZENOHD_PID
     - name: Test (simulation)
       id: test_simulation
       continue-on-error: true
       run: |
-        bazel build --config=simulation
-        bazel test --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+        bazel build --config ci --config=simulation
+        bazel test --config ci --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+        bazel test --config ci --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+        bazel test --config ci --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
         bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
         ZENOHD_PID=$!
-        bazel test --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
+        bazel test --config ci --config=simulation --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
         kill $ZENOHD_PID
     - name: Test (desktop_full)
       id: test_desktop_full
       continue-on-error: true
       run: |
-        bazel build --config=desktop_full
-        bazel test --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-        bazel test --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
-        bazel test --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+        bazel build --config ci --config=desktop_full
+        bazel test --config ci --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+        bazel test --config ci --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+        bazel test --config ci --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
         bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
         ZENOHD_PID=$!
-        bazel test --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
+        bazel test --config ci --config=desktop_full --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
         kill $ZENOHD_PID

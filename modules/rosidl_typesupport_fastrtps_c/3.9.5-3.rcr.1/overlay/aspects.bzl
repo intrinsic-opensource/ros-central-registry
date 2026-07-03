@@ -34,12 +34,18 @@ def _rosidl_typesupport_fastrtps_c_aspect_impl(target, ctx):
         debug = True,
     )
 
-    deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
+    # rosidl_typesupport_fastrtps_c_library is only needed for its headers
+    # here -- linking it in statically would duplicate its global state
+    # into every message's typesupport fragment. Route it through
+    # header_only_deps/dynamic_dep_libraries so every fragment links
+    # against the single canonical shared library instead. See
+    # generate_compilation_information's docstring.
+    header_only_deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
+
+    deps = [target[RosCBindingsInfo].cc_info, target[RosCcTypesupportFastRTPSInfo].cc_info]
     for dep in ctx.rule.attr.deps:
         if RosCTypesupportFastRTPSInfo in dep:
             deps.append(dep[RosCTypesupportFastRTPSInfo].cc_info)
-    deps.append(target[RosCBindingsInfo].cc_info)
-    deps.append(target[RosCcTypesupportFastRTPSInfo].cc_info)
 
     cc_info, dynamic_libraries = generate_compilation_information(
         ctx = ctx,
@@ -51,6 +57,8 @@ def _rosidl_typesupport_fastrtps_c_aspect_impl(target, ctx):
         hdrs = hdrs,
         srcs = srcs,
         deps = deps,
+        header_only_deps = header_only_deps,
+        dynamic_dep_libraries = ctx.attr._cc_shared_dep[DefaultInfo].files.to_list(),
         include_dirs = include_dirs,
     )
 
@@ -91,6 +99,9 @@ rosidl_typesupport_fastrtps_c_aspect = aspect(
                 Label("@rosidl_typesupport_fastrtps_c//:rosidl_typesupport_fastrtps_c_library"),
             ],
             providers = [CcInfo],
+        ),
+        "_cc_shared_dep": attr.label(
+            default = Label("@rosidl_typesupport_fastrtps_c//:rosidl_typesupport_fastrtps_c"),
         ),
     },
     required_providers = [RosInterfaceInfo],

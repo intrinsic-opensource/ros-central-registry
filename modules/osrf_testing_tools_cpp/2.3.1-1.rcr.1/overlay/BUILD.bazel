@@ -13,7 +13,7 @@
 # limitations under the License.
 
 load("@rosdistro//ament:defs.bzl", "ament_package")
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_shared_library", "cc_test")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -60,15 +60,23 @@ cc_library(
     ],
 )
 
-cc_library(
+# Built as a genuine shared library (rather than a cc_library baked directly
+# into each consuming cc_test) so it can be injected via DYLD_INSERT_LIBRARIES
+# on Darwin. Apple's __DATA,__interpose mechanism only reliably intercepts
+# malloc/realloc/calloc/free calls made from *other* loaded images (e.g. a
+# dependency's own .dylib) when the interposing code is loaded as an early
+# dylib; a copy statically linked into the test binary only interposes calls
+# made directly from that binary.
+#
+# Consumers must reach this via dynamic_deps (not deps) so they share this
+# exact loaded instance of :memory_tools -- otherwise the interposed
+# malloc/free calls increment counters in this dylib's copy of memory_tools'
+# global state while the consumer reads its own separately-linked copy,
+# which never moves off zero.
+cc_shared_library(
     name = "memory_tools_interpose",
-    srcs = [
-        "src/memory_tools/memory_tools.cpp",
-    ],
-    includes = ["include"],
-    deps = [
-        ":memory_tools",
-    ],
+    exports_filter = [":memory_tools"],
+    deps = [":memory_tools"],
 )
 
 cc_test(

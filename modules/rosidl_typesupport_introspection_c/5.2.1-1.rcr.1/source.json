@@ -4,8 +4,8 @@
     "strip_prefix": "rosidl-release-release-lyrical-rosidl_typesupport_introspection_c-5.2.1-1",
     "patch_strip": 1,
     "overlay": {
+        "aspects.bzl": "sha256-oHhyFt8o12ghwCUqCOBSlgpMfqiKJBgYn5XRo+U6lAs=",
         "BUILD.bazel": "sha256-E2U9sGm9kN/ORfBL7FyLvGthc7orLs3YCHcpHfKRZ3c=",
-        "aspects.bzl": "sha256-dZI4jeKqYhG724nsSGforRZJZK8DeF3puYZzZ2qvB6w=",
         "defs.bzl": "sha256-YLGRmKMVfj971j83zvN7/GoNAlDnXIclQ3jXLHkp2gk=",
         "types.bzl": "sha256-Ghh8ezt3Lw+bsvyOu4FJCTAbCXeo17+1NMis2im+k1g="
     },

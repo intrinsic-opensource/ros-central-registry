@@ -35,8 +35,14 @@ cc_library(
     includes = ["include"],
     local_defines = ros_local_defines() + [
         "RCUTILS_ENABLE_FAULT_INJECTION",
-        "_GNU_SOURCE",  # Required to get 'program_invocation_name'
-    ],
+    ] + select({
+        # _GNU_SOURCE requests glibc extensions (e.g. 'program_invocation_name',
+        # 'memrchr'). It's meaningless on non-glibc platforms like Darwin, and
+        # on Darwin it also makes find.c take the memrchr() branch, which
+        # Darwin's libc doesn't provide.
+        "@platforms//os:linux": ["_GNU_SOURCE"],
+        "//conditions:default": [],
+    }),
 )
 
 cc_shared_library(
@@ -65,9 +71,29 @@ genrule(
             "test/dummy_folder_with_subdir/**",
             "test/dummy_shared_library/**",
             "test/dummy_*.txt",
-        ]) + [":file_with_space"],
-        dynamic_deps = [":rcutils"],
-        env = env,
+        ]) + [":file_with_space"] + select({
+            "@platforms//os:osx": ["@osrf_testing_tools_cpp//:memory_tools_interpose"],
+            "//conditions:default": [],
+        }),
+        # osrf_testing_tools_cpp's malloc/realloc/calloc/free interposition
+        # only reliably covers the whole process on Darwin when injected via
+        # DYLD_INSERT_LIBRARIES; a plain link-time dep only interposes calls
+        # made directly from this test binary, missing calls made from
+        # within librcutils.dylib itself. It must be reached via dynamic_deps
+        # (not deps) so this test shares the same loaded :memory_tools
+        # instance as the interpose dylib -- otherwise the interposed calls
+        # increment a copy of memory_tools' counters that this test can't see
+        # (see :memory_tools_interpose).
+        dynamic_deps = [":rcutils"] + select({
+            "@platforms//os:osx": ["@osrf_testing_tools_cpp//:memory_tools_interpose"],
+            "//conditions:default": [],
+        }),
+        env = env | select({
+            "@platforms//os:osx": {
+                "DYLD_INSERT_LIBRARIES": "$(location @osrf_testing_tools_cpp//:memory_tools_interpose)",
+            },
+            "//conditions:default": {},
+        }),
         local_defines = ros_local_defines() + [
             "BUILD_DIR=\\\"/tmp\\\"",
         ],

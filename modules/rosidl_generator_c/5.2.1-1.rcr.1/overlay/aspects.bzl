@@ -42,8 +42,17 @@ def _rosidl_generator_c_aspect_impl(target, ctx):
         template_visibility_control = ctx.file._c_visibility_template,
     )
 
-    # Collect dependencies
-    deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
+    # rosidl_runtime_c_library is only needed for its headers here --
+    # linking it in statically would duplicate its global state (and
+    # transitively rcutils' error state, since rosidl_runtime_c_library
+    # itself statically depends on rcutils_library) into every message's
+    # C bindings fragment. Route it through header_only_deps/
+    # dynamic_dep_libraries so every fragment links against the single
+    # canonical @rosidl_runtime_c//:rosidl_runtime_c shared library
+    # instead. See generate_compilation_information's docstring.
+    header_only_deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
+
+    deps = []
     for dep in ctx.rule.attr.deps:
         if RosCBindingsInfo in dep:
             deps.append(dep[RosCBindingsInfo].cc_info)
@@ -59,6 +68,8 @@ def _rosidl_generator_c_aspect_impl(target, ctx):
         hdrs = hdrs,
         srcs = srcs,
         deps = deps,
+        header_only_deps = header_only_deps,
+        dynamic_dep_libraries = ctx.attr._cc_shared_dep[DefaultInfo].files.to_list(),
         include_dirs = include_dirs,
     )
 
@@ -100,6 +111,9 @@ rosidl_generator_c_aspect = aspect(
                 Label("@rosidl_runtime_c//:rosidl_runtime_c_library"),
             ],
             providers = [CcInfo],
+        ),
+        "_cc_shared_dep": attr.label(
+            default = Label("@rosidl_runtime_c//:rosidl_runtime_c"),
         ),
     },
     required_providers = [RosInterfaceInfo],

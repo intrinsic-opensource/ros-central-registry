@@ -4,11 +4,11 @@
     "strip_prefix": "rosidl_typesupport_fastrtps-release-release-lyrical-rosidl_typesupport_fastrtps_c-3.9.5-3",
     "patch_strip": 1,
     "overlay": {
+        "aspects.bzl": "sha256-MNXkdVY26jqSKTyHSiRVMkPnjpZXQIvrahyId9PyfUQ=",
         "BUILD.bazel": "sha256-Q55ak5obC76/Dvbd5obMXbUbUzPwfzSgCURXOgUf/Bw=",
-        "aspects.bzl": "sha256-Kwp+SkPifup9A4Tpt7DhriVxJPhgYByFJWXQxN6fEEQ=",
         "defs.bzl": "sha256-gQmv2xWclItsXkTKh6hihUE3/bam8vtI2tC5VK0GuMc=",
-        "test/msg/BUILD.bazel": "sha256-9nEFAT5vzZJtPwqJCT1X0YOlhIJlJ2/6iDVJwmQCi5o=",
-        "types.bzl": "sha256-fX9ARe84EPkfrPUTgm9JNMGJAL53ajwjNEGP+v5+tW4="
+        "types.bzl": "sha256-fX9ARe84EPkfrPUTgm9JNMGJAL53ajwjNEGP+v5+tW4=",
+        "test/msg/BUILD.bazel": "sha256-9nEFAT5vzZJtPwqJCT1X0YOlhIJlJ2/6iDVJwmQCi5o="
     },
     "patches": {
         "rosidl_typesupport_fastrtps_c____init____py.patch": "sha256-iag5n2od/qTlk2SNMtmnXOmZGtRdGIMeetRliWrId3c="

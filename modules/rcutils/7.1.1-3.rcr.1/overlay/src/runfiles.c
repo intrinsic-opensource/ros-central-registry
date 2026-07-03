@@ -18,7 +18,12 @@
 
 #include <unistd.h> // For readlink
 #include <limits.h> // For PATH_MAX
+#include <stdint.h> // For uint32_t
 #include <stdlib.h> // For getenv
+
+#if defined(__APPLE__)
+#include <mach-o/dyld.h> // For _NSGetExecutablePath
+#endif
 
 // Cross-platform way of obtaining the full path to the current executable. Returns
 // std::nullopt if we can't determine the path. We need this to determine if a
@@ -36,7 +41,7 @@ get_executable_name(char result[PATH_MAX])
   const ssize_t resolved_path_len = readlink(result, result, PATH_MAX);
   if (resolved_path_len > 0) {
     result[resolved_path_len] = '\0';
-    path_len = static_cast<uint32_t>(resolved_path_len);
+    path_len = (uint32_t)resolved_path_len;
   }
 #else
   ssize_t path_len = readlink("/proc/self/exe", result, PATH_MAX);

@@ -275,6 +275,20 @@ collect_transitive_dynamic_deps(
             "ROS_PACKAGE_NAME=\\\"rclcpp\\\"",
             "TEST_RESOURCES_DIRECTORY=\\\".\\\"",
         ],
+        # These two exercise real cross-context ROS graph discovery
+        # (multiple rclcpp::Context/domains discovering each other), which
+        # needs actual (multicast) network access -- Bazel's sandbox on
+        # Darwin blocks that entirely (unlike Linux, which still permits
+        # loopback). "exclusive" avoids the follow-on problem of
+        # un-sandboxed DDS traffic colliding with other concurrently-
+        # running DDS tests.
+        tags = [
+            "no-sandbox",
+            "exclusive",
+        ] if name in [
+            "test_publisher_subscription_count_api",
+            "test_subscription_publisher_count_api",
+        ] else [],
         deps = TEST_DEPENDENCIES.values() + [
             "//test/msg:cc",
             "@googletest//:gtest",

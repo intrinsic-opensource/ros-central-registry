@@ -173,8 +173,32 @@ def generate_compilation_information(
         srcs,
         include_dirs = [],
         deps = [],
+        header_only_deps = [],
+        dynamic_dep_libraries = [],
         custom_name = None):
-    """Generate language bindings"""
+    """Generate language bindings
+
+    Args:
+        header_only_deps: CcInfo providers contributing headers/includes
+            (via compilation_context) but NOT statically linked. Use this
+            for a singleton library (e.g. rosidl_typesupport_cpp itself)
+            that every generated fragment needs to *compile* against but
+            must never duplicate into its own object code -- see
+            dynamic_dep_libraries.
+        dynamic_dep_libraries: pre-built shared library Files (e.g. the
+            corresponding cc_shared_library's .dylib/.so) to link against
+            dynamically instead of statically. Every message/typesupport
+            fragment here gets compiled into its own standalone shared
+            library; if a singleton dependency's object code were pulled in
+            via deps/header_only_deps' linking_context instead, each
+            fragment would get its own private copy of that dependency's
+            global state (e.g. rosidl_typesupport_cpp's typesupport
+            identifier constant). On Linux the ELF loader merges same-named
+            globals across shared objects by default so the duplication is
+            invisible; Darwin's two-level namespace does not merge them,
+            so two fragments' copies of "the same" global can disagree at
+            runtime. Route singleton deps through here instead of deps.
+    """
 
     # Query for the current CC toolchain and feature set.
     cc_toolchain = find_cc_toolchain(ctx)
@@ -195,9 +219,29 @@ def generate_compilation_information(
         cc_toolchain = cc_toolchain,
         srcs = srcs,
         public_hdrs = hdrs,
-        compilation_contexts = [dep.compilation_context for dep in deps],
+        compilation_contexts = [dep.compilation_context for dep in deps] +
+                               [dep.compilation_context for dep in header_only_deps],
         includes = include_dirs,
     )
+
+    static_linking_contexts = [dep.linking_context for dep in deps]
+
+    dynamic_linking_contexts = []
+    for lib_file in dynamic_dep_libraries:
+        library_to_link = cc_common.create_library_to_link(
+            actions = ctx.actions,
+            feature_configuration = feature_configuration,
+            cc_toolchain = cc_toolchain,
+            dynamic_library = lib_file,
+        )
+        dynamic_linking_contexts.append(cc_common.create_linking_context(
+            linker_inputs = depset(direct = [cc_common.create_linker_input(
+                owner = ctx.label,
+                libraries = depset(direct = [library_to_link]),
+            )]),
+        ))
+
+    all_linking_contexts = static_linking_contexts + dynamic_linking_contexts
 
     # We need a linking context so that consumers can
     linking_context, _ = cc_common.create_linking_context_from_compilation_outputs(
@@ -205,7 +249,7 @@ def generate_compilation_information(
         feature_configuration = feature_configuration,
         cc_toolchain = cc_toolchain,
         compilation_outputs = compilation_outputs,
-        linking_contexts = [dep.linking_context for dep in deps],
+        linking_contexts = all_linking_contexts,
         name = name + "_link",
     )
 
@@ -215,6 +259,15 @@ def generate_compilation_information(
         linking_context = linking_context,
     )
 
+    # Each message/binding fragment is linked into its own standalone dynamic
+    # library here, with its transitive deps' *linking contexts* (not the
+    # resulting .dylib/.so files) as inputs. On Linux the linker tolerates
+    # the resulting undefined symbols in the .so (they're resolved against
+    # sibling shared libraries at load time). Darwin's linker defaults to a
+    # two-level namespace and fails at link time on the same undefined
+    # symbols, so we need to tell it to defer symbol resolution to runtime.
+    is_darwin = "apple" in cc_toolchain.target_gnu_system_name
+
     # We want to force linking to
     linking_outputs = cc_common.link(
         name = name,
@@ -223,10 +276,8 @@ def generate_compilation_information(
         cc_toolchain = cc_toolchain,
         output_type = "dynamic_library",
         compilation_outputs = compilation_outputs,
-        linking_contexts = [
-            dep.linking_context
-            for dep in deps
-        ],
+        linking_contexts = all_linking_contexts,
+        user_link_flags = ["-Wl,-undefined,dynamic_lookup"] if is_darwin else [],
     )
     lib_to_link = linking_outputs.library_to_link
 

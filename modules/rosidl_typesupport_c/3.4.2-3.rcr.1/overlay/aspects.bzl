@@ -37,8 +37,17 @@ def _rosidl_typesupport_c_aspect_impl(target, ctx):
         ],
     )
 
-    deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
-    deps.append(target[RosCBindingsInfo].cc_info)
+    # rosidl_typesupport_c_library is only needed for its headers here --
+    # linking it in statically would duplicate its global state (e.g. the
+    # typesupport_identifier constant, and transitively rcutils' error
+    # state) into every message's typesupport fragment. Route it through
+    # header_only_deps/dynamic_dep_libraries so every fragment links
+    # against the single canonical @rosidl_typesupport_c//:rosidl_typesupport_c
+    # shared library instead. See generate_compilation_information's
+    # docstring.
+    header_only_deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
+
+    deps = [target[RosCBindingsInfo].cc_info]
     for dep in ctx.rule.attr.deps:
         if RosCTypesupportInfo in dep:
             deps.append(dep[RosCTypesupportInfo].cc_info)
@@ -53,6 +62,8 @@ def _rosidl_typesupport_c_aspect_impl(target, ctx):
         hdrs = hdrs,
         srcs = srcs,
         deps = deps,
+        header_only_deps = header_only_deps,
+        dynamic_dep_libraries = ctx.attr._cc_shared_dep[DefaultInfo].files.to_list(),
         include_dirs = include_dirs,
     )
 
@@ -89,6 +100,9 @@ rosidl_typesupport_c_aspect = aspect(
                 Label("@rosidl_typesupport_c//:rosidl_typesupport_c_library"),
             ],
             providers = [CcInfo],
+        ),
+        "_cc_shared_dep": attr.label(
+            default = Label("@rosidl_typesupport_c//:rosidl_typesupport_c"),
         ),
     },
     required_providers = [RosInterfaceInfo],
