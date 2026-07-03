@@ -241,7 +241,21 @@ def generate_compilation_information(
             )]),
         ))
 
-    all_linking_contexts = static_linking_contexts + dynamic_linking_contexts
+    # On Darwin, singleton deps (e.g. rosidl_runtime_c) are passed via
+    # header_only_deps/dynamic_dep_libraries to avoid duplicating their global
+    # state across fragments under Darwin's two-level namespace. On Linux the
+    # ELF loader merges same-named globals at load time, so we fall back to the
+    # original approach of statically linking header_only_deps into each
+    # fragment -- this keeps all runtime deps self-contained in the .so and
+    # avoids needing to propagate transitive .so deps as runfiles.
+    is_darwin = "apple" in cc_toolchain.target_gnu_system_name
+    if is_darwin:
+        all_linking_contexts = static_linking_contexts + dynamic_linking_contexts
+    else:
+        all_linking_contexts = static_linking_contexts + [
+            dep.linking_context
+            for dep in header_only_deps
+        ]
 
     # We need a linking context so that consumers can
     linking_context, _ = cc_common.create_linking_context_from_compilation_outputs(
@@ -258,15 +272,6 @@ def generate_compilation_information(
         compilation_context = compilation_context,
         linking_context = linking_context,
     )
-
-    # Each message/binding fragment is linked into its own standalone dynamic
-    # library here, with its transitive deps' *linking contexts* (not the
-    # resulting .dylib/.so files) as inputs. On Linux the linker tolerates
-    # the resulting undefined symbols in the .so (they're resolved against
-    # sibling shared libraries at load time). Darwin's linker defaults to a
-    # two-level namespace and fails at link time on the same undefined
-    # symbols, so we need to tell it to defer symbol resolution to runtime.
-    is_darwin = "apple" in cc_toolchain.target_gnu_system_name
 
     # We want to force linking to
     linking_outputs = cc_common.link(
