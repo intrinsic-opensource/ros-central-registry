@@ -38,7 +38,7 @@ jobs:
       with:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
-        repository-cache: true
+        repository-cache: false
     - name: Generate PR diff and old metadata files
       run: |
         # Generate the diff name-status file
