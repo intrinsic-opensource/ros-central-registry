@@ -162,10 +162,20 @@ build:macos --linkopt=-Wl,-undefined,dynamic_lookup
 # redistributed). Some dependencies (e.g. crates pulled in by zenoh-c) need
 # IOKit/CoreFoundation, so point the compiler and linker at this machine's
 # Command Line Tools SDK for framework resolution.
-build:macos --copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-build:macos --host_copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-build:macos --copt=-isystem/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
-build:macos --host_copt=-isystem/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+#
+# We use -isysroot (not -isystem) to expose the SDK's usr/include path.
+# Bazel validates -isystem flags and rejects absolute paths that fall
+# outside the execution root; -isysroot bypasses that check and also
+# automatically makes <sysroot>/usr/include available to the compiler.
+# The macOS SDK contains only C system headers in usr/include (not C++),
+# so this does not conflict with the hermetic toolchain's own libc++.
+#
+# The explicit -F keeps framework resolution working for the linker, which
+# does not consult the sysroot for framework search paths.
+build:macos --copt=-isysroot
+build:macos --copt=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+build:macos --host_copt=-isysroot
+build:macos --host_copt=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
 build:macos --copt=-fno-implicit-module-maps
 build:macos --host_copt=-fno-implicit-module-maps
 build:macos --linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
