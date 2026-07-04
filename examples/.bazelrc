@@ -88,24 +88,30 @@ build --@llvm//config:experimental_stub_libgcc_s=True
 # we fall back to flat-namespace symbol lookup at load time instead.
 build:macos --linkopt=-Wl,-undefined,dynamic_lookup
 
-# Our hermetic LLVM toolchain ships a minimal macOS sysroot with no Apple
-# framework headers/libs at all (Apple's frameworks can't be freely
-# redistributed). Some dependencies (e.g. crates pulled in by zenoh-c) need
-# IOKit/CoreFoundation, so point the compiler and linker at this machine's
-# Command Line Tools SDK for framework resolution.
+# The "llvm" module's hermetic toolchain already builds a minimal macOS SDK
+# sysroot (see @llvm//extensions:osx.bzl, and the osx.frameworks(...) call in
+# MODULE.bazel) from a pinned, downloaded Apple SDK archive, and passes it to
+# every macos compile/link action via --sysroot=. That flag points at a real
+# Bazel-managed repo inside the execution root, so it doesn't hit the
+# "references a path outside of the execution root" rejection that hardcoding
+# --copt=-I/--copt=-F into this machine's local Xcode Command Line Tools
+# installation runs into (Bazel validates those flags on every macos compile
+# action, not just ones that actually resolve headers from there).
 #
-# NOTE: this hardcodes a path specific to this machine's SDK install and
-# breaks build hermeticity/reproducibility -- it's here for local testing
-# only, and needs a portable replacement (or a real vendored/allowed
-# framework source) before landing on modules.
-build:macos --copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-build:macos --linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-
-# --copt/--linkopt above only reach target-configured actions. Build tools
-# like zenoh-c's cargo build script compile "for tool" (exec configuration)
-# and need the host-config equivalents to see the same framework path.
-build:macos --host_copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-build:macos --host_linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+# The Apple SDK framework directories contain module.modulemap files that
+# activate Clang's implicit module system once a Frameworks directory is in
+# scope (as it now implicitly is, via --sysroot). Libraries like abseil-cpp
+# include CoreFoundation headers without declaring a module dependency, which
+# the module system rejects. -fno-implicit-module-maps is a clang driver flag
+# (not a cc1 flag); pass it directly without -Xclang.
+build:macos --copt=-fno-implicit-module-maps
+build:macos --host_copt=-fno-implicit-module-maps
+# Apple SDK framework headers use the CF_ENUM() macro, which expands to a forward
+# enum declaration inside a typedef -- a Clang extension that Clang supports but
+# warns about starting with Clang 22 (-Welaborated-enum-base). Suppress it so
+# CoreFoundation/CFBase.h and friends compile cleanly with the hermetic toolchain.
+build:macos --copt=-Wno-elaborated-enum-base
+build:macos --host_copt=-Wno-elaborated-enum-base
 
 ## TEST OPTIONS
 

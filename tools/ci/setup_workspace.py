@@ -158,21 +158,22 @@ build --@llvm//config:experimental_stub_libgcc_s=True
 build:macos --linkopt=-Wl,-undefined,dynamic_lookup
 build:macos --host_linkopt=-Wl,-undefined,dynamic_lookup
 
-# Our hermetic LLVM toolchain ships a minimal macOS sysroot with no Apple
-# framework headers/libs at all (Apple's frameworks can't be freely
-# redistributed). Some dependencies (e.g. crates pulled in by zenoh-c) need
-# IOKit/CoreFoundation, so point the compiler and linker at this machine's
-# Command Line Tools SDK for framework resolution.
+# The "llvm" module's hermetic toolchain already builds a minimal macOS SDK
+# sysroot (see @llvm//extensions:osx.bzl, and the osx.frameworks(...) call in
+# MODULE.bazel below) from a pinned, downloaded Apple SDK archive, and passes
+# it to every macos compile/link action via --sysroot=. That flag points at a
+# real Bazel-managed repo inside the execution root, so it doesn't hit the
+# "references a path outside of the execution root" rejection that hardcoding
+# --copt=-I/--copt=-F into this machine's local Xcode Command Line Tools
+# installation runs into (Bazel validates those flags on every macos compile
+# action, not just ones that actually resolve headers from there).
 #
-# -F adds the SDK Frameworks directory to the compiler's framework search
-# path so that <CoreFoundation/...>, <IOKit/...>, etc. are findable.
 # The Apple SDK framework directories contain module.modulemap files that
-# activate Clang's implicit module system when -F is in effect. Libraries
-# like abseil-cpp include CoreFoundation headers without declaring a module
-# dependency, which the module system rejects. -fno-implicit-module-maps is
-# a clang driver flag (not a cc1 flag); pass it directly without -Xclang.
-build:macos --copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-build:macos --host_copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+# activate Clang's implicit module system once a Frameworks directory is in
+# scope (as it now implicitly is, via --sysroot). Libraries like abseil-cpp
+# include CoreFoundation headers without declaring a module dependency, which
+# the module system rejects. -fno-implicit-module-maps is a clang driver flag
+# (not a cc1 flag); pass it directly without -Xclang.
 build:macos --copt=-fno-implicit-module-maps
 build:macos --host_copt=-fno-implicit-module-maps
 # Apple SDK framework headers use the CF_ENUM() macro, which expands to a forward
@@ -181,18 +182,6 @@ build:macos --host_copt=-fno-implicit-module-maps
 # CoreFoundation/CFBase.h and friends compile cleanly with the hermetic toolchain.
 build:macos --copt=-Wno-elaborated-enum-base
 build:macos --host_copt=-Wno-elaborated-enum-base
-# IOKit.framework headers (used by fastdds, zenoh-c, and others) transitively
-# include device/device_types.h, a Mach kernel header in the SDK's usr/include/
-# tree rather than any .framework directory. Adding that directory via -I (not
-# -isysroot) makes only Mach/device headers resolve to absolute SDK paths in the
-# .d file; standard C/C++ headers still come from the hermetic toolchain first.
-# Bazel's darwin sandbox allows reads from /Library/Developer/CommandLineTools, and
-# the macOS include scanner whitelists SDK paths, so this avoids the broad
-# "absolute path inclusion" failures that -isysroot causes.
-build:macos --copt=-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
-build:macos --host_copt=-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
-build:macos --linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-build:macos --host_linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
 
 # opencv's AVFoundation video-capture backend (cap_avfoundation_mac.mm) pulls in
 # the full AVFoundation capture API in addition to IOKit. Camera capture is not
@@ -361,6 +350,24 @@ bazel_dep(name = "rules_shell", version = "0.8.0")
 
 # Register our hermetic compiler (clang)
 register_toolchains("@llvm//toolchain:all")
+
+# Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with
+# IOKit, which fastdds (utils/Host.cpp) and some zenoh-c dependencies need
+# transitively. The default framework list (everything below except IOKit)
+# comes from the "llvm" module itself; since osx.frameworks(...) tags from
+# all modules are merged, we have to repeat it here rather than append.
+osx = use_extension("@llvm//extensions:osx.bzl", "osx")
+osx.frameworks(
+    names = [
+        "CoreFoundation",
+        "Foundation",
+        "IOKit",
+        "Kernel",
+        "OSLog",
+        "Security",
+        "SystemConfiguration",
+    ],
+)
 
 # Python / pip
 
