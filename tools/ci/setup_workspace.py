@@ -345,33 +345,32 @@ bazel_dep(name = "rules_shell", version = "0.8.0")
 # Register our hermetic compiler (clang)
 register_toolchains("@llvm//toolchain:all")
 
-# Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with the
-# frameworks our dependencies need transitively: IOKit for fastdds
-# (utils/Host.cpp) and some zenoh-c crates, and Accelerate/AVFoundation/
-# Cocoa/CoreGraphics/CoreMedia/CoreVideo/QuartzCore for opencv's videoio
-# AVFoundation capture backend (modules/videoio/src/cap_avfoundation_mac.mm,
-# see ocv.3rdparty.avfoundation in opencv's BUILD.bazel). The default
-# framework list (CoreFoundation/Foundation/Kernel/OSLog/Security/
-# SystemConfiguration) comes from the "llvm" module itself; since
-# osx.frameworks(...) tags from every module in the graph get merged into
-# one list, but that "llvm"-provided default only applies when nobody sets
-# the tag at all -- as soon as any module (including this one) sets it, the
-# default drops out, so we have to repeat it here rather than append.
+# Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with
+# IOKit, which fastdds (utils/Host.cpp, resolved version 3.4.2 here) and some
+# zenoh-c crates need transitively. We deliberately do NOT add AVFoundation:
+# opencv's videoio module normally pulls in an AVFoundation-based capture
+# backend (modules/videoio/src/cap_avfoundation_mac.mm), but
+# AVFoundation.framework bundles a nested Frameworks/AVFAudio.framework
+# alias that Bazel's archive extraction can't materialize ("file type ...
+# is not supported"), which breaks the whole sysroot repo -- not just that
+# one target. Since camera capture isn't needed for CI, we instead patch
+# opencv in bcr_staging/modules/opencv to drop that backend entirely; see
+# the patch there for details.
+#
+# The default framework list (everything below except IOKit) comes from the
+# "llvm" module itself; since osx.frameworks(...) tags from every module in
+# the graph get merged into one list, but that "llvm"-provided default only
+# applies when nobody sets the tag at all -- as soon as any module
+# (including this one) sets it, the default drops out, so we have to repeat
+# it here rather than append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
-        "Accelerate",
-        "AVFoundation",
-        "Cocoa",
         "CoreFoundation",
-        "CoreGraphics",
-        "CoreMedia",
-        "CoreVideo",
         "Foundation",
         "IOKit",
         "Kernel",
         "OSLog",
-        "QuartzCore",
         "Security",
         "SystemConfiguration",
     ],
