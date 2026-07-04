@@ -343,7 +343,9 @@ register_toolchains("@llvm//toolchain:all")
 # and AVFoundation for opencv's videoio capture backend
 # (modules/videoio/src/cap_avfoundation_mac.mm). CoreGraphics is needed
 # because Cocoa.h pulls in Foundation/NSGeometry.h, which #imports
-# <CoreGraphics/CGBase.h> for the CGFloat typedef. AVFoundation.framework
+# <CoreGraphics/CGBase.h> for the CGFloat typedef, and CoreServices is needed
+# because Foundation.h also pulls in Foundation/NSURLError.h, which #imports
+# <CoreServices/CoreServices.h>. AVFoundation.framework
 # bundles a nested Frameworks/AVFAudio.framework alias, and also a broken
 # Resources/libAVFAudio.tbd symlink to the sibling AVFAudio.framework we
 # don't request, both of which Bazel's archive extraction/sandbox couldn't
@@ -353,11 +355,12 @@ register_toolchains("@llvm//toolchain:all")
 # framework, rather than dropping AVFoundation support from opencv.
 #
 # The default framework list (everything below except IOKit/Cocoa/
-# AVFoundation/CoreGraphics) comes from the "llvm" module itself; since
-# osx.frameworks(...) tags from every module in the graph get merged into one
-# list, but that "llvm"-provided default only applies when nobody sets the
-# tag at all -- as soon as any module (including this one) sets it, the
-# default drops out, so we have to repeat it here rather than append.
+# AVFoundation/CoreGraphics/CoreServices) comes from the "llvm" module
+# itself; since osx.frameworks(...) tags from every module in the graph get
+# merged into one list, but that "llvm"-provided default only applies when
+# nobody sets the tag at all -- as soon as any module (including this one)
+# sets it, the default drops out, so we have to repeat it here rather than
+# append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
@@ -365,6 +368,7 @@ osx.frameworks(
         "Cocoa",
         "CoreFoundation",
         "CoreGraphics",
+        "CoreServices",
         "Foundation",
         "IOKit",
         "Kernel",
