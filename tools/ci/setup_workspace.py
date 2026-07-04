@@ -162,26 +162,16 @@ build:macos --linkopt=-Wl,-undefined,dynamic_lookup
 # redistributed). Some dependencies (e.g. crates pulled in by zenoh-c) need
 # IOKit/CoreFoundation, so point the compiler and linker at this machine's
 # Command Line Tools SDK for framework resolution.
-#
-# NOTE: this hardcodes a path specific to this machine's SDK install and
-# breaks build hermeticity/reproducibility -- it's here for local testing
-# only, and needs a portable replacement (or a real vendored/allowed
-# framework source) before landing on modules.
 build:macos --copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-build:macos --linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-# The Apple SDK framework directories contain module.modulemap files that
-# activate Clang's implicit module system when -F is in effect. Libraries
-# like abseil-cpp include CoreFoundation headers without declaring a module
-# dependency, which the module system rejects. -fno-implicit-module-maps is
-# a clang driver flag (not a cc1 flag); pass it directly without -Xclang.
-build:macos --copt=-fno-implicit-module-maps
-
-# --copt/--linkopt above only reach target-configured actions. Build tools
-# like zenoh-c's cargo build script compile "for tool" (exec configuration)
-# and need the host-config equivalents to see the same framework path.
 build:macos --host_copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-build:macos --host_linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+build:macos --copt=-isystem/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+build:macos --host_copt=-isystem/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+build:macos --copt=-fno-implicit-module-maps
 build:macos --host_copt=-fno-implicit-module-maps
+build:macos --linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+build:macos --host_linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+build:macos --linkopt=-Wl,-undefined,dynamic_lookup
+build:macos --host_linkopt=-Wl,-undefined,dynamic_lookup
 
 ## TEST OPTIONS
 
