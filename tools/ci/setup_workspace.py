@@ -156,6 +156,7 @@ build --@llvm//config:experimental_stub_libgcc_s=True
 # Linux resolves transitively at process load time with no issue. On Darwin
 # we fall back to flat-namespace symbol lookup at load time instead.
 build:macos --linkopt=-Wl,-undefined,dynamic_lookup
+build:macos --host_linkopt=-Wl,-undefined,dynamic_lookup
 
 # Our hermetic LLVM toolchain ships a minimal macOS sysroot with no Apple
 # framework headers/libs at all (Apple's frameworks can't be freely
@@ -174,19 +175,30 @@ build:macos --copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/
 build:macos --host_copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
 build:macos --copt=-fno-implicit-module-maps
 build:macos --host_copt=-fno-implicit-module-maps
+# Apple SDK framework headers use the CF_ENUM() macro, which expands to a forward
+# enum declaration inside a typedef -- a Clang extension that Clang supports but
+# warns about starting with Clang 22 (-Welaborated-enum-base). Suppress it so
+# CoreFoundation/CFBase.h and friends compile cleanly with the hermetic toolchain.
+build:macos --copt=-Wno-elaborated-enum-base
+build:macos --host_copt=-Wno-elaborated-enum-base
+# IOKit.framework headers (used by fastdds, zenoh-c, and others) transitively
+# include device/device_types.h, a Mach kernel header in the SDK's usr/include/
+# tree rather than any .framework directory. Adding that directory via -I (not
+# -isysroot) makes only Mach/device headers resolve to absolute SDK paths in the
+# .d file; standard C/C++ headers still come from the hermetic toolchain first.
+# Bazel's darwin sandbox allows reads from /Library/Developer/CommandLineTools, and
+# the macOS include scanner whitelists SDK paths, so this avoids the broad
+# "absolute path inclusion" failures that -isysroot causes.
+build:macos --copt=-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
+build:macos --host_copt=-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
 build:macos --linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
 build:macos --host_linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
 
-# opencv's AVFoundation video-capture backend (cap_avfoundation_mac.mm) pulls
-# in IOKit → CarbonCore → device/device_types.h, a Mach kernel header that
-# lives in usr/include rather than any .framework. The hermetic toolchain has
-# no path to it, and Bazel rejects any approach that adds absolute system
-# include paths (-isystem, -isysroot) outside the execution root. Camera
-# capture is not needed for CI, so just undefine HAVE_AVFOUNDATION for that
-# file so the IOKit include chain is never reached.
+# opencv's AVFoundation video-capture backend (cap_avfoundation_mac.mm) pulls in
+# the full AVFoundation capture API in addition to IOKit. Camera capture is not
+# needed for CI, so undefine HAVE_AVFOUNDATION for just that file to keep the
+# capture backend out of the CI build entirely.
 build:macos --per_file_copt=.*cap_avfoundation_mac\\.mm@-UHAVE_AVFOUNDATION
-build:macos --linkopt=-Wl,-undefined,dynamic_lookup
-build:macos --host_linkopt=-Wl,-undefined,dynamic_lookup
 
 ## TEST OPTIONS
 
