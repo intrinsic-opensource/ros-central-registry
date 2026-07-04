@@ -163,23 +163,28 @@ build:macos --linkopt=-Wl,-undefined,dynamic_lookup
 # IOKit/CoreFoundation, so point the compiler and linker at this machine's
 # Command Line Tools SDK for framework resolution.
 #
-# We use -isysroot (not -isystem) to expose the SDK's usr/include path.
-# Bazel validates -isystem flags and rejects absolute paths that fall
-# outside the execution root; -isysroot bypasses that check and also
-# automatically makes <sysroot>/usr/include available to the compiler.
-# The macOS SDK contains only C system headers in usr/include (not C++),
-# so this does not conflict with the hermetic toolchain's own libc++.
-#
-# The explicit -F keeps framework resolution working for the linker, which
-# does not consult the sysroot for framework search paths.
-build:macos --copt=-isysroot
-build:macos --copt=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
-build:macos --host_copt=-isysroot
-build:macos --host_copt=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+# -F adds the SDK Frameworks directory to the compiler's framework search
+# path so that <CoreFoundation/...>, <IOKit/...>, etc. are findable.
+# The Apple SDK framework directories contain module.modulemap files that
+# activate Clang's implicit module system when -F is in effect. Libraries
+# like abseil-cpp include CoreFoundation headers without declaring a module
+# dependency, which the module system rejects. -fno-implicit-module-maps is
+# a clang driver flag (not a cc1 flag); pass it directly without -Xclang.
+build:macos --copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+build:macos --host_copt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
 build:macos --copt=-fno-implicit-module-maps
 build:macos --host_copt=-fno-implicit-module-maps
 build:macos --linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
 build:macos --host_linkopt=-F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
+
+# opencv's AVFoundation video-capture backend (cap_avfoundation_mac.mm) pulls
+# in IOKit → CarbonCore → device/device_types.h, a Mach kernel header that
+# lives in usr/include rather than any .framework. The hermetic toolchain has
+# no path to it, and Bazel rejects any approach that adds absolute system
+# include paths (-isystem, -isysroot) outside the execution root. Camera
+# capture is not needed for CI, so just undefine HAVE_AVFOUNDATION for that
+# file so the IOKit include chain is never reached.
+build:macos --per_file_copt=.*cap_avfoundation_mac\\.mm@-UHAVE_AVFOUNDATION
 build:macos --linkopt=-Wl,-undefined,dynamic_lookup
 build:macos --host_linkopt=-Wl,-undefined,dynamic_lookup
 
