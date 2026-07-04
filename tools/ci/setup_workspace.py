@@ -341,26 +341,30 @@ register_toolchains("@llvm//toolchain:all")
 # (utils/Host.cpp, resolved version 3.4.2 here) and some zenoh-c crates,
 # Cocoa for opencv's highgui GUI backend (modules/highgui/src/window_cocoa.mm),
 # and AVFoundation for opencv's videoio capture backend
-# (modules/videoio/src/cap_avfoundation_mac.mm). AVFoundation.framework
-# bundles a nested Frameworks/AVFAudio.framework alias that Bazel's archive
-# extraction couldn't materialize on its own ("file type ... is not
-# supported"); we fixed that at the source by patching the "llvm" module's
-# osx.bzl extension (see bcr_staging/modules/llvm/0.8.6) to exclude nested
-# Frameworks/ subdirectories from every requested framework, rather than
-# dropping AVFoundation support from opencv.
+# (modules/videoio/src/cap_avfoundation_mac.mm). CoreGraphics is needed
+# because Cocoa.h pulls in Foundation/NSGeometry.h, which #imports
+# <CoreGraphics/CGBase.h> for the CGFloat typedef. AVFoundation.framework
+# bundles a nested Frameworks/AVFAudio.framework alias, and also a broken
+# Resources/libAVFAudio.tbd symlink to the sibling AVFAudio.framework we
+# don't request, both of which Bazel's archive extraction/sandbox couldn't
+# materialize on their own ("file type ... is not supported"); we fixed that
+# at the source by patching the "llvm" module's osx.bzl extension (see
+# bcr_staging/modules/llvm/0.8.6) to exclude both from every requested
+# framework, rather than dropping AVFoundation support from opencv.
 #
 # The default framework list (everything below except IOKit/Cocoa/
-# AVFoundation) comes from the "llvm" module itself; since osx.frameworks(...)
-# tags from every module in the graph get merged into one list, but that
-# "llvm"-provided default only applies when nobody sets the tag at all -- as
-# soon as any module (including this one) sets it, the default drops out, so
-# we have to repeat it here rather than append.
+# AVFoundation/CoreGraphics) comes from the "llvm" module itself; since
+# osx.frameworks(...) tags from every module in the graph get merged into one
+# list, but that "llvm"-provided default only applies when nobody sets the
+# tag at all -- as soon as any module (including this one) sets it, the
+# default drops out, so we have to repeat it here rather than append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
         "AVFoundation",
         "Cocoa",
         "CoreFoundation",
+        "CoreGraphics",
         "Foundation",
         "IOKit",
         "Kernel",
