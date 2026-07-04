@@ -158,16 +158,6 @@ build --@llvm//config:experimental_stub_libgcc_s=True
 build:macos --linkopt=-Wl,-undefined,dynamic_lookup
 build:macos --host_linkopt=-Wl,-undefined,dynamic_lookup
 
-# The "llvm" module's hermetic toolchain already builds a minimal macOS SDK
-# sysroot (see @llvm//extensions:osx.bzl, and the osx.frameworks(...) call in
-# MODULE.bazel below) from a pinned, downloaded Apple SDK archive, and passes
-# it to every macos compile/link action via --sysroot=. That flag points at a
-# real Bazel-managed repo inside the execution root, so it doesn't hit the
-# "references a path outside of the execution root" rejection that hardcoding
-# --copt=-I/--copt=-F into this machine's local Xcode Command Line Tools
-# installation runs into (Bazel validates those flags on every macos compile
-# action, not just ones that actually resolve headers from there).
-#
 # The Apple SDK framework directories contain module.modulemap files that
 # activate Clang's implicit module system once a Frameworks directory is in
 # scope (as it now implicitly is, via --sysroot). Libraries like abseil-cpp
@@ -176,6 +166,7 @@ build:macos --host_linkopt=-Wl,-undefined,dynamic_lookup
 # (not a cc1 flag); pass it directly without -Xclang.
 build:macos --copt=-fno-implicit-module-maps
 build:macos --host_copt=-fno-implicit-module-maps
+
 # Apple SDK framework headers use the CF_ENUM() macro, which expands to a forward
 # enum declaration inside a typedef -- a Clang extension that Clang supports but
 # warns about starting with Clang 22 (-Welaborated-enum-base). Suppress it so
@@ -345,27 +336,30 @@ bazel_dep(name = "rules_shell", version = "0.8.0")
 # Register our hermetic compiler (clang)
 register_toolchains("@llvm//toolchain:all")
 
-# Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with
-# IOKit, which fastdds (utils/Host.cpp, resolved version 3.4.2 here) and some
-# zenoh-c crates need transitively. We deliberately do NOT add AVFoundation:
-# opencv's videoio module normally pulls in an AVFoundation-based capture
-# backend (modules/videoio/src/cap_avfoundation_mac.mm), but
-# AVFoundation.framework bundles a nested Frameworks/AVFAudio.framework
-# alias that Bazel's archive extraction can't materialize ("file type ...
-# is not supported"), which breaks the whole sysroot repo -- not just that
-# one target. Since camera capture isn't needed for CI, we instead patch
-# opencv in bcr_staging/modules/opencv to drop that backend entirely; see
-# the patch there for details.
+# Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with the
+# frameworks our dependencies need transitively: IOKit for fastdds
+# (utils/Host.cpp, resolved version 3.4.2 here) and some zenoh-c crates,
+# Cocoa for opencv's highgui GUI backend (modules/highgui/src/window_cocoa.mm),
+# and AVFoundation for opencv's videoio capture backend
+# (modules/videoio/src/cap_avfoundation_mac.mm). AVFoundation.framework
+# bundles a nested Frameworks/AVFAudio.framework alias that Bazel's archive
+# extraction couldn't materialize on its own ("file type ... is not
+# supported"); we fixed that at the source by patching the "llvm" module's
+# osx.bzl extension (see bcr_staging/modules/llvm/0.8.6) to exclude nested
+# Frameworks/ subdirectories from every requested framework, rather than
+# dropping AVFoundation support from opencv.
 #
-# The default framework list (everything below except IOKit) comes from the
-# "llvm" module itself; since osx.frameworks(...) tags from every module in
-# the graph get merged into one list, but that "llvm"-provided default only
-# applies when nobody sets the tag at all -- as soon as any module
-# (including this one) sets it, the default drops out, so we have to repeat
-# it here rather than append.
+# The default framework list (everything below except IOKit/Cocoa/
+# AVFoundation) comes from the "llvm" module itself; since osx.frameworks(...)
+# tags from every module in the graph get merged into one list, but that
+# "llvm"-provided default only applies when nobody sets the tag at all -- as
+# soon as any module (including this one) sets it, the default drops out, so
+# we have to repeat it here rather than append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
+        "AVFoundation",
+        "Cocoa",
         "CoreFoundation",
         "Foundation",
         "IOKit",
