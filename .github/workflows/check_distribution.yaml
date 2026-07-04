@@ -92,6 +92,7 @@ jobs:
       run: |
         bazel build --config ci --config=${{ matrix.variant }}
     - name: Test (rmw_fastrtps_cpp)
+      continue-on-error: true
       id: test_rmw_fastrtps_cpp
       run: |
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp

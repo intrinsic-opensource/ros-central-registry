@@ -183,12 +183,6 @@ build:macos --host_copt=-fno-implicit-module-maps
 build:macos --copt=-Wno-elaborated-enum-base
 build:macos --host_copt=-Wno-elaborated-enum-base
 
-# opencv's AVFoundation video-capture backend (cap_avfoundation_mac.mm) pulls in
-# the full AVFoundation capture API in addition to IOKit. Camera capture is not
-# needed for CI, so undefine HAVE_AVFOUNDATION for just that file to keep the
-# capture backend out of the CI build entirely.
-build:macos --per_file_copt=.*cap_avfoundation_mac\\.mm@-UHAVE_AVFOUNDATION
-
 ## TEST OPTIONS
 
 # This restricts our test sandboxes from accessing the network, which is
@@ -351,19 +345,33 @@ bazel_dep(name = "rules_shell", version = "0.8.0")
 # Register our hermetic compiler (clang)
 register_toolchains("@llvm//toolchain:all")
 
-# Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with
-# IOKit, which fastdds (utils/Host.cpp) and some zenoh-c dependencies need
-# transitively. The default framework list (everything below except IOKit)
-# comes from the "llvm" module itself; since osx.frameworks(...) tags from
-# all modules are merged, we have to repeat it here rather than append.
+# Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with the
+# frameworks our dependencies need transitively: IOKit for fastdds
+# (utils/Host.cpp) and some zenoh-c crates, and Accelerate/AVFoundation/
+# Cocoa/CoreGraphics/CoreMedia/CoreVideo/QuartzCore for opencv's videoio
+# AVFoundation capture backend (modules/videoio/src/cap_avfoundation_mac.mm,
+# see ocv.3rdparty.avfoundation in opencv's BUILD.bazel). The default
+# framework list (CoreFoundation/Foundation/Kernel/OSLog/Security/
+# SystemConfiguration) comes from the "llvm" module itself; since
+# osx.frameworks(...) tags from every module in the graph get merged into
+# one list, but that "llvm"-provided default only applies when nobody sets
+# the tag at all -- as soon as any module (including this one) sets it, the
+# default drops out, so we have to repeat it here rather than append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
+        "Accelerate",
+        "AVFoundation",
+        "Cocoa",
         "CoreFoundation",
+        "CoreGraphics",
+        "CoreMedia",
+        "CoreVideo",
         "Foundation",
         "IOKit",
         "Kernel",
         "OSLog",
+        "QuartzCore",
         "Security",
         "SystemConfiguration",
     ],

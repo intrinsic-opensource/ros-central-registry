@@ -73,19 +73,33 @@ bazel_dep(name = "std_msgs", version = "0.0.0")
 # Register our hermetic compiler (clang)
 register_toolchains("@llvm//toolchain:all")
 
-# Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with
-# IOKit, which fastdds (utils/Host.cpp) and some zenoh-c dependencies need
-# transitively. The default framework list (everything below except IOKit)
-# comes from the "llvm" module itself; since osx.frameworks(...) tags from
-# all modules are merged, we have to repeat it here rather than append.
+# Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with the
+# frameworks our dependencies need transitively: IOKit for fastdds
+# (utils/Host.cpp) and some zenoh-c crates, and Accelerate/AVFoundation/
+# Cocoa/CoreGraphics/CoreMedia/CoreVideo/QuartzCore for opencv's videoio
+# AVFoundation capture backend (modules/videoio/src/cap_avfoundation_mac.mm,
+# see ocv.3rdparty.avfoundation in opencv's BUILD.bazel). The default
+# framework list (CoreFoundation/Foundation/Kernel/OSLog/Security/
+# SystemConfiguration) comes from the "llvm" module itself; since
+# osx.frameworks(...) tags from every module in the graph get merged into
+# one list, but that "llvm"-provided default only applies when nobody sets
+# the tag at all -- as soon as any module (including this one) sets it, the
+# default drops out, so we have to repeat it here rather than append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
+        "Accelerate",
+        "AVFoundation",
+        "Cocoa",
         "CoreFoundation",
+        "CoreGraphics",
+        "CoreMedia",
+        "CoreVideo",
         "Foundation",
         "IOKit",
         "Kernel",
         "OSLog",
+        "QuartzCore",
         "Security",
         "SystemConfiguration",
     ],
