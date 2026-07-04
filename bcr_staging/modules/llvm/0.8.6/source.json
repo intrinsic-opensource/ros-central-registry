@@ -4,7 +4,6 @@
     "url": "https://github.com/hermeticbuild/hermetic-llvm/releases/download/v0.8.6/hermetic-llvm-v0.8.6.tar.gz",
     "patch_strip": 1,
     "patches": {
-        "module_dot_bazel_version.patch": "sha256-q/zf5UEDk67VL90yOkhMkOu+OCoNK+ZLkq61qhFJRjw=",
-        "osx_exclude_nested_frameworks.patch": "sha256-Kc2I4t8LGzPF7KyE2KiMqtLBp4zY467P3gZGDsC43pw="
+        "module_dot_bazel_version.patch": "sha256-q/zf5UEDk67VL90yOkhMkOu+OCoNK+ZLkq61qhFJRjw="
     }
 }
