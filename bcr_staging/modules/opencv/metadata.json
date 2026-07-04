@@ -1,0 +1,30 @@
+{
+    "homepage": "https://opencv.org/",
+    "maintainers": [
+        {
+            "email": "ryangyang99@hotmail.com",
+            "github": "Ryang20718",
+            "github_user_id": 31294356,
+            "name": "Ryan Yang"
+        },
+        {
+            "email": "DodoEntertainment@gmail.com",
+            "github": "DoDoENT",
+            "github_user_id": 158844,
+            "name": "Nenad Mikša"
+        },
+        {
+            "email": "andrew.c.symington@gmail.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "repository": [
+        "https://github.com/opencv/opencv"
+    ],
+    "versions": [
+        "4.13.0.bcr.5"
+    ],
+    "yanked_versions": {}
+}
