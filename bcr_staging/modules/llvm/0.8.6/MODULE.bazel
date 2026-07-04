@@ -190,7 +190,11 @@ single_version_override(
 
 bazel_dep(name = "rules_zig", version = "0.12.2", dev_dependency = True)
 
-zig = use_extension("@rules_zig//zig:extensions.bzl", "zig", dev_dependency = True)
+zig = use_extension(
+    "@rules_zig//zig:extensions.bzl",
+    "zig",
+    dev_dependency = True,
+)
 zig.index(file = "//:zig_index.json")
 zig.toolchain(zig_version = "0.14.0")
 zig.mirrors(urls = [
