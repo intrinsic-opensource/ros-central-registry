@@ -5,6 +5,6 @@
     "patch_strip": 1,
     "patches": {
         "module_dot_bazel_version.patch": "sha256-q/zf5UEDk67VL90yOkhMkOu+OCoNK+ZLkq61qhFJRjw=",
-        "osx_exclude_nested_frameworks.patch": "sha256-ESTzkvaNZzEnhQRjG4rkC++4+jUEDOCikuaVc22/X/o="
+        "osx_exclude_nested_frameworks.patch": "sha256-Kc2I4t8LGzPF7KyE2KiMqtLBp4zY467P3gZGDsC43pw="
     }
 }
