@@ -345,25 +345,32 @@ register_toolchains("@llvm//toolchain:all")
 # because Cocoa.h pulls in Foundation/NSGeometry.h, which #imports
 # <CoreGraphics/CGBase.h> for the CGFloat typedef, and CoreServices is needed
 # because Foundation.h also pulls in Foundation/NSURLError.h, which #imports
-# <CoreServices/CoreServices.h>. AVFoundation.framework
-# bundles a nested Frameworks/AVFAudio.framework alias, and also a broken
-# Resources/libAVFAudio.tbd symlink to the sibling AVFAudio.framework we
-# don't request, both of which Bazel's archive extraction/sandbox couldn't
-# materialize on their own ("file type ... is not supported"); we fixed that
-# at the source by patching the "llvm" module's osx.bzl extension (see
-# bcr_staging/modules/llvm/0.8.6) to exclude both from every requested
-# framework, rather than dropping AVFoundation support from opencv.
+# <CoreServices/CoreServices.h>.
+#
+# AVFAudio is requested even though nothing here calls it directly: inside
+# the real SDK, AVFoundation.framework/Versions/A/{Frameworks/AVFAudio.
+# framework,Resources/libAVFAudio.tbd} are both *symlinks* out to a sibling
+# top-level AVFAudio.framework (unlike CoreServices' AE/CarbonCore/etc,
+# which are self-contained copies nested under CoreServices.framework/
+# Frameworks -- those need no special handling). If AVFAudio isn't also
+# requested, extraction includes AVFoundation's dangling symlinks to a
+# framework that was filtered out, and Bazel's sandbox refuses to stage
+# those as action inputs ("file type ... is not supported") for *any*
+# action that depends on the sysroot as a whole, not just ones that touch
+# AVFoundation. Requesting AVFAudio directly gives the symlinks a real
+# target and avoids needing to patch anything in the "llvm" module itself.
 #
 # The default framework list (everything below except IOKit/Cocoa/
-# AVFoundation/CoreGraphics/CoreServices) comes from the "llvm" module
-# itself; since osx.frameworks(...) tags from every module in the graph get
-# merged into one list, but that "llvm"-provided default only applies when
-# nobody sets the tag at all -- as soon as any module (including this one)
-# sets it, the default drops out, so we have to repeat it here rather than
-# append.
+# AVFoundation/AVFAudio/CoreGraphics/CoreServices) comes from the "llvm"
+# module itself; since osx.frameworks(...) tags from every module in the
+# graph get merged into one list, but that "llvm"-provided default only
+# applies when nobody sets the tag at all -- as soon as any module
+# (including this one) sets it, the default drops out, so we have to repeat
+# it here rather than append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
+        "AVFAudio",
         "AVFoundation",
         "Cocoa",
         "CoreFoundation",
