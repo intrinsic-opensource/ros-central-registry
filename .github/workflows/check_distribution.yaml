@@ -46,8 +46,6 @@ jobs:
         ros:
         - lyrical.2026-06-08.rcr.1
         variant:
-        - core
-        - base
         - perception
         os:
         - ubuntu-26.04
