@@ -347,6 +347,13 @@ register_toolchains("@llvm//toolchain:all")
 # because Foundation.h also pulls in Foundation/NSURLError.h, which #imports
 # <CoreServices/CoreServices.h>.
 #
+# DiskArbitration is needed because CoreServices.h pulls in AE.h, which pulls
+# in CarbonCore.h, which pulls in Components.h, which #includes
+# <DiskArbitration/DADisk.h>. Unlike AE/CarbonCore (self-contained copies
+# nested under CoreServices.framework/Frameworks), DiskArbitration is its own
+# top-level framework in System/Library/Frameworks, so it needs to be
+# requested explicitly here rather than riding along with CoreServices.
+#
 # AVFAudio is requested even though nothing here calls it directly: inside
 # the real SDK, AVFoundation.framework/Versions/A/{Frameworks/AVFAudio.
 # framework,Resources/libAVFAudio.tbd} are both *symlinks* out to a sibling
@@ -361,12 +368,12 @@ register_toolchains("@llvm//toolchain:all")
 # target and avoids needing to patch anything in the "llvm" module itself.
 #
 # The default framework list (everything below except IOKit/Cocoa/
-# AVFoundation/AVFAudio/CoreGraphics/CoreServices) comes from the "llvm"
-# module itself; since osx.frameworks(...) tags from every module in the
-# graph get merged into one list, but that "llvm"-provided default only
-# applies when nobody sets the tag at all -- as soon as any module
-# (including this one) sets it, the default drops out, so we have to repeat
-# it here rather than append.
+# AVFoundation/AVFAudio/CoreGraphics/CoreServices/DiskArbitration) comes
+# from the "llvm" module itself; since osx.frameworks(...) tags from every
+# module in the graph get merged into one list, but that "llvm"-provided
+# default only applies when nobody sets the tag at all -- as soon as any
+# module (including this one) sets it, the default drops out, so we have to
+# repeat it here rather than append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
@@ -376,6 +383,7 @@ osx.frameworks(
         "CoreFoundation",
         "CoreGraphics",
         "CoreServices",
+        "DiskArbitration",
         "Foundation",
         "IOKit",
         "Kernel",
