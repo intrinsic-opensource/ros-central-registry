@@ -33,7 +33,11 @@ cc_library(
     srcs = glob(["src/**/*.c"]),
     hdrs = HEADERS,
     includes = ["include"],
-    local_defines = ros_local_defines(),
+    # src/type_description/*.c is vendored from rosidl_generator_c's
+    # templates and uses ROSIDL_GENERATOR_C_PUBLIC (a distinct macro family
+    # also defined in this package's own visibility_control.h), not
+    # ROSIDL_RUNTIME_C_PUBLIC, so it needs its own BUILDING_DLL define too.
+    local_defines = ros_local_defines() + ["ROSIDL_GENERATOR_C_BUILDING_DLL"],
     deps = DEPENDENCIES.values(),
 )
 

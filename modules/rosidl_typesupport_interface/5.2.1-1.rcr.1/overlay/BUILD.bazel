@@ -38,9 +38,17 @@ cc_shared_library(
 cc_test(
     name = "test_macros",
     srcs = ["test/test_macros.cpp"],
-    dynamic_deps = [
-        ":rosidl_typesupport_interface",
-    ],
+    # rosidl_typesupport_interface_library is header-only (no srcs), so the
+    # cc_shared_library wrapping it produces an empty DLL with no exported
+    # symbols. Unlike a .so/.dylib, a Windows DLL with nothing to export
+    # doesn't get an import library generated at all, so any dynamic_deps
+    # reference to it fails at link time ("unable to find library
+    # -lrosidl_typesupport_interface"). The test already gets everything it
+    # needs from the direct deps on the header-only library below.
+    dynamic_deps = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": [":rosidl_typesupport_interface"],
+    }),
     deps = [
         ":rosidl_typesupport_interface_library",
         "@googletest//:gtest",

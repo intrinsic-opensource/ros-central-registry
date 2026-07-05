@@ -4,7 +4,7 @@
     "strip_prefix": "Fast-DDS-3.6.1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-8zDDp1nM089eY7m84bsXmbTBQwKozMWak8ycQDGE4vM="
+        "BUILD.bazel": "sha256-sCkOKH6yRWrLQspTxme5ihbDGwdU7xyRjHiAQ4p1Bb8="
     },
     "patches": {
         "allocator.patch": "sha256-K5T4wTGxGVyJwh3ubV5Yu1wZFrLh35VRUJPslZ2h6PM=",

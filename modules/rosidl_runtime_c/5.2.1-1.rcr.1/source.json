@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/rosidl-release/archive/refs/tags/release/lyrical/rosidl_runtime_c/5.2.1-1.tar.gz",
     "strip_prefix": "rosidl-release-release-lyrical-rosidl_runtime_c-5.2.1-1",
     "overlay": {
-        "BUILD.bazel": "sha256-jNxtjPvua2U38nRMspxBF0x7LbX3kM8Fx5PXUJ1vy7M="
+        "BUILD.bazel": "sha256-+PejpeyEOPjAVNG5KNmwGbRhUVqz+/wFrEq33N9KYF4="
     }
 }

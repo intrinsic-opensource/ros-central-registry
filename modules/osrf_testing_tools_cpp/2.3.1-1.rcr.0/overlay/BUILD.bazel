@@ -58,6 +58,13 @@ cc_library(
         "include",
         "src",
     ],
+    # The vendored backward-cpp (vendor/bombela/backward-cpp/backward.cpp)
+    # has a real Windows stack-unwinding backend using DbgHelp.dll's
+    # Sym*/StackWalk64 APIs, it's just never linked against dbghelp.
+    linkopts = select({
+        "@platforms//os:windows": ["-ldbghelp"],
+        "//conditions:default": [],
+    }),
 )
 
 cc_library(

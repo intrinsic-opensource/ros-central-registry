@@ -4,6 +4,10 @@
     "strip_prefix": "Fast-DDS-3.4.2",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-GHsDeHsVlVoQIlu2pHqMOT9/RtSNg8N7SnXSjWTTXEE="
+        "BUILD.bazel": "sha256-VeyN/G5TNF1LRfQOQVm5z7UW+PJIbI44b4MjKNGzatE="
+    },
+    "patches": {
+        "thirdparty__filewatch__FileWatch__hpp.patch": "sha256-u0PLRt9F6vFJiPQbZ+zstnxgLd9o7q38oHth/dKGLPs=",
+        "src__cpp__utils__TimedConditionVariable__cpp.patch": "sha256-RLZWBfajA8L4RpAgBj7xvVUkgiiTimMnk5jY6i79NpQ="
     }
 }

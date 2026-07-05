@@ -14,9 +14,18 @@
 
 def ros_local_defines(name = None):
     """Common local defines for ROS nodes"""
+    package_name = name or native.module_name()
     return [
-        "ROS_PACKAGE_NAME=\\\"{}\\\"".format(name or native.module_name()),
+        "ROS_PACKAGE_NAME=\\\"{}\\\"".format(package_name),
         "DEFAULT_RMW_IMPLEMENTATION=\"rmw_fastrtps_cpp\"",
+        # Ament's visibility_control.h convention gates dllexport/dllimport
+        # on <PACKAGE>_BUILDING_DLL: defined while compiling the library's
+        # own sources (so its public API resolves to dllexport), absent for
+        # everyone else who merely includes its headers (dllimport). This is
+        # a no-op on non-Windows platforms, where that macro is never
+        # consulted. local_defines (unlike defines) isn't propagated to
+        # consumers, so this correctly only affects this target's own TUs.
+        "{}_BUILDING_DLL".format(package_name.upper()),
     ]
 
 def ros_exports_header(name, out, library = None, **kwargs):

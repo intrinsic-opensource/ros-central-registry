@@ -1,0 +1,13 @@
+--- a/src/get_search_paths.cpp	2026-07-04 22:11:52.329158800 -0700
++++ b/src/get_search_paths.cpp	2026-07-04 22:12:04.147603300 -0700
+@@ -21,6 +21,10 @@
+ #include <mach-o/dyld.h> // For _NSGetExecutablePath
+ #endif
+ 
++#if defined(_WIN32)
++#include <windows.h> // For GetModuleFileNameA, MAX_PATH
++#endif
++
+ #include <cstdlib>
+ #include <filesystem>
+ #include <list>
