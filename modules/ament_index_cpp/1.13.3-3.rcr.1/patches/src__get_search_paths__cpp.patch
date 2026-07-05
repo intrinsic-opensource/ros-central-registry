@@ -1,9 +1,9 @@
 --- a/src/get_search_paths.cpp
 +++ b/src/get_search_paths.cpp
 @@ -14,9 +14,17 @@
- 
+
  #include "ament_index_cpp/get_search_paths.hpp"
- 
+
 +#include <unistd.h> // For readlink
 +#include <limits.h> // For PATH_MAX
 +

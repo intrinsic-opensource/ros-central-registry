@@ -29,8 +29,18 @@ cc_library(
             "src/**/*.h",
             "src/**/*.c",
         ],
-        exclude = ["src/time_win32.c"],
-    ),
+        # glob()'s exclude can't take a select() (glob runs at loading time,
+        # before the target platform is known), so exclude both
+        # platform-specific files unconditionally here and add back the
+        # right one via select() below instead.
+        exclude = [
+            "src/time_unix.c",
+            "src/time_win32.c",
+        ],
+    ) + select({
+        "@platforms//os:windows": ["src/time_win32.c"],
+        "//conditions:default": ["src/time_unix.c"],
+    }),
     hdrs = HEADERS,
     includes = ["include"],
     local_defines = ros_local_defines() + [

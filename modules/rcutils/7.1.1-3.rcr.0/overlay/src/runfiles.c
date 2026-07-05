@@ -20,6 +20,10 @@
 #include <limits.h> // For PATH_MAX
 #include <stdlib.h> // For getenv
 
+#if defined(_WIN32)
+#include <windows.h> // For GetModuleFileNameA, MAX_PATH
+#endif
+
 // Cross-platform way of obtaining the full path to the current executable. Returns
 // std::nullopt if we can't determine the path. We need this to determine if a
 // .runfiles/MANIFEST file exists in the current directory.
@@ -27,7 +31,7 @@ bool
 get_executable_name(char result[PATH_MAX])
 {
 #if defined(_WIN32)
-  auto path_len = GetModuleFileNameA(NULL, result, MAX_PATH);
+  DWORD path_len = GetModuleFileNameA(NULL, result, MAX_PATH);
 #elif defined(__APPLE__)
   uint32_t path_len = PATH_MAX;
   if (_NSGetExecutablePath(result, &path_len) != 0) {

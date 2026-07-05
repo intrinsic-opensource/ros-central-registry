@@ -9,6 +9,7 @@
     "patches": {
         "test__utest_deprecated__cpp.patch": "sha256-4QJjFNEwe4oydKCMCB6+H7ZoKsushGohN7I86HQBF2U=",
         "src__get_search_paths__cpp.patch": "sha256-Db9W70NCBFu4Yl8D4rozoAJee2olx1mwRn/Ji6gJ1L4=",
-        "test__utest__cpp.patch": "sha256-gshDOs1o8MrzVycI1GHT0JsdJV/3lBwexFD/NR2c5sE="
+        "test__utest__cpp.patch": "sha256-gshDOs1o8MrzVycI1GHT0JsdJV/3lBwexFD/NR2c5sE=",
+        "src__get_search_paths__windows_include__cpp.patch": "sha256-+xZIMlcBJcfWGVSpauWt6yIog2Tu+FXujpJEVj6uke4="
     }
 }

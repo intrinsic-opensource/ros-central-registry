@@ -1,0 +1,6 @@
+# Normalize all text files to LF on checkout, regardless of platform or a
+# developer's global core.autocrlf setting. Module overlay files (BUILD.bazel,
+# .bzl, etc.) are served to Bazel via local file:// registry URLs and their
+# SHA256 integrity hashes are computed against the LF blob content, so a
+# CRLF checkout (the Windows git default) breaks every local registry fetch.
+* text=auto eol=lf

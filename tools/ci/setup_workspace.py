@@ -82,8 +82,8 @@ common --check_direct_dependencies=off
 # This tells Bazel to look locally for RCR modules at the root of this
 # project, additional "staged" BCR modules in the bcr_staging folder
 # in this workspace, and ultimately at the BCR for the rest.
-common --registry=file://%workspace%/..             \\
-       --registry=file://%workspace%/../bcr_staging \\
+common --registry=file:///%workspace%/..             \\
+       --registry=file:///%workspace%/../bcr_staging \\
        --registry=https://bcr.bazel.build
 
 # This provides read-only access to a shared Bazel remote cache offered

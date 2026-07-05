@@ -12,7 +12,7 @@
         "cc/BUILD.bazel": "sha256-af0OpcMKyE15xdKMPdukvcDgUkRHxaPYrBAyC0qmWa8=",
         "cc/aspects.bzl": "sha256-3ZYy2k+bwCogeto/A7ipoOE+GD7br4BDrv54sfwJwjY=",
         "cc/defs.bzl": "sha256-CjrpSPeKNH5pafkHqlXGz+AYRso+FtJ8L1nZ8azsNBE=",
-        "cc/macros.bzl": "sha256-9p6Q4mwMMxZTpGngr7SyFlzgPBFzzuECSkCQPPujkJU=",
+        "cc/macros.bzl": "sha256-jKPSHBToZJwnLOKZmEN89F4voA1DylNwU0h9Ke8/500=",
         "cc/mcap_impl.cpp": "sha256-/qFEIYCpqc9IB5xJpJUL6SXUnyVrTjFXc1dpyScZwKQ=",
         "cc/rules.bzl": "sha256-QQqwkKTjrTt/Qep1FXo9d1g2fIjm6yoUhhIP3bVtVzY=",
         "cc/types.bzl": "sha256-rdlVPpnZM5fBfMRUrqSa+9GASlfn/i+mpMv4pul5+BI=",
