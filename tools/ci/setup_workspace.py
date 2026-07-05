@@ -381,7 +381,17 @@ register_toolchains("@llvm//toolchain:all")
 #    just ones that touch the framework in question -- so AVFAudio,
 #    ColorSync, CoreText, and ImageIO all have to be requested explicitly
 #    even though nothing here calls them directly, purely to give those
-#    symlinks a real target.
+#    symlinks a real target. This isn't limited to whole framework bundles
+#    either: ApplicationServices.../Frameworks/ATS.framework/Versions/A/
+#    Resources/{libFontParser,libhvf,libTrueTypeScaler,libType1Scaler}.tbd
+#    are themselves symlinks out to System/Library/PrivateFrameworks/
+#    FontServices.framework, several directory levels deeper than the
+#    top-level bundle symlinks above -- hence FontServices below, which is
+#    otherwise never referenced by name anywhere in this file. A full
+#    recursive symlink audit of every framework in this list (cloning
+#    github.com/phracker/MacOSX-SDKs and walking each requested bundle for
+#    symlinks pointing outside the requested set) turned up FontServices as
+#    the only remaining gap.
 #
 # CoreAudioTypes is its own top-level framework for a related reason:
 # CoreAudio.framework/Headers/CoreAudioTypes.h is just a one-line forward to
@@ -419,6 +429,7 @@ osx.frameworks(
         "CoreText",
         "CoreVideo",
         "DiskArbitration",
+        "FontServices",
         "Foundation",
         "IOKit",
         "IOSurface",
