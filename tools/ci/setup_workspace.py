@@ -353,6 +353,9 @@ register_toolchains("@llvm//toolchain:all")
 # nested under CoreServices.framework/Frameworks), DiskArbitration is its own
 # top-level framework in System/Library/Frameworks, so it needs to be
 # requested explicitly here rather than riding along with CoreServices.
+# CFNetwork is needed for the same reason: CoreServices.h directly #includes
+# <CFNetwork/CFNetwork.h>, and CFNetwork is likewise its own top-level
+# framework rather than something nested under CoreServices.framework.
 #
 # AVFAudio is requested even though nothing here calls it directly: inside
 # the real SDK, AVFoundation.framework/Versions/A/{Frameworks/AVFAudio.
@@ -368,17 +371,18 @@ register_toolchains("@llvm//toolchain:all")
 # target and avoids needing to patch anything in the "llvm" module itself.
 #
 # The default framework list (everything below except IOKit/Cocoa/
-# AVFoundation/AVFAudio/CoreGraphics/CoreServices/DiskArbitration) comes
-# from the "llvm" module itself; since osx.frameworks(...) tags from every
-# module in the graph get merged into one list, but that "llvm"-provided
-# default only applies when nobody sets the tag at all -- as soon as any
-# module (including this one) sets it, the default drops out, so we have to
-# repeat it here rather than append.
+# AVFoundation/AVFAudio/CFNetwork/CoreGraphics/CoreServices/DiskArbitration)
+# comes from the "llvm" module itself; since osx.frameworks(...) tags from
+# every module in the graph get merged into one list, but that
+# "llvm"-provided default only applies when nobody sets the tag at all -- as
+# soon as any module (including this one) sets it, the default drops out, so
+# we have to repeat it here rather than append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
         "AVFAudio",
         "AVFoundation",
+        "CFNetwork",
         "Cocoa",
         "CoreFoundation",
         "CoreGraphics",
