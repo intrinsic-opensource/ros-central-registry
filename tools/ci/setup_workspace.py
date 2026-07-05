@@ -339,73 +339,99 @@ register_toolchains("@llvm//toolchain:all")
 # Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with the
 # frameworks our dependencies need: IOKit for fastdds (utils/Host.cpp,
 # resolved version 3.4.2 here) and some zenoh-c crates, plus everything
-# opencv needs for its macOS highgui/videoio backends. Cocoa, Accelerate,
-# AVFoundation, CoreGraphics, CoreMedia, CoreVideo, and QuartzCore are the
-# exact set of "-framework" linkopts the opencv module itself declares for
-# @platforms//os:macos on its ocv.3rdparty.cocoa and ocv.3rdparty.avfoundation
-# objc_library targets (see the "opencv" module's overlay/BUILD.bazel on the
-# BCR, version 4.13.0.bcr.5 as resolved here) -- pulled from opencv's own
-# build config rather than rediscovered one CI failure at a time.
+# opencv needs for its macOS highgui/videoio backends.
 #
-# CoreGraphics is also needed transitively because Cocoa.h pulls in
-# Foundation/NSGeometry.h, which #imports <CoreGraphics/CGBase.h> for the
-# CGFloat typedef, and CoreServices is needed because Foundation.h also
-# pulls in Foundation/NSURLError.h, which #imports
-# <CoreServices/CoreServices.h>.
+# The osx.bzl extension stages System/Library/Frameworks/<Name>.framework/*
+# for each requested name -- nothing more. It does *not* follow the C/ObjC
+# #include graph, so anything a requested framework's headers pull in via
+# <OtherFramework/Header.h> has to be requested too, or the compile fails
+# with "file not found" partway through some umbrella header. This list was
+# derived by cloning the actual SDK headers (github.com/phracker/MacOSX-SDKs)
+# and tracing every #include reachable from the four umbrella headers opencv
+# actually compiles against on macOS: Cocoa.h and AVFoundation.h (imported
+# directly by modules/highgui/src/window_cocoa.mm and
+# modules/videoio/src/cap_avfoundation_mac.mm), plus AppKit.h and CoreData.h
+# (which Cocoa.h itself unconditionally imports) -- rather than discovering
+# each missing framework one CI failure at a time. Accelerate, Cocoa,
+# CoreGraphics, CoreMedia, CoreVideo, and QuartzCore additionally match the
+# exact "-framework" linkopts the "opencv" module (4.13.0.bcr.5 as resolved
+# here) declares for @platforms//os:macos on its ocv.3rdparty.cocoa and
+# ocv.3rdparty.avfoundation objc_library targets.
 #
-# DiskArbitration is needed because CoreServices.h pulls in AE.h, which pulls
-# in CarbonCore.h, which pulls in Components.h, which #includes
-# <DiskArbitration/DADisk.h>. Unlike AE/CarbonCore (self-contained copies
-# nested under CoreServices.framework/Frameworks), DiskArbitration is its own
-# top-level framework in System/Library/Frameworks, so it needs to be
-# requested explicitly here rather than riding along with CoreServices.
-# CFNetwork is needed for the same reason: CoreServices.h directly #includes
-# <CFNetwork/CFNetwork.h>, and CFNetwork is likewise its own top-level
-# framework rather than something nested under CoreServices.framework.
+# Two things complicate a pure "list every framework reachable" approach:
 #
-# AVFAudio is requested even though nothing here calls it directly: inside
-# the real SDK, AVFoundation.framework/Versions/A/{Frameworks/AVFAudio.
-# framework,Resources/libAVFAudio.tbd} are both *symlinks* out to a sibling
-# top-level AVFAudio.framework (unlike CoreServices' AE/CarbonCore/etc,
-# which are self-contained copies nested under CoreServices.framework/
-# Frameworks -- those need no special handling). If AVFAudio isn't also
-# requested, extraction includes AVFoundation's dangling symlinks to a
-# framework that was filtered out, and Bazel's sandbox refuses to stage
-# those as action inputs ("file type ... is not supported") for *any*
-# action that depends on the sysroot as a whole, not just ones that touch
-# AVFoundation. Requesting AVFAudio directly gives the symlinks a real
-# target and avoids needing to patch anything in the "llvm" module itself.
+# 1. Some frameworks referenced via <X/Y.h> are actually *nested*,
+#    self-contained copies bundled inside another framework's own
+#    Frameworks/ subdirectory (e.g. CoreServices.framework/Frameworks/
+#    {AE,CarbonCore,DictionaryServices,FSEvents,LaunchServices,Metadata,
+#    OSServices,SearchKit,SharedFileList}.framework, and similarly under
+#    ApplicationServices.framework/Frameworks/{ATS,ATSUI,ColorSyncLegacy,
+#    HIServices,LangAnalysis,PrintCore,QD,SpeechSynthesis}.framework).
+#    Clang resolves these via its framework-relative "subframework" header
+#    search without needing them in this list at all, as long as the
+#    *enclosing* framework (CoreServices / ApplicationServices) is present.
 #
-# The default framework list (everything below except IOKit/Cocoa/
-# AVFoundation/AVFAudio/Accelerate/CFNetwork/CoreAudio/CoreGraphics/CoreMedia/
-# CoreServices/CoreVideo/DiskArbitration/QuartzCore) comes from the "llvm"
-# module itself; since osx.frameworks(...) tags from every module in the
-# graph get merged into one list, but that "llvm"-provided default only
-# applies when nobody sets the tag at all -- as soon as any module
-# (including this one) sets it, the default drops out, so we have to repeat
-# it here rather than append.
+# 2. A handful of those same nested entries are instead *symlinks* out to a
+#    sibling top-level framework rather than self-contained copies: e.g.
+#    AVFoundation.framework/Versions/A/Frameworks/AVFAudio.framework and
+#    ApplicationServices.framework/.../Frameworks/{ColorSync,CoreText,
+#    ImageIO}.framework. Bazel's sandbox refuses to stage a dangling symlink
+#    to a framework that wasn't requested ("file type ... is not
+#    supported") for *any* action depending on the sysroot as a whole, not
+#    just ones that touch the framework in question -- so AVFAudio,
+#    ColorSync, CoreText, and ImageIO all have to be requested explicitly
+#    even though nothing here calls them directly, purely to give those
+#    symlinks a real target.
+#
+# CoreAudioTypes is its own top-level framework for a related reason:
+# CoreAudio.framework/Headers/CoreAudioTypes.h is just a one-line forward to
+# <CoreAudioTypes/CoreAudioTypes.h> in the real SDK.
+#
+# The default framework list (everything below except IOKit and the ones
+# explained above) comes from the "llvm" module itself; since
+# osx.frameworks(...) tags from every module in the graph get merged into
+# one list, but that "llvm"-provided default only applies when nobody sets
+# the tag at all -- as soon as any module (including this one) sets it, the
+# default drops out, so we have to repeat it here rather than append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
         "AVFAudio",
         "AVFoundation",
         "Accelerate",
+        "AppKit",
+        "ApplicationServices",
+        "AudioToolbox",
         "CFNetwork",
+        "CloudKit",
         "Cocoa",
+        "ColorSync",
         "CoreAudio",
+        "CoreAudioTypes",
+        "CoreData",
         "CoreFoundation",
         "CoreGraphics",
+        "CoreImage",
+        "CoreLocation",
+        "CoreMIDI",
         "CoreMedia",
         "CoreServices",
+        "CoreText",
         "CoreVideo",
         "DiskArbitration",
         "Foundation",
         "IOKit",
+        "IOSurface",
+        "ImageIO",
         "Kernel",
+        "MediaToolbox",
+        "Metal",
         "OSLog",
+        "OpenGL",
         "QuartzCore",
         "Security",
         "SystemConfiguration",
+        "UniformTypeIdentifiers",
     ],
 )
 
