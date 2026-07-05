@@ -69,7 +69,7 @@ common --enable_platform_specific_config
 ## BUILD OPTIONS
 
 # Ensure that we use toolchains_llvm instead of the host toolchain.
-build --action_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
+build --repo_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
 
 # Our bazel distribution provides conversion utilities for transforming
 # ROS messages to .proto files. This prevent protobuf from trying to
