@@ -377,7 +377,7 @@ register_toolchains("@llvm//toolchain:all")
 # target and avoids needing to patch anything in the "llvm" module itself.
 #
 # The default framework list (everything below except IOKit/Cocoa/
-# AVFoundation/AVFAudio/Accelerate/CFNetwork/CoreGraphics/CoreMedia/
+# AVFoundation/AVFAudio/Accelerate/CFNetwork/CoreAudio/CoreGraphics/CoreMedia/
 # CoreServices/CoreVideo/DiskArbitration/QuartzCore) comes from the "llvm"
 # module itself; since osx.frameworks(...) tags from every module in the
 # graph get merged into one list, but that "llvm"-provided default only
@@ -392,6 +392,7 @@ osx.frameworks(
         "Accelerate",
         "CFNetwork",
         "Cocoa",
+        "CoreAudio",
         "CoreFoundation",
         "CoreGraphics",
         "CoreMedia",
