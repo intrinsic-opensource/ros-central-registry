@@ -337,14 +337,20 @@ bazel_dep(name = "rules_shell", version = "0.8.0")
 register_toolchains("@llvm//toolchain:all")
 
 # Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with the
-# frameworks our dependencies need transitively: IOKit for fastdds
-# (utils/Host.cpp, resolved version 3.4.2 here) and some zenoh-c crates,
-# Cocoa for opencv's highgui GUI backend (modules/highgui/src/window_cocoa.mm),
-# and AVFoundation for opencv's videoio capture backend
-# (modules/videoio/src/cap_avfoundation_mac.mm). CoreGraphics is needed
-# because Cocoa.h pulls in Foundation/NSGeometry.h, which #imports
-# <CoreGraphics/CGBase.h> for the CGFloat typedef, and CoreServices is needed
-# because Foundation.h also pulls in Foundation/NSURLError.h, which #imports
+# frameworks our dependencies need: IOKit for fastdds (utils/Host.cpp,
+# resolved version 3.4.2 here) and some zenoh-c crates, plus everything
+# opencv needs for its macOS highgui/videoio backends. Cocoa, Accelerate,
+# AVFoundation, CoreGraphics, CoreMedia, CoreVideo, and QuartzCore are the
+# exact set of "-framework" linkopts the opencv module itself declares for
+# @platforms//os:macos on its ocv.3rdparty.cocoa and ocv.3rdparty.avfoundation
+# objc_library targets (see the "opencv" module's overlay/BUILD.bazel on the
+# BCR, version 4.13.0.bcr.5 as resolved here) -- pulled from opencv's own
+# build config rather than rediscovered one CI failure at a time.
+#
+# CoreGraphics is also needed transitively because Cocoa.h pulls in
+# Foundation/NSGeometry.h, which #imports <CoreGraphics/CGBase.h> for the
+# CGFloat typedef, and CoreServices is needed because Foundation.h also
+# pulls in Foundation/NSURLError.h, which #imports
 # <CoreServices/CoreServices.h>.
 #
 # DiskArbitration is needed because CoreServices.h pulls in AE.h, which pulls
@@ -371,27 +377,32 @@ register_toolchains("@llvm//toolchain:all")
 # target and avoids needing to patch anything in the "llvm" module itself.
 #
 # The default framework list (everything below except IOKit/Cocoa/
-# AVFoundation/AVFAudio/CFNetwork/CoreGraphics/CoreServices/DiskArbitration)
-# comes from the "llvm" module itself; since osx.frameworks(...) tags from
-# every module in the graph get merged into one list, but that
-# "llvm"-provided default only applies when nobody sets the tag at all -- as
-# soon as any module (including this one) sets it, the default drops out, so
-# we have to repeat it here rather than append.
+# AVFoundation/AVFAudio/Accelerate/CFNetwork/CoreGraphics/CoreMedia/
+# CoreServices/CoreVideo/DiskArbitration/QuartzCore) comes from the "llvm"
+# module itself; since osx.frameworks(...) tags from every module in the
+# graph get merged into one list, but that "llvm"-provided default only
+# applies when nobody sets the tag at all -- as soon as any module
+# (including this one) sets it, the default drops out, so we have to repeat
+# it here rather than append.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
         "AVFAudio",
         "AVFoundation",
+        "Accelerate",
         "CFNetwork",
         "Cocoa",
         "CoreFoundation",
         "CoreGraphics",
+        "CoreMedia",
         "CoreServices",
+        "CoreVideo",
         "DiskArbitration",
         "Foundation",
         "IOKit",
         "Kernel",
         "OSLog",
+        "QuartzCore",
         "Security",
         "SystemConfiguration",
     ],
