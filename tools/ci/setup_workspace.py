@@ -410,7 +410,6 @@ osx.frameworks(
         "AVFoundation",
         "Accelerate",
         "AppKit",
-        "ApplicationServices",
         "AudioToolbox",
         "CFNetwork",
         "CloudKit",
