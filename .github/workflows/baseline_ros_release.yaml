@@ -76,7 +76,7 @@ jobs:
 
     - name: Set up MSVC
       if: runner.os == 'Windows'
-      uses: ilammy/msvc-dev-cmd@460a772e4cf7358f9f2f23773240813e40e7a894
+      uses: ilammy/msvc-dev-cmd@v1
 
     - name: Setup ROS
       uses: ros-tooling/setup-ros@v0.7
