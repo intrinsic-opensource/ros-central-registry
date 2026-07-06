@@ -91,7 +91,6 @@ jobs:
     #   uses: ros-tooling/setup-ros@v0.7
 
     # Install additional ROS 2 build/testing dependencies on Linux.
-    # We must use apt here so they are installed in the system Python environment.
     - name: Install ROS 2 build dependencies (Linux)
       if: runner.os == 'Linux'
       shell: bash
@@ -115,11 +114,8 @@ jobs:
           python3-pytest-timeout \
           ros-dev-tools
         sudo rosdep init
-
-    - name: Re-run rosdep update with custom index
-      shell: bash
-      run: |
         rosdep update
+        python3 -m pip install rosinstall-generator
 
     - name: Parse release and configure ROSDISTRO_INDEX_URL and DISTRO
       shell: bash
