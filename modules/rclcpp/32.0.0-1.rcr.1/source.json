@@ -19,7 +19,7 @@
         "test__rclcpp__node_interfaces__test_does_not_compile__get_node_topics_interface_const_ref_wrapped_node__cpp.patch": "sha256-Wl3eVT9jyCB8G7YpY8UQCcBb3denHWeix1onZvQ1wxQ=",
         "test__rclcpp__test_intra_process_manager__cpp.patch": "sha256-KDd4qB54W/00gl+/W9VEM/hSOnbixqnwQEkPuXZlX8g=",
         "include__rclcpp__typesupport_helpers__hpp.patch": "sha256-+UOA+7kH8pujE/VEnLnfc6oFPjMrKB1auBy/6USpIro=",
-        "src__rclcpp__typesupport_helpers__cpp.patch": "sha256-Et+CcIdAbklEo+kFZ7atkOqx3VkSTIG/7f5FmOp7Rxo=",
+        "src__rclcpp__typesupport_helpers__cpp.patch": "sha256-07Se2XCiESGfc4i6pU28LjY6kYcqoOoF7w7WL3e1iZI=",
         "test__rclcpp__test_generic_client__cpp.patch": "sha256-oK+iqmq9yzIWSsPMsUHMIcEkhtQTV5mU6GgGTVfllhE=",
         "test__rclcpp__node_interfaces__test_node_parameters__cpp.patch": "sha256-KWlHpy6X+Igy5v9JrN/P2GLfZwZ5UiaVRF9FoPKXIYg=",
         "test__rclcpp__wait_set_policies__test_storage_policy_common__cpp.patch": "sha256-jwGBkaAIhFeENLMrq4OFUbcit9f6xmBwPKUPernK1w0=",

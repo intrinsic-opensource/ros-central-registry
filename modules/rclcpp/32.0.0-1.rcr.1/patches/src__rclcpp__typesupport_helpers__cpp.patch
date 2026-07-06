@@ -37,7 +37,7 @@
  
  const void * get_typesupport_handle_impl(
    const std::string & type,
-@@ -119,40 +142,111 @@
+@@ -119,40 +142,116 @@
  }
  
  std::string get_typesupport_library_path(
@@ -85,11 +85,16 @@
 +  std::string target_library = package_name + "__" + interface_type + "__" + 
 +                               interface_name + "__" + typesupport_identifier;
 +
++  #if defined(__APPLE__)
++  const std::string ext = ".dylib";
++  #else
++  const std::string ext = ".so";
++  #endif
 +  std::string library_path = runfiles->Rlocation(
-+    runfiles_prefix + "lib" + target_library + ".so");
++    runfiles_prefix + "lib" + target_library + ext);
 +
 +  if (library_path.empty()) {
-+    library_path = runfiles->Rlocation("_main/lib/lib" + target_library + ".so");
++    library_path = runfiles->Rlocation("_main/lib/lib" + target_library + ext);
 +  }
 +
    if (library_path.empty()) {
