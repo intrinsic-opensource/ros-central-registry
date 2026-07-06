@@ -14,12 +14,19 @@
 
 name: check_bazel_modules
 run-name: Checks that changes to Bazel modules abide by certain rules
-env:
-  ANDROID_HOME: ""
+
 on:
   pull_request:
     branches:
       - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  ANDROID_HOME: ""
+
 jobs:
   check_bazel_modules:
     name: Check PR rules on ${{ matrix.directory }}

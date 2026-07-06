@@ -37,6 +37,11 @@ on:
         default: '2026-06-08'
         required: true
         type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   baseline-new-release:
     permissions:
