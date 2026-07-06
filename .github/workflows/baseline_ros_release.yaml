@@ -114,6 +114,7 @@ jobs:
           python3-pytest-runner \
           python3-pytest-timeout \
           ros-dev-tools
+        sudo rosdep init
 
     - name: Re-run rosdep update with custom index
       shell: bash
