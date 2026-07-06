@@ -39,7 +39,11 @@ cc_library(
     srcs = glob(["src/**"]),
     hdrs = glob(["include/**"]),
     includes = ["include"],
-    local_defines = ros_local_defines(),
+    # The wstring_conversion helpers are annotated with the BASE package's
+    # ROSIDL_TYPESUPPORT_PROTOBUF_PUBLIC macro, so exporting them from this DLL
+    # on Windows needs the base ROSIDL_TYPESUPPORT_PROTOBUF_BUILDING_DLL define
+    # in addition to what ros_local_defines() derives for this package.
+    local_defines = ros_local_defines() + ["ROSIDL_TYPESUPPORT_PROTOBUF_BUILDING_DLL"],
     deps = DEPENDENCIES.values(),
 )
 

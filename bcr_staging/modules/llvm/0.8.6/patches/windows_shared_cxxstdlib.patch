@@ -1,0 +1,23 @@
+diff --git a/runtimes/cxxstdlib/BUILD.bazel b/runtimes/cxxstdlib/BUILD.bazel
+index 9e2006a..673ed54 100644
+--- a/runtimes/cxxstdlib/BUILD.bazel
++++ b/runtimes/cxxstdlib/BUILD.bazel
+@@ -113,7 +113,17 @@ filegroup(
+             "@llvm-project//libcxxabi:libcxxabi.shared",
+             "@llvm-project//libunwind:libunwind.shared",
+         ],
+-        # TODO(zbarsky): windows?
++        # Windows links the C++ runtime dynamically (see the toolchain's Windows
++        # enabled_features, which drops static_link_cpp_runtimes) so that the
++        # libc++ ABI symbols live once in libc++.dll instead of being statically
++        # embedded in -- and re-exported from -- every ROS DLL, which otherwise
++        # collides at link time ("<symbol> was replaced"). Only libc++.dll is
++        # listed: on Windows it statically absorbs libc++abi + libunwind (see
++        # libcxx.shared), so it is the single self-contained runtime DLL that
++        # gets linked into every binary and copied next to it.
++        ":libcxx_windows": [
++            "@llvm-project//libcxx:libcxx.shared",
++        ],
+         "//conditions:default": [],
+     }),
+ )

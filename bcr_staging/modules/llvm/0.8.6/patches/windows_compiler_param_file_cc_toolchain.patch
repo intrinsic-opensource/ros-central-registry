@@ -1,0 +1,36 @@
+diff --git a/toolchain/cc_toolchain.bzl b/toolchain/cc_toolchain.bzl
+index bffdaa7..15030ba 100644
+--- a/toolchain/cc_toolchain.bzl
++++ b/toolchain/cc_toolchain.bzl
+@@ -10,6 +10,7 @@ def cc_toolchain(name, tool_map, module_map = None, extra_args = []):
+             "@llvm//toolchain/features:static_link_cpp_runtimes",
+             "@llvm//toolchain/features/runtime_library_search_directories:feature",
+             "@llvm//toolchain/features:archive_param_file",
++            "@llvm//toolchain/features:compiler_param_file",
+             "@llvm//toolchain/features:prefer_pic_for_opt_binaries",
+             "@llvm//toolchain/features:parse_headers",
+             "@llvm//toolchain/features:external_include_paths",
+@@ -40,6 +41,7 @@ def cc_toolchain(name, tool_map, module_map = None, extra_args = []):
+             #"@rules_cc//cc/toolchains/args/layering_check:layering_check",
+             #"@rules_cc//cc/toolchains/args/layering_check:use_module_maps",
+             "@llvm//toolchain/features:archive_param_file",
++            "@llvm//toolchain/features:compiler_param_file",
+             "@llvm//toolchain/features:prefer_pic_for_opt_binaries",
+             # Always last (contains user_compile_flags and user_link_flags who should apply last).
+             "@llvm//toolchain/features/legacy:experimental_replace_legacy_action_config_features",
+@@ -77,6 +79,7 @@ def cc_toolchain(name, tool_map, module_map = None, extra_args = []):
+             "@llvm//toolchain/features:opt",
+             "@llvm//toolchain/features:dbg",
+             "@llvm//toolchain/features:archive_param_file",
++            "@llvm//toolchain/features:compiler_param_file",
+             "@llvm//toolchain/features:parse_headers_wrapper",
+             "@llvm//toolchain/features/legacy:all_legacy_builtin_features",
+             # Always last (contains user_compile_flags and user_link_flags who should apply last).
+@@ -89,6 +92,7 @@ def cc_toolchain(name, tool_map, module_map = None, extra_args = []):
+         all_of = [
+             "@llvm//toolchain/features:prefer_pic_for_opt_binaries",
+             "@llvm//toolchain/features:archive_param_file",
++            "@llvm//toolchain/features:compiler_param_file",
+             # Always last (contains user_compile_flags and user_link_flags who should apply last).
+             "@llvm//toolchain/features/legacy:experimental_replace_legacy_action_config_features",
+         ],

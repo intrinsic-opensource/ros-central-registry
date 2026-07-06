@@ -189,6 +189,15 @@ build:windows --action_env=USERPROFILE
 build:windows --action_env=HOMEDRIVE
 build:windows --action_env=HOMEPATH
 
+# Windows caps a process command line at 32767 characters (CreateProcessW).
+# Packages with many include paths (anything pulling in OpenCV, for example)
+# blow past that and fail with "command is longer than CreateProcessW's limit".
+# Enable Bazel's compiler_param_file feature so C++ compile flags are written to
+# a @params file instead of the command line (the toolchain already enables the
+# archive/linker param files). This affects the target configuration only, so
+# the exec-config LLVM/clang-from-source tool build keeps its cache.
+build:windows --features=compiler_param_file
+
 ## TEST OPTIONS
 
 # This restricts our test sandboxes from accessing the network, which is

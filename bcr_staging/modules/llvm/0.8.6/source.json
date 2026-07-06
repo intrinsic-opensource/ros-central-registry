@@ -11,6 +11,8 @@
         "windows_shared_libcxxabi.patch": "sha256-z/xK4qyGs51HOv2e2mZdset8J1/nKyb5dlmaNlyDEG4=",
         "windows_shared_libunwind.patch": "sha256-/OjoKS88NmTqlDqNH0iua+KFD0gPZn9a6RUgcZzVgE0=",
         "windows_shared_args_windows.patch": "sha256-nNXnmUXCtyFHeis0UPn7TqBFtfiGGpYA+TKnQSgY/yw=",
-        "windows_shared_cxxstdlib.patch": "sha256-YAhVxu8rfCOdhFDH40c2Nzx0Vp9q5UtuuTmx7HRkxV8="
+        "windows_shared_cxxstdlib.patch": "sha256-YAhVxu8rfCOdhFDH40c2Nzx0Vp9q5UtuuTmx7HRkxV8=",
+        "windows_compiler_param_file_cc_toolchain.patch": "sha256-w4MDHgl4/vLFDL4oixbrg3dMsMLmgs0wf4Q2euz9Mo4=",
+        "windows_compiler_param_file_features_BUILD.patch": "sha256-eI4/MEGwAZR+zbUoIcH04xt3OZn5ITlV2FvSc1yOKKc="
     }
 }

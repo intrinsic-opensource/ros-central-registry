@@ -1,0 +1,22 @@
+diff --git a/toolchain/features/BUILD.bazel b/toolchain/features/BUILD.bazel
+index 2691b67..58e69f5 100644
+--- a/toolchain/features/BUILD.bazel
++++ b/toolchain/features/BUILD.bazel
+@@ -197,6 +197,17 @@ cc_feature(
+     feature_name = "archive_param_file",
+ )
+ 
++# Windows caps a process command line at 32767 characters. Vision packages that
++# pull in OpenCV compile with hundreds of -I include paths (one per SIMD-dispatch
++# virtual-include dir) and blow past that limit. compiler_param_file makes Bazel
++# write the C++ compile flags to a @params file instead of the command line, the
++# same way archive_param_file already does for archive actions. Enabled only for
++# the Windows target config via `build:windows --features=compiler_param_file`.
++cc_feature(
++    name = "compiler_param_file",
++    feature_name = "compiler_param_file",
++)
++
+ cc_feature(
+     name = "parse_headers_wrapper",
+     args = [

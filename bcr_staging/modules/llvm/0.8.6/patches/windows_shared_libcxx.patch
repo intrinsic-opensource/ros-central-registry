@@ -1,0 +1,51 @@
+diff --git a/3rd_party/llvm-project/x.x/libcxx/libcxx.BUILD.bazel b/3rd_party/llvm-project/x.x/libcxx/libcxx.BUILD.bazel
+index c13f2ae..e015b79 100644
+--- a/3rd_party/llvm-project/x.x/libcxx/libcxx.BUILD.bazel
++++ b/3rd_party/llvm-project/x.x/libcxx/libcxx.BUILD.bazel
+@@ -359,12 +359,41 @@ cc_runtime_stage0_static_library(
+ 
+ cc_runtime_stage1_shared_library(
+     name = "libcxx.shared",
+-    shared_lib_name = "libc++.so.1",
+-    user_link_flags = [
+-        "-Wl,-soname,libc++.so.1",
+-    ],
++    # PE/COFF has no SONAME and its loader finds DLLs by filename, so the
++    # versioned "libc++.so.1" name and -Wl,-soname are both wrong on Windows
++    # (ld.lld rejects -soname for PE targets). Emit "libc++.dll" there.
++    shared_lib_name = select({
++        "@platforms//os:windows": "libc++.dll",
++        "//conditions:default": "libc++.so.1",
++    }),
++    user_link_flags = select({
++        "@platforms//os:windows": [],
++        "//conditions:default": ["-Wl,-soname,libc++.so.1"],
++    }),
++    # The libc++/libc++abi ABI symbols are __declspec(dllexport) on MinGW, but
++    # rules_cc's cc_shared_library only writes them into the DLL's export table
++    # when the windows_export_all_symbols feature is on; without it libc++.dll
++    # exports nothing and every consumer fails to import the runtime. Enable it
++    # so libc++.dll actually exports the runtime ABI (the whole point of linking
++    # the C++ runtime dynamically on Windows).
++    features = select({
++        "@platforms//os:windows": ["windows_export_all_symbols"],
++        "//conditions:default": [],
++    }),
+     visibility = ["//visibility:public"],
+     deps = [
+         ":libcxx",
+-    ],
++    ] + select({
++        # On Linux the three runtime .so's cross-reference each other and the
++        # ELF loader resolves the undefined symbols at load time. PE/COFF has no
++        # such lazy interlib resolution, so a Windows libc++.dll must resolve
++        # the C++ ABI and unwinder symbols at link time: statically absorb them
++        # here to produce a single self-contained libc++.dll (which also means
++        # only one runtime DLL to locate at load time).
++        "@platforms//os:windows": [
++            "@llvm-project//libcxxabi:libcxxabi",
++            "@llvm-project//libunwind:libunwind",
++        ],
++        "//conditions:default": [],
++    }),
+ )
