@@ -112,11 +112,10 @@ jobs:
           python3-pytest-rerunfailures \
           python3-pytest-runner \
           python3-pytest-timeout \
-          python3-ament-package \
+          python3-rosinstall-generator \
           ros-dev-tools
         sudo rosdep init
         rosdep update
-        python3 -m pip install rosinstall-generator
 
     - name: Parse release and configure ROSDISTRO_INDEX_URL and DISTRO
       shell: bash
