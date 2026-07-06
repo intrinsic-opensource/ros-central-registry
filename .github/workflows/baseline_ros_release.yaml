@@ -104,7 +104,7 @@ jobs:
     - name: Generate repos file and import sources
       shell: bash
       run: |
-        python -m rosinstall_generator ${{ matrix.variant }} --rosdistro ${{ env.DISTRO }} --deps > ros2.repos
+        python -c "import sys; from rosinstall_generator.cli import main; sys.exit(main())" ${{ matrix.variant }} --rosdistro ${{ env.DISTRO }} --deps > ros2.repos
         mkdir -p src
         vcs import src < ros2.repos
 
