@@ -74,6 +74,10 @@ jobs:
       with:
         python-version: '3.12'
 
+    - name: Install ROS installation tools
+      shell: bash
+      run: pip install rosinstall-generator
+
     - name: Set up MSVC
       if: runner.os == 'Windows'
       uses: ilammy/msvc-dev-cmd@v1
@@ -100,7 +104,7 @@ jobs:
     - name: Generate repos file and import sources
       shell: bash
       run: |
-        rosinstall_generator ${{ matrix.variant }} --rosdistro ${{ env.DISTRO }} --deps > ros2.repos
+        python -m rosinstall_generator ${{ matrix.variant }} --rosdistro ${{ env.DISTRO }} --deps > ros2.repos
         mkdir -p src
         vcs import src < ros2.repos
 
