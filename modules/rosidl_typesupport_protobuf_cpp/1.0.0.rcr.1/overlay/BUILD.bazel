@@ -45,7 +45,12 @@ cc_library(
     srcs = glob(["src/**"]),
     hdrs = HEADERS,
     includes = ["include"],
-    local_defines = ros_local_defines(),
+    # The wstring_conversion helpers (write_to_string/write_to_u16string) are
+    # annotated with the BASE package's ROSIDL_TYPESUPPORT_PROTOBUF_PUBLIC macro
+    # (not the _CPP-suffixed one), so exporting them from this DLL on Windows
+    # requires the base ROSIDL_TYPESUPPORT_PROTOBUF_BUILDING_DLL define in
+    # addition to the ones ros_local_defines() derives for this package.
+    local_defines = ros_local_defines() + ["ROSIDL_TYPESUPPORT_PROTOBUF_BUILDING_DLL"],
     deps = DEPENDENCIES.values(),
 )
 

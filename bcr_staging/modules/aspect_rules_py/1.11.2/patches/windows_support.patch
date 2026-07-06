@@ -1,0 +1,153 @@
+diff -ur a/py/defs.bzl b/py/defs.bzl
+--- a/py/defs.bzl	2026-07-04 23:27:48.552254100 -0700
++++ b/py/defs.bzl	2026-07-05 07:50:00.950599600 -0700
+@@ -35,6 +35,8 @@
+ ```
+ """
+ 
++load("@aspect_rules_py_uv_host//:defs.bzl", "CURRENT_PLATFORM_OS")
++load("@rules_python//python:defs.bzl", _rules_python_binary = "py_binary", _rules_python_library = "py_library", _rules_python_test = "py_test")
+ load("//py/private:py_binary.bzl", _py_binary = "py_binary", _py_test = "py_test")
+ load("//py/private:py_image_layer.bzl", _py_image_layer = "py_image_layer")
+ load("//py/private:py_library.bzl", _py_library = "py_library")
+@@ -53,9 +55,69 @@
+ 
+ py_binary_rule = _py_binary
+ py_test_rule = _py_test
+-py_library = _py_library
+ py_unpacked_wheel = _py_unpacked_wheel
+ 
++# rules_py's venv/unpack/shim helper tools have no Windows binaries and its
++# venv-based launcher strategy assumes a POSIX host ("TODO: Windows" upstream).
++# On Windows hosts we transparently dispatch py_library/py_binary/py_test to
++# the rules_python implementations, which fully support Windows. On all other
++# platforms behavior is unchanged.
++_IS_WINDOWS_HOST = CURRENT_PLATFORM_OS == "windows"
++
++# Attributes specific to rules_py that the rules_python implementations do not
++# understand. None are currently used by rules_py-on-Windows consumers; they
++# are dropped (empty/None values only) or rejected when set.
++_RULES_PY_ONLY_ATTRS = ["package_collisions", "resolutions", "virtual_deps"]
++
++def _strip_rules_py_only_attrs(kwargs, kind):
++    for attr in _RULES_PY_ONLY_ATTRS:
++        if kwargs.pop(attr, None):
++            fail("{} attribute '{}' is not supported on Windows hosts".format(kind, attr))
++
++def _partition_py_srcs(kwargs):
++    """Move bare non-Python resource files from srcs to data.
++
++    rules_py accepts arbitrary resource files (py.typed, *.lark, templates,
++    ...) directly in srcs; rules_python only allows .py/.py3 there and expects
++    resources in data. Only bare in-package source files are moved: target
++    references (":gen", "@repo//:x", "//pkg:x") are left in srcs untouched,
++    because a rule there may itself produce the .py main/module (e.g. a
++    genrule that emits interface_generator.py), and moving it would break
++    main resolution or drop generated modules.
++    """
++    srcs = kwargs.get("srcs", None)
++    if not srcs or type(srcs) != type([]):
++        return
++    py_srcs = []
++    resources = []
++    for src in srcs:
++        s = str(src)
++        if s.startswith(":") or s.startswith("@") or s.startswith("//"):
++            # A target reference; its output kind is unknown here. Leave it.
++            py_srcs.append(src)
++        elif s.endswith(".py") or s.endswith(".py3"):
++            py_srcs.append(src)
++        else:
++            resources.append(src)
++    if resources:
++        data = list(kwargs.get("data", None) or [])
++        seen = {_label_key(d): True for d in data}
++        kwargs["srcs"] = py_srcs
++        kwargs["data"] = data + [r for r in resources if _label_key(r) not in seen]
++
++def _label_key(value):
++    """Normalize same-package label spellings (":foo" vs "foo") for comparison."""
++    s = str(value)
++    return s[1:] if s.startswith(":") else s
++
++def py_library(name, **kwargs):
++    if _IS_WINDOWS_HOST:
++        _strip_rules_py_only_attrs(kwargs, "py_library")
++        _partition_py_srcs(kwargs)
++        _rules_python_library(name = name, **kwargs)
++        return
++    _py_library(name = name, **kwargs)
++
+ py_image_layer = _py_image_layer
+ 
+ resolutions = _resolutions
+@@ -98,6 +160,21 @@
+         **kwargs: additional named parameters to `py_binary_rule`.
+     """
+ 
++    if _IS_WINDOWS_HOST:
++        _strip_rules_py_only_attrs(kwargs, "py_binary")
++        kwargs["srcs"] = srcs
++        _partition_py_srcs(kwargs)
++        if main == None and len(kwargs["srcs"]) == 1:
++            # rules_py falls back to a single src as the main; rules_python
++            # requires an explicit main unless a src matches the target name.
++            main = kwargs["srcs"][0]
++        _rules_python_binary(
++            name = name,
++            main = main,
++            **kwargs
++        )
++        return
++
+     # For a clearer DX when updating resolutions, the resolutions dict is "string" -> "label",
+     # where the rule attribute is a label-keyed-dict, so reverse them here.
+     resolutions = kwargs.pop("resolutions", None)
+@@ -128,6 +205,21 @@
+         **kwargs: additional named parameters to `py_binary_rule`.
+     """
+ 
++    if _IS_WINDOWS_HOST:
++        _strip_rules_py_only_attrs(kwargs, "py_test")
++        if pytest_main:
++            fail("py_test(pytest_main = True) is not supported on Windows hosts")
++        kwargs["srcs"] = srcs
++        _partition_py_srcs(kwargs)
++        if main == None and len(kwargs["srcs"]) == 1:
++            main = kwargs["srcs"][0]
++        _rules_python_test(
++            name = name,
++            main = main,
++            **kwargs
++        )
++        return
++
+     # Ensure that any other targets we write will be testonly like the py_test target
+     kwargs["testonly"] = True
+ 
+diff -ur a/uv/private/host/repository.bzl b/uv/private/host/repository.bzl
+--- a/uv/private/host/repository.bzl	2026-07-04 23:27:48.523964000 -0700
++++ b/uv/private/host/repository.bzl	2026-07-04 23:28:21.312645600 -0700
+@@ -55,7 +55,11 @@
+         else:
+             fail("Unknown libc from ldd --version %r" % res.stdout)
+ 
+-    # TODO: Windows
++    elif os == "windows":
++        # Windows has no libc; Python prebuilts and uv use the MSVC ABI. The
++        # version component is not consulted for msvc prebuilt selection.
++        return "msvc", "14.0"
++
+     # TODO: Other
+ 
+     fail("Unsupported platform {}".format(os))
+@@ -78,7 +82,8 @@
+ # DO NOT EDIT: automatically generated constraints list
+ CURRENT_PLATFORM_LIBC = {}
+ CURRENT_PLATFORM_VERSION = {}
+-""".format(repr(libc), repr(version)))
++CURRENT_PLATFORM_OS = {}
++""".format(repr(libc), repr(version), repr(_translate_os(rctx.os.name))))
+ 
+ host_platform_repo = repository_rule(
+     implementation = _host_platform_repo_impl,

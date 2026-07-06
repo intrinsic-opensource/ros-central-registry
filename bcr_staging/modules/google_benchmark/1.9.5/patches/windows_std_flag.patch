@@ -1,0 +1,15 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+index 993b261..e30e364 100644
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -21,7 +21,9 @@ COPTS = [
+ ]
+ 
+ MSVC_COPTS = [
+-    "/std:c++17",
++    # This registry builds Windows with clang/mingw, not MSVC; use the GCC-style
++    # standard flag instead of the rejected cl.exe /std:c++17.
++    "-std=c++17",
+ ]
+ 
+ config_setting(
