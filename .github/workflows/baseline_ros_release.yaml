@@ -21,7 +21,6 @@ on:
       - main
   workflow_dispatch:
     inputs:
-    inputs:
       distribution:
         description: 'Which distribution is the release for?'
         required: true
@@ -92,7 +91,7 @@ jobs:
       run: |
         INPUT_DISTRIBUTION="${{ inputs.distribution }}"
         INPUT_DISTRIBUTION="${INPUT_DISTRIBUTION:-lyrical}"
-        INPUT_DATE="${{ inputs.distribution }}"
+        INPUT_DATE="${{ inputs.date }}"
         INPUT_DATE="${INPUT_DATE:-2026-06-08}"
         RELEASE_NAME="${INPUT_DISTRIBUTION}/${INPUT_DATE}"
         echo "DISTRO=${INPUT_DISTRIBUTION}" >> $GITHUB_ENV
