@@ -111,7 +111,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_cpp)
         path: |
-          "bazel-testlogs/**/test.log"
+          "workspace/bazel-testlogs/**/test.log"
       if: always()
 
     # Test distribution with IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
@@ -125,7 +125,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_dynamic_cpp)
         path: |
-          "bazel-testlogs/**/test.log"
+          "workspace/bazel-testlogs/**/test.log"
       if: always()
 
     # Test distribution with IMPLEMENTATION=rmw_cyclonedds_cpp
@@ -139,7 +139,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_cyclonedds_cpp)
         path: |
-          "bazel-testlogs/**/test.log"
+          "workspace/bazel-testlogs/**/test.log"
       if: always()
 
     # Test distribution with IMPLEMENTATION=rmw_zenoh_cpp
@@ -155,7 +155,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_zenoh_cpp)
         path: |
-          "bazel-testlogs/**/test.log"
-          "zenohd-stdout.log"
-          "zenohd-stderr.log"
+          "workspace/bazel-testlogs/**/test.log"
+          "workspace/zenohd-stdout.log"
+          "workspace/zenohd-stderr.log"
       if: always()
