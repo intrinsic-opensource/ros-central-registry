@@ -70,6 +70,7 @@ jobs:
       shell: bash
       run: |
         RELEASE_INPUT="${{ inputs.release }}"
+        RELEASE_INPUT="${RELEASE_INPUT:-lyrical/2026-06-08}"
         DISTRO_NAME="${RELEASE_INPUT%%/*}"
         echo "DISTRO=$DISTRO_NAME" >> $GITHUB_ENV
         echo "ROSDISTRO_INDEX_URL=https://github.com/asymingt/rosdistro/releases/download/${RELEASE_INPUT}/index-v4.yaml" >> $GITHUB_ENV
