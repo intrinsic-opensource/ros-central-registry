@@ -106,7 +106,8 @@ jobs:
           python3-pytest-repeat \
           python3-pytest-rerunfailures \
           python3-pytest-runner \
-          python3-pytest-timeout
+          python3-pytest-timeout \
+          ros-dev-tools
 
     - name: Re-run rosdep update with custom index
       shell: bash
