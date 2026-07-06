@@ -99,7 +99,7 @@ rosidl_typesupport_introspection_c_aspect = aspect(
             providers = [CcInfo],
         ),
         "_cc_shared_dep": attr.label(
-            default = Label("@rosidl_typesupport_introspection_c//:rosidl_typesupport_introspection_c"),
+            default = Label("@rosidl_typesupport_introspection_c//:transitive_dynamic_deps"),
         ),
     },
     required_providers = [RosInterfaceInfo],

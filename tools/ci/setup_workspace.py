@@ -178,6 +178,16 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 build:macos --experimental_allow_unresolved_symlinks
 build:macos --nested_set_depth_limit=5000
 
+# setuptools/distutils' find_config_files() calls os.path.expanduser("~"),
+# which on Windows resolves via USERPROFILE (or HOMEDRIVE + HOMEPATH). The
+# --incompatible_strict_action_env flag above strips these from the build
+# action environment, making expanduser raise "Could not determine home
+# directory" inside the setup.py egg_info genrules that compute ament entry
+# points. Pass them through from the client environment (value-less
+# --action_env inherits the current value) so those genrules can run.
+build:windows --action_env=USERPROFILE
+build:windows --action_env=HOMEDRIVE
+build:windows --action_env=HOMEPATH
 
 ## TEST OPTIONS
 

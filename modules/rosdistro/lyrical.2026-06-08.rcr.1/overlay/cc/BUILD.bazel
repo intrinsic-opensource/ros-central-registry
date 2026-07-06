@@ -13,6 +13,8 @@
 # limitations under the License.
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library")
+load("@rules_cc//cc:defs.bzl", "cc_import")
+load("//cc:python_import.bzl", "py_import_lib_file")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -190,10 +192,33 @@ alias(
 )
 
 # pybind11
+#
+# On Windows the Python C API symbols (PyErr_*, etc.) are __declspec(dllimport),
+# so every extension module must link against the Python import library. On
+# ELF/Mach-O those symbols are left undefined and resolved at load time by the
+# interpreter, so no link-time dependency is needed there. Wrap the upstream
+# pybind11 target so all `_py` bindings that depend on @rosdistro//cc:pybind11
+# pick up the import library on Windows without touching each package.
 
-alias(
+py_import_lib_file(
+    name = "python_import_lib_file",
+    src = "@rules_python//python/cc:current_py_cc_libs",
+    lib_name = "python312.lib",
+)
+
+cc_import(
+    name = "python_import_lib",
+    static_library = ":python_import_lib_file",
+)
+
+cc_library(
     name = "pybind11",
-    actual = "@@pybind11_bazel++internal_configure_extension+pybind11//:pybind11",
+    deps = [
+        "@@pybind11_bazel++internal_configure_extension+pybind11//:pybind11",
+    ] + select({
+        "@platforms//os:windows": [":python_import_lib"],
+        "//conditions:default": [],
+    }),
 )
 
 # cyclonedds

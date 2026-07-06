@@ -95,6 +95,10 @@ pip.parse(
     hub_name = "pip_ros",
     python_version = "3.12",
     requirements_lock = "requirements.txt",
+    # The default lock is compiled on Linux and misses Windows-only packages
+    # (e.g. pytest's colorama dependency) and Windows wheel hashes, so Windows
+    # hosts use their own platform lock.
+    requirements_windows = "requirements_windows.txt",
     # Windows' file locking makes concurrent whl_library fetches reading the
     # same entry in the shared, machine-wide pip wheel cache
     # (%LOCALAPPDATA%\pip\cache\wheels) prone to PermissionError under
