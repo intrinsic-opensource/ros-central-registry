@@ -14,8 +14,7 @@
 
 name: check_deployment
 run-name: Checks documents build and deploys if necessary
-env:
-  ANDROID_HOME: ""
+
 on:
   pull_request:
     branches:
@@ -23,8 +22,17 @@ on:
   push:
     branches:
       - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
+
+env:
+  ANDROID_HOME: ""
+
 jobs:
   check_deployment: 
     runs-on: ubuntu-26.04
