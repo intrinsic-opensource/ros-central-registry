@@ -73,7 +73,7 @@ jobs:
 
     # Setup auth to allow pushing to the remote cache.
     - name: Authenticate to Google Cloud
-      uses: "google-github-actions/auth@71fee32a0bb7e97b4d33d548e7d957010649d8fa"
+      uses: "google-github-actions/auth@v3"
       with:
         workload_identity_provider: projects/771457463613/locations/global/workloadIdentityPools/github-automation/providers/build-dev
         service_account: github-automation-bot@gha-intrinsic-opensource-rcr.iam.gserviceaccount.com
@@ -107,7 +107,7 @@ jobs:
       run: |
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
     - name: Test logs (rmw_fastrtps_cpp)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_cpp)
         path: |
@@ -121,7 +121,7 @@ jobs:
       run: |
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
     - name: Test logs (rmw_fastrtps_dynamic_cpp)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_dynamic_cpp)
         path: |
@@ -135,7 +135,7 @@ jobs:
       run: |
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
     - name: Test logs (rmw_cyclonedds_cpp)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_cyclonedds_cpp)
         path: |
@@ -151,7 +151,7 @@ jobs:
         trap "pkill -f rmw_zenohd 2>/dev/null || true" EXIT
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
     - name: Test logs (rmw_zenoh_cpp)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_zenoh_cpp)
         path: |
