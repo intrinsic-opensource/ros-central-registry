@@ -1,0 +1,118 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: baseline_ros_release
+run-name: Baseline colcon build and test for coverage and performance
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'Release in DISTRIBUTION/YYYY-MM-DD. Default is lyrical/2026-06-08.'
+        required: true
+        default: lyrical/2026-06-08
+        type: string
+jobs:
+  baseline-new-release:
+    permissions:
+      pull-requests: write
+      contents: write
+    name: ${{ matrix.variant }}_${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        variant:
+        - ros_core
+        # - ros_base
+        # - perception
+        # - desktop
+        # - simulation
+        # - desktop_full
+        os:
+        - ubuntu-26.04
+        - ubuntu-26.04-arm
+        - macos-26-intel
+        - macos-26
+        - windows-2025
+        - windows-11-arm
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Set up MSVC
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Setup ROS
+      uses: ros-tooling/setup-ros@v0.7
+
+    - name: Parse release and configure ROSDISTRO_INDEX_URL
+      shell: bash
+      run: |
+        RELEASE_INPUT="${{ inputs.release }}"
+        DISTRO_NAME="${RELEASE_INPUT%%/*}"
+        echo "DISTRO=$DISTRO_NAME" >> $GITHUB_ENV
+        echo "ROSDISTRO_INDEX_URL=https://github.com/asymingt/rosdistro/releases/download/${RELEASE_INPUT}/index-v4.yaml" >> $GITHUB_ENV
+
+    - name: Re-run rosdep update with custom index
+      shell: bash
+      run: |
+        rosdep update
+
+    - name: Generate repos file and import sources
+      shell: bash
+      run: |
+        rosinstall_generator ${{ matrix.variant }} --rosdistro ${{ env.DISTRO }} --deps > ros2.repos
+        mkdir -p src
+        vcs import src < ros2.repos
+
+    - name: Install system dependencies using rosdep
+      shell: bash
+      run: |
+        if [ "${{ runner.os }}" = "Windows" ]; then
+          rosdep install --from-paths src --ignore-src -y --rosdistro ${{ env.DISTRO }} || true
+        else
+          rosdep install --from-paths src --ignore-src -y --rosdistro ${{ env.DISTRO }}
+        fi
+
+    - name: Colcon Build
+      shell: bash
+      run: |
+        start_time=$(date +%s)
+        colcon build --symlink-install --packages-up-to ${{ matrix.variant }}
+        end_time=$(date +%s)
+        duration=$((end_time - start_time))
+        echo "### Build Duration: ${duration} seconds" >> $GITHUB_STEP_SUMMARY
+
+    - name: Colcon Test
+      shell: bash
+      run: |
+        start_time=$(date +%s)
+        colcon test --packages-up-to ${{ matrix.variant }}
+        end_time=$(date +%s)
+        duration=$((end_time - start_time))
+        echo "### Test Duration: ${duration} seconds" >> $GITHUB_STEP_SUMMARY
+
+    - name: Archive Test Results (JUnit XML)
+      uses: actions/upload-artifact@v7
+      if: always()
+      with:
+        name: test-results-${{ matrix.variant }}-${{ matrix.os }}
+        path: |
+          build/**/*.xml
