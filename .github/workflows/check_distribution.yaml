@@ -64,46 +64,85 @@ jobs:
         large-packages: true
         docker-images: true
         swap-storage: true
-    - name: Checkout repository and submodules
+  
+    # Setup bazel with controlled caching
+    - name: Checkout repository
       uses: actions/checkout@v7
       with:
         fetch-depth: 0
+
+    # Setup auth to allow pushing to the remote cache.
     - name: Authenticate to Google Cloud
       uses: "google-github-actions/auth@71fee32a0bb7e97b4d33d548e7d957010649d8fa"
       with:
         workload_identity_provider: projects/771457463613/locations/global/workloadIdentityPools/github-automation/providers/build-dev
         service_account: github-automation-bot@gha-intrinsic-opensource-rcr.iam.gserviceaccount.com
         create_credentials_file: true
+
+    # Setup bazel with controlled caching
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.19.0
       with:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
         repository-cache: false
+
+    # Setup a bare workspace for the entire release.
     - name: Prepare workspace
       id: prepare_workspace
       working-directory: .
       run: |
         bazel run //tools/ci:setup_workspace -- --release ${{ matrix.ros }}
+
+    # Build distribution
     - name: Build
       id: build
       run: |
         bazel build --config ci --config=${{ matrix.variant }}
+
+    # Test distribution with IMPLEMENTATION=rmw_fastrtps_cpp
     - name: Test (rmw_fastrtps_cpp)
       continue-on-error: true
       id: test_rmw_fastrtps_cpp
       run: |
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+    - name: Test logs (rmw_fastrtps_cpp)
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_cpp)
+        path: |
+          "bazel-testlogs/**/test.log"
+      if: always()
+
+    # Test distribution with IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
     - name: Test (rmw_fastrtps_dynamic_cpp)
       id: test_rmw_fastrtps_dynamic_cpp
       continue-on-error: true
       run: |
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+    - name: Test logs (rmw_fastrtps_dynamic_cpp)
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_dynamic_cpp)
+        path: |
+          "bazel-testlogs/**/test.log"
+      if: always()
+
+    # Test distribution with IMPLEMENTATION=rmw_cyclonedds_cpp
     - name: Test (rmw_cyclonedds_cpp)
       id: test_rmw_cyclonedds_cpp
       continue-on-error: true
       run: |
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+    - name: Test logs (rmw_cyclonedds_cpp)
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_cyclonedds_cpp)
+        path: |
+          "bazel-testlogs/**/test.log"
+      if: always()
+
+    # Test distribution with IMPLEMENTATION=rmw_zenoh_cpp
     - name: Test (rmw_zenoh_cpp)
       id: test_rmw_zenoh_cpp
       continue-on-error: true
@@ -111,3 +150,12 @@ jobs:
         bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
         trap "pkill -f rmw_zenohd 2>/dev/null || true" EXIT
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
+    - name: Test logs (rmw_zenoh_cpp)
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_zenoh_cpp)
+        path: |
+          "bazel-testlogs/**/test.log"
+          "zenohd-stdout.log"
+          "zenohd-stderr.log"
+      if: always()
