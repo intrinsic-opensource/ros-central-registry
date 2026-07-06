@@ -145,7 +145,7 @@ jobs:
       shell: bash
       run: |
         start_time=$(date +%s)
-        colcon build --symlink-install --packages-up-to ${{ matrix.variant }}
+        colcon build --packages-up-to ${{ matrix.variant }}
         end_time=$(date +%s)
         duration=$((end_time - start_time))
         echo "### Build Duration: ${duration} seconds" >> $GITHUB_STEP_SUMMARY
@@ -154,7 +154,7 @@ jobs:
       shell: bash
       run: |
         start_time=$(date +%s)
-        colcon test --packages-up-to ${{ matrix.variant }}
+        colcon test-result --packages-up-to ${{ matrix.variant }}
         end_time=$(date +%s)
         duration=$((end_time - start_time))
         echo "### Test Duration: ${duration} seconds" >> $GITHUB_STEP_SUMMARY
