@@ -69,14 +69,21 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v7
 
+    # We must not run setup-python on Linux. setup-python overrides the python3
+    # executable pointing to a custom environment that lacks all system python3-*
+    # packages installed via apt (e.g. numpy, yaml) which are required to build ROS 2.
     - name: Set up Python
+      if: runner.os != 'Linux'
       uses: actions/setup-python@v6
       with:
         python-version: '3.12'
 
+    # On Linux, python3-rosinstall-generator is installed by apt via ros-dev-tools.
+    # On macOS and Windows we must install it manually.
     - name: Install ROS installation tools
+      if: runner.os != 'Linux'
       shell: bash
-      run: pip install rosinstall-generator
+      run: python3 -m pip install rosinstall-generator
 
     - name: Set up MSVC
       if: runner.os == 'Windows'
@@ -84,6 +91,24 @@ jobs:
 
     - name: Setup ROS
       uses: ros-tooling/setup-ros@v0.7
+
+    # Install additional ROS 2 build/testing dependencies on Linux.
+    # We must use apt here so they are installed in the system Python environment.
+    - name: Install ROS 2 build dependencies (Linux)
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          python3-mypy \
+          python3-pip \
+          python3-pytest \
+          python3-pytest-cov \
+          python3-pytest-mock \
+          python3-pytest-repeat \
+          python3-pytest-rerunfailures \
+          python3-pytest-runner \
+          python3-pytest-timeout
 
     - name: Re-run rosdep update with custom index
       shell: bash
@@ -104,7 +129,7 @@ jobs:
     - name: Generate repos file and import sources
       shell: bash
       run: |
-        python -c "import sys; from rosinstall_generator.cli import main; sys.exit(main())" ${{ matrix.variant }} --rosdistro ${{ env.DISTRO }} --deps > ros2.repos
+        python3 -c "import sys; from rosinstall_generator.cli import main; sys.exit(main())" ${{ matrix.variant }} --rosdistro ${{ env.DISTRO }} --deps > ros2.repos
         mkdir -p src
         vcs import src < ros2.repos
 
