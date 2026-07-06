@@ -21,10 +21,21 @@ on:
       - main
   workflow_dispatch:
     inputs:
-      release:
-        description: 'Release in DISTRIBUTION/YYYY-MM-DD. Default is lyrical/2026-06-08.'
+    inputs:
+      distribution:
+        description: 'Which distribution is the release for?'
         required: true
-        default: lyrical/2026-06-08
+        type: choice
+        options:
+        - 'jazzy'
+        - 'kilted'
+        - 'lyrical'
+        - 'rolling'
+        default: 'lyrical'
+      date:
+        description: 'Release in YYYY-MM-DD. Default is 2026-06-08.'
+        default: '2026-06-08'
+        required: true
         type: string
 jobs:
   baseline-new-release:
@@ -61,24 +72,26 @@ jobs:
 
     - name: Set up MSVC
       if: runner.os == 'Windows'
-      uses: ilammy/msvc-dev-cmd@v1
+      uses: ilammy/msvc-dev-cmd@460a772e4cf7358f9f2f23773240813e40e7a894
 
     - name: Setup ROS
       uses: ros-tooling/setup-ros@v0.7
-
-    - name: Parse release and configure ROSDISTRO_INDEX_URL
-      shell: bash
-      run: |
-        RELEASE_INPUT="${{ inputs.release }}"
-        RELEASE_INPUT="${RELEASE_INPUT:-lyrical/2026-06-08}"
-        DISTRO_NAME="${RELEASE_INPUT%%/*}"
-        echo "DISTRO=$DISTRO_NAME" >> $GITHUB_ENV
-        echo "ROSDISTRO_INDEX_URL=https://github.com/asymingt/rosdistro/releases/download/${RELEASE_INPUT}/index-v4.yaml" >> $GITHUB_ENV
 
     - name: Re-run rosdep update with custom index
       shell: bash
       run: |
         rosdep update
+
+    - name: Parse release and configure ROSDISTRO_INDEX_URL and DISTRO
+      shell: bash
+      run: |
+        INPUT_DISTRIBUTION="${{ inputs.distribution }}"
+        INPUT_DISTRIBUTION="${INPUT_DISTRIBUTION:-lyrical}"
+        INPUT_DATE="${{ inputs.distribution }}"
+        INPUT_DATE="${INPUT_DATE:-2026-06-08}"
+        RELEASE_NAME="${INPUT_DISTRIBUTION}/${INPUT_DATE}"
+        echo "DISTRO=${INPUT_DISTRIBUTION}" >> $GITHUB_ENV
+        echo "ROSDISTRO_INDEX_URL=https://github.com/asymingt/rosdistro/releases/download/${RELEASE_NAME}/index-v4.yaml" >> $GITHUB_ENV
 
     - name: Generate repos file and import sources
       shell: bash
