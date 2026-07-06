@@ -101,7 +101,7 @@ rosidl_typesupport_fastrtps_c_aspect = aspect(
             providers = [CcInfo],
         ),
         "_cc_shared_dep": attr.label(
-            default = Label("@rosidl_typesupport_fastrtps_c//:rosidl_typesupport_fastrtps_c"),
+            default = Label("@rosidl_typesupport_fastrtps_c//:transitive_dynamic_deps"),
         ),
     },
     required_providers = [RosInterfaceInfo],

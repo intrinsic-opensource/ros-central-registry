@@ -51,7 +51,10 @@ cc_shared_library(
 collect_transitive_dynamic_deps(
     name = "transitive_dynamic_deps",
     dynamic_deps = [":rosidl_runtime_c"],
-    visibility = ["//visibility:private"],
+    # Public so the rosidl generator aspects can link a message fragment against
+    # the full transitive DLL closure on Windows (see rosidl_generator_c's
+    # _cc_shared_dep), where a DLL may not contain undefined symbols.
+    visibility = ["//visibility:public"],
 )
 
 ### TESTING

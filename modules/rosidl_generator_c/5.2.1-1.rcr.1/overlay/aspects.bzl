@@ -113,7 +113,16 @@ rosidl_generator_c_aspect = aspect(
             providers = [CcInfo],
         ),
         "_cc_shared_dep": attr.label(
-            default = Label("@rosidl_runtime_c//:rosidl_runtime_c"),
+            # On Windows a DLL may not carry undefined symbols, so each fragment
+            # must link the *full* transitive shared-library closure it uses --
+            # not just rosidl_runtime_c but also its dependencies (rcutils,
+            # rosidl_typesupport_interface, ...), which the generated C bindings
+            # call into directly. transitive_dynamic_deps collects that closure;
+            # linking against just @rosidl_runtime_c//:rosidl_runtime_c leaves
+            # e.g. rcutils_get_default_allocator undefined at link time. On Linux
+            # this attribute is unused (fragments statically bundle their deps)
+            # and on Darwin the extra DLLs are harmless.
+            default = Label("@rosidl_runtime_c//:transitive_dynamic_deps"),
         ),
     },
     required_providers = [RosInterfaceInfo],

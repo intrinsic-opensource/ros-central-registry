@@ -14,7 +14,7 @@
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 load("@rosdistro//ament:defs.bzl", "ament_package")
-load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps")
+load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps", "ros_local_defines")
 load("@rosdistro//python:defs.bzl", "py_pytest")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library")
 
@@ -46,6 +46,7 @@ DEPENDENCIES = {
 
 cc_library(
     name = "rosidl_typesupport_fastrtps_cpp_library",
+    local_defines = ros_local_defines(),
     srcs = glob(["src/**/*.cpp"]),
     hdrs = HEADERS,
     includes = ["include"],
@@ -69,7 +70,7 @@ cc_shared_library(
 collect_transitive_dynamic_deps(
     name = "transitive_dynamic_deps",
     dynamic_deps = [":rosidl_typesupport_fastrtps_cpp"],
-    visibility = ["//visibility:private"],
+    visibility = ["//visibility:public"],
 )
 
 ### PYTHON LIBRARIES

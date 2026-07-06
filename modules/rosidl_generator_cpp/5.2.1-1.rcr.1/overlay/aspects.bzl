@@ -112,7 +112,7 @@ rosidl_generator_cpp_aspect = aspect(
             providers = [CcInfo],
         ),
         "_cc_shared_dep": attr.label(
-            default = Label("@rosidl_runtime_cpp//:rosidl_runtime_cpp"),
+            default = Label("@rosidl_runtime_cpp//:transitive_dynamic_deps"),
         ),
     },
     required_providers = [RosInterfaceInfo],

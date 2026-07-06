@@ -31,6 +31,12 @@ cc_library(
     ],
     hdrs = glob(["include/**/*.hpp"]),
     includes = ["include"],
+    # keyboard_handler's visibility_control.hpp gates dllexport vs dllimport
+    # on KEYBOARD_HANDLER_BUILDING_LIBRARY (not the ament-standard
+    # <PKG>_BUILDING_DLL). Define it while compiling the library's own sources
+    # so its public API resolves to dllexport on Windows. No-op off Windows,
+    # where the macro block is guarded by _WIN32/__CYGWIN__.
+    local_defines = ["KEYBOARD_HANDLER_BUILDING_LIBRARY"],
 )
 
 cc_shared_library(

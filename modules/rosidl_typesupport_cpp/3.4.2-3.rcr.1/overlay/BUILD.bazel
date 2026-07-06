@@ -17,6 +17,7 @@ load("@rosdistro//ament:defs.bzl", "ament_package")
 load("@rosdistro//cc:defs.bzl", "ros_local_defines")
 load("@rosdistro//python:defs.bzl", "py_pytest")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library")
+load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -36,6 +37,11 @@ HEADERS = glob([
 
 DEPENDENCIES = {
     "@rcpputils//:rcpputils": "@rcpputils//:rcpputils_library",
+    # Sources call rcutils directly (RCUTILS_SET_ERROR_MSG and friends in
+    # type_support_dispatch), so on Windows -- where a DLL may not contain
+    # undefined symbols -- rcutils.dll must be a direct dynamic dependency
+    # rather than a transitive one. Harmless and truthful on other platforms.
+    "@rcutils//:rcutils": "@rcutils//:rcutils_library",
     "@rosidl_typesupport_c//:rosidl_typesupport_c": "@rosidl_typesupport_c//:rosidl_typesupport_c_library",
 }
 
@@ -113,4 +119,13 @@ ament_package(
         "@rosidl_typesupport_interface//:ament_package",
         "@rosidl_typesupport_introspection_cpp//:ament_package",
     ],
+)
+
+# Public so the rosidl generator aspects can link a message fragment against
+# the full transitive DLL closure on Windows (see the aspects' _cc_shared_dep),
+# where a DLL may not contain undefined symbols.
+collect_transitive_dynamic_deps(
+    name = "transitive_dynamic_deps",
+    dynamic_deps = [":rosidl_typesupport_cpp"],
+    visibility = ["//visibility:public"],
 )

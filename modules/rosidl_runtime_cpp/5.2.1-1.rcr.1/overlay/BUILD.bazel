@@ -51,7 +51,7 @@ cc_shared_library(
 collect_transitive_dynamic_deps(
     name = "transitive_dynamic_deps",
     dynamic_deps = [":rosidl_runtime_cpp"],
-    visibility = ["//visibility:private"],
+    visibility = ["//visibility:public"],
 )
 
 ### TESTING

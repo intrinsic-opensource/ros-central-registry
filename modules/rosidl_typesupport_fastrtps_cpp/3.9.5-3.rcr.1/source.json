@@ -4,8 +4,8 @@
     "strip_prefix": "rosidl_typesupport_fastrtps-release-release-lyrical-rosidl_typesupport_fastrtps_cpp-3.9.5-3",
     "patch_strip": 1,
     "overlay": {
-        "aspects.bzl": "sha256-2XTN45Q+Ipybj9U9EflvG9MsI/0YNDPbon+WsfgtM+c=",
-        "BUILD.bazel": "sha256-p8ZtbAc5yqZ+INVwygPOqbjcg5kDpvGufiVMtTKni40=",
+        "aspects.bzl": "sha256-3TJfJV6qFUyvDPhdfAL7lSfsoR8qSB+esdqkF55yY2o=",
+        "BUILD.bazel": "sha256-iR6sFJK5LjleVF7i98rlOfasUq81An0hHLCDdf/lktA=",
         "defs.bzl": "sha256-NU6MmpsKTQJE+5DJiAhNbNR2nLDix+d8DuyMxKCYq64=",
         "types.bzl": "sha256-RLcmpOqdP9NKbPcwr7NXcW2eGpKVlvbeWb0ppPYJtYE=",
         "test/msg/BUILD.bazel": "sha256-9nEFAT5vzZJtPwqJCT1X0YOlhIJlJ2/6iDVJwmQCi5o="

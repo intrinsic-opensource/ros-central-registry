@@ -26,6 +26,12 @@ def ros_local_defines(name = None):
         # consulted. local_defines (unlike defines) isn't propagated to
         # consumers, so this correctly only affects this target's own TUs.
         "{}_BUILDING_DLL".format(package_name.upper()),
+        # A sizeable minority of packages (rcpputils, rcutils, class_loader,
+        # ...) predate the _BUILDING_DLL convention and gate their visibility
+        # macro on <PACKAGE>_BUILDING_LIBRARY instead. Define that spelling too
+        # so their public API (including class vtables) resolves to dllexport
+        # when building the library; the unused spelling is harmless.
+        "{}_BUILDING_LIBRARY".format(package_name.upper()),
     ]
 
 def ros_exports_header(name, out, library = None, **kwargs):

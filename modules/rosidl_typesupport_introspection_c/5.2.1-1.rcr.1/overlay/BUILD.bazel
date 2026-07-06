@@ -15,6 +15,7 @@
 load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 load("@rosdistro//ament:defs.bzl", "ament_package")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library")
+load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps", "ros_local_defines")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -33,6 +34,7 @@ HEADERS = glob(["include/**/*.h"])
 
 cc_library(
     name = "rosidl_typesupport_introspection_c_library",
+    local_defines = ros_local_defines(),
     srcs = glob(["src/**/*.c"]),
     hdrs = HEADERS,
     includes = ["include"],
@@ -92,4 +94,13 @@ ament_package(
         "@rosidl_runtime_c//:ament_package",
         "@rosidl_typesupport_interface//:ament_package",
     ],
+)
+
+# Public so the rosidl generator aspects can link a message fragment against
+# the full transitive DLL closure on Windows (see the aspects' _cc_shared_dep),
+# where a DLL may not contain undefined symbols.
+collect_transitive_dynamic_deps(
+    name = "transitive_dynamic_deps",
+    dynamic_deps = [":rosidl_typesupport_introspection_c"],
+    visibility = ["//visibility:public"],
 )
