@@ -44,7 +44,7 @@
  
  extern const char * typesupport_identifier;
  
-@@ -53,39 +77,47 @@
+@@ -53,39 +77,51 @@
        }
        rcpputils::SharedLibrary * lib = nullptr;
  
@@ -78,7 +78,11 @@
 -        }
 -
 -        std::string library_name;
++        #if defined(__APPLE__)
++        const std::string library_name = "lib" + package_name + "__" + typesupport_name + ".dylib";
++        #else
 +        const std::string library_name = "lib" + package_name + "__" + typesupport_name + ".so";
++        #endif
          try {
 -          library_name = rcpputils::get_platform_library_name(library_basename);
 -        } catch (const std::runtime_error & e) {

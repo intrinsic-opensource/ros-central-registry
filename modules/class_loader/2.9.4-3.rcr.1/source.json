@@ -9,6 +9,7 @@
     },
     "patches": {
         "include__class_loader__class_loader_core__hpp.patch": "sha256-UyFWUuNJ6tOcbjm8dBKvIe7gUCBHrw2BW7J1yp5HUtw=",
-        "src__class_loader__cpp.patch": "sha256-nTTevx0fTdElBthJLz0KfDsnspGLH9owDclzvthNd2k="
+        "src__class_loader__cpp.patch": "sha256-hfxeHSMAsP5TmC3/h93WQ6C4BVzRp1yfwlCHsVk4izA=",
+        "src__multi_library_class_loader__cpp.patch": "sha256-/l0boPH3DEcYpblpwEtTkgb7IBzSGKfGUQIAo4NtjnI="
     }
 }

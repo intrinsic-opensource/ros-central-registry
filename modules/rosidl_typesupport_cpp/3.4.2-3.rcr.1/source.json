@@ -13,7 +13,7 @@
     "patches": {
         "resource__msg__type_support__cpp__em.patch": "sha256-RHKrwsMjA+1SoFHtY55ylWqZCfu26RqjQa3nlf0He+s=",
         "rosidl_typesupport_cpp____init____py.patch": "sha256-SsLahD1kE3+75GNOae2o9s/bHqqV2DdgGsaxrzsIkYA=",
-        "src__type_support_dispatch__hpp.patch": "sha256-/ziUzkC3SUP57jFDzznDCn38lWDheSH12qmH4d3QNBA=",
+        "src__type_support_dispatch__hpp.patch": "sha256-wFD1O9XzM4F/P015MdOmn3vBzLj83rfnOFmxBVbORWI=",
         "resource__srv__type_support__cpp__em.patch": "sha256-SwdZlRegv4uFiLUQjjh+jpmoW/MnGIWBBzzeZxduO1A="
     }
 }
