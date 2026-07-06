@@ -15,6 +15,10 @@
 name: baseline_ros_release
 run-name: Baseline colcon build and test for coverage and performance
 on:
+  # TODO(asymingt) - remove.
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       release:
