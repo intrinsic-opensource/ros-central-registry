@@ -112,6 +112,7 @@ jobs:
           python3-pytest-rerunfailures \
           python3-pytest-runner \
           python3-pytest-timeout \
+          python3-ament-package \
           ros-dev-tools
         sudo rosdep init
         rosdep update
