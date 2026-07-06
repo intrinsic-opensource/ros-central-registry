@@ -90,7 +90,7 @@ jobs:
     # - name: Setup ROS
     #   uses: ros-tooling/setup-ros@v0.7
 
-    # Install additional ROS 2 build/testing dependencies on Linux.
+    # Linux platform configuration
     - name: Install ROS 2 build dependencies (Linux)
       if: runner.os == 'Linux'
       shell: bash
@@ -116,6 +116,12 @@ jobs:
           ros-dev-tools
         sudo rosdep init
         rosdep update
+
+    - name: Install colcon mixins
+      shell: bash
+      run: |
+        colcon mixin add default https://github.com/colcon/colcon-mixin-repository/raw/master/index.yaml
+        colcon mixin update default
 
     - name: Parse release and configure ROSDISTRO_INDEX_URL and DISTRO
       shell: bash
