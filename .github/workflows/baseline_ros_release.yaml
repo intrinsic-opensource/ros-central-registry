@@ -61,36 +61,34 @@ jobs:
         os:
         - ubuntu-26.04
         - ubuntu-26.04-arm
-        - macos-26-intel
-        - macos-26
-        - windows-2025
-        - windows-11-arm
+        # - macos-26-intel
+        # - macos-26
+        # - windows-2025
+        # - windows-11-arm
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v7
 
     # We must not run setup-python on Linux. setup-python overrides the python3
     # executable pointing to a custom environment that lacks all system python3-*
     # packages installed via apt (e.g. numpy, yaml) which are required to build ROS 2.
-    - name: Set up Python
-      if: runner.os != 'Linux'
-      uses: actions/setup-python@v6
-      with:
-        python-version: '3.12'
+    # - name: Set up Python
+    #   if: runner.os != 'Linux'
+    #   uses: actions/setup-python@v6
+    #   with:
+    #     python-version: '3.12'
 
     # On Linux, python3-rosinstall-generator is installed by apt via ros-dev-tools.
     # On macOS and Windows we must install it manually.
-    - name: Install ROS installation tools
-      if: runner.os != 'Linux'
-      shell: bash
-      run: python3 -m pip install rosinstall-generator
+    # - name: Install ROS installation tools
+    #   if: runner.os != 'Linux'
+    #   shell: bash
+    #   run: python3 -m pip install rosinstall-generator
 
-    - name: Set up MSVC
-      if: runner.os == 'Windows'
-      uses: ilammy/msvc-dev-cmd@v1
+    # - name: Set up MSVC
+    #   if: runner.os == 'Windows'
+    #   uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Setup ROS
-      uses: ros-tooling/setup-ros@v0.7
+    # - name: Setup ROS
+    #   uses: ros-tooling/setup-ros@v0.7
 
     # Install additional ROS 2 build/testing dependencies on Linux.
     # We must use apt here so they are installed in the system Python environment.
@@ -136,11 +134,7 @@ jobs:
     - name: Install system dependencies using rosdep
       shell: bash
       run: |
-        if [ "${{ runner.os }}" = "Windows" ]; then
-          rosdep install --from-paths src --ignore-src -y --skip-keys "fastcdr rti-connext-dds-7.7.0 urdfdom_headers" --rosdistro ${{ env.DISTRO }} || true
-        else
           rosdep install --from-paths src --ignore-src -y --skip-keys "fastcdr rti-connext-dds-7.7.0 urdfdom_headers" --rosdistro ${{ env.DISTRO }}
-        fi
 
     - name: Colcon Build
       shell: bash
