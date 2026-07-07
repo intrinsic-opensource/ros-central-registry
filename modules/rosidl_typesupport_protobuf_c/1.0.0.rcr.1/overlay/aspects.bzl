@@ -21,6 +21,7 @@ load("@rosidl_generator_cpp//:types.bzl", "RosCcBindingsInfo")
 load("@rosidl_generator_type_description//:types.bzl", "RosTypeDescriptionInfo")
 load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
+load("@rules_cc//cc/common:cc_shared_library_info.bzl", "CcSharedLibraryInfo")
 load(":types.bzl", "RosCTypesupportProtobufInfo")
 
 def _rosidl_typesupport_protobuf_c_aspect_impl(target, ctx):
@@ -40,7 +41,7 @@ def _rosidl_typesupport_protobuf_c_aspect_impl(target, ctx):
     # rosidl_typesupport_protobuf_c_library is only needed for its headers
     # here -- linking it in statically would duplicate its global state
     # into every message's typesupport fragment. Route it through
-    # header_only_deps/dynamic_dep_libraries so every fragment links
+    # header_only_deps/dynamic_dep_linker_inputs so every fragment links
     # against the single canonical shared library instead. See
     # generate_compilation_information's docstring.
     header_only_deps = [dep[CcInfo] for dep in ctx.attr._c_deps if CcInfo in dep]
@@ -65,7 +66,7 @@ def _rosidl_typesupport_protobuf_c_aspect_impl(target, ctx):
         srcs = srcs,
         deps = deps,
         header_only_deps = header_only_deps,
-        dynamic_dep_libraries = ctx.attr._cc_shared_dep[DefaultInfo].files.to_list(),
+        dynamic_dep_linker_inputs = [ctx.attr._cc_shared_dep[CcSharedLibraryInfo].linker_input],
         include_dirs = include_dirs,
     )
 

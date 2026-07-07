@@ -174,7 +174,7 @@ def generate_compilation_information(
         include_dirs = [],
         deps = [],
         header_only_deps = [],
-        dynamic_dep_libraries = [],
+        dynamic_dep_linker_inputs = [],
         custom_name = None):
     """Generate language bindings
 
@@ -184,20 +184,30 @@ def generate_compilation_information(
             for a singleton library (e.g. rosidl_typesupport_cpp itself)
             that every generated fragment needs to *compile* against but
             must never duplicate into its own object code -- see
-            dynamic_dep_libraries.
-        dynamic_dep_libraries: pre-built shared library Files (e.g. the
-            corresponding cc_shared_library's .dylib/.so) to link against
-            dynamically instead of statically. Every message/typesupport
-            fragment here gets compiled into its own standalone shared
-            library; if a singleton dependency's object code were pulled in
-            via deps/header_only_deps' linking_context instead, each
-            fragment would get its own private copy of that dependency's
-            global state (e.g. rosidl_typesupport_cpp's typesupport
-            identifier constant). On Linux the ELF loader merges same-named
-            globals across shared objects by default so the duplication is
-            invisible; Darwin's two-level namespace does not merge them,
-            so two fragments' copies of "the same" global can disagree at
-            runtime. Route singleton deps through here instead of deps.
+            dynamic_dep_linker_inputs.
+        dynamic_dep_linker_inputs: LinkerInputs (e.g.
+            CcSharedLibraryInfo.linker_input from the corresponding
+            cc_shared_library's transitive closure) to link against
+            dynamically instead of statically. These already wrap
+            fully-formed LibraryToLink objects -- notably ones Bazel has
+            already routed through its solib symlink machinery, because
+            they come from a cc_shared_library's own dynamic_deps closure
+            (see collect_transitive_dynamic_deps in rosdistro's cc/rules.bzl)
+            -- so they're merged into a LinkingContext directly rather than
+            rebuilt via cc_common.create_library_to_link(), which asserts
+            its `dynamic_library` file isn't itself already a solib symlink
+            and crashes Bazel with an IllegalArgumentException in
+            SolibSymlinkAction otherwise. Every message/typesupport fragment
+            here gets compiled into its own standalone shared library; if a
+            singleton dependency's object code were pulled in via
+            deps/header_only_deps' linking_context instead, each fragment
+            would get its own private copy of that dependency's global state
+            (e.g. rosidl_typesupport_cpp's typesupport identifier constant).
+            On Linux the ELF loader merges same-named globals across shared
+            objects by default so the duplication is invisible; Darwin's
+            two-level namespace does not merge them, so two fragments'
+            copies of "the same" global can disagree at runtime. Route
+            singleton deps through here instead of deps.
     """
 
     # Query for the current CC toolchain and feature set.
@@ -258,23 +268,15 @@ def generate_compilation_information(
 
     static_linking_contexts = [dep.linking_context for dep in deps]
 
-    dynamic_linking_contexts = []
-    for lib_file in dynamic_dep_libraries:
-        library_to_link = cc_common.create_library_to_link(
-            actions = ctx.actions,
-            feature_configuration = feature_configuration,
-            cc_toolchain = cc_toolchain,
-            dynamic_library = lib_file,
+    dynamic_linking_contexts = [
+        cc_common.create_linking_context(
+            linker_inputs = depset(direct = [linker_input]),
         )
-        dynamic_linking_contexts.append(cc_common.create_linking_context(
-            linker_inputs = depset(direct = [cc_common.create_linker_input(
-                owner = ctx.label,
-                libraries = depset(direct = [library_to_link]),
-            )]),
-        ))
+        for linker_input in dynamic_dep_linker_inputs
+    ]
 
     # On Darwin, singleton deps (e.g. rosidl_runtime_c) are passed via
-    # header_only_deps/dynamic_dep_libraries to avoid duplicating their global
+    # header_only_deps/dynamic_dep_linker_inputs to avoid duplicating their global
     # state across fragments under Darwin's two-level namespace. On Linux the
     # ELF loader merges same-named globals at load time, so we fall back to the
     # original approach of statically linking header_only_deps into each
@@ -287,7 +289,7 @@ def generate_compilation_information(
     # linking the singleton's archive instead leaves the dllimport reference
     # unsatisfied -- ld.lld reports "undefined symbol: __declspec(dllimport) ..."
     # and notes the symbol is in the .a "but cannot be used because it is not an
-    # import library". Routing the singleton through dynamic_dep_libraries makes
+    # import library". Routing the singleton through dynamic_dep_linker_inputs makes
     # the fragment link against the .dll and import the symbol.
     is_darwin = "apple" in cc_toolchain.target_gnu_system_name
     is_windows = "windows" in cc_toolchain.target_gnu_system_name or "mingw" in cc_toolchain.target_gnu_system_name
@@ -336,7 +338,7 @@ def generate_compilation_information(
     # transitive contexts (its deps' DLLs and the dynamic singletons) are merged
     # in so they propagate too. Elsewhere keep bundling the objects into the
     # consumer (Linux merges duplicate globals at load time; Darwin routes the
-    # singletons through dynamic_dep_libraries).
+    # singletons through dynamic_dep_linker_inputs).
     if is_windows:
         own_library = cc_common.create_library_to_link(
             actions = ctx.actions,
