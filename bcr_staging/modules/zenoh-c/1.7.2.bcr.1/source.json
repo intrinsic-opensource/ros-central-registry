@@ -18,6 +18,6 @@
         "tests/MODULE.bazel": "sha256-AZcxcOneMo28iSlVQ0iHMNwssysPmEYS7UFYqpm0eAY="
     },
     "patches": {
-        "build.patch": "sha256-6zSyW+2JILAx+1ttrj7enrGHEks5HgM1STiXs8mHxVE="
+        "build.patch": "sha256-ObuFsR9rgL/VCRldXXhSB2crthDX7tIOwVAmJxaxlMI="
     }
 }
