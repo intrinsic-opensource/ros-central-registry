@@ -58,6 +58,11 @@ cc_library(
         "include",
         "src",
     ],
+    # memory_tools' public API is gated on the OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS
+    # _BUILDING_DLL macro (its visibility_control.hpp), so define it while
+    # compiling this library to dllexport the symbols on Windows; consumers omit
+    # it and get dllimport.
+    local_defines = ["OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_BUILDING_DLL"],
     # The vendored backward-cpp (vendor/bombela/backward-cpp/backward.cpp)
     # has a real Windows stack-unwinding backend using DbgHelp.dll's
     # Sym*/StackWalk64 APIs, it's just never linked against dbghelp.
@@ -89,6 +94,11 @@ cc_shared_library(
 cc_test(
     name = "test_memory_tools",
     srcs = ["test/memory_tools/test_memory_tools.cpp"],
+    # Reach memory_tools through the interpose shared library (per the comment
+    # above) rather than statically: on Windows the test TU sees the public API
+    # as dllimport, so the symbols must come from memory_tools_interpose.dll's
+    # import library; a static :memory_tools in deps leaves them undefined.
+    dynamic_deps = [":memory_tools_interpose"],
     deps = [
         ":memory_tools",
         "@googletest//:gtest",
