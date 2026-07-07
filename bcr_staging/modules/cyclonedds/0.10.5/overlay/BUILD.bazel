@@ -470,6 +470,12 @@ cc_library(
     name = "ddsc",
     srcs = DDSRT_COMMON_SRCS + DDSRT_PLATFORM_IMPL_SRCS + DDSRT_PLATFORM_SRCS + DDSC_SRCS + DDSI_SRCS,
     hdrs = DDS_HDRS,
+    # On Windows the generated dds/export.h resolves DDS_EXPORT to dllexport
+    # only when DDS_BUILD_SHARED is defined while compiling the library itself;
+    # otherwise every dds_/ddsrt_/ddsi_ symbol is dllimport and nothing is
+    # exported from cyclonedds.dll, so consumers (rmw_cyclonedds_cpp) fail to
+    # link. Keep it local so consumers still see dllimport.
+    local_defines = ["DDS_BUILD_SHARED"],
     includes = [
         "src/core/ddsc/include",
         "src/core/ddsc/src",
@@ -584,7 +590,18 @@ cc_library(
         ":idlpp_configed_h",
         ":idlpp_mcpp_export_h",
     ],
-    copts = ["-DHAVE_CONFIG_H=1"],
+    # Under SYS_MINGW, mcpp's system.c references MSYS_ROOT_DIRECTORY /
+    # MINGW_DIRECTORY to translate MSYS-style absolute paths against a real
+    # MinGW/MSYS install. This hermetic build has neither and always passes
+    # explicit -I dirs, so define them empty to satisfy the compiler; the
+    # translation code path is inert with empty prefixes.
+    copts = ["-DHAVE_CONFIG_H=1"] + select({
+        "@platforms//os:windows": [
+            "-DMSYS_ROOT_DIRECTORY=\\\"\\\"",
+            "-DMINGW_DIRECTORY=\\\"\\\"",
+        ],
+        "//conditions:default": [],
+    }),
     includes = ["src/tools/idlpp/src"],
 )
 

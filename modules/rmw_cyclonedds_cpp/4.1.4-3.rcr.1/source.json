@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/rmw_cyclonedds-release/archive/refs/tags/release/lyrical/rmw_cyclonedds_cpp/4.1.4-3.tar.gz",
     "strip_prefix": "rmw_cyclonedds-release-release-lyrical-rmw_cyclonedds_cpp-4.1.4-3",
     "overlay": {
-        "BUILD.bazel": "sha256-g0XU8LW7f0mvmu0AVuYPeCeLaKi4Xh359K/PSPkEVEo="
+        "BUILD.bazel": "sha256-4JMJ04gIp7qprpyQO4CmLsNwsR63geUMwR3+TaYHct4="
     }
 }

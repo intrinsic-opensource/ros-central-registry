@@ -4,7 +4,7 @@
     "strip_prefix": "osrf_testing_tools_cpp-release-release-lyrical-osrf_testing_tools_cpp-2.3.1-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-C1Pd/X+6RHgVpy9xCB6i34Hk2UhTsDzjoz2qNLcPUtE="
+        "BUILD.bazel": "sha256-ORoZMGOXwN6mlyK8/NLVyCinSq80roCsM7Ukp/XqsGA="
     },
     "patches": {
         "src__memory_tools__count_function_occurrences_in_backtrace__hpp.patch": "sha256-pPcjOhZNRXpctkjvMzzRjKvG8sSImYpsKGpM6gfxmIs="

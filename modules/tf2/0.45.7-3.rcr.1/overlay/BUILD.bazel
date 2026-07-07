@@ -67,7 +67,12 @@ collect_transitive_dynamic_deps(
         name = name,
         timeout = "moderate",
         srcs = ["test/{}.cpp".format(src)],
-        dynamic_deps = [":transitive_dynamic_deps"],
+        # These are white-box unit tests that call internal BufferCore members
+        # (lookupFrameNumber, validateFrameId, ...) which are not part of the
+        # dllexport'd public API, so on Windows they are absent from tf2.dll.
+        # Link tf2_library statically (no dynamic_deps) so the test sees the
+        # implementation's internal symbols. TF2_BUILDING_DLL (via
+        # ros_local_defines) keeps the public headers self-consistent.
         local_defines = ros_local_defines(),
         deps = [
             ":tf2_library",

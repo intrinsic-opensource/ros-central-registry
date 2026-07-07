@@ -1,0 +1,15 @@
+diff --git a/src/threadlocal.h b/src/threadlocal.h
+index 69b587c..53f0697 100644
+--- a/src/threadlocal.h
++++ b/src/threadlocal.h
+@@ -24,7 +24,9 @@
+ #ifndef THREADLOCAL_H_
+ # define THREADLOCAL_H_
+ 
+-# if __STDC_VERSION__ >= 201112L && !defined __STDC_NO_THREADS__
++# if __STDC_VERSION__ >= 201112L && !defined __STDC_NO_THREADS__     && !(defined __GNUC__ && defined _WIN32)
++/* clang targeting mingw advertises C11 but ships no <threads.h>; fall through
++   to the __GNUC__ && _WIN32 TlsAlloc branch below instead. */
+ #  if __STDC_VERSION__ < 202311L
+ #   include <threads.h>
+ #  endif
