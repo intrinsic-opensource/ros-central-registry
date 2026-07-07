@@ -14,10 +14,9 @@
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 load("@rosdistro//ament:defs.bzl", "ament_package")
-load("@rosdistro//cc:defs.bzl", "ros_local_defines")
+load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps", "ros_local_defines")
 load("@rosdistro//python:defs.bzl", "py_pytest")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library")
-load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps")
 
 package(default_visibility = ["//visibility:public"])
 

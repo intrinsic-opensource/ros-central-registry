@@ -46,10 +46,10 @@ DEPENDENCIES = {
 
 cc_library(
     name = "rosidl_typesupport_fastrtps_cpp_library",
-    local_defines = ros_local_defines(),
     srcs = glob(["src/**/*.cpp"]),
     hdrs = HEADERS,
     includes = ["include"],
+    local_defines = ros_local_defines(),
     deps = DEPENDENCIES.values(),
 )
 

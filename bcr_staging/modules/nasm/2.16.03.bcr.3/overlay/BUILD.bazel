@@ -103,11 +103,11 @@ cc_binary(
     ],
     copts = COPTS,
     includes = [
-        "include",
-        "x86",
         "asm",
         "disasm",
+        "include",
         "output",
+        "x86",
     ],
     visibility = ["//visibility:public"],
     deps = [

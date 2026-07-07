@@ -92,6 +92,12 @@ python.toolchain(
 # Setup pip
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
+    # Windows' file locking makes concurrent whl_library fetches reading the
+    # same entry in the shared, machine-wide pip wheel cache
+    # (%LOCALAPPDATA%\pip\cache\wheels) prone to PermissionError under
+    # --keep_going's parallelism. Skip that cache entirely for these
+    # hermetic fetches.
+    extra_pip_args = ["--no-cache-dir"],
     hub_name = "pip_ros",
     python_version = "3.12",
     requirements_lock = "requirements.txt",
@@ -99,12 +105,6 @@ pip.parse(
     # (e.g. pytest's colorama dependency) and Windows wheel hashes, so Windows
     # hosts use their own platform lock.
     requirements_windows = "requirements_windows.txt",
-    # Windows' file locking makes concurrent whl_library fetches reading the
-    # same entry in the shared, machine-wide pip wheel cache
-    # (%LOCALAPPDATA%\pip\cache\wheels) prone to PermissionError under
-    # --keep_going's parallelism. Skip that cache entirely for these
-    # hermetic fetches.
-    extra_pip_args = ["--no-cache-dir"],
 )
 use_repo(pip, "pip_ros")
 

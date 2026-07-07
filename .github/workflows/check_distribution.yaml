@@ -95,16 +95,21 @@ jobs:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
         repository-cache: false
-    # Setup a bare workspace for the entire release.
+
+    # Setup python
     - name: Setup Python
       uses: actions/setup-python@v6
       with:
         python-version: '3.12'
+
+    # Prepare the bazel workspace
     - name: Prepare workspace
       id: prepare_workspace
       working-directory: .
       run: |
         python3 tools/ci/setup_workspace.py --release ${{ matrix.ros }}
+
+    # Build the ros 2 distribution
     - name: Build
       id: build
       run: |
@@ -121,7 +126,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_cpp)
         path: |
-          "workspace/bazel-testlogs/**/test.log"
+          "bazel-testlogs/**/test.log"
       if: always()
 
     # Test distribution with IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
@@ -135,7 +140,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_dynamic_cpp)
         path: |
-          "workspace/bazel-testlogs/**/test.log"
+          "bazel-testlogs/**/test.log"
       if: always()
 
     # Test distribution with IMPLEMENTATION=rmw_cyclonedds_cpp
@@ -149,7 +154,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_cyclonedds_cpp)
         path: |
-          "workspace/bazel-testlogs/**/test.log"
+          "bazel-testlogs/**/test.log"
       if: always()
 
     # Test distribution with IMPLEMENTATION=rmw_zenoh_cpp
@@ -165,7 +170,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_zenoh_cpp)
         path: |
-          "workspace/bazel-testlogs/**/test.log"
-          "workspace/zenohd-stdout.log"
-          "workspace/zenohd-stderr.log"
+          "bazel-testlogs/**/test.log"
+          "zenohd-stdout.log"
+          "zenohd-stderr.log"
       if: always()

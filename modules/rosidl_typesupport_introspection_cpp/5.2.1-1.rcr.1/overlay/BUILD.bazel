@@ -14,8 +14,8 @@
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 load("@rosdistro//ament:defs.bzl", "ament_package")
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library")
 load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps", "ros_local_defines")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_shared_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -41,10 +41,10 @@ DEPENDENCIES = {
 
 cc_library(
     name = "rosidl_typesupport_introspection_cpp_library",
-    local_defines = ros_local_defines(),
     srcs = glob(["src/**"]),
     hdrs = HEADERS,
     includes = ["include"],
+    local_defines = ros_local_defines(),
     deps = DEPENDENCIES.values(),
 )
 

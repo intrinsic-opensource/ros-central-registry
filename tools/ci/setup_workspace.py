@@ -184,10 +184,6 @@ build:macos --host_copt=-fno-implicit-module-maps
 build:macos --copt=-Wno-elaborated-enum-base
 build:macos --host_copt=-Wno-elaborated-enum-base
 
-# handle unresolved symlinks in frameworks
-build:macos --experimental_allow_unresolved_symlinks
-build:macos --nested_set_depth_limit=5000
-
 # setuptools/distutils' find_config_files() calls os.path.expanduser("~"),
 # which on Windows resolves via USERPROFILE (or HOMEDRIVE + HOMEPATH). The
 # --incompatible_strict_action_env flag above strips these from the build

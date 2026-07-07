@@ -14,7 +14,10 @@ cc_library(
         # clang/mingw, not MSVC: force-include winsock2.h with the GCC-style
         # flag instead of cl.exe /FI so windows.h does not pull in the older
         # winsock.h first.
-        "@platforms//os:windows": ["-include", "winsock2.h"],
+        "@platforms//os:windows": [
+            "-include",
+            "winsock2.h",
+        ],
         "//conditions:default": [],
     }),
     includes = ["asio/include"],

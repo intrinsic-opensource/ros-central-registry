@@ -470,12 +470,6 @@ cc_library(
     name = "ddsc",
     srcs = DDSRT_COMMON_SRCS + DDSRT_PLATFORM_IMPL_SRCS + DDSRT_PLATFORM_SRCS + DDSC_SRCS + DDSI_SRCS,
     hdrs = DDS_HDRS,
-    # On Windows the generated dds/export.h resolves DDS_EXPORT to dllexport
-    # only when DDS_BUILD_SHARED is defined while compiling the library itself;
-    # otherwise every dds_/ddsrt_/ddsi_ symbol is dllimport and nothing is
-    # exported from cyclonedds.dll, so consumers (rmw_cyclonedds_cpp) fail to
-    # link. Keep it local so consumers still see dllimport.
-    local_defines = ["DDS_BUILD_SHARED"],
     includes = [
         "src/core/ddsc/include",
         "src/core/ddsc/src",
@@ -498,6 +492,12 @@ cc_library(
             "-lpthread",
         ],
     }),
+    # On Windows the generated dds/export.h resolves DDS_EXPORT to dllexport
+    # only when DDS_BUILD_SHARED is defined while compiling the library itself;
+    # otherwise every dds_/ddsrt_/ddsi_ symbol is dllimport and nothing is
+    # exported from cyclonedds.dll, so consumers (rmw_cyclonedds_cpp) fail to
+    # link. Keep it local so consumers still see dllimport.
+    local_defines = ["DDS_BUILD_SHARED"],
     textual_hdrs = [
         "src/core/ddsi/src/ddsi_cdrstream_keys.part.c",
         "src/core/ddsi/src/ddsi_cdrstream_write.part.c",
