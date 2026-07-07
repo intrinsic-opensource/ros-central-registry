@@ -80,6 +80,16 @@ cc_library(
         "@platforms//os:windows": ["-U_WINSOCKAPI_"],
         "//conditions:default": [],
     }),
+    defines = select({
+        # TimedMutex.hpp branches on MINGW_COMPILER to use std::timed_mutex
+        # instead of MSVC STL internals (_Mtx_t etc.), which don't exist
+        # under our clang++ -target x86_64-w64-windows-gnu toolchain. This
+        # define changes the actual layout of TimedMutex/RecursiveTimedMutex
+        # (a public header type), so it must propagate to consumers, not
+        # just this target's own translation units.
+        "@platforms//os:windows": ["MINGW_COMPILER"],
+        "//conditions:default": [],
+    }),
     includes = [
         "include",
         "src/cpp",
@@ -97,16 +107,6 @@ cc_library(
     }),
     local_defines = select({
         "@platforms//os:windows": ["WIN32_LEAN_AND_MEAN"],
-        "//conditions:default": [],
-    }),
-    defines = select({
-        # TimedMutex.hpp branches on MINGW_COMPILER to use std::timed_mutex
-        # instead of MSVC STL internals (_Mtx_t etc.), which don't exist
-        # under our clang++ -target x86_64-w64-windows-gnu toolchain. This
-        # define changes the actual layout of TimedMutex/RecursiveTimedMutex
-        # (a public header type), so it must propagate to consumers, not
-        # just this target's own translation units.
-        "@platforms//os:windows": ["MINGW_COMPILER"],
         "//conditions:default": [],
     }),
     visibility = ["//visibility:public"],

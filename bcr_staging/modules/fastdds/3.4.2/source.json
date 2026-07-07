@@ -4,7 +4,7 @@
     "strip_prefix": "Fast-DDS-3.4.2",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-VeyN/G5TNF1LRfQOQVm5z7UW+PJIbI44b4MjKNGzatE="
+        "BUILD.bazel": "sha256-o8d/P314KRS4JoxaDe3JhCWzNqjOK+kzn7GtqHllJsI="
     },
     "patches": {
         "thirdparty__filewatch__FileWatch__hpp.patch": "sha256-u0PLRt9F6vFJiPQbZ+zstnxgLd9o7q38oHth/dKGLPs=",

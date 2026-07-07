@@ -58,11 +58,6 @@ cc_library(
         "include",
         "src",
     ],
-    # memory_tools' public API is gated on the OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS
-    # _BUILDING_DLL macro (its visibility_control.hpp), so define it while
-    # compiling this library to dllexport the symbols on Windows; consumers omit
-    # it and get dllimport.
-    local_defines = ["OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_BUILDING_DLL"],
     # The vendored backward-cpp (vendor/bombela/backward-cpp/backward.cpp)
     # has a real Windows stack-unwinding backend using DbgHelp.dll's
     # Sym*/StackWalk64 APIs, it's just never linked against dbghelp.
@@ -70,6 +65,11 @@ cc_library(
         "@platforms//os:windows": ["-ldbghelp"],
         "//conditions:default": [],
     }),
+    # memory_tools' public API is gated on the OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS
+    # _BUILDING_DLL macro (its visibility_control.hpp), so define it while
+    # compiling this library to dllexport the symbols on Windows; consumers omit
+    # it and get dllimport.
+    local_defines = ["OSRF_TESTING_TOOLS_CPP_MEMORY_TOOLS_BUILDING_DLL"],
 )
 
 # Built as a genuine shared library (rather than a cc_library baked directly

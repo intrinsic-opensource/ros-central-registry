@@ -6,8 +6,8 @@
 
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
-load("@rules_license//rules:license.bzl", "license")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("@rules_license//rules:license.bzl", "license")
 
 package(
     default_applicable_licenses = [":license"],
@@ -26,7 +26,6 @@ license(
     ],
     license_text = "LICENSE.md",
 )
-
 
 # This registry builds Windows with the hermetic clang/mingw toolchain
 # (x86_64-w64-windows-gnu), not MSVC, so the cl.exe-style flags this project
@@ -192,17 +191,6 @@ cc_library(
             "jconfig.h",
             "jconfigint.h",
             "simd/jsimd.h",
-            "src/jchuff.h",
-            "src/jdct.h",
-            "src/jerror.h",
-            "src/jinclude.h",
-            "src/jmorecfg.h",
-            "src/jpegint.h",
-            "src/jpeglib.h",
-            "src/jsamplecomp.h",
-            "src/jsimd.h",
-            "src/jsimddct.h",
-            "simd/x86_64/jsimd.c",
             "simd/x86_64/jccolor-avx2.o",
             "simd/x86_64/jccolor-sse2.o",
             "simd/x86_64/jcgray-avx2.o",
@@ -229,7 +217,18 @@ cc_library(
             "simd/x86_64/jquantf-sse2.o",
             "simd/x86_64/jquanti-avx2.o",
             "simd/x86_64/jquanti-sse2.o",
+            "simd/x86_64/jsimd.c",
             "simd/x86_64/jsimdcpu.o",
+            "src/jchuff.h",
+            "src/jdct.h",
+            "src/jerror.h",
+            "src/jinclude.h",
+            "src/jmorecfg.h",
+            "src/jpegint.h",
+            "src/jpeglib.h",
+            "src/jsamplecomp.h",
+            "src/jsimd.h",
+            "src/jsimddct.h",
         ],
         "//conditions:default": [],
     }),
@@ -278,6 +277,7 @@ cc_library(
         "src/jutils.c",
     ],
     copts = libjpegturbo_copts,
+    strip_include_prefix = "src",
     visibility = ["//visibility:public"],
     deps = select({
         ":nosimd": [":simd_none"],
@@ -288,7 +288,6 @@ cc_library(
         ":windows": [":simd_win_x86_64"],
         "//conditions:default": [":simd_none"],
     }),
-    strip_include_prefix = "src",
 )
 
 cc_library(
@@ -310,28 +309,31 @@ cc_library(
         "src/tjutil.c",
         "src/transupp.c",
         "src/turbojpeg.c",
-        "src/wrbmp.c",
-        "src/wrapper/rdppm-8.c",
         "src/wrapper/rdppm-12.c",
         "src/wrapper/rdppm-16.c",
-        "src/wrapper/wrppm-8.c",
+        "src/wrapper/rdppm-8.c",
         "src/wrapper/wrppm-12.c",
         "src/wrapper/wrppm-16.c",
+        "src/wrapper/wrppm-8.c",
+        "src/wrbmp.c",
     ],
     hdrs = [
         "src/cderror.h",
         "src/cdjpeg.h",
         "src/cmyk.h",
-        "src/jpegapicomp.h",
         "src/jinclude.h",
+        "src/jpegapicomp.h",
         "src/rdppm.c",
-        "src/turbojpeg-mp.c",
         "src/tjutil.h",
-        "src/turbojpeg.h",
         "src/transupp.h",
+        "src/turbojpeg.h",
+        "src/turbojpeg-mp.c",
         "src/wrppm.c",
     ],
-    copts = libjpegturbo_copts + ["-DBMP_SUPPORTED", "-DPPM_SUPPORTED"],
+    copts = libjpegturbo_copts + [
+        "-DBMP_SUPPORTED",
+        "-DPPM_SUPPORTED",
+    ],
     strip_include_prefix = "src",
     visibility = ["//visibility:public"],
     deps = [":jpeg"],
@@ -340,17 +342,8 @@ cc_library(
 cc_library(
     name = "simd_altivec",
     srcs = [
-        "src/jchuff.h",
         "jconfig.h",
         "jconfigint.h",
-        "src/jdct.h",
-        "src/jerror.h",
-        "src/jinclude.h",
-        "src/jmorecfg.h",
-        "src/jpegint.h",
-        "src/jpeglib.h",
-        "src/jsimd.h",
-        "src/jsimddct.h",
         "simd/jsimd.h",
         "simd/powerpc/jccolor-altivec.c",
         "simd/powerpc/jcgray-altivec.c",
@@ -364,6 +357,15 @@ cc_library(
         "simd/powerpc/jidctint-altivec.c",
         "simd/powerpc/jquanti-altivec.c",
         "simd/powerpc/jsimd.c",
+        "src/jchuff.h",
+        "src/jdct.h",
+        "src/jerror.h",
+        "src/jinclude.h",
+        "src/jmorecfg.h",
+        "src/jpegint.h",
+        "src/jpeglib.h",
+        "src/jsimd.h",
+        "src/jsimddct.h",
     ],
     hdrs = [
         "simd/powerpc/jccolext-altivec.c",
@@ -428,10 +430,10 @@ cc_library(
         "simd/x86_64/jsimdcpu.o",
     ] + SRCS_SIMD_COMMON,
     copts = libjpegturbo_copts,
-    alwayslink = True,
     target_compatible_with = [
         "@platforms//cpu:x86_64",
     ],
+    alwayslink = True,
 )
 
 genrule(
@@ -583,11 +585,11 @@ cc_library(
         "simd/arm/aarch32/jccolext-neon.c",
     ] + HDRS_SIMD_ARM,
     copts = libjpegturbo_copts,
-    visibility = ["//visibility:private"],
-    deps = [":neon-compat_hdr"],
     target_compatible_with = [
         "@platforms//cpu:armv7",
     ],
+    visibility = ["//visibility:private"],
+    deps = [":neon-compat_hdr"],
 )
 
 cc_library(
@@ -600,11 +602,11 @@ cc_library(
         "simd/arm/aarch64/jccolext-neon.c",
     ] + HDRS_SIMD_ARM,
     copts = libjpegturbo_copts,
-    visibility = ["//visibility:private"],
-    deps = [":neon-compat_hdr"],
     target_compatible_with = [
         "@platforms//cpu:arm64",
     ],
+    visibility = ["//visibility:private"],
+    deps = [":neon-compat_hdr"],
 )
 
 cc_library(
@@ -840,19 +842,25 @@ JCONFIGINT_NOWIN_SUBSTITUTIONS.update(JCONFIGINT_COMMON_SUBSTITUTIONS)
 JCONFIGINT_WIN_SUBSTITUTIONS.update(JCONFIGINT_COMMON_SUBSTITUTIONS)
 
 JCONFIGINT_NOWIN_NOSIMD_SUBSTITUTIONS = {}
+
 JCONFIGINT_NOWIN_NOSIMD_SUBSTITUTIONS.update(JCONFIGINT_NOWIN_SUBSTITUTIONS)
+
 JCONFIGINT_NOWIN_NOSIMD_SUBSTITUTIONS.update({
     "#cmakedefine WITH_SIMD 1": "",
 })
 
 JCONFIGINT_NOWIN_SIMD_SUBSTITUTIONS = {}
+
 JCONFIGINT_NOWIN_SIMD_SUBSTITUTIONS.update(JCONFIGINT_NOWIN_SUBSTITUTIONS)
+
 JCONFIGINT_NOWIN_SIMD_SUBSTITUTIONS.update({
     "#cmakedefine WITH_SIMD 1": "#define WITH_SIMD 1",
 })
 
 JCONFIGINT_WIN_SIMD_SUBSTITUTIONS = {}
+
 JCONFIGINT_WIN_SIMD_SUBSTITUTIONS.update(JCONFIGINT_WIN_SUBSTITUTIONS)
+
 JCONFIGINT_WIN_SIMD_SUBSTITUTIONS.update({
     "#cmakedefine WITH_SIMD 1": "#define WITH_SIMD 1",
 })
@@ -925,11 +933,11 @@ config_setting(
 
 config_setting(
     name = "k8",
-    flag_values = {":noasm": "no"},
     constraint_values = [
         "@platforms//os:linux",
         "@platforms//cpu:x86_64",
-    ]
+    ],
+    flag_values = {":noasm": "no"},
 )
 
 config_setting(
@@ -941,34 +949,34 @@ config_setting(
 
 config_setting(
     name = "armeabi-v7a",
-    flag_values = {":noasm": "no"},
     constraint_values = [
         "@platforms//cpu:armv7",
     ],
+    flag_values = {":noasm": "no"},
 )
 
 config_setting(
     name = "arm64-v8a",
-    flag_values = {":noasm": "no"},
     constraint_values = [
         "@platforms//cpu:arm64",
     ],
+    flag_values = {":noasm": "no"},
 )
 
 config_setting(
     name = "windows",
-    flag_values = {":noasm": "no"},
     constraint_values = [
         "@platforms//os:windows",
         "@platforms//cpu:x86_64",
     ],
+    flag_values = {":noasm": "no"},
 )
 
 config_setting(
     name = "linux_ppc64le",
-    flag_values = {":noasm": "no"},
     constraint_values = [
         "@platforms//os:linux",
         "@platforms//cpu:ppc64le",
     ],
+    flag_values = {":noasm": "no"},
 )
