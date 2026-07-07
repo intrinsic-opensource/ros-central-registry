@@ -11,12 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""Starlark rules for compiling ROS message generator libraries."""
 
 load("@protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
 load("@rosidl_adapter//:defs.bzl", "RosInterfaceInfo", "rosidl_adapter_aspect")
-load("@rosidl_adapter_proto//:defs.bzl", "RosProtoInfo", "merge_proto_infos", "rosidl_adapter_proto_aspect")
-load("@rosidl_generator_c//:defs.bzl", "RosCBindingsInfo", "rosidl_generator_c_aspect", "rosidl_generator_type_description_aspect")
-load("@rosidl_generator_cpp//:defs.bzl", "RosCcBindingsInfo", "rosidl_generator_cpp_aspect")
+load("@rosidl_adapter_proto//:defs.bzl", "merge_proto_infos", "rosidl_adapter_proto_aspect")
+load("@rosidl_generator_c//:defs.bzl", "rosidl_generator_c_aspect", "rosidl_generator_type_description_aspect")
+load("@rosidl_generator_cpp//:defs.bzl", "rosidl_generator_cpp_aspect")
 load("@rosidl_generator_py//:defs.bzl", "RosPyBindingsInfo", "rosidl_generator_py_aspect")
 load("@rosidl_generator_rs//:defs.bzl", "RosRsBindingsInfo", "rosidl_generator_rs_aspect")
 load("@rosidl_typesupport_c//:defs.bzl", "RosCTypesupportInfo", "rosidl_typesupport_c_aspect")
@@ -69,6 +70,55 @@ def _create_dynamic_linking_context(ctx, transitive_libraries):
                 libraries = depset(direct = libraries_to_link),
             ),
         ]),
+    )
+
+def _force_alwayslink(ctx, direct_cc_infos):
+    cc_toolchain = find_cc_toolchain(ctx)
+    feature_configuration = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
+    is_windows = "windows" in cc_toolchain.target_gnu_system_name or "mingw" in cc_toolchain.target_gnu_system_name
+    is_darwin = "apple" in cc_toolchain.target_gnu_system_name
+
+    merged_cc_info = cc_common.merge_cc_infos(direct_cc_infos = direct_cc_infos)
+    new_linker_inputs = []
+    for linker_input in merged_cc_info.linking_context.linker_inputs.to_list():
+        new_libraries = []
+        for lib in linker_input.libraries:
+            if not lib.static_library and not lib.pic_static_library:
+                fail("Library %s lacks a static archive; cannot statically link typesupport" % lib)
+            new_libraries.append(
+                cc_common.create_library_to_link(
+                    actions = ctx.actions,
+                    feature_configuration = feature_configuration,
+                    cc_toolchain = cc_toolchain,
+                    static_library = lib.static_library,
+                    pic_static_library = lib.pic_static_library,
+                    alwayslink = True,
+                ),
+            )
+
+        user_link_flags = list(linker_input.user_link_flags)
+        if not is_windows and not is_darwin:
+            if "-rdynamic" not in user_link_flags:
+                user_link_flags.append("-rdynamic")
+
+        new_linker_inputs.append(
+            cc_common.create_linker_input(
+                owner = linker_input.owner,
+                libraries = depset(new_libraries),
+                user_link_flags = depset(user_link_flags),
+                additional_inputs = depset(linker_input.additional_inputs),
+            ),
+        )
+    return CcInfo(
+        compilation_context = merged_cc_info.compilation_context,
+        linking_context = cc_common.create_linking_context(
+            linker_inputs = depset(new_linker_inputs),
+        ),
     )
 
 # IDL files
@@ -161,23 +211,30 @@ def _c_ros_library(ctx):
         RosCcTypesupportFastRTPSInfo,
         RosCTypesupportInfo,
     ])
-    dynamic_linking_context = _create_dynamic_linking_context(ctx, direct_libraries)
-    cc_info = cc_common.merge_cc_infos(
-        direct_cc_infos = [
-            cc_common.merge_cc_infos(direct_cc_infos = direct_cc_infos),
-            CcInfo(linking_context = dynamic_linking_context),
-        ],
-    )
-    symlinks = {}
-    for file in depset(transitive = direct_libraries).to_list():
-        symlinks["lib/" + file.basename] = file
-    default_info = DefaultInfo(
-        files = depset(transitive = direct_libraries),
-        runfiles = ctx.runfiles(
-            symlinks = symlinks,
-            transitive_files = depset(transitive = direct_libraries),
-        ),
-    )
+    if ctx.attr.alwayslink:
+        cc_info = _force_alwayslink(ctx, direct_cc_infos)
+        default_info = DefaultInfo(
+            files = depset(),
+            runfiles = ctx.runfiles(),
+        )
+    else:
+        dynamic_linking_context = _create_dynamic_linking_context(ctx, direct_libraries)
+        cc_info = cc_common.merge_cc_infos(
+            direct_cc_infos = [
+                cc_common.merge_cc_infos(direct_cc_infos = direct_cc_infos),
+                CcInfo(linking_context = dynamic_linking_context),
+            ],
+        )
+        symlinks = {}
+        for file in depset(transitive = direct_libraries).to_list():
+            symlinks["lib/" + file.basename] = file
+        default_info = DefaultInfo(
+            files = depset(transitive = direct_libraries),
+            runfiles = ctx.runfiles(
+                symlinks = symlinks,
+                transitive_files = depset(transitive = direct_libraries),
+            ),
+        )
     return [cc_info, default_info]
 
 c_ros_library = rule(
@@ -202,6 +259,7 @@ c_ros_library = rule(
             providers = [RosInterfaceInfo],
             allow_files = False,
         ),
+        "alwayslink": attr.bool(default = False),
     },
     provides = [CcInfo, DefaultInfo],
 )
@@ -214,23 +272,30 @@ def _cc_ros_library(ctx):
         RosCcTypesupportFastRTPSInfo,
         RosCcTypesupportInfo,
     ])
-    dynamic_linking_context = _create_dynamic_linking_context(ctx, direct_libraries)
-    cc_info = cc_common.merge_cc_infos(
-        direct_cc_infos = [
-            cc_common.merge_cc_infos(direct_cc_infos = direct_cc_infos),
-            CcInfo(linking_context = dynamic_linking_context),
-        ],
-    )
-    symlinks = {}
-    for file in depset(transitive = direct_libraries).to_list():
-        symlinks["lib/" + file.basename] = file
-    default_info = DefaultInfo(
-        files = depset(transitive = direct_libraries),
-        runfiles = ctx.runfiles(
-            symlinks = symlinks,
-            transitive_files = depset(transitive = direct_libraries),
-        ),
-    )
+    if ctx.attr.alwayslink:
+        cc_info = _force_alwayslink(ctx, direct_cc_infos)
+        default_info = DefaultInfo(
+            files = depset(),
+            runfiles = ctx.runfiles(),
+        )
+    else:
+        dynamic_linking_context = _create_dynamic_linking_context(ctx, direct_libraries)
+        cc_info = cc_common.merge_cc_infos(
+            direct_cc_infos = [
+                cc_common.merge_cc_infos(direct_cc_infos = direct_cc_infos),
+                CcInfo(linking_context = dynamic_linking_context),
+            ],
+        )
+        symlinks = {}
+        for file in depset(transitive = direct_libraries).to_list():
+            symlinks["lib/" + file.basename] = file
+        default_info = DefaultInfo(
+            files = depset(transitive = direct_libraries),
+            runfiles = ctx.runfiles(
+                symlinks = symlinks,
+                transitive_files = depset(transitive = direct_libraries),
+            ),
+        )
     return [cc_info, default_info]
 
 cc_ros_library = rule(
@@ -254,6 +319,7 @@ cc_ros_library = rule(
             providers = [RosInterfaceInfo],
             allow_files = False,
         ),
+        "alwayslink": attr.bool(default = False),
     },
     provides = [CcInfo, DefaultInfo],
 )

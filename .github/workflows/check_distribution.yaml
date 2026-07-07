@@ -96,6 +96,22 @@ jobs:
         disk-cache: ${{ github.workflow }}
         repository-cache: false
 
+    # Build the ros 2 distribution
+    - name: Examples
+      id: examples
+      run: |
+        bazel build --config ci --config=${{ matrix.variant }}
+    - name: Update status badge (build)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.bazel }}_${{ matrix.os }}_examples.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.examples.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.examples.outcome == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
+
     # Setup python
     - name: Setup Python
       uses: actions/setup-python@v6
@@ -120,7 +136,7 @@ jobs:
         auth: ${{ secrets.STATUS_BADGE_SECRET }}
         gistID: f796805a77e0f05cc837b18e60142773
         filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_build.json
-        label: builds
+        label: ${{ matrix.bazel }}
         message: ${{ steps.build.outcome == 'success' && '✓' || 'x' }}
         color: ${{ steps.build.outcome == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)

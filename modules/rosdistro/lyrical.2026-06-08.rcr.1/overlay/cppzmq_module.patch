@@ -1,7 +1,0 @@
---- a/MODULE.bazel
-+++ b/MODULE.bazel
-@@ -7,3 +7,4 @@
- )
- 
- bazel_dep(name = "libzmq", version = "4.3.5.bcr.2")
-+bazel_dep(name = "rules_cc", version = "0.2.17")

@@ -78,26 +78,28 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
 Then install a few prerequisite tools:
 
 ```powershell
-winget install Bazel.Bazelisk        # 'bazel' launcher
+winget install Bazel.Bazelisk
 winget install Git.Git
 winget install MSYS2.MSYS2
 ```
 
 Bazel runs `genrule` and `rules_shell` actions through a POSIX `bash`. On Windows you must
 point it at the MSYS2 `bash` by setting the `BAZEL_SH` environment variable — Bazel does not
-detect MSYS2 reliably on its own. Set it persistently for your user (re-open the terminal
-afterwards so the change takes effect):
+detect MSYS2 reliably on its own. Set it persistently for your user.
 
 ```powershell
 [Environment]::SetEnvironmentVariable("BAZEL_SH", "C:\msys64\usr\bin\bash.exe", "User")
 ```
 
+Please re-open the terminal afterwards so the change takes effect.
+
 # Verify your setup
 
+Check that the commands below print versions.
+
 ```bash
-bazel --version    # should print a Bazel version (Bazelisk downloads it on first run)
+bazel --version
 git --version
-python3 --version  # 'python --version' on Windows
 ```
 
 # Quick demo
@@ -309,22 +311,27 @@ One of our objectives is to provide the ability to compile small, portable C and
 
 1. Messages dependency chains are declared at the message-level, not the package level. Broadly speaking, if `sensor_msgs/msg/CompressedImage` relies on `std_msgs/msg/Header`, then the `@sensor_msgs//msg:CompressedImage` Bazel target must have a `deps` entry for `@std_msgs//msg:Header`. This enables binaries to compile-in only the symbols for messages they use, and not entire packages.
 2. At runtime the typea dapter calls `dlopen` to load the typesupport shared library for the active middleware when it needs to transform serialized bytes on the wire to the language. We have modified this type adapter to first look for the symbols on the active binary, in case they were compiled statically into the binary.
-3. By default, when the `--@rmw_implementation//:rmw=...` flag is set, it configures the RMW implementation to a specific single middleware. The `RMW_IMPLEMENTATION` environment variable should not be used. This allows a ROS node that depends on `rclcpp`, which in turn depends on `rmw_implementation` transitively through `rcl`, to statically link in everything it needs for the RMW implementation layer.
+3. By default, when the `--@rosdistro//:rmw=...` flag is set, it configures the RMW implementation to a specific single middleware. The `RMW_IMPLEMENTATION` environment variable should not be used. This allows a ROS node that depends on `rclcpp`, which in turn depends on `rmw_implementation` transitively through `rcl`, to statically link in everything it needs for the RMW implementation layer.
 
-So, for example, if you run `bazel build //my_pkg:portable_node --@rmw_implementation//:rmw=rmw_fastrtps_cpp //:portable node` on the following code you will get a single portable executable with all required symbols statically linked into the executable:
+So, for example, if you run `bazel build //my_pkg:portable_node --@rosdistro//:rmw=rmw_fastrtps_cpp //:portable node` on the following code you will get a single portable executable with all required symbols statically linked into the executable:
 
 ```python
 load("@core_generators//:defs.bzl", "cc_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 
+# The "alwayslink" flag signals that consumers are expecting the typesupport symbols are provided by
+# the CcInfo, and that they should always be included statically into the end consumer.
 cc_ros_library(
     name = "cc_msgs",
     deps = [
         "@sensor_msgs//msg:CompressedImage"
     ],
+    alwayslink = True
 )
 
-cc_test(
+# Now a consumer can statically link these symbols into itself to become portable. Note that the
+# you also have to force a RMW implementation to be fully portable.
+cc_binary(
     name = "portable_node",
     srcs = ["node.cc"],
     deps = [
@@ -335,7 +342,7 @@ cc_test(
 )
 ```
 
-Note: the above code works because `cc_ros_library` calls a rule that introspects the `--@rmw_implementation//:rmw` argument value. If it is set then it will include the typesupports in the `CcInfo` provider with `alwayslink = True`, forcing the typesupport symbols to be added to the `portable_node` binary.
+Note: the above code works because `cc_ros_library` calls a rule that introspects the `--@rosdistro//:rmw` argument value. If it is set then it will include the typesupports in the `CcInfo` provider with `alwayslink = True`, forcing the typesupport symbols to be added to the `portable_node` binary.
 
 # Remote caching
 

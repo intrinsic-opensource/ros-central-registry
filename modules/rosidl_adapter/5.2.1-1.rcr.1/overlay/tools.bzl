@@ -11,10 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""Starlark functions for compiling ROS message adapters."""
 
 load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain")
-load(":types.bzl", "RosIdlInfo", "RosInterfaceInfo")
+load(":types.bzl", "RosIdlInfo")
 
 def pkg_name_and_base_from_path(path):
     """
@@ -339,11 +340,22 @@ def generate_compilation_information(
     # in so they propagate too. Elsewhere keep bundling the objects into the
     # consumer (Linux merges duplicate globals at load time; Darwin routes the
     # singletons through dynamic_dep_linker_inputs).
+    static_linking_context, static_linking_outputs = cc_common.create_linking_context_from_compilation_outputs(
+        actions = ctx.actions,
+        feature_configuration = feature_configuration,
+        cc_toolchain = cc_toolchain,
+        compilation_outputs = compilation_outputs,
+        linking_contexts = all_linking_contexts,
+        name = name + "_link",
+    )
     if is_windows:
+        static_lib = static_linking_outputs.library_to_link
         own_library = cc_common.create_library_to_link(
             actions = ctx.actions,
             feature_configuration = feature_configuration,
             cc_toolchain = cc_toolchain,
+            static_library = static_lib.static_library,
+            pic_static_library = static_lib.pic_static_library,
             dynamic_library = old_lib_file,
         )
         own_context = cc_common.create_linking_context(
@@ -356,14 +368,7 @@ def generate_compilation_information(
             linking_contexts = [own_context] + all_linking_contexts,
         )
     else:
-        linking_context, _ = cc_common.create_linking_context_from_compilation_outputs(
-            actions = ctx.actions,
-            feature_configuration = feature_configuration,
-            cc_toolchain = cc_toolchain,
-            compilation_outputs = compilation_outputs,
-            linking_contexts = all_linking_contexts,
-            name = name + "_link",
-        )
+        linking_context = static_linking_context
 
     # The standard CcInfo.
     cc_info = CcInfo(
