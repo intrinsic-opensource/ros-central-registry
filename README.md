@@ -3,31 +3,166 @@
 <br/>   
 <font size="6">ROS Central Registry</font>
 <br/>
-The <a href="http://intrinsic-opensource.github.io/ros-central-registry">ROS Central Registry</a> provides <a href= "https://bazel.build">Bazel</a> modules for <a href="https://ros.org">Robot Operating System (ROS)</a> core packages. Our approach is to build everything from source, using the dependency management system provided by the <a href="https://bazel.build/docs/bzlmod">bzlmod</a> ecosystem to ensure consistency across ROS releases.
-<br/>
-<br/>
-<font size="2">lyrical/2026-06-08</font>
-<br/>
-<br/>
-<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/modules.json">
-&nbsp; 
-<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/tooling.json">
-&nbsp; 
-<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/deployment.json">
-&nbsp; 
-<img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/linting.json">
-
-<br/>
-
-|                       | 🛠️ | <font size="2">FastDDS</font> | <font size="2">FastDDS Dynamic</font> | <font size="2">CycloneDDS</font> | <font size="2"> Zenoh</font> |
-| :-------------------- | :---: | :----------: | :------------------: | :------------: | :--------: |
-| ubuntu-26.04          | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04_build.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04_build.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04_test_rmw_fastrtps_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04_test_rmw_fastrtps_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04_test_rmw_fastrtps_dynamic_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04_test_rmw_fastrtps_dynamic_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04_test_rmw_cyclonedds_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04_test_rmw_cyclonedds_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04_test_rmw_zenoh_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04_test_rmw_zenoh_cpp.json"/> |
-| ubuntu-26.04-arm      | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04-arm_build.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04-arm_build.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04-arm_test_rmw_fastrtps_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04-arm_test_rmw_fastrtps_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04-arm_test_rmw_fastrtps_dynamic_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04-arm_test_rmw_fastrtps_dynamic_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04-arm_test_rmw_cyclonedds_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04-arm_test_rmw_cyclonedds_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04-arm_test_rmw_zenoh_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04-arm_test_rmw_zenoh_cpp.json"/> |
-| macos-26-intel        | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26-intel_build.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26-intel_build.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26-intel_test_rmw_fastrtps_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26-intel_test_rmw_fastrtps_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26-intel_test_rmw_fastrtps_dynamic_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26-intel_test_rmw_fastrtps_dynamic_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26-intel_test_rmw_cyclonedds_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26-intel_test_rmw_cyclonedds_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26-intel_test_rmw_zenoh_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26-intel_test_rmw_zenoh_cpp.json"/> |
-| macos-26              | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26_build.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_build.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26_test_rmw_fastrtps_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_test_rmw_fastrtps_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26_test_rmw_fastrtps_dynamic_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_test_rmw_fastrtps_dynamic_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26_test_rmw_cyclonedds_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_test_rmw_cyclonedds_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26_test_rmw_zenoh_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_test_rmw_zenoh_cpp.json"/> |
-| windows-2025          | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_build.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_build.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_fastrtps_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_fastrtps_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_fastrtps_dynamic_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_fastrtps_dynamic_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_cyclonedds_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_cyclonedds_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_zenoh_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_zenoh_cpp.json"/> |
-| windows-11-arm        | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-11-arm_build.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-11-arm_build.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-11-arm_test_rmw_fastrtps_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-11-arm_test_rmw_fastrtps_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-11-arm_test_rmw_fastrtps_dynamic_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-11-arm_test_rmw_fastrtps_dynamic_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-11-arm_test_rmw_cyclonedds_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-11-arm_test_rmw_cyclonedds_cpp.json"/> | <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-11-arm_test_rmw_zenoh_cpp.json"/> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-11-arm_test_rmw_zenoh_cpp.json"/> |
+The <a href="http://intrinsic-opensource.github.io/ros-central-registry">ROS Central Registry</a> provides <a href= "https://bazel.build">Bazel</a> modules for <a href="https://ros.org">Robot Operating System (ROS)</a> core packages. This repo provides tooling that automates the the release and patching process in response to upstream changes.
 </p>
+
+# Releases
+
+## Lyrical/2026-06-08 (latest: lyrical.2026-06-08.rcr.1)
+
+<table>
+  <thead>
+    <tr>
+      <th rowspan="2" align="left"></th>
+      <th rowspan="2" style="text-align: center;">Examples</th>
+      <th colspan="5" style="text-align: center;">Distribution</th>
+    </tr>
+    <tr>
+      <th style="text-align: center;">Build</th>
+      <th style="text-align: center;"><font size="2">FastDDS</font></th>
+      <th style="text-align: center;"><font size="2">FastDDS Dynamic</font></th>
+      <th style="text-align: center;"><font size="2">CycloneDDS</font></th>
+      <th style="text-align: center;"><font size="2">Zenoh</font></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ubuntu-26.04</td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_8.x_ubuntu-26.04_examples.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_9.x_ubuntu-26.04_examples.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04_build.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04_build.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04_test_rmw_fastrtps_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04_test_rmw_fastrtps_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04_test_rmw_fastrtps_dynamic_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04_test_rmw_fastrtps_dynamic_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04_test_rmw_cyclonedds_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04_test_rmw_cyclonedds_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04_test_rmw_zenoh_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04_test_rmw_zenoh_cpp.json"/>
+      </td>
+    </tr>
+    <tr>
+      <td>ubuntu-26.04-arm</td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_8.x_ubuntu-26.04-arm_examples.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_9.x_ubuntu-26.04-arm_examples.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04-arm_build.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04-arm_build.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04-arm_test_rmw_fastrtps_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04-arm_test_rmw_fastrtps_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04-arm_test_rmw_fastrtps_dynamic_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04-arm_test_rmw_fastrtps_dynamic_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04-arm_test_rmw_cyclonedds_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04-arm_test_rmw_cyclonedds_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_ubuntu-26.04-arm_test_rmw_zenoh_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_ubuntu-26.04-arm_test_rmw_zenoh_cpp.json"/>
+      </td>
+    </tr>
+    <tr>
+      <td>macos-26-intel</td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_8.x_macos-26-intel_examples.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_9.x_macos-26-intel_examples.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26-intel_build.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26-intel_build.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26-intel_test_rmw_fastrtps_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26-intel_test_rmw_fastrtps_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26-intel_test_rmw_fastrtps_dynamic_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26-intel_test_rmw_fastrtps_dynamic_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26-intel_test_rmw_cyclonedds_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26-intel_test_rmw_cyclonedds_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26-intel_test_rmw_zenoh_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26-intel_test_rmw_zenoh_cpp.json"/>
+      </td>
+    </tr>
+    <tr>
+      <td>macos-26</td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_8.x_macos-26_examples.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_9.x_macos-26_examples.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26_build.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_build.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26_test_rmw_fastrtps_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_test_rmw_fastrtps_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26_test_rmw_fastrtps_dynamic_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_test_rmw_fastrtps_dynamic_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26_test_rmw_cyclonedds_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_test_rmw_cyclonedds_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_macos-26_test_rmw_zenoh_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_test_rmw_zenoh_cpp.json"/>
+      </td>
+    </tr>
+    <tr>
+      <td>windows-2025</td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_8.x_windows-2025_examples.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_9.x_windows-2025_examples.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_build.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_build.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_fastrtps_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_fastrtps_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_fastrtps_dynamic_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_fastrtps_dynamic_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_cyclonedds_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_cyclonedds_cpp.json"/>
+      </td>
+      <td align="center">
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_zenoh_cpp.json"/>
+        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_zenoh_cpp.json"/>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 # Prerequisites
 
