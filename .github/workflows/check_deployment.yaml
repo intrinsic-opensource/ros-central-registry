@@ -69,3 +69,13 @@ jobs:
         token: ${{ secrets.RCR_UI_PAT_TOKEN }}
         repository: intrinsic-opensource/rcr-ui
         event-type: on-rcr-trigger
+    - name: Update status badges
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: deployment.json
+        label: deployment
+        message: ${{ job.status == 'success' && '✓' || 'x' }}
+        color: ${{ job.status == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
