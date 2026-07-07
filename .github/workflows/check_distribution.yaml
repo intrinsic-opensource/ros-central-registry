@@ -101,9 +101,7 @@ jobs:
       id: prepare_workspace
       working-directory: .
       run: |
-        bazel run //tools/ci:setup_workspace -- --release ${{ matrix.ros }}
-
-    # Build distribution
+        python3 tools/ci/setup_workspace.py --release ${{ matrix.ros }}
     - name: Build
       id: build
       run: |
