@@ -114,6 +114,16 @@ jobs:
       id: build
       run: |
         bazel build --config ci --config=${{ matrix.variant }}
+    - name: Update status badge (build)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_build.json
+        label: builds
+        message: ${{ steps.build.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.build.outcome == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
 
     # Test distribution with IMPLEMENTATION=rmw_fastrtps_cpp
     - name: Test (rmw_fastrtps_cpp)
@@ -128,6 +138,16 @@ jobs:
         path: |
           "bazel-testlogs/**/test.log"
       if: always()
+    - name: Update status badge (rmw_fastrtps_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_test_rmw_fastrtps_cpp.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.test_rmw_fastrtps_cpp.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.test_rmw_fastrtps_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
 
     # Test distribution with IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
     - name: Test (rmw_fastrtps_dynamic_cpp)
@@ -142,6 +162,16 @@ jobs:
         path: |
           "bazel-testlogs/**/test.log"
       if: always()
+    - name: Update status badge (rmw_fastrtps_dynamic_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_test_rmw_fastrtps_dynamic_cpp.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.test_rmw_fastrtps_dynamic_cpp.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.test_rmw_fastrtps_dynamic_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
 
     # Test distribution with IMPLEMENTATION=rmw_cyclonedds_cpp
     - name: Test (rmw_cyclonedds_cpp)
@@ -156,6 +186,16 @@ jobs:
         path: |
           "bazel-testlogs/**/test.log"
       if: always()
+    - name: Update status badge (rmw_cyclonedds_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_test_rmw_cyclonedds_cpp.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.test_rmw_cyclonedds_cpp.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.test_rmw_cyclonedds_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
 
     # Test distribution with IMPLEMENTATION=rmw_zenoh_cpp
     - name: Test (rmw_zenoh_cpp)
@@ -174,3 +214,13 @@ jobs:
           "zenohd-stdout.log"
           "zenohd-stderr.log"
       if: always()
+    - name: Update status badge (rmw_zenoh_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_test_rmw_zenoh_cpp.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.test_rmw_zenoh_cpp.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.test_rmw_zenoh_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
