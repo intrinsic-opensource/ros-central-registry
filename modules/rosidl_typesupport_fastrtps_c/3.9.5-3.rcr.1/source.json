@@ -4,7 +4,7 @@
     "strip_prefix": "rosidl_typesupport_fastrtps-release-release-lyrical-rosidl_typesupport_fastrtps_c-3.9.5-3",
     "patch_strip": 1,
     "overlay": {
-        "aspects.bzl": "sha256-xHxtlbiqZlj8hB/oJBbfNbFFq5J2j4grtMfAZZLaL1k=",
+        "aspects.bzl": "sha256-RoOigDLCLowvlQI1rA3U2N5uTHdUve9hhOZ6kF3zhZ0=",
         "BUILD.bazel": "sha256-MqRrX3zrD+beHnXisatdTaXNqBx6BR1TwYhfWBm2Aik=",
         "defs.bzl": "sha256-gQmv2xWclItsXkTKh6hihUE3/bam8vtI2tC5VK0GuMc=",
         "types.bzl": "sha256-fX9ARe84EPkfrPUTgm9JNMGJAL53ajwjNEGP+v5+tW4=",

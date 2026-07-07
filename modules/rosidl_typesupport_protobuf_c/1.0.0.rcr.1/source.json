@@ -4,7 +4,7 @@
     "strip_prefix": "rosidl_typesupport_protobuf-e3de421144f1dd080f234a8a03a2de90bf31314f/rosidl_typesupport_protobuf_c",
     "patch_strip": 1,
     "overlay": {
-        "aspects.bzl": "sha256-vb0FRGT+5xioqw75lVDZc3CRgVstoRNncdT1MZYuZws=",
+        "aspects.bzl": "sha256-QvPaK2ZOHE5Y65YUP7nC0gw0zTxB7QG6J95XjJKsIBs=",
         "BUILD.bazel": "sha256-4YC7HIeXSV6WLOrAtQx4AYf1Uz3eCMcn3v7ZIlllxgo=",
         "types.bzl": "sha256-Dav7sXwLGcYtzfiW8zhR/MBPqnIFM2aoF0Emss35ZyA="
     },
