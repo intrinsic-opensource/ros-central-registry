@@ -381,7 +381,6 @@ osx.frameworks(
         "Accelerate",
         "AppKit",
         "ApplicationServices",
-        "ATS",
         "AudioToolbox",
         "CFNetwork",
         "CloudKit",
