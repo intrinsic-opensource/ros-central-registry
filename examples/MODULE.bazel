@@ -80,10 +80,10 @@ osx.frameworks(
     names = [
         "AVFAudio",
         "AVFoundation",
+        "AVRouting",
         "Accelerate",
         "AppKit",
         "ApplicationServices",
-        "ATS",
         "AudioToolbox",
         "CFNetwork",
         "CloudKit",
@@ -112,10 +112,13 @@ osx.frameworks(
         "Metal",
         "OSLog",
         "OpenGL",
+        "PrintCore",
         "QuartzCore",
         "Security",
+        "Symbols",
         "SystemConfiguration",
         "UniformTypeIdentifiers",
+        "_LocationEssentials",
     ],
 )
 
