@@ -370,10 +370,8 @@ bazel_dep(name = "rules_shell", version = "0.8.0")
 # Register our hermetic compiler (clang)
 register_toolchains("@llvm//toolchain:all")
 
-# LLVM is hermetic by default and therefore it cannot see system frameworks.
-# We need to explicitly tell it where to find them. IOKit is needed for FastRTPS
-# to work on macOS, and OpenGL is needed for visualization tools like rviz2.
-# The rest are common frameworks needed by OpenCV.
+# Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with the
+# frameworks our dependencies needed on OSX.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
