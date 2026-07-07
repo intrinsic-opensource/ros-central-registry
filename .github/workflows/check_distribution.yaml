@@ -95,8 +95,11 @@ jobs:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
         repository-cache: false
-
     # Setup a bare workspace for the entire release.
+    - name: Setup Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
     - name: Prepare workspace
       id: prepare_workspace
       working-directory: .
