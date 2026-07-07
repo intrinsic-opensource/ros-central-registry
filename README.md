@@ -264,26 +264,33 @@ bazel query //...
 
 Please refer to [examples/README.md](examples/README.md) for more information.
 
-# Building the full distribution
+# Building and test the full perception release
 
 To build and test an entire ROS variant (for example `perception`), generate a workspace
 from the repository root and run Bazel inside it:
 
 ```bash
-# From the root of the repository, generate the workspace/ folder for a release
-python3 tools/ci/setup_workspace.py --release lyrical.2026-06-08.rcr.1
+# From the root of the repository, generate the workspace/ folder for a release.
+bazel run //tools/ci:setup_workspace -- --release=lyrical.2026-06-08.rcr.1
 
-# Build and test the perception variant
+# Switch to the generated workspace.
 cd workspace
+
+# Build all packages in the perception variant.
+bazel build --config perception
+
+# Test all packages in the perception variant.
 bazel test --config perception
 ```
 
-The `setup_workspace.py` script resolves every package in the requested release, writes a
+The `setup_workspace` target resolves every package in the requested release, writes a
 `MODULE.bazel`, a `.bazelrc`, and `ros-<variant>.txt` target lists into `workspace/`. The
 available variants are `core`, `base`, `desktop`, `desktop_full`, `perception` and
 `simulation`; select one with the matching `--config` flag. The first build compiles the
 whole distribution from source and can take a long time on a cold cache; subsequent builds
 reuse the local and remote caches.
+
+Right now we support everything up to perception. Beyond perception, the other variants (desktop, simulation and desktop_full) are incomplete. The biggest issue is that packages (rviz, gazebo, etc) depend on OpenGL, which requires headers to be supplied from the host, breaking hermeticity.
 
 # Usage instructions
 
