@@ -21,9 +21,87 @@ The [ROS Central Registry](http://intrinsic-opensource.github.io/ros-central-reg
 
 Currently, we have Bazel modules for all packages up to the `perception` variant. We test against `x86_64` and `aarch64` architectures on Linux only. Over time we intend to expand through to `desktop`, `simulation` and `desktop_full` variants, and support both `darwin` (MacOS) and `windows` architectures.
 
-# Quick demo
+# Prerequisites
 
-Firstly, make sure that you have [bazelisk](https://github.com/bazelbuild/bazelisk) installed on Linux aarch64 or x86_64. Then clone this repository.
+The RCR builds **everything from source** using a hermetic LLVM/clang toolchain and a
+hermetic Python interpreter that Bazel downloads automatically. As a result you do **not**
+need a system C/C++ compiler, an existing ROS installation, or a matching system Python to
+build or run the code. The only things you must install yourself are:
+
+| Tool | Why | Needed for |
+| :--- | :--- | :--- |
+| **Bazelisk** | Launches the pinned Bazel version (a `bazel` shim) | Everything |
+| **Git** | Clone the repository | Everything |
+| **Python 3** (≥ 3.9) | Runs `tools/ci/setup_workspace.py` to generate a full workspace | Full `--config perception` workspace only |
+| **A POSIX `bash`** (Windows only) | Bazel runs genrules through `bash`; ROS message generation uses genrules | Everything, on Windows |
+| **Xcode Command Line Tools** (macOS only) | System frameworks + linker | Everything, on macOS |
+| **buildifier** | Lints `BUILD`/`.bzl` files | Contributors only |
+
+Two workflows are described below. The `examples/` folder is a self-contained Bazel
+workspace and needs only Bazelisk + Git (+ a `bash` on Windows). Building the full ROS
+distribution (`bazel test --config perception`) additionally needs Python 3 to generate the
+`workspace/` folder.
+
+## Ubuntu 26.04 (amd64 or arm64)
+
+Make sure you have git, Python3, and zip compression tools installed:
+
+```
+sudo apt-get update && sudo apt-get install -y git python3 unzip zip
+```
+
+Then download bazelisk and put it on your path:
+
+```bash
+mkdir -p ~/.local/bin
+curl -Lo ~/.local/bin/bazel \
+  https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-$(dpkg --print-architecture)
+chmod +x  ~/.local/bin/bazel
+```
+
+## MacOS Tahoe (amd64 or arm64)
+
+Install the system SDK frameworks and linker:
+
+```
+xcode-select --install
+```
+
+Install Homebrew and then the necessary tools:
+
+```bash
+brew install bazelisk git python@3.12
+```
+
+## Windows 2025 (amd64 only)
+
+Enable developer mode by goiong to `Settings → Privacy & security → For developers → Developer Mode: On`. This grants the symlink-creation privilege that the Rust/zenoh crate splice requires; without it the full `--config perception` build fails during dependency fetching (`os error 1314`). After this run all commands in an elevated **PowerShell**.
+
+Make sure you have long path support:
+
+```powershell
+New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+    -Name LongPathsEnabled -Value 1 -PropertyType DWORD -Force
+```
+
+Then insall a few prerequisite tools:
+
+```powershell
+winget install Bazel.Bazelisk        # 'bazel' launcher
+winget install Git.Git
+winget install Python.Python.3.12
+winget install MSYS2.MSYS2
+```
+
+# Verify your setup
+
+```bash
+bazel --version    # should print a Bazel version (Bazelisk downloads it on first run)
+git --version
+python3 --version  # 'python --version' on Windows
+```
+
+# Quick demo
 
 ```python
 git clone https://github.com/intrinsic-opensource/ros-central-registry.git
@@ -49,6 +127,27 @@ bazel query //...
 ```
 
 Please refer to [examples/README.md](examples/README.md) for more information.
+
+# Building the full distribution
+
+To build and test an entire ROS variant (for example `perception`), generate a workspace
+from the repository root and run Bazel inside it:
+
+```bash
+# From the root of the repository, generate the workspace/ folder for a release
+python3 tools/ci/setup_workspace.py --release lyrical.2026-06-08.rcr.1
+
+# Build and test the perception variant
+cd workspace
+bazel test --config perception
+```
+
+The `setup_workspace.py` script resolves every package in the requested release, writes a
+`MODULE.bazel`, a `.bazelrc`, and `ros-<variant>.txt` target lists into `workspace/`. The
+available variants are `core`, `base`, `desktop`, `desktop_full`, `perception` and
+`simulation`; select one with the matching `--config` flag. The first build compiles the
+whole distribution from source and can take a long time on a cold cache; subsequent builds
+reuse the local and remote caches.
 
 # Usage instructions
 
