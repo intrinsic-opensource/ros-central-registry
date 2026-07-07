@@ -23,31 +23,14 @@ Currently, we have Bazel modules for all packages up to the `perception` variant
 
 # Prerequisites
 
-The RCR builds **everything from source** using a hermetic LLVM/clang toolchain and a
-hermetic Python interpreter that Bazel downloads automatically. As a result you do **not**
-need a system C/C++ compiler, an existing ROS installation, or a matching system Python to
-build or run the code. The only things you must install yourself are:
-
-| Tool | Why | Needed for |
-| :--- | :--- | :--- |
-| **Bazelisk** | Launches the pinned Bazel version (a `bazel` shim) | Everything |
-| **Git** | Clone the repository | Everything |
-| **Python 3** (≥ 3.9) | Runs `tools/ci/setup_workspace.py` to generate a full workspace | Full `--config perception` workspace only |
-| **A POSIX `bash`** (Windows only) | Bazel runs genrules through `bash`; ROS message generation uses genrules | Everything, on Windows |
-| **Xcode Command Line Tools** (macOS only) | System frameworks + linker | Everything, on macOS |
-| **buildifier** | Lints `BUILD`/`.bzl` files | Contributors only |
-
-Two workflows are described below. The `examples/` folder is a self-contained Bazel
-workspace and needs only Bazelisk + Git (+ a `bash` on Windows). Building the full ROS
-distribution (`bazel test --config perception`) additionally needs Python 3 to generate the
-`workspace/` folder.
+The RCR builds **everything from source** using a hermetic LLVM/clang toolchain and a hermetic Python interpreter that Bazel downloads automatically. As a result you do **not** need a system C/C++ compiler or an existing ROS installation.
 
 ## Ubuntu 26.04 (amd64 or arm64)
 
 Make sure you have git, Python3, and zip compression tools installed:
 
 ```
-sudo apt-get update && sudo apt-get install -y git python3 unzip zip
+sudo apt-get update && sudo apt-get install -y git unzip zip
 ```
 
 Then download bazelisk and put it on your path:
@@ -70,7 +53,7 @@ xcode-select --install
 Install Homebrew and then the necessary tools:
 
 ```bash
-brew install bazelisk git python@3.12
+brew install bazelisk git
 ```
 
 ## Windows 2025 (amd64 only)
@@ -84,13 +67,21 @@ New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
     -Name LongPathsEnabled -Value 1 -PropertyType DWORD -Force
 ```
 
-Then insall a few prerequisite tools:
+Then install a few prerequisite tools:
 
 ```powershell
 winget install Bazel.Bazelisk        # 'bazel' launcher
 winget install Git.Git
-winget install Python.Python.3.12
 winget install MSYS2.MSYS2
+```
+
+Bazel runs `genrule` and `rules_shell` actions through a POSIX `bash`. On Windows you must
+point it at the MSYS2 `bash` by setting the `BAZEL_SH` environment variable — Bazel does not
+detect MSYS2 reliably on its own. Set it persistently for your user (re-open the terminal
+afterwards so the change takes effect):
+
+```powershell
+[Environment]::SetEnvironmentVariable("BAZEL_SH", "C:\msys64\usr\bin\bash.exe", "User")
 ```
 
 # Verify your setup
