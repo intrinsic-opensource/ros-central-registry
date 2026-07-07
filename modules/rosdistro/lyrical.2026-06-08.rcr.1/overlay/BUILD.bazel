@@ -12,10 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load("@rosdistro//ament:defs.bzl", "ament_package")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 
 package(default_visibility = ["//visibility:public"])
+
+# Arguments
+string_flag(
+    name = "rmw",
+    build_setting_default = "dynamic",
+)
+
+config_setting(
+    name = "rmw_dynamic",
+    flag_values = {":rmw": "dynamic"},
+)
 
 ### PYTHON
 

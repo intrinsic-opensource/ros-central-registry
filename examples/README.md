@@ -53,7 +53,7 @@ Other available Bazel targets include:
 
 ## Selecting the Middleware Implementation
 
-By default, RCR uses Fast RTPS (`rmw_fastrtps_cpp`). You can override this behavior and select a different RMW implementation for your nodes by passing the `--@rmw_implementation//:rmw` flag when running your Bazel targets.
+By default, RCR uses Fast RTPS (`rmw_fastrtps_cpp`). You can override this behavior and select a different RMW implementation for your nodes by passing the `--@rosdistro//:rmw` flag when running your Bazel targets.
 
 The supported middleware implementations are:
 - `rmw_cyclonedds_cpp`
@@ -64,13 +64,13 @@ The supported middleware implementations are:
 For example, to run the C++ publisher with Cyclone DDS:
 
 ```bash
-bazel run //:example_ros_publisher_cc --@rmw_implementation//:rmw=rmw_cyclonedds_cpp
+bazel run //:example_ros_publisher_cc --@rosdistro//:rmw=rmw_cyclonedds_cpp
 ```
 
 To run it with Zenoh:
 
 ```bash
-bazel run //:example_ros_publisher_cc --@rmw_implementation//:rmw=rmw_zenoh_cpp
+bazel run //:example_ros_publisher_cc --@rosdistro//:rmw=rmw_zenoh_cpp
 ```
 
 ### Note on Zenoh

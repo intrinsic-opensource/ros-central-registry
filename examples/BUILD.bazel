@@ -20,7 +20,7 @@ load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 
 package(default_visibility = ["//visibility:public"])
 
-# C examples
+# C examples - the more traditional pipeline
 
 c_ros_library(
     name = "example_ros_c_msgs",
@@ -41,6 +41,34 @@ cc_binary(
     srcs = ["src/example_ros_subscriber.c"],
     deps = [
         ":example_ros_c_msgs",
+        "@rclc//:rclc_library",
+    ],
+)
+
+# C examples (static type)
+
+c_ros_library(
+    name = "example_ros_c_msgs_static",
+    deps = ["//msg:ExampleMessage"],
+    alwayslink = True,
+)
+
+cc_binary(
+    name = "example_ros_publisher_c_static",
+    srcs = ["src/example_ros_publisher.c"],
+    linkstatic = True,
+    deps = [
+        ":example_ros_c_msgs_static",
+        "@rclc//:rclc_library",
+    ],
+)
+
+cc_binary(
+    name = "example_ros_subscriber_c_static",
+    srcs = ["src/example_ros_subscriber.c"],
+    linkstatic = True,
+    deps = [
+        ":example_ros_c_msgs_static",
         "@rclc//:rclc_library",
     ],
 )
@@ -66,6 +94,32 @@ cc_binary(
     srcs = ["src/example_ros_subscriber.cc"],
     deps = [
         ":example_ros_cc_msgs",
+        "@rclcpp//:rclcpp_library",
+    ],
+)
+
+cc_ros_library(
+    name = "example_ros_cc_msgs_static",
+    deps = ["//msg:ExampleMessage"],
+    alwayslink = True,
+)
+
+cc_binary(
+    name = "example_ros_publisher_cc_static",
+    srcs = ["src/example_ros_publisher.cc"],
+    linkstatic = True,
+    deps = [
+        ":example_ros_cc_msgs_static",
+        "@rclcpp//:rclcpp_library",
+    ],
+)
+
+cc_binary(
+    name = "example_ros_subscriber_cc_static",
+    srcs = ["src/example_ros_subscriber.cc"],
+    linkstatic = True,
+    deps = [
+        ":example_ros_cc_msgs_static",
         "@rclcpp//:rclcpp_library",
     ],
 )

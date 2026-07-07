@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""Starlark rules for generating ROS interface code and bindings."""
 
 load("@rosdistro//ament:defs.bzl", "ament_index")
 load(
@@ -47,7 +48,7 @@ cc_ros_library = _cc_ros_library
 py_ros_library = _py_ros_library
 rs_ros_library = _rs_ros_library
 
-def core_generators(package_xml, export_name = None, deps = [], hdrs = [], includes = [], data = []):
+def core_generators(package_xml, name = None, export_name = None, deps = [], hdrs = [], includes = [], data = [], alwayslink = None):
     """Generate core interface targets
 
     This macro is responsible for generating all interface targets for the
@@ -55,12 +56,20 @@ def core_generators(package_xml, export_name = None, deps = [], hdrs = [], inclu
 
     Args:
         package_xml: required package.xml file
+        name: optional macro name
         export_name: optional export name
         deps: list of dependencies for this target collection.
         hdrs: extra headers
         includes: extra includes
         data: extra data
+        alwayslink: optional boolean to force alwayslink behavior
     """
+
+    if alwayslink == None:
+        alwayslink = select({
+            "@rosdistro//:rmw_dynamic": False,
+            "//conditions:default": True,
+        })
 
     # C bindings:
     # ----------
@@ -69,6 +78,7 @@ def core_generators(package_xml, export_name = None, deps = [], hdrs = [], inclu
     # containing all shared libraries for the whole dep chain of messages.
     c_ros_library(
         name = "c_internal",
+        alwayslink = alwayslink,
         deps = deps,
     )
     cc_library(
@@ -85,6 +95,7 @@ def core_generators(package_xml, export_name = None, deps = [], hdrs = [], inclu
     # containing all shared libraries for the whole dep chain of messages.
     cc_ros_library(
         name = "cc_internal",
+        alwayslink = alwayslink,
         deps = deps,
     )
     cc_library(
