@@ -135,6 +135,16 @@ common:ci --google_default_credentials
 # For example, macos on macos, linux on linux, etc.
 common --enable_platform_specific_config
 
+# Disable Bazel 9's repo-contents cache. Once Developer Mode is enabled on
+# Windows (needed for the Rust/zenoh crate splice), Bazel symlinks every fetched
+# repository into that content-addressed cache. The pip wheel installer creates
+# its site-packages/ tree via a subprocess *through* that symlink, which breaks
+# Bazel's repo-rule filesystem-consistency check ("site-packages is no longer an
+# existing directory") and fails every pip package. Turning the cache off makes
+# repositories materialize as real directories again, as they did before
+# Developer Mode was enabled.
+common:windows --repo_contents_cache=
+
 ## BUILD OPTIONS
 
 # Ensure that we use toolchains_llvm instead of the host toolchain.
