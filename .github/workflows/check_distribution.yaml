@@ -96,11 +96,18 @@ jobs:
         disk-cache: ${{ github.workflow }}
         repository-cache: false
 
-    # Build the ros 2 distribution
+    # SMOKE TEST
+
+    # Checks that the examples build, for both dynamic and static RMW implementations.
     - name: Examples
       id: examples
+      working-directory: ./examples
       run: |
-        bazel build --config ci --config=${{ matrix.variant }}
+        bazel build //... --@rosdistro//:rmw=rmw_fastrtps_cpp
+        bazel build //... --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp
+        bazel build //... --@rosdistro//:rmw=rmw_cyclonedds_cpp
+        bazel build //... --@rosdistro//:rmw=rmw_zenoh_cpp
+        bazel build //...
     - name: Update status badge (build)
       uses: Schneegans/dynamic-badges-action@v1.8.0
       with:
@@ -111,6 +118,8 @@ jobs:
         message: ${{ steps.examples.outcome == 'success' && '✓' || 'x' }}
         color: ${{ steps.examples.outcome == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)
+
+    # TEST THE ENTIRE DISTRIBUTION
 
     # Setup python
     - name: Setup Python
