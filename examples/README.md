@@ -41,36 +41,53 @@ bazel run //:example_ros_subscriber_py
 ```
 
 Other available Bazel targets include:
+
+### Standard (Dynamic) Targets
+These targets use dynamic linkage and are intended for use with the default dynamic middleware selection (`--@rosdistro//:rmw=dynamic`):
 - `//:example_ros_publisher_c`
 - `//:example_ros_subscriber_c`
 - `//:example_ros_publisher_cc`
 - `//:example_ros_subscriber_cc`
 - `//:example_ros_publisher_py`
 - `//:example_ros_subscriber_py`
+
+### Static Targets
+These targets are compiled with static linkage (`linkstatic = True` and message libraries with `alwayslink = True`). Use these when selecting a static RMW implementation (e.g., `--@rosdistro//:rmw=rmw_fastrtps_cpp` or `--@rosdistro//:rmw=rmw_cyclonedds_cpp`):
+- `//:example_ros_publisher_c_static`
+- `//:example_ros_subscriber_c_static`
+- `//:example_ros_publisher_cc_static`
+- `//:example_ros_subscriber_cc_static`
+
+### Protobuf Pipeline Targets
 - `//:example_proto_publisher_cc`
 - `//:example_proto_subscriber_cc`
 - `//:example_proto_py_export` (demonstrates importing the generated Python Protobuf bindings)
 
 ## Selecting the Middleware Implementation
 
-By default, RCR uses Fast RTPS (`rmw_fastrtps_cpp`). You can override this behavior and select a different RMW implementation for your nodes by passing the `--@rosdistro//:rmw` flag when running your Bazel targets.
+By default, RCR compiles with a dynamic middleware selection (`--@rosdistro//:rmw=dynamic`). This builds `rmw_implementation` as a shared library that dynamically loads the RMW implementation specified by the `RMW_IMPLEMENTATION` environment variable at runtime.
+
+You can override this compile-time setting to statically compile a specific RMW implementation directly into your nodes by passing the `--@rosdistro//:rmw` flag.
 
 The supported middleware implementations are:
 - `rmw_cyclonedds_cpp`
-- `rmw_fastrtps_cpp` (default)
+- `rmw_fastrtps_cpp`
 - `rmw_fastrtps_dynamic_cpp`
 - `rmw_zenoh_cpp`
 
-For example, to run the C++ publisher with Cyclone DDS:
+> [!IMPORTANT]
+> When compiling with a specific static middleware implementation (e.g., `--@rosdistro//:rmw=rmw_fastrtps_cpp`), you **must** build and run the corresponding static Bazel targets (ending in `_static`). For example:
+>
+> ```bash
+> bazel run //:example_ros_publisher_cc_static --@rosdistro//:rmw=rmw_cyclonedds_cpp
+> ```
+>
+> Doing so ensures that typesupport structures and dependencies are linked correctly in the static build configuration.
+
+To run it with Zenoh (which also requires the static target when compile-time RMW is specified):
 
 ```bash
-bazel run //:example_ros_publisher_cc --@rosdistro//:rmw=rmw_cyclonedds_cpp
-```
-
-To run it with Zenoh:
-
-```bash
-bazel run //:example_ros_publisher_cc --@rosdistro//:rmw=rmw_zenoh_cpp
+bazel run //:example_ros_publisher_cc_static --@rosdistro//:rmw=rmw_zenoh_cpp
 ```
 
 ### Note on Zenoh
