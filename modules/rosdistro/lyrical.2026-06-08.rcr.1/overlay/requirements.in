@@ -19,7 +19,7 @@ lxml==5.2.1
 matplotlib==3.10.9
 mypy==1.9.0
 numpy==1.26.4
-opencv-python==4.6.0.66
+opencv-python==4.9.0.80
 osrf-pycommon==2.0.2
 packaging==24.2
 pillow==12.2.0

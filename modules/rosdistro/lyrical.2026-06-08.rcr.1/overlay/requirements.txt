@@ -868,14 +868,14 @@ numpy==1.26.4 \
     #   matplotlib
     #   opencv-python
     #   pyqtgraph
-opencv-python==4.6.0.66 \
-    --hash=sha256:0dc82a3d8630c099d2f3ac1b1aabee164e8188db54a786abb7a4e27eba309440 \
-    --hash=sha256:5af8ba35a4fcb8913ffb86e92403e9a656a4bff4a645d196987468f0f8947875 \
-    --hash=sha256:6e32af22e3202748bd233ed8f538741876191863882eba44e332d1a34993165b \
-    --hash=sha256:c5bfae41ad4031e66bb10ec4a0a2ffd3e514d092652781e8b1ac98d1b59f1158 \
-    --hash=sha256:dbdc84a9b4ea2cbae33861652d25093944b9959279200b7ae0badd32439f74de \
-    --hash=sha256:e6e448b62afc95c5b58f97e87ef84699e6607fe5c58730a03301c52496005cae \
-    --hash=sha256:f482e78de6e7b0b060ff994ffd859bddc3f7f382bb2019ef157b0ea8ca8712f5
+opencv-python==4.9.0.80 \
+    --hash=sha256:1a9f0e6267de3a1a1db0c54213d022c7c8b5b9ca4b580e80bdc58516c922c9e1 \
+    --hash=sha256:3f16f08e02b2a2da44259c7cc712e779eff1dd8b55fdb0323e8cab09548086c0 \
+    --hash=sha256:71dfb9555ccccdd77305fc3dcca5897fbf0cf28b297c51ee55e079c065d812a3 \
+    --hash=sha256:7b34a52e9da36dda8c151c6394aed602e4b17fa041df0b9f5b93ae10b0fcca2a \
+    --hash=sha256:7e5f7aa4486651a6ebfa8ed4b594b65bd2d2f41beeb4241a3e4b1b85acbbbadb \
+    --hash=sha256:dcf000c36dd1651118a2462257e3a9e76db789a78432e1f303c7bac54f63ef6c \
+    --hash=sha256:e4088cab82b66a3b37ffc452976b14a3c599269c247895ae9ceb4066d8188a57
     # via -r requirements.in
 osrf-pycommon==2.0.2 \
     --hash=sha256:912306696e59aad34698e29f4b832327046306344999c31f19007fc28b99adf0 \
