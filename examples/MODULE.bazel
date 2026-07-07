@@ -74,36 +74,46 @@ bazel_dep(name = "std_msgs", version = "0.0.0")
 register_toolchains("@llvm//toolchain:all")
 
 # Extend the hermetic macOS SDK sysroot (@llvm//extensions:osx.bzl) with the
-# frameworks our dependencies need transitively: IOKit for fastdds
-# (utils/Host.cpp, resolved version 3.4.2 here) and some zenoh-c crates,
-# Cocoa for opencv's highgui GUI backend (modules/highgui/src/window_cocoa.mm),
-# and AVFoundation for opencv's videoio capture backend
-# (modules/videoio/src/cap_avfoundation_mac.mm). AVFoundation.framework
-# bundles a nested Frameworks/AVFAudio.framework alias that Bazel's archive
-# extraction couldn't materialize on its own ("file type ... is not
-# supported"); we fixed that at the source by patching the "llvm" module's
-# osx.bzl extension (see bcr_staging/modules/llvm/0.8.6) to exclude nested
-# Frameworks/ subdirectories from every requested framework, rather than
-# dropping AVFoundation support from opencv.
-#
-# The default framework list (everything below except IOKit/Cocoa/
-# AVFoundation) comes from the "llvm" module itself; since osx.frameworks(...)
-# tags from every module in the graph get merged into one list, but that
-# "llvm"-provided default only applies when nobody sets the tag at all -- as
-# soon as any module (including this one) sets it, the default drops out, so
-# we have to repeat it here rather than append.
+# frameworks our dependencies needed on OSX.
 osx = use_extension("@llvm//extensions:osx.bzl", "osx")
 osx.frameworks(
     names = [
+        "AVFAudio",
         "AVFoundation",
+        "Accelerate",
+        "AppKit",
+        "ApplicationServices",
+        "AudioToolbox",
+        "CFNetwork",
+        "CloudKit",
         "Cocoa",
+        "ColorSync",
+        "CoreAudio",
+        "CoreAudioTypes",
+        "CoreData",
         "CoreFoundation",
+        "CoreGraphics",
+        "CoreImage",
+        "CoreLocation",
+        "CoreMIDI",
+        "CoreMedia",
+        "CoreServices",
+        "CoreText",
+        "CoreVideo",
+        "DiskArbitration",
         "Foundation",
         "IOKit",
+        "IOSurface",
+        "ImageIO",
         "Kernel",
+        "MediaToolbox",
+        "Metal",
         "OSLog",
+        "OpenGL",
+        "QuartzCore",
         "Security",
         "SystemConfiguration",
+        "UniformTypeIdentifiers",
     ],
 )
 
