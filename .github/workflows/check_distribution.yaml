@@ -134,8 +134,8 @@ jobs:
       run: |
         python3 tools/ci/setup_workspace.py --release ${{ matrix.ros }}
 
-    # Build the ros 2 distribution
-    - name: Build
+    # Build the whole ROS distribution
+    - name: Build distribution
       id: build
       run: |
         bazel build --config ci --config=${{ matrix.variant }}

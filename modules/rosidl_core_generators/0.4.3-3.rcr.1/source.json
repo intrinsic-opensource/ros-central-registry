@@ -3,7 +3,7 @@
     "url": "https://github.com/ros2-gbp/rosidl_core-release/archive/refs/tags/release/lyrical/rosidl_core_generators/0.4.3-3.tar.gz",
     "strip_prefix": "rosidl_core-release-release-lyrical-rosidl_core_generators-0.4.3-3",
     "overlay": {
-        "rules.bzl": "sha256-AwQ8wFMGsy59eZgx5rWMcCjJg3IYGIPmVwzyq6SwCzI=",
+        "rules.bzl": "sha256-ZAFydijCyjeJArpueihoUPDrlpvYO6NoEDc3WqRRAdo=",
         "defs.bzl": "sha256-AZXuq0HdDkVeZMnRUoCsEOcjAxSTJB3r8xoebnxJNJY=",
         "BUILD.bazel": "sha256-9x/8CaQVqo8bSxmsZL++1OnzOJEEW//0IdTrp0zOV00="
     }
