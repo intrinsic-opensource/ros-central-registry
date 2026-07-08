@@ -567,8 +567,6 @@ alias(
     actual = "@llvm-project//clang:clang-format",
 )
 
-# zenoh-cpp
-
 alias(
     name = "zenoh-cpp_library",
     actual = "@zenoh-cpp",
@@ -577,6 +575,13 @@ alias(
 cc_shared_library(
     name = "zenoh-cpp",
     exports_filter = [":zenoh-cpp_library"],
+    user_link_flags = select({
+        "@platforms//os:linux": [
+            "-lpthread",
+            "-lrt",
+        ],
+        "//conditions:default": [],
+    }),
     deps = [":zenoh-cpp_library"],
 )
 

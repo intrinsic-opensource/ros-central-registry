@@ -51,6 +51,7 @@ c_ros_library(
     name = "example_ros_c_msgs_static",
     deps = ["//msg:ExampleMessage"],
     alwayslink = True,
+    tags = ["manual"],
 )
 
 cc_binary(
@@ -61,6 +62,7 @@ cc_binary(
         ":example_ros_c_msgs_static",
         "@rclc//:rclc_library",
     ],
+    tags = ["manual"],
 )
 
 cc_binary(
@@ -71,6 +73,7 @@ cc_binary(
         ":example_ros_c_msgs_static",
         "@rclc//:rclc_library",
     ],
+    tags = ["manual"],
 )
 
 # C++ examples
@@ -102,6 +105,7 @@ cc_ros_library(
     name = "example_ros_cc_msgs_static",
     deps = ["//msg:ExampleMessage"],
     alwayslink = True,
+    tags = ["manual"],
 )
 
 cc_binary(
@@ -112,6 +116,7 @@ cc_binary(
         ":example_ros_cc_msgs_static",
         "@rclcpp//:rclcpp_library",
     ],
+    tags = ["manual"],
 )
 
 cc_binary(
@@ -122,6 +127,7 @@ cc_binary(
         ":example_ros_cc_msgs_static",
         "@rclcpp//:rclcpp_library",
     ],
+    tags = ["manual"],
 )
 
 # Python examples - please note  you must use the py_library, py_binary,
