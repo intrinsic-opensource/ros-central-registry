@@ -49,31 +49,31 @@ cc_binary(
 
 c_ros_library(
     name = "example_ros_c_msgs_static",
+    tags = ["manual"],
     deps = ["//msg:ExampleMessage"],
     alwayslink = True,
-    tags = ["manual"],
 )
 
 cc_binary(
     name = "example_ros_publisher_c_static",
     srcs = ["src/example_ros_publisher.c"],
     linkstatic = True,
+    tags = ["manual"],
     deps = [
         ":example_ros_c_msgs_static",
         "@rclc//:rclc_library",
     ],
-    tags = ["manual"],
 )
 
 cc_binary(
     name = "example_ros_subscriber_c_static",
     srcs = ["src/example_ros_subscriber.c"],
     linkstatic = True,
+    tags = ["manual"],
     deps = [
         ":example_ros_c_msgs_static",
         "@rclc//:rclc_library",
     ],
-    tags = ["manual"],
 )
 
 # C++ examples
@@ -103,31 +103,31 @@ cc_binary(
 
 cc_ros_library(
     name = "example_ros_cc_msgs_static",
+    tags = ["manual"],
     deps = ["//msg:ExampleMessage"],
     alwayslink = True,
-    tags = ["manual"],
 )
 
 cc_binary(
     name = "example_ros_publisher_cc_static",
     srcs = ["src/example_ros_publisher.cc"],
     linkstatic = True,
+    tags = ["manual"],
     deps = [
         ":example_ros_cc_msgs_static",
         "@rclcpp//:rclcpp_library",
     ],
-    tags = ["manual"],
 )
 
 cc_binary(
     name = "example_ros_subscriber_cc_static",
     srcs = ["src/example_ros_subscriber.cc"],
     linkstatic = True,
+    tags = ["manual"],
     deps = [
         ":example_ros_cc_msgs_static",
         "@rclcpp//:rclcpp_library",
     ],
-    tags = ["manual"],
 )
 
 # Python examples - please note  you must use the py_library, py_binary,
