@@ -41,6 +41,8 @@ jobs:
         fetch-depth: 0
     - name: Setup buildifier
       uses: jbajic/setup-buildifier@v1
+      with:
+        version: 8.5.1
     - name: Run buildifier
       run: |
         buildifier -mode check -r .
