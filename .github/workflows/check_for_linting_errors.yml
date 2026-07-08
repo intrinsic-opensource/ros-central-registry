@@ -47,7 +47,7 @@ jobs:
       run: |
         buildifier -mode check -r .
     - name: Update status badges
-      uses: Schneegans/dynamic-badges-action@v1.7.0
+      uses: Schneegans/dynamic-badges-action@v1.8.0
       with:
         auth: ${{ secrets.STATUS_BADGE_SECRET }}
         gistID: f796805a77e0f05cc837b18e60142773
