@@ -36,6 +36,13 @@ crate.from_cargo(
         "//build-resources/opaque-types:Cargo.toml",
         "//:Cargo.toml",
     ],
+    supported_platform_triples = [
+        "aarch64-apple-darwin",
+        "aarch64-unknown-linux-gnu",
+        "x86_64-apple-darwin",
+        "x86_64-pc-windows-msvc",
+        "x86_64-unknown-linux-gnu",
+    ],
 )
 crate.annotation(
     crate = "cbindgen",
