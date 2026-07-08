@@ -160,7 +160,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_cpp)
         path: |
-          "bazel-testlogs/**/test.log"
+          bazel-testlogs/**/test.log
       if: always()
     - name: Update status badge (rmw_fastrtps_cpp)
       uses: Schneegans/dynamic-badges-action@v1.8.0
@@ -184,7 +184,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_dynamic_cpp)
         path: |
-          "bazel-testlogs/**/test.log"
+          bazel-testlogs/**/test.log
       if: always()
     - name: Update status badge (rmw_fastrtps_dynamic_cpp)
       uses: Schneegans/dynamic-badges-action@v1.8.0
@@ -208,7 +208,7 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_cyclonedds_cpp)
         path: |
-          "bazel-testlogs/**/test.log"
+          bazel-testlogs/**/test.log
       if: always()
     - name: Update status badge (rmw_cyclonedds_cpp)
       uses: Schneegans/dynamic-badges-action@v1.8.0
@@ -234,9 +234,9 @@ jobs:
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_zenoh_cpp)
         path: |
-          "bazel-testlogs/**/test.log"
-          "zenohd-stdout.log"
-          "zenohd-stderr.log"
+          bazel-testlogs/**/test.log
+          zenohd-stdout.log
+          zenohd-stderr.log
       if: always()
     - name: Update status badge (rmw_zenoh_cpp)
       uses: Schneegans/dynamic-badges-action@v1.8.0
