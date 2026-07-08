@@ -4,7 +4,7 @@
     "strip_prefix": "rosidl_rust-release-release-lyrical-rosidl_generator_rs-0.4.12-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-0GE2BnyMzXVjsBnmeGuph8cIfWtp0xaz6oxiW7H7L+g=",
+        "BUILD.bazel": "sha256-pMdNRB3322NeYNJ6uIeOpp/dZWt5LbxEvVgYeoKushk=",
         "aspects.bzl": "sha256-24Cjs4GFbkinmKoWmSyzAecInKs/oqM6/f9R6tDXP7M=",
         "defs.bzl": "sha256-T0gXoCbKyqrirqQTmEmXFeWWVqf0BC4sw+H/Ez09J1g=",
         "types.bzl": "sha256-evtPVVz7OWT9V9xGgOAj/OXafpUQWe8Yp+wDRFzOuBk="

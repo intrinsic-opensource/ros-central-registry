@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/rosidl-release/archive/refs/tags/release/lyrical/rosidl_buffer_backend_registry/5.2.1-1.tar.gz",
     "strip_prefix": "rosidl-release-release-lyrical-rosidl_buffer_backend_registry-5.2.1-1",
     "overlay": {
-        "BUILD.bazel": "sha256-b7fM330my4wKo+Sj70P80w5UfUt7HwUmlqVDoJppmTY="
+        "BUILD.bazel": "sha256-PA/5qEsq3mPsSRvAH6YGkpLAlGRozDLKJ+VjkIVjWhA="
     }
 }

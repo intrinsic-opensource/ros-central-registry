@@ -1,5 +1,3 @@
-#!/bin/bash
-#
 # Copyright 2026 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
+load(
+    ":aspects.bzl",
+    _rosidl_adapter_proto_aspect = "rosidl_adapter_proto_aspect",
+)
+load(
+    ":tools.bzl",
+    _merge_proto_infos = "merge_proto_infos",
+)
+load(
+    ":types.bzl",
+    _RosProtoInfo = "RosProtoInfo",
+)
 
-echo ""
-echo "ROS 2 dev shell (distro: $ROS_DISTRO, home: $ROS_HOME, rmw: $RMW_IMPLEMENTATION)"
-echo "Try: ros2 topic list, ros2 node list, ros2 topic echo /your/topic"
-echo ""
+# Provider returned by the aspect containing protobuf info.
+RosProtoInfo = _RosProtoInfo
 
-exec bash --norc --noprofile -i
+# Aspect to collect RosProtoInfo across a graph.
+rosidl_adapter_proto_aspect = _rosidl_adapter_proto_aspect
+
+# Reusable tooling for merging ProtoInfos.
+merge_proto_infos = _merge_proto_infos

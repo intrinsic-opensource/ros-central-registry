@@ -5,7 +5,7 @@
     "patch_strip": 1,
     "overlay": {
         "aspects.bzl": "sha256-sXZWAJaNAs6DDr4ljS49TLg9vge5uj1BJDvTbmYS+PY=",
-        "BUILD.bazel": "sha256-z93qzccx94YQG0ytWXUA6WyG8FH3v3jjPnP8GLhnVzs=",
+        "BUILD.bazel": "sha256-bd6dtejF3n7zEvU1P/BistNIY6oiVHGPQvafSfKPlQo=",
         "defs.bzl": "sha256-J962b3csI/ptc1HRq8whPAuRhMYJ2e/1enq5XkdmuwY=",
         "types.bzl": "sha256-fr8kGo0syl0vmYB4hA9OeFYKeCM+1Y7IvrIQAAexHAc="
     },

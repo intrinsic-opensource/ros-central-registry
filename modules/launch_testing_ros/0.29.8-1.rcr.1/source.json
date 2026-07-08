@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/launch_ros-release/archive/refs/tags/release/lyrical/launch_testing_ros/0.29.8-1.tar.gz",
     "strip_prefix": "launch_ros-release-release-lyrical-launch_testing_ros-0.29.8-1",
     "overlay": {
-        "BUILD.bazel": "sha256-j5fKAhRH+VGjD7pmG5n0XzFfI8JHxwLKpXtQoWxlXJo="
+        "BUILD.bazel": "sha256-v2cSCUfFSJt6fCwLz/XSAg8QKJur/0gbjNeF5ZFIcW0="
     }
 }

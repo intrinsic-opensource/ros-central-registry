@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/rmw_implementation-release/archive/refs/tags/release/lyrical/rmw_implementation/3.1.5-6.tar.gz",
     "strip_prefix": "rmw_implementation-release-release-lyrical-rmw_implementation-3.1.5-6",
     "overlay": {
-        "BUILD.bazel": "sha256-4D5yTsPNbSLC814L9SsQA66P6q//bEBRlbtOFSQmqUg="
+        "BUILD.bazel": "sha256-ZjisK8DStQOkiX3uYcqRqMxjTtX+etHFObvFE5yRV4c="
     }
 }

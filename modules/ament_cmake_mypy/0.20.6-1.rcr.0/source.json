@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/ament_lint-release/archive/refs/tags/release/lyrical/ament_cmake_mypy/0.20.6-1.tar.gz",
     "strip_prefix": "ament_lint-release-release-lyrical-ament_cmake_mypy-0.20.6-1",
     "overlay": {
-        "BUILD.bazel": "sha256-hc+LglVhYUbAR0T3tanfpNfeyDRy9ezsZZ0HEwgKtMo="
+        "BUILD.bazel": "sha256-H2PTmiLv5oQ58WpEgG+kuwka6sgFggMecjgFadEt3y4="
     }
 }

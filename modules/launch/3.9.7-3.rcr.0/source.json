@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/launch-release/archive/refs/tags/release/lyrical/launch/3.9.7-3.tar.gz",
     "strip_prefix": "launch-release-release-lyrical-launch-3.9.7-3",
     "overlay": {
-        "BUILD.bazel": "sha256-hsXHexqIzy30F9+60Rul96SWSC9JmeuU3syRKoC2+MY="
+        "BUILD.bazel": "sha256-1k0IEdeLrXT+c8ipeftnqQdNxac0p1nwVNU22A+kofE="
     }
 }

@@ -4,7 +4,7 @@
     "strip_prefix": "rcpputils-release-release-lyrical-rcpputils-2.14.5-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-0DKY8BiCtHMY8MBnB5J0ZgT3e9dkRxe0WLih1N4hwVA="
+        "BUILD.bazel": "sha256-6QLin1mHcDHHWoxreXoDXgXt6Mlor0ONg42b9VYVCwc="
     },
     "patches": {
         "test__test_filesystem_helper_std__cpp.patch": "sha256-M/kBILB5XHtNnoKv/L2rrRAeCLb3ueAzhHkJcGk5NcM="

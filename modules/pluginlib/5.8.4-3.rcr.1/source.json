@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/pluginlib-release/archive/refs/tags/release/lyrical/pluginlib/5.8.4-3.tar.gz",
     "strip_prefix": "pluginlib-release-release-lyrical-pluginlib-5.8.4-3",
     "overlay": {
-        "BUILD.bazel": "sha256-5eqaIxdRv7cp5DdEREKYNAeZEIEOVxmW3ahInlO/+Cg="
+        "BUILD.bazel": "sha256-VwJJ9K/v+0/Z10knk6QyRuPKDAYmcJ3Yw0C5hKh2OMQ="
     }
 }

@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/sros2-release/archive/refs/tags/release/lyrical/sros2_cmake/0.16.6-1.tar.gz",
     "strip_prefix": "sros2-release-release-lyrical-sros2_cmake-0.16.6-1",
     "overlay": {
-        "BUILD.bazel": "sha256-zqPkE9Hos8NAD6L5KgJFAp1jMEu4GJES0a9hIW0n4dE="
+        "BUILD.bazel": "sha256-y/Rh0TIClIMqFJTl1C0BEwYtbQ7wjX9pZmp+DITrxL8="
     }
 }

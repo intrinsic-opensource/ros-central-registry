@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/google_benchmark_vendor-release/archive/refs/tags/release/lyrical/google_benchmark_vendor/0.7.0-3.tar.gz",
     "strip_prefix": "google_benchmark_vendor-release-release-lyrical-google_benchmark_vendor-0.7.0-3",
     "overlay": {
-        "BUILD.bazel": "sha256-o+CQRpjlBcD1ymL8OOHGnwWM9Qr69eQN2NCnBdRl97s="
+        "BUILD.bazel": "sha256-6Qwnx5d5bKXrNhAf/7nUXikOClKNJ7s+AHvvEg8Hux4="
     }
 }

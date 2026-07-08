@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/ament_cmake-release/archive/refs/tags/release/lyrical/ament_cmake_export_dependencies/2.8.7-3.tar.gz",
     "strip_prefix": "ament_cmake-release-release-lyrical-ament_cmake_export_dependencies-2.8.7-3",
     "overlay": {
-        "BUILD.bazel": "sha256-zI4Cu87naA6eOP678In4BtVOekah1K4oBAA2eEt7qQU="
+        "BUILD.bazel": "sha256-SoGd4AshXJ5Y4jiXBc1DcYnYetcCvcyTJwTcQ/QmFms="
     }
 }

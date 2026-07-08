@@ -3,7 +3,7 @@
     "url": "https://github.com/ros2-gbp/unique_identifier_msgs-release/archive/refs/tags/release/lyrical/unique_identifier_msgs/2.8.1-3.tar.gz",
     "strip_prefix": "unique_identifier_msgs-release-release-lyrical-unique_identifier_msgs-2.8.1-3",
     "overlay": {
-        "BUILD.bazel": "sha256-Wyn8kdFbZc/zfrqLc+iWGaiMOpdNICAI2AXIZz8GAHk=",
+        "BUILD.bazel": "sha256-ZA62yBb4lUJPjPBbKbAkhQ6EPzkRt9vCiEGhccngJGQ=",
         "msg/BUILD.bazel": "sha256-Cd0yWqotw1XEnlr3d+n4e9F/9zS4e7YtJdvyw8Py5wo="
     }
 }

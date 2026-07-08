@@ -4,7 +4,7 @@
     "strip_prefix": "ament_lint-release-release-lyrical-ament_pep257-0.20.6-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-h0ytvglFpFR0btrHN7uKAa113zccn5VGtRBNhyqKm+A="
+        "BUILD.bazel": "sha256-oaBVVCIAadpTbB1OlLnORLtCE4/xGkntzVKToebRZ+k="
     },
     "patches": {
         "ament_pep257__main__py.patch": "sha256-r38owdEJk7zDuIcxjX4374H2fNYSCQKW+7Y5TN5SHQw="

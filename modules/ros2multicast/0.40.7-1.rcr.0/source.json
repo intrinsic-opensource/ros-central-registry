@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2multicast/0.40.7-1.tar.gz",
     "strip_prefix": "ros2cli-release-release-lyrical-ros2multicast-0.40.7-1",
     "overlay": {
-        "BUILD.bazel": "sha256-BvR6WIA3ErWRhEeL/vCWwDbTHTSu/b9ebWWVr2r6G18="
+        "BUILD.bazel": "sha256-Oq2jr0PuAWKwifUw3jVWNBcT72fM3sZ6ANLRVWm5O6c="
     }
 }

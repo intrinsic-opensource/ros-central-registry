@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2run/0.40.7-1.tar.gz",
     "strip_prefix": "ros2cli-release-release-lyrical-ros2run-0.40.7-1",
     "overlay": {
-        "BUILD.bazel": "sha256-Srk4ECLU+gbkqn+IEcgmS1XQvb6tlf1zIB3B82ne8Yk="
+        "BUILD.bazel": "sha256-+D4TL2rKU9Z8E7WgrfyM1G808xu5JSpfQJJJJ9kkRx4="
     }
 }

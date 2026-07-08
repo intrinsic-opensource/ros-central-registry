@@ -4,7 +4,7 @@
     "strip_prefix": "ament_lint-release-release-lyrical-ament_uncrustify-0.20.6-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-88MbRXHRBn+8l7/+pBgkXmcRWD/ElGDYfrY7ygOGuKA="
+        "BUILD.bazel": "sha256-Okbt02HkNd5rFQFxWXCXgt7eCN0ex76E9cB9P2D61eU="
     },
     "patches": {
         "ament_uncrustify__main__py.patch": "sha256-DjSgdRlqcZR6JzXuBHko75pd9rDWy8Sb1QwzjpM0WHA=",

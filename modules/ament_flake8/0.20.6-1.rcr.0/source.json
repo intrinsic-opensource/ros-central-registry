@@ -4,7 +4,7 @@
     "strip_prefix": "ament_lint-release-release-lyrical-ament_flake8-0.20.6-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-8CEjlEy4HN7IZxmFhwrWFWxsRey31oiXOkVtlxrfvu8="
+        "BUILD.bazel": "sha256-UpWhhhxRXI+8IwJkt50RCKDDLUFKGQcChh3vugMwUag="
     },
     "patches": {
         "ament_flake8__main__py.patch": "sha256-+L7DQofoCGDALiAOlNlMETkRBzEc6bQPtdwAlYmato8="
