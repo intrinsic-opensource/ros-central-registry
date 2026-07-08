@@ -15,7 +15,6 @@
 name: baseline_ros_release
 run-name: Baseline colcon build and test for coverage and performance
 on:
-  # TODO(asymingt) - remove.
   pull_request:
     branches:
       - main
@@ -26,8 +25,6 @@ on:
         required: true
         type: choice
         options:
-        - 'jazzy'
-        - 'kilted'
         - 'lyrical'
         - 'rolling'
         default: 'lyrical'
@@ -38,7 +35,7 @@ on:
         type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event_name == 'workflow_dispatch' && format('{0}/{1}', inputs.distribution, inputs.date) || (github.event.pull_request.number || github.ref) }}
   cancel-in-progress: true
 
 jobs:
