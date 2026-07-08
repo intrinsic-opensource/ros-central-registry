@@ -202,11 +202,40 @@ filegroup(
     ]
 ]
 
+# On macOS, our hermetic clang statically links a vanilla (non-Apple) build of
+# compiler-rt into every link action (see the `llvm` module's
+# `toolchain/args/macos:default_libs`). That copy of compiler-rt provides the
+# aarch64 outlined-atomics helpers (__aarch64_have_lse_atomics,
+# __aarch64_cpu_features, __init_cpu_features_resolver). Rust's prebuilt
+# std/core for aarch64-apple-darwin bundles its own copy of the very same
+# compiler-rt helpers unconditionally (independent of our own
+# `-C target-feature=-outline-atomics`, which only affects code generated for
+# this crate, not the precompiled sysroot), so linking libzenohc.a together
+# with compiler-rt fails with duplicate symbol errors. Apple's own fork of
+# compiler-rt marks these as weak so they coalesce; our vanilla build doesn't.
+# Localize the 3 duplicated symbols in libzenohc.a so the linker resolves them
+# from compiler-rt instead: unresolved references in the rest of the archive
+# still find them there.
+genrule(
+    name = "zenohc_static_delocalized",
+    srcs = [":zenohc_static"],
+    outs = ["libzenohc_delocalized.a"],
+    cmd = "$(location @llvm//tools:llvm-objcopy) " +
+          "--localize-symbol=___aarch64_have_lse_atomics " +
+          "--localize-symbol=___aarch64_cpu_features " +
+          "--localize-symbol=___init_cpu_features_resolver " +
+          "$(location :zenohc_static) $@",
+    tools = ["@llvm//tools:llvm-objcopy"],
+)
+
 # Package up the rust library and c headers as a cc_library
 
 cc_library(
     name = "zenoh-c",
-    srcs = [":zenohc_static"],
+    srcs = select({
+        "@platforms//os:macos": [":zenohc_static_delocalized"],
+        "//conditions:default": [":zenohc_static"],
+    }),
     hdrs = [
         "include/zenoh.h",
         "include/zenoh_commons.h",
