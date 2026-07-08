@@ -220,11 +220,18 @@ genrule(
     name = "zenohc_static_delocalized",
     srcs = [":zenohc_static"],
     outs = ["libzenohc_delocalized.a"],
-    cmd = "$(location @llvm//tools:llvm-objcopy) " +
-          "--localize-symbol=___aarch64_have_lse_atomics " +
-          "--localize-symbol=___aarch64_cpu_features " +
-          "--localize-symbol=___init_cpu_features_resolver " +
-          "$(location :zenohc_static) $@",
+    cmd = select({
+        "@platforms//cpu:aarch64": (
+            "$(location @llvm//tools:llvm-objcopy) " +
+            "--localize-symbol=___aarch64_have_lse_atomics " +
+            "--localize-symbol=___aarch64_cpu_features " +
+            "--localize-symbol=___init_cpu_features_resolver " +
+            "$(location :zenohc_static) $@"
+        ),
+        "//conditions:default": (
+            "cp $(location :zenohc_static) $@"
+        ),
+    }),
     tools = ["@llvm//tools:llvm-objcopy"],
 )
 
