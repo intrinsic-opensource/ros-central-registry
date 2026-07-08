@@ -15,9 +15,6 @@
 name: baseline_ros_release
 run-name: Baseline colcon build and test for coverage and performance
 on:
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       distribution:
@@ -35,7 +32,7 @@ on:
         type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name == 'workflow_dispatch' && format('{0}/{1}', inputs.distribution, inputs.date) || (github.event.pull_request.number || github.ref) }}
+  group: ${{ github.workflow }}-${{ inputs.distribution }}/${{ inputs.date }}
   cancel-in-progress: true
 
 jobs:

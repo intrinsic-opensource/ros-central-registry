@@ -16,9 +16,6 @@ name: check_distribution
 run-name: Perform a build across platforms, bazel versions and variants.
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       branch:
@@ -28,7 +25,7 @@ on:
         type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ inputs.branch || github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ inputs.branch }}
   cancel-in-progress: true
 
 env:
@@ -82,7 +79,7 @@ jobs:
       uses: actions/checkout@v7
       with:
         fetch-depth: 0
-        ref: ${{ inputs.branch || github.ref }}
+        ref: ${{ inputs.branch }}
 
     # Setup auth to allow pushing to the remote cache.
     - name: Authenticate to Google Cloud
