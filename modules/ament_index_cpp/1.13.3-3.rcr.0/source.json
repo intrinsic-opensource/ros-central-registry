@@ -4,7 +4,7 @@
     "strip_prefix": "ament_index-release-release-lyrical-ament_index_cpp-1.13.3-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-bhn/KKTX/jiX7kVb8e7Y2q7MEr2Ea74h5bDYlKedujY="
+        "BUILD.bazel": "sha256-9EWTpETdPKP/JzUjnq5z2MhydfuVNSSzjS1T2OnHh1w="
     },
     "patches": {
         "src__get_search_paths__cpp.patch": "sha256-l4tpfOHY5R61QZDf5q9ETYk6zb6XFVaVMdqyD4miVM4=",

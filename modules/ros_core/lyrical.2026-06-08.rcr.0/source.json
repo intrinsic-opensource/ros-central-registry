@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/variants-release/archive/refs/tags/release/lyrical/ros_core/0.13.0-3.tar.gz",
     "strip_prefix": "variants-release-release-lyrical-ros_core-0.13.0-3",
     "overlay": {
-        "BUILD.bazel": "sha256-S6UuRoaEYY2W6MV0ibwr/aP6b4qQiTTeJeYV1jRiu+g="
+        "BUILD.bazel": "sha256-YH/oU4xKF0CwAkQ/ZS/aLJvhFcJNNx9SQpjthg9+Kyk="
     }
 }

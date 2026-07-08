@@ -4,7 +4,7 @@
     "strip_prefix": "rcl-release-release-lyrical-rcl-10.4.4-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-bTb89Q0Tk3pfTJ/6VzrnYAS0FBH1EQYPubw3yh36ykI=",
+        "BUILD.bazel": "sha256-DJ381tkEMSLEBvEyBTbMGHv7kTIrchuk1Rl6o84wyAg=",
         "test/rcl/locate_test_assets.h": "sha256-ia47EJ5WscWEKv5VP+9UjtdG+ga+IKU/wGktwux1vjA="
     },
     "patches": {

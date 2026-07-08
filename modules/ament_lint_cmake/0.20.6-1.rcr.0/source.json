@@ -4,7 +4,7 @@
     "strip_prefix": "ament_lint-release-release-lyrical-ament_lint_cmake-0.20.6-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-DoybqU8NhIBE3G5Y8zhzlY0OL+FpSeMcWn/BmKj1b80="
+        "BUILD.bazel": "sha256-xm0hA4BjRa9B67Of0YHLMj8yJ5prc2CtY/25nXRzPc8="
     },
     "patches": {
         "ament_lint_cmake__main__py.patch": "sha256-UOa6dUALIU7cN9Hibu7Dn9sBlnbqlepnsSmJ0Iwu3zI=",

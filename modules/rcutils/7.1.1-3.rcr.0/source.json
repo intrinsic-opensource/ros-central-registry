@@ -4,7 +4,7 @@
     "strip_prefix": "rcutils-release-release-lyrical-rcutils-7.1.1-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-oLT4lAOx1G9uBCxwOD8QoZuFrvyf+Ax9fmbGflCr5/U=",
+        "BUILD.bazel": "sha256-OSY3mQfJn/6VH3jgZPGGttt2bVLfjsEMrVAVPpdv9T0=",
         "include/rcutils/runfiles.h": "sha256-MAa3qQUADk1JVGZ8n5N0bp/aRP+ko4so3tNJgFFPePg=",
         "src/runfiles.c": "sha256-rBzVucMUhENpauo5I/r4zf/s/cWrtFTFLnG/TB/gQ8s=",
         "test/locate_test_assets.h": "sha256-xm3tB/I+9VgV9CwPVDT2dP+r0BJpFuezPgkze0Z+J/I="

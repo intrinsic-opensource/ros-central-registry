@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/ros2_tracing-release/archive/refs/tags/release/lyrical/tracetools/8.10.2-1.tar.gz",
     "strip_prefix": "ros2_tracing-release-release-lyrical-tracetools-8.10.2-1",
     "overlay": {
-        "BUILD.bazel": "sha256-inu3Ilo3rwNlvKzNHRjJy9ytGnF0h+Ryen/EQWTFNN8="
+        "BUILD.bazel": "sha256-S/A3aCoVBgvQ3D5n6+p0Nb13PAVkb8J+4OXlBLOdY/I="
     }
 }

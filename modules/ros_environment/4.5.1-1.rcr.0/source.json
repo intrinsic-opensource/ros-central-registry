@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/ros_environment-release/archive/refs/tags/release/lyrical/ros_environment/4.5.1-1.tar.gz",
     "strip_prefix": "ros_environment-release-release-lyrical-ros_environment-4.5.1-1",
     "overlay": {
-        "BUILD.bazel": "sha256-8yxS/Bfj+lZVAJINx51gZ5olK0Jkmye8S4YwsFypXwo="
+        "BUILD.bazel": "sha256-Mn+EzID30bV75CwvT0nz3N4ex/r/tNkVPH8EacmT+Nc="
     }
 }

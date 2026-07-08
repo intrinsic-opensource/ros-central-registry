@@ -5,6 +5,6 @@
     "overlay": {
         "rules.bzl": "sha256-ZAFydijCyjeJArpueihoUPDrlpvYO6NoEDc3WqRRAdo=",
         "defs.bzl": "sha256-AZXuq0HdDkVeZMnRUoCsEOcjAxSTJB3r8xoebnxJNJY=",
-        "BUILD.bazel": "sha256-9x/8CaQVqo8bSxmsZL++1OnzOJEEW//0IdTrp0zOV00="
+        "BUILD.bazel": "sha256-8N5ojrRoZb3Xqzp9uA7OKKrSXH3mKBVg1XHnHYtAlSk="
     }
 }

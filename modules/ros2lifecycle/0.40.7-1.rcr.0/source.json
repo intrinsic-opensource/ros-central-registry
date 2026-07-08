@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/ros2cli-release/archive/refs/tags/release/lyrical/ros2lifecycle/0.40.7-1.tar.gz",
     "strip_prefix": "ros2cli-release-release-lyrical-ros2lifecycle-0.40.7-1",
     "overlay": {
-        "BUILD.bazel": "sha256-JBAcwSNd3RddWTohU8J4KJQubPBL3wIBMz96Uyp6+r0="
+        "BUILD.bazel": "sha256-EBNtKtCr9AalpyBOalLxTi7/CWQTPY6hunrNcJNz8lI="
     }
 }

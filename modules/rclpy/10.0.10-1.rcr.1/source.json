@@ -4,7 +4,7 @@
     "strip_prefix": "rclpy-release-release-lyrical-rclpy-10.0.10-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-oe+1CPWakeMyeMPiUpkLsT7QVbAR69fO1K3MYF0pUjs="
+        "BUILD.bazel": "sha256-KfAFI9X0C4qmc0RIJHG41tAl4EH5Ol4onF1cL/mqzz8="
     },
     "patches": {
         "rclpy__impl__implementation_singleton__py.patch": "sha256-yhiwP3XLpYHJY5B4OWTKDdHNT2p8Gps+Rbb318/aQ/U=",

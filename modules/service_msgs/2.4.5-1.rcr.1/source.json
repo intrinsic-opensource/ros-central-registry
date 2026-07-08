@@ -3,7 +3,7 @@
     "url": "https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/service_msgs/2.4.5-1.tar.gz",
     "strip_prefix": "rcl_interfaces-release-release-lyrical-service_msgs-2.4.5-1",
     "overlay": {
-        "BUILD.bazel": "sha256-lQ8mg+XGpkOOCg7N4Fyaqpoq7xTKmOODMKZQKvQvlv8=",
+        "BUILD.bazel": "sha256-uyb8cc+AqlnsrmEWyypftKK0gSSBWtUWriuAlSeuS3w=",
         "msg/BUILD.bazel": "sha256-oztBWvQecX6Yk8KdnLYRm55AXAxOMqzo8vHiTWFV5m4="
     }
 }

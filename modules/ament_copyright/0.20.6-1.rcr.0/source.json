@@ -4,7 +4,7 @@
     "strip_prefix": "ament_lint-release-release-lyrical-ament_copyright-0.20.6-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-GRZx/mOCq08awAQ2AMnoRG3ckjAuQ0aNyD13jyUIZD0="
+        "BUILD.bazel": "sha256-aZCcAMQAO6fP0qZirh2eSAfYMx9VuBBe5R4BaMuH+84="
     },
     "patches": {
         "ament_copyright__main__py.patch": "sha256-mx4k4EjLhjYst4tD+HnORj44FrI07KHBgXRcMkFJHbU="

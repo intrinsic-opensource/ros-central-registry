@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/sros2-release/archive/refs/tags/release/lyrical/sros2/0.16.6-1.tar.gz",
     "strip_prefix": "sros2-release-release-lyrical-sros2-0.16.6-1",
     "overlay": {
-        "BUILD.bazel": "sha256-yqBh8FXffqZoGKLeoysvGyxuviBGl7nrAPwyTNEGDws="
+        "BUILD.bazel": "sha256-1pI9ZtaB6Sfd0Y0NeaM5S7EMBm9cAqAfR4ymKAf+Ufw="
     }
 }

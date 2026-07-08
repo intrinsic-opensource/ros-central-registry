@@ -4,7 +4,7 @@
     "strip_prefix": "rosidl_python-release-release-lyrical-rosidl_generator_py-0.27.2-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-H0jMYzz1byM1ZnsF7SmIOyD16wbccvS5MVCLn/WTogk=",
+        "BUILD.bazel": "sha256-gYa7DnoUzK8V/LzmYiix1NyJMjBR1yufXv6276Z2YWA=",
         "aspects.bzl": "sha256-Jz/nc1MiSsicCjbikwA4mn/CCBZBMo3QbjxSgRlo6o0=",
         "defs.bzl": "sha256-9wcLuuzNyN/cD4hmx3YapdpM1SSBmOMdJllHzWgorL8=",
         "msg/BUILD.bazel": "sha256-kJ3QXFll1cN6Q2UWQUgeZ6LE4ku7g+Z1dZINC9zeCwA=",

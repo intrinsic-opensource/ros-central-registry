@@ -4,7 +4,7 @@
     "strip_prefix": "class_loader-release-release-lyrical-class_loader-2.9.4-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-fbRkGTpUAhBopoaaMg2UAUerrLKKlJOSs+nBzRsWGgw=",
+        "BUILD.bazel": "sha256-9CO0KIdurY4S+98rHPBgbIfPj64G2NTbZPqcYxIIl/Y=",
         "defs.bzl": "sha256-us3jLmfnFkbgzCIXaY46JMmcUb54iPLiXHKF0WzXPBw="
     },
     "patches": {

@@ -3,7 +3,7 @@
     "url": "https://github.com/ros2-gbp/rosidl-release/archive/refs/tags/release/lyrical/rosidl_parser/5.2.1-1.tar.gz",
     "strip_prefix": "rosidl-release-release-lyrical-rosidl_parser-5.2.1-1",
     "overlay": {
-        "BUILD.bazel": "sha256-nT3R2nhb1HEqf9yA1Jfg3JcecthMbD6FGfa89yzz/XE=",
+        "BUILD.bazel": "sha256-EbPFa00YsMRiACZXBnGoQP/2dHox9n6S14H/ZFIM7EA=",
         "defs.bzl": "sha256-UahJMxBWRALo7Gw/8iQjuUFLE+aUGHl/f+/i6sgQTM0="
     }
 }

@@ -3,7 +3,7 @@
     "url": "https://github.com/ros2-gbp/rcl_interfaces-release/archive/refs/tags/release/lyrical/statistics_msgs/2.4.5-1.tar.gz",
     "strip_prefix": "rcl_interfaces-release-release-lyrical-statistics_msgs-2.4.5-1",
     "overlay": {
-        "BUILD.bazel": "sha256-AwsjY+4LBFhWGujXDzA6ZoQHgnrCo0+8005Bnng42rY=",
+        "BUILD.bazel": "sha256-e3YKNnS7ZSvtSvkJi03tfNMGWClszrDfQPx0/IH1ANo=",
         "msg/BUILD.bazel": "sha256-0/gT7El3CotFV3rAYWT/Ya0wD32Ijhx5OyZteN5cgX0="
     }
 }
