@@ -294,13 +294,34 @@ def generate_compilation_information(
     # the fragment link against the .dll and import the symbol.
     is_darwin = "apple" in cc_toolchain.target_gnu_system_name
     is_windows = "windows" in cc_toolchain.target_gnu_system_name or "mingw" in cc_toolchain.target_gnu_system_name
+
+    # Linking contexts used for building the fragment shared library (.dylib / .so / .dll).
     if is_darwin or is_windows:
-        all_linking_contexts = static_linking_contexts + dynamic_linking_contexts
+        dynamic_library_linking_contexts = static_linking_contexts + dynamic_linking_contexts
     else:
-        all_linking_contexts = static_linking_contexts + [
+        dynamic_library_linking_contexts = static_linking_contexts + [
             dep.linking_context
             for dep in header_only_deps
         ]
+
+    # Linking contexts propagated to static consumers of this fragment (via CcInfo).
+    if is_windows:
+        static_linking_contexts_to_propagate = static_linking_contexts + dynamic_linking_contexts
+    else:
+        static_linking_contexts_to_propagate = static_linking_contexts + [
+            dep.linking_context
+            for dep in header_only_deps
+        ]
+
+    if not srcs:
+        linking_context = cc_common.merge_linking_contexts(
+            linking_contexts = static_linking_contexts_to_propagate,
+        )
+        cc_info = CcInfo(
+            compilation_context = compilation_context,
+            linking_context = linking_context,
+        )
+        return cc_info, []
 
     # Link the fragment into its own shared library. Done before building the
     # consumer-facing linking context below so that on Windows that context can
@@ -312,7 +333,7 @@ def generate_compilation_information(
         cc_toolchain = cc_toolchain,
         output_type = "dynamic_library",
         compilation_outputs = compilation_outputs,
-        linking_contexts = all_linking_contexts,
+        linking_contexts = dynamic_library_linking_contexts,
         user_link_flags = ["-Wl,-undefined,dynamic_lookup"] if is_darwin else [],
     )
     lib_to_link = linking_outputs.library_to_link
@@ -345,7 +366,7 @@ def generate_compilation_information(
         feature_configuration = feature_configuration,
         cc_toolchain = cc_toolchain,
         compilation_outputs = compilation_outputs,
-        linking_contexts = all_linking_contexts,
+        linking_contexts = static_linking_contexts_to_propagate,
         name = name + "_link",
     )
     if is_windows:
@@ -365,7 +386,7 @@ def generate_compilation_information(
             )]),
         )
         linking_context = cc_common.merge_linking_contexts(
-            linking_contexts = [own_context] + all_linking_contexts,
+            linking_contexts = [own_context] + static_linking_contexts_to_propagate,
         )
     else:
         linking_context = static_linking_context

@@ -89,6 +89,9 @@ def _force_alwayslink(ctx, direct_cc_infos):
         new_libraries = []
         for lib in linker_input.libraries:
             if not lib.static_library and not lib.pic_static_library:
+                if lib.dynamic_library or lib.interface_library:
+                    new_libraries.append(lib)
+                    continue
                 fail("Library %s lacks a static archive; cannot statically link typesupport" % lib)
             new_libraries.append(
                 cc_common.create_library_to_link(
