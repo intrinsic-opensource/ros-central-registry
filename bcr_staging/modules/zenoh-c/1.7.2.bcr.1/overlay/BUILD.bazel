@@ -72,6 +72,13 @@ rust_shared_library(
         package_name = "zenoh-c",
         normal = True,
     ),
+    rustc_flags = select({
+        "@platforms//os:macos": [
+            "-C",
+            "target-feature=-outline-atomics",
+        ],
+        "//conditions:default": [],
+    }),
 )
 
 rust_static_library(
@@ -107,6 +114,13 @@ rust_static_library(
         package_name = "zenoh-c",
         normal = True,
     ),
+    rustc_flags = select({
+        "@platforms//os:macos": [
+            "-C",
+            "target-feature=-outline-atomics",
+        ],
+        "//conditions:default": [],
+    }),
 )
 
 # Run cbindgen
