@@ -32,6 +32,28 @@ config_setting(
     ],
 )
 
+config_setting(
+    name = "windows_msvc_x86_32",
+    constraint_values = [
+        "@platforms//os:windows",
+        "@platforms//cpu:x86_32",
+    ],
+    flag_values = {
+        "@bazel_tools//tools/cpp:compiler": "msvc-cl",
+    },
+)
+
+config_setting(
+    name = "windows_msvc_x86_64",
+    constraint_values = [
+        "@platforms//os:windows",
+        "@platforms//cpu:x86_64",
+    ],
+    flag_values = {
+        "@bazel_tools//tools/cpp:compiler": "msvc-cl",
+    },
+)
+
 MIMICK_DEFINES_CPU = select({
     ":windows_x86_64": [
         "MMK_ARCH_x86=1",
@@ -115,7 +137,8 @@ PLATFORM_SPECIFIC_PLT_SRCS = select({
 })
 
 PLATFORM_SPECIFIC_TRAMPOLINE_SRCS = select({
-    # clang/mingw uses the GAS-syntax Windows trampoline, not the ml64/MASM one.
+    ":windows_msvc_x86_64": ["src/asm/trampoline-x86_64-win.asm"],
+    ":windows_msvc_x86_32": ["src/asm/trampoline-i386-cdecl.asm"],
     ":windows_x86_64": ["src/asm/trampoline-x86_64-win.S"],
     "@platforms//cpu:x86_64": ["src/asm/trampoline-x86_64-systemv.S"],
     "@platforms//cpu:x86_32": ["src/asm/trampoline-i386-cdecl.S"],
