@@ -116,11 +116,11 @@ jobs:
         sudo rosdep init
         rosdep update
 
-    - name: Install colcon mixins
-      shell: bash
-      run: |
-        colcon mixin add default https://github.com/colcon/colcon-mixin-repository/raw/master/index.yaml
-        colcon mixin update default
+    # - name: Install colcon mixins
+    #   shell: bash
+    #   run: |
+    #     colcon mixin add default https://github.com/colcon/colcon-mixin-repository/raw/master/index.yaml
+    #     colcon mixin update default
 
     - name: Parse release and configure ROSDISTRO_INDEX_URL and DISTRO
       shell: bash
@@ -130,20 +130,20 @@ jobs:
         INPUT_DATE="${{ inputs.date }}"
         INPUT_DATE="${INPUT_DATE:-2026-06-08}"
         RELEASE_NAME="${INPUT_DISTRIBUTION}/${INPUT_DATE}"
-        echo "DISTRO=${INPUT_DISTRIBUTION}" >> $GITHUB_ENV
+        echo "ROS_DISTRO=${INPUT_DISTRIBUTION}" >> $GITHUB_ENV
         echo "ROSDISTRO_INDEX_URL=https://github.com/asymingt/rosdistro/releases/download/${RELEASE_NAME}/index-v4.yaml" >> $GITHUB_ENV
 
     - name: Generate repos file and import sources
       shell: bash
       run: |
-        python3 -c "import sys; from rosinstall_generator.cli import main; sys.exit(main())" ${{ matrix.variant }} --rosdistro ${{ env.DISTRO }} --deps > ros2.repos
+        python3 -c "import sys; from rosinstall_generator.cli import main; sys.exit(main())" ${{ matrix.variant }} --rosdistro ${{ env.ROS_DISTRO }} --deps > ros2.repos
         mkdir -p src
         vcs import src < ros2.repos
 
     - name: Install system dependencies using rosdep
       shell: bash
       run: |
-          rosdep install --from-paths src --ignore-src -y --skip-keys "fastcdr rti-connext-dds-7.7.0 urdfdom_headers" --rosdistro ${{ env.DISTRO }}
+          rosdep install --from-paths src --ignore-src -y --skip-keys "fastcdr rti-connext-dds-7.7.0 urdfdom_headers" --rosdistro ${{ env.ROS_DISTRO }}
 
     - name: Colcon Build
       shell: bash
