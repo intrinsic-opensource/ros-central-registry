@@ -103,6 +103,7 @@ common --run_env=ROS_DISTRO="{distro}"
 common --run_env=ROS_HOME=".ros"
 common --run_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --run_env=LD_LIBRARY_PATH=lib
+common --run_env=DYLD_LIBRARY_PATH=lib
 
 # Propagate select X11 variables through to the test sandbox, so that
 # any test that uses the display has access to it.
