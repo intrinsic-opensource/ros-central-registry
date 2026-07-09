@@ -1,5 +1,0 @@
-matrix:
-  platform:
-  - ubuntu2404
-  - ubuntu2404_arm64
-  - macos
