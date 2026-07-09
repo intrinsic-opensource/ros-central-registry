@@ -27,7 +27,7 @@ DEPS_GENERAL = {
     "rules_pkg": "1.2.0",
     "rules_python": "1.9.0",
     "rules_qt": "0.0.6",
-    "rules_rs": "0.0.56",
-    "rules_rust": "0.69.0",
+    "rules_rs": "0.0.93",
+    "rules_rust": "0.71.3",
     "rules_shell": "0.7.1",
 }
