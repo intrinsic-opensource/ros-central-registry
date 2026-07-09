@@ -42,21 +42,12 @@ bazel run //:example_ros_subscriber_py
 
 Other available Bazel targets include:
 
-### Standard (Dynamic) Targets
-These targets use dynamic linkage and are intended for use with the default dynamic middleware selection (`--@rosdistro//:rmw=dynamic`):
 - `//:example_ros_publisher_c`
 - `//:example_ros_subscriber_c`
 - `//:example_ros_publisher_cc`
 - `//:example_ros_subscriber_cc`
 - `//:example_ros_publisher_py`
 - `//:example_ros_subscriber_py`
-
-### Static Targets
-These targets are compiled with static linkage (`linkstatic = True` and message libraries with `alwayslink = True`). Use these when selecting a static RMW implementation (e.g., `--@rosdistro//:rmw=rmw_fastrtps_cpp` or `--@rosdistro//:rmw=rmw_cyclonedds_cpp`):
-- `//:example_ros_publisher_c_static`
-- `//:example_ros_subscriber_c_static`
-- `//:example_ros_publisher_cc_static`
-- `//:example_ros_subscriber_cc_static`
 
 ### Protobuf Pipeline Targets
 - `//:example_proto_publisher_cc`
@@ -76,18 +67,18 @@ The supported middleware implementations are:
 - `rmw_zenoh_cpp`
 
 > [!IMPORTANT]
-> When compiling with a specific static middleware implementation (e.g., `--@rosdistro//:rmw=rmw_fastrtps_cpp`), you **must** build and run the corresponding static Bazel targets (ending in `_static`). For example:
+> When compiling with a specific static middleware implementation (e.g., `--@rosdistro//:rmw=rmw_fastrtps_cpp`), you can configure Bazel to link client libraries, middleware, and typesupports statically by passing `--dynamic_mode=off`. For example:
 >
 > ```bash
-> bazel run //:example_ros_publisher_cc_static --@rosdistro//:rmw=rmw_cyclonedds_cpp
+> bazel run //:example_ros_publisher_cc --@rosdistro//:rmw=rmw_cyclonedds_cpp --dynamic_mode=off
 > ```
 >
-> Doing so ensures that typesupport structures and dependencies are linked correctly in the static build configuration.
+> Doing so ensures that all client libraries, middleware implementations, and typesupport dependencies are linked statically.
 
-To run it with Zenoh (which also requires the static target when compile-time RMW is specified):
+To run it with Zenoh:
 
 ```bash
-bazel run //:example_ros_publisher_cc_static --@rosdistro//:rmw=rmw_zenoh_cpp
+bazel run //:example_ros_publisher_cc --@rosdistro//:rmw=rmw_zenoh_cpp --dynamic_mode=off
 ```
 
 ### Note on Zenoh

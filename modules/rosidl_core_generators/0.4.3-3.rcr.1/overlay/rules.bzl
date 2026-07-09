@@ -214,7 +214,9 @@ def _c_ros_library(ctx):
         RosCcTypesupportFastRTPSInfo,
         RosCTypesupportInfo,
     ])
-    if ctx.attr.alwayslink:
+    dynamic_mode_val = ctx.fragments.cpp.dynamic_mode()
+    dynamic_mode_off = dynamic_mode_val.lower() == "off"
+    if ctx.attr.alwayslink or dynamic_mode_off:
         cc_info = _force_alwayslink(ctx, direct_cc_infos)
         default_info = DefaultInfo(
             files = depset(),
@@ -275,7 +277,9 @@ def _cc_ros_library(ctx):
         RosCcTypesupportFastRTPSInfo,
         RosCcTypesupportInfo,
     ])
-    if ctx.attr.alwayslink:
+    dynamic_mode_val = ctx.fragments.cpp.dynamic_mode()
+    dynamic_mode_off = dynamic_mode_val.lower() == "off"
+    if ctx.attr.alwayslink or dynamic_mode_off:
         cc_info = _force_alwayslink(ctx, direct_cc_infos)
         default_info = DefaultInfo(
             files = depset(),

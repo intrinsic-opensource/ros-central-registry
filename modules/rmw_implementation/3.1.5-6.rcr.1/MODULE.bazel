@@ -55,6 +55,7 @@ bazel_dep(name = "rmw_fastrtps_dynamic_cpp", version = "9.4.8-1.rcr.1")
 bazel_dep(name = "rmw_implementation_cmake", version = "7.10.1-5.rcr.1")
 bazel_dep(name = "rmw_zenoh_cpp", version = "0.10.4-1.rcr.1")
 bazel_dep(name = "rosdistro", version = "lyrical.2026-06-08.rcr.1")
+bazel_dep(name = "tracetools", version = "8.10.2-1.rcr.1")
 
 # Setup Python
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
