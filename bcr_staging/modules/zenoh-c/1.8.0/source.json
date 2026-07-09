@@ -4,7 +4,7 @@
     "url": "https://github.com/eclipse-zenoh/zenoh-c/archive/refs/tags/1.8.0.tar.gz",
     "patch_strip": 0,
     "overlay": {
-        "BUILD.bazel": "sha256-YXAizJ1mo06MbURdEitT8BNd5Gm9wPL//vgttd3zcdM=",
+        "BUILD.bazel": "sha256-oCWe/fM9gs1y4zkhqd3mBcwLYAbIqgX0tD5pSHgejLw=",
         "Cargo.lock": "sha256-7iRdxDlEuWgiXy6yA1xTC5h6HINimslMeERsbEy3N+k=",
         "Cargo.toml": "sha256-UvrQQGbBnLMOyfxYBLiJrRrpb9VUnVrLyokSDcN8BD4=",
         "bazel_generate_opaque_types.rs": "sha256-qcBzJodko73BQ2+0PBMda+YmiRYSCd9k37WPz2mQ9g4=",

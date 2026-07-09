@@ -455,32 +455,7 @@ One of our objectives is to provide the ability to compile small, portable C and
 2. At runtime the typea dapter calls `dlopen` to load the typesupport shared library for the active middleware when it needs to transform serialized bytes on the wire to the language. We have modified this type adapter to first look for the symbols on the active binary, in case they were compiled statically into the binary.
 3. By default, when the `--@rosdistro//:rmw=...` flag is set, it configures the RMW implementation to a specific single middleware. The `RMW_IMPLEMENTATION` environment variable should not be used. This allows a ROS node that depends on `rclcpp`, which in turn depends on `rmw_implementation` transitively through `rcl`, to statically link in everything it needs for the RMW implementation layer.
 
-So, for example, if you run `bazel build //my_pkg:portable_node --@rosdistro//:rmw=rmw_fastrtps_cpp --dynamic_mode=off` on the following code you will get a single portable executable with all required symbols statically linked into the executable:
-
-```python
-load("@rosidl_core_generators//:defs.bzl", "cc_ros_library")
-load("@rules_cc//cc:defs.bzl", "cc_binary")
-
-cc_ros_library(
-    name = "cc_msgs",
-    deps = [
-        "@sensor_msgs//msg:CompressedImage"
-    ],
-)
-
-# Now a consumer can statically link these symbols into itself to become portable by compiling
-# with --dynamic_mode=off.
-cc_binary(
-    name = "portable_node",
-    srcs = ["node.cc"],
-    deps = [
-        ":cc_msgs",
-        "@rclcpp//:rclcpp_library",
-    ],
-)
-```
-
-Note: the above code works because `cc_ros_library` and `c_ros_library` inspect the dynamic mode configuration. When `--dynamic_mode=off` is passed to Bazel, the core generators rules propagate static archives of the typesupport dependencies rather than the shared objects, forcing Bazel to link the typesupport symbols statically into the binary.
+So, for example, if you run `bazel run //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp` in the examples folder you will get a single portable executable with all required symbols statically linked into the executable. These flags must always be used together, as both the typesupports and the middleware / dependencies must both be either statically or dynamically linked, but never mixed.
 
 # Remote caching
 
