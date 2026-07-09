@@ -1,0 +1,13 @@
+{
+    "url": "https://github.com/eProsima/Fast-DDS/archive/refs/tags/v3.4.2.tar.gz",
+    "integrity": "sha256-Xy2NInKXtYbljjRuHns8MDgbfhFYDw32oSxtoVoZQPQ=",
+    "strip_prefix": "Fast-DDS-3.4.2",
+    "patch_strip": 1,
+    "overlay": {
+        "BUILD.bazel": "sha256-o8d/P314KRS4JoxaDe3JhCWzNqjOK+kzn7GtqHllJsI="
+    },
+    "patches": {
+        "thirdparty__filewatch__FileWatch__hpp.patch": "sha256-u0PLRt9F6vFJiPQbZ+zstnxgLd9o7q38oHth/dKGLPs=",
+        "src__cpp__utils__TimedConditionVariable__cpp.patch": "sha256-RLZWBfajA8L4RpAgBj7xvVUkgiiTimMnk5jY6i79NpQ="
+    }
+}

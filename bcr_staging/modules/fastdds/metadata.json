@@ -1,0 +1,30 @@
+{
+    "homepage": "https://github.com/eProsima/Fast-DDS",
+    "maintainers": [
+        {
+            "email": "daohu527@gmail.com",
+            "github": "daohu527",
+            "name": "daohu527",
+            "github_user_id": 10419854
+        },
+        {
+            "email": "sidewaiise@users.noreply.github.com",
+            "github": "sidewaiise",
+            "name": "sidewaiise",
+            "github_user_id": 5085804
+        },
+        {
+            "email": "andrew.c.symington@gmail.com",
+            "github": "asymingt",
+            "github_user_id": 37671,
+            "name": "Andrew Symington"
+        }
+    ],
+    "repository": [
+        "github:eProsima/Fast-DDS"
+    ],
+    "versions": [
+        "3.4.2.bcr.0"
+    ],
+    "yanked_versions": {}
+}

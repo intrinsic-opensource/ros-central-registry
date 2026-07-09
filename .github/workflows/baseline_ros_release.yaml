@@ -116,19 +116,21 @@ jobs:
       shell: bash
       run: |
         start_time=$(date +%s)
-        colcon test --merge-install --packages-up-to ${{ matrix.variant }}
+        colcon test --merge-install --packages-up-to ${{ matrix.variant }} || true
         end_time=$(date +%s)
         duration=$((end_time - start_time))
         echo "### Test Duration: ${duration} seconds" >> $GITHUB_STEP_SUMMARY
+        find -L build -name "*.xml" -print0 | tar -czf ${{ matrix.variant }}-${{ matrix.os }}.tar.gz --null -T -
 
     - name: Colcon Test Result
       shell: bash
+      if: always()
       run: |
         start_time=$(date +%s)
         colcon test-result
         end_time=$(date +%s)
         duration=$((end_time - start_time))
-        echo "### Test Duration: ${duration} seconds" >> $GITHUB_STEP_SUMMARY
+        echo "### Test Result Duration: ${duration} seconds" >> $GITHUB_STEP_SUMMARY
 
     - name: Archive Test Results (JUnit XML)
       uses: actions/upload-artifact@v7
@@ -136,4 +138,4 @@ jobs:
       with:
         name: test-results-${{ matrix.variant }}-${{ matrix.os }}
         path: |
-          build/**/*.xml
+          ${{ matrix.variant }}-${{ matrix.os }}.tar.gz
