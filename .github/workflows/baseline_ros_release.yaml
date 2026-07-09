@@ -35,7 +35,7 @@ on:
         type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ inputs.distribution }}/${{ inputs.date }}
+  group: ${{ github.workflow }}-${{ github.event_name == 'workflow_dispatch' && format('{0}/{1}', inputs.distribution, inputs.date) || (github.event.pull_request.number || github.ref) }}
   cancel-in-progress: true
 
 jobs:
@@ -51,43 +51,15 @@ jobs:
       fail-fast: false
       matrix:
         variant:
-        - ros_core
-        # - ros_base
         - perception
-        # - desktop
-        # - simulation
-        # - desktop_full
         os:
         - ubuntu-26.04
         - ubuntu-26.04-arm
-        # - macos-26-intel
-        # - macos-26
-        # - windows-2025
-        # - windows-11-arm
+        - macos-26-intel
+        - macos-26
+        - windows-2025
+        - windows-11-arm
     steps:
-
-    # We must not run setup-python on Linux. setup-python overrides the python3
-    # executable pointing to a custom environment that lacks all system python3-*
-    # packages installed via apt (e.g. numpy, yaml) which are required to build ROS 2.
-    # - name: Set up Python
-    #   if: runner.os != 'Linux'
-    #   uses: actions/setup-python@v6
-    #   with:
-    #     python-version: '3.12'
-
-    # On Linux, python3-rosinstall-generator is installed by apt via ros-dev-tools.
-    # On macOS and Windows we must install it manually.
-    # - name: Install ROS installation tools
-    #   if: runner.os != 'Linux'
-    #   shell: bash
-    #   run: python3 -m pip install rosinstall-generator
-
-    # - name: Set up MSVC
-    #   if: runner.os == 'Windows'
-    #   uses: ilammy/msvc-dev-cmd@v1
-
-    # - name: Setup ROS
-    #   uses: ros-tooling/setup-ros@v0.7
 
     # Linux platform configuration
     - name: Install ROS 2 build dependencies (Linux)
@@ -116,6 +88,63 @@ jobs:
         sudo rosdep init
         rosdep update
 
+    # macOS platform configuration
+    - name: Set up Python (macOS)
+      if: runner.os == 'macOS'
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+    - name: Install ROS 2 build dependencies (macOS)
+      if: runner.os == 'macOS'
+      shell: bash
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install -U \
+          mypy \
+          pytest \
+          pytest-cov \
+          pytest-mock \
+          pytest-repeat \
+          pytest-rerunfailures \
+          pytest-runner \
+          pytest-timeout \
+          rosinstall-generator \
+          colcon-common-extensions \
+          vcstool \
+          rosdep
+        sudo $(which rosdep) init || true
+        rosdep update
+
+    # Windows platform configuration
+    - name: Set up MSVC (Windows)
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+    - name: Set up Python (Windows)
+      if: runner.os == 'Windows'
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+    - name: Install ROS 2 build dependencies (Windows)
+      if: runner.os == 'Windows'
+      shell: bash
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install -U \
+          mypy \
+          pytest \
+          pytest-cov \
+          pytest-mock \
+          pytest-repeat \
+          pytest-rerunfailures \
+          pytest-runner \
+          pytest-timeout \
+          rosinstall-generator \
+          colcon-common-extensions \
+          vcstool \
+          rosdep
+        rosdep init || true
+        rosdep update
+
     - name: Parse release and configure ROSDISTRO_INDEX_URL and DISTRO
       shell: bash
       run: |
@@ -135,6 +164,7 @@ jobs:
         vcs import src < ros2.repos
 
     - name: Install system dependencies using rosdep
+      if: runner.os != 'Windows'
       shell: bash
       run: |
           rosdep install --from-paths src --ignore-src -y --skip-keys "fastcdr rti-connext-dds-7.7.0 urdfdom_headers" --rosdistro ${{ env.ROS_DISTRO }}
@@ -152,7 +182,7 @@ jobs:
       shell: bash
       run: |
         start_time=$(date +%s)
-        colcon test --packages-up-to ${{ matrix.variant }}
+        colcon test --merge-install --packages-up-to ${{ matrix.variant }}
         end_time=$(date +%s)
         duration=$((end_time - start_time))
         echo "### Test Duration: ${duration} seconds" >> $GITHUB_STEP_SUMMARY
