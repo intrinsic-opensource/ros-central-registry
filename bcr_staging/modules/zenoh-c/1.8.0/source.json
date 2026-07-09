@@ -1,14 +1,14 @@
 {
-    "integrity": "sha256-bWax0cclcAFIpuqQ+vk6qZxy23GjSL8w9YOLWhvhktk=",
+    "integrity": "sha256-GP7F3jMiF9Rb/bnSWC/SbnDCejcpm39I+sy3mLmTC2g=",
     "strip_prefix": "zenoh-c-1.8.0",
     "url": "https://github.com/eclipse-zenoh/zenoh-c/archive/refs/tags/1.8.0.tar.gz",
     "patch_strip": 0,
     "overlay": {
         "BUILD.bazel": "sha256-YXAizJ1mo06MbURdEitT8BNd5Gm9wPL//vgttd3zcdM=",
-        "Cargo.lock": "sha256-F8XcRTZy9NyWna723JRYU/Y3UsYhrzlvMGzW3RGqzLs=",
-        "Cargo.toml": "sha256-btiiAoZiOUXc2Q/sbRtlsPDBU7kfnjhjKuAAkfr4ofE=",
+        "Cargo.lock": "sha256-7iRdxDlEuWgiXy6yA1xTC5h6HINimslMeERsbEy3N+k=",
+        "Cargo.toml": "sha256-UvrQQGbBnLMOyfxYBLiJrRrpb9VUnVrLyokSDcN8BD4=",
         "bazel_generate_opaque_types.rs": "sha256-qcBzJodko73BQ2+0PBMda+YmiRYSCd9k37WPz2mQ9g4=",
-        "build-resources/opaque-types/BUILD.bazel": "sha256-pBmdxvZK+v+l/zPBAJk5mRDAg+yGAjsML91cRNhHozk=",
+        "build-resources/opaque-types/BUILD.bazel": "sha256-qKZDzvfVUMjl/We9oY+SznA/1oX4mxkDI00koNuPSnI=",
         "build-resources/opaque-types/tools.bzl": "sha256-riBmsze0Tn7HJmUp/YvjfHEVtWJgU4R+67zujeMUdi4=",
         "cbindgen/BUILD.bazel": "sha256-xjd2OX7+Pp5gI6L8YI8OGUgSzjXSg2YtJnRrxd/XgRI=",
         "cbindgen/cargo_manifest.bzl": "sha256-o874CMEFe8xL/hnCuuACKdplPN66DD1h3MAIxSJZPDw=",

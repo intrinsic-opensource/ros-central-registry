@@ -11,6 +11,14 @@
 # Contributors:
 #   ZettaScale Zenoh Team, <zenoh@zettascale.tech>
 #
+# NOTE (BCR overlay): the only change from the upstream zenoh-c Cargo.toml is the
+# [workspace] table below. rules_rs `crate.from_cargo` resolves a single
+# workspace Cargo.toml, and the build-resources/opaque-types package (which is
+# the only crate that pulls in zenoh-protocol) must be part of that universe.
+[workspace]
+members = ["build-resources/opaque-types"]
+resolver = "2"
+
 [package]
 name = "zenoh-c"
 version = "1.8.0"

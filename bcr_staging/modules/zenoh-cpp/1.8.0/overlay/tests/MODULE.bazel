@@ -20,7 +20,7 @@ local_path_override(
 
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.16")
-bazel_dep(name = "rules_rust", version = "0.68.1")
+bazel_dep(name = "rules_rust", version = "0.71.3")
 bazel_dep(name = "rules_shell", version = "0.6.1")
 
 # This is the rust edition and version used in the upstream zenoh-cpp project.
