@@ -128,6 +128,9 @@ def _setup_workspace(
 # Ensure that we use toolchains_llvm instead of the host toolchain.
 build --repo_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
 
+# Ignore any host-level pip configurations and pull public python dependencies.
+build --repo_env="PIP_CONFIG_FILE=/dev/null"
+
 # Our bazel distribution provides conversion utilities for transforming
 # ROS messages to .proto files. This prevent protobuf from trying to
 # recompile itself in response to environment changes.
