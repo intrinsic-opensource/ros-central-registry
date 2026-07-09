@@ -5,8 +5,8 @@
     "patch_strip": 1,
     "overlay": {
         "BUILD.bazel": "sha256-ydPNx9R2GRWBa9Gw5WWp255bLQBlj5wFqziGGm0dfoE=",
-        "tests/BUILD.bazel": "sha256-IQJKlT18dTDFCE/3FA0uLER4/k1R62fjQMCo2EHQ61s=",
-        "tests/MODULE.bazel": "sha256-JcQURsnOHheezeb9tAJnDF0YZ8Bd2nfNxd+/fNPyvp4="
+        "tests/MODULE.bazel": "sha256-NHDaPTvWD7/XEep7bLlZHOfUKfa0X85qlfJWYvswawA=",
+        "tests/BUILD.bazel": "sha256-IQJKlT18dTDFCE/3FA0uLER4/k1R62fjQMCo2EHQ61s="
     },
     "patches": {
         "shell.patch": "sha256-544AB7Q7dyC3rfDFVC3NT+olYnIBrBG3bD8HyIEArTA="

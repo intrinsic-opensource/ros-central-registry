@@ -22,7 +22,6 @@ bazel_dep(name = "openssl", version = "3.5.4.bcr.1")
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "rules_rust", version = "0.68.1")
-
 bazel_dep(name = "rules_shell", version = "0.6.1")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
@@ -41,14 +40,12 @@ rust_host_tools.host_tools(
     name = "rust_host_tools_nightly",
     version = "nightly",
 )
-
 use_repo(
     rust_host_tools,
     "rust_host_tools_nightly",
 )
 
 bindeps = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
-
 bindeps.spec(
     artifact = "bin",
     package = "zenohd",

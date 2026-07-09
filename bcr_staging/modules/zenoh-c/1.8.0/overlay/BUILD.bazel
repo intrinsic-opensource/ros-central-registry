@@ -184,9 +184,9 @@ cc_library(
         ":dynamic_mode_off": [],
         "//conditions:default": ["ZENOHC_DYN_LIB"],
     }),
+    visibility = ["//visibility:public"],
     deps = select({
         ":dynamic_mode_off": [":zenohc_static"],
         "//conditions:default": [],
     }),
-    visibility = ["//visibility:public"],
 )
