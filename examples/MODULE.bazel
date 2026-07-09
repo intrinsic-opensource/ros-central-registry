@@ -137,8 +137,13 @@ use_repo(pip_ros, "pip_ros")
 
 # Rust / crates
 
-rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
-rust.toolchain(
+rs_toolchains = use_extension("@rules_rs//rs/toolchains:module_extension.bzl", "toolchains")
+rs_toolchains.toolchain(
     edition = "2021",
-    versions = ["1.85.0"],
+    version = "1.93.0",
+)
+use_repo(rs_toolchains, "default_rust_toolchains")
+
+register_toolchains(
+    "@default_rust_toolchains//:all",
 )

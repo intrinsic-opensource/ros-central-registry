@@ -349,7 +349,6 @@ bazel_dep(name = "rules_cc", version = "0.2.22")
 bazel_dep(name = "rules_go", version = "0.60.0")
 bazel_dep(name = "rules_python", version = "2.2.0")
 bazel_dep(name = "rules_rs", version = "0.0.93")
-bazel_dep(name = "rules_rust", version = "0.71.3")
 bazel_dep(name = "rules_shell", version = "0.8.0")
 
 ## RCR deps
@@ -428,10 +427,15 @@ use_repo(pip_ros, "pip_ros")
 
 # Rust / crates
 
-rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
-rust.toolchain(
+rs_toolchains = use_extension("@rules_rs//rs/toolchains:module_extension.bzl", "toolchains")
+rs_toolchains.toolchain(
     edition = "2021",
-    versions = ["1.85.0"],
+    version = "1.93.0",
+)
+use_repo(rs_toolchains, "default_rust_toolchains")
+
+register_toolchains(
+    "@default_rust_toolchains//:all",
 )
 """)
 
