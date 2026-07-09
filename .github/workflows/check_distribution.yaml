@@ -52,7 +52,7 @@ jobs:
       fail-fast: false
       matrix:
         bazel:
-        #- 8.x
+        - 8.x
         - 9.x
         ros:
         - lyrical.2026-06-08.rcr.1
@@ -64,6 +64,7 @@ jobs:
         - macos-26-intel
         - macos-26
         - windows-2025
+        - windows-11-arm
     steps:
     - name: Free disk space
       if: runner.os == 'Linux'
@@ -154,18 +155,19 @@ jobs:
         color: ${{ steps.build.outcome == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)
 
-    # Test distribution with IMPLEMENTATION=rmw_fastrtps_cpp
     - name: Test (rmw_fastrtps_cpp)
       continue-on-error: true
       id: test_rmw_fastrtps_cpp
       run: |
-        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp || test_status=$?
+        find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_cpp.tar.gz --null -T -
+        exit ${test_status:-0}
     - name: Test logs (rmw_fastrtps_cpp)
       uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_cpp)
         path: |
-          bazel-testlogs/**/test.log
+          workspace/${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_cpp.tar.gz
       if: always()
     - name: Update status badge (rmw_fastrtps_cpp)
       uses: Schneegans/dynamic-badges-action@v1.8.0
@@ -178,18 +180,19 @@ jobs:
         color: ${{ steps.test_rmw_fastrtps_cpp.outcome == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)
 
-    # Test distribution with IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
     - name: Test (rmw_fastrtps_dynamic_cpp)
       id: test_rmw_fastrtps_dynamic_cpp
       continue-on-error: true
       run: |
-        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp || test_status=$?
+        find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_dynamic_cpp.tar.gz --null -T -
+        exit ${test_status:-0}
     - name: Test logs (rmw_fastrtps_dynamic_cpp)
       uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_fastrtps_dynamic_cpp)
         path: |
-          bazel-testlogs/**/test.log
+          workspace/${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_dynamic_cpp.tar.gz
       if: always()
     - name: Update status badge (rmw_fastrtps_dynamic_cpp)
       uses: Schneegans/dynamic-badges-action@v1.8.0
@@ -202,18 +205,19 @@ jobs:
         color: ${{ steps.test_rmw_fastrtps_dynamic_cpp.outcome == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)
 
-    # Test distribution with IMPLEMENTATION=rmw_cyclonedds_cpp
     - name: Test (rmw_cyclonedds_cpp)
       id: test_rmw_cyclonedds_cpp
       continue-on-error: true
       run: |
-        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp || test_status=$?
+        find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_cyclonedds_cpp.tar.gz --null -T -
+        exit ${test_status:-0}
     - name: Test logs (rmw_cyclonedds_cpp)
       uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_cyclonedds_cpp)
         path: |
-          bazel-testlogs/**/test.log
+          workspace/${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_cyclonedds_cpp.tar.gz
       if: always()
     - name: Update status badge (rmw_cyclonedds_cpp)
       uses: Schneegans/dynamic-badges-action@v1.8.0
@@ -226,22 +230,23 @@ jobs:
         color: ${{ steps.test_rmw_cyclonedds_cpp.outcome == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)
 
-    # Test distribution with IMPLEMENTATION=rmw_zenoh_cpp
     - name: Test (rmw_zenoh_cpp)
       id: test_rmw_zenoh_cpp
       continue-on-error: true
       run: |
         bazel run @rmw_zenoh_cpp//:rmw_zenohd 2>zenohd-stderr.log 1>zenohd-stdout.log &
         trap "pkill -f rmw_zenohd 2>/dev/null || true" EXIT
-        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp || test_status=$?
+        find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_zenoh_cpp.tar.gz --null -T -
+        exit ${test_status:-0}
     - name: Test logs (rmw_zenoh_cpp)
       uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }} (rmw_zenoh_cpp)
         path: |
-          bazel-testlogs/**/test.log
-          zenohd-stdout.log
-          zenohd-stderr.log
+          workspace/${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_zenoh_cpp.tar.gz
+          workspace/zenohd-stdout.log
+          workspace/zenohd-stderr.log
       if: always()
     - name: Update status badge (rmw_zenoh_cpp)
       uses: Schneegans/dynamic-badges-action@v1.8.0
