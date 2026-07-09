@@ -453,9 +453,41 @@ One of our objectives is to provide the ability to compile small, portable C and
 
 1. Messages dependency chains are declared at the message-level, not the package level. Broadly speaking, if `sensor_msgs/msg/CompressedImage` relies on `std_msgs/msg/Header`, then the `@sensor_msgs//msg:CompressedImage` Bazel target must have a `deps` entry for `@std_msgs//msg:Header`. This enables binaries to compile-in only the symbols for messages they use, and not entire packages.
 2. At runtime the typea dapter calls `dlopen` to load the typesupport shared library for the active middleware when it needs to transform serialized bytes on the wire to the language. We have modified this type adapter to first look for the symbols on the active binary, in case they were compiled statically into the binary.
-3. By default, when the `--@rosdistro//:rmw=...` flag is set, it configures the RMW implementation to a specific single middleware. The `RMW_IMPLEMENTATION` environment variable should not be used. This allows a ROS node that depends on `rclcpp`, which in turn depends on `rmw_implementation` transitively through `rcl`, to statically link in everything it needs for the RMW implementation layer.
+3. By default, when the `--@rosdistro//:rmw=...` flag is set, it configures the RMW implementation to a specific single middleware. The `RMW_IMPLEMENTATION` environment variable should not be used. This allows a ROS node that depends on `rclcpp`, which in turn depends on `rmw_implementation` transitively through `rcl`, to avoid having to dynamically open a shared library for its RMW implementation.
 
-So, for example, if you run `bazel run //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp` in the examples folder you will get a single portable executable with all required symbols statically linked into the executable. These flags must always be used together, as both the typesupports and the middleware / dependencies must both be either statically or dynamically linked, but never mixed.
+## Static compilation
+
+If you run `bazel run //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp` in the examples folder you will get a single portable executable with all required symbols statically linked into the executable. These flags must always be used together, as both the typesupports and the middleware / dependencies must both be either statically or dynamically linked, but never mixed.
+
+For a simple rmw_zenoh_cpp publisher this will result in a 170M binary. With the following compiler optimizations, you can drop this to around 47M:
+
+```
+$ bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp -c opt \
+    --copt=-Os --copt=-fdata-sections  --copt=-ffunction-sections --copt=-fno-asynchronous-unwind-tables \
+        --linkopt=-Wl,--gc-sections --linkopt=-s  --strip=always
+$ du -hs bazel-bin/example_ros_publisher_cc
+47M     bazel-bin/example_ros_publisher_cc
+```
+
+For a simple rmw_fastrtps_cpp publisher this drops even further to 30M:
+
+```
+$ bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp -c opt \
+    --copt=-Os --copt=-fdata-sections  --copt=-ffunction-sections --copt=-fno-asynchronous-unwind-tables \
+        --linkopt=-Wl,--gc-sections --linkopt=-s  --strip=always
+$ du -hs bazel-bin/example_ros_publisher_cc
+30M     bazel-bin/example_ros_publisher_cc
+```
+
+For a simple rmw_cyclonedds_cpp publisher this drops even further to 8.8M:
+
+```
+$ bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp -c opt \
+    --copt=-Os --copt=-fdata-sections  --copt=-ffunction-sections --copt=-fno-asynchronous-unwind-tables \
+        --linkopt=-Wl,--gc-sections --linkopt=-s  --strip=always
+$ du -hs bazel-bin/example_ros_publisher_cc
+8.8M     bazel-bin/example_ros_publisher_cc
+```
 
 # Remote caching
 
