@@ -168,6 +168,20 @@ build --@llvm//config:experimental_stub_libgcc_s=True
 build:macos --linkopt=-Wl,-undefined,dynamic_lookup
 build:macos --host_linkopt=-Wl,-undefined,dynamic_lookup
 
+# Our hermetic macOS toolchain passes clang's SDK header search path via
+# "-isysroot <execroot-relative path>" (see the `llvm` module's
+# toolchain/args/macos:macos_sdk_sysroot, which needs -isysroot specifically
+# so Clang's Darwin driver resolves framework headers -- it checks -isysroot
+# before --sysroot). That relative path only resolves when the compiler's
+# current directory is the exec root. Cargo build scripts run with their
+# current directory changed to CARGO_MANIFEST_DIR instead, so any cc-rs
+# invocation that inherits these flags (e.g. the `ring` crate's build script,
+# used by zenoh's TLS transport) fails with "file not found" for SDK headers
+# like TargetConditionals.h. rules_rust/rules_rs have a purpose-built escape
+# hatch for exactly this: symlink the exec root's top-level entries into
+# CARGO_MANIFEST_DIR so exec-root-relative paths keep resolving.
+build:macos --@@rules_rs++rules_rust+rules_rust//cargo/settings:experimental_symlink_execroot=true
+
 # The Apple SDK framework directories contain module.modulemap files that
 # activate Clang's implicit module system once a Frameworks directory is in
 # scope (as it now implicitly is, via --sysroot). Libraries like abseil-cpp
