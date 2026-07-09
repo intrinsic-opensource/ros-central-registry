@@ -13,6 +13,7 @@
 # limitations under the License.
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary")
+load("@rosdistro//cc:defs.bzl", "collect_transitive_dynamic_deps")
 load("@rosidl_core_generators//:defs.bzl", "c_ros_library", "cc_proto_ros_library", "cc_ros_library", "py_ros_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@rules_license//rules:license.bzl", "license")
@@ -29,7 +30,28 @@ license(
     ],
 )
 
+config_setting(
+    name = "dynamic_mode_off",
+    values = {
+        "dynamic_mode": "off",
+    },
+)
+
+config_setting(
+    name = "rmw_dynamic",
+    flag_values = {"@rosdistro//:rmw": "dynamic"},
+)
+
 # C examples - the more traditional pipeline
+
+C_DEPENDENCIES = {
+    "@rclc//:rclc": "@rclc//:rclc_library",
+}
+
+collect_transitive_dynamic_deps(
+    name = "transitive_dynamic_deps_c",
+    dynamic_deps = C_DEPENDENCIES.keys(),
+)
 
 c_ros_library(
     name = "example_ros_c_msgs",
@@ -39,53 +61,39 @@ c_ros_library(
 cc_binary(
     name = "example_ros_publisher_c",
     srcs = ["src/example_ros_publisher.c"],
-    deps = [
+    dynamic_deps = select({
+        ":dynamic_mode_off": [],
+        ":rmw_dynamic": [":transitive_dynamic_deps_c"],
+        "//conditions:default": [],
+    }),
+    deps = C_DEPENDENCIES.values() + [
         ":example_ros_c_msgs",
-        "@rclc//:rclc_library",
     ],
 )
 
 cc_binary(
     name = "example_ros_subscriber_c",
     srcs = ["src/example_ros_subscriber.c"],
-    deps = [
+    dynamic_deps = select({
+        ":dynamic_mode_off": [],
+        ":rmw_dynamic": [":transitive_dynamic_deps_c"],
+        "//conditions:default": [],
+    }),
+    deps = C_DEPENDENCIES.values() + [
         ":example_ros_c_msgs",
-        "@rclc//:rclc_library",
-    ],
-)
-
-# C examples (static type)
-
-c_ros_library(
-    name = "example_ros_c_msgs_static",
-    tags = ["manual"],
-    deps = ["//msg:ExampleMessage"],
-    alwayslink = True,
-)
-
-cc_binary(
-    name = "example_ros_publisher_c_static",
-    srcs = ["src/example_ros_publisher.c"],
-    linkstatic = True,
-    tags = ["manual"],
-    deps = [
-        ":example_ros_c_msgs_static",
-        "@rclc//:rclc_library",
-    ],
-)
-
-cc_binary(
-    name = "example_ros_subscriber_c_static",
-    srcs = ["src/example_ros_subscriber.c"],
-    linkstatic = True,
-    tags = ["manual"],
-    deps = [
-        ":example_ros_c_msgs_static",
-        "@rclc//:rclc_library",
     ],
 )
 
 # C++ examples
+
+CPP_DEPENDENCIES = {
+    "@rclcpp//:rclcpp": "@rclcpp//:rclcpp_library",
+}
+
+collect_transitive_dynamic_deps(
+    name = "transitive_dynamic_deps_cc",
+    dynamic_deps = CPP_DEPENDENCIES.keys(),
+)
 
 cc_ros_library(
     name = "example_ros_cc_msgs",
@@ -95,47 +103,26 @@ cc_ros_library(
 cc_binary(
     name = "example_ros_publisher_cc",
     srcs = ["src/example_ros_publisher.cc"],
-    deps = [
+    dynamic_deps = select({
+        ":dynamic_mode_off": [],
+        ":rmw_dynamic": [":transitive_dynamic_deps_cc"],
+        "//conditions:default": [],
+    }),
+    deps = CPP_DEPENDENCIES.values() + [
         ":example_ros_cc_msgs",
-        "@rclcpp//:rclcpp_library",
     ],
 )
 
 cc_binary(
     name = "example_ros_subscriber_cc",
     srcs = ["src/example_ros_subscriber.cc"],
-    deps = [
+    dynamic_deps = select({
+        ":dynamic_mode_off": [],
+        ":rmw_dynamic": [":transitive_dynamic_deps_cc"],
+        "//conditions:default": [],
+    }),
+    deps = CPP_DEPENDENCIES.values() + [
         ":example_ros_cc_msgs",
-        "@rclcpp//:rclcpp_library",
-    ],
-)
-
-cc_ros_library(
-    name = "example_ros_cc_msgs_static",
-    tags = ["manual"],
-    deps = ["//msg:ExampleMessage"],
-    alwayslink = True,
-)
-
-cc_binary(
-    name = "example_ros_publisher_cc_static",
-    srcs = ["src/example_ros_publisher.cc"],
-    linkstatic = True,
-    tags = ["manual"],
-    deps = [
-        ":example_ros_cc_msgs_static",
-        "@rclcpp//:rclcpp_library",
-    ],
-)
-
-cc_binary(
-    name = "example_ros_subscriber_cc_static",
-    srcs = ["src/example_ros_subscriber.cc"],
-    linkstatic = True,
-    tags = ["manual"],
-    deps = [
-        ":example_ros_cc_msgs_static",
-        "@rclcpp//:rclcpp_library",
     ],
 )
 
@@ -179,6 +166,15 @@ py_binary(
 # DefaultInfo provider are the typesupport shared objects that need to
 # be present in the runfiles in order for ROS typesupport.
 
+PROTO_DEPENDENCIES = {
+    "@rclcpp//:rclcpp": "@rclcpp//:rclcpp_library",
+}
+
+collect_transitive_dynamic_deps(
+    name = "transitive_dynamic_deps_proto",
+    dynamic_deps = PROTO_DEPENDENCIES.keys(),
+)
+
 cc_proto_ros_library(
     name = "example_cc_proto",
     deps = ["//msg:ExampleMessage"],
@@ -187,17 +183,25 @@ cc_proto_ros_library(
 cc_binary(
     name = "example_proto_publisher_cc",
     srcs = ["src/example_proto_publisher.cc"],
-    deps = [
+    dynamic_deps = select({
+        ":dynamic_mode_off": [],
+        ":rmw_dynamic": [":transitive_dynamic_deps_proto"],
+        "//conditions:default": [],
+    }),
+    deps = PROTO_DEPENDENCIES.values() + [
         ":example_cc_proto",
-        "@rclcpp//:rclcpp_library",
     ],
 )
 
 cc_binary(
     name = "example_proto_subscriber_cc",
     srcs = ["src/example_proto_subscriber.cc"],
-    deps = [
+    dynamic_deps = select({
+        ":dynamic_mode_off": [],
+        ":rmw_dynamic": [":transitive_dynamic_deps_proto"],
+        "//conditions:default": [],
+    }),
+    deps = PROTO_DEPENDENCIES.values() + [
         ":example_cc_proto",
-        "@rclcpp//:rclcpp_library",
     ],
 )

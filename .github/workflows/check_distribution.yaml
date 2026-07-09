@@ -108,10 +108,10 @@ jobs:
       id: examples
       working-directory: ./examples
       run: |
-        bazel build //:example_ros_publisher_cc_static --@rosdistro//:rmw=rmw_fastrtps_cpp
-        bazel build //:example_ros_publisher_cc_static --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp
-        bazel build //:example_ros_publisher_cc_static --@rosdistro//:rmw=rmw_cyclonedds_cpp
-        bazel build //:example_ros_publisher_cc_static --@rosdistro//:rmw=rmw_zenoh_cpp
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp
         bazel build //...
     - name: Update status badge (build)
       uses: Schneegans/dynamic-badges-action@v1.8.0

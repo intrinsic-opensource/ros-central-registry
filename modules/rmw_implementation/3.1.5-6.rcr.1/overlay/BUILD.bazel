@@ -98,6 +98,7 @@ DEPENDENCIES = {
     "@rcpputils//:rcpputils": "@rcpputils//:rcpputils_library",
     "@rmw//:rmw": "@rmw//:rmw_library",
     "@rcutils//:rcutils": "@rcutils//:rcutils_library",
+    "@tracetools//:tracetools": "@tracetools//:tracetools_library",
 }
 
 cc_library(
