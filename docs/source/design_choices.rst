@@ -155,7 +155,7 @@ The standard way to handle Python dependencies in Bazel is to use the ``pip.bzl`
 
 .. code-block:: python
 
-    bazel_dep(name = "rules_python", version = "1.8.3")
+    bazel_dep(name = "rules_python", version = "2.2.0")
 
     ...
 
