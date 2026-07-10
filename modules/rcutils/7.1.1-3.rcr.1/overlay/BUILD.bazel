@@ -93,7 +93,12 @@ genrule(
             "test/dummy_shared_library/**",
             "test/dummy_*.txt",
         ]) + [":file_with_space"] + select({
-            "@platforms//os:osx": ["@osrf_testing_tools_cpp//:memory_tools_interpose"],
+            "@platforms//os:osx": ["@osrf_testing_tools_cpp//:memory_tools_interpose"] if name in [
+                "test_allocator",
+                "test_error_handling",
+                "test_error_handling_helpers",
+                "test_time",
+            ] else [],
             "//conditions:default": [],
         }),
         # osrf_testing_tools_cpp's malloc/realloc/calloc/free interposition
@@ -106,13 +111,23 @@ genrule(
         # increment a copy of memory_tools' counters that this test can't see
         # (see :memory_tools_interpose).
         dynamic_deps = [":rcutils"] + select({
-            "@platforms//os:osx": ["@osrf_testing_tools_cpp//:memory_tools_interpose"],
+            "@platforms//os:osx": ["@osrf_testing_tools_cpp//:memory_tools_interpose"] if name in [
+                "test_allocator",
+                "test_error_handling",
+                "test_error_handling_helpers",
+                "test_time",
+            ] else [],
             "//conditions:default": [],
         }),
         env = env | select({
             "@platforms//os:osx": {
                 "DYLD_INSERT_LIBRARIES": "$(location @osrf_testing_tools_cpp//:memory_tools_interpose)",
-            },
+            } if name in [
+                "test_allocator",
+                "test_error_handling",
+                "test_error_handling_helpers",
+                "test_time",
+            ] else {},
             "//conditions:default": {},
         }),
         local_defines = ros_local_defines() + [
