@@ -305,7 +305,7 @@ def generate_compilation_information(
         ]
 
     # Linking contexts propagated to static consumers of this fragment (via CcInfo).
-    if is_windows:
+    if is_darwin or is_windows:
         static_linking_contexts_to_propagate = static_linking_contexts + dynamic_linking_contexts
     else:
         static_linking_contexts_to_propagate = static_linking_contexts + [
