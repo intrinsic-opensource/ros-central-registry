@@ -134,33 +134,6 @@ The <a href="http://intrinsic-opensource.github.io/ros-central-registry">ROS Cen
         <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_macos-26_test_rmw_zenoh_cpp.json"/>
       </td>
     </tr>
-    <tr>
-      <td>windows-2025</td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_8.x_windows-2025_examples.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_9.x_windows-2025_examples.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_build.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_build.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_fastrtps_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_fastrtps_cpp.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_fastrtps_dynamic_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_fastrtps_dynamic_cpp.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_cyclonedds_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_cyclonedds_cpp.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.x_windows-2025_test_rmw_zenoh_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.x_windows-2025_test_rmw_zenoh_cpp.json"/>
-      </td>
-    </tr>
   </tbody>
 </table>
 
@@ -198,35 +171,6 @@ Install Homebrew and then the necessary tools:
 ```bash
 brew install bazelisk git
 ```
-
-## Windows 2025 (amd64 only)
-
-Enable developer mode by goiong to `Settings → Privacy & security → For developers → Developer Mode: On`. This grants the symlink-creation privilege that the Rust/zenoh crate splice requires; without it the full `--config perception` build fails during dependency fetching (`os error 1314`). After this run all commands in an elevated **PowerShell**.
-
-Make sure you have long path support:
-
-```powershell
-New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
-    -Name LongPathsEnabled -Value 1 -PropertyType DWORD -Force
-```
-
-Then install a few prerequisite tools:
-
-```powershell
-winget install Bazel.Bazelisk
-winget install Git.Git
-winget install MSYS2.MSYS2
-```
-
-Bazel runs `genrule` and `rules_shell` actions through a POSIX `bash`. On Windows you must
-point it at the MSYS2 `bash` by setting the `BAZEL_SH` environment variable — Bazel does not
-detect MSYS2 reliably on its own. Set it persistently for your user.
-
-```powershell
-[Environment]::SetEnvironmentVariable("BAZEL_SH", "C:\msys64\usr\bin\bash.exe", "User")
-```
-
-Please re-open the terminal afterwards so the change takes effect.
 
 # Verify your setup
 

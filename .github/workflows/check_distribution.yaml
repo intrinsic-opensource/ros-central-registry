@@ -64,8 +64,6 @@ jobs:
         - ubuntu-26.04-arm
         - macos-26-intel
         - macos-26
-        - windows-2025
-        - windows-11-arm
     steps:
     - name: Free disk space
       if: runner.os == 'Linux'

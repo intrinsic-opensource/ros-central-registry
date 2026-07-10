@@ -136,16 +136,6 @@ common:ci --google_default_credentials
 # For example, macos on macos, linux on linux, etc.
 common --enable_platform_specific_config
 
-# Disable Bazel 9's repo-contents cache. Once Developer Mode is enabled on
-# Windows (needed for the Rust/zenoh crate splice), Bazel symlinks every fetched
-# repository into that content-addressed cache. The pip wheel installer creates
-# its site-packages/ tree via a subprocess *through* that symlink, which breaks
-# Bazel's repo-rule filesystem-consistency check ("site-packages is no longer an
-# existing directory") and fails every pip package. Turning the cache off makes
-# repositories materialize as real directories again, as they did before
-# Developer Mode was enabled.
-common:windows --repo_contents_cache=
-
 ## BUILD OPTIONS
 
 # Ensure that we use toolchains_llvm instead of the host toolchain.
@@ -201,26 +191,6 @@ build:macos --host_copt=-fno-implicit-module-maps
 # CoreFoundation/CFBase.h and friends compile cleanly with the hermetic toolchain.
 build:macos --copt=-Wno-elaborated-enum-base
 build:macos --host_copt=-Wno-elaborated-enum-base
-
-# setuptools/distutils' find_config_files() calls os.path.expanduser("~"),
-# which on Windows resolves via USERPROFILE (or HOMEDRIVE + HOMEPATH). The
-# --incompatible_strict_action_env flag above strips these from the build
-# action environment, making expanduser raise "Could not determine home
-# directory" inside the setup.py egg_info genrules that compute ament entry
-# points. Pass them through from the client environment (value-less
-# --action_env inherits the current value) so those genrules can run.
-build:windows --action_env=USERPROFILE
-build:windows --action_env=HOMEDRIVE
-build:windows --action_env=HOMEPATH
-
-# Windows caps a process command line at 32767 characters (CreateProcessW).
-# Packages with many include paths (anything pulling in OpenCV, for example)
-# blow past that and fail with "command is longer than CreateProcessW's limit".
-# Enable Bazel's compiler_param_file feature so C++ compile flags are written to
-# a @params file instead of the command line (the toolchain already enables the
-# archive/linker param files). This affects the target configuration only, so
-# the exec-config LLVM/clang-from-source tool build keeps its cache.
-build:windows --features=compiler_param_file
 
 ## TEST OPTIONS
 
