@@ -305,13 +305,10 @@ def generate_compilation_information(
         ]
 
     # Linking contexts propagated to static consumers of this fragment (via CcInfo).
-    if is_darwin or is_windows:
-        static_linking_contexts_to_propagate = static_linking_contexts + dynamic_linking_contexts
-    else:
-        static_linking_contexts_to_propagate = static_linking_contexts + [
-            dep.linking_context
-            for dep in header_only_deps
-        ]
+    static_linking_contexts_to_propagate = static_linking_contexts + [
+        dep.linking_context
+        for dep in header_only_deps
+    ]
 
     if not srcs:
         linking_context = cc_common.merge_linking_contexts(
