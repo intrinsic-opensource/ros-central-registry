@@ -56,6 +56,16 @@ makes it easy to transitively collect ament index layers into something that loo
 like an underlay (getting it to this point requires more work, though).
 """
 
+# Shared library suffixes across the platforms we build for: ELF (.so, .so.1.2.3),
+# Mach-O (.dylib), and PE (.dll).
+def _is_shared_library(basename):
+    return (
+        basename.endswith(".so") or
+        ".so." in basename or
+        basename.endswith(".dylib") or
+        basename.endswith(".dll")
+    )
+
 def _ament_index_impl(ctx):
     # When we use local path overrides for the module name, Bazel appends
     # a plus sign to the end. We must remove this, or the ament_index
@@ -132,7 +142,7 @@ def _ament_index_impl(ctx):
                         component_files.append(file)
                 else:
                     symlinks["share/" + package_name + "/" + file.short_path] = file
-                    if file.basename.endswith(".so") or ".so." in file.basename:
+                    if _is_shared_library(file.basename):
                         symlinks["lib/" + file.basename] = file
         if component_files:
             out_comp_file = ctx.actions.declare_file("share/ament_index/resource_index/rclcpp_components/" + package_name)

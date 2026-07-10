@@ -183,13 +183,6 @@ ament_index(
     components = [
         ":component_nodes",
     ],
-    # test_component_manager/test_component_manager_api dlopen()
-    # libtest_component.dylib/.so at a "lib/<name>" path read back from this
-    # same ament_index registration; without it listed here that path is
-    # never populated in runfiles' lib/ symlink farm.
-    libraries = [
-        ":test_component",
-    ],
 )
 
 [
