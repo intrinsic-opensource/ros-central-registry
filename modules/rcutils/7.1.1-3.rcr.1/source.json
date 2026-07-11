@@ -4,7 +4,9 @@
     "strip_prefix": "rcutils-release-release-lyrical-rcutils-7.1.1-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-sqB4pXdF56X44J89GkePAj+bXT8IfjzI2cUwUulaqFw=",
+        "BUILD.bazel": "sha256-B3ltYXVAGi1EHEmWUKe6upKhchpM72tR777HVFxvc+0=",
+        "tests.bzl": "sha256-pqaxeo2mGmvIs42UixuKKEs9UtWIOD7WuIWHf+81MjM=",
+        "memory_tools_wrapper.sh": "sha256-D+tHSruswNGPUmGH7OydauZgkg2/Msdif5auaE2K17I=",
         "test/locate_test_assets.h": "sha256-xm3tB/I+9VgV9CwPVDT2dP+r0BJpFuezPgkze0Z+J/I=",
         "include/rcutils/runfiles.h": "sha256-MAa3qQUADk1JVGZ8n5N0bp/aRP+ko4so3tNJgFFPePg=",
         "src/runfiles.c": "sha256-ptISDACRYACpssUyCW9BPjKkVsmhbYznTB5mRlmkyYI="
