@@ -79,17 +79,10 @@ cc_test(
     srcs = ["tests/unit_test.cpp"],
     data = [":ament_index"],
     dynamic_deps = [":transitive_dynamic_deps"],
-    env = select({
-        "@platforms//os:windows": {"ROS_HOME": "%TEMP%"},
-        # GitHub Actions runners restrict what /tmp can be used for. $(TMPDIR) is
-        # a Make variable set via --define=TMPDIR=... (see workspace/.bazelrc and
-        # tools/ci/setup_workspace.py), resolved from $RUNNER_TEMP/$TMPDIR with a
-        # /tmp fallback for local use.
-        "//conditions:default": {"ROS_HOME": "$(TMPDIR)"},
-    }),
     deps = DEPENDENCIES.values() + [
         ":camera_info_manager_library",
         "@googletest//:gtest_main",
+        "@rosdistro//cc:bazel_test_helper",
         "@sensor_msgs//:cc",
     ],
 )

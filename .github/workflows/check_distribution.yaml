@@ -113,7 +113,7 @@ jobs:
       id: prepare_workspace
       working-directory: .
       run: |
-        bazel run //tools/ci:setup_workspace --release=${{ matrix.ros }} --tmpdir "$RUNNER_TEMP"
+        bazel run //tools/ci:setup_workspace -- --release=${{ matrix.ros }} --tmpdir "$RUNNER_TEMP"
         cat workspace/.bazelrc
         cat workspace/MODULE.bazel
 

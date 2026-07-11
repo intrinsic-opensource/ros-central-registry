@@ -159,6 +159,7 @@ filegroup(
         deps = DEPENDENCIES.values() + [
             ":image_transport_library",
             "@googletest//:gtest_main",
+            "@rosdistro//cc:bazel_test_helper",
         ],
     )
     for test in [
@@ -190,6 +191,7 @@ cc_test(
     deps = DEPENDENCIES.values() + [
         ":image_transport_library",
         "@googletest//:gtest_main",
+        "@rosdistro//cc:bazel_test_helper",
     ],
 )
 
