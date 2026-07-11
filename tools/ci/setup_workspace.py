@@ -129,6 +129,8 @@ common --remote_upload_local_results=false
 # CI specific options for remote caching and credentials.
 common:ci --remote_upload_local_results=true
 common:ci --google_default_credentials
+common:ci --http_timeout_scaling=3.0
+common:ci --experimental_repository_downloader_retries=10
 
 # We support the following variants of ROS distributions. This allows you
 # to build or test the entire variant with a --config flag.
