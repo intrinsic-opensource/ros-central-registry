@@ -40,6 +40,17 @@ common --test_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --test_env=LD_LIBRARY_PATH=lib
 common --test_env=DYLD_LIBRARY_PATH=lib
 
+# GitHub Actions runners restrict what /tmp can be used for, which breaks
+# any action (e.g. bazel_tools' generate-xml.sh test wrapper, or a compiler
+# writing scratch files) that creates temp files there. This file has no way
+# to bake in a literal resolved path (unlike workspace/.bazelrc, which
+# tools/ci/setup_workspace.py generates), so forward whatever TMPDIR the
+# invoking shell has instead -- CI exports it to $RUNNER_TEMP before
+# invoking bazel here.
+common --action_env=TMPDIR
+common --test_env=TMPDIR
+common --run_env=TMPDIR
+
 # Critical ROS environment variables needed at run-time.
 common --run_env=ROS_DISTRO="lyrical"
 common --run_env=ROS_HOME=".ros"

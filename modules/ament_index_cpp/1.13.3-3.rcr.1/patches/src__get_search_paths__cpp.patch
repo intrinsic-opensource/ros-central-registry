@@ -55,7 +55,7 @@
  std::list<std::filesystem::path>
  get_searcheable_paths()
  {
-@@ -38,6 +76,25 @@
+@@ -38,6 +76,31 @@
    _dupenv_s(&ament_prefix_path, &ament_prefix_path_size, env_var);
  #endif
    if (!ament_prefix_path || std::string(ament_prefix_path).empty()) {
@@ -71,7 +71,13 @@
 +    if (executable_path) {
 +      const std::filesystem::path runfiles_path(*executable_path + ".runfiles");
 +      if (std::filesystem::exists(runfiles_path / "MANIFEST")) {
-+        return std::list<std::filesystem::path>{runfiles_path / "_main"};
++        // test_workspace is the canonical repo name of the target under test
++        // (e.g. "_main" when the package is the root module, or
++        // "image_transport+" when it's pulled in as a bzlmod dependency of a
++        // different root module, as happens in CI's aggregated workspace).
++        // Fall back to "_main" only if it's unavailable.
++        return std::list<std::filesystem::path>{
++          runfiles_path / (test_workspace ? std::string(test_workspace) : "_main")};
 +      }
 +    }
 +    const std::filesystem::path cwd = std::filesystem::current_path();

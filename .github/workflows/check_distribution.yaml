@@ -107,6 +107,7 @@ jobs:
       id: examples
       working-directory: ./examples
       run: |
+        export TMPDIR="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
         bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp
         bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp
         bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp
@@ -136,7 +137,7 @@ jobs:
       id: prepare_workspace
       working-directory: .
       run: |
-        python3 tools/ci/setup_workspace.py --release ${{ matrix.ros }}
+        python3 tools/ci/setup_workspace.py --release ${{ matrix.ros }} --tmpdir "$RUNNER_TEMP"
 
     # Build the ros 2 distribution
     - name: Build

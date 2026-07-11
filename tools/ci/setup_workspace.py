@@ -97,6 +97,7 @@ common --test_env=ROS_DISTRO="{distro}"
 common --test_env=ROS_HOME=".ros"
 common --test_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --test_env=LD_LIBRARY_PATH=lib
+common --test_env=TMPDIR={tmpdir}
 
 # Critical ROS environment variables needed at run-time.
 common --run_env=ROS_DISTRO="{distro}"
@@ -104,6 +105,7 @@ common --run_env=ROS_HOME=".ros"
 common --run_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --run_env=LD_LIBRARY_PATH=lib
 common --run_env=DYLD_LIBRARY_PATH=lib
+common --run_env=TMPDIR={tmpdir}
 
 # Propagate select X11 variables through to the test sandbox, so that
 # any test that uses the display has access to it.
@@ -137,6 +139,13 @@ common:ci --google_default_credentials
 common --enable_platform_specific_config
 
 ## BUILD OPTIONS
+
+# Some packages bake a scratch-directory path into compiled test binaries via
+# local_defines (e.g. rcutils' BUILD_DIR), which --test_env/--run_env can't
+# reach since it's resolved at compile time, not test run-time. Expose the
+# same caller-resolved TMPDIR (see above) as a Make variable so those
+# local_defines/env attributes can pick it up via $(TMPDIR) substitution.
+build --define=TMPDIR={tmpdir}
 
 # Ensure that we use toolchains_llvm instead of the host toolchain.
 build --repo_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
@@ -272,7 +281,15 @@ def main():
         default=Path("workspace"),
         help="Directory to create the workspace in",
     )
+    parser.add_argument(
+        "--tmpdir",
+        default="",
+        help="Directory to pin TMPDIR to for build/test/run actions, e.g. "
+             "$RUNNER_TEMP. Falls back to $TMPDIR, then /tmp, if not given.",
+    )
     args = parser.parse_args()
+
+    tmpdir = args.tmpdir or os.environ.get("TMPDIR") or "/tmp"
 
     # Locate directories
     workspace_root = Path(
@@ -434,7 +451,7 @@ register_toolchains(
         for variant_name in VARIANTS
     )
     with open(target_workspace / ".bazelrc", "w") as f:
-        f.write(BAZELRC_TEMPLATE.format(distro=distro, variants=variants))
+        f.write(BAZELRC_TEMPLATE.format(distro=distro, variants=variants, tmpdir=tmpdir))
 
     print("Workspace setup complete.")
 
