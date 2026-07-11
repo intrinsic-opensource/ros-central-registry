@@ -194,14 +194,6 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 
 ## TEST OPTIONS
 
-# GitHub Actions' macOS runners point TMPDIR at a per-job path under
-# /Users/runner/work/_temp, which darwin-sandbox's fixed whitelist of
-# writable paths doesn't include. mktemp calls inside the sandbox (e.g.
-# bazel_tools' generate-xml.sh test wrapper) then abort. Pin TMPDIR to
-# /tmp (-> /private/tmp), which the sandbox always allows.
-build:macos --action_env=TMPDIR=/tmp
-test:macos  --test_env=TMPDIR=/tmp
-
 # This restricts our test sandboxes from accessing the network, which is
 # important if you want to prevent destructive interference on the ROS
 # messaging system between tests running in parallel. On Linux, this still
