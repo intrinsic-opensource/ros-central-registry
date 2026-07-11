@@ -88,9 +88,9 @@ genrule(
 # binary, missing calls made from within librcutils itself); a test needs to
 # share that exact loaded instance -- not a separately linked static copy --
 # to see the interposed calls' counters (see :memory_tools_interpose). These
-# run through memory_tools_wrapper.sh, which additionally injects the dylib
-# via DYLD_INSERT_LIBRARIES on Darwin, where interposition also needs to be
-# forced early via the dynamic loader.
+# run through memory_tools_wrapper_script.sh, which additionally injects the
+# dylib via DYLD_INSERT_LIBRARIES on Darwin, where interposition also needs
+# to be forced early via the dynamic loader.
 _MEMORY_TOOLS_TESTS = [
     "test_allocator",
     "test_error_handling",

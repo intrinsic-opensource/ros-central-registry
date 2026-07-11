@@ -24,8 +24,8 @@ def rcutils_cc_tests(tests, memory_tools_tests):
     Tests named in memory_tools_tests exercise osrf_testing_tools_cpp's
     memory-tools interposition checks and need to share the exact loaded
     :memory_tools_interpose instance (not a separately linked static copy)
-    -- see the comment on memory_tools_wrapper.sh for why that means running
-    through a wrapper rather than being a plain cc_test.
+    -- see the comment on memory_tools_wrapper_script.sh for why that means
+    running through a wrapper rather than being a plain cc_test.
 
     Args:
         tests: dict of (name, src) -> env, as in rcutils' BUILD.bazel.
@@ -73,7 +73,7 @@ def rcutils_cc_tests(tests, memory_tools_tests):
         if needs_memory_tools:
             sh_test(
                 name = name,
-                srcs = ["memory_tools_wrapper.sh"],
+                srcs = ["memory_tools_wrapper_script.sh"],
                 args = [
                     "$(rlocationpath :{}_bin)".format(name),
                     "$(rlocationpath @osrf_testing_tools_cpp//:memory_tools_interpose)",
