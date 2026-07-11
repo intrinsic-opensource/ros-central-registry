@@ -6,7 +6,7 @@
     "overlay": {
         "tests.bzl": "sha256-pqaxeo2mGmvIs42UixuKKEs9UtWIOD7WuIWHf+81MjM=",
         "BUILD.bazel": "sha256-B3ltYXVAGi1EHEmWUKe6upKhchpM72tR777HVFxvc+0=",
-        "memory_tools_wrapper.sh": "sha256-D+tHSruswNGPUmGH7OydauZgkg2/Msdif5auaE2K17I=",
+        "memory_tools_wrapper.sh": "sha256-ThsX7yWett4FtSg1V0tgbnFvgALQ6p7rnEbKZzzYGOQ=",
         "src/runfiles.c": "sha256-ptISDACRYACpssUyCW9BPjKkVsmhbYznTB5mRlmkyYI=",
         "test/locate_test_assets.h": "sha256-xm3tB/I+9VgV9CwPVDT2dP+r0BJpFuezPgkze0Z+J/I=",
         "include/rcutils/runfiles.h": "sha256-MAa3qQUADk1JVGZ8n5N0bp/aRP+ko4so3tNJgFFPePg="

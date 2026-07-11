@@ -25,7 +25,8 @@
 # that correctly regardless of context.
 #
 # On non-Darwin platforms DYLD_INSERT_LIBRARIES is meaningless, so this is a
-# transparent passthrough to the wrapped binary.
+# transparent passthrough to the wrapped binary. TODO(asymingt) are there any
+# other platforms that might require this type of workaround?
 
 set -euo pipefail
 
