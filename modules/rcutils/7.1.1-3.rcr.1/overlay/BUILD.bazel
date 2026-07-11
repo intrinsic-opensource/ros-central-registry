@@ -81,6 +81,14 @@ genrule(
     cmd = "echo '' > \"$(OUTS)\"",
 )
 
+genrule(
+    name = "memory_tools_wrapper",
+    srcs = ["memory_tools_wrapper_script.sh"],
+    outs = ["memory_tools_wrapper.sh"],
+    cmd = "cp $< $@ && chmod +x $@",
+    executable = True,
+)
+
 # Tests that exercise osrf_testing_tools_cpp's memory-tools interposition
 # checks. malloc/realloc/calloc/free interposition only reliably covers the
 # whole process when injected via the :memory_tools_interpose shared library

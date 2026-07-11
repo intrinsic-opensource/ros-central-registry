@@ -73,7 +73,7 @@ def rcutils_cc_tests(tests, memory_tools_tests):
         if needs_memory_tools:
             sh_test(
                 name = name,
-                srcs = ["memory_tools_wrapper_script.sh"],
+                srcs = [":memory_tools_wrapper"],
                 args = [
                     "$(rlocationpath :{}_bin)".format(name),
                     "$(rlocationpath @osrf_testing_tools_cpp//:memory_tools_interpose)",
