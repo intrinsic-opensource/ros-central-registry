@@ -215,9 +215,8 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 # just the handful of tests that need real multicast discovery.
 test --sandbox_default_allow_network=false
 
-# CI specific quirks
-test:ci --flaky_test_attempts=5
-test:ci --local_test_jobs=1
+# Retry in CI for any tests that are flaky
+test:ci --flaky_test_attempts=3
 """
 
 def get_copyright_header() -> str:

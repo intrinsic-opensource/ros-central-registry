@@ -53,8 +53,8 @@ jobs:
       fail-fast: false
       matrix:
         bazel:
-        - 8.x
-        - 9.x
+        - 8.5.1
+        - 9.1.1
         ros:
         - lyrical.2026-06-08.rcr.1
         variant:
@@ -100,30 +100,6 @@ jobs:
         disk-cache: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
         repository-cache: true
 
-    # SMOKE TEST
-
-    # Checks that the examples build, for both dynamic and static RMW implementations.
-    - name: Examples
-      id: examples
-      working-directory: ./examples
-      run: |
-        export TMPDIR="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp
-        bazel build //...
-    - name: Update status badge (build)
-      uses: Schneegans/dynamic-badges-action@v1.8.0
-      with:
-        auth: ${{ secrets.STATUS_BADGE_SECRET }}
-        gistID: f796805a77e0f05cc837b18e60142773
-        filename: ${{ matrix.ros }}_${{ matrix.bazel }}_${{ matrix.os }}_examples.json
-        label: ${{ matrix.bazel }}
-        message: ${{ steps.examples.outcome == 'success' && '✓' || 'x' }}
-        color: ${{ steps.examples.outcome == 'success' && 'green' || 'red' }}
-      if: always() # TODO(fix)
-
     # TEST THE ENTIRE DISTRIBUTION
 
     # Setup python
@@ -137,7 +113,9 @@ jobs:
       id: prepare_workspace
       working-directory: .
       run: |
-        python3 tools/ci/setup_workspace.py --release ${{ matrix.ros }} --tmpdir "$RUNNER_TEMP"
+        bazel run //tools/ci:setup_workspace --release=${{ matrix.ros }} --tmpdir "$RUNNER_TEMP"
+        cat workspace/.bazelrc
+        cat workspace/MODULE.bazel
 
     # Build the ros 2 distribution
     - name: Build
@@ -242,11 +220,35 @@ jobs:
         color: ${{ steps.test_rmw_zenoh_cpp.outcome == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)
 
+    # Checks examples
+    - name: Examples
+      id: examples
+      working-directory: ./examples
+      run: |
+        export TMPDIR="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp
+        bazel build //...
+    - name: Update status badge (build)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.bazel }}_${{ matrix.os }}_examples.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.examples.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.examples.outcome == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
+
     - name: Test logs
       uses: actions/upload-artifact@v7
       with:
         name: All test logs
         path: |
+          workspace/MODULE.bazel
+          workspace/.bazelrc
           workspace/*.xml.tar.gz
           workspace/*.log.tar.gz
           workspace/*.test.log
