@@ -217,6 +217,7 @@ test --sandbox_default_allow_network=false
 
 # Retry in CI for any tests that are flaky
 test:ci --flaky_test_attempts=3
+test:ci --local_test_jobs=1
 """
 
 def get_copyright_header() -> str:

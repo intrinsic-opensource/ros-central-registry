@@ -166,4 +166,4 @@ test --sandbox_default_allow_network=false
 
 # CI specific quirks
 test:ci --flaky_test_attempts=3
-
+test:ci --local_test_jobs=1
