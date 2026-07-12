@@ -156,16 +156,21 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 
 # This restricts our test sandboxes from accessing the network, which is
 # important if you want to prevent destructive interference on the ROS
-# messaging system between tests running in parallel. On Linux, this still
+# messaging system between tests running in parallel. This works well with
+# fastrtps on Linux, but fails if you need to access a zenohd router outside
+# a test sandbox, or if you are on Mac, which has multicast UDP disabled for
+# everything but localhost traffic (which breaks discovery).
+test --sandbox_default_allow_network=false
+
+# CI specific quirks. On Linux, sandbox_default_allow_network=false still
 # permits loopback, so DDS discovery over loopback keeps working. macOS's has
 # profile only carves out plain "localhost:*" traffic, not UDP
 # multicast groups, which is what FastRTPS's discovery protocol actually
 # uses -- so multi-node/multi-context tests (e.g. rcl_action's graph tests)
-# hang until they hit their own timeout under the sandbox. For the tests that
-# need real multicast discovery, we use "no-sandbox" + "exclusive" tags on
-# just the handful of tests that need real multicast discovery.
-test --sandbox_default_allow_network=false
-
-# CI specific quirks
+# hang until they hit their own timeout under the sandbox. GitHib CI workers
+# are very low resourced, so it's actually better to only allow one test job
+# at a time, and enable the network in the sandbox. Even then tests fail
+# ocassionally, so we retry a couple of times as a backup.
 test:ci --flaky_test_attempts=3
 test:ci --local_test_jobs=1
+test:ci --sandbox_default_allow_network=true
