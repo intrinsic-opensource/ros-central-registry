@@ -213,18 +213,8 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 # everything but localhost traffic (which breaks discovery).
 test --sandbox_default_allow_network=false
 
-# CI specific quirks. On Linux, sandbox_default_allow_network=false still
-# permits loopback, so DDS discovery over loopback keeps working. macOS's has
-# profile only carves out plain "localhost:*" traffic, not UDP
-# multicast groups, which is what FastRTPS's discovery protocol actually
-# uses -- so multi-node/multi-context tests (e.g. rcl_action's graph tests)
-# hang until they hit their own timeout under the sandbox. GitHib CI workers
-# are very low resourced, so it's actually better to only allow one test job
-# at a time, and enable the network in the sandbox. Even then tests fail
-# ocassionally, so we retry a couple of times as a backup.
+# Don't allow a flaky test to fail the entire run.
 test:ci --flaky_test_attempts=3
-test:ci --local_test_jobs=1
-test:ci --sandbox_default_allow_network=true
 """
 
 def get_copyright_header() -> str:

@@ -286,19 +286,27 @@ collect_transitive_dynamic_deps(
             "ROS_PACKAGE_NAME=\\\"rclcpp\\\"",
             "TEST_RESOURCES_DIRECTORY=\\\".\\\"",
         ],
-        # These two exercise real cross-context ROS graph discovery
-        # (multiple rclcpp::Context/domains discovering each other), which
-        # needs actual (multicast) network access -- Bazel's sandbox on
-        # Darwin blocks that entirely (unlike Linux, which still permits
-        # loopback). "exclusive" avoids the follow-on problem of
-        # un-sandboxed DDS traffic colliding with other concurrently-
-        # running DDS tests.
+        # These exercise real cross-context ROS graph discovery (multiple
+        # rclcpp::Context/domains discovering each other), which needs
+        # actual (multicast) network access -- Bazel's sandbox on Darwin
+        # blocks that entirely (unlike Linux, which still permits
+        # loopback). "requires-network" lifts just that restriction
+        # (filesystem/process sandboxing stays intact, unlike
+        # "no-sandbox") and must always be paired with "exclusive" to
+        # avoid un-sandboxed DDS traffic colliding with other
+        # concurrently-running DDS tests. CI itself already disables the
+        # sandbox network restriction for every test (see the `test:ci`
+        # config in tools/ci/setup_workspace.py), so these tags mainly
+        # matter for local `bazel test` runs made without --config ci.
         tags = [
-            "no-sandbox",
+            "requires-network",
             "exclusive",
         ] if name in [
             "test_publisher_subscription_count_api",
             "test_subscription_publisher_count_api",
+            "test_client_common",
+            "test_executor",
+            "test_graph_listener",
         ] else [],
         deps = TEST_DEPENDENCIES.values() + [
             "//test/msg:cc",

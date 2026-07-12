@@ -65,6 +65,21 @@ cc_test(
     name = "diagnostic_updater_test",
     srcs = ["test/diagnostic_updater_test.cpp"],
     dynamic_deps = [":transitive_dynamic_deps"],
+    # This test exercises real cross-node ROS graph discovery (it waits for
+    # a subscriber match on the diagnostics publisher), which needs actual
+    # (multicast) network access -- Bazel's sandbox on Darwin blocks that
+    # entirely (unlike Linux, which still permits loopback).
+    # "requires-network" lifts just that restriction (filesystem/process
+    # sandboxing stays intact, unlike "no-sandbox") and must always be
+    # paired with "exclusive" to avoid un-sandboxed DDS traffic colliding
+    # with other concurrently-running DDS tests. CI itself already
+    # disables the sandbox network restriction for every test (see the
+    # `test:ci` config in tools/ci/setup_workspace.py), so these tags
+    # mainly matter for local `bazel test` runs made without --config ci.
+    tags = [
+        "exclusive",
+        "requires-network",
+    ],
     deps = TEST_DEPENDENCIES.values() + [
         ":diagnostic_updater_library",
         "@googletest//:gtest_main",

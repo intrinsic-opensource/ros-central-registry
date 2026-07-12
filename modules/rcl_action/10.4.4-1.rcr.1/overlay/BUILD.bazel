@@ -94,16 +94,26 @@ collect_transitive_dynamic_deps(
         ],
         includes = ["src"],
         local_defines = ros_local_defines(),
-        # test_graph exercises real cross-node ROS graph discovery, which
-        # needs actual (multicast) network access -- Bazel's sandbox on
-        # Darwin blocks that entirely (unlike Linux, which still permits
-        # loopback). "exclusive" avoids the follow-on problem of un-
-        # sandboxed DDS traffic colliding with other concurrently-running
-        # DDS tests.
+        # test_graph, test_wait and test_action_client exercise real
+        # cross-node ROS graph discovery, which needs actual (multicast)
+        # network access -- Bazel's sandbox on Darwin blocks that entirely
+        # (unlike Linux, which still permits loopback). "requires-network"
+        # lifts just that restriction (filesystem/process sandboxing
+        # stays intact, unlike "no-sandbox") and must always be paired
+        # with "exclusive" to avoid un-sandboxed DDS traffic colliding
+        # with other concurrently-running DDS tests. CI itself already
+        # disables the sandbox network restriction for every test (see
+        # the `test:ci` config in tools/ci/setup_workspace.py), so these
+        # tags mainly matter for local `bazel test` runs made without
+        # --config ci.
         tags = [
-            "no-sandbox",
+            "requires-network",
             "exclusive",
-        ] if name == "test_graph" else [],
+        ] if name in [
+            "test_graph",
+            "test_wait",
+            "test_action_client",
+        ] else [],
         deps = DEPENDENCIES.values() + [
             ":rcl_action_library",
             "@googletest//:gtest",
