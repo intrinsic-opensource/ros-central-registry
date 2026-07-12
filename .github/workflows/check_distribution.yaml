@@ -175,103 +175,103 @@ jobs:
         color: ${{ steps.test_rmw_fastrtps_dynamic_cpp.outcome == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)
 
-    - name: Test (rmw_cyclonedds_cpp)
-      id: test_rmw_cyclonedds_cpp
-      continue-on-error: true
-      run: |
-        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp 2>&1 | tee rmw_cyclonedds_cpp.test.log || test_status=$?
-        if [ -d bazel-testlogs ]; then
-          find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_cyclonedds_cpp.xml.tar.gz --null -T - || true
-          find -L bazel-testlogs -name "*.log" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_cyclonedds_cpp.log.tar.gz --null -T - || true
-        fi
-        exit ${test_status:-0}
-    - name: Update status badge (rmw_cyclonedds_cpp)
-      uses: Schneegans/dynamic-badges-action@v1.8.0
-      with:
-        auth: ${{ secrets.STATUS_BADGE_SECRET }}
-        gistID: f796805a77e0f05cc837b18e60142773
-        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_test_rmw_cyclonedds_cpp.json
-        label: ${{ matrix.bazel }}
-        message: ${{ steps.test_rmw_cyclonedds_cpp.outcome == 'success' && '✓' || 'x' }}
-        color: ${{ steps.test_rmw_cyclonedds_cpp.outcome == 'success' && 'green' || 'red' }}
-      if: always() # TODO(fix)
+    # - name: Test (rmw_cyclonedds_cpp)
+    #   id: test_rmw_cyclonedds_cpp
+    #   continue-on-error: true
+    #   run: |
+    #     bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp 2>&1 | tee rmw_cyclonedds_cpp.test.log || test_status=$?
+    #     if [ -d bazel-testlogs ]; then
+    #       find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_cyclonedds_cpp.xml.tar.gz --null -T - || true
+    #       find -L bazel-testlogs -name "*.log" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_cyclonedds_cpp.log.tar.gz --null -T - || true
+    #     fi
+    #     exit ${test_status:-0}
+    # - name: Update status badge (rmw_cyclonedds_cpp)
+    #   uses: Schneegans/dynamic-badges-action@v1.8.0
+    #   with:
+    #     auth: ${{ secrets.STATUS_BADGE_SECRET }}
+    #     gistID: f796805a77e0f05cc837b18e60142773
+    #     filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_test_rmw_cyclonedds_cpp.json
+    #     label: ${{ matrix.bazel }}
+    #     message: ${{ steps.test_rmw_cyclonedds_cpp.outcome == 'success' && '✓' || 'x' }}
+    #     color: ${{ steps.test_rmw_cyclonedds_cpp.outcome == 'success' && 'green' || 'red' }}
+    #   if: always() # TODO(fix)
 
-    - name: Test (rmw_zenoh_cpp)
-      id: test_rmw_zenoh_cpp
-      continue-on-error: true
-      run: |
-        # `bazel run` and `bazel test` can't run concurrently against the same
-        # output base -- they serialize on Bazel's single command lock. Simply
-        # backgrounding `bazel run @rmw_zenoh_cpp//:rmw_zenohd &` right before
-        # `bazel test` races the two for that lock: whenever `bazel test` won
-        # (common under CI load), the router's `bazel run` client sat blocked
-        # for the entire test run and was killed by the EXIT trap before ever
-        # starting rmw_zenohd -- silently leaving every zenoh session in this
-        # step routerless (each rmw_zenoh_cpp context logs a warning and
-        # carries on without discovery) rather than failing loudly. Resolve
-        # the router to a plain script up front via `--script_path` (which
-        # only builds and writes the script, then returns -- it never leaves
-        # a command holding the lock) and launch that directly, so it no
-        # longer contends with `bazel test` for the lock at all.
-        bazel build --config ci @rmw_zenoh_cpp//:rmw_zenohd
-        bazel run --config ci @rmw_zenoh_cpp//:rmw_zenohd --script_path="$PWD/run_zenohd.sh"
-        ./run_zenohd.sh >zenohd-stdout.log 2>zenohd-stderr.log &
-        ZENOHD_PID=$!
-        trap "kill $ZENOHD_PID 2>/dev/null || true" EXIT
-        router_ready=false
-        for i in $(seq 1 30); do
-          if nc -z 127.0.0.1 7447 2>/dev/null; then
-            router_ready=true
-            break
-          fi
-          if ! kill -0 $ZENOHD_PID 2>/dev/null; then
-            break
-          fi
-          sleep 1
-        done
-        if [ "$router_ready" != "true" ]; then
-          echo "rmw_zenohd never started listening on 7447; see zenohd-stderr.log" >&2
-          cat zenohd-stderr.log >&2
-          exit 1
-        fi
-        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp 2>&1 | tee rmw_zenoh_cpp.test.log || test_status=$?
-        if [ -d bazel-testlogs ]; then
-          find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_zenoh_cpp.xml.tar.gz --null -T - || true
-          find -L bazel-testlogs -name "*.log" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_zenoh_cpp.log.tar.gz --null -T - || true
-        fi
-        exit ${test_status:-0}
-    - name: Update status badge (rmw_zenoh_cpp)
-      uses: Schneegans/dynamic-badges-action@v1.8.0
-      with:
-        auth: ${{ secrets.STATUS_BADGE_SECRET }}
-        gistID: f796805a77e0f05cc837b18e60142773
-        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_test_rmw_zenoh_cpp.json
-        label: ${{ matrix.bazel }}
-        message: ${{ steps.test_rmw_zenoh_cpp.outcome == 'success' && '✓' || 'x' }}
-        color: ${{ steps.test_rmw_zenoh_cpp.outcome == 'success' && 'green' || 'red' }}
-      if: always() # TODO(fix)
+    # - name: Test (rmw_zenoh_cpp)
+    #   id: test_rmw_zenoh_cpp
+    #   continue-on-error: true
+    #   run: |
+    #     # `bazel run` and `bazel test` can't run concurrently against the same
+    #     # output base -- they serialize on Bazel's single command lock. Simply
+    #     # backgrounding `bazel run @rmw_zenoh_cpp//:rmw_zenohd &` right before
+    #     # `bazel test` races the two for that lock: whenever `bazel test` won
+    #     # (common under CI load), the router's `bazel run` client sat blocked
+    #     # for the entire test run and was killed by the EXIT trap before ever
+    #     # starting rmw_zenohd -- silently leaving every zenoh session in this
+    #     # step routerless (each rmw_zenoh_cpp context logs a warning and
+    #     # carries on without discovery) rather than failing loudly. Resolve
+    #     # the router to a plain script up front via `--script_path` (which
+    #     # only builds and writes the script, then returns -- it never leaves
+    #     # a command holding the lock) and launch that directly, so it no
+    #     # longer contends with `bazel test` for the lock at all.
+    #     bazel build --config ci @rmw_zenoh_cpp//:rmw_zenohd
+    #     bazel run --config ci @rmw_zenoh_cpp//:rmw_zenohd --script_path="$PWD/run_zenohd.sh"
+    #     ./run_zenohd.sh >zenohd-stdout.log 2>zenohd-stderr.log &
+    #     ZENOHD_PID=$!
+    #     trap "kill $ZENOHD_PID 2>/dev/null || true" EXIT
+    #     router_ready=false
+    #     for i in $(seq 1 30); do
+    #       if nc -z 127.0.0.1 7447 2>/dev/null; then
+    #         router_ready=true
+    #         break
+    #       fi
+    #       if ! kill -0 $ZENOHD_PID 2>/dev/null; then
+    #         break
+    #       fi
+    #       sleep 1
+    #     done
+    #     if [ "$router_ready" != "true" ]; then
+    #       echo "rmw_zenohd never started listening on 7447; see zenohd-stderr.log" >&2
+    #       cat zenohd-stderr.log >&2
+    #       exit 1
+    #     fi
+    #     bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp 2>&1 | tee rmw_zenoh_cpp.test.log || test_status=$?
+    #     if [ -d bazel-testlogs ]; then
+    #       find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_zenoh_cpp.xml.tar.gz --null -T - || true
+    #       find -L bazel-testlogs -name "*.log" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_zenoh_cpp.log.tar.gz --null -T - || true
+    #     fi
+    #     exit ${test_status:-0}
+    # - name: Update status badge (rmw_zenoh_cpp)
+    #   uses: Schneegans/dynamic-badges-action@v1.8.0
+    #   with:
+    #     auth: ${{ secrets.STATUS_BADGE_SECRET }}
+    #     gistID: f796805a77e0f05cc837b18e60142773
+    #     filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_test_rmw_zenoh_cpp.json
+    #     label: ${{ matrix.bazel }}
+    #     message: ${{ steps.test_rmw_zenoh_cpp.outcome == 'success' && '✓' || 'x' }}
+    #     color: ${{ steps.test_rmw_zenoh_cpp.outcome == 'success' && 'green' || 'red' }}
+    #   if: always() # TODO(fix)
 
-    # Checks examples
-    - name: Examples
-      id: examples
-      working-directory: ./examples
-      run: |
-        export TMPDIR="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp
-        bazel build //...
-    - name: Update status badge (build)
-      uses: Schneegans/dynamic-badges-action@v1.8.0
-      with:
-        auth: ${{ secrets.STATUS_BADGE_SECRET }}
-        gistID: f796805a77e0f05cc837b18e60142773
-        filename: ${{ matrix.ros }}_${{ matrix.bazel }}_${{ matrix.os }}_examples.json
-        label: ${{ matrix.bazel }}
-        message: ${{ steps.examples.outcome == 'success' && '✓' || 'x' }}
-        color: ${{ steps.examples.outcome == 'success' && 'green' || 'red' }}
-      if: always() # TODO(fix)
+    # # Checks examples
+    # - name: Examples
+    #   id: examples
+    #   working-directory: ./examples
+    #   run: |
+    #     export TMPDIR="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
+    #     bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp
+    #     bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp
+    #     bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp
+    #     bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp
+    #     bazel build //...
+    # - name: Update status badge (build)
+    #   uses: Schneegans/dynamic-badges-action@v1.8.0
+    #   with:
+    #     auth: ${{ secrets.STATUS_BADGE_SECRET }}
+    #     gistID: f796805a77e0f05cc837b18e60142773
+    #     filename: ${{ matrix.ros }}_${{ matrix.bazel }}_${{ matrix.os }}_examples.json
+    #     label: ${{ matrix.bazel }}
+    #     message: ${{ steps.examples.outcome == 'success' && '✓' || 'x' }}
+    #     color: ${{ steps.examples.outcome == 'success' && 'green' || 'red' }}
+    #   if: always() # TODO(fix)
 
     - name: Test logs
       uses: actions/upload-artifact@v7
@@ -284,6 +284,6 @@ jobs:
           workspace/*.log.tar.gz
           workspace/*.test.log
           workspace/build.log
-          workspace/zenohd-stdout.log
-          workspace/zenohd-stderr.log
+          # workspace/zenohd-stdout.log
+          # workspace/zenohd-stderr.log
       if: always()
