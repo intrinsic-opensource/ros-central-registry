@@ -12,48 +12,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: check_for_linting_errors
-run-name: Checks that there are no buildifier linting errors
+# Reusable workflow: checks that the docs site builds. Called (never
+# triggered directly) from ci.yaml as part of the stage-1 fail-fast gate --
+# this is deliberately just the build check, not the actual publish (see
+# _check_deploy.yml for that), so a broken docs build is caught immediately
+# rather than only after the multi-hour distribution/release stages finish.
+
+name: _check_docs_build
 
 on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  workflow_call:
 
 env:
   ANDROID_HOME: ""
 
 jobs:
-  check_for_linting_errors:
-    name: Lint all Bazel files
+  check_docs_build:
+    name: Check docs build
     runs-on: ubuntu-26.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v7
       with:
-        fetch-depth: 0
-    - name: Setup buildifier
-      run: |
-        curl -L https://github.com/bazelbuild/buildtools/releases/download/v8.5.1/buildifier-linux-amd64 -o buildifier
-        chmod +x buildifier
-        sudo mv buildifier /usr/local/bin/buildifier 
-    - name: Run buildifier
-      run: |
-        buildifier -mode check -r .
+        fetch-depth: 1
+    - name: Setup Bazel
+      uses: bazel-contrib/setup-bazel@0.19.0
+      with:
+        bazelisk-cache: true
+        disk-cache: check_deployment
+        repository-cache: true
+    - name: Regenerate docs
+      run: bazel build //docs:html
     - name: Update status badges
       uses: Schneegans/dynamic-badges-action@v1.8.0
       with:
         auth: ${{ secrets.STATUS_BADGE_SECRET }}
         gistID: f796805a77e0f05cc837b18e60142773
-        filename: linting.json
-        label: linting
+        filename: docs_build.json
+        label: docs build
         message: ${{ job.status == 'success' && '✓' || 'x' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)

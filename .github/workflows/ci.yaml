@@ -1,0 +1,175 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This is the single staged pipeline for the repo, built out of the
+# reusable workflows in this directory (the _check_*.yml files).
+
+name: ci
+run-name: Lint, test tooling, build and test the distribution, and deploy.
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch name to check out for check_distribution.'
+        default: 'lyrical.2026-06-08.rcr.1'
+        required: true
+        type: string
+      distribution:
+        description: 'Which distribution is the release for (check_ros_release)?'
+        required: true
+        type: choice
+        options:
+        - 'lyrical'
+        - 'rolling'
+        default: 'lyrical'
+      date:
+        description: 'Release in YYYY-MM-DD, for check_ros_release. Default is 2026-06-08.'
+        default: '2026-06-08'
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'workflow_dispatch' && format('{0}/{1}/{2}', inputs.branch, inputs.distribution, inputs.date) || (github.event.pull_request.number || github.ref) }}
+  cancel-in-progress: true
+
+jobs:
+
+  ## STAGE 1: fast checks, run in parallel.
+
+  lint:
+    uses: ./.github/workflows/_check_for_linting_errors.yml
+    secrets: inherit
+
+  tooling:
+    uses: ./.github/workflows/_check_tooling.yml
+    secrets: inherit
+
+  # This diffs against github.base_ref, which only exists for pull_request
+  # events -- skipped (not failed) on push/workflow_dispatch, and stage 2
+  # below treats that skip as non-blocking.
+  bazel_modules:
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/_check_bazel_modules.yml
+    secrets: inherit
+
+  docs_build:
+    uses: ./.github/workflows/_check_docs_build.yml
+    secrets: inherit
+
+  ## STAGE 2: Build all distributions
+
+  build_distribution_and_examples:
+    needs: [lint, tooling, bazel_modules, docs_build]
+    if: |
+      always() &&
+      needs.lint.result == 'success' &&
+      needs.tooling.result == 'success' &&
+      needs.docs_build.result == 'success' &&
+      (needs.bazel_modules.result == 'success' || needs.bazel_modules.result == 'skipped')
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/_check_distribution_builds.yml
+    with:
+      branch: ${{ inputs.branch || github.ref }}
+    secrets: inherit
+
+  ## STAGE 3: Check all distributions
+
+  test_rmw_fastrtps_cpp:
+    needs: [build_distribution_and_examples]
+    if: |
+      always() &&
+      needs.build_distribution_and_examples.result == 'success'
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/_check_distribution_functions.yml
+    with:
+      branch: ${{ inputs.branch || github.ref }}
+      rmw: rmw_fastrtps_cpp
+    secrets: inherit
+
+  test_rmw_fastrtps_dynamic_cpp:
+    needs: test_rmw_fastrtps_cpp
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/_check_distribution_functions.yml
+    with:
+      branch: ${{ inputs.branch || github.ref }}
+      rmw: rmw_fastrtps_dynamic_cpp
+    secrets: inherit
+
+  test_rmw_cyclonedds_cpp:
+    needs: test_rmw_fastrtps_dynamic_cpp
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/_check_distribution_functions.yml
+    with:
+      branch: ${{ inputs.branch || github.ref }}
+      rmw: rmw_cyclonedds_cpp
+    secrets: inherit
+
+  test_rmw_zenoh_cpp:
+    needs: test_rmw_cyclonedds_cpp
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/_check_distribution_functions.yml
+    with:
+      branch: ${{ inputs.branch || github.ref }}
+      rmw: rmw_zenoh_cpp
+    secrets: inherit
+
+  ## STAGE 4: check_ros_release, only once the whole distribution chain
+  ## above is known-good.
+
+  ros_release:
+    needs: test_rmw_zenoh_cpp
+    permissions:
+      pull-requests: write
+      contents: write
+    uses: ./.github/workflows/_check_ros_release.yml
+    with:
+      distribution: ${{ inputs.distribution || 'lyrical' }}
+      date: ${{ inputs.date || '2026-06-08' }}
+    secrets: inherit
+
+  ## STAGE 5: deploy docs + notify the RCR-UI, gated on everything above.
+
+  deploy:
+    needs: ros_release
+    permissions:
+      contents: write
+    uses: ./.github/workflows/_check_deploy.yml
+    secrets: inherit

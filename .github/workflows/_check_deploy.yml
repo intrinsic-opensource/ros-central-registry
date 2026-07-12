@@ -12,30 +12,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: check_deployment
-run-name: Checks documents build and deploys if necessary
+# Reusable workflow: builds and publishes the docs site + notifies the
+# RCR-UI to rebuild. Called (never triggered directly) from ci.yaml as the
+# final stage, gated on every earlier stage (lint, tooling, modules, docs
+# build check, distribution, ros_release) having succeeded first. Docs are
+# rebuilt fresh here rather than reusing _check_docs_build.yml's output --
+# they share a disk-cache key, so this should mostly be a cache hit rather
+# than a full recompile.
+#
+# The actual publish + notify steps only fire when github.ref is
+# refs/heads/main, same guard as the original check_deployment.yaml -- on
+# a pull_request or a workflow_dispatch off a non-main ref, this job still
+# runs (as a final consistency check) but is a no-op beyond that.
+
+name: _check_deploy
 
 on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: write
+  workflow_call:
 
 env:
   ANDROID_HOME: ""
 
 jobs:
-  check_deployment: 
+  check_deploy:
+    name: Deploy docs
     runs-on: ubuntu-26.04
+    permissions:
+      contents: write
     steps:
     - name: Checkout repository
       uses: actions/checkout@v7
@@ -45,7 +48,7 @@ jobs:
       uses: bazel-contrib/setup-bazel@0.19.0
       with:
         bazelisk-cache: true
-        disk-cache: ${{ github.workflow }}
+        disk-cache: check_deployment
         repository-cache: true
     - name: Regenerate docs
       run: bazel build //docs:html
@@ -54,7 +57,7 @@ jobs:
         mkdir -p ./deploy/modules
         touch ./deploy/.nojekyll
         echo -e "{\n\t\"mirrors\": []\n}" > ./deploy/bazel_registry.json
-        tar -xzvf bazel-bin/docs/html_docs.tar.gz -C ./deploy 
+        tar -xzvf bazel-bin/docs/html_docs.tar.gz -C ./deploy
         cp -R ./bcr_staging/modules/* deploy/modules
         cp -R ./modules/* deploy/modules
     - name: Deploy to github pages

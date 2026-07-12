@@ -12,31 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: baseline_ros_release
-run-name: Baseline colcon build and test for coverage and performance
+# Reusable workflow: colcon build and test for coverage and performance
+# against a given ROS distribution release. Called (never triggered
+# directly) from ci.yaml as the stage after check_distribution succeeds.
+
+name: _check_ros_release
+
 on:
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_call:
     inputs:
       distribution:
         description: 'Which distribution is the release for?'
         required: true
-        type: choice
-        options:
-        - 'lyrical'
-        - 'rolling'
-        default: 'lyrical'
+        type: string
       date:
-        description: 'Release in YYYY-MM-DD. Default is 2026-06-08.'
-        default: '2026-06-08'
+        description: 'Release in YYYY-MM-DD.'
         required: true
         type: string
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name == 'workflow_dispatch' && format('{0}/{1}', inputs.distribution, inputs.date) || (github.event.pull_request.number || github.ref) }}
-  cancel-in-progress: true
 
 jobs:
   baseline-new-release:
@@ -83,12 +75,8 @@ jobs:
     - name: Parse release and configure ROSDISTRO_INDEX_URL and ROS_DISTRO
       shell: bash
       run: |
-        INPUT_DISTRIBUTION="${{ inputs.distribution }}"
-        INPUT_DISTRIBUTION="${INPUT_DISTRIBUTION:-lyrical}"
-        INPUT_DATE="${{ inputs.date }}"
-        INPUT_DATE="${INPUT_DATE:-2026-06-08}"
-        RELEASE_NAME="${INPUT_DISTRIBUTION}/${INPUT_DATE}"
-        echo "ROS_DISTRO=${INPUT_DISTRIBUTION}" >> $GITHUB_ENV
+        RELEASE_NAME="${{ inputs.distribution }}/${{ inputs.date }}"
+        echo "ROS_DISTRO=${{ inputs.distribution }}" >> $GITHUB_ENV
         echo "ROSDISTRO_INDEX_URL=https://github.com/asymingt/rosdistro/releases/download/${RELEASE_NAME}/index-v4.yaml" >> $GITHUB_ENV
 
     - name: Generate repos file and import sources

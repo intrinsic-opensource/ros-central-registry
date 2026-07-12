@@ -1,0 +1,53 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Reusable workflow: runs the tests for this repo's own CI/developer
+# tooling (tools/ci, etc). Called (never triggered directly) from ci.yaml
+# as part of the stage-1 fail-fast gate.
+
+name: _check_tooling
+
+on:
+  workflow_call:
+
+env:
+  ANDROID_HOME: ""
+
+jobs:
+  check_tooling:
+    name: Run tooling tests
+    runs-on: ubuntu-26.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 1
+    - name: Setup Bazel
+      uses: bazel-contrib/setup-bazel@0.19.0
+      with:
+        bazelisk-cache: true
+        disk-cache: check_tooling
+        repository-cache: true
+    - name: Run tests
+      run: bazel test //...
+    - name: Update status badges
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: tooling.json
+        label: tooling
+        message: ${{ job.status == 'success' && '✓' || 'x' }}
+        color: ${{ job.status == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
