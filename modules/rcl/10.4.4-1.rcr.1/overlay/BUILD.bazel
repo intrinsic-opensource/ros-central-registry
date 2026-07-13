@@ -110,10 +110,6 @@ cc_library(
         ]),
         data = glob(["test/resources/**"]),
         dynamic_deps = [":transitive_dynamic_deps"],
-        flaky = test in [
-            "test_subscription",
-            "test_wait",
-        ],
         includes = ["src/rcl"],
         local_defines = ros_local_defines() + ["RMW_TIMESTAMPS_SUPPORTED=1"],
         # test_graph and test_wait exercise real cross-node ROS graph
@@ -132,6 +128,8 @@ cc_library(
             "exclusive",
         ] if test in [
             "test_graph",
+            "test_info_by_topic",
+            "test_subscription",
             "test_wait",
         ] else [],
         deps = DEPENDENCIES.values() + [

@@ -52,9 +52,9 @@ ament_index(
 
 ament_index(
     name = "ament_index_plugin",
-    export_name = "rosbag2_compression",
     libraries = [":rosbag2_compression_zstd"],
     package_xml = "package.xml",
+    plugin_category = "rosbag2_compression",
     plugins = ["plugin_description.xml"],
 )
 
