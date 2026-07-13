@@ -40,7 +40,6 @@ jobs:
       id-token: write
     name: test_${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_${{ inputs.rmw }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 90
     defaults:
       run:
         working-directory: workspace
