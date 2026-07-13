@@ -82,7 +82,11 @@ jobs:
 
   distribution_compiles:
     name: Check distribution builds
-    needs: [lint, tooling, bazel_modules, docs_build]
+    needs:
+    - lint
+    - tooling
+    - bazel_modules
+    - docs_build
     if: |
       always() &&
       needs.lint.result == 'success' &&
@@ -120,10 +124,10 @@ jobs:
 
   test_rmw_fastrtps_cpp:
     name: Test FastDDS
-    needs: [distribution_examples]
+    needs: [distribution_compiles]
     if: |
       always() &&
-      needs.distribution_examples.result == 'success'
+      needs.distribution_compiles.result == 'success'
     permissions:
       actions: read
       checks: write
@@ -137,7 +141,10 @@ jobs:
 
   test_rmw_fastrtps_dynamic_cpp:
     name: Test FastDDS (dynamic)
-    needs: test_rmw_fastrtps_cpp
+    needs: [distribution_compiles]
+    if: |
+      always() &&
+      needs.distribution_compiles.result == 'success'
     permissions:
       actions: read
       checks: write
@@ -151,7 +158,10 @@ jobs:
 
   test_rmw_cyclonedds_cpp:
     name: Test CycloneDDS
-    needs: test_rmw_fastrtps_dynamic_cpp
+    needs: [distribution_compiles]
+    if: |
+      always() &&
+      needs.distribution_compiles.result == 'success'
     permissions:
       actions: read
       checks: write
@@ -165,7 +175,10 @@ jobs:
 
   test_rmw_zenoh_cpp:
     name: Test Zenoh
-    needs: test_rmw_cyclonedds_cpp
+    needs: [distribution_compiles]
+    if: |
+      always() &&
+      needs.distribution_compiles.result == 'success'
     permissions:
       actions: read
       checks: write
@@ -182,7 +195,12 @@ jobs:
 
   ros_release:
     name: Test upstream colcon
-    needs: test_rmw_zenoh_cpp
+    needs:
+    - distribution_examples
+    - test_rmw_fastrtps_cpp
+    - test_rmw_fastrtps_dynamic_cpp
+    - test_rmw_cyclonedds_cpp
+    - test_rmw_zenoh_cpp
     permissions:
       pull-requests: write
       contents: write
@@ -195,7 +213,7 @@ jobs:
   ## STAGE 5: deploy docs + notify the RCR-UI, gated on everything above.
 
   deploy:
-    name: Deploy modules and docs
+    name: Push to github pages
     needs: ros_release
     permissions:
       contents: write
