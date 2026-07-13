@@ -125,12 +125,16 @@ common --incompatible_strict_action_env
 common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
 common --remote_cache_compression=true
 common --remote_upload_local_results=false
+common --remote_download_toplevel
 
-# CI specific options for remote caching and credentials.
+# CI specific options for remote cache writing and performance tweaks.
 common:ci --remote_upload_local_results=true
 common:ci --google_default_credentials
 common:ci --http_timeout_scaling=3.0
 common:ci --experimental_repository_downloader_retries=10
+common:ci --remote_cache_compression=false
+common:ci --nobuild_runfile_links
+common:ci --ui_event_filters=-INFO,-DEBUG
 
 # We support the following variants of ROS distributions. This allows you
 # to build or test the entire variant with a --config flag.

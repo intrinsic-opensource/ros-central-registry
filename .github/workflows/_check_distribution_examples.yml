@@ -88,11 +88,11 @@ jobs:
       working-directory: ./examples
       run: |
         export TMPDIR="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp 2>&1 | tee examples_static_rmw_fastrtps_cpp.log
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp 2>&1 | tee examples_static_rmw_fastrtps_dynamic_cpp.log
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp 2>&1 | tee examples_static_rmw_cyclonedds_cpp.log
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp 2>&1 | tee examples_static_rmw_zenoh_cpp.log
-        bazel build //... 2>&1 | tee examples_dynamic.log
+        bazel build --config ci //... 2>&1 | tee examples_dynamic.log
+        bazel build --config ci --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_fastrtps_cpp.log
+        bazel build --config ci --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_fastrtps_dynamic_cpp.log
+        bazel build --config ci --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_cyclonedds_cpp.log
+        bazel build --config ci --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_zenoh_cpp.log
     - name: Update status badge (examples)
       uses: Schneegans/dynamic-badges-action@v1.8.0
       with:
