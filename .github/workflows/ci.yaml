@@ -88,7 +88,7 @@ jobs:
     - bazel_modules
     - docs_build
     if: |
-      always() &&
+      !cancelled() &&
       needs.lint.result == 'success' &&
       needs.tooling.result == 'success' &&
       needs.docs_build.result == 'success' &&
@@ -108,7 +108,7 @@ jobs:
     name: Check examples build
     needs: [distribution_compiles]
     if: |
-      always() &&
+      !cancelled() &&
       needs.distribution_compiles.result == 'success'
     permissions:
       actions: read
@@ -126,7 +126,7 @@ jobs:
     name: Test FastDDS
     needs: [distribution_compiles]
     if: |
-      always() &&
+      !cancelled() &&
       needs.distribution_compiles.result == 'success'
     permissions:
       actions: read
@@ -143,7 +143,7 @@ jobs:
     name: Test FastDDS (dynamic)
     needs: [distribution_compiles]
     if: |
-      always() &&
+      !cancelled() &&
       needs.distribution_compiles.result == 'success'
     permissions:
       actions: read
@@ -160,7 +160,7 @@ jobs:
     name: Test CycloneDDS
     needs: [distribution_compiles]
     if: |
-      always() &&
+      !cancelled() &&
       needs.distribution_compiles.result == 'success'
     permissions:
       actions: read
@@ -177,7 +177,7 @@ jobs:
     name: Test Zenoh
     needs: [distribution_compiles]
     if: |
-      always() &&
+      !cancelled() &&
       needs.distribution_compiles.result == 'success'
     permissions:
       actions: read
