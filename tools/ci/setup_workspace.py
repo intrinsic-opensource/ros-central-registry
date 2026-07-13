@@ -215,6 +215,9 @@ test --sandbox_default_allow_network=false
 
 # Don't allow a flaky test to fail the entire run.
 test:ci --flaky_test_attempts=3
+
+# Limit local test concurrency on CI to prevent resource starvation.
+test:ci --local_test_jobs=1
 """
 
 def get_copyright_header() -> str:
