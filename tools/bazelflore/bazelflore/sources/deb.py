@@ -16,11 +16,8 @@
 Scrapes Ubuntu snapshot archives for package metadata
 """
 
-import argparse
 import gzip
-import io
 import re
-import sys
 import urllib.request
 from collections import namedtuple
 from pathlib import Path

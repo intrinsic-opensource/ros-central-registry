@@ -17,13 +17,10 @@ Setup a new workspace for a RCR patch set.
 """
 
 import argparse
-import datetime
 import re
 from pathlib import Path
-from termcolor import COLORS, HIGHLIGHTS
 from typing import Optional, Dict, List, Set
 from yaspin import yaspin
-from yaspin.spinners import Spinners
 from bazelflore.utils.bzlmod import increment_version
 from bazelflore.utils.bzlmod import scan_module_for_dependencies
 from bazelflore.utils.bzlmod import find_latest_patch

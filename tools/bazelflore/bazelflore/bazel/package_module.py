@@ -15,7 +15,6 @@
 
 from pathlib import Path
 from typing import Dict
-from bazelflore.utils.copyright import get_copyright_header
 from bazelflore.bazel.module import Module
 from bazelflore.sources.bcr import BcrSource
 from bazelflore.sources.deb import DebSource

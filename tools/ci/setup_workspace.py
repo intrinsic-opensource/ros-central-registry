@@ -21,7 +21,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Set
+from typing import Dict, List
 
 def scan_module_for_dependencies(
     module_dot_bazel: Path,

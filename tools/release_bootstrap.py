@@ -16,20 +16,16 @@
 Bootstrap a new ROS release.
 """
 
-import random
-import time
 import argparse
 import datetime
 from pathlib import Path
 from typing import Optional
-from termcolor import COLORS, HIGHLIGHTS
 from yaspin import yaspin
-from yaspin.spinners import Spinners
 from bazelflore.bazel.package_module import PackageModule
 from bazelflore.bazel.ros_module import RosModule
 from bazelflore.bazel.rosdistro_module import RosdistroModule
 from bazelflore.sources.bcr import BcrWorker
-from bazelflore.sources.deb import DebWorker, COMPONENTS
+from bazelflore.sources.deb import DebWorker
 from bazelflore.sources.ros import RosWorker
 
 # These are packages that we'd like a user to be able to import by release
@@ -115,9 +111,6 @@ def main():
         help="Snapshot architecture, e.g. amd64",
     )
     args = parser.parse_args()
-
-    # Execute on the task
-    release_version = "{0}.{1}".format(args.ubuntu_distro, args.ros_release_date)
 
     with yaspin(text="Bootstrapping new release", color="cyan") as sp:
     

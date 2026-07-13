@@ -1,0 +1,116 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Reusable workflow: build the distribution for a given OS and bazel version.
+
+name: _check_distribution_examples
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: 'Branch or ref to check out.'
+        required: true
+        type: string
+
+env:
+  ANDROID_HOME: ""
+
+jobs:
+  checkout-setup-build-test:
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write
+    name: build_${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    defaults:
+      run:
+        working-directory: workspace
+        shell: bash
+    env:
+      USE_BAZEL_VERSION: ${{ matrix.bazel }}
+    strategy:
+      fail-fast: false
+      matrix:
+        bazel:
+        - 8.5.1
+        - 9.1.1
+        ros:
+        - lyrical.2026-06-08.rcr.1
+        variant:
+        - perception
+        os:
+        - ubuntu-26.04
+        - ubuntu-26.04-arm
+        - macos-26-intel
+        - macos-26
+    steps:
+
+    # Setup bazel with controlled caching that is invariant to RMW implementation.
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 1
+        ref: ${{ inputs.branch }}
+
+    # Setup auth to allow pushing to the remote cache.
+    - name: Authenticate to Google Cloud
+      uses: "google-github-actions/auth@v3"
+      with:
+        workload_identity_provider: projects/771457463613/locations/global/workloadIdentityPools/github-automation/providers/build-dev
+        service_account: github-automation-bot@gha-intrinsic-opensource-rcr.iam.gserviceaccount.com
+        create_credentials_file: true
+
+    # Setup bazel to use a specific cache.
+    - name: Setup Bazel
+      uses: bazel-contrib/setup-bazel@0.19.0
+      with:
+        bazelisk-cache: true
+        disk-cache: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
+        repository-cache: true
+
+    # Checks examples
+    - name: Examples
+      id: examples
+      working-directory: ./examples
+      run: |
+        export TMPDIR="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp 2>&1 | tee examples_static_rmw_fastrtps_cpp.log
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp 2>&1 | tee examples_static_rmw_fastrtps_dynamic_cpp.log
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp 2>&1 | tee examples_static_rmw_cyclonedds_cpp.log
+        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp 2>&1 | tee examples_static_rmw_zenoh_cpp.log
+        bazel build //... 2>&1 | tee examples_dynamic.log
+    - name: Update status badge (examples)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.bazel }}_${{ matrix.os }}_examples.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.examples.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.examples.outcome == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
+
+    - name: Example logs
+      uses: actions/upload-artifact@v7
+      with:
+        name: Example logs ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
+        path: |
+          examples/MODULE.bazel
+          examples/.bazelrc
+          examples/*.log
+      if: always()

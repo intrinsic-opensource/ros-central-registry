@@ -74,9 +74,9 @@ jobs:
     uses: ./.github/workflows/_check_docs_build.yml
     secrets: inherit
 
-  ## STAGE 2: Build all distributions
+  ## STAGE 2: Build all distributions and examples
 
-  build_distribution_and_examples:
+  distribution_compiles:
     needs: [lint, tooling, bazel_modules, docs_build]
     if: |
       always() &&
@@ -89,7 +89,23 @@ jobs:
       checks: write
       contents: read
       id-token: write
-    uses: ./.github/workflows/_check_distribution_builds.yml
+    uses: ./.github/workflows/_check_distribution_compiles.yml
+    with:
+      branch: ${{ inputs.branch || github.ref }}
+    secrets: inherit
+
+
+  distribution_examples:
+    needs: [distribution_compiles]
+    if: |
+      always() &&
+      needs.distribution_compiles.result == 'success'
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/_check_distribution_examples.yml
     with:
       branch: ${{ inputs.branch || github.ref }}
     secrets: inherit
@@ -97,16 +113,16 @@ jobs:
   ## STAGE 3: Check all distributions
 
   test_rmw_fastrtps_cpp:
-    needs: [build_distribution_and_examples]
+    needs: [distribution_examples]
     if: |
       always() &&
-      needs.build_distribution_and_examples.result == 'success'
+      needs.distribution_examples.result == 'success'
     permissions:
       actions: read
       checks: write
       contents: read
       id-token: write
-    uses: ./.github/workflows/_check_distribution_functions.yml
+    uses: ./.github/workflows/_check_distribution_tests.yml
     with:
       branch: ${{ inputs.branch || github.ref }}
       rmw: rmw_fastrtps_cpp
@@ -119,7 +135,7 @@ jobs:
       checks: write
       contents: read
       id-token: write
-    uses: ./.github/workflows/_check_distribution_functions.yml
+    uses: ./.github/workflows/_check_distribution_tests.yml
     with:
       branch: ${{ inputs.branch || github.ref }}
       rmw: rmw_fastrtps_dynamic_cpp
@@ -132,7 +148,7 @@ jobs:
       checks: write
       contents: read
       id-token: write
-    uses: ./.github/workflows/_check_distribution_functions.yml
+    uses: ./.github/workflows/_check_distribution_tests.yml
     with:
       branch: ${{ inputs.branch || github.ref }}
       rmw: rmw_cyclonedds_cpp
@@ -145,7 +161,7 @@ jobs:
       checks: write
       contents: read
       id-token: write
-    uses: ./.github/workflows/_check_distribution_functions.yml
+    uses: ./.github/workflows/_check_distribution_tests.yml
     with:
       branch: ${{ inputs.branch || github.ref }}
       rmw: rmw_zenoh_cpp

@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Reusable workflow: checks that there are no buildifier linting errors.
-# Called (never triggered directly) from ci.yaml as part of the stage-1
-# fail-fast gate.
+# Reusable workflow: checks that there are no buildifier or Python (ruff)
+# linting errors. Called (never triggered directly) from ci.yaml as part
+# of the stage-1 fail-fast gate.
 
 name: _check_for_linting_errors
 
@@ -48,6 +48,32 @@ jobs:
         gistID: f796805a77e0f05cc837b18e60142773
         filename: linting.json
         label: linting
+        message: ${{ job.status == 'success' && '✓' || 'x' }}
+        color: ${{ job.status == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
+
+  check_python_linting:
+    name: Lint Python files (tools, examples, docs)
+    runs-on: ubuntu-26.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 1
+    - name: Run ruff
+      uses: astral-sh/ruff-action@v4.1.0
+      with:
+        src: >-
+          tools
+          examples
+          docs
+    - name: Update status badges
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: python_linting.json
+        label: python linting
         message: ${{ job.status == 'success' && '✓' || 'x' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)

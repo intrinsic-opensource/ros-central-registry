@@ -16,20 +16,13 @@
 Bootstrap a new ROS release.
 """
 
-import re
-import random
-import time
 import argparse
-import datetime
 import shutil
-from typing import Optional, Dict
+from typing import Optional
 from pathlib import Path
-from termcolor import COLORS, HIGHLIGHTS
 from yaspin import yaspin
-from yaspin.spinners import Spinners
 from bazelflore.utils.bzlmod import add_version_to_metadata_json
 from bazelflore.utils.bzlmod import regenerate_integrity_hashes
-from bazelflore.utils.bzlmod import add_boilerplate_build_file
 from bazelflore.utils.bzlmod import increment_version
 from bazelflore.utils.bzlmod import scan_module_for_dependencies
 from bazelflore.utils.bzlmod import update_package_dependencies

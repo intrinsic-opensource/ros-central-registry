@@ -17,13 +17,9 @@ Generate a RCR patch from a given release workspace
 """
 
 import argparse
-import datetime
 import shutil
 from pathlib import Path
-from termcolor import COLORS, HIGHLIGHTS
-from typing import Optional, Dict, List
 from yaspin import yaspin
-from yaspin.spinners import Spinners
 from bazelflore.utils.bzlmod import increment_version
 from bazelflore.utils.bzlmod import find_latest_patch
 from bazelflore.utils.bzlmod import find_release

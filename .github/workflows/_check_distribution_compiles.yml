@@ -14,7 +14,7 @@
 
 # Reusable workflow: build the distribution for a given OS and bazel version.
 
-name: _check_distribution_builds
+name: _check_distribution_compiles
 
 on:
   workflow_call:
@@ -106,32 +106,10 @@ jobs:
         color: ${{ steps.build.outcome == 'success' && 'green' || 'red' }}
       if: always() # TODO(fix)
 
-    # Checks examples
-    - name: Examples
-      id: examples
-      working-directory: ./examples
-      run: |
-        export TMPDIR="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp 2>&1 | tee examples_static_rmw_fastrtps_cpp.log
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp 2>&1 | tee examples_static_rmw_fastrtps_dynamic_cpp.log
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp 2>&1 | tee examples_static_rmw_cyclonedds_cpp.log
-        bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp 2>&1 | tee examples_static_rmw_zenoh_cpp.log
-        bazel build //... 2>&1 | tee examples_dynamic.log
-    - name: Update status badge (examples)
-      uses: Schneegans/dynamic-badges-action@v1.8.0
-      with:
-        auth: ${{ secrets.STATUS_BADGE_SECRET }}
-        gistID: f796805a77e0f05cc837b18e60142773
-        filename: ${{ matrix.ros }}_${{ matrix.bazel }}_${{ matrix.os }}_examples.json
-        label: ${{ matrix.bazel }}
-        message: ${{ steps.examples.outcome == 'success' && '✓' || 'x' }}
-        color: ${{ steps.examples.outcome == 'success' && 'green' || 'red' }}
-      if: always() # TODO(fix)
-
-    - name: Build logs
+    - name: Compile logs
       uses: actions/upload-artifact@v7
       with:
-        name: Build logs ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
+        name: Compile logs ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
         path: |
           workspace/MODULE.bazel
           workspace/.bazelrc

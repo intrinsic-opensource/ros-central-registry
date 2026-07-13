@@ -14,7 +14,7 @@
 
 # Reusable workflow: Test a given OS / bazel version against a RMW.
 
-name: _check_distribution_rmw
+name: _check_distribution_tests
 
 on:
   workflow_call:

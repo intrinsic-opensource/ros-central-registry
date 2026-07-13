@@ -43,7 +43,7 @@ def add_version_to_metadata_json(metadata_json_path: Path, package_version: str)
     with open(metadata_json_path, 'r') as f:
         try:
             metadata = json.load(f)
-        except:
+        except json.JSONDecodeError:
             return False
     if package_version not in metadata["versions"]:
         metadata["versions"].append(package_version)
@@ -63,7 +63,7 @@ def remove_version_from_metadata_json(metadata_json_path: Path, package_version:
     with open(metadata_json_path, 'r') as f:
         try:
             metadata = json.load(f)
-        except:
+        except json.JSONDecodeError:
             return False
     if package_version in metadata["versions"]:
         metadata["versions"].remove(package_version)
@@ -85,7 +85,7 @@ def regenerate_integrity_hashes(module_dir: Path) -> bool:
     with open(source_json_path, 'r') as f:
         try:
             source = json.load(f)
-        except:
+        except json.JSONDecodeError:
             return False
     
     # Delete any overlay and patches that might already exist.
@@ -263,7 +263,7 @@ def get_module_diff(ref_package_dir : Path, new_package_dir : Path) -> Tuple[Dic
                     f_ref.readlines(),
                     [],
                     fromfile=f"a/{rel_path}",
-                    tofile=f"/dev/null"
+                    tofile="/dev/null"
                 )
                 patches[patch_file_name_from_rel_path(rel_path)] = ''.join(diff_lines)
     return patches, overlays

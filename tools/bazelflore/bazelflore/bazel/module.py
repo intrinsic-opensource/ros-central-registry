@@ -18,19 +18,17 @@ Generic module creator for bazel.
 
 import json
 import re
-import base64
-import hashlib
 import tarfile
 import urllib
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, Tuple
 from bazelflore.utils.copyright import get_copyright_header
 from bazelflore.utils.bzlmod import add_version_to_metadata_json
 from bazelflore.utils.bzlmod import calculate_integrity_hash_for_file
 from bazelflore.sources.bcr import BcrSource
 from bazelflore.sources.ros import RosSource
 from bazelflore.sources.deb import DebSource
-from bazelflore.bazel.constants import *
+from bazelflore.bazel.constants import DEPS_GENERAL
 
 class Module:
     """

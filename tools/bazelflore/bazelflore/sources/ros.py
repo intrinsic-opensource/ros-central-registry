@@ -17,10 +17,10 @@ Generic module creator for the "ros" module.
 """
 
 import os
-import tempfile
 from collections import namedtuple
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict
+from typing import Set
 from rosinstall_generator.distro import get_distro
 from rosinstall_generator.distro import get_package_names
 from rosdistro.dependency_walker import DependencyWalker

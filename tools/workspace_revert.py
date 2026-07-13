@@ -17,22 +17,11 @@ Remove a previously-applied patch set from the RCR.
 """
 
 import argparse
-import datetime
 import shutil
 from pathlib import Path
-from termcolor import COLORS, HIGHLIGHTS
-from typing import Optional, Dict, List
+from typing import Optional, List
 from yaspin import yaspin
-from yaspin.spinners import Spinners
-from bazelflore.utils.bzlmod import increment_version
-from bazelflore.utils.bzlmod import find_latest_patch
-from bazelflore.utils.bzlmod import find_release
 from bazelflore.utils.bzlmod import scan_module_for_dependencies
-from bazelflore.utils.bzlmod import get_module_diff
-from bazelflore.utils.bzlmod import load_patches_and_overlays
-from bazelflore.utils.bzlmod import regenerate_integrity_hashes
-from bazelflore.utils.bzlmod import add_version_to_metadata_json
-from bazelflore.utils.bzlmod import update_package_dependencies
 from bazelflore.utils.bzlmod import remove_version_from_metadata_json   
 
 def _get_all_previous_patch_versions(working_directory: Path, release: str) -> Optional[List[str]]:

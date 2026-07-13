@@ -16,15 +16,13 @@
 Scrapes BCR snapshot for package version information.
 """
 
-import os
 import requests
 import json
 import shutil
 import tarfile
-import fnmatch
 from collections import namedtuple
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict
 
 BcrSource = namedtuple('BcrSource', ['versions'])
 
@@ -44,7 +42,7 @@ class BcrWorker:
         """
         Fetches the SHA of the latest commit on a specified GitHub branch.
         """
-        url = f"https://api.github.com/repos/bazelbuild/bazel-central-registry/branches/main"
+        url = "https://api.github.com/repos/bazelbuild/bazel-central-registry/branches/main"
         try:
             response = requests.get(url)
             response.raise_for_status()  # Raise an exception for bad status codes (4XX or 5XX)
@@ -76,7 +74,7 @@ class BcrWorker:
                 with open(cache_file, 'wb') as f:
                     shutil.copyfileobj(response.raw, f)
             return cache_file
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             return None
 
     def _parse_tarball(self, tarball_file : Path) -> Dict[str, BcrSource]:
@@ -115,9 +113,9 @@ class BcrWorker:
         if not commit_sha:
             return bcr_sources
 
-        tarball_file = self._download_commit_tarball(commit_sha) 
+        tarball_file = self._download_commit_tarball(commit_sha)
         if not tarball_file:
-            return all_modules
+            return bcr_sources
 
         return self._parse_tarball(tarball_file)
 
