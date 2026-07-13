@@ -143,14 +143,6 @@ ament_index(
     plugins = ["default_plugins.xml"],
 )
 
-filegroup(
-    name = "ament_index_group",
-    srcs = [
-        ":ament_index_package",
-        ":ament_index_plugin",
-    ],
-)
-
 ### TESTS
 
 [
@@ -163,7 +155,8 @@ filegroup(
         data = [
             "default_plugins.xml",
             "test/test_plugin_manifest.xml",
-            ":ament_index_group",
+            ":ament_index_package",
+            ":ament_index_plugin",
         ],
         dynamic_deps = [":transitive_dynamic_deps"],
         local_defines = [

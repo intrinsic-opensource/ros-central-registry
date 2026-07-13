@@ -137,14 +137,6 @@ ament_index(
     plugins = ["default_plugins.xml"],
 )
 
-filegroup(
-    name = "ament_index",
-    srcs = [
-        ":ament_index_package",
-        ":ament_index_plugin",
-    ],
-)
-
 ### TESTS
 
 [
@@ -154,7 +146,10 @@ filegroup(
             "test/{0}.cpp".format(test),
             "test/utils.hpp",
         ],
-        data = [":ament_index"],
+        data = [
+            ":ament_index_package",
+            ":ament_index_plugin",
+        ],
         dynamic_deps = [":transitive_dynamic_deps"],
         deps = DEPENDENCIES.values() + [
             ":image_transport_library",
@@ -181,7 +176,8 @@ cc_test(
     data = [
         "default_plugins.xml",
         "test/test_plugin_manifest.xml",
-        ":ament_index",
+        ":ament_index_package",
+        ":ament_index_plugin",
     ],
     dynamic_deps = [":transitive_dynamic_deps"],
     local_defines = [
@@ -208,7 +204,8 @@ ament_package(
     ],
     package_xml = "package.xml",
     deps = [
-        ":ament_index",
+        ":ament_index_package",
+        ":ament_index_plugin",
         "@ament_cmake_gtest//:ament_package",
         "@ament_cmake_ros//:ament_package",
         "@ament_lint_auto//:ament_package",

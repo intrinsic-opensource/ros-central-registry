@@ -58,14 +58,6 @@ ament_index(
     plugins = ["plugin_description.xml"],
 )
 
-filegroup(
-    name = "ament_index",
-    srcs = [
-        ":ament_index_package",
-        ":ament_index_plugin",
-    ],
-)
-
 ### TESTS
 
 TEST_DEPENDENCIES = DEPENDENCIES | {
@@ -83,7 +75,8 @@ cc_test(
     name = "test_zstd_compressor",
     srcs = ["test/rosbag2_compression_zstd/test_zstd_compressor.cpp"],
     data = [
-        ":ament_index",
+        ":ament_index_package",
+        ":ament_index_plugin",
         "@rosbag2_compression//:ament_index",
     ],
     dynamic_deps = [":transitive_dynamic_deps"],
@@ -100,7 +93,8 @@ ament_package(
     libraries = [":rosbag2_compression_zstd"],
     package_xml = "package.xml",
     deps = [
-        ":ament_index",
+        ":ament_index_package",
+        ":ament_index_plugin",
         "@ament_cmake//:ament_package",
         "@ament_cmake_gmock//:ament_package",
         "@ament_lint_auto//:ament_package",
