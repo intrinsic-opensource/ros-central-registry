@@ -529,6 +529,10 @@ cc_shared_library(
         ":zlib",
     ],
     exports_filter = [":opencv_library"],
+    user_link_flags = select({
+        "@platforms//os:macos": ["-Wl,-all_load"],
+        "//conditions:default": [],
+    }),
     deps = [":opencv_library"],
 )
 
