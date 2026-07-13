@@ -77,7 +77,7 @@ ament_index(
     libraries = [":rosbag2_transport"],
     package_xml = "package.xml",
     deps = [
-        "@rosbag2_compression_zstd//:ament_index",
+        "@rosbag2_compression_zstd//:ament_package",
         "@rosbag2_cpp//:ament_index",
         "@rosbag2_storage_default_plugins//:ament_index",
         "@test_msgs//:ament_index",

@@ -27,7 +27,7 @@ ament_index(
         "@rclcpp//:ament_package",
         "@rcpputils//:ament_package",
         "@rosbag2_compression//:ament_index",
-        "@rosbag2_compression_zstd//:ament_index",
+        "@rosbag2_compression_zstd//:ament_package",
         "@rosbag2_cpp//:ament_index",
         "@rosbag2_storage//:ament_index",
         "@rosbag2_storage_default_plugins//:ament_index",
