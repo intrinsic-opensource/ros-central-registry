@@ -83,7 +83,7 @@ jobs:
       uses: bazel-contrib/setup-bazel@0.19.0
       with:
         bazelisk-cache: true
-        disk-cache: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
+        disk-cache: false
         repository-cache: true
 
     # Prepare the bazel workspace

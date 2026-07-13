@@ -48,7 +48,7 @@ jobs:
       uses: bazel-contrib/setup-bazel@0.19.0
       with:
         bazelisk-cache: true
-        disk-cache: check_deployment
+        disk-cache: false
         repository-cache: true
     - name: Regenerate docs
       run: bazel build //docs:html
