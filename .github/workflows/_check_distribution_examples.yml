@@ -34,7 +34,7 @@ jobs:
       checks: write
       contents: read
       id-token: write
-    name: build_${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
+    name: example_${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:

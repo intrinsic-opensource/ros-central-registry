@@ -28,7 +28,7 @@ env:
 
 jobs:
   check_docs_build:
-    name: Check docs build
+    name: Check documentation builds
     runs-on: ubuntu-26.04
     steps:
     - name: Checkout repository

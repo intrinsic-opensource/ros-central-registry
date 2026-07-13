@@ -29,7 +29,7 @@ env:
 
 jobs:
   check_bazel_modules:
-    name: Check PR rules on ${{ matrix.directory }}
+    name: Check ${{ matrix.directory }} modules
     runs-on: ubuntu-26.04
     strategy:
       fail-fast: false

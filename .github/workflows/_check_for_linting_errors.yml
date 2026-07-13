@@ -53,7 +53,7 @@ jobs:
       if: always() # TODO(fix)
 
   check_python_linting:
-    name: Lint Python files (tools, examples, docs)
+    name: Lint all Python files
     runs-on: ubuntu-26.04
     steps:
     - name: Checkout repository

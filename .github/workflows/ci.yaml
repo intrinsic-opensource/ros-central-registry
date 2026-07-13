@@ -55,10 +55,12 @@ jobs:
   ## STAGE 1: fast checks, run in parallel.
 
   lint:
+    name: Lint source code
     uses: ./.github/workflows/_check_for_linting_errors.yml
     secrets: inherit
 
   tooling:
+    name: Test tooling
     uses: ./.github/workflows/_check_tooling.yml
     secrets: inherit
 
@@ -66,17 +68,20 @@ jobs:
   # events -- skipped (not failed) on push/workflow_dispatch, and stage 2
   # below treats that skip as non-blocking.
   bazel_modules:
+    name: Check modules
     if: github.event_name == 'pull_request'
     uses: ./.github/workflows/_check_bazel_modules.yml
     secrets: inherit
 
   docs_build:
+    name: Check documentation
     uses: ./.github/workflows/_check_docs_build.yml
     secrets: inherit
 
   ## STAGE 2: Build all distributions and examples
 
   distribution_compiles:
+    name: Check distribution builds
     needs: [lint, tooling, bazel_modules, docs_build]
     if: |
       always() &&
@@ -96,6 +101,7 @@ jobs:
 
 
   distribution_examples:
+    name: Check examples build
     needs: [distribution_compiles]
     if: |
       always() &&
@@ -113,6 +119,7 @@ jobs:
   ## STAGE 3: Check all distributions
 
   test_rmw_fastrtps_cpp:
+    name: Test FastDDS
     needs: [distribution_examples]
     if: |
       always() &&
@@ -129,6 +136,7 @@ jobs:
     secrets: inherit
 
   test_rmw_fastrtps_dynamic_cpp:
+    name: Test FastDDS (dynamic)
     needs: test_rmw_fastrtps_cpp
     permissions:
       actions: read
@@ -142,6 +150,7 @@ jobs:
     secrets: inherit
 
   test_rmw_cyclonedds_cpp:
+    name: Test CycloneDDS
     needs: test_rmw_fastrtps_dynamic_cpp
     permissions:
       actions: read
@@ -155,6 +164,7 @@ jobs:
     secrets: inherit
 
   test_rmw_zenoh_cpp:
+    name: Test Zenoh
     needs: test_rmw_cyclonedds_cpp
     permissions:
       actions: read
@@ -171,6 +181,7 @@ jobs:
   ## above is known-good.
 
   ros_release:
+    name: Test upstream colcon
     needs: test_rmw_zenoh_cpp
     permissions:
       pull-requests: write
@@ -184,6 +195,7 @@ jobs:
   ## STAGE 5: deploy docs + notify the RCR-UI, gated on everything above.
 
   deploy:
+    name: Deploy modules and docs
     needs: ros_release
     permissions:
       contents: write
