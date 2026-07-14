@@ -59,6 +59,13 @@ jobs:
         - macos-26
     steps:
 
+    # Pin Xcode explicitly on macOS runners.
+    - name: Select Xcode
+      if: runner.os == 'macOS'
+      uses: maxim-lobanov/setup-xcode@v1.7.0
+      with:
+        xcode-version: '26.3'
+
     # Setup bazel with controlled caching that is invariant to RMW implementation.
     - name: Checkout repository
       uses: actions/checkout@v7

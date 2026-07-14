@@ -133,6 +133,7 @@ common:ci --google_default_credentials
 common:ci --http_timeout_scaling=3.0
 common:ci --experimental_repository_downloader_retries=10
 common:ci --remote_cache_compression=false
+common:ci --remote_download_minimal
 common:ci --nobuild_runfile_links
 common:ci --ui_event_filters=-INFO,-DEBUG
 
@@ -213,7 +214,7 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 
 # Cap build parallelism on macOS to fix memory pressure, which leads to OOM
 # failures and build/test crashes.
-build:macos --jobs=2
+build:macos --jobs=3
 
 ## TEST OPTIONS
 

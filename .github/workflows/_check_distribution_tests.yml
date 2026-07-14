@@ -63,6 +63,13 @@ jobs:
         - macos-26
     steps:
 
+    # Pin Xcode explicitly on macOS runners.
+    - name: Select Xcode
+      if: runner.os == 'macOS'
+      uses: maxim-lobanov/setup-xcode@v1.7.0
+      with:
+        xcode-version: '26.3'
+
     # Setup bazel with controlled caching
     - name: Checkout repository
       uses: actions/checkout@v7
@@ -85,21 +92,6 @@ jobs:
         bazelisk-cache: true
         disk-cache: false
         repository-cache: true
-
-    # Pin Xcode explicitly on macOS runners. Bazel's objc_library rule (used by
-    # the vendored @opencv//:highgui Cocoa backend, see ocv.3rdparty.cocoa) is
-    # resolved through Bazel's native Apple toolchain, which picks up whatever
-    # Xcode happens to be the runner's ambient default -- unlike the rest of
-    # this workspace, which builds exclusively through the hermetic
-    # toolchains_llvm C++ toolchain and never touches Xcode. Pinning removes
-    # that ambient dependency while we investigate macOS-wide dyld failures
-    # (missing cvSetModeWindow_COCOA at runtime in cv_bridge/image_geometry/
-    # image_proc/compressed_depth_image_transport tests).
-    - name: Select Xcode
-      if: runner.os == 'macOS'
-      uses: maxim-lobanov/setup-xcode-version@v1.7.0
-      with:
-        xcode-version: latest-stable
 
     # Prepare the bazel workspace
     - name: Prepare workspace

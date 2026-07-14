@@ -83,17 +83,9 @@ common:ci --google_default_credentials
 common:ci --http_timeout_scaling=3.0
 common:ci --experimental_repository_downloader_retries=10
 common:ci --remote_cache_compression=false
+common:ci --remote_download_minimal
 common:ci --nobuild_runfile_links
 common:ci --ui_event_filters=-INFO,-DEBUG
-
-# We support the following variants of ROS distributions. This allows you
-# to build or test the entire variant with a --config flag.
-common:core --target_pattern_file=ros-core.txt
-common:base --target_pattern_file=ros-base.txt
-common:desktop --target_pattern_file=ros-desktop.txt
-common:desktop_full --target_pattern_file=ros-desktop_full.txt
-common:perception --target_pattern_file=ros-perception.txt
-common:simulation --target_pattern_file=ros-simulation.txt
 
 # Automatically pick configurations for the platform running bazel.
 # For example, macos on macos, linux on linux, etc.
@@ -161,7 +153,7 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 
 # Cap build parallelism on macOS to fix memory pressure, which leads to OOM
 # failures and build/test crashes.
-build:macos --jobs=2
+build:macos --jobs=3
 
 ## TEST OPTIONS
 
