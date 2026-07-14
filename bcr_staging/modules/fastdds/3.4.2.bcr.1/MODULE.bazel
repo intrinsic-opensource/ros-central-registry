@@ -14,7 +14,7 @@
 
 module(
     name = "fastdds",
-    version = "3.4.2.bcr.0",
+    version = "3.4.2.bcr.1",
     bazel_compatibility = [">=7.2.1"],
     compatibility_level = 2,
 )
