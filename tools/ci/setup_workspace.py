@@ -144,6 +144,10 @@ common:ci --ui_event_filters=-INFO,-DEBUG
 # For example, macos on macos, linux on linux, etc.
 common --enable_platform_specific_config
 
+# Stop the profiler from being fatal — even with less build pressure,
+# a resource issue shouldn't take down the whole bazel command.
+common --noexperimental_collect_system_network_usage
+
 ## BUILD OPTIONS
 
 # Some packages bake a scratch-directory path into compiled test binaries via
@@ -207,6 +211,10 @@ build:macos --host_copt=-fno-implicit-module-maps
 build:macos --copt=-Wno-elaborated-enum-base
 build:macos --host_copt=-Wno-elaborated-enum-base
 
+# Cap build parallelism on macOS to fix memory pressure, which leads to OOM
+# failures and build/test crashes.
+build:macos --jobs=2
+
 ## TEST OPTIONS
 
 # This restricts our test sandboxes from accessing the network, which is
@@ -223,7 +231,6 @@ test:ci --local_test_jobs=1
 # indefinitely within a sandbox. Also, multicast is needed by some RMW
 # for discovery, and the sandbox network adapter does not support this.
 test:macos --test_strategy=standalone
-test:macos --local_test_jobs=1
 """
 
 def get_copyright_header() -> str:

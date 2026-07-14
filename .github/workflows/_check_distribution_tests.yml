@@ -86,12 +86,47 @@ jobs:
         disk-cache: false
         repository-cache: true
 
+    # Pin Xcode explicitly on macOS runners. Bazel's objc_library rule (used by
+    # the vendored @opencv//:highgui Cocoa backend, see ocv.3rdparty.cocoa) is
+    # resolved through Bazel's native Apple toolchain, which picks up whatever
+    # Xcode happens to be the runner's ambient default -- unlike the rest of
+    # this workspace, which builds exclusively through the hermetic
+    # toolchains_llvm C++ toolchain and never touches Xcode. Pinning removes
+    # that ambient dependency while we investigate macOS-wide dyld failures
+    # (missing cvSetModeWindow_COCOA at runtime in cv_bridge/image_geometry/
+    # image_proc/compressed_depth_image_transport tests).
+    - name: Select Xcode
+      if: runner.os == 'macOS'
+      uses: maxim-lobanov/setup-xcode-version@v1.7.0
+      with:
+        xcode-version: latest-stable
+
     # Prepare the bazel workspace
     - name: Prepare workspace
       id: prepare_workspace
       working-directory: .
       run: |
         bazel run //tools/ci:setup_workspace -- --release=${{ matrix.ros }} --tmpdir "$RUNNER_TEMP"
+
+    # TEMPORARY DIAGNOSTIC: confirm whether @opencv//:ocv.3rdparty.cocoa (the
+    # objc_library providing window_cocoa.mm / cvSetModeWindow_COCOA) actually
+    # produces that symbol on this runner. Non-fatal -- this exists only to
+    # verify the Xcode pin above before committing to it as the fix. Remove
+    # once the root cause is confirmed.
+    - name: Debug OpenCV Cocoa symbol (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        bazel build --config ci @opencv//:ocv.3rdparty.cocoa
+        for f in $(bazel cquery --config ci --output=files @opencv//:ocv.3rdparty.cocoa 2>/dev/null); do
+          echo "--- $f ---"
+          file "$f" || true
+          lipo -info "$f" || true
+          if nm -g "$f" 2>/dev/null | grep -q "cvSetModeWindow_COCOA"; then
+            echo "FOUND: cvSetModeWindow_COCOA present in $f"
+          else
+            echo "MISSING: cvSetModeWindow_COCOA not found in $f"
+          fi
+        done
 
     # Run the distribution test for the implementation.
     - name: Test (${{ inputs.rmw }})
