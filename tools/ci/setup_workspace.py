@@ -222,7 +222,7 @@ test:ci --local_test_jobs=1
 # On mac we wan't to bypass the sandbox for testing because mimick hangs
 # indefinitely within a sandbox. Also, multicast is needed by some RMW
 # for discovery, and the sandbox network adapter does not support this.
-test:macos --test_strategy=local
+test:macos --test_strategy=standalone
 test:macos --local_test_jobs=1
 """
 
