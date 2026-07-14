@@ -210,11 +210,7 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 ## TEST OPTIONS
 
 # This restricts our test sandboxes from accessing the network, which is
-# important if you want to prevent destructive interference on the ROS
-# messaging system between tests running in parallel. This works well with
-# fastrtps on Linux, but fails if you need to access a zenohd router outside
-# a test sandbox, or if you are on Mac, which has multicast UDP disabled for
-# everything but localhost traffic (which breaks discovery).
+# important if you want to prevent destructive interference between tests.
 test --sandbox_default_allow_network=false
 
 # Don't allow a flaky test to fail the entire run.
@@ -222,6 +218,12 @@ test:ci --flaky_test_attempts=3
 
 # Limit local test concurrency on CI to prevent resource starvation.
 test:ci --local_test_jobs=1
+
+# On mac we wan't to bypass the sandbox for testing because mimick hangs
+# indefinitely within a sandbox. Also, multicast is needed by some RMW
+# for discovery, and the sandbox network adapter does not support this.
+test:macos --test_strategy=local
+test:macos --local_test_jobs=1
 """
 
 def get_copyright_header() -> str:

@@ -167,3 +167,9 @@ test --sandbox_default_allow_network=false
 
 # Don't allow a flaky test to fail the entire run.
 test:ci --flaky_test_attempts=3
+
+# On mac we wan't to bypass the sandbox for testing because mimick hangs
+# indefinitely within a sandbox. Also, multicast is needed by some RMW
+# for discovery, and the sandbox network adapter does not support this.
+test:macos --test_strategy=local
+test:macos --local_test_jobs=1
