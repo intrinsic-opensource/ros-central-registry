@@ -125,7 +125,6 @@ common --incompatible_strict_action_env
 common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
 common --remote_cache_compression=true
 common --remote_upload_local_results=false
-common --remote_download_toplevel
 
 # CI specific options for remote cache writing and performance tweaks.
 common:ci --remote_upload_local_results=true
@@ -133,7 +132,6 @@ common:ci --google_default_credentials
 common:ci --http_timeout_scaling=3.0
 common:ci --experimental_repository_downloader_retries=10
 common:ci --remote_cache_compression=false
-common:ci --remote_download_minimal
 common:ci --nobuild_runfile_links
 common:ci --ui_event_filters=-INFO,-DEBUG
 
@@ -150,6 +148,10 @@ common --enable_platform_specific_config
 common --noexperimental_collect_system_network_usage
 
 ## BUILD OPTIONS
+
+# Assume a build for a developer machine and only download the toplevel
+# artifacts. Let the runfiles and intermediate artifacts build on demand.
+build --remote_download_toplevel
 
 # Some packages bake a scratch-directory path into compiled test binaries via
 # local_defines (e.g. rcutils' BUILD_DIR), which --test_env/--run_env can't
@@ -215,6 +217,9 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 # Cap build parallelism on macOS to fix memory pressure, which leads to OOM
 # failures and build/test crashes.
 build:macos --jobs=3
+
+# CI should download the minimal amoutn possible to speed up builds.
+build:ci --remote_download_minimal
 
 ## TEST OPTIONS
 

@@ -38,18 +38,7 @@ common --test_env=ROS_DISTRO="lyrical"
 common --test_env=ROS_HOME=".ros"
 common --test_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --test_env=LD_LIBRARY_PATH=lib
-common --test_env=DYLD_LIBRARY_PATH=lib
-
-# GitHub Actions runners restrict what /tmp can be used for, which breaks
-# any action (e.g. bazel_tools' generate-xml.sh test wrapper, or a compiler
-# writing scratch files) that creates temp files there. This file has no way
-# to bake in a literal resolved path (unlike workspace/.bazelrc, which
-# tools/ci/setup_workspace.py generates), so forward whatever TMPDIR the
-# invoking shell has instead -- CI exports it to $RUNNER_TEMP before
-# invoking bazel here.
-common --action_env=TMPDIR
-common --test_env=TMPDIR
-common --run_env=TMPDIR
+common --test_env=TMPDIR=/tmp
 
 # Critical ROS environment variables needed at run-time.
 common --run_env=ROS_DISTRO="lyrical"
@@ -57,6 +46,7 @@ common --run_env=ROS_HOME=".ros"
 common --run_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --run_env=LD_LIBRARY_PATH=lib
 common --run_env=DYLD_LIBRARY_PATH=lib
+common --run_env=TMPDIR=/tmp
 
 # Propagate select X11 variables through to the test sandbox, so that
 # any test that uses the display has access to it.
@@ -83,7 +73,6 @@ common:ci --google_default_credentials
 common:ci --http_timeout_scaling=3.0
 common:ci --experimental_repository_downloader_retries=10
 common:ci --remote_cache_compression=false
-common:ci --remote_download_minimal
 common:ci --nobuild_runfile_links
 common:ci --ui_event_filters=-INFO,-DEBUG
 
@@ -97,10 +86,21 @@ common --noexperimental_collect_system_network_usage
 
 ## BUILD OPTIONS
 
+# Assume a build for a developer machine and only download the toplevel
+# artifacts. Let the runfiles and intermediate artifacts build on demand.
+build --remote_download_toplevel
+
+# Some packages bake a scratch-directory path into compiled test binaries via
+# local_defines (e.g. rcutils' BUILD_DIR), which --test_env/--run_env can't
+# reach since it's resolved at compile time, not test run-time. Expose the
+# same caller-resolved TMPDIR (see above) as a Make variable so those
+# local_defines/env attributes can pick it up via $(TMPDIR) substitution.
+build --define=TMPDIR=/tmp
+
 # Ensure that we use toolchains_llvm instead of the host toolchain.
 build --repo_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
 
-# Ignore any host-level pip configurations and pull public python dependencie
+# Ignore any host-level pip configurations and pull public python dependencies.
 build --repo_env="PIP_CONFIG_FILE=/dev/null"
 
 # Our bazel distribution provides conversion utilities for transforming
@@ -155,21 +155,22 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 # failures and build/test crashes.
 build:macos --jobs=3
 
+# CI should download the minimal amoutn possible to speed up builds.
+build:ci --remote_download_minimal
+
 ## TEST OPTIONS
 
 # This restricts our test sandboxes from accessing the network, which is
-# important if you want to prevent destructive interference on the ROS
-# messaging system between tests running in parallel. This works well with
-# fastrtps on Linux, but fails if you need to access a zenohd router outside
-# a test sandbox, or if you are on Mac, which has multicast UDP disabled for
-# everything but localhost traffic (which breaks discovery).
+# important if you want to prevent destructive interference between tests.
 test --sandbox_default_allow_network=false
 
 # Don't allow a flaky test to fail the entire run.
 test:ci --flaky_test_attempts=3
 
+# Limit local test concurrency on CI to prevent resource starvation.
+test:ci --local_test_jobs=1
+
 # On mac we wan't to bypass the sandbox for testing because mimick hangs
 # indefinitely within a sandbox. Also, multicast is needed by some RMW
 # for discovery, and the sandbox network adapter does not support this.
 test:macos --test_strategy=standalone
-test:macos --local_test_jobs=1
