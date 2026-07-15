@@ -152,26 +152,26 @@ build:macos --host_copt=-fno-implicit-module-maps
 build:macos --copt=-Wno-elaborated-enum-base
 build:macos --host_copt=-Wno-elaborated-enum-base
 
-# Cap build parallelism on macOS to fix memory pressure, which leads to OOM
-# failures and build/test crashes.
-build:macos --jobs=3
+# Fix memory pressure in CI workers, which leads to OOM errors.
+build:ci --jobs=4
 
-# CI should download the minimal amoutn possible to speed up builds.
+# CI should download the minimal amount possible to speed up builds.
 build:ci --remote_download_minimal
 
 ## TEST OPTIONS
 
 # This restricts our test sandboxes from accessing the network, which is
 # important if you want to prevent destructive interference between tests.
+# Note: this only applies to developer builds because github runners are
+#       in proceswrapper-sandbox and run 1 test at a time.
 test --sandbox_default_allow_network=false
 
 # Don't allow a flaky test to fail the entire run.
 test:ci --flaky_test_attempts=3
 
-# Limit local test concurrency on CI to prevent resource starvation.
+# Limit local test concurrency on CI to prevent resource starvation, as
+# well as destructive interference between tests.
 test:ci --local_test_jobs=1
 
-# On mac we wan't to bypass the sandbox for testing because mimick hangs
-# indefinitely within a sandbox. Also, multicast is needed by some RMW
-# for discovery, and the sandbox network adapter does not support this.
-test:macos --test_strategy=standalone
+# This is both faster, and circumvents network and IPC issues in worfklows.
+test:ci --test_strategy=processwrapper-sandbox
