@@ -100,26 +100,6 @@ jobs:
       run: |
         bazel run //tools/ci:setup_workspace -- --release=${{ matrix.ros }} --tmpdir "$RUNNER_TEMP"
 
-    # TEMPORARY DIAGNOSTIC: confirm whether @opencv//:ocv.3rdparty.cocoa (the
-    # objc_library providing window_cocoa.mm / cvSetModeWindow_COCOA) actually
-    # produces that symbol on this runner. Non-fatal -- this exists only to
-    # verify the Xcode pin above before committing to it as the fix. Remove
-    # once the root cause is confirmed.
-    - name: Debug OpenCV Cocoa symbol (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        bazel build --config ci @opencv//:ocv.3rdparty.cocoa
-        for f in $(bazel cquery --config ci --output=files @opencv//:ocv.3rdparty.cocoa 2>/dev/null); do
-          echo "--- $f ---"
-          file "$f" || true
-          lipo -info "$f" || true
-          if nm -g "$f" 2>/dev/null | grep -q "cvSetModeWindow_COCOA"; then
-            echo "FOUND: cvSetModeWindow_COCOA present in $f"
-          else
-            echo "MISSING: cvSetModeWindow_COCOA not found in $f"
-          fi
-        done
-
     # Run the distribution test for the implementation.
     - name: Test (${{ inputs.rmw }})
       id: test
