@@ -141,6 +141,9 @@ jobs:
             exit 1
           fi
         fi
+        # We do a build before the test, as the compilation load causes time-based
+        # tests to flake nondeterminstically, creating lots of result noise.
+        bazel build --config ci --build_tests_only --config=${{ matrix.variant }}
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=${{ inputs.rmw }} 2>&1 | tee ${{ inputs.rmw }}.test.log || test_status=$?
         if [ -d bazel-testlogs ]; then
           find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_${{ inputs.rmw }}.xml.tar.gz --null -T - || true
