@@ -109,25 +109,6 @@ collect_transitive_dynamic_deps(
         local_defines = ros_local_defines() + [
             '_SRC_RESOURCES_DIR_PATH=\\"../rosbag2_transport+/test/resources\\"',
         ],
-        # test_play and test_play_publish_clock exercise real cross-node ROS
-        # graph discovery (the player waits for subscriber matches before
-        # publishing), which needs actual (multicast) network access --
-        # Bazel's sandbox on Darwin blocks that entirely (unlike Linux,
-        # which still permits loopback). "requires-network" lifts just
-        # that restriction (filesystem/process sandboxing stays intact,
-        # unlike "no-sandbox") and must always be paired with "exclusive"
-        # to avoid un-sandboxed DDS traffic colliding with other
-        # concurrently-running DDS tests. CI itself already disables the
-        # sandbox network restriction for every test (see the `test:ci`
-        # config in tools/ci/setup_workspace.py), so these tags mainly
-        # matter for local `bazel test` runs made without --config ci.
-        tags = [
-            "requires-network",
-            "exclusive",
-        ] if test in [
-            "test_play",
-            "test_play_publish_clock",
-        ] else [],
         deps = TEST_DEPENDENCIES.values() + [
             "@googletest//:gtest_main",
             "@test_msgs//:cc",

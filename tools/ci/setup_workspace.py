@@ -218,9 +218,6 @@ build:macos --host_copt=-Wno-elaborated-enum-base
 # Fix memory pressure in CI workers, which leads to OOM errors.
 build:ci --jobs=4
 
-# CI should download the minimal amount possible to speed up builds.
-build:ci --remote_download_minimal
-
 ## TEST OPTIONS
 
 # This restricts our test sandboxes from accessing the network, which is
@@ -235,9 +232,7 @@ test:ci --flaky_test_attempts=3
 # Limit local test concurrency on CI to prevent resource starvation, as
 # well as destructive interference between tests.
 test:ci --local_test_jobs=1
-
-# This is both faster, and circumvents network and IPC issues in worfklows.
-test:ci --test_strategy=processwrapper-sandbox
+test:ci --test_strategy=exclusive
 """
 
 def get_copyright_header() -> str:
