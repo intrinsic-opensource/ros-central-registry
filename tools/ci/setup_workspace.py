@@ -97,6 +97,7 @@ common --test_env=ROS_DISTRO="{distro}"
 common --test_env=ROS_HOME=".ros"
 common --test_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
 common --test_env=LD_LIBRARY_PATH=lib
+common --test_env=DYLD_LIBRARY_PATH=lib
 common --test_env=TMPDIR={tmpdir}
 
 # Critical ROS environment variables needed at run-time.
