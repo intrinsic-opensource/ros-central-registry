@@ -35,6 +35,12 @@ def rcutils_cc_tests(tests, memory_tools_tests):
     for (name, src), env in tests.items():
         needs_memory_tools = name in memory_tools_tests
 
+        # Skip test_time on macOS because mimick's clock_gettime mocking crashes on ARM64 macOS due to system protection.
+        target_compatible_with = select({
+            "@platforms//os:osx": ["@platforms//:incompatible"],
+            "//conditions:default": [],
+        }) if name == "test_time" else []
+
         cc_test(
             name = name + "_bin" if needs_memory_tools else name,
             srcs = native.glob([
@@ -60,10 +66,10 @@ def rcutils_cc_tests(tests, memory_tools_tests):
                 # local use.
                 "BUILD_DIR=\\\"$(TMPDIR)\\\"",
             ],
+            target_compatible_with = target_compatible_with,
             deps = [
                 ":rcutils_library",
-                "@googletest//:gtest",
-                "@googletest//:gtest_main",
+                "@rosdistro//cc:googletest",
                 "@osrf_testing_tools_cpp//:memory_tools",
                 "@rosdistro//cc:mimick",
                 "@rules_cc//cc/runfiles",
@@ -84,4 +90,5 @@ def rcutils_cc_tests(tests, memory_tools_tests):
                     "@osrf_testing_tools_cpp//:memory_tools_interpose",
                 ],
                 env = env,
+                target_compatible_with = target_compatible_with,
             )
