@@ -4,7 +4,7 @@
     "strip_prefix": "rosbag2-release-release-lyrical-rosbag2_transport-0.33.3-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-TjkW31sfe72l1bn1m9RpHM8L8yxjNHiqL1Cas45lnrA=",
+        "BUILD.bazel": "sha256-+Rsc5w+E9vFYkLgRSH4dV6DJVa6aNzUSdvE+uGuCJcQ=",
         "test/srv/BUILD.bazel": "sha256-eAzWALg4sRgpxGxQKakyndRHu9W13eOA+sdUQJF5BD4="
     },
     "patches": {

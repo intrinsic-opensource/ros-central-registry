@@ -126,8 +126,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":class_loader_headers",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -167,8 +166,7 @@ cc_test(
     ],
     deps = DEPENDENCIES.values() + [
         ":class_loader_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -224,8 +222,7 @@ cc_test(
     deps = DEPENDENCIES.values() + [
         ":class_loader_Test_Fviz_library",
         ":class_loader_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

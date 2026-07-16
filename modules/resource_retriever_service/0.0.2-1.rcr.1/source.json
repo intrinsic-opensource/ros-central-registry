@@ -4,7 +4,7 @@
     "strip_prefix": "resource_retriever_service-release-release-lyrical-resource_retriever_service-0.0.2-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-9sZEHmySOPPKkVcMRGvbuNajhIw2J8DyAughMp02wjQ="
+        "BUILD.bazel": "sha256-bEneJIckLANkLCEF6BMFxzDrBuyYHOSAohQzeM+0n0w="
     },
     "patches": {
         "test__resource_retriever_service_test__cpp.patch": "sha256-M4jkO3EHczt+elcMEjaQ69lyAk9Z6iX46gvb3DxyXeI="

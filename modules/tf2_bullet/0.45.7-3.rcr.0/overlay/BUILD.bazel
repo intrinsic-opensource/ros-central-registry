@@ -62,10 +62,7 @@ cc_test(
     srcs = ["test/test_tf2_bullet.cpp"],
     dynamic_deps = [":transitive_dynamic_deps_test"],
     local_defines = ros_local_defines(),
-    deps = TEST_DEPENDENCIES.values() + [
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
-    ],
+    deps = TEST_DEPENDENCIES.values() + ["@rosdistro//cc:googletest"],
 )
 
 ### PACKAGING

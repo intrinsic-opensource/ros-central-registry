@@ -90,8 +90,7 @@ cc_test(
     local_defines = ros_local_defines(),
     deps = DEPENDENCIES.values() + [
         ":rcl_logging_spdlog_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

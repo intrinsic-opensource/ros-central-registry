@@ -76,8 +76,7 @@ collect_transitive_dynamic_deps(
         local_defines = ros_local_defines(),
         deps = [
             ":rosidl_runtime_cpp_library",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
         ],
     )
     for test in [

@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/resource_retriever-release/archive/refs/tags/release/lyrical/resource_retriever/3.9.3-3.tar.gz",
     "strip_prefix": "resource_retriever-release-release-lyrical-resource_retriever-3.9.3-3",
     "overlay": {
-        "BUILD.bazel": "sha256-JXuhKb+j1lV8ryKMR2ghA1iYvErIgdATV4nRvIBVrAk="
+        "BUILD.bazel": "sha256-S9lXqtja7rX2IH3n8++tFEdbCmjZ4J1EDAXY7gjjl6g="
     }
 }

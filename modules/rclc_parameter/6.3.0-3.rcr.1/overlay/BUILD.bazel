@@ -74,8 +74,7 @@ cc_test(
     local_defines = ros_local_defines(),
     deps = DEPENDENCIES.values() + [
         ":rclc_parameter_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

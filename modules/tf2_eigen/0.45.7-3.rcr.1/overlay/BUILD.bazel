@@ -59,7 +59,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":tf2_eigen_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

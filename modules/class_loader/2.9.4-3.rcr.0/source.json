@@ -4,8 +4,8 @@
     "strip_prefix": "class_loader-release-release-lyrical-class_loader-2.9.4-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-9CO0KIdurY4S+98rHPBgbIfPj64G2NTbZPqcYxIIl/Y=",
-        "defs.bzl": "sha256-us3jLmfnFkbgzCIXaY46JMmcUb54iPLiXHKF0WzXPBw="
+        "defs.bzl": "sha256-us3jLmfnFkbgzCIXaY46JMmcUb54iPLiXHKF0WzXPBw=",
+        "BUILD.bazel": "sha256-LJOu2QmSlA3cq3icJH7uws8g+/5AS7KUpVO8MPHDeVc="
     },
     "patches": {
         "include__class_loader__class_loader_core__hpp.patch": "sha256-UyFWUuNJ6tOcbjm8dBKvIe7gUCBHrw2BW7J1yp5HUtw=",

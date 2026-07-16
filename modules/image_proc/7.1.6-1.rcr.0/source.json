@@ -4,7 +4,7 @@
     "strip_prefix": "image_pipeline-release-release-lyrical-image_proc-7.1.6-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-MeDhBGEsErclrPNGzNVj37LyOeJ0dOwa39vwf/xGtZQ="
+        "BUILD.bazel": "sha256-cnLXQuTRyAxWR2enK1EKCwZGmEZdSKOMFXmYTvJNxPU="
     },
     "patches": {
         "test__rostest__cpp.patch": "sha256-KPQsmtViccbuvdLcEnxEz6kR2/NMp7Yn2TcdXHLpdGk=",

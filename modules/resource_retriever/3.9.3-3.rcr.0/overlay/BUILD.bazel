@@ -81,7 +81,7 @@ cc_test(
     tags = ["requires-network"],
     deps = DEPENDENCIES.values() + [
         ":resource_retriever_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

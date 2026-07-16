@@ -107,8 +107,8 @@ py_library(
 #     srcs = ["test/test_python_allocator.cpp"],
 #     deps = [
 #         ":rclpy/_rclpy_pybind11",
-#         "@googletest//:gtest",
-#         "@googletest//:gtest_main",
+#         "@rosdistro//cc:googletest",
+#         "@rosdistro//cc:googletest",
 #     ],
 # )
 

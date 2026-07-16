@@ -4,7 +4,7 @@
     "strip_prefix": "rclcpp-release-release-lyrical-rclcpp_components-32.0.0-1",
     "overlay": {
         "rules.bzl": "sha256-PtEFOlk+V0QaCBFLOnT8pizQyr8rkCJVbeySlUIhVhQ=",
-        "BUILD.bazel": "sha256-vSiV4fCVRpQc4b0OelxMUBcFv4KGwD5CWRyGcFyh67Y=",
-        "defs.bzl": "sha256-nqdjMueEqXl1X+eX42wF9Q5LH8m0riVC5j0eI0Zj6ec="
+        "defs.bzl": "sha256-nqdjMueEqXl1X+eX42wF9Q5LH8m0riVC5j0eI0Zj6ec=",
+        "BUILD.bazel": "sha256-7BYWb0qlnWKWxQV/dO3MEotnTMSHzDay+sr+n6/FD3s="
     }
 }

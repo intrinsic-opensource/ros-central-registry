@@ -111,8 +111,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":rosidl_typesupport_protobuf_cpp_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

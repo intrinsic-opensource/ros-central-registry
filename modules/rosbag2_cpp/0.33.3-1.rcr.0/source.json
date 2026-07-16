@@ -4,7 +4,7 @@
     "strip_prefix": "rosbag2-release-release-lyrical-rosbag2_cpp-0.33.3-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-9Ckp8HXZgGPMO9EmQ+ybx0CPaU28tAaQxHHKb3OPrbM="
+        "BUILD.bazel": "sha256-TJwNgmV6ODU5Wj1yrzYMEc+O0AHugbHJnd57Fkh58Gw="
     },
     "patches": {
         "test__rosbag2_cpp__test_sequential_reader__cpp.patch": "sha256-7AHxnGk4Y+f4tJPVplbvjW/PwpMQ/3oNO527vVAfbKA="

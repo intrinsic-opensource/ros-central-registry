@@ -4,11 +4,11 @@
     "strip_prefix": "ament_index-release-release-lyrical-ament_index_cpp-1.13.3-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-9EWTpETdPKP/JzUjnq5z2MhydfuVNSSzjS1T2OnHh1w="
+        "BUILD.bazel": "sha256-q0MJUroBw4/52OFtIjnSM7CA//++/2JC1NWEzQIIKzc="
     },
     "patches": {
         "src__get_search_paths__cpp.patch": "sha256-l4tpfOHY5R61QZDf5q9ETYk6zb6XFVaVMdqyD4miVM4=",
-        "test__utest__cpp.patch": "sha256-gshDOs1o8MrzVycI1GHT0JsdJV/3lBwexFD/NR2c5sE=",
-        "test__utest_deprecated__cpp.patch": "sha256-4QJjFNEwe4oydKCMCB6+H7ZoKsushGohN7I86HQBF2U="
+        "test__utest_deprecated__cpp.patch": "sha256-4QJjFNEwe4oydKCMCB6+H7ZoKsushGohN7I86HQBF2U=",
+        "test__utest__cpp.patch": "sha256-gshDOs1o8MrzVycI1GHT0JsdJV/3lBwexFD/NR2c5sE="
     }
 }

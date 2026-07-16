@@ -51,7 +51,7 @@ cc_test(
     srcs = ["test/utest.cpp"],
     deps = [
         ":angles",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

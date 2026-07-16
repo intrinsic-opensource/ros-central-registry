@@ -78,7 +78,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":camera_calibration_parsers_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@sensor_msgs//:cc",
     ],
 )
@@ -92,7 +92,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":camera_calibration_parsers_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@sensor_msgs//:cc",
     ],
 )

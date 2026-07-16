@@ -77,7 +77,7 @@ cc_test(
     srcs = ["test/test_tf2_kdl.cpp"],
     dynamic_deps = [":transitive_dynamic_deps_test"],
     deps = TEST_DEPENDENCIES.values() + [
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

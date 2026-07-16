@@ -61,7 +61,7 @@ qt_cc_library(
     ],
     deps = DEPENDENCIES.values() + [
         "@geometry_msgs//:cc",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@rules_qt//:qt_test",
         "@rules_qt//:qt_widgets",
         "@std_msgs//:cc",

@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/rcl-release/archive/refs/tags/release/lyrical/rcl_lifecycle/10.4.4-1.tar.gz",
     "strip_prefix": "rcl-release-release-lyrical-rcl_lifecycle-10.4.4-1",
     "overlay": {
-        "BUILD.bazel": "sha256-gNcKMvFe7wsg6cI0X9hYfFDXyqNXOtrGFb36pLb/zvs="
+        "BUILD.bazel": "sha256-WVejIT4MXpiqogTISXBG/WwS/8KSFrVHCw8sTpElQys="
     }
 }

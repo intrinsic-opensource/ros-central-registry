@@ -115,9 +115,8 @@ cc_library(
         deps = DEPENDENCIES.values() + [
             ":rcl_library",
             ":wait_for_entity_helpers",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
             "@osrf_testing_tools_cpp//:memory_tools",
+            "@rosdistro//cc:googletest",
             "@rosdistro//cc:mimick",
             "@rules_cc//cc/runfiles",
             "@test_msgs//:c",

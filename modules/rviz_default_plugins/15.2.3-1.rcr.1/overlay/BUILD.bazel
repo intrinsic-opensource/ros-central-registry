@@ -103,7 +103,7 @@ cc_shared_library(
 #     deps = [
 #         ":ogre_testing_environment",
 #         ":rviz_default_plugins_library",
-#         "@googletest//:gtest",
+#         "@rosdistro//cc:googletest",
 #     ],
 # )
 
@@ -114,7 +114,7 @@ cc_shared_library(
 #     ],
 #     deps = [
 #         ":rviz_default_plugins_test_fixture",
-#         "@googletest//:gtest_main",
+#         "@rosdistro//cc:googletest",
 #     ],
 # )
 
@@ -125,7 +125,7 @@ cc_shared_library(
 #     ],
 #     deps = [
 #         ":rviz_default_plugins_test_fixture",
-#         "@googletest//:gtest_main",
+#         "@rosdistro//cc:googletest",
 #     ],
 # )
 
@@ -136,7 +136,7 @@ cc_shared_library(
 #     ],
 #     deps = [
 #         ":rviz_default_plugins_test_fixture",
-#         "@googletest//:gtest_main",
+#         "@rosdistro//cc:googletest",
 #     ],
 # )
 

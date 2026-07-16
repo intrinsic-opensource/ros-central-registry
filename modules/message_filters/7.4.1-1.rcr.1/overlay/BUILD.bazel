@@ -81,7 +81,7 @@ collect_transitive_dynamic_deps(
         dynamic_deps = [":transitive_dynamic_deps"],
         flaky = test in ["test_latest_time_policy"],
         deps = TEST_DEPENDENCIES.values() + [
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
             "@sensor_msgs//:cc",
         ],
     )

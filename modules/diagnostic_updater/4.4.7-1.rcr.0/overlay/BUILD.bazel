@@ -67,7 +67,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = TEST_DEPENDENCIES.values() + [
         ":diagnostic_updater_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -78,7 +78,7 @@ cc_test(
     deps = TEST_DEPENDENCIES.values() + [
         ":diagnostic_updater_library",
         "@diagnostic_msgs//:cc",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@std_msgs//:cc",
     ],
 )

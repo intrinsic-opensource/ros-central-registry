@@ -110,7 +110,7 @@ collect_transitive_dynamic_deps(
             '_SRC_RESOURCES_DIR_PATH=\\"../rosbag2_transport+/test/resources\\"',
         ],
         deps = TEST_DEPENDENCIES.values() + [
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
             "@test_msgs//:cc",
         ],
     )

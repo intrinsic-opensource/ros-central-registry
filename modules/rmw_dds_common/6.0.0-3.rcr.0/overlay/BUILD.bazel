@@ -108,9 +108,8 @@ cc_test(
         local_defines = ros_local_defines(),
         deps = DEPENDENCIES.values() + [
             ":rmw_dds_common_library",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
             "@osrf_testing_tools_cpp//:memory_tools",
+            "@rosdistro//cc:googletest",
         ],
     )
     for test in [

@@ -101,9 +101,8 @@ collect_transitive_dynamic_deps(
         deps = TEST_DEPENDENCIES.values() + [
             "@example_interfaces//:c",
             "@example_interfaces//:cc",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
             "@osrf_testing_tools_cpp//:memory_tools",
+            "@rosdistro//cc:googletest",
             "@std_msgs//:c",
             "@test_msgs//:c",
             "@test_msgs//:cc",

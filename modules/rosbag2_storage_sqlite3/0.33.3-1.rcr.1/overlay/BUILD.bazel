@@ -99,7 +99,7 @@ collect_transitive_dynamic_deps(
             '_TEST_RESOURCES_DIR_PATH=\\"test/rosbag2_storage_sqlite3\\"',
         ],
         deps = TEST_DEPENDENCIES.values() + [
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
             "@std_msgs//:cc",
         ],
     )

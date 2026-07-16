@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/rosidl-release/archive/refs/tags/release/lyrical/rosidl_typesupport_interface/5.2.1-1.tar.gz",
     "strip_prefix": "rosidl-release-release-lyrical-rosidl_typesupport_interface-5.2.1-1",
     "overlay": {
-        "BUILD.bazel": "sha256-H8pBjGBMYmJdD0YmMUfT5dmIDS9PukwIZsrwzLHstU8="
+        "BUILD.bazel": "sha256-EYsP9/6DGs/DSqnZT5ZHNDxRfmeEsx7PrE06zXMsRsM="
     }
 }

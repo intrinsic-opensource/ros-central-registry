@@ -119,7 +119,7 @@ cc_shared_library(
             '_TEST_RESOURCES_DIR_PATH=\\"test/rosbag2_cpp\\"',
         ],
         deps = TEST_DEPENDENCIES.values() + [
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
             "@std_msgs//:cc",
         ],
     )

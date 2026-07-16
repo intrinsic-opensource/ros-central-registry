@@ -68,8 +68,7 @@ cc_test(
     local_defines = ros_local_defines(),
     deps = [
         ":libstatistics_collector_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -83,8 +82,7 @@ cc_test(
     local_defines = ros_local_defines(),
     deps = [
         ":libstatistics_collector_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -99,10 +97,9 @@ cc_test(
         local_defines = ros_local_defines(),
         deps = [
             ":libstatistics_collector_library",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
             "@rcl//:rcl_library",
             "@rmw//:rmw_library",
+            "@rosdistro//cc:googletest",
         ],
     )
     for name in [

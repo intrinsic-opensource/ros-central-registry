@@ -282,8 +282,7 @@ collect_transitive_dynamic_deps(
         ],
         deps = TEST_DEPENDENCIES.values() + [
             "//test/msg:cc",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
             "@rosdistro//cc:mimick",
             "@rules_cc//cc/runfiles",
             "@test_msgs//:test_msgs_cc",

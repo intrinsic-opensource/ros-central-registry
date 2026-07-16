@@ -224,7 +224,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":median_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -234,7 +234,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":transfer_function_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -244,7 +244,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":mean_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -254,7 +254,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":params_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -264,7 +264,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":realtime_circular_buffer",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -275,7 +275,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":filter_chain",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

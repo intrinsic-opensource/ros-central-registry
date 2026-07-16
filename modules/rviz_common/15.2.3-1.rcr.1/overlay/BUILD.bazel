@@ -129,7 +129,7 @@ qt_cc_library(
     includes = ["test"],
     local_defines = ros_local_defines() + ["RVIZ_COMMON_PUBLIC="],
     deps = TEST_DEPENDENCIES.values() + [
-        "@googletest//:gtest",
+        "@rosdistro//cc:googletest",
         "@rules_qt//:qt",
         "@rules_qt//:qt_widgets",
     ],
@@ -182,7 +182,7 @@ qt_cc_test(
     tags = ["no-sandbox"],
     deps = TEST_DEPENDENCIES.values() + [
         ":rviz_common_test_utils_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -219,7 +219,7 @@ qt_cc_test(
     tags = ["no-sandbox"],
     deps = TEST_DEPENDENCIES.values() + [
         ":rviz_common_test_utils_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -259,7 +259,7 @@ qt_cc_test(
     tags = ["no-sandbox"],
     deps = TEST_DEPENDENCIES.values() + [
         ":rviz_common_test_utils_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -282,7 +282,7 @@ cc_library(
     local_defines = ros_local_defines() + ["RVIZ_COMMON_PUBLIC="],
     deps = TEST_DEPENDENCIES.values() + [
         ":rviz_common_test_utils_library",
-        "@googletest//:gtest",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -297,7 +297,7 @@ qt_cc_test(
     local_defines = ros_local_defines() + ["RVIZ_COMMON_PUBLIC="],
     deps = [
         ":frame_manager_test_lib",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

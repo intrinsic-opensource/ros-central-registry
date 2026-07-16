@@ -5,17 +5,17 @@
     "patch_strip": 1,
     "overlay": {
         "aspects.bzl": "sha256-QvPaK2ZOHE5Y65YUP7nC0gw0zTxB7QG6J95XjJKsIBs=",
-        "BUILD.bazel": "sha256-ntqN1C5hHNLbS7XtA/m4JFi+s4naWSRdfMbamsw/yXw=",
+        "BUILD.bazel": "sha256-th4XbJy/KOPf9f4VAcPy6n8eERNPVvJjMPksBsOv/cg=",
         "types.bzl": "sha256-Dav7sXwLGcYtzfiW8zhR/MBPqnIFM2aoF0Emss35ZyA="
     },
     "patches": {
-        "resource__msg__type_support__cpp__em.patch": "sha256-o1tgiEpg0QCMD1hBoq9DZsL17y3mRJhEej3Q8Onk+ak=",
-        "CMakeLists__txt.patch": "sha256-VksZrmApvaW8SPxL03QJDGKzq+2UyqEv3X/k/9Jnpss=",
-        "resource__idl__type_support__cpp__em.patch": "sha256-xIQGlQ1J6No92Bi2ZoFTJxWw2ld3SzOlCVIoetyN35E=",
-        "rosidl_typesupport_protobuf_c____init____py.patch": "sha256-B6PMhZOnKCKKGy3M9Fv64dlqpWsEuqD7lNQRyACK5y8=",
-        "package__xml.patch": "sha256-gkilzmp/rqiygdA8YLFqDYLkLBrziKC8rNqJs/0QK04=",
+        "cmake__rosidl_typesupport_protobuf_c_generate_interfaces__cmake.patch": "sha256-Ss5ehdlTn+Ph33h4ApCBmJM1AdXOZ2SXVX4ywHj++yw=",
         "resource__msg__rosidl_typesupport_protobuf_c__hpp__em.patch": "sha256-TA52rGIaW14KMR58JEHIf1bgP3W++/idD2rq9OeHmEw=",
+        "resource__msg__type_support__cpp__em.patch": "sha256-o1tgiEpg0QCMD1hBoq9DZsL17y3mRJhEej3Q8Onk+ak=",
+        "package__xml.patch": "sha256-gkilzmp/rqiygdA8YLFqDYLkLBrziKC8rNqJs/0QK04=",
         "resource__srv__type_support__cpp__em.patch": "sha256-jxKF3bftuPHk69CuUtWyZzCRU4rqiuEUUHzOz9S5VaY=",
-        "cmake__rosidl_typesupport_protobuf_c_generate_interfaces__cmake.patch": "sha256-Ss5ehdlTn+Ph33h4ApCBmJM1AdXOZ2SXVX4ywHj++yw="
+        "rosidl_typesupport_protobuf_c____init____py.patch": "sha256-B6PMhZOnKCKKGy3M9Fv64dlqpWsEuqD7lNQRyACK5y8=",
+        "CMakeLists__txt.patch": "sha256-VksZrmApvaW8SPxL03QJDGKzq+2UyqEv3X/k/9Jnpss=",
+        "resource__idl__type_support__cpp__em.patch": "sha256-xIQGlQ1J6No92Bi2ZoFTJxWw2ld3SzOlCVIoetyN35E="
     }
 }

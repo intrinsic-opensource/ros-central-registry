@@ -108,7 +108,7 @@ collect_transitive_dynamic_deps(
             '_TEST_RESOURCES_DIR_PATH=\\"../rosbag2_storage_mcap+/test/rosbag2_storage_mcap\\"',
         ],
         deps = TEST_DEPENDENCIES.values() + [
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
             "@std_msgs//:cc",
         ],
     )

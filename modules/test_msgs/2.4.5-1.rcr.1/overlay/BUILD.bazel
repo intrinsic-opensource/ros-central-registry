@@ -77,8 +77,7 @@ cc_test(
     srcs = ["test/test_c_type_support.cpp"],
     deps = [
         ":c",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -87,8 +86,7 @@ cc_test(
     srcs = ["test/test_cpp_type_support.cpp"],
     deps = [
         ":cc",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

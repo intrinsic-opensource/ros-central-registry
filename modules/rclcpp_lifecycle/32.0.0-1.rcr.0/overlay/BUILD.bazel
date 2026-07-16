@@ -91,8 +91,7 @@ collect_transitive_dynamic_deps(
         local_defines = ros_local_defines(),
         deps = DEPENDENCIES.values() + [
             ":rclcpp_lifecycle_library",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
             "@rosdistro//cc:mimick",
             "@test_msgs//:cc",
         ],

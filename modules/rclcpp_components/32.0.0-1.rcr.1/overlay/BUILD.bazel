@@ -194,8 +194,7 @@ ament_index(
         local_defines = ros_local_defines(),
         deps = DEPENDENCIES.values() + [
             ":component_manager_library",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
         ],
     )
     for test in [

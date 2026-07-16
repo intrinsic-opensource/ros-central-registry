@@ -158,7 +158,7 @@ filegroup(
         dynamic_deps = [":transitive_dynamic_deps"],
         deps = DEPENDENCIES.values() + [
             ":image_transport_library",
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
         ],
     )
     for test in [
@@ -189,7 +189,7 @@ cc_test(
     ],
     deps = DEPENDENCIES.values() + [
         ":image_transport_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

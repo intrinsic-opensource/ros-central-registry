@@ -117,7 +117,7 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = BASE_DEPENDENCIES.values() + [
         ":DepthImageToLaserScan_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

@@ -92,7 +92,7 @@ cc_test(
         ":interactive_marker_fixtures",
         ":interactive_markers_library",
         "@geometry_msgs//:cc",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@std_msgs//:cc",
         "@visualization_msgs//:cc",
     ],
@@ -111,7 +111,7 @@ cc_test(
         ":interactive_markers_library",
         "@builtin_interfaces//:cc",
         "@geometry_msgs//:cc",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@visualization_msgs//:cc",
     ],
 )

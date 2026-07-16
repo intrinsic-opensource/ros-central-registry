@@ -94,8 +94,7 @@ cc_test(
     srcs = ["test/memory_tools/test_memory_tools.cpp"],
     deps = [
         ":memory_tools",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -105,10 +104,7 @@ cc_test(
         "src/test_runner/parse_environment_variable.hpp",
         "test/test_runner/test_parse_environment_variable.cpp",
     ],
-    deps = [
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
-    ],
+    deps = ["@rosdistro//cc:googletest"],
 )
 
 cc_binary(
@@ -128,7 +124,7 @@ cc_binary(
         "test/test_runner/assert_env_vars.cpp",
     ],
     deps = [
-        "@googletest//:gtest",
+        "@rosdistro//cc:googletest",
     ],
 )
 

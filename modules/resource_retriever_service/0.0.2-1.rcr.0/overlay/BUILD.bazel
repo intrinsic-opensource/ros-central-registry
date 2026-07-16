@@ -59,8 +59,8 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":resource_retriever_service_library",
-        "@googletest//:gtest",
         "@resource_retriever_interfaces//:cc",
+        "@rosdistro//cc:googletest",
     ],
 )
 

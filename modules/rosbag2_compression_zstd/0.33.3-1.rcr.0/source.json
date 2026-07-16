@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/rosbag2-release/archive/refs/tags/release/lyrical/rosbag2_compression_zstd/0.33.3-1.tar.gz",
     "strip_prefix": "rosbag2-release-release-lyrical-rosbag2_compression_zstd-0.33.3-1",
     "overlay": {
-        "BUILD.bazel": "sha256-8L3VjEG8p9uFXqiAxVrMNGGXp6maXiX0VVWLtFoYhMw="
+        "BUILD.bazel": "sha256-eNf63fEGAuSHKSsOrwMAcc3G1G4J0LT1qCVmh0Ge1Zs="
     }
 }

@@ -4,10 +4,10 @@
     "strip_prefix": "vision_opencv-release-release-lyrical-cv_bridge-4.1.0-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-ZumGXQ98g6M/bdzprf4dBH/qQx339Z6c2cWNHLIg1+w="
+        "BUILD.bazel": "sha256-9iwWBwBZI8E7lo4FRJrwVZJkJFylhV7fMDF7sls7wEk="
     },
     "patches": {
-        "src__cv_bridge__cpp.patch": "sha256-5FHbVKpcDD1j2L60G5rwFbE82hxlhPEOkxNc7zM+ACs=",
-        "test__test_dynamic_scaling__cpp.patch": "sha256-PZpieOjluO1MQQFjmu5N09oYA43krkZpQkXcYDul6R8="
+        "test__test_dynamic_scaling__cpp.patch": "sha256-PZpieOjluO1MQQFjmu5N09oYA43krkZpQkXcYDul6R8=",
+        "src__cv_bridge__cpp.patch": "sha256-5FHbVKpcDD1j2L60G5rwFbE82hxlhPEOkxNc7zM+ACs="
     }
 }

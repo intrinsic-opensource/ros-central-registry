@@ -109,7 +109,7 @@ collect_transitive_dynamic_deps(
         data = [":ament_index"],
         dynamic_deps = [":transitive_dynamic_deps_test"],
         deps = TEST_DEPENDENCIES.values() + [
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
         ],
     )
     for test in [

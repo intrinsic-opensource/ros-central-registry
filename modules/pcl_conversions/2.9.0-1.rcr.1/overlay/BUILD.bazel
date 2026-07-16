@@ -66,7 +66,7 @@ cc_test(
     local_defines = ros_local_defines(),
     deps = DEPENDENCIES.values() + [
         ":pcl_conversions_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

@@ -81,8 +81,8 @@ collect_transitive_dynamic_deps(
         dynamic_deps = [":transitive_dynamic_deps"],
         deps = DEPENDENCIES.values() + [
             ":cv_bridge_library",
-            "@googletest//:gtest_main",
             "@rosdistro//cc:boost.endian",
+            "@rosdistro//cc:googletest",
         ],
     )
     for test in [

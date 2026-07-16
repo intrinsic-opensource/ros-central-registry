@@ -87,10 +87,7 @@ collect_transitive_dynamic_deps(
         ],
         dynamic_deps = [":transitive_dynamic_deps_test"],
         local_defines = ros_local_defines(),
-        deps = TEST_DEPENDENCIES.values() + [
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
-        ],
+        deps = TEST_DEPENDENCIES.values() + ["@rosdistro//cc:googletest"],
     )
     for test in [
         "test_buffer_backend_registry",

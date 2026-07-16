@@ -85,7 +85,7 @@ cc_test(
     }),
     deps = DEPENDENCIES.values() + [
         ":camera_info_manager_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@sensor_msgs//:cc",
     ],
 )

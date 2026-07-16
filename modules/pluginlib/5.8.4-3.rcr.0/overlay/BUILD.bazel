@@ -136,7 +136,7 @@ ament_index(
         deps = DEPENDENCIES.values() + [
             ":pluginlib_library",
             ":test_plugins_headers",
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
         ],
     )
     for test in [

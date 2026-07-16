@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/keyboard_handler-release/archive/refs/tags/release/lyrical/keyboard_handler/0.5.1-1.tar.gz",
     "strip_prefix": "keyboard_handler-release-release-lyrical-keyboard_handler-0.5.1-1",
     "overlay": {
-        "BUILD.bazel": "sha256-I5LuFXJ7uRzXkr5c0e4NRTkv5Y9hQ/r6lblyzpN8y3U="
+        "BUILD.bazel": "sha256-REBgc//9JT57qTYc/FMC1Sd5IZrRbFtxvLSkLmHL8Fg="
     }
 }

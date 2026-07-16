@@ -133,8 +133,7 @@ cc_test(
     deps = [
         ":tracetools_library",
         ":tracetools_status_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

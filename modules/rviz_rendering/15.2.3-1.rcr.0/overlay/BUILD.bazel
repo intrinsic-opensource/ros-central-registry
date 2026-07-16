@@ -129,7 +129,7 @@ collect_transitive_dynamic_deps(
         local_defines = ros_local_defines() + ["RVIZ_RENDERING_PUBLIC="],
         tags = ["no-sandbox"],
         deps = TEST_DEPENDENCIES.values() + [
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
         ],
     )
     for test, srcs in {

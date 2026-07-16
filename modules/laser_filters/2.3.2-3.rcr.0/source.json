@@ -4,11 +4,11 @@
     "strip_prefix": "laser_filters-release-release-lyrical-laser_filters-2.3.2-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-KkLvbQETN+XEyXHKH/lMpOa2ifBvFAbVUnAj0BGp5HA="
+        "BUILD.bazel": "sha256-wFfaHHYO2diKTLoiZP7llhomPZhaPfC2aqiUIatfXD4="
     },
     "patches": {
+        "test__test_speckle_filter__cpp.patch": "sha256-Ryu0hHlRm+UMoYU1M8v0szLwYY2C85zbB6sabUU87qw=",
         "test__test_scan_filter_chain__cpp.patch": "sha256-QWiZOmJQThDG5nVv/sJ+yVJwTlvvfyvwHFCWhNYw+/A=",
-        "test__test_scan_shadows_filter__cpp.patch": "sha256-ZNZcN6THiC39MB7jt5OwmXXfrLV0VfuhvdVoAlpWqio=",
-        "test__test_speckle_filter__cpp.patch": "sha256-Ryu0hHlRm+UMoYU1M8v0szLwYY2C85zbB6sabUU87qw="
+        "test__test_scan_shadows_filter__cpp.patch": "sha256-ZNZcN6THiC39MB7jt5OwmXXfrLV0VfuhvdVoAlpWqio="
     }
 }

@@ -4,7 +4,7 @@
     "strip_prefix": "ros2_message_filters-release-release-lyrical-message_filters-7.4.1-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-EF7LIMvWPLDxlYPiswz0I0TaWEww+c9Yc+LNwqAWqJU="
+        "BUILD.bazel": "sha256-Fmqt/4NiEjia8UNu8bUp4tyIeLympMU0mzf+A9suVUQ="
     },
     "patches": {
         "include__message_filters__input_aligner__hpp.patch": "sha256-FlZJ/RLsUJQxK3d6vg0jmT6EMdJak6qaurcAJdO+AY4="

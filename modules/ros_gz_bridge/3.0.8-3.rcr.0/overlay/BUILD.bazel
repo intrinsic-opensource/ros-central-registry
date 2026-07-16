@@ -235,7 +235,7 @@ cc_test(
         "src",
     ],
     deps = [
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         #"@rcl_interfaces//:cc",
         "@rosdistro//cc:gz_msgs",
     ],
@@ -255,8 +255,8 @@ cc_test(
     ],
     deps = [
         ":ros_gz_bridge_library",
-        "@googletest//:gtest_main",
         "@ros_gz_interfaces//:cc",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -281,7 +281,7 @@ cc_library(
         "@%s//:cc" % pkg
         for pkg in BRIDGE_MESSAGE_TYPES
     ] + [
-        "@googletest//:gtest",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -354,8 +354,8 @@ cc_test(
     includes = ["src"],
     deps = [
         ":ros_gz_bridge_library",
-        "@googletest//:gtest_main",
         "@rclcpp//:rclcpp_library",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -363,8 +363,8 @@ cc_test(
     name = "ros_gz_bridge_gid_filtering",
     srcs = ["test/test_gid_filtering.cpp"],
     deps = [
-        "@googletest//:gtest_main",
         "@rclcpp//:rclcpp_library",
+        "@rosdistro//cc:googletest",
         "@std_msgs//:cc",
     ],
 )

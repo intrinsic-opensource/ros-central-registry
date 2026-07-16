@@ -70,8 +70,7 @@ cc_test(
     local_defines = ros_local_defines(),
     deps = DEPENDENCIES.values() + [
         ":tf2_eigen_kdl_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

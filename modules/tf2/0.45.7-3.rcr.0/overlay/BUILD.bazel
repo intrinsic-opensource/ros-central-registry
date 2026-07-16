@@ -71,8 +71,7 @@ collect_transitive_dynamic_deps(
         local_defines = ros_local_defines(),
         deps = [
             ":tf2_library",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
         ] + extra_deps,
     )
     for name, src, extra_deps in [

@@ -81,8 +81,8 @@ cc_test(
     dynamic_deps = [":transitive_dynamic_deps"],
     deps = DEPENDENCIES.values() + [
         ":camera_info_manager_library",
-        "@googletest//:gtest_main",
         "@rosdistro//cc:bazel_test_helper",
+        "@rosdistro//cc:googletest",
         "@sensor_msgs//:cc",
     ],
 )

@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/filters-release/archive/refs/tags/release/lyrical/filters/2.2.2-3.tar.gz",
     "strip_prefix": "filters-release-release-lyrical-filters-2.2.2-3",
     "overlay": {
-        "BUILD.bazel": "sha256-zsjv/7bcmQgthm9GB2lRgItUxyJjjFHNwXZc4NNlOhU="
+        "BUILD.bazel": "sha256-aNCHoeuVJphviYC9+npHfhk+wR5KxbJkg+NDbv31W1I="
     }
 }

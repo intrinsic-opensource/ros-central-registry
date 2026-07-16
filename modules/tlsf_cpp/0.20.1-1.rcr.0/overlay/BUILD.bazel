@@ -45,9 +45,9 @@ cc_test(
     local_defines = ros_local_defines(),
     deps = [
         ":tlsf_cpp",
-        "@googletest//:gtest_main",
         "@rclcpp//:rclcpp_library",
         "@rcpputils//:rcpputils_library",
+        "@rosdistro//cc:googletest",
         "@std_msgs//:cc",
     ],
 )

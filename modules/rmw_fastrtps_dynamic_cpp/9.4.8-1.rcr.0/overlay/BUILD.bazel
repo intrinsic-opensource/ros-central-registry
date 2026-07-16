@@ -91,9 +91,8 @@ cc_test(
     local_defines = ros_local_defines(),
     deps = DEPENDENCIES.values() + [
         ":rmw_fastrtps_dynamic_cpp_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
         "@osrf_testing_tools_cpp//:memory_tools",
+        "@rosdistro//cc:googletest",
         "@test_msgs//:c",
     ],
 )
@@ -105,8 +104,7 @@ cc_test(
     local_defines = ros_local_defines(),
     deps = DEPENDENCIES.values() + [
         ":rmw_fastrtps_dynamic_cpp_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

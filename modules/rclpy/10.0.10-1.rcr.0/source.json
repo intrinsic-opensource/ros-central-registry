@@ -4,10 +4,10 @@
     "strip_prefix": "rclpy-release-release-lyrical-rclpy-10.0.10-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-m4i63l4LFoQd/CBOKaB8UhGVhpvuY8c0btQ7zr/rmtg="
+        "BUILD.bazel": "sha256-FgJDKgJ7Mb4YJaAVnD7T5VnuKXaMIssPDv0C+TPd6a8="
     },
     "patches": {
-        "rclpy__impl__implementation_singleton__py.patch": "sha256-yhiwP3XLpYHJY5B4OWTKDdHNT2p8Gps+Rbb318/aQ/U=",
-        "test__test_type_description_service__py.patch": "sha256-gMJviHX8/IMDmDhJHbyXXNCpPb1CJO9nxrd3uiJAdco="
+        "test__test_type_description_service__py.patch": "sha256-gMJviHX8/IMDmDhJHbyXXNCpPb1CJO9nxrd3uiJAdco=",
+        "rclpy__impl__implementation_singleton__py.patch": "sha256-yhiwP3XLpYHJY5B4OWTKDdHNT2p8Gps+Rbb318/aQ/U="
     }
 }

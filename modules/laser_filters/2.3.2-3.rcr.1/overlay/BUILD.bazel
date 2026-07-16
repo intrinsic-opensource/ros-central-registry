@@ -167,7 +167,7 @@ cc_test(
         ":laser_scan_filters_library",
         "@angles",
         "@filters",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@sensor_msgs//:cc",
     ],
 )
@@ -179,7 +179,7 @@ cc_test(
     deps = DEPENDENCIES.values() + [
         ":laser_scan_filters_library",
         "@angles",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -190,7 +190,7 @@ cc_test(
     deps = DEPENDENCIES.values() + [
         ":laser_scan_filters_library",
         "@angles",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 
@@ -201,7 +201,7 @@ cc_test(
     deps = DEPENDENCIES.values() + [
         ":laser_scan_filters_library",
         "@angles",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@sensor_msgs//:cc",
     ],
 )

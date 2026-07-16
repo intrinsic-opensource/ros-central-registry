@@ -202,7 +202,7 @@ cc_test(
     deps = DEPENDENCIES.values() + [
         ":image_proc_library",
         ":rectify_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@sensor_msgs//:cc",
     ],
 )
@@ -222,7 +222,7 @@ cc_test(
     ],
     deps = DEPENDENCIES.values() + [
         ":image_proc_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@sensor_msgs//:cc",
     ],
 )

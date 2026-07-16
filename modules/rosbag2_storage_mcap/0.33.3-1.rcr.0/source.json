@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/rosbag2-release/archive/refs/tags/release/lyrical/rosbag2_storage_mcap/0.33.3-1.tar.gz",
     "strip_prefix": "rosbag2-release-release-lyrical-rosbag2_storage_mcap-0.33.3-1",
     "overlay": {
-        "BUILD.bazel": "sha256-t8OE5SjU+KRwT3MqB1vxDced0Z4NgETA1H8B66+qQes="
+        "BUILD.bazel": "sha256-Kj/FG3k9cuM84LuiXUrfu75NBEzoyZkZXSFBvhFN6uQ="
     }
 }

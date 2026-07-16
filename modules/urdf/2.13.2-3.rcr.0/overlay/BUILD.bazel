@@ -125,7 +125,7 @@ cc_test(
     deps = DEPENDENCIES.values() + [
         ":urdf_library",
         ":urdf_xml_parser_library",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

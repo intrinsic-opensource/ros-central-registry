@@ -50,7 +50,7 @@ cc_test(
     deps = [
         ":cc",
         "@geometry_msgs//:cc",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
         "@std_msgs//:cc",
     ],
 )

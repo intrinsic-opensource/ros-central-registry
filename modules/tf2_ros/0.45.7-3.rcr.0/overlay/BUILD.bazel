@@ -173,8 +173,7 @@ cc_binary(
         local_defines = ros_local_defines(),
         deps = [
             ":tf2_ros_library",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
+            "@rosdistro//cc:googletest",
         ] + extra_deps,
     )
     for name, src, extra_deps in [

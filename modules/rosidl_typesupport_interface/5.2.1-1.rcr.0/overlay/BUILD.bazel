@@ -62,8 +62,7 @@ cc_test(
     }),
     deps = [
         ":rosidl_typesupport_interface_library",
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+        "@rosdistro//cc:googletest",
     ],
 )
 

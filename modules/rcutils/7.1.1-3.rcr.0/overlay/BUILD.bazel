@@ -94,9 +94,8 @@ genrule(
         ],
         deps = [
             ":rcutils_library",
-            "@googletest//:gtest",
-            "@googletest//:gtest_main",
             "@osrf_testing_tools_cpp//:memory_tools",
+            "@rosdistro//cc:googletest",
             "@rosdistro//cc:mimick",
             "@rules_cc//cc/runfiles",
         ],

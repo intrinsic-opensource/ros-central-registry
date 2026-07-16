@@ -603,9 +603,22 @@ cc_shared_library(
 )
 
 # Helper library to set up writable ROS_HOME and TMPDIR from TEST_TMPDIR for tests at runtime
+
 cc_library(
     name = "bazel_test_helper",
     srcs = ["bazel_test_helper.cpp"],
     visibility = ["//visibility:public"],
+    alwayslink = True,
+)
+
+# Helper library to make sure a gtest cleans up background DDS threads before exiting
+
+cc_library(
+    name = "googletest",
+    srcs = ["gtest_dds_cleanup.cpp"],
+    deps = [
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
     alwayslink = True,
 )

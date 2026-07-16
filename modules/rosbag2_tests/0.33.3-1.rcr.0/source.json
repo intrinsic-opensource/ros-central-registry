@@ -4,11 +4,11 @@
     "strip_prefix": "rosbag2-release-release-lyrical-rosbag2_tests-0.33.3-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-LPSXUaBMx8Ms+PKnn+nPy+92JHBkqCJEq2kOaaGbRUY=",
+        "BUILD.bazel": "sha256-WvL4TAk8ga5PdcA2Jai61naw+1PFw3JH6Jft9PfwKO8=",
         "ros2": "sha256-Avx8xZuS9asYKI39j/93MBrgiEI4v3XSjqazfR5D7co="
     },
     "patches": {
-        "test__rosbag2_tests__test_rosbag2_info_end_to_end__cpp.patch": "sha256-iswQlA2bkfY/ZpnBKfwMg82aAl9emNj7k3Uce0j8QJU=",
-        "test__rosbag2_tests__test_rosbag2_play_end_to_end__cpp.patch": "sha256-PQIIvtSN8hVEemWRWY9IKHFOPMAjl3siR+G7Yzn9VNU="
+        "test__rosbag2_tests__test_rosbag2_play_end_to_end__cpp.patch": "sha256-PQIIvtSN8hVEemWRWY9IKHFOPMAjl3siR+G7Yzn9VNU=",
+        "test__rosbag2_tests__test_rosbag2_info_end_to_end__cpp.patch": "sha256-iswQlA2bkfY/ZpnBKfwMg82aAl9emNj7k3Uce0j8QJU="
     }
 }

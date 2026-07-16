@@ -3,6 +3,6 @@
     "url": "https://github.com/ros2-gbp/image_common-release/archive/refs/tags/release/lyrical/camera_info_manager/6.4.9-1.tar.gz",
     "strip_prefix": "image_common-release-release-lyrical-camera_info_manager-6.4.9-1",
     "overlay": {
-        "BUILD.bazel": "sha256-jtU5te92n8d+AaFC8aBhiZz0TE7iGU2utiRhcpYXR5c="
+        "BUILD.bazel": "sha256-HfeKaLGytADgxOXT28P3Intut+wXz8E7oMhagxS/PA0="
     }
 }
