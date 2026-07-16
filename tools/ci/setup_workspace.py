@@ -233,6 +233,7 @@ test:ci --flaky_test_attempts=3
 # well as destructive interference between tests.
 test:ci --local_test_jobs=1
 test:ci --test_strategy=exclusive
+test:ci --strategy=TestRunner=standalone
 """
 
 def get_copyright_header() -> str:
