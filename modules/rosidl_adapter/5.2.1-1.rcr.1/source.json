@@ -6,7 +6,7 @@
     "overlay": {
         "rules.bzl": "sha256-1SRch1sV5b2Ya/+YmB8WZlcUJN0b1xl/1z54IJMnU/k=",
         "aspects.bzl": "sha256-2L4dUPZvgPgbi8Wl4WukBvPlM+4Lw7FQkxsI1RIx+aU=",
-        "tools.bzl": "sha256-rC3gG7/2sX3NpOGYw/KQsLIw71w6Fn5O5q8fw8gGbnc=",
+        "tools.bzl": "sha256-r+MPwr/YQMNpYmp/R+KaNgMHeZZvvC7EzE+YSXgQqcU=",
         "BUILD.bazel": "sha256-r0ij7hAgMbtGPLdLSI3WYqbKVwkr5pTAzcI+6z8zK9M=",
         "defs.bzl": "sha256-xmQs3Os3g/Nu/n34p3kkokivBaZY0Koyeragv3nxa0k=",
         "types.bzl": "sha256-OMrNf68IO6Es4E2obs7YqyXK6CyMc1rfJy284ff6YCs=",

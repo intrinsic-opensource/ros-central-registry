@@ -211,11 +211,13 @@ def generate_compilation_information(
 
     is_darwin = "apple" in cc_toolchain.target_gnu_system_name
 
-    dynamic_library_linking_contexts = static_linking_contexts + [
-        dep.linking_context
-        for dep in header_only_deps
-        if not is_darwin
-    ]
+    if is_darwin:
+        dynamic_library_linking_contexts = static_linking_contexts + dynamic_linking_contexts
+    else:
+        dynamic_library_linking_contexts = static_linking_contexts + [
+            dep.linking_context
+            for dep in header_only_deps
+        ]
 
     static_linking_contexts_to_propagate = static_linking_contexts + [
         dep.linking_context
@@ -232,7 +234,6 @@ def generate_compilation_information(
             linking_context = linking_context,
         )
         return cc_info, []
-
 
     linking_outputs = cc_common.link(
         name = name,
