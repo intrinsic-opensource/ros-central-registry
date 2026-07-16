@@ -177,44 +177,10 @@ def generate_compilation_information(
         header_only_deps = [],
         dynamic_dep_linker_inputs = [],
         custom_name = None):
-    """Generate language bindings
+    """Generate language bindings"""
 
-    Args:
-        header_only_deps: CcInfo providers contributing headers/includes
-            (via compilation_context) but NOT statically linked. Use this
-            for a singleton library (e.g. rosidl_typesupport_cpp itself)
-            that every generated fragment needs to *compile* against but
-            must never duplicate into its own object code -- see
-            dynamic_dep_linker_inputs.
-        dynamic_dep_linker_inputs: LinkerInputs (e.g.
-            CcSharedLibraryInfo.linker_input from the corresponding
-            cc_shared_library's transitive closure) to link against
-            dynamically instead of statically. These already wrap
-            fully-formed LibraryToLink objects -- notably ones Bazel has
-            already routed through its solib symlink machinery, because
-            they come from a cc_shared_library's own dynamic_deps closure
-            (see collect_transitive_dynamic_deps in rosdistro's cc/rules.bzl)
-            -- so they're merged into a LinkingContext directly rather than
-            rebuilt via cc_common.create_library_to_link(), which asserts
-            its `dynamic_library` file isn't itself already a solib symlink
-            and crashes Bazel with an IllegalArgumentException in
-            SolibSymlinkAction otherwise. Every message/typesupport fragment
-            here gets compiled into its own standalone shared library; if a
-            singleton dependency's object code were pulled in via
-            deps/header_only_deps' linking_context instead, each fragment
-            would get its own private copy of that dependency's global state
-            (e.g. rosidl_typesupport_cpp's typesupport identifier constant).
-            On Linux the ELF loader merges same-named globals across shared
-            objects by default so the duplication is invisible; Darwin's
-            two-level namespace does not merge them, so two fragments'
-            copies of "the same" global can disagree at runtime. Route
-            singleton deps through here instead of deps.
-    """
-
-    # Query for the current CC toolchain and feature set.
     cc_toolchain = find_cc_toolchain(ctx)
 
-    # Get the compiler feature configuration.
     feature_configuration = cc_common.configure_features(
         ctx = ctx,
         cc_toolchain = cc_toolchain,
@@ -222,38 +188,6 @@ def generate_compilation_information(
         unsupported_features = ctx.disabled_features,
     )
 
-    # Each generated fragment is compiled into its own shared library, so it is
-    # always the "owner" of the symbols its rosidl visibility_control header
-    # guards. On Windows that header resolves <PREFIX>_PUBLIC[_<pkg>] to
-    # dllimport unless the corresponding <PREFIX>_BUILDING_DLL[_<pkg>] macro is
-    # defined while compiling the fragment's own sources -- and clang rejects a
-    # dllimport attribute on a (non-inline) function *definition*, so every
-    # message package fails to compile without it. Derive the prefix from
-    # `name`, which each rosidl aspect formats as
-    # "<pkg>__<interface_type>__<interface_code>__<generator>" (e.g.
-    # "builtin_interfaces__msg__Duration__rosidl_generator_c"): the generator
-    # segment uppercased is exactly the visibility macro prefix
-    # (ROSIDL_GENERATOR_C, ROSIDL_TYPESUPPORT_CPP, ...). The generators disagree
-    # on whether BUILDING_DLL is namespaced by package: rosidl_generator_c/cpp
-    # and the fastrtps typesupports use <PREFIX>_BUILDING_DLL_<pkg>, while the
-    # plain and introspection typesupports use a bare <PREFIX>_BUILDING_DLL. We
-    # define both forms; the unused one is harmless. No-op on non-Windows
-    # platforms, where the header's dllexport/dllimport block is guarded by
-    # `defined _WIN32 || defined __CYGWIN__`.
-    local_defines = []
-    name_parts = name.split("__")
-    if len(name_parts) >= 4:
-        prefix = name_parts[-1].upper()
-        local_defines = [
-            "{}_BUILDING_DLL".format(prefix),
-            "{}_BUILDING_DLL_{}".format(prefix, name_parts[0]),
-            # The protobuf generators (rosidl_adapter_proto,
-            # rosidl_typesupport_protobuf_c/cpp) namespace the macro with a
-            # double underscore: <PREFIX>_BUILDING_DLL__<pkg>.
-            "{}_BUILDING_DLL__{}".format(prefix, name_parts[0]),
-        ]
-
-    # Get a compilation context
     (compilation_context, compilation_outputs) = cc_common.compile(
         name = name + "_compile",
         actions = ctx.actions,
@@ -261,7 +195,6 @@ def generate_compilation_information(
         cc_toolchain = cc_toolchain,
         srcs = srcs,
         public_hdrs = hdrs,
-        local_defines = local_defines,
         compilation_contexts = [dep.compilation_context for dep in deps] +
                                [dep.compilation_context for dep in header_only_deps],
         includes = include_dirs,
@@ -276,38 +209,18 @@ def generate_compilation_information(
         for linker_input in dynamic_dep_linker_inputs
     ]
 
-    # On Darwin, singleton deps (e.g. rosidl_runtime_c) are passed via
-    # header_only_deps/dynamic_dep_linker_inputs to avoid duplicating their global
-    # state across fragments under Darwin's two-level namespace. On Linux the
-    # ELF loader merges same-named globals at load time, so we fall back to the
-    # original approach of statically linking header_only_deps into each
-    # fragment -- this keeps all runtime deps self-contained in the .so and
-    # avoids needing to propagate transitive .so deps as runfiles.
-    # Windows needs the same dynamic treatment as Darwin, for a different
-    # reason: a singleton's public symbols (e.g. the typesupport_identifier
-    # constant) are declared __declspec(dllimport) in its headers, so a fragment
-    # that references them must import them from the singleton's DLL. Statically
-    # linking the singleton's archive instead leaves the dllimport reference
-    # unsatisfied -- ld.lld reports "undefined symbol: __declspec(dllimport) ..."
-    # and notes the symbol is in the .a "but cannot be used because it is not an
-    # import library". Routing the singleton through dynamic_dep_linker_inputs makes
-    # the fragment link against the .dll and import the symbol.
     is_darwin = "apple" in cc_toolchain.target_gnu_system_name
-    is_windows = "windows" in cc_toolchain.target_gnu_system_name or "mingw" in cc_toolchain.target_gnu_system_name
 
-    # Linking contexts used for building the fragment shared library (.dylib / .so / .dll).
-    if is_darwin or is_windows:
-        dynamic_library_linking_contexts = static_linking_contexts + dynamic_linking_contexts
-    else:
-        dynamic_library_linking_contexts = static_linking_contexts + [
-            dep.linking_context
-            for dep in header_only_deps
-        ]
+    dynamic_library_linking_contexts = static_linking_contexts + [
+        dep.linking_context
+        for dep in header_only_deps
+        if not is_darwin
+    ]
 
-    # Linking contexts propagated to static consumers of this fragment (via CcInfo).
     static_linking_contexts_to_propagate = static_linking_contexts + [
         dep.linking_context
         for dep in header_only_deps
+        if not is_darwin
     ]
 
     if not srcs:
@@ -320,9 +233,7 @@ def generate_compilation_information(
         )
         return cc_info, []
 
-    # Link the fragment into its own shared library. Done before building the
-    # consumer-facing linking context below so that on Windows that context can
-    # point at this DLL.
+
     linking_outputs = cc_common.link(
         name = name,
         actions = ctx.actions,
@@ -335,7 +246,6 @@ def generate_compilation_information(
     )
     lib_to_link = linking_outputs.library_to_link
 
-    # Decide if we need to symlink to the python module library.
     old_lib_file = lib_to_link.resolved_symlink_dynamic_library or lib_to_link.dynamic_library
     if custom_name:
         new_lib_file = ctx.actions.declare_file(custom_name)
@@ -347,17 +257,6 @@ def generate_compilation_information(
     else:
         dynamic_libraries = [old_lib_file]
 
-    # We need a linking context so that consumers can link against this fragment.
-    # On Windows each fragment's public symbols are __declspec(dllimport) to its
-    # consumers (a dependent typesupport fragment, the next package's messages,
-    # ...), so a consumer that statically linked this fragment's object code
-    # would leave those imports unsatisfied -- ld.lld reports "undefined symbol:
-    # __declspec(dllimport) <pkg>__msg__<Msg>__init" and similar. Hand consumers
-    # a context that imports from this fragment's DLL instead; the fragment's own
-    # transitive contexts (its deps' DLLs and the dynamic singletons) are merged
-    # in so they propagate too. Elsewhere keep bundling the objects into the
-    # consumer (Linux merges duplicate globals at load time; Darwin routes the
-    # singletons through dynamic_dep_linker_inputs).
     static_linking_context, static_linking_outputs = cc_common.create_linking_context_from_compilation_outputs(
         actions = ctx.actions,
         feature_configuration = feature_configuration,
@@ -366,33 +265,11 @@ def generate_compilation_information(
         linking_contexts = static_linking_contexts_to_propagate,
         name = name + "_link",
     )
-    if is_windows:
-        static_lib = static_linking_outputs.library_to_link
-        own_library = cc_common.create_library_to_link(
-            actions = ctx.actions,
-            feature_configuration = feature_configuration,
-            cc_toolchain = cc_toolchain,
-            static_library = static_lib.static_library,
-            pic_static_library = static_lib.pic_static_library,
-            dynamic_library = old_lib_file,
-        )
-        own_context = cc_common.create_linking_context(
-            linker_inputs = depset(direct = [cc_common.create_linker_input(
-                owner = ctx.label,
-                libraries = depset(direct = [own_library]),
-            )]),
-        )
-        linking_context = cc_common.merge_linking_contexts(
-            linking_contexts = [own_context] + static_linking_contexts_to_propagate,
-        )
-    else:
-        linking_context = static_linking_context
+    linking_context = static_linking_context
 
-    # The standard CcInfo.
     cc_info = CcInfo(
         compilation_context = compilation_context,
         linking_context = linking_context,
     )
 
-    # Return the CcInfo and the path to the resulting dynamic library.
     return cc_info, dynamic_libraries
