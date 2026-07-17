@@ -1,0 +1,38 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Triggered manually using the GitHub action interface. It requests
+# a release name, in <distribution>/<date>.rcr.<n> where N is an
+# integer strictly greater than or equal to one. It then zips the
+# documentation and all modules as a release artifact, and finally
+# pushes the release name as a tag along with the artifact. The
+# maintainer will then go and add some release notes.
+
+# changes_tooling = True || changes_staged = True || changes_modules = True || changes_distribution = True
+# ros_release:
+#   name: Test upstream colcon
+#   needs:
+#   - distribution_examples
+#   - test_rmw_fastrtps_cpp
+#   - test_rmw_fastrtps_dynamic_cpp
+#   - test_rmw_cyclonedds_cpp
+#   - test_rmw_zenoh_cpp
+#   permissions:
+#     pull-requests: write
+#     contents: write
+#   uses: ./.github/workflows/_check_ros_release.yml
+#   with:
+#     distribution: ${{ inputs.distribution || 'lyrical' }}
+#     date: ${{ inputs.date || '2026-06-08' }}
+#   secrets: inherit

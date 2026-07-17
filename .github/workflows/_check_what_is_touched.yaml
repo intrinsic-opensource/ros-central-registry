@@ -1,0 +1,159 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Reusable workflow: checks what paths were modified in the commit or PR,
+# and outputs boolean variables + sets corresponding PR labels.
+# Called (never triggered directly) from ci.yaml.
+
+name: _check_what_is_touched
+
+on:
+  workflow_call:
+    outputs:
+      changes_docs:
+        description: "True if only docs or workspace configs changed"
+        value: ${{ jobs.detect_changes.outputs.changes_docs }}
+      changes_examples:
+        description: "True if examples changed"
+        value: ${{ jobs.detect_changes.outputs.changes_examples }}
+      changes_staged:
+        description: "True if bcr_staging changed"
+        value: ${{ jobs.detect_changes.outputs.changes_staged }}
+      changes_modules:
+        description: "True if modules changed"
+        value: ${{ jobs.detect_changes.outputs.changes_modules }}
+      changes_tooling:
+        description: "True if tooling changed"
+        value: ${{ jobs.detect_changes.outputs.changes_tooling }}
+
+jobs:
+  detect_changes:
+    name: Detect changes
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      pull-requests: write
+    outputs:
+      changes_docs: ${{ steps.filter.outputs.changes_docs }}
+      changes_examples: ${{ steps.filter.outputs.changes_examples }}
+      changes_staged: ${{ steps.filter.outputs.changes_staged }}
+      changes_modules: ${{ steps.filter.outputs.changes_modules }}
+      changes_tooling: ${{ steps.filter.outputs.changes_tooling }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+    - name: Check changed files
+      id: filter
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          base_ref="origin/${{ github.base_ref }}"
+        else
+          base_ref="HEAD~1"
+        fi
+        
+        changed_files=$(git diff --name-only "$base_ref...HEAD")
+        echo "Changed files:"
+        echo "$changed_files"
+        
+        changes_docs="true"
+        for file in $changed_files; do
+          if [[ ! "$file" =~ ^docs/ && "$file" =~ / ]]; then
+            changes_docs="false"
+            break
+          fi
+        done
+        
+        changes_examples="false"
+        for file in $changed_files; do
+          if [[ "$file" =~ ^examples/ ]]; then
+            changes_examples="true"
+            break
+          fi
+        done
+        
+        changes_staged="false"
+        for file in $changed_files; do
+          if [[ "$file" =~ ^bcr_staging/ ]]; then
+            changes_staged="true"
+            break
+          fi
+        done
+        
+        changes_modules="false"
+        for file in $changed_files; do
+          if [[ "$file" =~ ^modules/ ]]; then
+            changes_modules="true"
+            break
+          fi
+        done
+        
+        changes_tooling="false"
+        for file in $changed_files; do
+          if [[ "$file" =~ ^tools/ ]]; then
+            changes_tooling="true"
+            break
+          fi
+        done
+        
+        echo "changes_docs=$changes_docs"
+        echo "changes_docs=$changes_docs" >> "$GITHUB_OUTPUT"
+        echo "changes_examples=$changes_examples"
+        echo "changes_examples=$changes_examples" >> "$GITHUB_OUTPUT"
+        echo "changes_staged=$changes_staged"
+        echo "changes_staged=$changes_staged" >> "$GITHUB_OUTPUT"
+        echo "changes_modules=$changes_modules"
+        echo "changes_modules=$changes_modules" >> "$GITHUB_OUTPUT"
+        echo "changes_tooling=$changes_tooling"
+        echo "changes_tooling=$changes_tooling" >> "$GITHUB_OUTPUT"
+        
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          if [ "$changes_docs" = "true" ]; then
+            gh label create "documentation" --color "bfd4f2" --description "Affects documentation" --force || true
+            gh pr edit "${{ github.event.pull_request.number }}" --add-label "documentation"
+          else
+            gh pr edit "${{ github.event.pull_request.number }}" --remove-label "documentation" || true
+          fi
+          
+          if [ "$changes_examples" = "true" ]; then
+            gh label create "examples" --color "0075ca" --description "Affects examples" --force || true
+            gh pr edit "${{ github.event.pull_request.number }}" --add-label "examples"
+          else
+            gh pr edit "${{ github.event.pull_request.number }}" --remove-label "examples" || true
+          fi
+          
+          if [ "$changes_staged" = "true" ]; then
+            gh label create "bcr staging" --color "fef2c0" --description "Affects staged BCR modules" --force || true
+            gh pr edit "${{ github.event.pull_request.number }}" --add-label "bcr staging"
+          else
+            gh pr edit "${{ github.event.pull_request.number }}" --remove-label "bcr staging" || true
+          fi
+          
+          if [ "$changes_modules" = "true" ]; then
+            gh label create "modules" --color "c5def5" --description "Affects RCR modules" --force || true
+            gh pr edit "${{ github.event.pull_request.number }}" --add-label "modules"
+          else
+            gh pr edit "${{ github.event.pull_request.number }}" --remove-label "modules" || true
+          fi
+          
+          if [ "$changes_tooling" = "true" ]; then
+            gh label create "tooling" --color "5319e7" --description "Affects tooling scripts" --force || true
+            gh pr edit "${{ github.event.pull_request.number }}" --add-label "tooling"
+          else
+            gh pr edit "${{ github.event.pull_request.number }}" --remove-label "tooling" || true
+          fi
+        fi
