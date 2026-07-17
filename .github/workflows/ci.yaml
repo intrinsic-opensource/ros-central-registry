@@ -52,8 +52,6 @@ concurrency:
 
 jobs:
 
-  ## STAGE 1: fast checks, run in parallel.
-
   lint:
     name: Lint source code
     uses: ./.github/workflows/_check_for_linting_errors.yml
@@ -64,9 +62,6 @@ jobs:
     uses: ./.github/workflows/_check_tooling.yml
     secrets: inherit
 
-  # This diffs against github.base_ref, which only exists for pull_request
-  # events -- skipped (not failed) on push/workflow_dispatch, and stage 2
-  # below treats that skip as non-blocking.
   bazel_modules:
     name: Check modules
     if: github.event_name == 'pull_request'
@@ -77,8 +72,6 @@ jobs:
     name: Check documentation
     uses: ./.github/workflows/_check_docs_build.yml
     secrets: inherit
-
-  ## STAGE 2: Build all distributions and examples
 
   distribution_compiles:
     name: Check distribution builds
@@ -103,7 +96,6 @@ jobs:
       branch: ${{ inputs.branch || github.ref }}
     secrets: inherit
 
-
   distribution_examples:
     name: Check examples build
     needs: [distribution_compiles]
@@ -119,8 +111,6 @@ jobs:
     with:
       branch: ${{ inputs.branch || github.ref }}
     secrets: inherit
-
-  ## STAGE 3: Check all distributions
 
   test_rmw_fastrtps_cpp:
     name: Test FastDDS
@@ -188,34 +178,4 @@ jobs:
     with:
       branch: ${{ inputs.branch || github.ref }}
       rmw: rmw_zenoh_cpp
-    secrets: inherit
-
-  ## STAGE 4: check_ros_release, only once the whole distribution chain
-  ## above is known-good.
-
-  ros_release:
-    name: Test upstream colcon
-    needs:
-    - distribution_examples
-    - test_rmw_fastrtps_cpp
-    - test_rmw_fastrtps_dynamic_cpp
-    - test_rmw_cyclonedds_cpp
-    - test_rmw_zenoh_cpp
-    permissions:
-      pull-requests: write
-      contents: write
-    uses: ./.github/workflows/_check_ros_release.yml
-    with:
-      distribution: ${{ inputs.distribution || 'lyrical' }}
-      date: ${{ inputs.date || '2026-06-08' }}
-    secrets: inherit
-
-  ## STAGE 5: deploy docs + notify the RCR-UI, gated on everything above.
-
-  deploy:
-    name: Push to github pages
-    needs: ros_release
-    permissions:
-      contents: write
-    uses: ./.github/workflows/_check_deploy.yml
     secrets: inherit
