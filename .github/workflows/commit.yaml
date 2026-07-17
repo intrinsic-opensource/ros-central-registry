@@ -27,7 +27,7 @@ on:
       - main
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: commit-${{ github.ref }}
   cancel-in-progress: true
 
 # Prevents Android .bazelrc from affecting setup-bazel.

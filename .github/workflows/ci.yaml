@@ -22,32 +22,9 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch name to check out for check_distribution.'
-        default: 'lyrical.2026-06-08.rcr.1'
-        required: true
-        type: string
-      distribution:
-        description: 'Which distribution is the release for (check_ros_release)?'
-        required: true
-        type: choice
-        options:
-        - 'lyrical'
-        - 'rolling'
-        default: 'lyrical'
-      date:
-        description: 'Release in YYYY-MM-DD, for check_ros_release. Default is 2026-06-08.'
-        default: '2026-06-08'
-        required: true
-        type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name == 'workflow_dispatch' && format('{0}/{1}/{2}', inputs.branch, inputs.distribution, inputs.date) || (github.event.pull_request.number || github.ref) }}
+  group: ci-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
