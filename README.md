@@ -80,7 +80,6 @@ The <a href="http://intrinsic-opensource.github.io/ros-central-registry">ROS Cen
         <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_ubuntu-26.04-arm_test_rmw_zenoh_cpp.json"/>
       </td>
     </tr>
-    <!-- DISABLED FOR NOW
     <tr>
       <td>macos-26-intel</td>
       <td align="center">
@@ -91,22 +90,7 @@ The <a href="http://intrinsic-opensource.github.io/ros-central-registry">ROS Cen
         <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.5.1_macos-26-intel_build.json"/>
         <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_macos-26-intel_build.json"/>
       </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.5.1_macos-26-intel_test_rmw_fastrtps_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_macos-26-intel_test_rmw_fastrtps_cpp.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.5.1_macos-26-intel_test_rmw_fastrtps_dynamic_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_macos-26-intel_test_rmw_fastrtps_dynamic_cpp.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.5.1_macos-26-intel_test_rmw_cyclonedds_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_macos-26-intel_test_rmw_cyclonedds_cpp.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.5.1_macos-26-intel_test_rmw_zenoh_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_macos-26-intel_test_rmw_zenoh_cpp.json"/>
-      </td>
+      <td colspan="4" align="center"><i>disabled</i></td>
     </tr>
     <tr>
       <td>macos-26</td>
@@ -118,28 +102,12 @@ The <a href="http://intrinsic-opensource.github.io/ros-central-registry">ROS Cen
         <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.5.1_macos-26_build.json"/>
         <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_macos-26_build.json"/>
       </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.5.1_macos-26_test_rmw_fastrtps_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_macos-26_test_rmw_fastrtps_cpp.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.5.1_macos-26_test_rmw_fastrtps_dynamic_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_macos-26_test_rmw_fastrtps_dynamic_cpp.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.5.1_macos-26_test_rmw_cyclonedds_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_macos-26_test_rmw_cyclonedds_cpp.json"/>
-      </td>
-      <td align="center">
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_8.5.1_macos-26_test_rmw_zenoh_cpp.json"/>
-        <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/asymingt/f796805a77e0f05cc837b18e60142773/raw/lyrical.2026-06-08.rcr.1_perception_9.1.1_macos-26_test_rmw_zenoh_cpp.json"/>
-      </td>
+      <td colspan="4" align="center"><i>disabled</i></td>
     </tr>
-    -->
   </tbody>
 </table>
 
-<i>Although the code builds and passes tests on mac-16 and mac-26-intel machines, the free GitHub workers for these machine types are too slow, and so we get nondeterministic timing failures in CI. For this reason CI has mac workers disabled for now.</i>
+<i>Although the code builds and passes tests on macos-26 and macos-26-intel machines, the free GitHub workers for these machine types are too slow, and so we get nondeterministic timing failures in CI. For this reason CI has mac workers disabled for now.</i>
 
 # Prerequisites
 
