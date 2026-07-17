@@ -61,7 +61,6 @@ bazel_dep(name = "examples_rclpy_minimal_service", version = "0.0.0")
 bazel_dep(name = "examples_rclpy_minimal_subscriber", version = "0.0.0")
 bazel_dep(name = "examples_rclpy_pointcloud_publisher", version = "0.0.0")
 bazel_dep(name = "examples_tf2_py", version = "0.0.0")
-bazel_dep(name = "rclc", version = "0.0.0")
 bazel_dep(name = "rclcpp", version = "0.0.0")
 bazel_dep(name = "rclpy", version = "0.0.0")
 bazel_dep(name = "rosdistro", version = "0.0.0")
@@ -69,6 +68,10 @@ bazel_dep(name = "rosidl_core_generators", version = "0.0.0")
 bazel_dep(name = "rmw_implementation", version = "0.0.0")
 bazel_dep(name = "sensor_msgs", version = "0.0.0")
 bazel_dep(name = "std_msgs", version = "0.0.0")
+
+# The C examples require rclc, which is not part of the "perception" variant.
+# Nevertheless, we can bring the package in if we know its version.
+bazel_dep(name = "rclc", version = "6.3.0-3.rcr.1")
 
 ## BOOTSTRAP
 
