@@ -19,7 +19,7 @@ def main():
         shutil.rmtree(build_dir)
     os.makedirs(build_dir, exist_ok=True)
 
-    print(f"Starting sphinx-autobuild...")
+    print("Starting sphinx-autobuild...")
     print(f"  Source: {docs_dir}")
     print(f"  Build:  {build_dir}")
 

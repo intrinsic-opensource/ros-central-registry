@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-dkI9q4M5cHsDP5N6WhoebkraFXepA4bYpSO+2JLyjBI=",
+    "url": "https://github.com/ros2-gbp/ffmpeg_image_transport-release/archive/refs/tags/upstream/3.0.3.tar.gz",
+    "strip_prefix": "ffmpeg_image_transport-release-upstream-3.0.3"
+}

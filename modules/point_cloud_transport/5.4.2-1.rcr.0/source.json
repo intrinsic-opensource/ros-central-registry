@@ -1,0 +1,12 @@
+{
+    "integrity": "sha256-lLj70/P5cr1luen5o/lI5A6o7LJYqRGW6pCVZJyXJ2k=",
+    "url": "https://github.com/ros2-gbp/point_cloud_transport-release/archive/refs/tags/release/lyrical/point_cloud_transport/5.4.2-1.tar.gz",
+    "strip_prefix": "point_cloud_transport-release-release-lyrical-point_cloud_transport-5.4.2-1",
+    "patch_strip": 1,
+    "overlay": {
+        "BUILD.bazel": "sha256-AFN4wNhtpbB5kyJNnYUj33ceG9Vyhw4lO2NyIv7lI2o="
+    },
+    "patches": {
+        "src__point_cloud_transport__cpp.patch": "sha256-N0zIsIfzJxCj0Cngu7YYh2Hh+hQslNUWE3WNUtsb9AA="
+    }
+}

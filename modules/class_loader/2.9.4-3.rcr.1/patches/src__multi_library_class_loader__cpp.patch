@@ -1,0 +1,28 @@
+--- a/src/multi_library_class_loader.cpp
++++ b/src/multi_library_class_loader.cpp
+@@ -30,11 +30,14 @@
+ #include "class_loader/multi_library_class_loader.hpp"
+ 
++#include <cstdlib>
+ #include <cstddef>
+ #include <mutex>
+ #include <string>
+ #include <vector>
+ 
+ namespace class_loader
+ {
+ 
++void set_exiting();
++
+ typedef std::vector<std::shared_ptr<class_loader::ClassLoader>> ClassLoaderPtrVector;
+@@ -75,5 +78,10 @@
+ ClassLoaderPtrVectorImpl & getClassLoaderPtrVectorImpl()
+ {
+   static ClassLoaderPtrVectorImpl instance;
++  static bool registered = false;
++  if (!registered) {
++    std::atexit(set_exiting);
++    registered = true;
++  }
+   return instance;
+ }

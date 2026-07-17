@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-fedx4rlCiHkgbqet5zDUdFQXZIyO+wwcoCzo7/frJfY=",
+    "url": "https://github.com/ros2-gbp/nav2_minimal_turtlebot_simulation-release/archive/refs/tags/upstream/1.2.0.tar.gz",
+    "strip_prefix": "nav2_minimal_turtlebot_simulation-release-upstream-1.2.0/nav2_minimal_tb4_description"
+}

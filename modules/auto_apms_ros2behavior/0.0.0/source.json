@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-AjWyf9o7fgJK6IuilP8yNo2ewM+eXEqTknqNaK0omPc=",
+    "url": "https://github.com/ros2-gbp/autoapms-release/archive/refs/tags/upstream/1.5.1.tar.gz",
+    "strip_prefix": "autoapms-release-upstream-1.5.1/auto_apms_ros2behavior"
+}

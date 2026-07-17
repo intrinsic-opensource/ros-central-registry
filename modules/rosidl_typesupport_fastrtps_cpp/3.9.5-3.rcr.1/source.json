@@ -1,0 +1,16 @@
+{
+    "integrity": "sha256-ldO7yfuj/YdGX/tMRqpKAcLz9S1UxetRyps2OZ1FwEQ=",
+    "url": "https://github.com/ros2-gbp/rosidl_typesupport_fastrtps-release/archive/refs/tags/release/lyrical/rosidl_typesupport_fastrtps_cpp/3.9.5-3.tar.gz",
+    "strip_prefix": "rosidl_typesupport_fastrtps-release-release-lyrical-rosidl_typesupport_fastrtps_cpp-3.9.5-3",
+    "patch_strip": 1,
+    "overlay": {
+        "aspects.bzl": "sha256-ihTlU9B82mkSPU2bz2r4L48mc/FwzpiYrUF4ed9rugc=",
+        "BUILD.bazel": "sha256-FMLwAacKe0gYfoKgCN4XkEXtAShYfu5XXlbfqDNkaUw=",
+        "defs.bzl": "sha256-NU6MmpsKTQJE+5DJiAhNbNR2nLDix+d8DuyMxKCYq64=",
+        "types.bzl": "sha256-RLcmpOqdP9NKbPcwr7NXcW2eGpKVlvbeWb0ppPYJtYE=",
+        "test/msg/BUILD.bazel": "sha256-9nEFAT5vzZJtPwqJCT1X0YOlhIJlJ2/6iDVJwmQCi5o="
+    },
+    "patches": {
+        "rosidl_typesupport_fastrtps_cpp____init____py.patch": "sha256-OkBhb71yNdBYq1nkgAsr/hHTNipHaz9ZWyFb84VNk+c="
+    }
+}

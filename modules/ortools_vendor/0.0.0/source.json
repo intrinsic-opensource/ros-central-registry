@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-LApI++1wcatHY656AlgQS1nDc27kCzOvFu65YpvvhWU=",
+    "url": "https://github.com/ros2-gbp/ortools_vendor-release/archive/refs/tags/upstream/9.9.0.tar.gz",
+    "strip_prefix": "ortools_vendor-release-upstream-9.9.0"
+}

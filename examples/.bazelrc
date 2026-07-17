@@ -1,0 +1,173 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+## COMMON OPTIONS
+
+# This suppresses warnings that bazel emits when two dependencies rely
+# on different versions of a single module. This is what allows us to
+# load 0.0.0 versions of RCR package and have bazel resolve the correct
+# package for the ROS distribution we are using.
+common --check_direct_dependencies=off
+
+# This tells Bazel to look locally for RCR modules at the root of this
+# project, additional "staged" BCR modules in the bcr_staging folder
+# in this workspace, and ultimately at the BCR for the rest.
+common --registry=file:///%workspace%/..             \
+       --registry=file:///%workspace%/../bcr_staging \
+       --registry=https://bcr.bazel.build
+
+# This provides read-only access to a shared Bazel remote cache offered
+# by Intrinsic. It helps speed up fresh checkouts from upstream.
+common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
+common --remote_upload_local_results=false
+common --remote_cache_compression=true
+
+# Critical ROS environment variables needed at test-time.
+common --test_env=ROS_DISTRO="lyrical"
+common --test_env=ROS_HOME=".ros"
+common --test_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
+common --test_env=LD_LIBRARY_PATH=lib
+common --test_env=DYLD_LIBRARY_PATH=lib
+common --test_env=TMPDIR=/tmp
+
+# Critical ROS environment variables needed at run-time.
+common --run_env=ROS_DISTRO="lyrical"
+common --run_env=ROS_HOME=".ros"
+common --run_env=RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
+common --run_env=LD_LIBRARY_PATH=lib
+common --run_env=DYLD_LIBRARY_PATH=lib
+common --run_env=TMPDIR=/tmp
+
+# Propagate select X11 variables through to the test sandbox, so that
+# any test that uses the display has access to it.
+common --test_env=DISPLAY
+common --test_env=XAUTHORITY
+common --test_env=WAYLAND_DISPLAY
+
+# Our approach to message generation works on a per-message dependency
+# chain. We need to be able to merge messages into 
+common --incompatible_default_to_explicit_init_py
+
+# This restricts the environment variables available to build actions, 
+# keeping the build environment more hermetic.
+common --incompatible_strict_action_env
+
+# Use a shared cache for bazel builds, which speeds up CI builds.
+common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildcache
+common --remote_cache_compression=true
+common --remote_upload_local_results=false
+
+# CI specific options for remote cache writing and performance tweaks.
+common:ci --remote_upload_local_results=true
+common:ci --google_default_credentials
+common:ci --http_timeout_scaling=3.0
+common:ci --experimental_repository_downloader_retries=10
+common:ci --remote_cache_compression=false
+common:ci --nobuild_runfile_links
+common:ci --ui_event_filters=-INFO,-DEBUG
+
+# Automatically pick configurations for the platform running bazel.
+# For example, macos on macos, linux on linux, etc.
+common --enable_platform_specific_config
+
+# Stop the profiler from being fatal — even with less build pressure,
+# a resource issue shouldn't take down the whole bazel command.
+common --noexperimental_collect_system_network_usage
+
+## BUILD OPTIONS
+
+# Assume a build for a developer machine and only download the toplevel
+# artifacts. Let the runfiles and intermediate artifacts build on demand.
+build --remote_download_toplevel
+
+# Some packages bake a scratch-directory path into compiled test binaries via
+# local_defines (e.g. rcutils' BUILD_DIR), which --test_env/--run_env can't
+# reach since it's resolved at compile time, not test run-time. Expose the
+# same caller-resolved TMPDIR (see above) as a Make variable so those
+# local_defines/env attributes can pick it up via $(TMPDIR) substitution.
+build --define=TMPDIR=/tmp
+
+# Ensure that we use toolchains_llvm instead of the host toolchain.
+build --repo_env="BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1"
+
+# Ignore any host-level pip configurations and pull public python dependencies.
+build --repo_env="PIP_CONFIG_FILE=/dev/null"
+
+# Our bazel distribution provides conversion utilities for transforming
+# ROS messages to .proto files. This prevent protobuf from trying to
+# recompile itself in response to environment changes.
+build --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
+
+# This tells our hermetic LLVM compiler to stub some GCC functions that
+# are used in several places around the ROS Bazel workspace/
+build --@llvm//config:experimental_stub_libgcc_s=True
+
+# ld64's two-level namespace requires every undefined symbol in a .dylib to
+# be resolvable among the libraries passed directly to its link command.
+# Our rosidl-generated cc_shared_library targets commonly need symbols from
+# libraries that are several dynamic_deps hops away, which the ELF loader on
+# Linux resolves transitively at process load time with no issue. On Darwin
+# we fall back to flat-namespace symbol lookup at load time instead.
+build:macos --linkopt=-Wl,-undefined,dynamic_lookup
+build:macos --host_linkopt=-Wl,-undefined,dynamic_lookup
+
+# Our hermetic macOS toolchain passes clang's SDK header search path via
+# "-isysroot <execroot-relative path>" (see the `llvm` module's
+# toolchain/args/macos:macos_sdk_sysroot, which needs -isysroot specifically
+# so Clang's Darwin driver resolves framework headers -- it checks -isysroot
+# before --sysroot). That relative path only resolves when the compiler's
+# current directory is the exec root. Cargo build scripts run with their
+# current directory changed to CARGO_MANIFEST_DIR instead, so any cc-rs
+# invocation that inherits these flags (e.g. the `ring` crate's build script,
+# used by zenoh's TLS transport) fails with "file not found" for SDK headers
+# like TargetConditionals.h. rules_rust/rules_rs have a purpose-built escape
+# hatch for exactly this: symlink the exec root's top-level entries into
+# CARGO_MANIFEST_DIR so exec-root-relative paths keep resolving.
+build:macos --@@rules_rs++rules_rust+rules_rust//cargo/settings:experimental_symlink_execroot=true
+
+# The Apple SDK framework directories contain module.modulemap files that
+# activate Clang's implicit module system once a Frameworks directory is in
+# scope (as it now implicitly is, via --sysroot). Libraries like abseil-cpp
+# include CoreFoundation headers without declaring a module dependency, which
+# the module system rejects. -fno-implicit-module-maps is a clang driver flag
+# (not a cc1 flag); pass it directly without -Xclang.
+build:macos --copt=-fno-implicit-module-maps
+build:macos --host_copt=-fno-implicit-module-maps
+
+# Apple SDK framework headers use the CF_ENUM() macro, which expands to a forward
+# enum declaration inside a typedef -- a Clang extension that Clang supports but
+# warns about starting with Clang 22 (-Welaborated-enum-base). Suppress it so
+# CoreFoundation/CFBase.h and friends compile cleanly with the hermetic toolchain.
+build:macos --copt=-Wno-elaborated-enum-base
+build:macos --host_copt=-Wno-elaborated-enum-base
+
+# Fix memory pressure in CI workers, which leads to OOM errors.
+build:ci --jobs=4
+
+## TEST OPTIONS
+
+# This restricts our test sandboxes from accessing the network, which is
+# important if you want to prevent destructive interference between tests.
+# Note: this only applies to developer builds because github runners are
+#       in proceswrapper-sandbox and run 1 test at a time.
+test --sandbox_default_allow_network=false
+
+# Don't allow a flaky test to fail the entire run.
+test:ci --flaky_test_attempts=3
+
+# Limit local test concurrency on CI to prevent resource starvation, as
+# well as destructive interference between tests.
+test:ci --local_test_jobs=1
+test:ci --test_strategy=exclusive
+test:ci --strategy=TestRunner=standalone

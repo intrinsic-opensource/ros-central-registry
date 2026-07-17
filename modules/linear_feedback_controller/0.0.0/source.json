@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-PTCVukicdtqpnvWkSkDGogkNYT6c6QHh0HqVt4lo+dY=",
+    "url": "https://github.com/ros2-gbp/linear-feedback-controller-release/archive/refs/tags/upstream/3.2.0.tar.gz",
+    "strip_prefix": "linear-feedback-controller-release-upstream-3.2.0"
+}

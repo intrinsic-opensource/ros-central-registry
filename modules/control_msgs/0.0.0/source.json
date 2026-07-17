@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-JX0pAEVgv1mn2wMBQSsZN4MM2DcTx7Bk5fefji7tBMU=",
+    "url": "https://github.com/ros2-gbp/control_msgs-release/archive/refs/tags/upstream/6.9.0.tar.gz",
+    "strip_prefix": "control_msgs-release-upstream-6.9.0/control_msgs"
+}

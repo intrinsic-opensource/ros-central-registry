@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-BE/S467mO8a55hN7JUbvpAjn8y7eFsUWFFb5W3GmDMA=",
+    "url": "https://github.com/ros2-gbp/ros_testing-release/archive/refs/tags/upstream/0.9.1.tar.gz",
+    "strip_prefix": "ros_testing-release-upstream-0.9.1/ros2test"
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-IJ+XRl0tJgULE4ZH0bx7pc0NVkLag+4TAmAc7jIwB50=",
+    "url": "https://github.com/ros2-gbp/iceoryx-release/archive/refs/tags/upstream/2.0.5.tar.gz",
+    "strip_prefix": "iceoryx-release-upstream-2.0.5/iceoryx_hoofs"
+}

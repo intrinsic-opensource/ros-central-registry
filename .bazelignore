@@ -1,1 +1,6 @@
-submodules
+.github
+.cache
+bcr_staging
+examples
+modules
+workspace

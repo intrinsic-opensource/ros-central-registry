@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-y0jScXeOhaPY3b1vlDhuFDeB2jr7I0MCwCCjiAz4vlM=",
+    "url": "https://github.com/ros2-gbp/flir_camera_driver-release/archive/refs/tags/release/lyrical/spinnaker_camera_driver/3.0.5-1.tar.gz",
+    "strip_prefix": "flir_camera_driver-release-release-lyrical-spinnaker_camera_driver-3.0.5-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-m4RFvYxZ6CdgZ3qYsg7ffh885OUvI0t7GYkpjqjs0PU="
+    }
+}

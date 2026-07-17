@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-+jnlx6/JLe/fbf7gBfzKPaaUhmmOIxA08tmBiubUNK0=",
+    "url": "https://github.com/ros2-gbp/ros2_socketcan-release/archive/refs/tags/release/lyrical/ros2_socketcan_msgs/1.3.0-3.tar.gz",
+    "strip_prefix": "ros2_socketcan-release-release-lyrical-ros2_socketcan_msgs-1.3.0-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-73rHc868oAHPtKbOQfC2HWblFiHn8i6HKt9SJzFoHtk=",
+        "msg/BUILD.bazel": "sha256-rQsJ2/OhG/pUBbhT73HAgZwyah1rUWAZbWC4SWfiYDU="
+    }
+}

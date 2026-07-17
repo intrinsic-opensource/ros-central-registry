@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-Oyp6neR6t1qT5BrzLef5nu0tkbSnWTLs/7Nojg9p3NI=",
+    "url": "https://github.com/ros2-gbp/fuse-release/archive/refs/tags/release/lyrical/fuse_optimizers/1.3.3-1.tar.gz",
+    "strip_prefix": "fuse-release-release-lyrical-fuse_optimizers-1.3.3-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-b+Oacqdd9Td3q6Hn2LE9kcqSeIhBYlivMhW24HQiKfE="
+    }
+}

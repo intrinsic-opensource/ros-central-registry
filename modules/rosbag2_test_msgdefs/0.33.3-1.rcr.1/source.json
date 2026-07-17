@@ -1,0 +1,13 @@
+{
+    "integrity": "sha256-A3hfCJP9givcq9CUAFpTaoR0aO7dxKHWeMaiAkYEwrQ=",
+    "url": "https://github.com/ros2-gbp/rosbag2-release/archive/refs/tags/release/lyrical/rosbag2_test_msgdefs/0.33.3-1.tar.gz",
+    "strip_prefix": "rosbag2-release-release-lyrical-rosbag2_test_msgdefs-0.33.3-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-iaOKvaPzNKLL8Ysc7oOVA4tVQAqgDyYG94Vt9TwpSX4=",
+        "action/BUILD.bazel": "sha256-InAV45pc94cyaWBiXtjniPcVL6Ig/HGFM9E7sFhkFyA=",
+        "msg/BUILD.bazel": "sha256-dWukCDVDv2kMKM4Pd5Vhuqyrr7T0IEnepmC+0yT3EPk=",
+        "msg/nested_sub_dir/BUILD.bazel": "sha256-9ofTJzWCDCgivORSMvigHAuf/44Wv/IQhft4r8nMWoU=",
+        "nested_sub_dir/action/BUILD.bazel": "sha256-2x8Vnk6U4wjIGXt2UClQsbpPwKwSqLzQYy9ZUaLkdUo=",
+        "srv/BUILD.bazel": "sha256-TVk5PbVRNLlrbppHUwy6hqCmjOrJLbdaNFFB998nYlw="
+    }
+}

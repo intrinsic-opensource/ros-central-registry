@@ -1,0 +1,79 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Reusable workflow: checks that there are no buildifier or Python (ruff)
+# linting errors. Called (never triggered directly) from ci.yaml as part
+# of the stage-1 fail-fast gate.
+
+name: _check_for_linting_errors
+
+on:
+  workflow_call:
+
+env:
+  ANDROID_HOME: ""
+
+jobs:
+  check_for_linting_errors:
+    name: Lint all Bazel files
+    runs-on: ubuntu-26.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 1
+    - name: Setup buildifier
+      run: |
+        curl -L https://github.com/bazelbuild/buildtools/releases/download/v8.5.1/buildifier-linux-amd64 -o buildifier
+        chmod +x buildifier
+        sudo mv buildifier /usr/local/bin/buildifier
+    - name: Run buildifier
+      run: |
+        buildifier -mode check -r .
+    - name: Update status badges
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: linting.json
+        label: linting
+        message: ${{ job.status == 'success' && '✓' || 'x' }}
+        color: ${{ job.status == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
+
+  check_python_linting:
+    name: Lint all Python files
+    runs-on: ubuntu-26.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 1
+    - name: Run ruff
+      uses: astral-sh/ruff-action@v4.1.0
+      with:
+        src: >-
+          tools
+          examples
+          docs
+    - name: Update status badges
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: python_linting.json
+        label: python linting
+        message: ${{ job.status == 'success' && '✓' || 'x' }}
+        color: ${{ job.status == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)

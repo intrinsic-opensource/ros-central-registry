@@ -1,0 +1,11 @@
+{
+    "integrity": "sha256-HfCj0E/we6SEcVyy9icCZGaUWO1E8Yl9+Mt4I5aAAhc=",
+    "url": "https://github.com/ros2-gbp/rosbridge_suite-release/archive/refs/tags/release/lyrical/rosbridge_test_msgs/4.2.0-1.tar.gz",
+    "strip_prefix": "rosbridge_suite-release-release-lyrical-rosbridge_test_msgs-4.2.0-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-tO9NAUgVHVukKHGwIjE6G7klid5bNxSln2MRAFS69Yk=",
+        "action/BUILD.bazel": "sha256-kS0oIXnkc4AJNDbHOabtaBqhTB5J/AZl6Mao6JanKqs=",
+        "msg/BUILD.bazel": "sha256-kzCyI06EVEkn5pt4AdVY3yYAk2k5LVZPN4kEdvFBcbc=",
+        "srv/BUILD.bazel": "sha256-WTInCI08qOsKP2n/VtJ2eeSEGxsafLLmuOBRp+XFb6A="
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-ivR1T3pLI7SP4W/YQCtIf/JC9rOrNGYhaeYdZByZtSQ=",
+    "url": "https://github.com/ros2-gbp/ompl-release/archive/refs/tags/upstream/1.7.0.tar.gz",
+    "strip_prefix": "ompl-release-upstream-1.7.0"
+}

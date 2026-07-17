@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-k+iQXIFdi90q3/1x5BiIoHdVAjOk7umeLBmgPEHQ65g=",
+    "url": "https://github.com/ros2-gbp/libg2o-release/archive/refs/tags/upstream/2020.5.29.tar.gz",
+    "strip_prefix": "libg2o-release-upstream-2020.5.29"
+}

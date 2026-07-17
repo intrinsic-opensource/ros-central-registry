@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-KFRfyvqITt2apHsM1CbzWVnzze6OBui6FnLxH+0VkR4=",
+    "url": "https://github.com/ros2-gbp/performance_test-release/archive/refs/tags/upstream/2.3.0.tar.gz",
+    "strip_prefix": "performance_test-release-upstream-2.3.0/performance_test"
+}
