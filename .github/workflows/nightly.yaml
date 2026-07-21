@@ -15,5 +15,52 @@
 # This is called at midnight PST each day to test all distributions
 # across supported bazel versions, operating systems, micro-
 # architectures, and RMW implementations. It also does a colcon build
-# of the same release, and then calculates a report shoing how many
+# of the same release, and then calculates a report showing how many
 # tests pass in both the colcon and bazel version of the build.
+
+name: nightly
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  bazel_test:
+    name: Run Bazel Tests
+    uses: ./.github/workflows/_check_distribution.yml
+    with:
+      branch: main
+    secrets: inherit
+
+  colcon_test:
+    name: Run Colcon Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - distribution: lyrical
+            date: "2026-06-08"
+    uses: ./.github/workflows/_check_colcon_build.yml
+    with:
+      distribution: ${{ matrix.distribution }}
+      date: ${{ matrix.date }}
+    secrets: inherit
+
+  report:
+    name: Generate Comparison Report
+    needs: [bazel_test, colcon_test]
+    if: |
+      always() &&
+      (needs.bazel_test.result == 'success' || needs.bazel_test.result == 'failure') &&
+      (needs.colcon_test.result == 'success' || needs.colcon_test.result == 'failure')
+    runs-on: ubuntu-26.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+    - name: Generate comparison report
+      run: python3 tools/ci/generate_test_report.py artifacts

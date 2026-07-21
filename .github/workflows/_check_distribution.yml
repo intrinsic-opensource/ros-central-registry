@@ -1,0 +1,305 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Reusable workflow: Test a given OS / bazel version against a RMW.
+
+name: _check_distribution
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: 'Branch or ref to check out.'
+        required: true
+        type: string
+
+env:
+  ANDROID_HOME: ""
+
+jobs:
+  checkout-setup-build-test:
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write
+    name: distribution_${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: workspace
+        shell: bash
+    env:
+      USE_BAZEL_VERSION: ${{ matrix.bazel }}
+    strategy:
+      fail-fast: false
+      matrix:
+        bazel:
+        - 8.5.1
+        - 9.1.1
+        ros:
+        - lyrical.2026-06-08.rcr.1
+        variant:
+        - perception
+        os:
+        - ubuntu-26.04
+        - ubuntu-26.04-arm
+        - macos-26-intel
+        - macos-26
+    steps:
+
+    # Reset all status badges at the beginning of the build
+
+    - name: Reset status badge (build)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_build.json
+        label: ${{ matrix.bazel }}
+        message: 'ⴵ'
+        color: 'yellow'
+      if: always()
+    - name: Reset status badge (rmw_fastrtps_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_cpp.json
+        label: ${{ matrix.bazel }}
+        message: 'ⴵ'
+        color: 'yellow'
+      if: always()
+    - name: Reset status badge (rmw_fastrtps_dynamic_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_dynamic_cpp.json
+        label: ${{ matrix.bazel }}
+        message: 'ⴵ'
+        color: 'yellow'
+      if: always()
+    - name: Reset status badge (rmw_cyclonedds_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_cyclonedds_cpp.json
+        label: ${{ matrix.bazel }}
+        message: 'ⴵ'
+        color: 'yellow'
+      if: always()
+    - name: Reset status badge (rmw_zenoh_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_zenoh_cpp.json
+        label: ${{ matrix.bazel }}
+        message: 'ⴵ'
+        color: 'yellow'
+      if: always()
+
+    # Pin Xcode explicitly on macOS runners.
+  
+    - name: Select Xcode
+      if: runner.os == 'macOS'
+      uses: maxim-lobanov/setup-xcode@v1.7.0
+      with:
+        xcode-version: '26.3'
+
+    # Setup bazel with controlled caching
+
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 1
+        ref: ${{ inputs.branch }}
+
+    # Setup auth to allow pushing to the remote cache.
+
+    - name: Authenticate to Google Cloud
+      uses: "google-github-actions/auth@v3"
+      with:
+        workload_identity_provider: projects/771457463613/locations/global/workloadIdentityPools/github-automation/providers/build-dev
+        service_account: github-automation-bot@gha-intrinsic-opensource-rcr.iam.gserviceaccount.com
+        create_credentials_file: true
+
+    # Setup bazel with controlled caching that is invariant to RMW implementation.
+
+    - name: Setup Bazel
+      uses: bazel-contrib/setup-bazel@0.19.0
+      with:
+        bazelisk-cache: true
+        disk-cache: false
+        repository-cache: true
+
+    # Prepare the bazel workspace
+
+    - name: Prepare workspace
+      id: prepare_workspace
+      working-directory: .
+      run: |
+        bazel run //tools/ci:setup_workspace -- --release=${{ matrix.ros }} --tmpdir "$RUNNER_TEMP"
+
+    # Build the ros 2 distribution
+
+    - name: Build
+      id: build
+      run: |
+        bazel build --config ci --config=${{ matrix.variant }} 2>&1 | tee build.log
+        bazel build --config ci @rmw_zenoh_cpp//:rmw_zenohd
+    - name: Update status badge (build)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_build.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.build.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.build.outcome == 'success' && 'green' || 'red' }}
+      if: always()
+
+    # Run the rmw_fastrtps_cpp tests
+
+    - name: Test (rmw_fastrtps_cpp)
+      if: runner.os == 'Linux' # TODO(asymingt) - mac runners are very slow
+      id: rmw_fastrtps_cpp
+      run: |
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_cpp 2>&1 | tee rmw_fastrtps_cpp.test.log || test_status=$?
+        if [ -d bazel-testlogs ]; then
+          find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_cpp.xml.tar.gz --null -T - || true
+          find -L bazel-testlogs -name "*.log" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_cpp.log.tar.gz --null -T - || true
+          rm -rf bazel-testlogs
+        fi
+        exit ${test_status:-0}
+    - name: Update status badge (rmw_fastrtps_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_cpp.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.rmw_fastrtps_cpp.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.rmw_fastrtps_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always()
+
+    # Run the rmw_fastrtps_dynamic_cpp tests
+
+    - name: Test (rmw_fastrtps_dynamic_cpp)
+      if: runner.os == 'Linux' # TODO(asymingt) - mac runners are very slow
+      id: rmw_fastrtps_dynamic_cpp
+      run: |
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_fastrtps_dynamic_cpp 2>&1 | tee rmw_fastrtps_dynamic_cpp.test.log || test_status=$?
+        if [ -d bazel-testlogs ]; then
+          find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_dynamic_cpp.xml.tar.gz --null -T - || true
+          find -L bazel-testlogs -name "*.log" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_dynamic_cpp.log.tar.gz --null -T - || true
+          rm -rf bazel-testlogs
+        fi
+        exit ${test_status:-0}
+    - name: Update status badge (rmw_fastrtps_dynamic_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_fastrtps_dynamic_cpp.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.rmw_fastrtps_dynamic_cpp.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.rmw_fastrtps_dynamic_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always()
+
+    # Run the rmw_cyclonedds_cpp tests
+
+    - name: Test (rmw_cyclonedds_cpp)
+      if: runner.os == 'Linux' # TODO(asymingt) - mac runners are very slow
+      id: rmw_cyclonedds_cpp
+      run: |
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp 2>&1 | tee rmw_fastrtps_dynamic_cpp.test.log || test_status=$?
+        if [ -d bazel-testlogs ]; then
+          find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_cyclonedds_cpp.xml.tar.gz --null -T - || true
+          find -L bazel-testlogs -name "*.log" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_cyclonedds_cpp.log.tar.gz --null -T - || true
+          rm -rf bazel-testlogs
+        fi
+        exit ${test_status:-0}
+    - name: Update status badge (rmw_cyclonedds_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_cyclonedds_cpp.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.rmw_cyclonedds_cpp.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.rmw_cyclonedds_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always()
+
+    # Run the rmw_zenoh_cpp tests
+
+    - name: Test (rmw_zenoh_cpp)
+      if: runner.os == 'Linux' # TODO(asymingt) - mac runners are very slow
+      id: rmw_zenoh_cpp
+      run: |
+        bazel run --config ci @rmw_zenoh_cpp//:rmw_zenohd --script_path="$PWD/run_zenohd.sh"
+        ./run_zenohd.sh >zenohd-stdout.log 2>zenohd-stderr.log &
+        ZENOHD_PID=$!
+        trap "kill $ZENOHD_PID 2>/dev/null || true" EXIT
+        router_ready=false
+        for i in $(seq 1 30); do
+          if nc -z 127.0.0.1 7447 2>/dev/null; then
+            router_ready=true
+            break
+          fi
+          if ! kill -0 $ZENOHD_PID 2>/dev/null; then
+            break
+          fi
+          sleep 1
+        done
+        if [ "$router_ready" != "true" ]; then
+          echo "rmw_zenohd never started listening on 7447; see zenohd-stderr.log" >&2
+          cat zenohd-stderr.log >&2
+          exit 1
+        fi
+        # We do a build before the test, as the compilation load causes time-based
+        # tests to flake nondeterminstically, creating lots of result noise.
+        bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=rmw_zenoh_cpp 2>&1 | tee rmw_zenoh_cpp.test.log || test_status=$?
+        if [ -d bazel-testlogs ]; then
+          find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_zenoh_cpp.xml.tar.gz --null -T - || true
+          find -L bazel-testlogs -name "*.log" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_zenoh_cpp.log.tar.gz --null -T - || true
+          rm -rf bazel-testlogs
+        fi
+        exit ${test_status:-0}
+    - name: Update status badge (rmw_zenoh_cpp)
+      uses: Schneegans/dynamic-badges-action@v1.8.0
+      with:
+        auth: ${{ secrets.STATUS_BADGE_SECRET }}
+        gistID: f796805a77e0f05cc837b18e60142773
+        filename: ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_rmw_zenoh_cpp.json
+        label: ${{ matrix.bazel }}
+        message: ${{ steps.rmw_zenoh_cpp.outcome == 'success' && '✓' || 'x' }}
+        color: ${{ steps.rmw_zenoh_cpp.outcome == 'success' && 'green' || 'red' }}
+      if: always() # TODO(fix)
+
+    # Upload the test logs as artfacts.
+
+    - name: Test logs
+      uses: actions/upload-artifact@v7
+      with:
+        name: Test logs ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}
+        path: |
+          workspace/MODULE.bazel
+          workspace/.bazelrc
+          workspace/*.xml.tar.gz
+          workspace/*.log.tar.gz
+          workspace/*.log
+      if: always()

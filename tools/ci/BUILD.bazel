@@ -40,3 +40,8 @@ py_binary(
     name = "setup_workspace",
     srcs = ["setup_workspace.py"],
 )
+
+py_binary(
+    name = "generate_test_report",
+    srcs = ["generate_test_report.py"],
+)

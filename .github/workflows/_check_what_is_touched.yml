@@ -22,7 +22,7 @@ on:
   workflow_call:
     outputs:
       changes_docs:
-        description: "True if only docs or workspace configs changed"
+        description: "True if documentation changed"
         value: ${{ jobs.detect_changes.outputs.changes_docs }}
       changes_examples:
         description: "True if examples changed"

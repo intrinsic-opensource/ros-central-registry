@@ -16,7 +16,7 @@
 # against a given ROS distribution release. Called (never triggered
 # directly) from ci.yaml as the stage after check_distribution succeeds.
 
-name: _check_ros_release
+name: _check_colcon_build
 
 on:
   workflow_call:

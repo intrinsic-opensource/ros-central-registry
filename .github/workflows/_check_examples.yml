@@ -14,7 +14,7 @@
 
 # Reusable workflow: build the distribution for a given OS and bazel version.
 
-name: _check_distribution_examples
+name: _check_examples
 
 on:
   workflow_call:

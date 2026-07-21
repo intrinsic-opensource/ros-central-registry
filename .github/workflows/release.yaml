@@ -19,20 +19,40 @@
 # pushes the release name as a tag along with the artifact. The
 # maintainer will then go and add some release notes.
 
-# changes_tooling = True || changes_staged = True || changes_modules = True || changes_distribution = True
-# ros_release:
-#   name: Test upstream colcon
-#   needs:
-#   - distribution_examples
-#   - test_rmw_fastrtps_cpp
-#   - test_rmw_fastrtps_dynamic_cpp
-#   - test_rmw_cyclonedds_cpp
-#   - test_rmw_zenoh_cpp
-#   permissions:
-#     pull-requests: write
-#     contents: write
-#   uses: ./.github/workflows/_check_ros_release.yml
-#   with:
-#     distribution: ${{ inputs.distribution || 'lyrical' }}
-#     date: ${{ inputs.date || '2026-06-08' }}
-#   secrets: inherit
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag name'
+        required: true
+        type: string
+
+jobs:
+  release:
+    name: Tag and Release
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        ref: main
+        fetch-depth: 0
+    - name: Test upstream colcon
+      permissions:
+        pull-requests: write
+        contents: write
+      uses: ./.github/workflows/_check_ros_release.yml
+      with:
+        distribution: ${{ inputs.distribution || 'lyrical' }}
+        date: ${{ inputs.date || '2026-06-08' }}
+      secrets: inherit
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ inputs.release_tag }}
+        target_commitish: main
+        generate_release_notes: true

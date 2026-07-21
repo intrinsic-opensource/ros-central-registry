@@ -29,130 +29,100 @@ concurrency:
 
 jobs:
 
+  # Always run, tags PR and provides some boolean values to use to
+  # unnlock 
+  # changes_docs:
+  #   description: "True if documentation changed"
+  #   value: ${{ jobs.detect_changes.outputs.changes_docs }}
+  # changes_examples:
+  #   description: "True if examples changed"
+  #   value: ${{ jobs.detect_changes.outputs.changes_examples }}
+  # changes_staged:
+  #   description: "True if bcr_staging changed"
+  #   value: ${{ jobs.detect_changes.outputs.changes_staged }}
+  # changes_modules:
+  #   description: "True if modules changed"
+  #   value: ${{ jobs.detect_changes.outputs.changes_modules }}
+  # changes_tooling:
+  #   description: "True if tooling changed"
+  #   value: ${{ jobs.detect_changes.outputs.changes_tooling }}
+  touched:
+    name: Check what is touched
+    uses: ./.github/workflows/_check_what_is_touched.yml
+    secrets: inherit
+
   lint:
     name: Lint source code
     uses: ./.github/workflows/_check_for_linting_errors.yml
     secrets: inherit
 
-  tooling:
-    name: Test tooling
-    uses: ./.github/workflows/_check_tooling.yml
-    secrets: inherit
-
-  bazel_modules:
-    name: Check modules
-    if: github.event_name == 'pull_request'
-    uses: ./.github/workflows/_check_bazel_modules.yml
-    secrets: inherit
-
-  docs_build:
+  docs:
+    needs: touched
+    if: github.event.pull_request.draft == false && needs.touched.outputs.changes_docs == 'true'
     name: Check documentation
     uses: ./.github/workflows/_check_docs_build.yml
     secrets: inherit
 
-  distribution_compiles:
-    name: Check distribution builds
+  tooling:
+    needs: touched
+    if: github.event.pull_request.draft == false && needs.touched.outputs.changes_tooling == 'true'
+    name: Test tooling
+    uses: ./.github/workflows/_check_tooling.yml
+    secrets: inherit
+
+  modules:
+    needs: touched
+    if: github.event.pull_request.draft == false && (needs.touched.outputs.changes_modules == 'true' || needs.touched.outputs.changes_staged == 'true')
+    name: Check modules
+    uses: ./.github/workflows/_check_bazel_modules.yml
+    secrets: inherit
+
+  examples:
     needs:
+    - touched
     - lint
     - tooling
-    - bazel_modules
-    - docs_build
+    - modules
     if: |
-      !cancelled() &&
-      needs.lint.result == 'success' &&
-      needs.tooling.result == 'success' &&
-      needs.docs_build.result == 'success' &&
-      (needs.bazel_modules.result == 'success' || needs.bazel_modules.result == 'skipped')
-    permissions:
-      actions: read
-      checks: write
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/_check_distribution_compiles.yml
-    with:
-      branch: ${{ inputs.branch || github.ref }}
-    secrets: inherit
-
-  distribution_examples:
+      always() &&
+      github.event.pull_request.draft == false &&
+      (needs.touched.result == 'success') &&
+      (needs.touched.outputs.changes_modules == 'true' || needs.touched.outputs.changes_staged == 'true' || needs.touched.outputs.changes_examples == 'true') &&
+      (needs.lint.result == 'success') &&
+      (needs.tooling.result == 'success' || needs.tooling.result == 'skipped') &&
+      (needs.modules.result == 'success' || needs.modules.result == 'skipped')
     name: Check examples build
-    needs: [distribution_compiles]
-    if: |
-      !cancelled() &&
-      needs.distribution_compiles.result == 'success'
     permissions:
       actions: read
       checks: write
       contents: read
       id-token: write
-    uses: ./.github/workflows/_check_distribution_examples.yml
+    uses: ./.github/workflows/_check_examples.yml
     with:
       branch: ${{ inputs.branch || github.ref }}
     secrets: inherit
 
-  test_rmw_fastrtps_cpp:
-    name: Test FastDDS
-    needs: [distribution_compiles]
+  distribution:
+    needs:
+    - touched
+    - lint
+    - tooling
+    - modules
     if: |
-      !cancelled() &&
-      needs.distribution_compiles.result == 'success'
+      always() &&
+      github.event.pull_request.draft == false &&
+      (needs.touched.result == 'success') &&
+      (needs.touched.outputs.changes_modules == 'true' || needs.touched.outputs.changes_staged == 'true') &&
+      (needs.lint.result == 'success') &&
+      (needs.tooling.result == 'success' || needs.tooling.result == 'skipped') &&
+      (needs.modules.result == 'success' || needs.modules.result == 'skipped')
+    name: Check distribution builds
     permissions:
       actions: read
       checks: write
       contents: read
       id-token: write
-    uses: ./.github/workflows/_check_distribution_tests.yml
+    uses: ./.github/workflows/_check_distribution.yml
     with:
       branch: ${{ inputs.branch || github.ref }}
-      rmw: rmw_fastrtps_cpp
-    secrets: inherit
-
-  test_rmw_fastrtps_dynamic_cpp:
-    name: Test FastDDS (dynamic)
-    needs: [distribution_compiles]
-    if: |
-      !cancelled() &&
-      needs.distribution_compiles.result == 'success'
-    permissions:
-      actions: read
-      checks: write
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/_check_distribution_tests.yml
-    with:
-      branch: ${{ inputs.branch || github.ref }}
-      rmw: rmw_fastrtps_dynamic_cpp
-    secrets: inherit
-
-  test_rmw_cyclonedds_cpp:
-    name: Test CycloneDDS
-    needs: [distribution_compiles]
-    if: |
-      !cancelled() &&
-      needs.distribution_compiles.result == 'success'
-    permissions:
-      actions: read
-      checks: write
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/_check_distribution_tests.yml
-    with:
-      branch: ${{ inputs.branch || github.ref }}
-      rmw: rmw_cyclonedds_cpp
-    secrets: inherit
-
-  test_rmw_zenoh_cpp:
-    name: Test Zenoh
-    needs: [distribution_compiles]
-    if: |
-      !cancelled() &&
-      needs.distribution_compiles.result == 'success'
-    permissions:
-      actions: read
-      checks: write
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/_check_distribution_tests.yml
-    with:
-      branch: ${{ inputs.branch || github.ref }}
-      rmw: rmw_zenoh_cpp
     secrets: inherit
