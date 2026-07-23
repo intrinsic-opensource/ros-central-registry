@@ -132,10 +132,10 @@ osx.frameworks(
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
     is_default = True,
-    python_version = "3.12",
+    python_version = "3.11",
 )
 
-pip_ros = use_extension("@rosdistro//python:defs.bzl", "pip_ros")
+pip_ros = use_extension("@rosdistro//python:defs.bzl", "pip_ros_3_11")
 use_repo(pip_ros, "pip_ros")
 
 # Rust / crates
@@ -149,4 +149,11 @@ use_repo(rs_toolchains, "default_rust_toolchains")
 
 register_toolchains(
     "@default_rust_toolchains//:all",
+)
+
+single_version_override(
+    module_name = "rosdistro",
+    version = "lyrical.2026-06-08.rcr.1",
+    patches = ["//:rosdistro_311.patch"],
+    patch_strip = 1,
 )

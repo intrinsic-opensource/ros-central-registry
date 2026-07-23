@@ -1,0 +1,58 @@
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 2bef424fd..40891aa0b 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -89,6 +89,9 @@ python.toolchain(
+     is_default = True,
+     python_version = "3.12",
+ )
++python.toolchain(
++    python_version = "3.11",
++)
+ 
+ # Setup pip
+ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+@@ -108,6 +111,14 @@ pip.parse(
+     requirements_windows = "requirements_windows.txt",
+ )
+ use_repo(pip, "pip_ros")
++pip.parse(
++    extra_pip_args = ["--no-cache-dir"],
++    hub_name = "pip_ros_3_11",
++    python_version = "3.11",
++    requirements_lock = "requirements.txt",
++    requirements_windows = "requirements_windows.txt",
++)
++use_repo(pip, "pip_ros_3_11")
+ 
+ # Set up llvm for clang-format and clang-tidy
+ llvm = use_extension("@llvm//extensions:llvm.bzl", "llvm")
+diff --git a/python/defs.bzl b/python/defs.bzl
+index d2da20220..2520f72cd 100644
+--- a/python/defs.bzl
++++ b/python/defs.bzl
+@@ -93,7 +93,7 @@ def _pip_ros_impl(ctx):
+     #
+     # The apparent name "pip_ros" in rosdistro's context maps to the canonical
+     # name of the hub created by rules_python's pip extension.
+-    pip_ros_canonical = str(Label("@pip_ros//:_")).split("//")[0].lstrip("@")
++    pip_ros_canonical = str(Label("@pip_ros_3_11//:_")).split("//")[0].lstrip("@")
+ 
+     # Create a pip_ros proxy repository that dependent modules can use_repo().
+     _pip_ros_proxy(
+@@ -107,6 +107,15 @@ def _pip_ros_impl(ctx):
+ #   use_repo(pip_ros, "pip_ros")
+ pip_ros = module_extension(implementation = _pip_ros_impl)
+ 
++def _pip_ros_3_11_impl(ctx):
++    pip_ros_canonical = str(Label("@pip_ros_3_11//:_")).split("//")[0].lstrip("@")
++    _pip_ros_proxy(
++        name = "pip_ros",
++        real_hub_canonical_name = pip_ros_canonical,
++    )
++
++pip_ros_3_11 = module_extension(implementation = _pip_ros_3_11_impl)
++
+ # Macro for pytest invocations.
+ def py_pytest(name, srcs, deps = [], args = [], **kwargs):
+     _py_test(
