@@ -40,3 +40,23 @@ py_binary(
     name = "setup_workspace",
     srcs = ["setup_workspace.py"],
 )
+
+py_library(
+    name = "check_test_coverage_lib",
+    srcs = ["check_test_coverage.py"],
+    imports = ["../.."],
+)
+
+py_binary(
+    name = "check_test_coverage",
+    srcs = ["check_test_coverage.py"],
+    deps = [":check_test_coverage_lib"],
+)
+
+py_test(
+    name = "check_test_coverage_test",
+    srcs = ["check_test_coverage_test.py"],
+    deps = [
+        ":check_test_coverage_lib",
+    ],
+)
