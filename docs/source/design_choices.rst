@@ -29,6 +29,33 @@ Let's say we are creating a new release for ``kilted/2026-01-22`` release tag. I
         ],
     )
 
+Weekly patch rollup
+~~~~~~~~~~~~~~~~~~~
+
+Patches to individual packages land continuously through the week rather than as one big release cut. The workflow is split into a developer-facing step, run locally as many times as needed, and a weekly rollup, run once by CI.
+
+During the week, a developer fixes one package at a time:
+
+.. code-block:: shell
+
+    bazel run //tools/ci:setup_workspace -- --release=lyrical.2026-06-08.rcr.1
+    bazel run //tools/ci:vendor_modules -- rclcpp
+    # ... edit workspace/vendor/rclcpp+/ in place ...
+    bazel run //tools/ci:create_patch -- rclcpp
+
+``create_patch`` diffs the edit against raw upstream (not the currently-patched version -- every ``.rcr.N`` of a package's patches/overlay describe a transformation relative to the *same* raw upstream archive, not an incremental delta from ``.rcr.(N-1)``) and creates a single new module version, e.g. ``rclcpp@32.0.0-1.rcr.1`` -> ``rclcpp@32.0.0-1.rcr.2``. This becomes the developer's PR -- it never touches any other package.
+
+Because per-package patches land independently and asynchronously, ``setup_workspace`` always resolves every package to its true latest published version, loudly, via ``single_version_override``:
+
+.. code-block:: shell
+
+    OVERRIDE: rclcpp pinned at 32.0.0-1.rcr.1 by release lyrical.2026-06-08.rcr.1,
+              but a newer patch 32.0.0-1.rcr.2 already exists -- overriding workspace to use it.
+
+This is what keeps two developers patching the same package in the same week from colliding on the same next version number: whichever workspace is set up second sees the first developer's already-merged patch as the new "latest" and increments from there, rather than recomputing the same version the first developer already claimed.
+
+Once a week, ``//tools/ci:rollup_patches`` aggregates whatever leaf patches landed: for every package with a newer published version than what the current ``ros`` release references, it transitively bumps every package that depends on it -- purely a ``bazel_dep`` pin update, no content change -- so ``rclcpp_action@...rcr.1`` becomes ``rclcpp_action@...rcr.2`` simply because ``rclcpp`` moved. It then regenerates the top-level ``ros`` module to reference the new versions, runs the result through the full CI matrix, and auto-merges on success (otherwise the PR is assigned for manual review). See ``.github/workflows/weekly_rollup.yml``.
+
 Interfaces
 ----------
 The ROS Central Registry adopts many of the aspects of `rules_ros2 <https://github.com/mvukov/rules_ros2>`__ with a few key differences. The most obvious one is that interface dependencies are declared at the message level, not the package level. As an example, consider adding the following new message ``ExampleMessage.msg`` that depends on two common interfaces, ``sensor_msgs/CompressedImage`` and ``std_msgs/String``.

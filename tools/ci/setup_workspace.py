@@ -23,30 +23,8 @@ import sys
 from pathlib import Path
 from typing import Dict, List
 
-def scan_module_for_dependencies(
-    module_dot_bazel: Path,
-    modules_path: Path,
-    include_bcr: bool = False,
-    include_rcr: bool = True,
-) -> Dict[str, str]:
-    """
-    Returns a list of package names and their versions.
-    """
-    packages = {}
-    with open(module_dot_bazel, "r") as f:
-        content = f.read()
-        matches = re.findall(
-            r'bazel_dep\(\s*name\s*=\s*"([^"]+)"\s*,\s*version\s*=\s*"([^"]+)"',
-            content,
-        )
-        for name, version in matches:
-            is_rcr_module = (modules_path / name).exists()
-            if (include_rcr and is_rcr_module) or (
-                include_bcr and not is_rcr_module
-            ):
-                packages[name] = version
-    return packages
-
+from tools.ci.bzlmod_lib import scan_module_for_dependencies
+from tools.ci.bzlmod_lib import find_packages_with_newer_versions
 
 VARIANTS = {
     "core": "ros_core",
@@ -85,6 +63,11 @@ common --check_direct_dependencies=off
 common --registry=file:///%workspace%/..             \\
        --registry=file:///%workspace%/../bcr_staging \\
        --registry=https://bcr.bazel.build
+
+# If a "vendor" folder is present (see //tools/ci:vendor_modules), read
+# vendored module sources from it instead of fetching/extracting them,
+# so in-place edits to vendored modules are picked up by the build.
+common --vendor_dir=vendor
 
 # This provides read-only access to a shared Bazel remote cache offered
 # by Intrinsic. It helps speed up fresh checkouts from upstream.
@@ -328,6 +311,23 @@ def main():
     packages["rosdistro"] = args.release
     print(f"Found {len(packages)} RCR packages in release.")
 
+    # Some packages may already have a newer patch published (e.g. a
+    # developer's create_patch PR merged since this release was cut) than
+    # what this release pins. Override those to the latest available
+    # version so this workspace is never stale -- this is what keeps
+    # concurrent per-package patches from colliding on the same next
+    # version number (see docs/source/design_choices.rst).
+    override_candidates = {k: v for k, v in packages.items() if k not in ("ros", "rosdistro")}
+    overrides = find_packages_with_newer_versions(override_candidates, modules_dir)
+    for name, latest_version in sorted(overrides.items()):
+        print(
+            f"OVERRIDE: {name} pinned at {packages[name]} by release "
+            f"{args.release}, but a newer patch {latest_version} already "
+            f"exists -- overriding workspace to use it."
+        )
+    if overrides:
+        print(f"Overrode {len(overrides)} package(s) to newer available patches.")
+
     # Detect variants
     variants: Dict[str, List[str]] = {}
     for variant_name, variant_package in VARIANTS.items():
@@ -379,6 +379,14 @@ bazel_dep(name = "rules_shell", version = "0.8.0")
         for name in sorted(packages.keys()):
             if name != "ros":
                 f.write(f'bazel_dep(name = "{name}", version = "{packages[name]}")\n')
+
+        if overrides:
+            f.write("\n## OVERRIDES (packages with newer patches than the pinned release)\n\n")
+            for name in sorted(overrides.keys()):
+                f.write(
+                    f'single_version_override(module_name = "{name}", '
+                    f'version = "{overrides[name]}")\n'
+                )
 
         f.write("""
 ## BOOTSTRAP
