@@ -50,7 +50,7 @@ jobs:
         label: linting
         message: ${{ job.status == 'success' && '✓' || 'x' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: always() # TODO(fix)
+      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push'
 
   check_python_linting:
     name: Lint all Python files
@@ -76,4 +76,4 @@ jobs:
         label: python linting
         message: ${{ job.status == 'success' && '✓' || 'x' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: always() # TODO(fix)
+      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push'

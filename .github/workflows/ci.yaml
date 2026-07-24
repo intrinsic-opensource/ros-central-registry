@@ -22,12 +22,36 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 concurrency:
-  group: ci-${{ github.event.pull_request.number }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+
+  detect-changes:
+    name: Detect changed files
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ github.event_name != 'pull_request' || steps.filter.outputs.code }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+    - name: Filter paths
+      uses: dorny/paths-filter@v4
+      id: filter
+      with:
+        filters: |
+          code:
+            - 'bcr_staging/**'
+            - 'examples/**'
+            - 'modules/**'
+            - 'tools/**'
+            - 'bazel_registry.json'
+            - '.bazelignore'
 
   lint:
     name: Lint source code
@@ -53,6 +77,7 @@ jobs:
   distribution_compiles:
     name: Check distribution builds
     needs:
+    - detect-changes
     - lint
     - tooling
     - bazel_modules
@@ -62,7 +87,8 @@ jobs:
       needs.lint.result == 'success' &&
       needs.tooling.result == 'success' &&
       needs.docs_build.result == 'success' &&
-      (needs.bazel_modules.result == 'success' || needs.bazel_modules.result == 'skipped')
+      (needs.bazel_modules.result == 'success' || needs.bazel_modules.result == 'skipped') &&
+      needs.detect-changes.outputs.code == 'true'
     permissions:
       actions: read
       checks: write
