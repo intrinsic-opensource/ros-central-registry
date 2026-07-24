@@ -15,7 +15,7 @@
 # Reusable workflow: checks that the docs site builds. Called (never
 # triggered directly) from ci.yaml as part of the stage-1 fail-fast gate --
 # this is deliberately just the build check, not the actual publish (see
-# _check_deploy.yml for that), so a broken docs build is caught immediately
+# commit.yaml for that), so a broken docs build is caught immediately
 # rather than only after the multi-hour distribution/release stages finish.
 
 name: _check_docs_build
@@ -52,4 +52,4 @@ jobs:
         label: docs build
         message: ${{ job.status == 'success' && '✓' || 'x' }}
         color: ${{ job.status == 'success' && 'green' || 'red' }}
-      if: always() # TODO(fix)
+      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push'
