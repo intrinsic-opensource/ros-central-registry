@@ -23,7 +23,6 @@ bazelbuild/bazel-central-registry's generate_module_diff.yml).
 import argparse
 import os
 import subprocess
-import sys
 from pathlib import Path
 from typing import List, Optional, Tuple
 
