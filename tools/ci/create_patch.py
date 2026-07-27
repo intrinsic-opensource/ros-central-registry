@@ -13,13 +13,18 @@
 # limitations under the License.
 
 """
-Roll a developer's in-place edits to a single vendored module (see
-//tools/ci:vendor_modules) up into a brand-new module version, e.g.
+Roll a developer's in-place edits to one or more vendored modules (see
+//tools/ci:vendor_modules) up into brand-new module versions, e.g.
 rclcpp@32.0.0-1.rcr.1 -> rclcpp@32.0.0-1.rcr.2.
+
+Pass an explicit module name to roll up just that module. Omit it to
+auto-detect every vendored module with local edits and roll all of them
+up at once, after a single confirmation.
 """
 
 import argparse
 import base64
+import dataclasses
 import difflib
 import filecmp
 import hashlib
@@ -33,9 +38,10 @@ import tempfile
 import urllib.request
 import zipfile
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 
 from tools.ci import bzlmod_lib
+from tools.ci import vendor_modules
 
 
 def read_module_version(module_dot_bazel: Path, package_name: str) -> str:
@@ -166,12 +172,179 @@ def diff_module_source(pristine_dir: Path, edited_dir: Path) -> Tuple[Dict[str, 
     return patches, overlays
 
 
+@dataclasses.dataclass
+class ModuleRollup:
+    """
+    Everything needed to print a summary of, and (optionally) write, a new
+    patch version for a single vendored module.
+    """
+    module: str
+    current_version: str
+    new_version: str
+    current_module_dir: Path
+    new_module_dir: Path
+    new_patches: Dict[str, str]
+    new_overlays: Dict[str, str]
+    old_patches: Dict[str, str]
+    old_overlays: Dict[str, str]
+
+    @property
+    def changed(self) -> bool:
+        return self.new_patches != self.old_patches or self.new_overlays != self.old_overlays
+
+
+def compute_rollup(
+    module: str, modules_dir: Path, target_workspace: Path
+) -> ModuleRollup:
+    """
+    Fetches raw upstream and diffs it against a vendored module's tree,
+    returning everything needed to print a summary and (optionally) write
+    a new patch version. Raises RuntimeError for user-facing error
+    conditions (missing vendor dir, stale workspace).
+    """
+    vendor_module_dir = target_workspace / "vendor" / f"{module}+"
+    if not vendor_module_dir.exists():
+        raise RuntimeError(
+            f"{vendor_module_dir} does not exist. Run "
+            f"'bazel run //tools/ci:vendor_modules -- {module}' first."
+        )
+
+    # Determine the version Bazel actually resolved for this module (which
+    # reflects any single_version_override from setup_workspace), not the
+    # textual bazel_dep pin in the root workspace's MODULE.bazel.
+    current_version = read_module_version(vendor_module_dir / "MODULE.bazel", module)
+
+    metadata_path = modules_dir / module / "metadata.json"
+    metadata = bzlmod_lib.read_metadata_json(metadata_path)
+    latest_published = bzlmod_lib.get_latest_non_yanked_version(metadata)
+    if bzlmod_lib.version_sort_key(current_version) != bzlmod_lib.version_sort_key(latest_published):
+        raise RuntimeError(
+            f"this workspace resolved {module} to {current_version}, but the "
+            f"latest published version is {latest_published}. This "
+            "workspace is stale (likely set up before a concurrent patch "
+            "landed). Re-run //tools/ci:setup_workspace, then "
+            "//tools/ci:vendor_modules, before creating a patch."
+        )
+
+    current_module_dir = modules_dir / module / current_version
+
+    # Obtain the raw (unpatched) upstream source for diffing -- NOT the
+    # currently-published version's vendored tree, since that already has
+    # existing patches/overlay applied (see fetch_raw_upstream's docstring
+    # for why that distinction matters). Namespaced by module so that
+    # auto-detect mode (which calls this in a loop) can't have one
+    # module's fetch collide with another's leftovers.
+    pristine_root = target_workspace / ".pristine_upstream" / module
+    shutil.rmtree(pristine_root, ignore_errors=True)
+    try:
+        print(f"Fetching raw upstream source for {module} (no patches applied)...")
+        fetch_raw_upstream(current_module_dir / "source.json", pristine_root)
+        new_patches, new_overlays = diff_module_source(pristine_root, vendor_module_dir)
+    except Exception:
+        print(
+            f"Error occurred while computing the diff for {module}; leaving "
+            f"raw upstream reference at {pristine_root} for inspection.",
+            file=sys.stderr,
+        )
+        raise
+    else:
+        shutil.rmtree(pristine_root, ignore_errors=True)
+
+    old_patches, old_overlays = load_existing_patches_and_overlays(current_module_dir)
+    new_version = bzlmod_lib.increment_version(current_version)
+    new_module_dir = modules_dir / module / new_version
+
+    return ModuleRollup(
+        module=module,
+        current_version=current_version,
+        new_version=new_version,
+        current_module_dir=current_module_dir,
+        new_module_dir=new_module_dir,
+        new_patches=new_patches,
+        new_overlays=new_overlays,
+        old_patches=old_patches,
+        old_overlays=old_overlays,
+    )
+
+
+def print_rollup_summary(rollup: ModuleRollup) -> None:
+    print(f"Creating {rollup.module}@{rollup.new_version} (from {rollup.current_version}):")
+    print(f"  patches: {len(rollup.new_patches)} (was {len(rollup.old_patches)})")
+    print(f"  overlay: {len(rollup.new_overlays)} (was {len(rollup.old_overlays)})")
+
+
+def apply_rollup(rollup: ModuleRollup, metadata_path: Path) -> None:
+    shutil.copytree(rollup.current_module_dir, rollup.new_module_dir, dirs_exist_ok=True)
+    shutil.rmtree(rollup.new_module_dir / "patches", ignore_errors=True)
+    shutil.rmtree(rollup.new_module_dir / "overlay", ignore_errors=True)
+    for patch_name, content in rollup.new_patches.items():
+        patch_path = rollup.new_module_dir / "patches" / patch_name
+        patch_path.parent.mkdir(parents=True, exist_ok=True)
+        patch_path.write_text(content)
+    for overlay_name, content in rollup.new_overlays.items():
+        overlay_path = rollup.new_module_dir / "overlay" / overlay_name
+        overlay_path.parent.mkdir(parents=True, exist_ok=True)
+        overlay_path.write_text(content)
+
+    module_file = rollup.new_module_dir / "MODULE.bazel"
+    module_file.write_text(
+        bzlmod_lib.rewrite_module_version(module_file.read_text(), rollup.module, rollup.new_version)
+    )
+    bzlmod_lib.regenerate_integrity_hashes(rollup.new_module_dir)
+    bzlmod_lib.add_version_to_metadata_json(metadata_path, rollup.new_version)
+
+
+def discover_vendored_modules(target_workspace: Path, modules_dir: Path) -> List[str]:
+    """
+    Lists every module currently vendored into this workspace: every
+    "<name>+" directory under vendor/ (Bazel's canonical-repo-name suffix
+    for a bazel_dep) that corresponds to a declared RCR module.
+    """
+    vendor_dir = target_workspace / "vendor"
+    if not vendor_dir.exists():
+        return []
+    modules = []
+    for entry in sorted(vendor_dir.iterdir()):
+        if entry.is_dir() and entry.name.endswith("+") and (modules_dir / entry.name[:-1]).exists():
+            modules.append(entry.name[:-1])
+    return modules
+
+
+def module_has_local_edits(target_workspace: Path, module: str) -> bool:
+    """
+    Cheap, network-free check for whether a vendored module's files differ
+    from the manifest snapshot //tools/ci:vendor_modules records right
+    after vendoring. Conservatively returns True if no manifest exists
+    (e.g. it was vendored before this workspace had one), so the module
+    still gets checked by the full upstream diff rather than silently
+    skipped.
+    """
+    manifest_path = target_workspace / vendor_modules.VENDOR_MANIFEST_DIR_NAME / f"{module}.json"
+    if not manifest_path.exists():
+        return True
+    with open(manifest_path, "r") as f:
+        manifest = json.load(f)
+    vendor_module_dir = target_workspace / "vendor" / f"{module}+"
+    return bzlmod_lib.hash_directory_tree(vendor_module_dir) != manifest
+
+
+def confirm(prompt: str) -> bool:
+    return input(prompt).strip().lower() in ("y", "yes")
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Create a new patch version of a single vendored module "
-        "from in-place edits made via //tools/ci:vendor_modules."
+        description="Roll a developer's in-place edits to one or more "
+        "vendored modules up into new module version(s), from edits made "
+        "via //tools/ci:vendor_modules."
     )
-    parser.add_argument("module", help="Name of the module to create a patch for, e.g. rclcpp")
+    parser.add_argument(
+        "module",
+        nargs="?",
+        help="Name of the module to create a patch for, e.g. rclcpp. If "
+        "omitted, auto-detects every vendored module with local edits and "
+        "rolls all of them up after a single confirmation.",
+    )
     parser.add_argument(
         "--workspace-dir",
         type=Path,
@@ -182,6 +355,11 @@ def main():
         "--dry-run",
         action="store_true",
         help="Compute and print what would happen, but don't write anything",
+    )
+    parser.add_argument(
+        "--yes", "-y",
+        action="store_true",
+        help="In auto-detect mode, skip the confirmation prompt.",
     )
     args = parser.parse_args()
 
@@ -198,91 +376,68 @@ def main():
         )
         sys.exit(1)
 
-    vendor_module_dir = target_workspace / "vendor" / f"{args.module}+"
-    if not vendor_module_dir.exists():
-        print(
-            f"Error: {vendor_module_dir} does not exist. Run "
-            f"'bazel run //tools/ci:vendor_modules -- {args.module}' first.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+    if args.module:
+        try:
+            rollup = compute_rollup(args.module, modules_dir, target_workspace)
+        except RuntimeError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
 
-    # Determine the version Bazel actually resolved for this module (which
-    # reflects any single_version_override from setup_workspace), not the
-    # textual bazel_dep pin in the root workspace's MODULE.bazel.
-    current_version = read_module_version(vendor_module_dir / "MODULE.bazel", args.module)
+        if not rollup.changed:
+            print(f"No changes detected for {args.module}; nothing to do.")
+            return
 
-    metadata_path = modules_dir / args.module / "metadata.json"
-    metadata = bzlmod_lib.read_metadata_json(metadata_path)
-    latest_published = bzlmod_lib.get_latest_non_yanked_version(metadata)
-    if bzlmod_lib.version_sort_key(current_version) != bzlmod_lib.version_sort_key(latest_published):
-        print(
-            f"Error: this workspace resolved {args.module} to {current_version}, "
-            f"but the latest published version is {latest_published}. This "
-            "workspace is stale (likely set up before a concurrent patch "
-            "landed). Re-run //tools/ci:setup_workspace, then "
-            "//tools/ci:vendor_modules, before creating a patch.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+        print_rollup_summary(rollup)
+        if args.dry_run:
+            print("Dry run: no files written.")
+            return
 
-    current_module_dir = modules_dir / args.module / current_version
-
-    # Obtain the raw (unpatched) upstream source for diffing -- NOT the
-    # currently-published version's vendored tree, since that already has
-    # existing patches/overlay applied (see fetch_raw_upstream's docstring
-    # for why that distinction matters).
-    pristine_root = target_workspace / ".pristine_upstream"
-    try:
-        print(f"Fetching raw upstream source for {args.module} (no patches applied)...")
-        fetch_raw_upstream(current_module_dir / "source.json", pristine_root)
-        new_patches, new_overlays = diff_module_source(pristine_root, vendor_module_dir)
-    except Exception:
-        print(
-            f"Error occurred while computing the diff; leaving raw upstream "
-            f"reference at {pristine_root} for inspection.",
-            file=sys.stderr,
-        )
-        raise
-    else:
-        shutil.rmtree(pristine_root, ignore_errors=True)
-
-    old_patches, old_overlays = load_existing_patches_and_overlays(current_module_dir)
-    if new_patches == old_patches and new_overlays == old_overlays:
-        print(f"No changes detected for {args.module}; nothing to do.")
+        apply_rollup(rollup, modules_dir / args.module / "metadata.json")
+        print(f"Done. modules/{args.module}/{rollup.new_version}/ is ready to commit as a PR.")
         return
 
-    new_version = bzlmod_lib.increment_version(current_version)
-    new_module_dir = modules_dir / args.module / new_version
+    # Auto-detect mode: find vendored modules, cheaply filter to those with
+    # local edits, then confirm the real (upstream-diffed) changes before
+    # rolling anything up.
+    candidates = [
+        m for m in discover_vendored_modules(target_workspace, modules_dir)
+        if module_has_local_edits(target_workspace, m)
+    ]
+    if not candidates:
+        print("No vendored modules have local edits; nothing to do.")
+        return
 
-    print(f"Creating {args.module}@{new_version} (from {current_version}):")
-    print(f"  patches: {len(new_patches)} (was {len(old_patches)})")
-    print(f"  overlay: {len(new_overlays)} (was {len(old_overlays)})")
+    rollups = []
+    for module in candidates:
+        try:
+            rollup = compute_rollup(module, modules_dir, target_workspace)
+        except RuntimeError as e:
+            print(f"Warning: skipping {module}: {e}", file=sys.stderr)
+            continue
+        if rollup.changed:
+            rollups.append(rollup)
+
+    if not rollups:
+        print("No changes detected in any vendored module; nothing to do.")
+        return
+
+    print(f"Detected changes in {len(rollups)} vendored module(s):")
+    for rollup in rollups:
+        print_rollup_summary(rollup)
 
     if args.dry_run:
         print("Dry run: no files written.")
         return
 
-    shutil.copytree(current_module_dir, new_module_dir, dirs_exist_ok=True)
-    shutil.rmtree(new_module_dir / "patches", ignore_errors=True)
-    shutil.rmtree(new_module_dir / "overlay", ignore_errors=True)
-    for patch_name, content in new_patches.items():
-        patch_path = new_module_dir / "patches" / patch_name
-        patch_path.parent.mkdir(parents=True, exist_ok=True)
-        patch_path.write_text(content)
-    for overlay_name, content in new_overlays.items():
-        overlay_path = new_module_dir / "overlay" / overlay_name
-        overlay_path.parent.mkdir(parents=True, exist_ok=True)
-        overlay_path.write_text(content)
+    if not args.yes and not confirm(
+        f"Roll up {len(rollups)} module(s) into new patch versions? [y/N]: "
+    ):
+        print("Aborted; no files written.")
+        return
 
-    module_file = new_module_dir / "MODULE.bazel"
-    module_file.write_text(
-        bzlmod_lib.rewrite_module_version(module_file.read_text(), args.module, new_version)
-    )
-    bzlmod_lib.regenerate_integrity_hashes(new_module_dir)
-    bzlmod_lib.add_version_to_metadata_json(metadata_path, new_version)
-
-    print(f"Done. modules/{args.module}/{new_version}/ is ready to commit as a PR.")
+    for rollup in rollups:
+        apply_rollup(rollup, modules_dir / rollup.module / "metadata.json")
+        print(f"Done. modules/{rollup.module}/{rollup.new_version}/ is ready to commit as a PR.")
 
 
 if __name__ == "__main__":

@@ -18,6 +18,7 @@ Vendor a set of modules into a Bazel workspace created by
 """
 
 import argparse
+import json
 import os
 import re
 import subprocess
@@ -25,10 +26,15 @@ import sys
 from pathlib import Path
 from typing import Iterable, List, Set
 
-from tools.ci.bzlmod_lib import scan_module_for_dependencies
+from tools.ci.bzlmod_lib import hash_directory_tree, scan_module_for_dependencies
 from tools.ci.setup_workspace import VARIANTS
 
 VENDOR_DIR_RC_LINE = "common --vendor_dir=vendor"
+
+# Where per-module file-hash snapshots are recorded right after vendoring,
+# so //tools/ci:create_patch can later detect local edits without a
+# network fetch (see create_patch.module_has_local_edits).
+VENDOR_MANIFEST_DIR_NAME = ".vendor_manifest"
 
 # setup_workspace.VARIANTS maps a short workspace-file key (e.g. "core") to
 # the ROS variant package name it corresponds to (e.g. "ros_core"), and
@@ -96,6 +102,21 @@ def resolve_modules(
     for variant in variants:
         modules += modules_for_variant(target_workspace, variant)
     return list(dict.fromkeys(modules))
+
+
+def write_vendor_manifest(target_workspace: Path, module: str) -> None:
+    """
+    Snapshots the file hashes of a freshly-vendored module tree, so a
+    later //tools/ci:create_patch run can cheaply tell whether it's been
+    edited since, without re-fetching upstream just to check.
+    """
+    vendor_module_dir = target_workspace / "vendor" / f"{module}+"
+    manifest_path = target_workspace / VENDOR_MANIFEST_DIR_NAME / f"{module}.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    hashes = hash_directory_tree(vendor_module_dir)
+    with open(manifest_path, "w") as f:
+        json.dump(hashes, f, indent=4, sort_keys=True)
+        f.write("\n")
 
 
 def ensure_vendor_dir_flag(bazelrc: Path) -> None:
@@ -195,6 +216,9 @@ def main():
     print(f"Vendoring {', '.join(modules)} into "
           f"{target_workspace / 'vendor'}...")
     subprocess.run(cmd, cwd=target_workspace, check=True)
+
+    for module in modules:
+        write_vendor_manifest(target_workspace, module)
 
     print(
         "Done. Edit sources under "

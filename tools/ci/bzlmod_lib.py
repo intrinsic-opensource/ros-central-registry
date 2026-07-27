@@ -145,6 +145,23 @@ def calculate_integrity_hash_for_file(file_path: Path) -> str:
     return "sha256-" + base64.b64encode(sha256_hash.digest()).decode()
 
 
+def hash_directory_tree(dir_path: Path, exclude_names: Tuple[str, ...] = ("MODULE.bazel",)) -> Dict[str, str]:
+    """
+    Hashes every file under dir_path (recursively), keyed by its POSIX
+    path relative to dir_path, skipping any file whose basename is in
+    exclude_names. Used to snapshot a vendored module's tree right after
+    vendoring (see //tools/ci:vendor_modules), and later to cheaply detect
+    local edits against that snapshot without a network fetch (see
+    //tools/ci:create_patch).
+    """
+    hashes = {}
+    for file_path in sorted(dir_path.rglob("*")):
+        if file_path.is_file() and file_path.name not in exclude_names:
+            rel_path = file_path.relative_to(dir_path).as_posix()
+            hashes[rel_path] = calculate_integrity_hash_for_file(file_path)
+    return hashes
+
+
 def regenerate_integrity_hashes(module_dir: Path) -> None:
     """
     Recompute source.json's "overlay"/"patches" integrity-hash dicts and

@@ -94,7 +94,10 @@ py_library(
     name = "create_patch_lib",
     srcs = ["create_patch.py"],
     imports = ["../.."],
-    deps = [":bzlmod_lib"],
+    deps = [
+        ":bzlmod_lib",
+        ":vendor_modules_lib",
+    ],
 )
 
 py_binary(

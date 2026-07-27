@@ -151,6 +151,42 @@ class TestRewriteHelpers(unittest.TestCase):
             bzlmod_lib.rewrite_bazel_dep_version('bazel_dep(name = "other", version = "1.0.0")', "rclcpp", "2.0.0")
 
 
+class TestHashDirectoryTree(unittest.TestCase):
+
+    def setUp(self):
+        self.tmp_dir = Path(tempfile.mkdtemp())
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp_dir)
+
+    def test_hashes_nested_files_by_relative_posix_path(self):
+        (self.tmp_dir / "src").mkdir()
+        (self.tmp_dir / "src" / "foo.c").write_text("hello\n")
+        (self.tmp_dir / "top.txt").write_text("world\n")
+        result = bzlmod_lib.hash_directory_tree(self.tmp_dir)
+        self.assertEqual(
+            result,
+            {
+                "src/foo.c": bzlmod_lib.calculate_integrity_hash_for_file(self.tmp_dir / "src" / "foo.c"),
+                "top.txt": bzlmod_lib.calculate_integrity_hash_for_file(self.tmp_dir / "top.txt"),
+            },
+        )
+
+    def test_excludes_module_bazel_by_default(self):
+        (self.tmp_dir / "MODULE.bazel").write_text("module(...)\n")
+        (self.tmp_dir / "src.c").write_text("hello\n")
+        result = bzlmod_lib.hash_directory_tree(self.tmp_dir)
+        self.assertEqual(list(result.keys()), ["src.c"])
+
+    def test_changing_file_content_changes_hash(self):
+        target = self.tmp_dir / "src.c"
+        target.write_text("hello\n")
+        before = bzlmod_lib.hash_directory_tree(self.tmp_dir)
+        target.write_text("goodbye\n")
+        after = bzlmod_lib.hash_directory_tree(self.tmp_dir)
+        self.assertNotEqual(before, after)
+
+
 class TestFindPackagesWithNewerVersions(unittest.TestCase):
 
     def setUp(self):

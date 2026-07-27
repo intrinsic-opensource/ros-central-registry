@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
 import shutil
 import subprocess
 import sys
@@ -19,6 +20,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from tools.ci import bzlmod_lib
 from tools.ci import vendor_modules
 
 
@@ -148,6 +150,38 @@ class TestEnsureVendorDirFlag(unittest.TestCase):
         self.assertEqual(content.count(vendor_modules.VENDOR_DIR_RC_LINE), 1)
 
 
+class TestWriteVendorManifest(unittest.TestCase):
+
+    def setUp(self):
+        self.workspace_dir = Path(tempfile.mkdtemp())
+        self.vendor_module_dir = self.workspace_dir / "vendor" / "rclcpp+"
+        self.vendor_module_dir.mkdir(parents=True)
+        (self.vendor_module_dir / "MODULE.bazel").write_text('module(name = "rclcpp")\n')
+        (self.vendor_module_dir / "src.c").write_text("hello\n")
+
+    def tearDown(self):
+        shutil.rmtree(self.workspace_dir)
+
+    def test_writes_manifest_matching_hash_directory_tree(self):
+        vendor_modules.write_vendor_manifest(self.workspace_dir, "rclcpp")
+        manifest_path = (
+            self.workspace_dir / vendor_modules.VENDOR_MANIFEST_DIR_NAME / "rclcpp.json")
+        with open(manifest_path) as f:
+            manifest = json.load(f)
+        self.assertEqual(manifest, bzlmod_lib.hash_directory_tree(self.vendor_module_dir))
+        self.assertNotIn("MODULE.bazel", manifest)
+
+    def test_overwrites_stale_manifest_on_rerun(self):
+        vendor_modules.write_vendor_manifest(self.workspace_dir, "rclcpp")
+        (self.vendor_module_dir / "src.c").write_text("edited\n")
+        vendor_modules.write_vendor_manifest(self.workspace_dir, "rclcpp")
+        manifest_path = (
+            self.workspace_dir / vendor_modules.VENDOR_MANIFEST_DIR_NAME / "rclcpp.json")
+        with open(manifest_path) as f:
+            manifest = json.load(f)
+        self.assertEqual(manifest, bzlmod_lib.hash_directory_tree(self.vendor_module_dir))
+
+
 class TestMain(unittest.TestCase):
     """
     End-to-end coverage of main()'s argument handling, exercised against a
@@ -180,6 +214,14 @@ class TestMain(unittest.TestCase):
 
         def _fake_run(cmd, cwd=None, check=None):
             self.recorded_cmds.append(cmd)
+            # Simulate what a real "bazel vendor" would materialize, so the
+            # post-vendor manifest-writing step has something to hash.
+            for arg in cmd:
+                if arg.startswith("--repo=@"):
+                    module_dir = self.target_workspace / "vendor" / f"{arg[len('--repo=@'):]}+"
+                    module_dir.mkdir(parents=True, exist_ok=True)
+                    (module_dir / "MODULE.bazel").write_text("module(...)\n")
+                    (module_dir / "src.c").write_text("hello\n")
 
             class _FakeResult:
                 returncode = 0
