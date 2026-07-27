@@ -49,16 +49,45 @@ py_test(
     deps = [":bzlmod_lib"],
 )
 
+py_library(
+    name = "setup_workspace_lib",
+    srcs = ["setup_workspace.py"],
+    imports = ["../.."],
+    deps = [":bzlmod_lib"],
+)
+
 py_binary(
     name = "setup_workspace",
     srcs = ["setup_workspace.py"],
-    deps = [":bzlmod_lib"],
+    deps = [":setup_workspace_lib"],
+)
+
+py_test(
+    name = "setup_workspace_test",
+    srcs = ["setup_workspace_test.py"],
+    deps = [":setup_workspace_lib"],
+)
+
+py_library(
+    name = "vendor_modules_lib",
+    srcs = ["vendor_modules.py"],
+    imports = ["../.."],
+    deps = [
+        ":bzlmod_lib",
+        ":setup_workspace_lib",
+    ],
 )
 
 py_binary(
     name = "vendor_modules",
     srcs = ["vendor_modules.py"],
-    deps = [":bzlmod_lib"],
+    deps = [":vendor_modules_lib"],
+)
+
+py_test(
+    name = "vendor_modules_test",
+    srcs = ["vendor_modules_test.py"],
+    deps = [":vendor_modules_lib"],
 )
 
 py_library(
