@@ -2,5 +2,6 @@ bazel-*
 MODULE.bazel.lock
 .vscode
 .cache
+.claude
 workspace/**
 **/__pycache__/**
