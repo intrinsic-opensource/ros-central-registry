@@ -15,6 +15,7 @@
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -148,8 +149,15 @@ def main():
     )
     args = parser.parse_args()
 
+    # `bazel run`'s child process cwd is the exec root, not the actual git
+    # checkout -- BUILD_WORKSPACE_DIRECTORY is what recovers the real path
+    # (see the same pattern in setup_workspace.py/vendor_modules.py/
+    # create_patch.py). Without this, every modified metadata.json under
+    # `working_dir` spuriously looks "missing".
+    workspace_root = Path(os.environ.get("BUILD_WORKSPACE_DIRECTORY", ".")).resolve()
+
     diffs = parse_diff_status_file(args.diff_status)
-    violations = check_violations(diffs, args.old_metadata_dir, Path("."), args.directory)
+    violations = check_violations(diffs, args.old_metadata_dir, workspace_root, args.directory)
 
     if violations:
         print(f"PR violations found in '{args.directory}' directory:")
