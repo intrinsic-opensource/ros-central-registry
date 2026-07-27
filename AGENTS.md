@@ -94,3 +94,21 @@ patch pipeline — see the skills in `.agent/skills/`:
 - `sys.exit`/`parser.error` belong in `main()` only; helper functions should
   raise exceptions so they stay unit-testable without subprocess/`SystemExit`
   gymnastics.
+
+## Linting
+
+CI (`.github/workflows/_check_for_linting_errors.yml`) fails a PR on either
+of these, so check both before considering a change done:
+
+- **Every `BUILD.bazel`/`.bzl` file in the repo must pass buildifier**:
+  `buildifier -mode check -r .` from the repo root. If it's not on your
+  `PATH`, grab the same version CI uses:
+  `curl -L https://github.com/bazelbuild/buildtools/releases/download/v8.5.1/buildifier-linux-amd64 -o buildifier && chmod +x buildifier`.
+  Use `buildifier -mode fix -r .` to auto-fix formatting issues.
+- **Every Python file under `tools/`, `examples/`, and `docs/` must pass
+  ruff**: `ruff check tools examples docs` from the repo root. CI pins
+  `ruff==0.15.22` (`astral-sh/ruff-action`) — install the same version
+  (`pipx install ruff==0.15.22` or `pip install ruff==0.15.22`) so local
+  results match CI exactly; a newer ruff can flag (or miss) different things.
+  There's no `ruff.toml`/`pyproject.toml` in this repo, so it runs with
+  ruff's defaults.
