@@ -19,21 +19,7 @@ import os
 import sys
 from pathlib import Path
 
-def parse_diff_status_file(file_path: Path) -> list[tuple[str, str]]:
-    diffs = []
-    try:
-        with open(file_path, "r") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                parts = line.split("\t", 1)
-                if len(parts) == 2:
-                    diffs.append((parts[0], parts[1]))
-        return diffs
-    except Exception as e:
-        print(f"Error reading diff status file {file_path}: {e}", file=sys.stderr)
-        sys.exit(1)
+from tools.ci.bzlmod_lib import parse_diff_status_file
 
 def check_metadata_json(file_path: str, old_metadata_dir: Path, working_dir: Path) -> list[str]:
     violations = []

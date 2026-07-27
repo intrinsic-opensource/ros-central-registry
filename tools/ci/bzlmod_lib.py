@@ -22,8 +22,9 @@ import base64
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 
 
 def get_copyright_header() -> str:
@@ -42,6 +43,27 @@ def get_copyright_header() -> str:
 # limitations under the License.
 
 """
+
+
+def parse_diff_status_file(file_path: Path) -> List[Tuple[str, str]]:
+    """
+    Parses the output of `git diff --name-status` (one "<status>\\t<path>"
+    line per changed file) into a list of (status, path) tuples.
+    """
+    diffs = []
+    try:
+        with open(file_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                parts = line.split("\t", 1)
+                if len(parts) == 2:
+                    diffs.append((parts[0], parts[1]))
+        return diffs
+    except Exception as e:
+        print(f"Error reading diff status file {file_path}: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 def scan_module_for_dependencies(

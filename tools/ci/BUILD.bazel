@@ -21,6 +21,7 @@ py_library(
     name = "check_pr_modules_lib",
     srcs = ["check_pr_modules.py"],
     imports = ["../.."],
+    deps = [":bzlmod_lib"],
 )
 
 py_binary(
@@ -88,6 +89,25 @@ py_test(
     name = "vendor_modules_test",
     srcs = ["vendor_modules_test.py"],
     deps = [":vendor_modules_lib"],
+)
+
+py_library(
+    name = "module_diff_lib",
+    srcs = ["module_diff.py"],
+    imports = ["../.."],
+    deps = [":bzlmod_lib"],
+)
+
+py_binary(
+    name = "module_diff",
+    srcs = ["module_diff.py"],
+    deps = [":module_diff_lib"],
+)
+
+py_test(
+    name = "module_diff_test",
+    srcs = ["module_diff_test.py"],
+    deps = [":module_diff_lib"],
 )
 
 py_library(
