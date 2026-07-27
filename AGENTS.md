@@ -112,3 +112,35 @@ of these, so check both before considering a change done:
   results match CI exactly; a newer ruff can flag (or miss) different things.
   There's no `ruff.toml`/`pyproject.toml` in this repo, so it runs with
   ruff's defaults.
+
+## Licensing
+
+`rules_license` is already a default `bazel_dep` on every module (see
+`BCR_DEPS` in `tools/ci/bootstrap_release.py`), so it never needs adding —
+but any `BUILD.bazel` you newly author or hand-edit (typically `overlay/`
+files added via `create_patch`, or a package's own `msg`/`srv`/`action`
+`BUILD.bazel`) should declare the package's license with it, matching this
+existing pattern (e.g. `modules/rosidl_parser/*/overlay/BUILD.bazel`):
+
+```python
+load("@rules_license//rules:license.bzl", "license")
+
+package(
+    default_applicable_licenses = [":license"],
+    default_visibility = ["//visibility:public"],
+)
+
+license(
+    name = "license",
+    license_kinds = [
+        "@rules_license//licenses/spdx:Apache-2.0",
+    ],
+)
+```
+
+Match `license_kinds` to the package's actual upstream license (its
+`package.xml`'s `<license>` tag) rather than defaulting to Apache-2.0 --
+`BSD-3-Clause` shows up frequently too. This isn't retrofitted across every
+existing overlay file (many predate the convention), so don't feel obligated
+to add it to files you're not otherwise touching -- just include it in any
+new or edited one.
