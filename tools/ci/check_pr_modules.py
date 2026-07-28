@@ -15,24 +15,11 @@
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
-def parse_diff_status_file(file_path: Path) -> list[tuple[str, str]]:
-    diffs = []
-    try:
-        with open(file_path, "r") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                parts = line.split("\t", 1)
-                if len(parts) == 2:
-                    diffs.append((parts[0], parts[1]))
-        return diffs
-    except Exception as e:
-        print(f"Error reading diff status file {file_path}: {e}", file=sys.stderr)
-        sys.exit(1)
+from tools.ci.bzlmod_lib import parse_diff_status_file
 
 def check_metadata_json(file_path: str, old_metadata_dir: Path, working_dir: Path) -> list[str]:
     violations = []
@@ -148,8 +135,15 @@ def main():
     )
     args = parser.parse_args()
 
+    # `bazel run`'s child process cwd is the exec root, not the actual git
+    # checkout -- BUILD_WORKSPACE_DIRECTORY is what recovers the real path
+    # (see the same pattern in setup_workspace.py/vendor_modules.py/
+    # create_patch.py). Without this, every modified metadata.json under
+    # `working_dir` spuriously looks "missing".
+    workspace_root = Path(os.environ.get("BUILD_WORKSPACE_DIRECTORY", ".")).resolve()
+
     diffs = parse_diff_status_file(args.diff_status)
-    violations = check_violations(diffs, args.old_metadata_dir, Path("."), args.directory)
+    violations = check_violations(diffs, args.old_metadata_dir, workspace_root, args.directory)
 
     if violations:
         print(f"PR violations found in '{args.directory}' directory:")

@@ -1,0 +1,231 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Vendor a set of modules into a Bazel workspace created by
+//tools/ci:setup_workspace, so their sources can be edited in place.
+"""
+
+import argparse
+import json
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+from typing import Iterable, List, Set
+
+from tools.ci.bzlmod_lib import hash_directory_tree, scan_module_for_dependencies
+from tools.ci.setup_workspace import VARIANTS
+
+VENDOR_DIR_RC_LINE = "common --vendor_dir=vendor"
+
+# Where per-module file-hash snapshots are recorded right after vendoring,
+# so //tools/ci:create_patch can later detect local edits without a
+# network fetch (see create_patch.module_has_local_edits).
+VENDOR_MANIFEST_DIR_NAME = ".vendor_manifest"
+
+# setup_workspace.VARIANTS maps a short workspace-file key (e.g. "core") to
+# the ROS variant package name it corresponds to (e.g. "ros_core"), and
+# writes the packages that belong to it into a "ros-<key>.txt" target
+# pattern file. We expose the variant package names as the --variant
+# choices here, and use the inverse mapping to find the right file.
+VARIANT_KEY_BY_NAME = {package: key for key, package in VARIANTS.items()}
+VARIANT_CHOICES = sorted(VARIANT_KEY_BY_NAME)
+
+
+def declared_module_names(module_dot_bazel: Path, modules_dir: Path) -> set:
+    return set(
+        scan_module_for_dependencies(
+            module_dot_bazel, modules_dir, include_bcr=True, include_rcr=True
+        ).keys()
+    )
+
+
+def parse_module_tokens(tokens: Iterable[str]) -> List[str]:
+    """
+    Splits each token on whitespace/commas, so a single quoted argument
+    like "rclcpp rclcpp_action rclcpp_lifecycle" (or comma-separated)
+    behaves the same as passing each module as its own argument.
+    """
+    modules = []
+    for token in tokens:
+        for part in re.split(r"[\s,]+", token.strip()):
+            if part:
+                modules.append(part)
+    return modules
+
+
+def modules_for_variant(target_workspace: Path, variant: str) -> List[str]:
+    """
+    Reads the ros-<variant>.txt target-pattern file written by
+    //tools/ci:setup_workspace (lines look like "@rclcpp//...") and
+    returns the bare module names it lists. Raises FileNotFoundError if
+    that variant wasn't generated for this workspace.
+    """
+    key = VARIANT_KEY_BY_NAME[variant]
+    variant_file = target_workspace / f"ros-{key}.txt"
+    modules = []
+    for line in variant_file.read_text().splitlines():
+        line = line.strip()
+        if line:
+            modules.append(line.lstrip("@").split("//", 1)[0])
+    return modules
+
+
+def resolve_modules(
+    module_args: List[str],
+    variants: List[str],
+    vendor_all: bool,
+    target_workspace: Path,
+    declared: Set[str],
+) -> List[str]:
+    """
+    Combines explicit module names, --variant selections, and/or --all
+    into a single deduplicated, order-preserving list of module names to
+    vendor.
+    """
+    if vendor_all:
+        return sorted(declared)
+    modules = parse_module_tokens(module_args)
+    for variant in variants:
+        modules += modules_for_variant(target_workspace, variant)
+    return list(dict.fromkeys(modules))
+
+
+def write_vendor_manifest(target_workspace: Path, module: str) -> None:
+    """
+    Snapshots the file hashes of a freshly-vendored module tree, so a
+    later //tools/ci:create_patch run can cheaply tell whether it's been
+    edited since, without re-fetching upstream just to check.
+    """
+    vendor_module_dir = target_workspace / "vendor" / f"{module}+"
+    manifest_path = target_workspace / VENDOR_MANIFEST_DIR_NAME / f"{module}.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    hashes = hash_directory_tree(vendor_module_dir)
+    with open(manifest_path, "w") as f:
+        json.dump(hashes, f, indent=4, sort_keys=True)
+        f.write("\n")
+
+
+def ensure_vendor_dir_flag(bazelrc: Path) -> None:
+    """
+    Older workspaces may have been created before setup_workspace started
+    writing --vendor_dir into the .bazelrc. Patch it in so builds/tests in
+    this workspace actually read from the vendored sources.
+    """
+    content = bazelrc.read_text()
+    if VENDOR_DIR_RC_LINE in content:
+        return
+    with open(bazelrc, "a") as f:
+        f.write(f"\n{VENDOR_DIR_RC_LINE}\n")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Vendor a set of modules into a Bazel workspace for "
+        "in-place editing, e.g. to test local patches."
+    )
+    parser.add_argument(
+        "modules",
+        nargs="*",
+        default=[],
+        help="Names of modules to vendor, e.g. rclcpp rmw_fastrtps_cpp. "
+        "A single space- or comma-separated string is also accepted, "
+        'e.g. "rclcpp rclcpp_action rclcpp_lifecycle".',
+    )
+    parser.add_argument(
+        "--variant",
+        nargs="+",
+        choices=VARIANT_CHOICES,
+        default=[],
+        help="Vendor every module belonging to one or more canned ROS "
+        "variants (as generated by //tools/ci:setup_workspace).",
+    )
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Vendor every module declared as a bazel_dep in the workspace.",
+    )
+    parser.add_argument(
+        "--workspace-dir",
+        type=Path,
+        default=Path("workspace"),
+        help="Workspace directory created by //tools/ci:setup_workspace",
+    )
+    args = parser.parse_args()
+
+    if args.all and (args.modules or args.variant):
+        parser.error("--all cannot be combined with explicit modules or --variant.")
+    if not args.modules and not args.variant and not args.all:
+        parser.error("Specify at least one module, --variant <name>, or --all.")
+
+    workspace_root = Path(
+        os.environ.get("BUILD_WORKSPACE_DIRECTORY", ".")
+    ).resolve()
+    target_workspace = (workspace_root / args.workspace_dir).resolve()
+    module_dot_bazel = target_workspace / "MODULE.bazel"
+    bazelrc = target_workspace / ".bazelrc"
+
+    if not module_dot_bazel.exists():
+        print(
+            f"Error: {module_dot_bazel} does not exist. Run "
+            "//tools/ci:setup_workspace first.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    declared = declared_module_names(module_dot_bazel, workspace_root / "modules")
+
+    try:
+        modules = resolve_modules(
+            args.modules, args.variant, args.all, target_workspace, declared
+        )
+    except FileNotFoundError as e:
+        print(
+            f"Error: {e}. Run //tools/ci:setup_workspace first to generate "
+            "the ros-<variant>.txt target-pattern files.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    unknown = [m for m in modules if m not in declared]
+    if unknown:
+        print(
+            f"Error: {', '.join(unknown)} not declared as bazel_dep in "
+            f"{module_dot_bazel}.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    ensure_vendor_dir_flag(bazelrc)
+
+    cmd = ["bazel", "vendor", "--vendor_dir=vendor"]
+    cmd += [f"--repo=@{m}" for m in modules]
+    print(f"Vendoring {', '.join(modules)} into "
+          f"{target_workspace / 'vendor'}...")
+    subprocess.run(cmd, cwd=target_workspace, check=True)
+
+    for module in modules:
+        write_vendor_manifest(target_workspace, module)
+
+    print(
+        "Done. Edit sources under "
+        f"{target_workspace / 'vendor'} to test local patches; "
+        "builds/tests in this workspace will pick them up automatically."
+    )
+
+
+if __name__ == "__main__":
+    main()

@@ -14,18 +14,33 @@
 
 # Reusable workflow: checks that changes to Bazel modules abide by certain
 # rules. Called (never triggered directly) from ci.yaml as part of the
-# stage-1 fail-fast gate. This diffs against github.base_ref, so it only
-# makes sense for pull_request events -- the caller is responsible for only
-# invoking it then, and for treating a skip here as non-blocking for push
-# and workflow_dispatch runs.
+# stage-1 fail-fast gate, and from weekly_rollup.yml to check the rollup's
+# own diff against the same append-only guardrail enforced on human PRs.
+# This diffs against a base ref (github.base_ref for pull_request events,
+# or an explicit `base_ref` input for schedule/workflow_dispatch callers
+# like weekly_rollup.yml that have no github.base_ref of their own).
 
 name: _check_bazel_modules
 
 on:
   workflow_call:
+    inputs:
+      base_ref:
+        description: >
+          Git ref to diff against. Defaults to github.base_ref, which is
+          only set for pull_request events -- non-PR callers (e.g. a
+          scheduled rollup diffing its branch against main) must pass this
+          explicitly.
+        required: false
+        type: string
+        default: ""
 
 env:
   ANDROID_HOME: ""
+
+permissions:
+  contents: read
+  pull-requests: write # to post/update the module-diff comment below.
 
 jobs:
   check_bazel_modules:
@@ -48,14 +63,16 @@ jobs:
         repository-cache: true
     - name: Generate PR diff and old metadata files
       run: |
+        BASE_REF="${{ inputs.base_ref || github.base_ref }}"
+
         # Generate the diff name-status file
-        git diff --name-status "origin/${{ github.base_ref }}...HEAD" > /tmp/diff_status.txt
+        git diff --name-status "origin/$BASE_REF...HEAD" > /tmp/diff_status.txt
 
         # Extract the old versions of any modified metadata.json files under the matrix directory
         mkdir -p /tmp/old_metadata
-        git diff --name-only "origin/${{ github.base_ref }}...HEAD" | grep "^${{ matrix.directory }}/[^/]*/metadata.json$" | while read -r file; do
+        git diff --name-only "origin/$BASE_REF...HEAD" | grep "^${{ matrix.directory }}/[^/]*/metadata.json$" | while read -r file; do
             mkdir -p "/tmp/old_metadata/$(dirname "$file")"
-            git show "origin/${{ github.base_ref }}:$file" > "/tmp/old_metadata/$file" || true
+            git show "origin/$BASE_REF:$file" > "/tmp/old_metadata/$file" || true
         done
     - name: Run PR modules check
       run: |
@@ -63,6 +80,58 @@ jobs:
             --diff-status /tmp/diff_status.txt \
             --old-metadata-dir /tmp/old_metadata \
             --directory "${{ matrix.directory }}"
+    - name: Generate module diff
+      # Always runs, even if the check above failed -- that's exactly when
+      # seeing what a new module version actually changed is most useful.
+      if: always()
+      run: |
+        bazel run //tools/ci:module_diff -- \
+            --diff-status /tmp/diff_status.txt \
+            --directory "${{ matrix.directory }}" \
+            --output /tmp/module_diff.md
+    - name: Post module diff to PR
+      # Only meaningful on a real pull_request event -- weekly_rollup.yml
+      # calls this workflow before any PR exists (see the comment at the
+      # top of this file), so there's nothing to comment on there.
+      if: always() && github.event_name == 'pull_request'
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const fs = require('fs');
+          const path = '/tmp/module_diff.md';
+          if (!fs.existsSync(path)) return;
+          const diff = fs.readFileSync(path, 'utf8').trim();
+          if (!diff) return;
+
+          // Marker scopes the comment to this matrix directory, so
+          // "modules" and "bcr_staging/modules" each get their own
+          // comment, and re-runs update the same comment instead of
+          // piling up duplicates.
+          const marker = `<!-- module-diff: ${{ matrix.directory }} -->`;
+          const body = `${marker}\n${diff}`;
+
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          const existing = comments.find((c) => c.body.includes(marker));
+
+          if (existing) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: existing.id,
+              body,
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
+          }
     - name: Update status badges
       uses: Schneegans/dynamic-badges-action@v1.8.0
       with:

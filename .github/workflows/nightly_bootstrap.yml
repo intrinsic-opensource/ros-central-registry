@@ -1,0 +1,101 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Nightly bootstrap: scans ros/rosdistro for new "<distro>/<date>" tags
+# (via //tools/ci:bootstrap_release, which shells out to `gh api`) and, for
+# anything new, stages bare module versions + a new .rcr.0 per package that
+# carries forward its previous patch set. Commits straight to main once the
+# append-only guardrail passes -- this is purely additive scaffolding that
+# nothing currently-published references yet, unlike weekly_rollup.yml
+# (which changes the active ros release pointer and needs full-CI gating).
+
+name: nightly_bootstrap
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      distro:
+        description: 'Single distro to bootstrap (overrides the default list below)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nightly-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    name: Bootstrap ${{ matrix.distro }}
+    runs-on: ubuntu-26.04
+    strategy:
+      fail-fast: false
+      # Add more entries here to scan additional distros -- everything
+      # else in this workflow is distro-agnostic.
+      matrix:
+        distro: ${{ fromJson(github.event.inputs.distro && format('["{0}"]', github.event.inputs.distro) || '["lyrical"]') }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: bazel-contrib/setup-bazel@0.19.0
+        with:
+          bazelisk-cache: true
+          disk-cache: false
+          repository-cache: true
+
+      - name: Run bootstrap_release
+        id: bootstrap
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          bazel run //tools/ci:bootstrap_release -- --distro "${{ matrix.distro }}" 2>&1 | tee /tmp/bootstrap.log
+          if grep -q "Nothing to bootstrap" /tmp/bootstrap.log; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check append-only guardrail
+        if: steps.bootstrap.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/old_metadata
+          git diff --name-only HEAD -- modules | grep 'metadata\.json$' | while read -r file; do
+            mkdir -p "/tmp/old_metadata/$(dirname "$file")"
+            git show "HEAD:$file" > "/tmp/old_metadata/$file"
+          done
+          {
+            git diff --name-status HEAD -- modules
+            git status --porcelain modules | grep '^??' | awk '{print "A\t" $2}'
+          } > /tmp/diff_status.txt
+          bazel run //tools/ci:check_pr_modules -- \
+              --diff-status /tmp/diff_status.txt \
+              --old-metadata-dir /tmp/old_metadata \
+              --directory modules
+
+      - name: Commit and push
+        if: steps.bootstrap.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "rcr-automation-bot"
+          git config user.email "actions@github.com"
+          git add modules
+          git commit -m "Nightly bootstrap: ${{ matrix.distro }}"
+          git push origin main

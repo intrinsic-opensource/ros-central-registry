@@ -13,10 +13,14 @@
 # limitations under the License.
 
 import json
+import os
 import shutil
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+
+from tools.ci import check_pr_modules
 from tools.ci.check_pr_modules import check_violations
 
 class TestCheckPrModules(unittest.TestCase):
@@ -130,6 +134,112 @@ class TestCheckPrModules(unittest.TestCase):
         diffs = [("M", rel_path)]
         violations = check_violations(diffs, self.old_dir, self.work_dir, "bcr_staging/modules")
         self.assertIn("Version '1.0.0' was removed from 'versions' in bcr_staging/modules/existing_module/metadata.json but was not added to 'yanked_versions'.", violations)
+
+
+class TestMain(unittest.TestCase):
+    """
+    Exercises main() end-to-end, including its resolution of the actual
+    working directory -- the piece check_violations()/check_metadata_json()
+    unit tests above can't cover, since they're always handed an explicit
+    working_dir rather than going through main()'s own resolution logic.
+    """
+
+    def setUp(self):
+        # Simulates the real git checkout (what BUILD_WORKSPACE_DIRECTORY
+        # should point at).
+        self.workspace_root = Path(tempfile.mkdtemp())
+        # Simulates Bazel's exec root: some unrelated directory that
+        # `bazel run` actually sets as the child process's cwd.
+        self.unrelated_cwd = Path(tempfile.mkdtemp())
+        self.old_metadata_dir = Path(tempfile.mkdtemp())
+        self.args_dir = Path(tempfile.mkdtemp())
+        self.diff_status_path = self.args_dir / "diff_status.txt"
+
+        self.original_environ = dict(os.environ)
+        self.original_argv = sys.argv
+        self.original_cwd = os.getcwd()
+
+    def tearDown(self):
+        os.chdir(self.original_cwd)
+        os.environ.clear()
+        os.environ.update(self.original_environ)
+        sys.argv = self.original_argv
+        shutil.rmtree(self.workspace_root)
+        shutil.rmtree(self.unrelated_cwd)
+        shutil.rmtree(self.old_metadata_dir)
+        shutil.rmtree(self.args_dir)
+
+    def write_json(self, base_dir: Path, rel_path: str, data: dict):
+        path = base_dir / rel_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with open(path, "w") as f:
+            json.dump(data, f)
+
+    def run_main(self) -> int:
+        sys.argv = [
+            "check_pr_modules.py",
+            "--diff-status", str(self.diff_status_path),
+            "--old-metadata-dir", str(self.old_metadata_dir),
+            "--directory", "modules",
+        ]
+        with self.assertRaises(SystemExit) as cm:
+            check_pr_modules.main()
+        return cm.exception.code
+
+    def test_modified_metadata_resolved_via_build_workspace_directory(self):
+        # Regression test for the bug fixed in main(): under `bazel run`,
+        # the child process's cwd is Bazel's exec root, not the real git
+        # checkout, so a legitimately-modified metadata.json must still be
+        # found via BUILD_WORKSPACE_DIRECTORY rather than bare Path(".").
+        rel_path = "modules/existing_module/metadata.json"
+        self.write_json(self.old_metadata_dir, rel_path, {"versions": ["1.0.0"], "yanked_versions": {}})
+        self.write_json(self.workspace_root, rel_path, {"versions": ["1.0.0", "1.1.0"], "yanked_versions": {}})
+        self.diff_status_path.write_text(f"M\t{rel_path}\n")
+
+        os.chdir(self.unrelated_cwd)
+        os.environ["BUILD_WORKSPACE_DIRECTORY"] = str(self.workspace_root)
+
+        self.assertEqual(self.run_main(), 0)
+
+    def test_modified_metadata_not_found_without_build_workspace_directory(self):
+        # Characterizes the failure mode this env var exists to avoid: if
+        # it's unset (or wrong) and the cwd isn't the real checkout, the
+        # modified metadata.json can't be found and is (mis)reported as a
+        # violation, even though the change itself is legitimate.
+        rel_path = "modules/existing_module/metadata.json"
+        self.write_json(self.old_metadata_dir, rel_path, {"versions": ["1.0.0"], "yanked_versions": {}})
+        self.write_json(self.workspace_root, rel_path, {"versions": ["1.0.0", "1.1.0"], "yanked_versions": {}})
+        self.diff_status_path.write_text(f"M\t{rel_path}\n")
+
+        os.chdir(self.unrelated_cwd)
+        os.environ.pop("BUILD_WORKSPACE_DIRECTORY", None)
+
+        self.assertEqual(self.run_main(), 1)
+
+    def test_falls_back_to_cwd_when_env_var_unset(self):
+        # When invoked directly (e.g. `python3 tools/ci/check_pr_modules.py`
+        # outside of `bazel run`), there's no BUILD_WORKSPACE_DIRECTORY --
+        # main() should fall back to the process's actual cwd, which is
+        # correct in that case since there's no exec-root indirection.
+        rel_path = "modules/existing_module/metadata.json"
+        self.write_json(self.old_metadata_dir, rel_path, {"versions": ["1.0.0"], "yanked_versions": {}})
+        self.write_json(self.workspace_root, rel_path, {"versions": ["1.0.0", "1.1.0"], "yanked_versions": {}})
+        self.diff_status_path.write_text(f"M\t{rel_path}\n")
+
+        os.chdir(self.workspace_root)
+        os.environ.pop("BUILD_WORKSPACE_DIRECTORY", None)
+
+        self.assertEqual(self.run_main(), 0)
+
+    def test_no_violations_exits_zero_and_violations_exit_one(self):
+        diffs_path_content = "D\tmodules/existing_module/1.0.0/MODULE.bazel\n"
+        self.diff_status_path.write_text(diffs_path_content)
+
+        os.chdir(self.workspace_root)
+        os.environ["BUILD_WORKSPACE_DIRECTORY"] = str(self.workspace_root)
+
+        self.assertEqual(self.run_main(), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -66,6 +66,9 @@ jobs:
   bazel_modules:
     name: Check modules
     if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write # to post/update the module-diff PR comment.
     uses: ./.github/workflows/_check_bazel_modules.yml
     secrets: inherit
 

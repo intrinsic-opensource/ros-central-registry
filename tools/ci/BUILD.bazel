@@ -13,6 +13,7 @@
 # limitations under the License.
 
 load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library", "py_test")
+load("@pip_ros_central_registry//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -20,6 +21,7 @@ py_library(
     name = "check_pr_modules_lib",
     srcs = ["check_pr_modules.py"],
     imports = ["../.."],
+    deps = [":bzlmod_lib"],
 )
 
 py_binary(
@@ -36,7 +38,154 @@ py_test(
     ],
 )
 
+py_library(
+    name = "bzlmod_lib",
+    srcs = ["bzlmod_lib.py"],
+    imports = ["../.."],
+)
+
+py_test(
+    name = "bzlmod_lib_test",
+    srcs = ["bzlmod_lib_test.py"],
+    deps = [":bzlmod_lib"],
+)
+
+py_library(
+    name = "setup_workspace_lib",
+    srcs = ["setup_workspace.py"],
+    imports = ["../.."],
+    deps = [":bzlmod_lib"],
+)
+
 py_binary(
     name = "setup_workspace",
     srcs = ["setup_workspace.py"],
+    deps = [":setup_workspace_lib"],
+)
+
+py_test(
+    name = "setup_workspace_test",
+    srcs = ["setup_workspace_test.py"],
+    deps = [":setup_workspace_lib"],
+)
+
+py_library(
+    name = "vendor_modules_lib",
+    srcs = ["vendor_modules.py"],
+    imports = ["../.."],
+    deps = [
+        ":bzlmod_lib",
+        ":setup_workspace_lib",
+    ],
+)
+
+py_binary(
+    name = "vendor_modules",
+    srcs = ["vendor_modules.py"],
+    deps = [":vendor_modules_lib"],
+)
+
+py_test(
+    name = "vendor_modules_test",
+    srcs = ["vendor_modules_test.py"],
+    deps = [":vendor_modules_lib"],
+)
+
+py_library(
+    name = "module_diff_lib",
+    srcs = ["module_diff.py"],
+    imports = ["../.."],
+    deps = [":bzlmod_lib"],
+)
+
+py_binary(
+    name = "module_diff",
+    srcs = ["module_diff.py"],
+    deps = [":module_diff_lib"],
+)
+
+py_test(
+    name = "module_diff_test",
+    srcs = ["module_diff_test.py"],
+    deps = [":module_diff_lib"],
+)
+
+py_library(
+    name = "create_patch_lib",
+    srcs = ["create_patch.py"],
+    imports = ["../.."],
+    deps = [
+        ":bzlmod_lib",
+        ":vendor_modules_lib",
+    ],
+)
+
+py_binary(
+    name = "create_patch",
+    srcs = ["create_patch.py"],
+    deps = [":create_patch_lib"],
+)
+
+py_test(
+    name = "create_patch_test",
+    srcs = ["create_patch_test.py"],
+    deps = [":create_patch_lib"],
+)
+
+py_library(
+    name = "rollup_patches_lib",
+    srcs = ["rollup_patches.py"],
+    imports = ["../.."],
+    deps = [":bzlmod_lib"],
+)
+
+py_binary(
+    name = "rollup_patches",
+    srcs = ["rollup_patches.py"],
+    deps = [":rollup_patches_lib"],
+)
+
+py_test(
+    name = "rollup_patches_test",
+    srcs = ["rollup_patches_test.py"],
+    deps = [":rollup_patches_lib"],
+)
+
+py_library(
+    name = "rosdistro_lib",
+    srcs = ["rosdistro_lib.py"],
+    imports = ["../.."],
+    deps = [
+        requirement("pyyaml"),
+        requirement("requests"),
+    ],
+)
+
+py_test(
+    name = "rosdistro_lib_test",
+    srcs = ["rosdistro_lib_test.py"],
+    deps = [":rosdistro_lib"],
+)
+
+py_library(
+    name = "bootstrap_release_lib",
+    srcs = ["bootstrap_release.py"],
+    imports = ["../.."],
+    deps = [
+        ":bzlmod_lib",
+        ":rosdistro_lib",
+        requirement("requests"),
+    ],
+)
+
+py_binary(
+    name = "bootstrap_release",
+    srcs = ["bootstrap_release.py"],
+    deps = [":bootstrap_release_lib"],
+)
+
+py_test(
+    name = "bootstrap_release_test",
+    srcs = ["bootstrap_release_test.py"],
+    deps = [":bootstrap_release_lib"],
 )
