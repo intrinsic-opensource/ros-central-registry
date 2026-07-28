@@ -86,28 +86,31 @@ bazel_dep(name = "zstd", version = "1.5.6")
 # Setup python
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
+    python_version = "3.11",
+)
+python.toolchain(
     is_default = True,
     python_version = "3.12",
 )
+use_repo(python, "python_versions")
 
 # Setup pip
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
-    # Windows' file locking makes concurrent whl_library fetches reading the
-    # same entry in the shared, machine-wide pip wheel cache
-    # (%LOCALAPPDATA%\pip\cache\wheels) prone to PermissionError under
-    # --keep_going's parallelism. Skip that cache entirely for these
-    # hermetic fetches.
     extra_pip_args = ["--no-cache-dir"],
-    hub_name = "pip_ros",
-    python_version = "3.12",
-    requirements_lock = "requirements.txt",
-    # The default lock is compiled on Linux and misses Windows-only packages
-    # (e.g. pytest's colorama dependency) and Windows wheel hashes, so Windows
-    # hosts use their own platform lock.
+    hub_name = "pip_311",
+    python_version = "3.11",
+    requirements_lock = "requirements_3_11.txt",
     requirements_windows = "requirements_windows.txt",
 )
-use_repo(pip, "pip_ros")
+pip.parse(
+    extra_pip_args = ["--no-cache-dir"],
+    hub_name = "pip_312",
+    python_version = "3.12",
+    requirements_lock = "requirements_3_12.txt",
+    requirements_windows = "requirements_windows.txt",
+)
+use_repo(pip, "pip_311", "pip_312")
 
 # Set up llvm for clang-format and clang-tidy
 llvm = use_extension("@llvm//extensions:llvm.bzl", "llvm")
