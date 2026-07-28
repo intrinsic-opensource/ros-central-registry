@@ -485,7 +485,7 @@ use_repo(rs_toolchains, "default_rust_toolchains")
 register_toolchains(
     "@default_rust_toolchains//:all",
 )
-""")
+""".format(args=args, DEFAULT_PYTHON_VERSION=DEFAULT_PYTHON_VERSION))
 
     # Write .bazelrc
     distro = args.release.split(".")[0]
