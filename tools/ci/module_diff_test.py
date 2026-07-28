@@ -127,9 +127,27 @@ class TestDiffModuleVersions(unittest.TestCase):
 
         diff_text = module_diff.diff_module_versions(self.modules_dir, "rclcpp", "1.0.0", "1.0.1")
         self.assertEqual(diff_text.strip(), "")
+class TestTruncateDiffText(unittest.TestCase):
+
+    def test_does_not_truncate_short_text(self):
+        text = "line 1\nline 2\n"
+        self.assertEqual(module_diff.truncate_diff_text(text, 100), text)
+
+    def test_truncates_at_last_newline(self):
+        text = "line 1\nline 2\nline 3\n"
+        # Length of "line 1\nline 2\n" is 14. Let's set limit to 16.
+        # It should truncate at the end of line 2.
+        result = module_diff.truncate_diff_text(text, 16)
+        self.assertEqual(result, "line 1\nline 2\n\n... [Diff truncated: output too large] ...\n")
+
+    def test_truncates_even_without_newline(self):
+        text = "abcdefghij"
+        result = module_diff.truncate_diff_text(text, 5)
+        self.assertEqual(result, "abcde\n\n... [Diff truncated: output too large] ...\n")
 
 
 class TestRenderModuleDiffMarkdown(unittest.TestCase):
+
 
     def setUp(self):
         self.modules_dir = Path(tempfile.mkdtemp())

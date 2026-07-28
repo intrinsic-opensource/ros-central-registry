@@ -98,6 +98,23 @@ def diff_module_versions(
     return result.stdout
 
 
+MAX_DIFF_TEXT_LENGTH = 30000
+
+
+def truncate_diff_text(text: str, max_chars: int = MAX_DIFF_TEXT_LENGTH) -> str:
+    """
+    Truncates a text string to at most max_chars, trying to align the cut
+    with a line boundary.
+    """
+    if len(text) <= max_chars:
+        return text
+    truncated = text[:max_chars]
+    last_newline = truncated.rfind("\n")
+    if last_newline != -1:
+        truncated = truncated[:last_newline]
+    return truncated + "\n\n... [Diff truncated: output too large] ...\n"
+
+
 def render_module_diff_markdown(
     modules_dir: Path, new_versions: List[Tuple[str, str]]
 ) -> str:
@@ -127,10 +144,11 @@ def render_module_diff_markdown(
             )
             continue
 
+        truncated_diff = truncate_diff_text(diff_text)
         sections.append(
             f"<details>\n<summary><code>{package}</code>: "
             f"<code>{previous}</code> &rarr; <code>{version}</code></summary>\n\n"
-            f"```diff\n{diff_text}```\n\n</details>"
+            f"```diff\n{truncated_diff}```\n\n</details>"
         )
 
     return (
@@ -139,6 +157,7 @@ def render_module_diff_markdown(
         "generated the same way the Bazel Central Registry does for new "
         "module version submissions.\n\n" + "\n\n".join(sections) + "\n"
     )
+
 
 
 def main():
