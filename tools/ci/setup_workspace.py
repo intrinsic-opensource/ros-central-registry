@@ -35,6 +35,12 @@ VARIANTS = {
     "simulation": "simulation",
 }
 
+# Keep in sync with rosdistro's own MODULE.bazel (python.toolchain()/
+# pip.parse() calls) and python/defs.bzl (_SUPPORTED_PYTHON_VERSIONS) --
+# these are the versions rosdistro registers a toolchain + pip_ros hub for.
+SUPPORTED_PYTHON_VERSIONS = ["3.11", "3.12"]
+DEFAULT_PYTHON_VERSION = "3.12"
+
 BAZELRC_TEMPLATE = """# Copyright 2026 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -286,6 +292,13 @@ def main():
         help="Directory to pin TMPDIR to for build/test/run actions, e.g. "
              "$RUNNER_TEMP. Falls back to $TMPDIR, then /tmp, if not given.",
     )
+    parser.add_argument(
+        "--python-version",
+        choices=SUPPORTED_PYTHON_VERSIONS,
+        default=DEFAULT_PYTHON_VERSION,
+        help="Python version to use for both the default toolchain and the "
+             "rosdistro pip_ros hub (default: %(default)s).",
+    )
     args = parser.parse_args()
 
     tmpdir = args.tmpdir or os.environ.get("TMPDIR") or "/tmp"
@@ -444,14 +457,20 @@ osx.frameworks(
 )
 
 # Python / pip
+#
+# python_version is the single source of truth for both settings below
+# (--python-version, default {DEFAULT_PYTHON_VERSION!r}) -- it must stay one
+# of rosdistro's SUPPORTED_PYTHON_VERSIONS, since pip_ros.toolchain() selects
+# among the toolchains + pip_ros hubs rosdistro itself registers.
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
     is_default = True,
-    python_version = "3.12",
+    python_version = "{args.python_version}",
 )
 
 pip_ros = use_extension("@rosdistro//python:defs.bzl", "pip_ros")
+pip_ros.toolchain(python_version = "{args.python_version}")
 use_repo(pip_ros, "pip_ros")
 
 # Rust / crates
