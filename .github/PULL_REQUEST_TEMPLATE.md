@@ -9,25 +9,11 @@ this repo expects PRs to follow.
 
 <!-- What does this PR do, and why? -->
 
-## Packages affected
-
-<!--
-List every RCR package (module) this PR touches, e.g. the modules/<name>/
-directories with a new version. Per CONTRIBUTING.md, a single patch PR should
-normally touch exactly one package's new version directory plus its
-metadata.json.
--->
-
--
-
 ## Acknowledgements
 
 - [ ] I have read the [Contributing Guidelines](../CONTRIBUTING.md).
-- [ ] I have read the [Code of Conduct](../CODE_OF_CONDUCT.md) and agree to
-      abide by it.
-- [ ] I have read and complied with the [OSRF Policy on the Use of
-      Generative AI Tools ("Generative AI") in
-      Contributions](https://github.com/openrobotics/osra-policies-and-procedures/blob/main/OSRF%20Policy%20on%20the%20Use%20of%20Generative%20Tools%20(%E2%80%9CGenerative%20AI%E2%80%9D)%20in%20Contributions.md).
+- [ ] I have read the [Code of Conduct](../CODE_OF_CONDUCT.md) and agree to abide by it.
+- [ ] I have read and complied with the [OSRF Policy on the Use of Generative AI Tools ("Generative AI") in Contributions](https://github.com/openrobotics/osra-policies-and-procedures/blob/main/OSRF%20Policy%20on%20the%20Use%20of%20Generative%20Tools%20(%E2%80%9CGenerative%20AI%E2%80%9D)%20in%20Contributions.md).
 
 ## Generative AI disclosure
 
