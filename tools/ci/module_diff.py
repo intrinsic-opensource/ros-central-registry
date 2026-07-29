@@ -80,22 +80,57 @@ def find_previous_version(
 
 def diff_module_versions(
     modules_dir: Path, package: str, old_version: str, new_version: str
-) -> str:
+) -> List[Tuple[str, str]]:
     """
-    Unified diff (diff -ruN) between two version directories of the same
-    package -- MODULE.bazel, source.json, patches/, and overlay/ are all
-    fair game to review, since they're everything a new version adds. Runs
-    with cwd set to the package directory so the diff headers show clean
-    version-relative paths (e.g. "1.0.0/source.json") instead of a noisy,
-    non-portable absolute host path.
+    Compares two version directories file-by-file.
+    Returns a list of (relative_file_path, diff_content) tuples.
+    If there are no differences in a file, it is not included in the list.
     """
-    result = subprocess.run(
-        ["diff", "-ruN", old_version, new_version],
-        cwd=modules_dir / package,
-        capture_output=True,
-        text=True,
-    )
-    return result.stdout
+    old_dir = modules_dir / package / old_version
+    new_dir = modules_dir / package / new_version
+
+    old_files = {p.relative_to(old_dir) for p in old_dir.rglob("*") if p.is_file()}
+    new_files = {p.relative_to(new_dir) for p in new_dir.rglob("*") if p.is_file()}
+    all_files = sorted(old_files.union(new_files))
+
+    file_diffs = []
+    for rel_path in all_files:
+        old_file = old_dir / rel_path
+        new_file = new_dir / rel_path
+
+        old_target = str(old_file) if old_file.exists() else "/dev/null"
+        new_target = str(new_file) if new_file.exists() else "/dev/null"
+
+        label_old = f"{old_version}/{rel_path}"
+        label_new = f"{new_version}/{rel_path}"
+
+        result = subprocess.run(
+            ["diff", "-u", "--label", label_old, "--label", label_new, old_target, new_target],
+            capture_output=True,
+            text=True,
+        )
+        if result.stdout:
+            file_diffs.append((str(rel_path), result.stdout))
+
+    return file_diffs
+
+
+MAX_FILE_DIFF_LENGTH = 10000
+MAX_TOTAL_DIFF_LENGTH = 45000
+
+
+def truncate_diff_text(text: str, max_chars: int) -> str:
+    """
+    Truncates a text string to at most max_chars, trying to align the cut
+    with a line boundary.
+    """
+    if len(text) <= max_chars:
+        return text
+    truncated = text[:max_chars]
+    last_newline = truncated.rfind("\n")
+    if last_newline != -1:
+        truncated = truncated[:last_newline]
+    return truncated + "\n\n... [Diff truncated: output too large] ...\n"
 
 
 def render_module_diff_markdown(
@@ -119,18 +154,57 @@ def render_module_diff_markdown(
             )
             continue
 
-        diff_text = diff_module_versions(modules_dir, package, previous, version)
-        if not diff_text.strip():
+        file_diffs = diff_module_versions(modules_dir, package, previous, version)
+        if not file_diffs:
             sections.append(
                 f"<details>\n<summary><code>{package}@{version}</code> "
                 f"(identical to <code>{previous}</code>)</summary>\n</details>"
             )
             continue
 
+        module_sections = []
+        total_len = 0
+        limit_reached = False
+
+        for rel_path, diff_text in file_diffs:
+            if limit_reached:
+                module_sections.append(
+                    f"### `{rel_path}`\n\n*Diff omitted: overall limit reached.*\n"
+                )
+                continue
+
+            truncated_diff = truncate_diff_text(diff_text, MAX_FILE_DIFF_LENGTH)
+
+            # Check if adding this file's diff exceeds the total limit
+            file_section = f"### `{rel_path}`\n\n```diff\n{truncated_diff}```\n"
+            if total_len + len(file_section) > MAX_TOTAL_DIFF_LENGTH:
+                # Truncate this file's section to fit the remaining space
+                remaining = MAX_TOTAL_DIFF_LENGTH - total_len
+                if remaining > 500:
+                    space_for_diff = remaining - len(f"### `{rel_path}`\n\n```diff\n```\n")
+                    if space_for_diff > 100:
+                        truncated_diff = truncate_diff_text(diff_text, space_for_diff)
+                        file_section = f"### `{rel_path}`\n\n```diff\n{truncated_diff}```\n"
+                        module_sections.append(file_section)
+                        total_len += len(file_section)
+                    else:
+                        module_sections.append(
+                            f"### `{rel_path}`\n\n*Diff omitted: overall limit reached.*\n"
+                        )
+                else:
+                    module_sections.append(
+                        f"### `{rel_path}`\n\n*Diff omitted: overall limit reached.*\n"
+                    )
+                limit_reached = True
+            else:
+                module_sections.append(file_section)
+                total_len += len(file_section)
+
         sections.append(
             f"<details>\n<summary><code>{package}</code>: "
             f"<code>{previous}</code> &rarr; <code>{version}</code></summary>\n\n"
-            f"```diff\n{diff_text}```\n\n</details>"
+            + "\n".join(module_sections)
+            + "\n</details>"
         )
 
     return (
@@ -139,6 +213,8 @@ def render_module_diff_markdown(
         "generated the same way the Bazel Central Registry does for new "
         "module version submissions.\n\n" + "\n\n".join(sections) + "\n"
     )
+
+
 
 
 def main():

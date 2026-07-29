@@ -111,7 +111,8 @@ class TestDiffModuleVersions(unittest.TestCase):
         (old_dir / "patches" / "0001-old.patch").write_text("old patch\n")
         (new_dir / "patches" / "0002-new.patch").write_text("new patch\n")
 
-        diff_text = module_diff.diff_module_versions(self.modules_dir, "rclcpp", "1.0.0", "1.0.1")
+        file_diffs = module_diff.diff_module_versions(self.modules_dir, "rclcpp", "1.0.0", "1.0.1")
+        diff_text = "\n".join(d for _, d in file_diffs)
         self.assertIn("-version = \"1.0.0\"", diff_text)
         self.assertIn("+version = \"1.0.1\"", diff_text)
         self.assertIn("0001-old.patch", diff_text)
@@ -125,11 +126,29 @@ class TestDiffModuleVersions(unittest.TestCase):
         (old_dir / "MODULE.bazel").write_text("same\n")
         (new_dir / "MODULE.bazel").write_text("same\n")
 
-        diff_text = module_diff.diff_module_versions(self.modules_dir, "rclcpp", "1.0.0", "1.0.1")
-        self.assertEqual(diff_text.strip(), "")
+        file_diffs = module_diff.diff_module_versions(self.modules_dir, "rclcpp", "1.0.0", "1.0.1")
+        self.assertEqual(file_diffs, [])
+class TestTruncateDiffText(unittest.TestCase):
+
+    def test_does_not_truncate_short_text(self):
+        text = "line 1\nline 2\n"
+        self.assertEqual(module_diff.truncate_diff_text(text, 100), text)
+
+    def test_truncates_at_last_newline(self):
+        text = "line 1\nline 2\nline 3\n"
+        # Length of "line 1\nline 2\n" is 14. Let's set limit to 16.
+        # It should truncate at the end of line 2.
+        result = module_diff.truncate_diff_text(text, 16)
+        self.assertEqual(result, "line 1\nline 2\n\n... [Diff truncated: output too large] ...\n")
+
+    def test_truncates_even_without_newline(self):
+        text = "abcdefghij"
+        result = module_diff.truncate_diff_text(text, 5)
+        self.assertEqual(result, "abcde\n\n... [Diff truncated: output too large] ...\n")
 
 
 class TestRenderModuleDiffMarkdown(unittest.TestCase):
+
 
     def setUp(self):
         self.modules_dir = Path(tempfile.mkdtemp())
@@ -171,6 +190,42 @@ class TestRenderModuleDiffMarkdown(unittest.TestCase):
         result = module_diff.render_module_diff_markdown(self.modules_dir, [("rclcpp", "1.0.1")])
         self.assertIn("identical to", result)
         self.assertNotIn("```diff", result)
+
+    def test_truncates_large_individual_file_diff(self):
+        original_max = module_diff.MAX_FILE_DIFF_LENGTH
+        module_diff.MAX_FILE_DIFF_LENGTH = 15
+        try:
+            old_dir = self.modules_dir / "rclcpp" / "1.0.0"
+            new_dir = self.modules_dir / "rclcpp" / "1.0.1"
+            old_dir.mkdir(parents=True)
+            new_dir.mkdir(parents=True)
+            (old_dir / "MODULE.bazel").write_text("line 1\nline 2\nline 3\n")
+            (new_dir / "MODULE.bazel").write_text("line a\nline b\nline c\n")
+
+            result = module_diff.render_module_diff_markdown(self.modules_dir, [("rclcpp", "1.0.1")])
+            self.assertIn("Diff truncated", result)
+        finally:
+            module_diff.MAX_FILE_DIFF_LENGTH = original_max
+
+    def test_omits_subsequent_files_when_total_limit_reached(self):
+        original_max_total = module_diff.MAX_TOTAL_DIFF_LENGTH
+        module_diff.MAX_TOTAL_DIFF_LENGTH = 100
+        try:
+            old_dir = self.modules_dir / "rclcpp" / "1.0.0"
+            new_dir = self.modules_dir / "rclcpp" / "1.0.1"
+            old_dir.mkdir(parents=True)
+            new_dir.mkdir(parents=True)
+            (old_dir / "f1").write_text("a\n" * 10)
+            (new_dir / "f1").write_text("b\n" * 10)
+            (old_dir / "f2").write_text("c\n" * 10)
+            (new_dir / "f2").write_text("d\n" * 10)
+
+            result = module_diff.render_module_diff_markdown(self.modules_dir, [("rclcpp", "1.0.1")])
+            self.assertIn("f1", result)
+            self.assertIn("f2", result)
+            self.assertIn("Diff omitted: overall limit reached", result)
+        finally:
+            module_diff.MAX_TOTAL_DIFF_LENGTH = original_max_total
 
 
 class TestMain(unittest.TestCase):
