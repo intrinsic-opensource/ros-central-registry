@@ -183,6 +183,7 @@ class ModuleRollup:
     new_version: str
     current_module_dir: Path
     new_module_dir: Path
+    vendor_module_dir: Path
     new_patches: Dict[str, str]
     new_overlays: Dict[str, str]
     old_patches: Dict[str, str]
@@ -190,6 +191,11 @@ class ModuleRollup:
 
     @property
     def changed(self) -> bool:
+        if self.module == "rosdistro":
+            old_module_dot_bazel = (self.current_module_dir / "MODULE.bazel").read_text()
+            new_module_dot_bazel = (self.vendor_module_dir / "MODULE.bazel").read_text()
+            if old_module_dot_bazel != new_module_dot_bazel:
+                return True
         return self.new_patches != self.old_patches or self.new_overlays != self.old_overlays
 
 
@@ -260,6 +266,7 @@ def compute_rollup(
         new_version=new_version,
         current_module_dir=current_module_dir,
         new_module_dir=new_module_dir,
+        vendor_module_dir=vendor_module_dir,
         new_patches=new_patches,
         new_overlays=new_overlays,
         old_patches=old_patches,
@@ -287,6 +294,9 @@ def apply_rollup(rollup: ModuleRollup, metadata_path: Path) -> None:
         overlay_path.write_text(content)
 
     module_file = rollup.new_module_dir / "MODULE.bazel"
+    if rollup.module == "rosdistro":
+        shutil.copy2(rollup.vendor_module_dir / "MODULE.bazel", module_file)
+
     module_file.write_text(
         bzlmod_lib.rewrite_module_version(module_file.read_text(), rollup.module, rollup.new_version)
     )

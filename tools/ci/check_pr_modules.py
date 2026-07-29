@@ -16,10 +16,11 @@
 import argparse
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
-from tools.ci.bzlmod_lib import parse_diff_status_file
+from tools.ci.bzlmod_lib import increment_version, parse_diff_status_file
 
 def check_metadata_json(file_path: str, old_metadata_dir: Path, working_dir: Path) -> list[str]:
     violations = []
@@ -73,6 +74,85 @@ def check_metadata_json(file_path: str, old_metadata_dir: Path, working_dir: Pat
 
     return violations
 
+def check_module_bazel(file_path: str, old_metadata_dir: Path, working_dir: Path, package_name: str) -> list[str]:
+    violations = []
+
+    # If it is the rosdistro module, we allow any edits.
+    if package_name == "rosdistro":
+        return violations
+
+    # Otherwise, check the only change is the version argument bumping the patch suffix by one.
+    old_module_path = old_metadata_dir / file_path
+    if not old_module_path.exists():
+        violations.append(f"Old MODULE.bazel file {file_path} not found in {old_metadata_dir}.")
+        return violations
+
+    new_module_path = working_dir / file_path
+    if not new_module_path.exists():
+        violations.append(f"Modified file {file_path} does not exist in the working directory.")
+        return violations
+
+    try:
+        with open(old_module_path, "r") as f:
+            old_content = f.read()
+    except Exception as e:
+        violations.append(f"Failed to read old MODULE.bazel in {file_path}: {e}")
+        return violations
+
+    try:
+        with open(new_module_path, "r") as f:
+            new_content = f.read()
+    except Exception as e:
+        violations.append(f"Failed to read new MODULE.bazel in {file_path}: {e}")
+        return violations
+
+    pattern = re.compile(
+        r'module\(\s*name\s*=\s*["\']([^"\']+)["\']\s*,\s*version\s*=\s*["\']([^"\']+)["\']'
+    )
+
+    old_match = pattern.search(old_content)
+    if not old_match:
+        violations.append(f"Could not find module declaration for '{package_name}' in old MODULE.bazel {file_path}")
+        return violations
+
+    old_name, old_version = old_match.groups()
+    if old_name != package_name:
+        violations.append(f"Module name mismatch in old MODULE.bazel: expected '{package_name}', found '{old_name}'")
+        return violations
+
+    new_match = pattern.search(new_content)
+    if not new_match:
+        violations.append(f"Could not find module declaration for '{package_name}' in new MODULE.bazel {file_path}")
+        return violations
+
+    new_name, new_version = new_match.groups()
+    if new_name != package_name:
+        violations.append(f"Module name mismatch in new MODULE.bazel: expected '{package_name}', found '{new_name}'")
+        return violations
+
+    try:
+        expected_version = increment_version(old_version)
+    except ValueError as e:
+        violations.append(f"Failed to increment version '{old_version}': {e}")
+        return violations
+
+    if new_version != expected_version:
+        violations.append(
+            f"MODULE.bazel version was changed from '{old_version}' to '{new_version}', "
+            f"but it should have been incremented to '{expected_version}'."
+        )
+        return violations
+
+    # Replace the new version string back to the old version string in new_content
+    normalized_new_content = (
+        new_content[:new_match.start(2)] + old_version + new_content[new_match.end(2):]
+    )
+
+    if normalized_new_content != old_content:
+        violations.append(f"MODULE.bazel has modifications other than the version bump: {file_path}")
+
+    return violations
+
 def check_violations(diffs: list[tuple[str, str]], old_metadata_dir: Path, working_dir: Path, target_dir: str) -> list[str]:
     violations = []
     
@@ -95,7 +175,7 @@ def check_violations(diffs: list[tuple[str, str]], old_metadata_dir: Path, worki
             violations.append(f"Renamed file in {prefix}: {file_path}")
             continue
 
-        # Rule 3: Only metadata.json files can be modified under target_dir
+        # Rule 3: Only metadata.json and MODULE.bazel files can be modified under target_dir
         if status.startswith("M"):
             path_parts = Path(file_path).parts
             is_metadata = (
@@ -104,14 +184,23 @@ def check_violations(diffs: list[tuple[str, str]], old_metadata_dir: Path, worki
                 path_parts[-1] == "metadata.json"
             )
             
-            if not is_metadata:
-                violations.append(f"Modified existing file (only metadata.json files can be modified): {file_path}")
+            is_module_bazel = (
+                len(path_parts) == len(target_parts) + 3 and
+                path_parts[:len(target_parts)] == target_parts and
+                path_parts[-1] == "MODULE.bazel"
+            )
+
+            if is_metadata:
+                meta_violations = check_metadata_json(file_path, old_metadata_dir, working_dir)
+                violations.extend(meta_violations)
+            elif is_module_bazel:
+                package_name = path_parts[len(target_parts)]
+                module_violations = check_module_bazel(file_path, old_metadata_dir, working_dir, package_name)
+                violations.extend(module_violations)
+            else:
+                violations.append(f"Modified existing file (only metadata.json and MODULE.bazel files can be modified): {file_path}")
                 continue
 
-            # For modified metadata.json, check version rules
-            meta_violations = check_metadata_json(file_path, old_metadata_dir, working_dir)
-            violations.extend(meta_violations)
-            
     return violations
 
 def main():

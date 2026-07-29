@@ -68,9 +68,9 @@ jobs:
         # Generate the diff name-status file
         git diff --name-status "origin/$BASE_REF...HEAD" > /tmp/diff_status.txt
 
-        # Extract the old versions of any modified metadata.json files under the matrix directory
+        # Extract the old versions of any modified metadata.json or MODULE.bazel files under the matrix directory
         mkdir -p /tmp/old_metadata
-        git diff --name-only "origin/$BASE_REF...HEAD" | grep "^${{ matrix.directory }}/[^/]*/metadata.json$" | while read -r file; do
+        git diff --name-only "origin/$BASE_REF...HEAD" | grep -E "^${{ matrix.directory }}/[^/]*/metadata.json$|^${{ matrix.directory }}/[^/]*/[^/]*/MODULE.bazel$" | while read -r file; do
             mkdir -p "/tmp/old_metadata/$(dirname "$file")"
             git show "origin/$BASE_REF:$file" > "/tmp/old_metadata/$file" || true
         done
