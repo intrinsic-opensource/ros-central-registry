@@ -389,6 +389,83 @@ class TestMainAutoDetect(_RollupFixtureTestCase):
         self.run_main(["rclcpp"])
         self.assertTrue(self.new_version_dir().exists())
 
+class TestRosdistroMODULEBazelRollup(unittest.TestCase):
+
+    def setUp(self):
+        self.tmp_dir = Path(tempfile.mkdtemp())
+        self.workspace_root = self.tmp_dir / "repo"
+        self.modules_dir = self.workspace_root / "modules"
+        self.target_workspace = self.workspace_root / "workspace"
+        (self.target_workspace / "vendor").mkdir(parents=True)
+        (self.target_workspace / "MODULE.bazel").write_text("")
+
+        module_dir = self.modules_dir / "rosdistro"
+        self.version_dir = module_dir / "lyrical.2026-06-08.rcr.1"
+        self.version_dir.mkdir(parents=True)
+        with open(module_dir / "metadata.json", "w") as f:
+            json.dump({"versions": ["lyrical.2026-06-08.rcr.1"], "yanked_versions": {}}, f)
+        
+        self.old_module_content = (
+            'module(\n'
+            '    name = "rosdistro",\n'
+            '    version = "lyrical.2026-06-08.rcr.1",\n'
+            ')\n'
+            'bazel_dep(name = "old_dep", version = "1.0.0")\n'
+        )
+        (self.version_dir / "MODULE.bazel").write_text(self.old_module_content)
+
+        # source.json has to exist for compute_rollup to load pristine/raw-upstream
+        # even though we don't have diffs.
+        archive_src = self.tmp_dir / "archive_src" / "rosdistro-lyrical-2026-06-08"
+        archive_src.mkdir(parents=True)
+        (archive_src / "dummy.txt").write_text("hello\n")
+        archive_path = self.tmp_dir / "rosdistro.tar.gz"
+        with tarfile.open(archive_path, "w:gz") as tf:
+            tf.add(archive_src, arcname="rosdistro-lyrical-2026-06-08")
+        
+        digest = base64.b64encode(hashlib.sha256(archive_path.read_bytes()).digest()).decode()
+        with open(self.version_dir / "source.json", "w") as f:
+            json.dump({
+                "url": archive_path.as_uri(),
+                "strip_prefix": "rosdistro-lyrical-2026-06-08",
+                "integrity": f"sha256-{digest}",
+            }, f)
+
+        self.vendor_module_dir = self.target_workspace / "vendor" / "rosdistro+"
+        self.vendor_module_dir.mkdir(parents=True)
+        # In vendor_module_dir, write the dummy.txt as well so no diffs in source files
+        (self.vendor_module_dir / "dummy.txt").write_text("hello\n")
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp_dir)
+
+    def test_rosdistro_module_bazel_edits_detected_and_applied(self):
+        # Developer edits MODULE.bazel in vendored tree (adds a new dependency)
+        new_module_content = (
+            'module(\n'
+            '    name = "rosdistro",\n'
+            '    version = "lyrical.2026-06-08.rcr.1",\n'
+            ')\n'
+            'bazel_dep(name = "old_dep", version = "1.0.0")\n'
+            'bazel_dep(name = "new_dep", version = "2.0.0")\n'
+        )
+        (self.vendor_module_dir / "MODULE.bazel").write_text(new_module_content)
+
+        rollup = create_patch.compute_rollup("rosdistro", self.modules_dir, self.target_workspace)
+        self.assertTrue(rollup.changed)
+        self.assertEqual(rollup.current_version, "lyrical.2026-06-08.rcr.1")
+        self.assertEqual(rollup.new_version, "lyrical.2026-06-08.rcr.2")
+
+        create_patch.apply_rollup(rollup, self.modules_dir / "rosdistro" / "metadata.json")
+
+        new_dir = self.modules_dir / "rosdistro" / "lyrical.2026-06-08.rcr.2"
+        self.assertTrue(new_dir.exists())
+        
+        # Verify the new MODULE.bazel has the developer's modifications AND the correct new version
+        new_content = (new_dir / "MODULE.bazel").read_text()
+        self.assertIn('version = "lyrical.2026-06-08.rcr.2"', new_content)
+        self.assertIn('bazel_dep(name = "new_dep", version = "2.0.0")', new_content)
+
 
 if __name__ == "__main__":
     unittest.main()

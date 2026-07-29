@@ -40,8 +40,10 @@ and packages what already exists upstream in
 4. **Bazel modules are immutable once merged to `main`.** A version directory
    under `modules/<package>/<version>/` is never edited, renamed, or deleted
    after merge — CI enforces this (`tools/ci/check_pr_modules.py`: any diff
-   under `modules/` that isn't a brand-new version directory, or an append-only
-   edit to `metadata.json`, fails). Fixing a bug in a package means creating a
+   under `modules/` that isn't a brand-new version directory, an append-only
+   edit to `metadata.json`, or a version-bump-only modification to `MODULE.bazel`,
+   fails). The only exception is the `rosdistro` module, which permits any edits
+   to its `MODULE.bazel` files. Fixing a bug in a package means creating a
    **new** version directory (e.g. `rclcpp@32.0.0-1.rcr.1` ->
    `rclcpp@32.0.0-1.rcr.2`), never editing the old one in place.
 
@@ -60,6 +62,29 @@ patch pipeline — see the skills in `.agent/skills/`:
   everything you touched.
 - `.agent/skills/release-automation/` — what's automated (bootstrap, rollup)
   and what you should never try to do by hand.
+
+## Adding a new third-party (BCR) dependency
+
+Never add a new `bazel_dep` to a package's own `MODULE.bazel` (e.g. because
+its `CMakeLists.txt` needs something not already declared there, such as a
+prebuilt SDK upstream fetches via CMake `FetchContent`). Only `rosdistro`'s
+`MODULE.bazel` gains new BCR deps. Add the `bazel_dep` (and any module
+extension/repository rule needed to fetch it, e.g. a platform-specific
+prebuilt release archive) there instead, then expose it as a
+`cc_library`/`cc_shared_library` target in `rosdistro`'s `overlay/cc/BUILD.bazel`
+(see the `mcap`/`zstd`/`fastdds` targets there for the pattern of wrapping an
+upstream BCR target, and `bazel_test_helper`/`googletest` for small
+from-source helper libraries). Packages that need the dependency then depend
+on `@rosdistro//cc:<target>` rather than declaring the BCR dep themselves.
+
+This forces every package in a given distro release to pin to the exact same
+version of any transitive (non-ROS) dependency, instead of letting individual
+packages drift to their own versions.
+
+The same centralization applies to Python dependencies: add the package to
+`rosdistro`'s `requirements.in`, then regenerate both locks rather
+than hand-editing them — `bazel run //:requirements.update` for
+`requirements.txt` (see its own header comment).
 
 ## Repository layout
 

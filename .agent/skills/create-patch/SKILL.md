@@ -60,9 +60,11 @@ Useful flags in this mode:
 Exactly the new version directory/directories under `modules/<package>/`,
 plus the corresponding `metadata.json` updates (a new entry appended to
 `versions`) — nothing else. **Never** touch an existing version directory or
-any other package's files: `tools/ci/check_pr_modules.py` enforces this in
-CI and will fail the PR otherwise (see the immutability rule in
-`AGENTS.md`).
+any other package's files, with two exceptions: (1) `metadata.json` files can
+be modified to add versions or yanked versions, and (2) `MODULE.bazel` files
+can have their version argument bumped by exactly one patch suffix (any other edits
+are forbidden). Edits to `rosdistro`'s `MODULE.bazel` are exempt from the version-bump-only rule.
+`tools/ci/check_pr_modules.py` enforces this in CI and will fail the PR otherwise (see the immutability rule in `AGENTS.md`).
 
 When you open the PR, fill out every section of
 `.github/PULL_REQUEST_TEMPLATE.md` (GitHub applies it to the description

@@ -78,12 +78,12 @@ class TestCheckPrModules(unittest.TestCase):
         self.assertIn("Renamed file in modules/: modules/existing_module/1.0.0/MODULE.bazel", violations)
 
     def test_modified_non_metadata_forbidden(self):
-        # Modifying non-metadata.json files is forbidden
+        # Modifying non-metadata.json/MODULE.bazel files is forbidden
         diffs = [
-            ("M", "modules/existing_module/1.0.0/MODULE.bazel")
+            ("M", "modules/existing_module/1.0.0/source.json")
         ]
         violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
-        self.assertIn("Modified existing file (only metadata.json files can be modified): modules/existing_module/1.0.0/MODULE.bazel", violations)
+        self.assertIn("Modified existing file (only metadata.json and MODULE.bazel files can be modified): modules/existing_module/1.0.0/source.json", violations)
 
     def test_modified_metadata_allowed_add_version(self):
         # Modifying metadata.json to add a new version is allowed
@@ -134,6 +134,97 @@ class TestCheckPrModules(unittest.TestCase):
         diffs = [("M", rel_path)]
         violations = check_violations(diffs, self.old_dir, self.work_dir, "bcr_staging/modules")
         self.assertIn("Version '1.0.0' was removed from 'versions' in bcr_staging/modules/existing_module/metadata.json but was not added to 'yanked_versions'.", violations)
+
+    def write_text(self, base_dir: Path, rel_path: str, content: str):
+        path = base_dir / rel_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content)
+
+    def test_modified_module_bazel_bump_version_allowed(self):
+        rel_path = "modules/existing_module/1.0.0/MODULE.bazel"
+        old_content = """module(
+    name = "existing_module",
+    version = "1.0.0-1.rcr.1",
+)
+bazel_dep(name = "some_dep", version = "1.2.3")
+"""
+        new_content = """module(
+    name = "existing_module",
+    version = "1.0.0-1.rcr.2",
+)
+bazel_dep(name = "some_dep", version = "1.2.3")
+"""
+        self.write_text(self.old_dir, rel_path, old_content)
+        self.write_text(self.work_dir, rel_path, new_content)
+
+        diffs = [("M", rel_path)]
+        violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
+        self.assertEqual(violations, [])
+
+    def test_modified_module_bazel_other_edits_forbidden(self):
+        rel_path = "modules/existing_module/1.0.0/MODULE.bazel"
+        old_content = """module(
+    name = "existing_module",
+    version = "1.0.0-1.rcr.1",
+)
+bazel_dep(name = "some_dep", version = "1.2.3")
+"""
+        # Change a dependency version, even if version field is bumped correctly
+        new_content = """module(
+    name = "existing_module",
+    version = "1.0.0-1.rcr.2",
+)
+bazel_dep(name = "some_dep", version = "1.2.4")
+"""
+        self.write_text(self.old_dir, rel_path, old_content)
+        self.write_text(self.work_dir, rel_path, new_content)
+
+        diffs = [("M", rel_path)]
+        violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
+        self.assertIn("MODULE.bazel has modifications other than the version bump: modules/existing_module/1.0.0/MODULE.bazel", violations)
+
+    def test_modified_module_bazel_wrong_version_forbidden(self):
+        rel_path = "modules/existing_module/1.0.0/MODULE.bazel"
+        old_content = """module(
+    name = "existing_module",
+    version = "1.0.0-1.rcr.1",
+)
+"""
+        # Change version field but not to the correct next patch version
+        new_content = """module(
+    name = "existing_module",
+    version = "1.0.0-1.rcr.3",
+)
+"""
+        self.write_text(self.old_dir, rel_path, old_content)
+        self.write_text(self.work_dir, rel_path, new_content)
+
+        diffs = [("M", rel_path)]
+        violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
+        self.assertIn("MODULE.bazel version was changed from '1.0.0-1.rcr.1' to '1.0.0-1.rcr.3', but it should have been incremented to '1.0.0-1.rcr.2'.", violations)
+
+    def test_modified_module_bazel_rosdistro_allowed(self):
+        rel_path = "modules/rosdistro/lyrical.2026-06-08.rcr.1/MODULE.bazel"
+        old_content = """module(
+    name = "rosdistro",
+    version = "lyrical.2026-06-08.rcr.1",
+)
+bazel_dep(name = "some_dep", version = "1.2.3")
+"""
+        # Rosdistro can have any edits (e.g. adding dependencies, changing version, etc.)
+        new_content = """module(
+    name = "rosdistro",
+    version = "lyrical.2026-06-08.rcr.1",
+)
+bazel_dep(name = "some_dep", version = "1.2.4")
+bazel_dep(name = "new_dep", version = "2.0.0")
+"""
+        self.write_text(self.old_dir, rel_path, old_content)
+        self.write_text(self.work_dir, rel_path, new_content)
+
+        diffs = [("M", rel_path)]
+        violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
+        self.assertEqual(violations, [])
 
 
 class TestMain(unittest.TestCase):

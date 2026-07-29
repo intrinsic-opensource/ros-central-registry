@@ -317,7 +317,7 @@ def main():
     # version so this workspace is never stale -- this is what keeps
     # concurrent per-package patches from colliding on the same next
     # version number (see docs/source/design_choices.rst).
-    override_candidates = {k: v for k, v in packages.items() if k not in ("ros", "rosdistro")}
+    override_candidates = {k: v for k, v in packages.items() if k not in ("ros")}
     overrides = find_packages_with_newer_versions(override_candidates, modules_dir)
     for name, latest_version in sorted(overrides.items()):
         print(
