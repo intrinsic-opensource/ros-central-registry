@@ -126,6 +126,15 @@ its `add_subdirectory()`/`find_package()` call). A big, scary-looking
 transitive dependency is often disabled entirely by the consuming package
 and doesn't need to be wired up at all.
 
+Don't trust a `CMakeLists.txt`'s declared include paths (or other
+target-configuration details) at face value when translating them to
+Bazel — verify against the actual `#include` statements in source instead.
+CMake/autotools builds can silently tolerate a wrong or stale include path
+because a system-installed copy of the same library papers over it in
+upstream's own CI, which Bazel's hermetic, no-system-headers builds won't
+do. If a declared include path doesn't match what the source files actually
+`#include`, trust the source.
+
 The same centralization applies to Python dependencies: add the package to
 `rosdistro`'s `requirements.in`, then regenerate both locks rather
 than hand-editing them — `bazel run //:requirements.update` for
