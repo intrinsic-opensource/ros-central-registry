@@ -63,6 +63,19 @@ patch pipeline — see the skills in `.agent/skills/`:
 - `.agent/skills/release-automation/` — what's automated (bootstrap, rollup)
   and what you should never try to do by hand.
 
+**Re-running `vendor-module` on a package you've already vendored discards
+any uncommitted edits to it**, even extensive ones — it re-fetches from
+whatever's currently published under `modules/` (plus overlay/patches),
+which does not include edits you haven't rolled into a `create-patch` output
+yet. This bites hardest when you're iterating on a dependency (e.g.
+`rosdistro`) and a downstream package in the *same* workspace, since
+re-running `setup-workspace`/`vendor-module` to pick up the dependency's new
+patch version silently wipes out any not-yet-patched work on the downstream
+package too. `create-patch` your current work (even as a throwaway
+intermediate version to be cleaned up later) before touching
+`setup-workspace`/`vendor-module` again for a package you still have
+uncommitted edits in.
+
 ## Adding a new third-party (BCR) dependency
 
 Never add a new `bazel_dep` to a package's own `MODULE.bazel` (e.g. because
