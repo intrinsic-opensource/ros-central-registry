@@ -165,7 +165,7 @@ jobs:
         label: ${{ matrix.bazel }}
         message: ${{ steps.test.outcome == 'success' && '✓' || 'x' }}
         color: ${{ steps.test.outcome == 'success' && 'green' || 'red' }}
-      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push' && github.repository == 'intrinsic-opensource/ros-central-registry'
 
     - name: Test logs
       uses: actions/upload-artifact@v7
