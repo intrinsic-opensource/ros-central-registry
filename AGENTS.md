@@ -116,6 +116,15 @@ hand-editing the version directory it already produced, and delete any
 now-stale intermediate `rosdistro` version directories before opening the PR
 so only the final one ships.
 
+A package that needs a dependency you just added to `rosdistro` won't
+actually build with its own `bazel_dep(name = "rosdistro", ...)` pin
+unchanged — `create-patch` doesn't bump that pin for you (bumping
+dependents when a dependency moves is the weekly rollup's job, not an
+individual patch's), so the package genuinely can't build standalone until
+either the rollup runs or you note the ordering dependency explicitly for
+the reviewer (this `rosdistro` patch has to merge and roll up before, or
+alongside, the package's own patch).
+
 When a package bundles or vendors a third-party SDK as embedded source (e.g.
 `find_package(SomeSDK REQUIRED)` pointing at a subdirectory shipped inside
 the package's own archive), don't assume the SDK's own top-level
