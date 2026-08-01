@@ -14,17 +14,13 @@
 
 # Weekly patch rollup: aggregates every per-package patch merged this week
 # (via //tools/ci:create_patch PRs) into a new ros release, using
-# //tools/ci:rollup_patches, then runs it through the same checks ci.yaml
-# runs for a human PR. Auto-merges on success; otherwise opens a PR and
-# assigns it to @asymingt for manual follow-up.
-#
-# External prerequisites this workflow depends on but cannot itself
-# configure: (1) branch protection on main must allow this workflow's
-# token to merge once required checks pass -- if main requires a human-
-# approved review, the merge step will fail regardless of test results;
-# (2) the GCP Workload Identity Federation trust policy used by the
-# distribution_* reusable workflows' remote-cache auth must permit
-# refs/heads/automated/rollup-*, not just main/PR refs.
+# //tools/ci:rollup_patches. Pushes to a standing automated/rollup-<version>
+# branch and opens (or updates, if one's already open awaiting review) a PR
+# against main -- the normal ci.yaml PR checks (lint, tooling, module
+# guardrail, docs, distribution build/test across all RMWs) run
+# automatically once the PR exists, exactly as they would for any
+# human-submitted PR. This workflow never merges anything itself; review
+# and merge is a manual step once CI is green.
 
 name: weekly_rollup
 
@@ -51,14 +47,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-
   rollup:
-    name: Aggregate this week's patches
+    name: Aggregate this week's patches and open a PR
     runs-on: ubuntu-26.04
-    outputs:
-      pending: ${{ steps.rollup.outputs.pending }}
-      new_branch: ${{ steps.rollup.outputs.new_branch }}
-      new_ros_version: ${{ steps.rollup.outputs.new_ros_version }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -68,208 +59,37 @@ jobs:
           bazelisk-cache: true
           disk-cache: false
           repository-cache: true
+
       - name: Run rollup_patches
         id: rollup
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           RELEASE="${{ github.event.inputs.release || 'lyrical.2026-06-08' }}"
           bazel run //tools/ci:rollup_patches -- --release="$RELEASE" 2>&1 | tee /tmp/rollup.log
 
           if grep -q "Nothing to roll up" /tmp/rollup.log; then
-            echo "pending=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing to roll up this week."
             exit 0
           fi
 
           NEW_VERSION=$(grep -oP '(?<=Rolled up to ros version )\S+(?=\.$)' /tmp/rollup.log)
           BRANCH="automated/rollup-$NEW_VERSION"
-          echo "pending=true" >> "$GITHUB_OUTPUT"
-          echo "new_ros_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
-          echo "new_branch=$BRANCH" >> "$GITHUB_OUTPUT"
 
           git config user.name "rcr-automation-bot"
           git config user.email "actions@github.com"
           git checkout -b "$BRANCH"
           git add modules .github/workflows
           git commit -m "Weekly rollup: ros $NEW_VERSION"
-          git push origin "$BRANCH"
+          # --force-with-lease rather than a plain push: if last week's PR on
+          # this same branch is somehow still open, this keeps the branch in
+          # sync with the latest rollup rather than being rejected outright.
+          git push --force-with-lease origin "$BRANCH"
 
-  # Mirrors ci.yaml's fail-fast gate, pointed at the rollup branch instead
-  # of a PR ref. bazel_modules gets an explicit base_ref (main) since
-  # github.base_ref is only set for pull_request events.
-  lint:
-    name: Lint source code
-    needs: rollup
-    if: needs.rollup.outputs.pending == 'true'
-    uses: ./.github/workflows/_check_for_linting_errors.yml
-    secrets: inherit
-
-  tooling:
-    name: Test tooling
-    needs: rollup
-    if: needs.rollup.outputs.pending == 'true'
-    uses: ./.github/workflows/_check_tooling.yml
-    secrets: inherit
-
-  bazel_modules:
-    name: Check modules
-    needs: rollup
-    if: needs.rollup.outputs.pending == 'true'
-    uses: ./.github/workflows/_check_bazel_modules.yml
-    with:
-      base_ref: main
-    secrets: inherit
-
-  docs_build:
-    name: Check documentation
-    needs: rollup
-    if: needs.rollup.outputs.pending == 'true'
-    uses: ./.github/workflows/_check_docs_build.yml
-    secrets: inherit
-
-  distribution_compiles:
-    name: Check distribution builds
-    needs: [rollup, lint, tooling, bazel_modules, docs_build]
-    if: |
-      !cancelled() &&
-      needs.rollup.outputs.pending == 'true' &&
-      needs.lint.result == 'success' &&
-      needs.tooling.result == 'success' &&
-      needs.docs_build.result == 'success' &&
-      needs.bazel_modules.result == 'success'
-    permissions:
-      actions: read
-      checks: write
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/_check_distribution_compiles.yml
-    with:
-      branch: ${{ needs.rollup.outputs.new_branch }}
-    secrets: inherit
-
-  distribution_examples:
-    name: Check examples build
-    needs: [rollup, distribution_compiles]
-    if: |
-      !cancelled() &&
-      needs.distribution_compiles.result == 'success'
-    permissions:
-      actions: read
-      checks: write
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/_check_distribution_examples.yml
-    with:
-      branch: ${{ needs.rollup.outputs.new_branch }}
-    secrets: inherit
-
-  test_rmw_fastrtps_cpp:
-    name: Test FastDDS
-    needs: [rollup, distribution_compiles]
-    if: |
-      !cancelled() &&
-      needs.distribution_compiles.result == 'success'
-    permissions:
-      actions: read
-      checks: write
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/_check_distribution_tests.yml
-    with:
-      branch: ${{ needs.rollup.outputs.new_branch }}
-      rmw: rmw_fastrtps_cpp
-    secrets: inherit
-
-  test_rmw_fastrtps_dynamic_cpp:
-    name: Test FastDDS (dynamic)
-    needs: [rollup, distribution_compiles]
-    if: |
-      !cancelled() &&
-      needs.distribution_compiles.result == 'success'
-    permissions:
-      actions: read
-      checks: write
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/_check_distribution_tests.yml
-    with:
-      branch: ${{ needs.rollup.outputs.new_branch }}
-      rmw: rmw_fastrtps_dynamic_cpp
-    secrets: inherit
-
-  test_rmw_cyclonedds_cpp:
-    name: Test CycloneDDS
-    needs: [rollup, distribution_compiles]
-    if: |
-      !cancelled() &&
-      needs.distribution_compiles.result == 'success'
-    permissions:
-      actions: read
-      checks: write
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/_check_distribution_tests.yml
-    with:
-      branch: ${{ needs.rollup.outputs.new_branch }}
-      rmw: rmw_cyclonedds_cpp
-    secrets: inherit
-
-  test_rmw_zenoh_cpp:
-    name: Test Zenoh
-    needs: [rollup, distribution_compiles]
-    if: |
-      !cancelled() &&
-      needs.distribution_compiles.result == 'success'
-    permissions:
-      actions: read
-      checks: write
-      contents: read
-      id-token: write
-    uses: ./.github/workflows/_check_distribution_tests.yml
-    with:
-      branch: ${{ needs.rollup.outputs.new_branch }}
-      rmw: rmw_zenoh_cpp
-    secrets: inherit
-
-  finalize:
-    name: Merge or flag for review
-    needs:
-      - rollup
-      - distribution_examples
-      - test_rmw_fastrtps_cpp
-      - test_rmw_fastrtps_dynamic_cpp
-      - test_rmw_cyclonedds_cpp
-      - test_rmw_zenoh_cpp
-    if: |
-      !cancelled() &&
-      needs.rollup.outputs.pending == 'true'
-    runs-on: ubuntu-26.04
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v7
-      - name: Open PR
-        id: pr
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
           gh pr create \
-            --base main \
-            --head "${{ needs.rollup.outputs.new_branch }}" \
-            --title "Weekly rollup: ros ${{ needs.rollup.outputs.new_ros_version }}" \
-            --body "Automated weekly patch rollup." || true
-      - name: Merge on success, otherwise assign for review
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          if [ "${{ needs.distribution_examples.result }}" = "success" ] &&
-             [ "${{ needs.test_rmw_fastrtps_cpp.result }}" = "success" ] &&
-             [ "${{ needs.test_rmw_fastrtps_dynamic_cpp.result }}" = "success" ] &&
-             [ "${{ needs.test_rmw_cyclonedds_cpp.result }}" = "success" ] &&
-             [ "${{ needs.test_rmw_zenoh_cpp.result }}" = "success" ]; then
-            gh pr merge "${{ needs.rollup.outputs.new_branch }}" --squash --delete-branch
-          else
-            gh pr edit "${{ needs.rollup.outputs.new_branch }}" --add-assignee asymingt
-          fi
+              --base main \
+              --head "$BRANCH" \
+              --title "Weekly rollup: ros $NEW_VERSION" \
+              --body "Automated weekly patch rollup to ros $NEW_VERSION. Review the CI results on this PR before merging." \
+              || echo "PR already open for $BRANCH -- updated branch in place."
