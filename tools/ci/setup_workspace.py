@@ -110,14 +110,15 @@ common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildc
 common --remote_cache_compression=true
 common --remote_upload_local_results=false
 
-# CI specific options for remote cache writing and performance tweaks.
-common:ci --remote_upload_local_results=true
-common:ci --google_default_credentials
+# CI specific performance/reliability tweaks -- safe to use anywhere,
+# require no credentials (this is what forks get; see cache_write_config
+# below for the part that isn't safe on a fork).
 common:ci --http_timeout_scaling=3.0
 common:ci --experimental_repository_downloader_retries=10
 common:ci --remote_cache_compression=false
 common:ci --nobuild_runfile_links
 common:ci --ui_event_filters=-INFO,-DEBUG
+{cache_write_config}
 
 # We support the following variants of ROS distributions. This allows you
 # to build or test the entire variant with a --config flag.
@@ -219,6 +220,22 @@ test:ci --test_strategy=exclusive
 test:ci --strategy=TestRunner=standalone
 """
 
+
+def render_bazelrc(distro: str, variants: str, tmpdir: str, remote_cache_write: bool = False) -> str:
+    """
+    Fill in BAZELRC_TEMPLATE. remote_cache_write gates the two flags that
+    require GCP credentials (--remote_upload_local_results=true and
+    --google_default_credentials) -- see --remote-cache-write's help text.
+    """
+    cache_write_config = (
+        "common:ci --remote_upload_local_results=true\n"
+        "common:ci --google_default_credentials"
+    ) if remote_cache_write else ""
+    return BAZELRC_TEMPLATE.format(
+        distro=distro, variants=variants, tmpdir=tmpdir, cache_write_config=cache_write_config
+    )
+
+
 def get_copyright_header() -> str:
     return """# Copyright 2026 Open Source Robotics Foundation, Inc.
 #
@@ -285,6 +302,19 @@ def main():
         default="",
         help="Directory to pin TMPDIR to for build/test/run actions, e.g. "
              "$RUNNER_TEMP. Falls back to $TMPDIR, then /tmp, if not given.",
+    )
+    parser.add_argument(
+        "--remote-cache-write",
+        action="store_true",
+        help="Enable writing to the shared remote build cache under "
+             "--config ci (requires GCP credentials for the "
+             "intrinsic-opensource-buildcache bucket, e.g. via "
+             "google-github-actions/auth in the upstream repo's own CI). "
+             "Leave this off anywhere else -- forks don't have those "
+             "credentials, and attempting to write without them fails the "
+             "build rather than just skipping the write. The default "
+             "(non-ci) config already gives every caller anonymous "
+             "read-only access to the cache, so this only affects writes.",
     )
     args = parser.parse_args()
 
@@ -475,7 +505,7 @@ register_toolchains(
         for variant_name in VARIANTS
     )
     with open(target_workspace / ".bazelrc", "w") as f:
-        f.write(BAZELRC_TEMPLATE.format(distro=distro, variants=variants, tmpdir=tmpdir))
+        f.write(render_bazelrc(distro, variants, tmpdir, args.remote_cache_write))
 
     print("Workspace setup complete.")
 

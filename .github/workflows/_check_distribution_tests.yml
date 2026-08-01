@@ -77,8 +77,13 @@ jobs:
         fetch-depth: 1
         ref: ${{ inputs.branch }}
 
-    # Setup auth to allow pushing to the remote cache.
+    # Setup auth to allow pushing to the remote cache. The WIF trust policy
+    # only covers the upstream repo -- this (and --remote-cache-write below)
+    # is skipped on forks, which fall back to the default config's
+    # anonymous, read-only cache access rather than failing when a write
+    # is attempted with no valid credentials.
     - name: Authenticate to Google Cloud
+      if: github.repository == 'intrinsic-opensource/ros-central-registry'
       uses: "google-github-actions/auth@v3"
       with:
         workload_identity_provider: projects/771457463613/locations/global/workloadIdentityPools/github-automation/providers/build-dev
@@ -98,7 +103,8 @@ jobs:
       id: prepare_workspace
       working-directory: .
       run: |
-        bazel run //tools/ci:setup_workspace -- --release=${{ matrix.ros }} --tmpdir "$RUNNER_TEMP"
+        bazel run //tools/ci:setup_workspace -- --release=${{ matrix.ros }} --tmpdir "$RUNNER_TEMP" \
+            ${{ github.repository == 'intrinsic-opensource/ros-central-registry' && '--remote-cache-write' || '' }}
 
     # Run the distribution test for the implementation.
     - name: Test (${{ inputs.rmw }})

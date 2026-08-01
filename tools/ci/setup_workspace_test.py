@@ -20,6 +20,21 @@ from pathlib import Path
 from tools.ci import setup_workspace
 
 
+class TestRenderBazelrc(unittest.TestCase):
+
+    def test_cache_write_off_by_default(self):
+        content = setup_workspace.render_bazelrc("lyrical", "", "/tmp")
+        self.assertNotIn("--remote_upload_local_results=true", content)
+        self.assertNotIn("--google_default_credentials", content)
+        # The safe, credential-free performance flags are always present.
+        self.assertIn("common:ci --http_timeout_scaling=3.0", content)
+
+    def test_cache_write_enabled_opt_in(self):
+        content = setup_workspace.render_bazelrc("lyrical", "", "/tmp", remote_cache_write=True)
+        self.assertIn("common:ci --remote_upload_local_results=true", content)
+        self.assertIn("common:ci --google_default_credentials", content)
+
+
 class TestCalculatePackagesForVariant(unittest.TestCase):
 
     def setUp(self):
