@@ -107,6 +107,18 @@ class TestRenderModuleDotBazel(unittest.TestCase):
         self.assertIn('bazel_dep(name = "assimp", version = "6.0.3")', content)
         self.assertIn('hub_name = "pip_ros"', content)
 
+    def test_trailing_register_toolchains_is_buildifier_formatted(self):
+        # buildifier requires a blank line before a bare statement that
+        # follows a use_repo(...) call -- regression test for a bug where
+        # every bootstrapped MODULE.bazel failed lint (see git history).
+        for content in (
+                bootstrap_release.render_module_dot_bazel(
+                    "rclcpp", "32.0.0-1", {}, "lyrical", "2026-06-23"),
+                bootstrap_release.render_module_dot_bazel(
+                    "rosdistro", "lyrical.2026-06-23", {}, "lyrical", "2026-06-23",
+                    custom_body=bootstrap_release.ROSDISTRO_CUSTOM_BODY)):
+            self.assertIn('use_repo(qt, "qt_linux_x86_64")\n\nregister_toolchains("@rules_qt//tools:all")', content)
+
 
 class TestRenderStubModuleDotBazel(unittest.TestCase):
 
