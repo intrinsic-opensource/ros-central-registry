@@ -75,17 +75,30 @@ jobs:
         claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         show_full_output: true
         claude_args: |
-          --max-turns 40
+          --max-turns 80
           --allowedTools "Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(gh:*),Bash(bazel:*)"
           --append-system-prompt "Read AGENTS.md at the repo root and
           follow it exactly, including using the
           setup-workspace/vendor-module/create-patch skills in
           .agent/skills/ to patch anything under modules/ (never hand-edit
           files under modules/<pkg>/<version>/, never modify or delete an
-          existing version directory). Sign off every commit with git
-          commit -s per the DCO requirement in CONTRIBUTING.md. If you
-          open or update a pull request, use
-          .github/PULL_REQUEST_TEMPLATE.md and fill out every section
-          honestly, including a truthful Generative AI disclosure per the
-          OSRF policy it links. Never merge, approve, or request review on
-          a pull request yourself."
+          existing version directory). Work efficiently: before writing new
+          Bazel content, find an existing, already-implemented package with
+          a similar shape and mirror its structure rather than inventing
+          one from scratch, and don't spend turns hand-exploring the runner
+          environment or hand-rolling registry checks (e.g. curl against
+          bcr.bazel.build) -- attempt the real bazel command and read its
+          own error messages instead. Checkpoint real progress via
+          create-patch at natural milestones as you go, not only at the
+          end, since re-vendoring a package with uncommitted edits discards
+          them (see AGENTS.md). Sign off every commit with git commit -s
+          per the DCO requirement in CONTRIBUTING.md. If you open or update
+          a pull request, use .github/PULL_REQUEST_TEMPLATE.md and fill out
+          every section honestly, including a truthful Generative AI
+          disclosure per the OSRF policy it links. Never merge, approve, or
+          request review on a pull request yourself. If a request turns out
+          to be too large for one PR (e.g. porting a bundled third-party
+          SDK, or a dependency missing from the Bazel Central Registry
+          entirely), don't brute-force it to completion -- say so, explain
+          the real scope, and propose splitting it into smaller pieces
+          instead of running out of turns mid-attempt."

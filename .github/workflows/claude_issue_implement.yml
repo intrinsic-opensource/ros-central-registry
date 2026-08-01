@@ -95,6 +95,23 @@ jobs:
           Then implement this issue on the current branch and open a pull
           request for human review:
 
+          - Work efficiently: before writing any new Bazel content, find an
+            existing, already-implemented package in modules/ with a similar
+            shape (e.g. another message-only package, another driver with
+            ROS2 components) and mirror its exact structure rather than
+            inventing one from scratch — this is far faster and more likely
+            to be correct than guessing. Don't spend turns hand-exploring the
+            runner environment (system paths, global config files) or
+            hand-rolling registry checks (e.g. curl against bcr.bazel.build)
+            to verify a dependency exists — just attempt the real
+            bazel build/create-patch command and read Bazel's own error
+            messages, which are authoritative and faster than guessing.
+          - Checkpoint real progress via the create-patch skill at natural
+            milestones as you go, not only at the very end — this protects
+            against losing work (re-vendoring a package with uncommitted
+            edits discards them, see AGENTS.md) and means a partial,
+            genuinely useful PR exists even if you run out of turns before
+            finishing everything.
           - Run the relevant fast local checks (buildifier, ruff, and any
             targeted test for what you touched — see the Linting section of
             AGENTS.md) before committing. Do not attempt a full distribution
@@ -116,6 +133,21 @@ jobs:
             do not guess or implement something speculative: instead run
             `gh issue comment` explaining what clarification you need, and do
             not open a PR.
+          - If the issue is well-specified but genuinely too large for one PR
+            (e.g. it would require porting a bundled third-party SDK spanning
+            tens of thousands of lines, or authoring a brand-new Bazel module
+            from scratch for a dependency that doesn't exist in the Bazel
+            Central Registry at all), don't try to brute-force a complete
+            implementation — you will run out of turns before finishing and
+            waste the run. Instead, do enough investigation to describe the
+            real scope (what's actually needed vs. what looked scary at
+            first glance — see AGENTS.md's guidance on checking the
+            consuming package's build options before assuming a bundled
+            dependency is required), then `gh issue comment` proposing how to
+            split it into smaller, independently-mergeable issues, and open
+            a PR only for whatever well-scoped first slice you did manage to
+            finish (if any) rather than an incomplete attempt at the whole
+            thing.
         claude_args: |
-          --max-turns 80
+          --max-turns 200
           --allowedTools "Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(gh:*),Bash(bazel:*)"
