@@ -1,0 +1,119 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Posts/updates the module-diff PR comment produced by
+# _check_bazel_modules.yml (part of the `ci` workflow). This is a
+# separate, workflow_run-triggered workflow rather than a step inside
+# `ci` itself because `ci` can run against a fork PR, where GitHub forces
+# GITHUB_TOKEN to read-only and a direct comment attempt from within that
+# run fails with "Resource not accessible by integration".
+#
+# workflow_run always executes the workflow file as committed on this
+# repo's default branch -- never the fork PR's own version -- so granting
+# it write permissions here does not give a fork PR branch any control
+# over what runs. This is the standard safe pattern for commenting on
+# fork PRs (as opposed to `pull_request_target`, which would run the
+# fork's own workflow file, and possibly its code, with write access).
+
+name: post_module_diff_comment
+
+on:
+  workflow_run:
+    workflows: ["ci"]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read # to download artifacts from the triggering run.
+  pull-requests: write # to post/update the module-diff comment.
+
+jobs:
+  comment:
+    name: Post module diff comment
+    if: github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download module diff artifacts
+      uses: actions/download-artifact@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        run-id: ${{ github.event.workflow_run.id }}
+        pattern: module-diff-*
+        path: /tmp/module-diffs
+      # No artifacts exist if _check_bazel_modules.yml never ran (e.g. a
+      # push-triggered run, filtered out by the `if:` above) or failed
+      # before the upload step.
+      continue-on-error: true
+
+    - name: Post module diff comments
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+
+          const root = '/tmp/module-diffs';
+          if (!fs.existsSync(root)) return;
+
+          // workflow_run's own `pull_requests` field is empty for
+          // fork-originated PRs, so resolve the PR from the run's head
+          // commit instead, which works regardless of fork status.
+          const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            commit_sha: context.payload.workflow_run.head_sha,
+          });
+          const pr = prs.find((p) => p.state === 'open');
+          if (!pr) return;
+
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: pr.number,
+          });
+
+          for (const artifactDir of fs.readdirSync(root)) {
+            // Reverses the sanitization in _check_bazel_modules.yml's
+            // "Compute artifact name" step, e.g.
+            // "module-diff-bcr_staging-modules" -> "bcr_staging/modules".
+            const directory = artifactDir.replace(/^module-diff-/, '').replace(/-/g, '/');
+            const diffPath = path.join(root, artifactDir, 'module_diff.md');
+            if (!fs.existsSync(diffPath)) continue;
+            const diff = fs.readFileSync(diffPath, 'utf8').trim();
+            if (!diff) continue;
+
+            // Marker scopes the comment to this matrix directory, so
+            // "modules" and "bcr_staging/modules" each get their own
+            // comment, and re-runs update the same comment instead of
+            // piling up duplicates.
+            const marker = `<!-- module-diff: ${directory} -->`;
+            const body = `${marker}\n${diff}`;
+            const existing = comments.find((c) => c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body,
+              });
+            }
+          }

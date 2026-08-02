@@ -40,7 +40,6 @@ env:
 
 permissions:
   contents: read
-  pull-requests: write # to post/update the module-diff comment below.
 
 jobs:
   check_bazel_modules:
@@ -89,49 +88,38 @@ jobs:
             --diff-status /tmp/diff_status.txt \
             --directory "${{ matrix.directory }}" \
             --output /tmp/module_diff.md
-    - name: Post module diff to PR
-      # Only meaningful on a real pull_request event -- weekly_rollup.yml
-      # calls this workflow before any PR exists (see the comment at the
-      # top of this file), so there's nothing to comment on there.
-      if: always() && github.event_name == 'pull_request'
-      uses: actions/github-script@v9
+    - name: Write module diff to job summary
+      # Always runs, including for fork PRs: unlike the PR comment below,
+      # writing to GITHUB_STEP_SUMMARY needs no token permissions at all,
+      # so this is the one place a fork PR's module diff is guaranteed to
+      # be visible for review.
+      if: always()
+      run: |
+        if [ -s /tmp/module_diff.md ]; then
+          echo "### Module diff (${{ matrix.directory }})" >> "$GITHUB_STEP_SUMMARY"
+          cat /tmp/module_diff.md >> "$GITHUB_STEP_SUMMARY"
+        fi
+    - name: Compute artifact name
+      # Artifact names can't contain '/', so sanitize the matrix directory
+      # (e.g. "bcr_staging/modules" -> "bcr_staging-modules"). The
+      # post_module_diff_comment.yml workflow reverses this to recover the
+      # original directory for the comment marker.
+      if: always()
+      id: artifact_name
+      run: echo "name=$(echo '${{ matrix.directory }}' | tr '/' '-')" >> "$GITHUB_OUTPUT"
+    - name: Upload module diff artifact
+      # Uploading artifacts needs no special token permissions and works
+      # the same on fork PRs, unlike posting a PR comment directly (see
+      # the job summary step above). A separate, privileged workflow_run
+      # listener (post_module_diff_comment.yml) downloads this artifact
+      # from the base repo's context and posts/updates the PR comment.
+      if: always()
+      uses: actions/upload-artifact@v7
       with:
-        script: |
-          const fs = require('fs');
-          const path = '/tmp/module_diff.md';
-          if (!fs.existsSync(path)) return;
-          const diff = fs.readFileSync(path, 'utf8').trim();
-          if (!diff) return;
-
-          // Marker scopes the comment to this matrix directory, so
-          // "modules" and "bcr_staging/modules" each get their own
-          // comment, and re-runs update the same comment instead of
-          // piling up duplicates.
-          const marker = `<!-- module-diff: ${{ matrix.directory }} -->`;
-          const body = `${marker}\n${diff}`;
-
-          const { data: comments } = await github.rest.issues.listComments({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-          });
-          const existing = comments.find((c) => c.body.includes(marker));
-
-          if (existing) {
-            await github.rest.issues.updateComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: existing.id,
-              body,
-            });
-          } else {
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body,
-            });
-          }
+        name: module-diff-${{ steps.artifact_name.outputs.name }}
+        path: /tmp/module_diff.md
+        if-no-files-found: ignore
+        retention-days: 7
     - name: Update status badges
       uses: Schneegans/dynamic-badges-action@v1.8.0
       with:
