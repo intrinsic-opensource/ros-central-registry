@@ -92,8 +92,14 @@ jobs:
     - name: Post module diff to PR
       # Only meaningful on a real pull_request event -- weekly_rollup.yml
       # calls this workflow before any PR exists (see the comment at the
-      # top of this file), so there's nothing to comment on there.
-      if: always() && github.event_name == 'pull_request'
+      # top of this file), so there's nothing to comment on there. Also
+      # skipped for fork PRs: GitHub forces GITHUB_TOKEN to read-only for
+      # pull_request events triggered from a fork, regardless of the
+      # `permissions:` block above, so the comment API call would just
+      # fail with "Resource not accessible by integration".
+      if: |
+        always() && github.event_name == 'pull_request' &&
+        (github.event.pull_request.head.repo.full_name || github.repository) == 'intrinsic-opensource/ros-central-registry'
       uses: actions/github-script@v9
       with:
         script: |
