@@ -67,14 +67,24 @@ common --remote_cache=https://storage.googleapis.com/intrinsic-opensource-buildc
 common --remote_cache_compression=true
 common --remote_upload_local_results=false
 
-# CI specific options for remote cache writing and performance tweaks.
-common:ci --remote_upload_local_results=true
-common:ci --google_default_credentials
+# CI specific options for performance/reliability tweaks -- safe to use
+# anywhere, requires no credentials (this is what forks get).
 common:ci --http_timeout_scaling=3.0
 common:ci --experimental_repository_downloader_retries=10
 common:ci --remote_cache_compression=false
 common:ci --nobuild_runfile_links
 common:ci --ui_event_filters=-INFO,-DEBUG
+
+# Remote cache writing -- only usable where GCP credentials for the
+# upstream repo's build cache are actually available. See
+# .github/workflows/_check_distribution_examples.yml's "Authenticate to
+# Google Cloud" step, which only adds --config=ci-cache-write when it ran
+# (unlike workspace/.bazelrc, generated per-run by
+# //tools/ci:setup_workspace, this file is static, so the same
+# credentials gate has to be a separate config here rather than a
+# generator flag).
+common:ci-cache-write --remote_upload_local_results=true
+common:ci-cache-write --google_default_credentials
 
 # Automatically pick configurations for the platform running bazel.
 # For example, macos on macos, linux on linux, etc.

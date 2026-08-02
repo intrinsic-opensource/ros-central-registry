@@ -73,8 +73,13 @@ jobs:
         fetch-depth: 1
         ref: ${{ inputs.branch }}
 
-    # Setup auth to allow pushing to the remote cache.
+    # Setup auth to allow pushing to the remote cache. The WIF trust policy
+    # only covers the upstream repo -- this (and --config=ci-cache-write
+    # below) is skipped on forks, which fall back to examples/.bazelrc's
+    # default anonymous, read-only cache access rather than failing when a
+    # write is attempted with no valid credentials.
     - name: Authenticate to Google Cloud
+      if: (github.event.pull_request.head.repo.full_name || github.repository) == 'intrinsic-opensource/ros-central-registry'
       uses: "google-github-actions/auth@v3"
       with:
         workload_identity_provider: projects/771457463613/locations/global/workloadIdentityPools/github-automation/providers/build-dev
@@ -95,11 +100,12 @@ jobs:
       working-directory: ./examples
       run: |
         export TMPDIR="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
-        bazel build --config ci //... 2>&1 | tee examples_dynamic.log
-        bazel build --config ci --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_fastrtps_cpp.log
-        bazel build --config ci --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_fastrtps_dynamic_cpp.log
-        bazel build --config ci --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_cyclonedds_cpp.log
-        bazel build --config ci --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_zenoh_cpp.log
+        CACHE_WRITE_CONFIG="${{ (github.event.pull_request.head.repo.full_name || github.repository) == 'intrinsic-opensource/ros-central-registry' && '--config=ci-cache-write' || '' }}"
+        bazel build --config ci $CACHE_WRITE_CONFIG //... 2>&1 | tee examples_dynamic.log
+        bazel build --config ci $CACHE_WRITE_CONFIG --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_fastrtps_cpp.log
+        bazel build --config ci $CACHE_WRITE_CONFIG --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_dynamic_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_fastrtps_dynamic_cpp.log
+        bazel build --config ci $CACHE_WRITE_CONFIG --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_cyclonedds_cpp.log
+        bazel build --config ci $CACHE_WRITE_CONFIG --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp //:example_ros_publisher_cc 2>&1 | tee examples_static_rmw_zenoh_cpp.log
     - name: Update status badge (examples)
       uses: Schneegans/dynamic-badges-action@v1.8.0
       with:
@@ -109,7 +115,7 @@ jobs:
         label: ${{ matrix.bazel }}
         message: ${{ steps.examples.outcome == 'success' && '✓' || 'x' }}
         color: ${{ steps.examples.outcome == 'success' && 'green' || 'red' }}
-      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push' && (github.event.pull_request.head.repo.full_name || github.repository) == 'intrinsic-opensource/ros-central-registry'
 
     - name: Example logs
       uses: actions/upload-artifact@v7
