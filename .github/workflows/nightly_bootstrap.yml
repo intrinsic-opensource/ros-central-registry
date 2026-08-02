@@ -15,10 +15,13 @@
 # Nightly bootstrap: scans ros/rosdistro for new "<distro>/<date>" tags
 # (via //tools/ci:bootstrap_release, which shells out to `gh api`) and, for
 # anything new, stages bare module versions + a new .rcr.0 per package that
-# carries forward its previous patch set. Commits straight to main once the
-# append-only guardrail passes -- this is purely additive scaffolding that
-# nothing currently-published references yet, unlike weekly_rollup.yml
-# (which changes the active ros release pointer and needs full-CI gating).
+# carries forward its previous patch set. Pushes to a standing
+# automated/bootstrap-<distro> branch and opens (or updates, if one's
+# already open awaiting review) a PR against main, so the normal ci.yaml
+# PR checks -- including buildifier -- run before anything merges. This is
+# purely additive scaffolding that nothing currently-published references
+# yet, unlike weekly_rollup.yml (which changes the active ros release
+# pointer and auto-merges on green rather than waiting for review).
 
 name: nightly_bootstrap
 
@@ -34,6 +37,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: nightly-bootstrap
@@ -90,12 +94,26 @@ jobs:
               --old-metadata-dir /tmp/old_metadata \
               --directory modules
 
-      - name: Commit and push
+      - name: Push branch and open/update PR
         if: steps.bootstrap.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          BRANCH="automated/bootstrap-${{ matrix.distro }}"
           git config user.name "rcr-automation-bot"
           git config user.email "actions@github.com"
+          git checkout -b "$BRANCH"
           git add modules
           git commit -m "Nightly bootstrap: ${{ matrix.distro }}"
-          git push origin main
+          # --force-with-lease rather than a plain push: if yesterday's PR on
+          # this same branch is still open awaiting review, today's re-scan
+          # (run fresh off main every time) needs to replace it rather than
+          # be rejected as a non-fast-forward push.
+          git push --force-with-lease origin "$BRANCH"
+          gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "Nightly bootstrap: ${{ matrix.distro }}" \
+              --body "Automated nightly bootstrap for \`${{ matrix.distro }}\`. Review the CI results on this PR before merging." \
+              || echo "PR already open for $BRANCH -- updated branch in place."
