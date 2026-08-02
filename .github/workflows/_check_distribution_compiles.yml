@@ -23,6 +23,19 @@ on:
         description: 'Branch or ref to check out.'
         required: true
         type: string
+      changed_packages:
+        description: >
+          Space-separated package names to additionally bazel build in
+          full (e.g. "ouster_ros ouster_sensor_msgs"), on top of the
+          --config=<variant> build below -- a package a PR adds/patches
+          isn't necessarily part of any variant, so the variant build
+          alone can silently never touch it. Bazel's --target_pattern_file
+          (what --config=<variant> sets) can't be combined with explicit
+          targets on the same invocation, so this runs as a second, separate
+          bazel build. Empty/unset builds nothing extra.
+        required: false
+        type: string
+        default: ""
 
 env:
   ANDROID_HOME: ""
@@ -107,6 +120,18 @@ jobs:
       id: build
       run: |
         bazel build --config ci --config=${{ matrix.variant }} 2>&1 | tee build.log
+
+    # Build whatever package(s) this PR actually touches, in case they
+    # aren't part of the variant above -- see changed_packages' input docs.
+    - name: Build changed packages
+      id: build_changed_packages
+      if: inputs.changed_packages != ''
+      run: |
+        TARGETS=""
+        for pkg in ${{ inputs.changed_packages }}; do
+          TARGETS="$TARGETS @${pkg}//..."
+        done
+        bazel build --config ci $TARGETS 2>&1 | tee build_changed_packages.log
     - name: Update status badge (build)
       uses: Schneegans/dynamic-badges-action@v1.8.0
       with:

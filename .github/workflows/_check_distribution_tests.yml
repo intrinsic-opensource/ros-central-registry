@@ -27,6 +27,15 @@ on:
         description: 'RMW implementation to build and test, e.g. rmw_fastrtps_cpp.'
         required: true
         type: string
+      changed_packages:
+        description: >
+          Space-separated package names to additionally bazel test in
+          full (e.g. "ouster_ros ouster_sensor_msgs"), on top of the
+          --config=<variant> test below -- see _check_distribution_compiles.yml's
+          input of the same name for why. Empty/unset tests nothing extra.
+        required: false
+        type: string
+        default: ""
 
 env:
   ANDROID_HOME: ""
@@ -151,6 +160,19 @@ jobs:
         # tests to flake nondeterminstically, creating lots of result noise.
         bazel build --config ci --build_tests_only --config=${{ matrix.variant }}
         bazel test --config ci --config=${{ matrix.variant }} --test_env=RMW_IMPLEMENTATION=${{ inputs.rmw }} 2>&1 | tee ${{ inputs.rmw }}.test.log || test_status=$?
+
+        # Also build/test whatever package(s) this PR actually touches, in
+        # case they aren't part of the variant above -- see
+        # changed_packages' input docs in _check_distribution_compiles.yml.
+        if [ -n "${{ inputs.changed_packages }}" ]; then
+          TARGETS=""
+          for pkg in ${{ inputs.changed_packages }}; do
+            TARGETS="$TARGETS @${pkg}//..."
+          done
+          bazel build --config ci --build_tests_only $TARGETS
+          bazel test --config ci --test_env=RMW_IMPLEMENTATION=${{ inputs.rmw }} $TARGETS 2>&1 | tee ${{ inputs.rmw }}.changed_packages.test.log || test_status=$?
+        fi
+
         if [ -d bazel-testlogs ]; then
           find -L bazel-testlogs -name "*.xml" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_${{ inputs.rmw }}.xml.tar.gz --null -T - || true
           find -L bazel-testlogs -name "*.log" -print0 | tar -czf ${{ matrix.ros }}_${{ matrix.variant }}_${{ matrix.bazel }}_${{ matrix.os }}_${{ inputs.rmw }}.log.tar.gz --null -T - || true

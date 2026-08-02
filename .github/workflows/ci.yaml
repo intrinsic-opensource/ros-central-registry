@@ -72,6 +72,36 @@ jobs:
     uses: ./.github/workflows/_check_bazel_modules.yml
     secrets: inherit
 
+  changed-packages:
+    name: Detect changed packages
+    # A package this PR adds/patches isn't necessarily part of any of the
+    # six fixed distribution variants (see AGENTS.md), so the variant build
+    # below can silently never build or test it at all -- this finds every
+    # package touched, so distribution_compiles/test_rmw_* can build/test
+    # them directly too, on top of the variant. PR-only: on a push to main,
+    # there's no meaningful base to diff against here.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.diff.outputs.packages }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 0 # must be zero for 'git diff' against the base to work.
+    - name: Setup Bazel
+      uses: bazel-contrib/setup-bazel@0.19.0
+      with:
+        bazelisk-cache: true
+        disk-cache: false
+        repository-cache: true
+    - name: Compute changed packages
+      id: diff
+      run: |
+        git diff --name-status "origin/${{ github.base_ref }}...HEAD" -- modules > /tmp/diff_status.txt
+        PACKAGES=$(bazel run //tools/ci:changed_packages -- --diff-status /tmp/diff_status.txt --directory modules)
+        echo "packages=$PACKAGES" >> "$GITHUB_OUTPUT"
+
   docs_build:
     name: Check documentation
     uses: ./.github/workflows/_check_docs_build.yml
@@ -84,6 +114,7 @@ jobs:
     - lint
     - tooling
     - bazel_modules
+    - changed-packages
     - docs_build
     if: |
       !cancelled() &&
@@ -91,6 +122,7 @@ jobs:
       needs.tooling.result == 'success' &&
       needs.docs_build.result == 'success' &&
       (needs.bazel_modules.result == 'success' || needs.bazel_modules.result == 'skipped') &&
+      (needs.changed-packages.result == 'success' || needs.changed-packages.result == 'skipped') &&
       needs.detect-changes.outputs.code == 'true'
     permissions:
       actions: read
@@ -100,6 +132,7 @@ jobs:
     uses: ./.github/workflows/_check_distribution_compiles.yml
     with:
       branch: ${{ inputs.branch || github.ref }}
+      changed_packages: ${{ needs.changed-packages.outputs.packages }}
     secrets: inherit
 
   distribution_examples:
@@ -120,7 +153,7 @@ jobs:
 
   test_rmw_fastrtps_cpp:
     name: Test FastDDS
-    needs: [distribution_compiles]
+    needs: [distribution_compiles, changed-packages]
     if: |
       !cancelled() &&
       needs.distribution_compiles.result == 'success'
@@ -133,11 +166,12 @@ jobs:
     with:
       branch: ${{ inputs.branch || github.ref }}
       rmw: rmw_fastrtps_cpp
+      changed_packages: ${{ needs.changed-packages.outputs.packages }}
     secrets: inherit
 
   test_rmw_fastrtps_dynamic_cpp:
     name: Test FastDDS (dynamic)
-    needs: [distribution_compiles]
+    needs: [distribution_compiles, changed-packages]
     if: |
       !cancelled() &&
       needs.distribution_compiles.result == 'success'
@@ -150,11 +184,12 @@ jobs:
     with:
       branch: ${{ inputs.branch || github.ref }}
       rmw: rmw_fastrtps_dynamic_cpp
+      changed_packages: ${{ needs.changed-packages.outputs.packages }}
     secrets: inherit
 
   test_rmw_cyclonedds_cpp:
     name: Test CycloneDDS
-    needs: [distribution_compiles]
+    needs: [distribution_compiles, changed-packages]
     if: |
       !cancelled() &&
       needs.distribution_compiles.result == 'success'
@@ -167,11 +202,12 @@ jobs:
     with:
       branch: ${{ inputs.branch || github.ref }}
       rmw: rmw_cyclonedds_cpp
+      changed_packages: ${{ needs.changed-packages.outputs.packages }}
     secrets: inherit
 
   test_rmw_zenoh_cpp:
     name: Test Zenoh
-    needs: [distribution_compiles]
+    needs: [distribution_compiles, changed-packages]
     if: |
       !cancelled() &&
       needs.distribution_compiles.result == 'success'
@@ -184,4 +220,5 @@ jobs:
     with:
       branch: ${{ inputs.branch || github.ref }}
       rmw: rmw_zenoh_cpp
+      changed_packages: ${{ needs.changed-packages.outputs.packages }}
     secrets: inherit
