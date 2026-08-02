@@ -81,6 +81,7 @@ qt.install(
     version = "6.8.3",
 )
 use_repo(qt, "qt_linux_x86_64")
+
 register_toolchains("@rules_qt//tools:all")
 """
 
@@ -159,6 +160,7 @@ qt.install(
     version = "6.8.3",
 )
 use_repo(qt, "qt_linux_x86_64")
+
 register_toolchains("@rules_qt//tools:all")
 """
 
