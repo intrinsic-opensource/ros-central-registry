@@ -63,14 +63,43 @@ patch pipeline — see the skills in `.agent/skills/`:
 - `.agent/skills/release-automation/` — what's automated (bootstrap, rollup)
   and what you should never try to do by hand.
 
+**Re-running `vendor-module` on a package you've already vendored discards
+any uncommitted edits to it**, even extensive ones — it re-fetches from
+whatever's currently published under `modules/` (plus overlay/patches),
+which does not include edits you haven't rolled into a `create-patch` output
+yet. This bites hardest when you're iterating on a dependency (e.g.
+`rosdistro`) and a downstream package in the *same* workspace, since
+re-running `setup-workspace`/`vendor-module` to pick up the dependency's new
+patch version silently wipes out any not-yet-patched work on the downstream
+package too. `create-patch` your current work (even as a throwaway
+intermediate version to be cleaned up later) before touching
+`setup-workspace`/`vendor-module` again for a package you still have
+uncommitted edits in.
+
 ## Adding a new third-party (BCR) dependency
 
 Never add a new `bazel_dep` to a package's own `MODULE.bazel` (e.g. because
 its `CMakeLists.txt` needs something not already declared there, such as a
 prebuilt SDK upstream fetches via CMake `FetchContent`). Only `rosdistro`'s
-`MODULE.bazel` gains new BCR deps. Add the `bazel_dep` (and any module
-extension/repository rule needed to fetch it, e.g. a platform-specific
-prebuilt release archive) there instead, then expose it as a
+`MODULE.bazel` gains new BCR deps.
+
+Before adding anything, check whether it's already there: grep
+`rosdistro`'s `overlay/cc/BUILD.bazel` for a same-named target under
+`@rosdistro//cc:`. A lot of common third-party libraries (`curl`, `eigen`,
+`spdlog`, `opencv`, PCL, OpenSSL via `boringssl`, ...) are already wired up
+because some other package needed them first — don't assume a dependency is
+missing just because the package you're working on doesn't declare it
+itself. When you do need to add a genuinely new one, double check you have
+the exact right BCR module before wiring it in: similarly-named modules can
+be unrelated projects (e.g. the BCR module named `zip` is Info-ZIP's
+`zip`/`unzip` CLI tool, not `libzip`, the C API library most C++ code
+actually links against — read the module's own `overlay/BUILD.bazel` on
+[bazel-central-registry](https://github.com/bazelbuild/bazel-central-registry/tree/main/modules)
+to confirm what it actually provides before assuming a name match is right).
+
+Add the `bazel_dep` (and any module extension/repository rule needed to
+fetch it, e.g. a platform-specific prebuilt release archive) to
+`rosdistro`'s `MODULE.bazel`, then expose it as a
 `cc_library`/`cc_shared_library` target in `rosdistro`'s `overlay/cc/BUILD.bazel`
 (see the `mcap`/`zstd`/`fastdds` targets there for the pattern of wrapping an
 upstream BCR target, and `bazel_test_helper`/`googletest` for small
@@ -80,6 +109,53 @@ on `@rosdistro//cc:<target>` rather than declaring the BCR dep themselves.
 This forces every package in a given distro release to pin to the exact same
 version of any transitive (non-ROS) dependency, instead of letting individual
 packages drift to their own versions.
+
+**You cannot locally build/test against a newly-added `rosdistro` `bazel_dep`
+by editing the vendored copy alone.** `setup-workspace` resolves the module
+graph from what's actually published under `modules/` at the time it runs —
+editing `workspace/vendor/rosdistro+/MODULE.bazel` changes source content but
+not what Bazel resolved as `rosdistro`'s dependencies, so the new dep won't
+exist in the graph and any target referencing it fails with "no repository
+visible as '@<dep>'". The working sequence is: vendor `rosdistro` and make
+your edits (`MODULE.bazel` + `overlay/cc/BUILD.bazel`) as usual, then run the
+`create-patch` skill on `rosdistro` *before* trying to build against the new
+dep — this materializes a new (uncommitted) `modules/rosdistro/<new-version>/`
+that `setup-workspace`'s override mechanism picks up automatically on its
+next run (same mechanism that lets two people patch the same package in one
+week without colliding). Re-run `setup-workspace`, re-vendor, and only then
+does the new dependency actually resolve. If you need further edits after
+that, repeat the loop — re-run `create-patch -- rosdistro` again rather than
+hand-editing the version directory it already produced, and delete any
+now-stale intermediate `rosdistro` version directories before opening the PR
+so only the final one ships.
+
+A package that needs a dependency you just added to `rosdistro` won't
+actually build with its own `bazel_dep(name = "rosdistro", ...)` pin
+unchanged — `create-patch` doesn't bump that pin for you (bumping
+dependents when a dependency moves is the weekly rollup's job, not an
+individual patch's), so the package genuinely can't build standalone until
+either the rollup runs or you note the ordering dependency explicitly for
+the reviewer (this `rosdistro` patch has to merge and roll up before, or
+alongside, the package's own patch).
+
+When a package bundles or vendors a third-party SDK as embedded source (e.g.
+`find_package(SomeSDK REQUIRED)` pointing at a subdirectory shipped inside
+the package's own archive), don't assume the SDK's own top-level
+`CMakeLists.txt` defaults tell you what's actually needed — check how the
+*consuming* package's `CMakeLists.txt` configures that subdirectory first
+(look for `option(...)` overrides or cache variables set immediately before
+its `add_subdirectory()`/`find_package()` call). A big, scary-looking
+transitive dependency is often disabled entirely by the consuming package
+and doesn't need to be wired up at all.
+
+Don't trust a `CMakeLists.txt`'s declared include paths (or other
+target-configuration details) at face value when translating them to
+Bazel — verify against the actual `#include` statements in source instead.
+CMake/autotools builds can silently tolerate a wrong or stale include path
+because a system-installed copy of the same library papers over it in
+upstream's own CI, which Bazel's hermetic, no-system-headers builds won't
+do. If a declared include path doesn't match what the source files actually
+`#include`, trust the source.
 
 The same centralization applies to Python dependencies: add the package to
 `rosdistro`'s `requirements.in`, then regenerate both locks rather
