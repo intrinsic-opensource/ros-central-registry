@@ -1,0 +1,153 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Triggered by applying the "claude-implement" label to an issue. Claude reads
+# the issue, implements a fix following CONTRIBUTING.md, and opens a PR for
+# human review — it never merges anything itself. Since the action only acts
+# for users with write access to the repo, only a maintainer applying the
+# label can trigger a run; the issue body itself is still untrusted content
+# (see .github/workflows/claude_issue_implement.yml review notes / Anthropic's
+# prompt-injection guidance), so skim an issue before labeling it.
+
+name: claude-issue-implement
+
+run-name: Implement issue #${{ github.event.issue.number }} with Claude
+
+on:
+  issues:
+    types: [labeled]
+
+concurrency:
+  group: claude-issue-implement-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write # required so the action can fetch a GitHub OIDC token
+
+jobs:
+  implement:
+    name: Implement issue and open PR
+    if: github.event.label.name == 'claude-implement'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+
+    - name: Setup Bazel
+      uses: bazel-contrib/setup-bazel@0.19.0
+      with:
+        bazelisk-cache: true
+        disk-cache: false
+        repository-cache: true
+
+    - name: Setup git identity
+      run: |
+        git config --global user.email "claude[bot]@users.noreply.github.com"
+        git config --global user.name "claude[bot]"
+
+    - name: Create implementation branch
+      id: branch
+      run: |
+        BRANCH_NAME="claude/issue-${{ github.event.issue.number }}"
+        git checkout -b "$BRANCH_NAME"
+        echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
+
+    - name: Implement issue with Claude
+      uses: anthropics/claude-code-action@v1
+      with:
+        claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        show_full_output: false
+        prompt: |
+          REPO: ${{ github.repository }}
+          ISSUE NUMBER: ${{ github.event.issue.number }}
+          ISSUE TITLE: ${{ github.event.issue.title }}
+          ISSUE AUTHOR: ${{ github.event.issue.user.login }}
+          BRANCH: ${{ steps.branch.outputs.branch_name }}
+
+          ISSUE BODY:
+          ${{ github.event.issue.body }}
+
+          First, read AGENTS.md at the repo root in full — it's the mandatory
+          guidance for coding agents in this repository, including the
+          setup-workspace / vendor-module / create-patch skill pipeline in
+          .agent/skills/ for patching packages under modules/, plus linting,
+          licensing, and testing conventions. Follow it exactly, and use
+          those skills rather than hand-editing anything under modules/ or
+          hand-rolling `bazel run //tools/ci:...` invocations yourself.
+
+          Then implement this issue on the current branch and open a pull
+          request for human review:
+
+          - Work efficiently: before writing any new Bazel content, find an
+            existing, already-implemented package in modules/ with a similar
+            shape (e.g. another message-only package, another driver with
+            ROS2 components) and mirror its exact structure rather than
+            inventing one from scratch — this is far faster and more likely
+            to be correct than guessing. Don't spend turns hand-exploring the
+            runner environment (system paths, global config files) or
+            hand-rolling registry checks (e.g. curl against bcr.bazel.build)
+            to verify a dependency exists — just attempt the real
+            bazel build/create-patch command and read Bazel's own error
+            messages, which are authoritative and faster than guessing.
+          - Checkpoint real progress via the create-patch skill at natural
+            milestones as you go, not only at the very end — this protects
+            against losing work (re-vendoring a package with uncommitted
+            edits discards them, see AGENTS.md) and means a partial,
+            genuinely useful PR exists even if you run out of turns before
+            finishing everything.
+          - Run the relevant fast local checks (buildifier, ruff, and any
+            targeted test for what you touched — see the Linting section of
+            AGENTS.md) before committing. Do not attempt a full distribution
+            build; .github/workflows/ci.yaml already does that comprehensively
+            on the PR.
+          - Sign off every commit (`git commit -s`) per the DCO requirement in
+            CONTRIBUTING.md, using the claude[bot] identity already configured
+            in this job.
+          - Push the branch, then open the PR against main with `gh pr create`.
+            Use .github/PULL_REQUEST_TEMPLATE.md as the PR body verbatim,
+            filling out every section honestly — in particular, answer the
+            Generative AI disclosure truthfully (you are Claude; say so and
+            describe what you did) per the OSRF Generative AI policy it
+            links, and put "Fixes #${{ github.event.issue.number }}" under
+            Related issue(s). Title the PR clearly, and leave it open for
+            @${{ github.repository_owner }} to review — do not merge it,
+            approve it, or request review from anyone yourself.
+          - If the issue is too vague or under-specified to implement safely,
+            do not guess or implement something speculative: instead run
+            `gh issue comment` explaining what clarification you need, and do
+            not open a PR.
+          - If the issue is well-specified but genuinely too large for one PR
+            (e.g. it would require porting a bundled third-party SDK spanning
+            tens of thousands of lines, or authoring a brand-new Bazel module
+            from scratch for a dependency that doesn't exist in the Bazel
+            Central Registry at all), don't try to brute-force a complete
+            implementation — you will run out of turns before finishing and
+            waste the run. Instead, do enough investigation to describe the
+            real scope (what's actually needed vs. what looked scary at
+            first glance — see AGENTS.md's guidance on checking the
+            consuming package's build options before assuming a bundled
+            dependency is required), then `gh issue comment` proposing how to
+            split it into smaller, independently-mergeable issues, and open
+            a PR only for whatever well-scoped first slice you did manage to
+            finish (if any) rather than an incomplete attempt at the whole
+            thing.
+        claude_args: |
+          --max-turns 200
+          --allowedTools "Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(gh:*),Bash(bazel:*)"

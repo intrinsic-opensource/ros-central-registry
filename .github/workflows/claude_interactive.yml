@@ -1,0 +1,104 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Interactive companion to claude_issue_implement.yml. Mention "@claude" in an
+# issue, a PR comment, or a PR review (including on PRs Claude itself opened)
+# and it responds or pushes follow-up commits addressing the feedback. Like
+# the auto-implement workflow, the action only acts for users with write
+# access to the repo, so only a maintainer's "@claude" mention triggers it —
+# but the surrounding comment/issue thread is still untrusted content from
+# whoever wrote it, so skim before relying on Claude's response.
+
+name: claude-interactive
+
+run-name: Respond to @claude mention
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+  issues:
+    types: [opened, assigned]
+
+concurrency:
+  group: claude-interactive-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+  actions: read # lets Claude read CI results on the PR it's responding in
+
+jobs:
+  claude:
+    name: Respond to @claude
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 1
+
+    - name: Setup Bazel
+      uses: bazel-contrib/setup-bazel@0.19.0
+      with:
+        bazelisk-cache: true
+        disk-cache: false
+        repository-cache: true
+
+    - name: Run Claude Code
+      id: claude
+      uses: anthropics/claude-code-action@v1
+      with:
+        claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        show_full_output: false
+        claude_args: |
+          --max-turns 80
+          --allowedTools "Edit,MultiEdit,Write,Read,Glob,Grep,LS,Bash(git:*),Bash(gh:*),Bash(bazel:*)"
+          --append-system-prompt "Read AGENTS.md at the repo root and
+          follow it exactly, including using the
+          setup-workspace/vendor-module/create-patch skills in
+          .agent/skills/ to patch anything under modules/ (never hand-edit
+          files under modules/<pkg>/<version>/, never modify or delete an
+          existing version directory). Work efficiently: before writing new
+          Bazel content, find an existing, already-implemented package with
+          a similar shape and mirror its structure rather than inventing
+          one from scratch, and don't spend turns hand-exploring the runner
+          environment or hand-rolling registry checks (e.g. curl against
+          bcr.bazel.build) -- attempt the real bazel command and read its
+          own error messages instead. Checkpoint real progress via
+          create-patch at natural milestones as you go, not only at the
+          end, since re-vendoring a package with uncommitted edits discards
+          them (see AGENTS.md). Sign off every commit with git commit -s
+          per the DCO requirement in CONTRIBUTING.md. If you open or update
+          a pull request, use .github/PULL_REQUEST_TEMPLATE.md and fill out
+          every section honestly, including a truthful Generative AI
+          disclosure per the OSRF policy it links. Never merge, approve, or
+          request review on a pull request yourself. If a request turns out
+          to be too large for one PR (e.g. porting a bundled third-party
+          SDK, or a dependency missing from the Bazel Central Registry
+          entirely), don't brute-force it to completion -- say so, explain
+          the real scope, and propose splitting it into smaller pieces
+          instead of running out of turns mid-attempt."
