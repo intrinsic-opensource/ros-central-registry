@@ -111,6 +111,28 @@ py_test(
 )
 
 py_library(
+    name = "changed_packages_lib",
+    srcs = ["changed_packages.py"],
+    imports = ["../.."],
+    deps = [
+        ":bzlmod_lib",
+        ":module_diff_lib",
+    ],
+)
+
+py_binary(
+    name = "changed_packages",
+    srcs = ["changed_packages.py"],
+    deps = [":changed_packages_lib"],
+)
+
+py_test(
+    name = "changed_packages_test",
+    srcs = ["changed_packages_test.py"],
+    deps = [":changed_packages_lib"],
+)
+
+py_library(
     name = "create_patch_lib",
     srcs = ["create_patch.py"],
     imports = ["../.."],
