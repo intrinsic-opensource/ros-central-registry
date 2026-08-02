@@ -89,6 +89,17 @@ jobs:
             --diff-status /tmp/diff_status.txt \
             --directory "${{ matrix.directory }}" \
             --output /tmp/module_diff.md
+    - name: Write module diff to job summary
+      # Always runs, including for fork PRs: unlike the PR comment below,
+      # writing to GITHUB_STEP_SUMMARY needs no token permissions at all,
+      # so this is the one place a fork PR's module diff is guaranteed to
+      # be visible for review.
+      if: always()
+      run: |
+        if [ -s /tmp/module_diff.md ]; then
+          echo "### Module diff (${{ matrix.directory }})" >> "$GITHUB_STEP_SUMMARY"
+          cat /tmp/module_diff.md >> "$GITHUB_STEP_SUMMARY"
+        fi
     - name: Post module diff to PR
       # Only meaningful on a real pull_request event -- weekly_rollup.yml
       # calls this workflow before any PR exists (see the comment at the
@@ -96,7 +107,8 @@ jobs:
       # skipped for fork PRs: GitHub forces GITHUB_TOKEN to read-only for
       # pull_request events triggered from a fork, regardless of the
       # `permissions:` block above, so the comment API call would just
-      # fail with "Resource not accessible by integration".
+      # fail with "Resource not accessible by integration". The job
+      # summary step above still surfaces the diff in that case.
       if: |
         always() && github.event_name == 'pull_request' &&
         (github.event.pull_request.head.repo.full_name || github.repository) == 'intrinsic-opensource/ros-central-registry'
