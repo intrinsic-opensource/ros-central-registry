@@ -388,6 +388,30 @@ cc_shared_library(
     deps = [":console_bridge_library"],
 )
 
+# boringssl (OpenSSL API)
+
+alias(
+    name = "boringssl_crypto_library",
+    actual = "@boringssl//:crypto",
+)
+
+alias(
+    name = "boringssl_ssl_library",
+    actual = "@boringssl//:ssl",
+)
+
+cc_shared_library(
+    name = "boringssl",
+    exports_filter = [
+        ":boringssl_crypto_library",
+        ":boringssl_ssl_library",
+    ],
+    deps = [
+        ":boringssl_crypto_library",
+        ":boringssl_ssl_library",
+    ],
+)
+
 # curl
 
 alias(
