@@ -155,6 +155,29 @@ py_test(
 )
 
 py_library(
+    name = "rebase_module_lib",
+    srcs = ["rebase_module.py"],
+    imports = ["../.."],
+    deps = [
+        ":bzlmod_lib",
+        ":create_patch_lib",
+        ":vendor_modules_lib",
+    ],
+)
+
+py_binary(
+    name = "rebase_module",
+    srcs = ["rebase_module.py"],
+    deps = [":rebase_module_lib"],
+)
+
+py_test(
+    name = "rebase_module_test",
+    srcs = ["rebase_module_test.py"],
+    deps = [":rebase_module_lib"],
+)
+
+py_library(
     name = "rollup_patches_lib",
     srcs = ["rollup_patches.py"],
     imports = ["../.."],

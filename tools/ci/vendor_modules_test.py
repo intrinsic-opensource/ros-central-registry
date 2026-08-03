@@ -182,6 +182,79 @@ class TestWriteVendorManifest(unittest.TestCase):
         self.assertEqual(manifest, bzlmod_lib.hash_directory_tree(self.vendor_module_dir))
 
 
+class TestWritePackageManifest(unittest.TestCase):
+
+    def setUp(self):
+        self.workspace_root = Path(tempfile.mkdtemp())
+        self.modules_dir = self.workspace_root / "modules"
+        self.module_dir = self.modules_dir / "rclcpp" / "1.0.0"
+        self.module_dir.mkdir(parents=True)
+        (self.module_dir / "MODULE.bazel").write_text(
+            'module(\n    name = "rclcpp",\n    version = "1.0.0",\n)\n')
+        (self.module_dir / "source.json").write_text('{"url": "..."}\n')
+        self.target_workspace = self.workspace_root / "workspace"
+        self.target_workspace.mkdir(parents=True)
+
+    def tearDown(self):
+        shutil.rmtree(self.workspace_root)
+
+    def test_writes_manifest_including_module_bazel(self):
+        vendor_modules.write_package_manifest(self.target_workspace, self.modules_dir, "rclcpp", "1.0.0")
+        manifest_path = (
+            self.target_workspace / vendor_modules.PACKAGE_MANIFEST_DIR_NAME / "rclcpp.json")
+        with open(manifest_path) as f:
+            manifest = json.load(f)
+        self.assertEqual(manifest["version"], "1.0.0")
+        self.assertEqual(
+            manifest["hashes"], bzlmod_lib.hash_directory_tree(self.module_dir, exclude_names=()))
+        # Unlike write_vendor_manifest, MODULE.bazel IS included here --
+        # drift there is exactly what this manifest exists to catch.
+        self.assertIn("MODULE.bazel", manifest["hashes"])
+
+    def test_overwrites_stale_manifest_on_rerun(self):
+        vendor_modules.write_package_manifest(self.target_workspace, self.modules_dir, "rclcpp", "1.0.0")
+        (self.module_dir / "source.json").write_text('{"url": "changed"}\n')
+        vendor_modules.write_package_manifest(self.target_workspace, self.modules_dir, "rclcpp", "1.0.0")
+        manifest_path = (
+            self.target_workspace / vendor_modules.PACKAGE_MANIFEST_DIR_NAME / "rclcpp.json")
+        with open(manifest_path) as f:
+            manifest = json.load(f)
+        self.assertEqual(
+            manifest["hashes"], bzlmod_lib.hash_directory_tree(self.module_dir, exclude_names=()))
+
+
+class TestWriteVendorSnapshot(unittest.TestCase):
+
+    def setUp(self):
+        self.workspace_dir = Path(tempfile.mkdtemp())
+        self.vendor_module_dir = self.workspace_dir / "vendor" / "rclcpp+"
+        self.vendor_module_dir.mkdir(parents=True)
+        (self.vendor_module_dir / "src.c").write_text("hello\n")
+
+    def tearDown(self):
+        shutil.rmtree(self.workspace_dir)
+
+    def test_copies_full_content(self):
+        vendor_modules.write_vendor_snapshot(self.workspace_dir, "rclcpp")
+        snapshot = self.workspace_dir / vendor_modules.VENDOR_SNAPSHOT_DIR_NAME / "rclcpp+"
+        self.assertEqual((snapshot / "src.c").read_text(), "hello\n")
+
+    def test_later_edits_do_not_affect_the_snapshot(self):
+        vendor_modules.write_vendor_snapshot(self.workspace_dir, "rclcpp")
+        (self.vendor_module_dir / "src.c").write_text("edited\n")
+        snapshot = self.workspace_dir / vendor_modules.VENDOR_SNAPSHOT_DIR_NAME / "rclcpp+"
+        self.assertEqual((snapshot / "src.c").read_text(), "hello\n")
+
+    def test_rerun_replaces_rather_than_merges(self):
+        vendor_modules.write_vendor_snapshot(self.workspace_dir, "rclcpp")
+        (self.vendor_module_dir / "src.c").write_text("edited\n")
+        (self.vendor_module_dir / "new_file.h").write_text("new\n")
+        vendor_modules.write_vendor_snapshot(self.workspace_dir, "rclcpp")
+        snapshot = self.workspace_dir / vendor_modules.VENDOR_SNAPSHOT_DIR_NAME / "rclcpp+"
+        self.assertEqual((snapshot / "src.c").read_text(), "edited\n")
+        self.assertEqual((snapshot / "new_file.h").read_text(), "new\n")
+
+
 class TestMain(unittest.TestCase):
     """
     End-to-end coverage of main()'s argument handling, exercised against a
@@ -194,7 +267,10 @@ class TestMain(unittest.TestCase):
         self.modules_dir = self.workspace_root / "modules"
         self.target_workspace = self.workspace_root / "workspace"
         for name in ["rclcpp", "rclcpp_action", "rclcpp_lifecycle", "rcutils"]:
-            (self.modules_dir / name).mkdir(parents=True)
+            version_dir = self.modules_dir / name / "1.0.0"
+            version_dir.mkdir(parents=True)
+            (version_dir / "MODULE.bazel").write_text(
+                f'module(\n    name = "{name}",\n    version = "1.0.0",\n)\n')
         self.target_workspace.mkdir(parents=True)
         (self.target_workspace / "MODULE.bazel").write_text(
             'bazel_dep(name = "rclcpp", version = "1.0.0")\n'
@@ -215,12 +291,14 @@ class TestMain(unittest.TestCase):
         def _fake_run(cmd, cwd=None, check=None):
             self.recorded_cmds.append(cmd)
             # Simulate what a real "bazel vendor" would materialize, so the
-            # post-vendor manifest-writing step has something to hash.
+            # post-vendor manifest-writing steps have something to hash.
             for arg in cmd:
                 if arg.startswith("--repo=@"):
-                    module_dir = self.target_workspace / "vendor" / f"{arg[len('--repo=@'):]}+"
+                    name = arg[len("--repo=@"):]
+                    module_dir = self.target_workspace / "vendor" / f"{name}+"
                     module_dir.mkdir(parents=True, exist_ok=True)
-                    (module_dir / "MODULE.bazel").write_text("module(...)\n")
+                    (module_dir / "MODULE.bazel").write_text(
+                        f'module(\n    name = "{name}",\n    version = "1.0.0",\n)\n')
                     (module_dir / "src.c").write_text("hello\n")
 
             class _FakeResult:
@@ -251,6 +329,10 @@ class TestMain(unittest.TestCase):
         self.assertEqual(
             repos,
             ["--repo=@rclcpp", "--repo=@rclcpp_action", "--repo=@rclcpp_lifecycle"])
+        self.assertTrue(
+            (self.target_workspace / vendor_modules.PACKAGE_MANIFEST_DIR_NAME / "rclcpp.json").exists())
+        self.assertTrue(
+            (self.target_workspace / vendor_modules.VENDOR_SNAPSHOT_DIR_NAME / "rclcpp+" / "src.c").exists())
 
     def test_multiple_modules_as_single_quoted_string(self):
         self.run_main(["rclcpp rclcpp_action rclcpp_lifecycle"])

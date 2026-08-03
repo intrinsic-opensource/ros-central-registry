@@ -34,6 +34,8 @@ During the week, a developer fixes one package at a time:
 
 ``create_patch`` diffs the edit against raw upstream (not the currently-patched version -- every ``.rcr.N`` of a package's patches/overlay describe a transformation relative to the *same* raw upstream archive, not an incremental delta from ``.rcr.(N-1)``) and creates a single new module version, e.g. ``rclcpp@32.0.0-1.rcr.1`` -> ``rclcpp@32.0.0-1.rcr.2``. This becomes the developer's PR -- it never touches any other package.
 
+"Immutable" here means immutable once it's reached a shared branch (checked locally via git, against ``main`` by default) -- a version that only exists on the developer's own branch is freely amendable in place instead, so iterating on the same not-yet-merged patch doesn't mint a new ``.rcr.N`` per edit. See the ``create-patch`` and ``rebase-module`` skills.
+
 Because per-package patches land independently and asynchronously, ``setup_workspace`` always resolves every package to its true latest published version, loudly, via ``single_version_override``:
 
 .. code-block:: shell

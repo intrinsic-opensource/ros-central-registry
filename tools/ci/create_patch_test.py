@@ -17,6 +17,7 @@ import hashlib
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tarfile
 import tempfile
@@ -26,6 +27,27 @@ from pathlib import Path
 from tools.ci import bzlmod_lib
 from tools.ci import create_patch
 from tools.ci import vendor_modules
+
+
+def _run_git(repo_root: Path, args) -> None:
+    subprocess.run(["git"] + args, cwd=repo_root, check=True, capture_output=True)
+
+
+def _init_git_repo_with_published_modules(repo_root: Path) -> None:
+    """
+    Initializes repo_root as a git repo (branch "main") and commits
+    whatever's under modules/ as the "published" baseline -- so
+    compute_rollup's default base_ref="main" treats every version present
+    at setUp time as already-published (preserving existing tests'
+    increment-mode expectations), while versions added later in a test
+    body remain branch-only/uncommitted and thus overwrite-in-place
+    candidates.
+    """
+    _run_git(repo_root, ["init", "-q", "-b", "main"])
+    _run_git(repo_root, ["config", "user.email", "test@example.com"])
+    _run_git(repo_root, ["config", "user.name", "Test"])
+    _run_git(repo_root, ["add", "modules"])
+    _run_git(repo_root, ["commit", "-q", "-m", "publish initial modules/"])
 
 
 class TestFetchRawUpstream(unittest.TestCase):
@@ -269,6 +291,8 @@ class _RollupFixtureTestCase(unittest.TestCase):
             'module(\n    name = "rclcpp",\n    version = "1.0.0",\n)\n')
         (self.vendor_module_dir / "src.c").write_text("edited\n")
 
+        _init_git_repo_with_published_modules(self.workspace_root)
+
     def tearDown(self):
         shutil.rmtree(self.tmp_dir)
 
@@ -287,7 +311,8 @@ class _RollupFixtureTestCase(unittest.TestCase):
 class TestComputeRollupAndApply(_RollupFixtureTestCase):
 
     def test_detects_change_and_computes_new_version(self):
-        rollup = create_patch.compute_rollup("rclcpp", self.modules_dir, self.target_workspace)
+        rollup = create_patch.compute_rollup(
+            "rclcpp", self.modules_dir, self.target_workspace, self.workspace_root)
         self.assertTrue(rollup.changed)
         self.assertEqual(rollup.current_version, "1.0.0")
         self.assertEqual(rollup.new_version, "1.0.0.rcr.0")
@@ -295,13 +320,15 @@ class TestComputeRollupAndApply(_RollupFixtureTestCase):
 
     def test_no_local_edit_means_unchanged(self):
         (self.vendor_module_dir / "src.c").write_text("original\n")
-        rollup = create_patch.compute_rollup("rclcpp", self.modules_dir, self.target_workspace)
+        rollup = create_patch.compute_rollup(
+            "rclcpp", self.modules_dir, self.target_workspace, self.workspace_root)
         self.assertFalse(rollup.changed)
 
     def test_missing_vendor_dir_raises(self):
         shutil.rmtree(self.vendor_module_dir)
         with self.assertRaises(RuntimeError):
-            create_patch.compute_rollup("rclcpp", self.modules_dir, self.target_workspace)
+            create_patch.compute_rollup(
+                "rclcpp", self.modules_dir, self.target_workspace, self.workspace_root)
 
     def test_stale_workspace_raises(self):
         # A newer patch has already been published since this workspace
@@ -310,10 +337,12 @@ class TestComputeRollupAndApply(_RollupFixtureTestCase):
         with open(self.modules_dir / "rclcpp" / "metadata.json", "w") as f:
             json.dump({"versions": ["1.0.0", "1.0.0.rcr.5"], "yanked_versions": {}}, f)
         with self.assertRaises(RuntimeError):
-            create_patch.compute_rollup("rclcpp", self.modules_dir, self.target_workspace)
+            create_patch.compute_rollup(
+                "rclcpp", self.modules_dir, self.target_workspace, self.workspace_root)
 
     def test_apply_rollup_writes_new_version_and_updates_metadata(self):
-        rollup = create_patch.compute_rollup("rclcpp", self.modules_dir, self.target_workspace)
+        rollup = create_patch.compute_rollup(
+            "rclcpp", self.modules_dir, self.target_workspace, self.workspace_root)
         create_patch.apply_rollup(rollup, self.modules_dir / "rclcpp" / "metadata.json")
 
         new_dir = self.modules_dir / "rclcpp" / "1.0.0.rcr.0"
@@ -324,6 +353,76 @@ class TestComputeRollupAndApply(_RollupFixtureTestCase):
         with open(self.modules_dir / "rclcpp" / "metadata.json") as f:
             metadata = json.load(f)
         self.assertEqual(metadata["versions"], ["1.0.0", "1.0.0.rcr.0"])
+
+
+class TestComputeRollupOverwriteInPlace(_RollupFixtureTestCase):
+    """
+    Covers a version that only exists on the current branch (never
+    committed to "main"): compute_rollup should amend it in place instead
+    of incrementing to yet another new version.
+    """
+
+    def setUp(self):
+        super().setUp()
+        # Simulate a prior create_patch run that already amended rclcpp to
+        # 1.0.0.rcr.0 on this branch, uncommitted -- current_version
+        # resolves to it, and it should be safe to overwrite in place
+        # rather than incrementing to 1.0.0.rcr.1.
+        self.branch_version = "1.0.0.rcr.0"
+        self.branch_version_dir = self.modules_dir / "rclcpp" / self.branch_version
+        shutil.copytree(self.version_dir, self.branch_version_dir)
+        (self.branch_version_dir / "MODULE.bazel").write_text(
+            f'module(\n    name = "rclcpp",\n    version = "{self.branch_version}",\n)\n')
+        with open(self.modules_dir / "rclcpp" / "metadata.json", "w") as f:
+            json.dump({"versions": ["1.0.0", self.branch_version], "yanked_versions": {}}, f)
+
+        (self.vendor_module_dir / "MODULE.bazel").write_text(
+            f'module(\n    name = "rclcpp",\n    version = "{self.branch_version}",\n)\n')
+
+        vendor_modules.write_package_manifest(
+            self.target_workspace, self.modules_dir, "rclcpp", self.branch_version)
+
+    def test_overwrites_in_place_instead_of_incrementing(self):
+        rollup = create_patch.compute_rollup(
+            "rclcpp", self.modules_dir, self.target_workspace, self.workspace_root)
+        self.assertTrue(rollup.overwrite_in_place)
+        self.assertEqual(rollup.current_version, self.branch_version)
+        self.assertEqual(rollup.new_version, self.branch_version)
+        self.assertEqual(rollup.new_module_dir, rollup.current_module_dir)
+
+    def test_apply_rollup_overwrites_existing_dir_in_place(self):
+        rollup = create_patch.compute_rollup(
+            "rclcpp", self.modules_dir, self.target_workspace, self.workspace_root)
+        create_patch.apply_rollup(rollup, self.modules_dir / "rclcpp" / "metadata.json")
+
+        self.assertEqual(
+            (self.branch_version_dir / "patches" / "src__c.patch").read_text(),
+            rollup.new_patches["src__c.patch"])
+        self.assertIn(
+            f'version = "{self.branch_version}"',
+            (self.branch_version_dir / "MODULE.bazel").read_text())
+        with open(self.modules_dir / "rclcpp" / "metadata.json") as f:
+            metadata = json.load(f)
+        # Idempotent -- the version was already listed, no duplicate entry.
+        self.assertEqual(metadata["versions"], ["1.0.0", self.branch_version])
+        # No stray extra version got minted alongside it.
+        self.assertFalse((self.modules_dir / "rclcpp" / "1.0.0.rcr.1").exists())
+
+    def test_drift_since_vendoring_is_refused(self):
+        # Something (e.g. a concurrent git pull/checkout) changed the
+        # packaged directory after this workspace vendored it.
+        (self.branch_version_dir / "extra_file.txt").write_text("surprise\n")
+        with self.assertRaises(RuntimeError):
+            create_patch.compute_rollup(
+                "rclcpp", self.modules_dir, self.target_workspace, self.workspace_root)
+
+    def test_missing_package_manifest_is_refused(self):
+        manifest_path = (
+            self.target_workspace / vendor_modules.PACKAGE_MANIFEST_DIR_NAME / "rclcpp.json")
+        manifest_path.unlink()
+        with self.assertRaises(RuntimeError):
+            create_patch.compute_rollup(
+                "rclcpp", self.modules_dir, self.target_workspace, self.workspace_root)
 
 
 class TestMainAutoDetect(_RollupFixtureTestCase):
@@ -389,6 +488,32 @@ class TestMainAutoDetect(_RollupFixtureTestCase):
         self.run_main(["rclcpp"])
         self.assertTrue(self.new_version_dir().exists())
 
+    def test_base_ref_flag_changes_publish_decision(self):
+        # An empty branch where rclcpp@1.0.0 was never committed -- against
+        # that ref, 1.0.0 looks branch-only, so create_patch should amend
+        # it in place rather than incrementing to 1.0.0.rcr.0. Built via
+        # plumbing commands (commit-tree/update-ref) rather than a real
+        # checkout, so the current branch's working tree/index are never
+        # touched.
+        empty_tree_sha = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+        commit_result = subprocess.run(
+            ["git", "commit-tree", empty_tree_sha, "-m", "empty"],
+            cwd=self.workspace_root, check=True, capture_output=True, text=True,
+        )
+        _run_git(
+            self.workspace_root,
+            ["update-ref", "refs/heads/empty-branch", commit_result.stdout.strip()],
+        )
+        vendor_modules.write_package_manifest(
+            self.target_workspace, self.modules_dir, "rclcpp", "1.0.0")
+
+        create_patch.input = lambda prompt="": "y"
+        self.run_main(["--base-ref", "empty-branch"])
+
+        self.assertFalse(self.new_version_dir().exists())
+        self.assertTrue((self.version_dir / "patches" / "src__c.patch").exists())
+
+
 class TestRosdistroMODULEBazelRollup(unittest.TestCase):
 
     def setUp(self):
@@ -436,6 +561,8 @@ class TestRosdistroMODULEBazelRollup(unittest.TestCase):
         # In vendor_module_dir, write the dummy.txt as well so no diffs in source files
         (self.vendor_module_dir / "dummy.txt").write_text("hello\n")
 
+        _init_git_repo_with_published_modules(self.workspace_root)
+
     def tearDown(self):
         shutil.rmtree(self.tmp_dir)
 
@@ -451,7 +578,8 @@ class TestRosdistroMODULEBazelRollup(unittest.TestCase):
         )
         (self.vendor_module_dir / "MODULE.bazel").write_text(new_module_content)
 
-        rollup = create_patch.compute_rollup("rosdistro", self.modules_dir, self.target_workspace)
+        rollup = create_patch.compute_rollup(
+            "rosdistro", self.modules_dir, self.target_workspace, self.workspace_root)
         self.assertTrue(rollup.changed)
         self.assertEqual(rollup.current_version, "lyrical.2026-06-08.rcr.1")
         self.assertEqual(rollup.new_version, "lyrical.2026-06-08.rcr.2")
@@ -463,6 +591,97 @@ class TestRosdistroMODULEBazelRollup(unittest.TestCase):
         
         # Verify the new MODULE.bazel has the developer's modifications AND the correct new version
         new_content = (new_dir / "MODULE.bazel").read_text()
+        self.assertIn('version = "lyrical.2026-06-08.rcr.2"', new_content)
+        self.assertIn('bazel_dep(name = "new_dep", version = "2.0.0")', new_content)
+
+
+class TestRosdistroOverwriteInPlace(unittest.TestCase):
+    """
+    Covers the overwrite-in-place path for rosdistro specifically: its
+    version is branch-only (never committed to "main"), so create_patch
+    should amend modules/rosdistro/<version>/MODULE.bazel in place rather
+    than incrementing to a new version.
+    """
+
+    def setUp(self):
+        self.tmp_dir = Path(tempfile.mkdtemp())
+        self.workspace_root = self.tmp_dir / "repo"
+        self.modules_dir = self.workspace_root / "modules"
+        self.target_workspace = self.workspace_root / "workspace"
+        (self.target_workspace / "vendor").mkdir(parents=True)
+        (self.target_workspace / "MODULE.bazel").write_text("")
+
+        # git repo exists, but rosdistro's version is never committed to
+        # main -- it's branch-only.
+        self.workspace_root.mkdir(parents=True, exist_ok=True)
+        _run_git(self.workspace_root, ["init", "-q", "-b", "main"])
+        _run_git(self.workspace_root, ["config", "user.email", "test@example.com"])
+        _run_git(self.workspace_root, ["config", "user.name", "Test"])
+        (self.workspace_root / "README.md").write_text("placeholder\n")
+        _run_git(self.workspace_root, ["add", "README.md"])
+        _run_git(self.workspace_root, ["commit", "-q", "-m", "initial commit"])
+
+        module_dir = self.modules_dir / "rosdistro"
+        self.version_dir = module_dir / "lyrical.2026-06-08.rcr.2"
+        self.version_dir.mkdir(parents=True)
+        with open(module_dir / "metadata.json", "w") as f:
+            json.dump({"versions": ["lyrical.2026-06-08.rcr.2"], "yanked_versions": {}}, f)
+
+        self.old_module_content = (
+            'module(\n'
+            '    name = "rosdistro",\n'
+            '    version = "lyrical.2026-06-08.rcr.2",\n'
+            ')\n'
+            'bazel_dep(name = "old_dep", version = "1.0.0")\n'
+        )
+        (self.version_dir / "MODULE.bazel").write_text(self.old_module_content)
+
+        archive_src = self.tmp_dir / "archive_src" / "rosdistro-lyrical-2026-06-08"
+        archive_src.mkdir(parents=True)
+        (archive_src / "dummy.txt").write_text("hello\n")
+        archive_path = self.tmp_dir / "rosdistro.tar.gz"
+        with tarfile.open(archive_path, "w:gz") as tf:
+            tf.add(archive_src, arcname="rosdistro-lyrical-2026-06-08")
+        digest = base64.b64encode(hashlib.sha256(archive_path.read_bytes()).digest()).decode()
+        with open(self.version_dir / "source.json", "w") as f:
+            json.dump({
+                "url": archive_path.as_uri(),
+                "strip_prefix": "rosdistro-lyrical-2026-06-08",
+                "integrity": f"sha256-{digest}",
+            }, f)
+
+        self.vendor_module_dir = self.target_workspace / "vendor" / "rosdistro+"
+        self.vendor_module_dir.mkdir(parents=True)
+        (self.vendor_module_dir / "dummy.txt").write_text("hello\n")
+        (self.vendor_module_dir / "MODULE.bazel").write_text(self.old_module_content)
+
+        vendor_modules.write_package_manifest(
+            self.target_workspace, self.modules_dir, "rosdistro", "lyrical.2026-06-08.rcr.2")
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp_dir)
+
+    def test_amends_rosdistro_module_bazel_in_place(self):
+        new_module_content = (
+            'module(\n'
+            '    name = "rosdistro",\n'
+            '    version = "lyrical.2026-06-08.rcr.2",\n'
+            ')\n'
+            'bazel_dep(name = "old_dep", version = "1.0.0")\n'
+            'bazel_dep(name = "new_dep", version = "2.0.0")\n'
+        )
+        (self.vendor_module_dir / "MODULE.bazel").write_text(new_module_content)
+
+        rollup = create_patch.compute_rollup(
+            "rosdistro", self.modules_dir, self.target_workspace, self.workspace_root)
+        self.assertTrue(rollup.overwrite_in_place)
+        self.assertEqual(rollup.new_version, "lyrical.2026-06-08.rcr.2")
+
+        create_patch.apply_rollup(rollup, self.modules_dir / "rosdistro" / "metadata.json")
+
+        # Still the SAME directory -- no lyrical.2026-06-08.rcr.3 was minted.
+        self.assertFalse((self.modules_dir / "rosdistro" / "lyrical.2026-06-08.rcr.3").exists())
+        new_content = (self.version_dir / "MODULE.bazel").read_text()
         self.assertIn('version = "lyrical.2026-06-08.rcr.2"', new_content)
         self.assertIn('bazel_dep(name = "new_dep", version = "2.0.0")', new_content)
 
