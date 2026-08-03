@@ -40,7 +40,7 @@ Roll up all your edits relative to raw upstream into a new module version direct
 cd ..
 bazel run //tools/ci:create_patch -- <module-name>
 ```
-This increments the `.rcr.N` patch version (e.g. `1.0.0-1.rcr.1` -> `1.0.0-1.rcr.2`), updates `metadata.json` to include the new version, and auto-generates:
+If the current version has already reached `main`, this increments the `.rcr.N` patch version (e.g. `1.0.0-1.rcr.1` -> `1.0.0-1.rcr.2`); if the version only exists on your branch, it amends that version in place instead (so re-running this after more edits to a not-yet-merged patch doesn't mint another version). Either way it updates `metadata.json` to include the version and auto-generates:
 - `source.json` (with updated patch/overlay integrity hashes)
 - `overlay/` (for brand-new files like `BUILD.bazel`)
 - `patches/` (diffs of files modified in place)
@@ -49,6 +49,9 @@ If you touched multiple packages, running `bazel run //tools/ci:create_patch` wi
 
 > [!NOTE]
 > While a PR can contain changes/additions for more than one module, large PRs affecting multiple unrelated modules are discouraged. Prefer submitting smaller, focused PRs per module (or per closely-related set of modules) to make reviews and CI runs more manageable.
+
+### 5. Recovering From a Stale Workspace
+If `create_patch` refuses because `modules/<package>/<version>/` changed on disk since you vendored it (e.g. a `git pull` brought in a concurrent edit), or you otherwise need to re-baseline against the current `modules/` state without losing uncommitted edits, see the `rebase-module` skill instead of re-running `setup-workspace`/`vendor-module` by hand.
 
 ---
 

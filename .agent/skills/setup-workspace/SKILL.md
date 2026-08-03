@@ -68,4 +68,7 @@ a whole variant, don't build the whole config — go straight to the
   `vendor-module` skill. Don't mix the two up.
 - If `bazel run //tools/ci:vendor_modules` or `//tools/ci:create_patch` later
   complain the workspace is stale, the fix is to just re-run this command,
-  not to hand-patch version numbers.
+  not to hand-patch version numbers. But if you have uncommitted edits in a
+  vendored package you don't want to lose, use the `rebase-module` skill
+  instead of re-running this directly — it re-baselines for you while
+  preserving your edits.

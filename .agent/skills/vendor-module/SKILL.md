@@ -70,12 +70,16 @@ version — that's your actual deliverable, not the `vendor/` tree itself
 ## Gotchas
 
 - `vendor/<name>+/MODULE.bazel` is never diffed by `create-patch` — don't
-  bother editing it.
-- Re-vendoring a package you've already vendored resets the local-edit
-  baseline that `create-patch`'s auto-detect mode compares against (it
-  snapshots a file-hash manifest into `workspace/.vendor_manifest/` right
-  after every vendor run). Don't re-run `vendor_modules` on a package
-  mid-edit unless you mean to reset that baseline.
+  bother editing it (`rosdistro` is the one exception; see the
+  `create-patch` skill).
+- Re-vendoring a package you've already vendored resets every local-edit
+  baseline `//tools/ci` tooling compares against: the file-hash manifest
+  `create-patch`'s auto-detect mode uses (`workspace/.vendor_manifest/`),
+  the packaged-directory snapshot `create-patch`'s drift guard uses
+  (`workspace/.package_manifest/`), and the content snapshot `rebase-module`
+  diffs your edits against (`workspace/.vendor_snapshot/`). Don't re-run
+  `vendor_modules` on a package mid-edit unless you mean to reset all three
+  — if you have edits worth keeping, use the `rebase-module` skill instead.
 - If a package isn't declared as a `bazel_dep` in the workspace's
   `MODULE.bazel`, vendoring it fails loudly rather than silently no-op-ing —
   that usually means you need to re-run `setup-workspace` (wrong release) or

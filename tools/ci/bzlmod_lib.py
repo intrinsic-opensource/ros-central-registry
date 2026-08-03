@@ -22,6 +22,7 @@ import base64
 import hashlib
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
@@ -230,6 +231,26 @@ def patch_file_name_from_rel_path(rel_path: Path) -> str:
     return path_file_name + ".patch"
 
 
+def read_module_version(module_dot_bazel: Path, package_name: str) -> str:
+    """
+    Read the version a MODULE.bazel's own module(name=package_name, ...)
+    declaration was resolved to. Used instead of scanning bazel_dep text in
+    the root workspace, since bazel_dep text doesn't reflect
+    single_version_override()s -- the vendored tree's own MODULE.bazel is
+    the source of truth for what Bazel actually resolved.
+    """
+    content = module_dot_bazel.read_text()
+    match = re.search(
+        r'module\(\s*name\s*=\s*"' + re.escape(package_name) + r'"\s*,\s*version\s*=\s*"([^"]+)"',
+        content,
+    )
+    if not match:
+        raise RuntimeError(
+            f"Could not find module(name={package_name!r}, ...) in {module_dot_bazel}"
+        )
+    return match.group(1)
+
+
 def rewrite_module_version(content: str, package_name: str, new_version: str) -> str:
     """
     Rewrite the version field of a MODULE.bazel's own module(name=...,
@@ -289,3 +310,59 @@ def find_packages_with_newer_versions(
         if version_sort_key(latest) != version_sort_key(pinned_version):
             result[package_name] = latest
     return result
+
+
+def git_ref_exists(repo_root: Path, ref: str) -> bool:
+    """
+    True if `ref` resolves to a commit in the local repo at repo_root
+    (does NOT fetch or otherwise consult a remote -- a local branch that
+    hasn't been pulled recently can go stale, by design; see
+    is_version_published).
+    """
+    result = subprocess.run(
+        ["git", "rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}"],
+        cwd=repo_root, capture_output=True,
+    )
+    return result.returncode == 0
+
+
+def path_exists_at_git_ref(repo_root: Path, ref: str, rel_path: Path) -> bool:
+    """
+    True if rel_path (POSIX-relative to repo_root) exists as a blob at git
+    ref `ref`. Raises RuntimeError if `ref` itself doesn't resolve locally
+    -- fails closed rather than silently guessing "not published" (which
+    would risk an unwarranted in-place overwrite of something that's
+    actually immutable) or "published" (which would silently disable the
+    overwrite-in-place feature entirely).
+    """
+    if not git_ref_exists(repo_root, ref):
+        raise RuntimeError(
+            f"git ref {ref!r} does not resolve in {repo_root} -- can't tell "
+            "whether a version has already been published there. Make sure "
+            f"the ref exists locally (e.g. `git fetch origin {ref}:{ref}`), "
+            "or pass --base-ref to point at one that does."
+        )
+    result = subprocess.run(
+        ["git", "cat-file", "-e", f"{ref}:{rel_path.as_posix()}"],
+        cwd=repo_root, capture_output=True,
+    )
+    return result.returncode == 0
+
+
+def is_version_published(repo_root: Path, base_ref: str, module_dir: Path) -> bool:
+    """
+    True if module_dir (a modules/<package>/<version>/ directory, relative
+    to repo_root) already exists at git ref base_ref -- i.e. this version
+    has reached base_ref (typically the local "main" branch) and must be
+    treated as immutable, rather than existing only on the current branch
+    where it can still be safely amended in place. Checks module_dir's
+    MODULE.bazel specifically, since git doesn't track empty directories
+    and every version directory always has one.
+
+    This intentionally checks the LOCAL base_ref, not origin/<base_ref> --
+    simplicity over robustness. A stale local base_ref (not recently
+    pulled) can cause this to wrongly report a since-published version as
+    branch-only; keeping it up to date is the caller's responsibility.
+    """
+    rel_path = module_dir.relative_to(repo_root) / "MODULE.bazel"
+    return path_exists_at_git_ref(repo_root, base_ref, rel_path)

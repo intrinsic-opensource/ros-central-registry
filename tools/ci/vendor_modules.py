@@ -21,12 +21,13 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 from typing import Iterable, List, Set
 
-from tools.ci.bzlmod_lib import hash_directory_tree, scan_module_for_dependencies
+from tools.ci.bzlmod_lib import hash_directory_tree, read_module_version, scan_module_for_dependencies
 from tools.ci.setup_workspace import VARIANTS
 
 VENDOR_DIR_RC_LINE = "common --vendor_dir=vendor"
@@ -35,6 +36,19 @@ VENDOR_DIR_RC_LINE = "common --vendor_dir=vendor"
 # so //tools/ci:create_patch can later detect local edits without a
 # network fetch (see create_patch.module_has_local_edits).
 VENDOR_MANIFEST_DIR_NAME = ".vendor_manifest"
+
+# Where per-module file-hash snapshots of the PACKAGED modules/<module>/
+# <version>/ directory (not the exploded vendor tree) are recorded right
+# after vendoring, so //tools/ci:create_patch's overwrite-in-place mode can
+# detect on-disk drift since vendoring before blindly overwriting it (see
+# create_patch._check_package_dir_not_stale).
+PACKAGE_MANIFEST_DIR_NAME = ".package_manifest"
+
+# Where a full-content copy of the freshly-vendored tree is kept per
+# module, so //tools/ci:rebase_module can later diff a developer's edits
+# against it (hashes alone can't reconstruct lost content once the
+# packaged module dir is the thing that drifted).
+VENDOR_SNAPSHOT_DIR_NAME = ".vendor_snapshot"
 
 # setup_workspace.VARIANTS maps a short workspace-file key (e.g. "core") to
 # the ROS variant package name it corresponds to (e.g. "ros_core"), and
@@ -117,6 +131,42 @@ def write_vendor_manifest(target_workspace: Path, module: str) -> None:
     with open(manifest_path, "w") as f:
         json.dump(hashes, f, indent=4, sort_keys=True)
         f.write("\n")
+
+
+def write_package_manifest(target_workspace: Path, modules_dir: Path, module: str, version: str) -> None:
+    """
+    Snapshots file hashes of modules/<module>/<version>/ itself (the
+    PACKAGED directory //tools/ci:create_patch's overwrite-in-place mode
+    later reads/overwrites -- not workspace/vendor/<module>+/), keyed by
+    the version it was taken at. Lets create_patch detect on-disk drift
+    (e.g. a concurrent git pull/checkout/rebase brought in someone else's
+    edit to this not-yet-published version) before blindly overwriting.
+    Unlike write_vendor_manifest, this does NOT exclude MODULE.bazel --
+    drift there is exactly what this guard exists to catch.
+    """
+    module_dir = modules_dir / module / version
+    manifest_path = target_workspace / PACKAGE_MANIFEST_DIR_NAME / f"{module}.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    hashes = hash_directory_tree(module_dir, exclude_names=())
+    with open(manifest_path, "w") as f:
+        json.dump({"version": version, "hashes": hashes}, f, indent=4, sort_keys=True)
+        f.write("\n")
+
+
+def write_vendor_snapshot(target_workspace: Path, module: str) -> None:
+    """
+    Full-content copy of the freshly-vendored tree into
+    workspace/.vendor_snapshot/<module>+/, replacing any prior snapshot.
+    File-hash manifests are enough to detect that a developer edited
+    something, but not to reconstruct what it looked like beforehand --
+    this snapshot is the baseline //tools/ci:rebase_module diffs a
+    developer's later edits against when recovering from a stale
+    workspace.
+    """
+    vendor_module_dir = target_workspace / "vendor" / f"{module}+"
+    snapshot_dir = target_workspace / VENDOR_SNAPSHOT_DIR_NAME / f"{module}+"
+    shutil.rmtree(snapshot_dir, ignore_errors=True)
+    shutil.copytree(vendor_module_dir, snapshot_dir)
 
 
 def ensure_vendor_dir_flag(bazelrc: Path) -> None:
@@ -219,6 +269,11 @@ def main():
 
     for module in modules:
         write_vendor_manifest(target_workspace, module)
+        version = read_module_version(
+            target_workspace / "vendor" / f"{module}+" / "MODULE.bazel", module
+        )
+        write_package_manifest(target_workspace, workspace_root / "modules", module, version)
+        write_vendor_snapshot(target_workspace, module)
 
     print(
         "Done. Edit sources under "

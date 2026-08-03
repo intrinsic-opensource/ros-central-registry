@@ -14,6 +14,7 @@
 
 import json
 import shutil
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -185,6 +186,92 @@ class TestHashDirectoryTree(unittest.TestCase):
         target.write_text("goodbye\n")
         after = bzlmod_lib.hash_directory_tree(self.tmp_dir)
         self.assertNotEqual(before, after)
+
+
+class TestReadModuleVersion(unittest.TestCase):
+
+    def setUp(self):
+        self.tmp_dir = Path(tempfile.mkdtemp())
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp_dir)
+
+    def test_reads_version(self):
+        module_file = self.tmp_dir / "MODULE.bazel"
+        module_file.write_text(
+            'module(\n    name = "rclcpp",\n    version = "32.0.0-1.rcr.1",\n)\n'
+        )
+        self.assertEqual(bzlmod_lib.read_module_version(module_file, "rclcpp"), "32.0.0-1.rcr.1")
+
+    def test_raises_if_not_found(self):
+        module_file = self.tmp_dir / "MODULE.bazel"
+        module_file.write_text('module(\n    name = "other",\n    version = "1.0.0",\n)\n')
+        with self.assertRaises(RuntimeError):
+            bzlmod_lib.read_module_version(module_file, "rclcpp")
+
+
+class _GitRepoTestCase(unittest.TestCase):
+    """Shared fixture: a real, throwaway git repo with an initial commit on main."""
+
+    def setUp(self):
+        self.repo_root = Path(tempfile.mkdtemp())
+        self._run_git(["init", "-q", "-b", "main"])
+        self._run_git(["config", "user.email", "test@example.com"])
+        self._run_git(["config", "user.name", "Test"])
+        (self.repo_root / "README.md").write_text("placeholder\n")
+        self._run_git(["add", "README.md"])
+        self._run_git(["commit", "-q", "-m", "initial commit"])
+
+    def tearDown(self):
+        shutil.rmtree(self.repo_root)
+
+    def _run_git(self, args):
+        subprocess.run(["git"] + args, cwd=self.repo_root, check=True, capture_output=True)
+
+    def commit_module_version(self, package: str, version: str, branch: str = "main"):
+        if branch != "main":
+            self._run_git(["checkout", "-q", "-b", branch])
+        module_dir = self.repo_root / "modules" / package / version
+        module_dir.mkdir(parents=True)
+        (module_dir / "MODULE.bazel").write_text(
+            f'module(\n    name = "{package}",\n    version = "{version}",\n)\n'
+        )
+        self._run_git(["add", str(module_dir)])
+        self._run_git(["commit", "-q", "-m", f"add {package}@{version}"])
+        if branch != "main":
+            self._run_git(["checkout", "-q", "main"])
+        return module_dir
+
+
+class TestGitRefExists(_GitRepoTestCase):
+
+    def test_existing_ref_is_true(self):
+        self.assertTrue(bzlmod_lib.git_ref_exists(self.repo_root, "main"))
+
+    def test_missing_ref_is_false(self):
+        self.assertFalse(bzlmod_lib.git_ref_exists(self.repo_root, "does-not-exist"))
+
+
+class TestIsVersionPublished(_GitRepoTestCase):
+
+    def test_published_version_is_detected(self):
+        module_dir = self.commit_module_version("rclcpp", "1.0.0")
+        self.assertTrue(bzlmod_lib.is_version_published(self.repo_root, "main", module_dir))
+
+    def test_branch_only_committed_version_is_not_published(self):
+        module_dir = self.commit_module_version("rclcpp", "1.0.0.rcr.0", branch="feature")
+        self.assertFalse(bzlmod_lib.is_version_published(self.repo_root, "main", module_dir))
+
+    def test_uncommitted_version_is_not_published(self):
+        module_dir = self.repo_root / "modules" / "rclcpp" / "1.0.0"
+        module_dir.mkdir(parents=True)
+        (module_dir / "MODULE.bazel").write_text('module(name = "rclcpp", version = "1.0.0")\n')
+        self.assertFalse(bzlmod_lib.is_version_published(self.repo_root, "main", module_dir))
+
+    def test_missing_base_ref_raises(self):
+        module_dir = self.commit_module_version("rclcpp", "1.0.0")
+        with self.assertRaises(RuntimeError):
+            bzlmod_lib.is_version_published(self.repo_root, "does-not-exist", module_dir)
 
 
 class TestFindPackagesWithNewerVersions(unittest.TestCase):

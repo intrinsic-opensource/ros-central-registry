@@ -30,7 +30,6 @@ import filecmp
 import hashlib
 import json
 import os
-import re
 import shutil
 import sys
 import tarfile
@@ -42,26 +41,7 @@ from typing import Dict, List, Tuple
 
 from tools.ci import bzlmod_lib
 from tools.ci import vendor_modules
-
-
-def read_module_version(module_dot_bazel: Path, package_name: str) -> str:
-    """
-    Read the version a MODULE.bazel's own module(name=package_name, ...)
-    declaration was resolved to. Used instead of scanning bazel_dep text in
-    the root workspace, since bazel_dep text doesn't reflect
-    single_version_override()s -- the vendored tree's own MODULE.bazel is
-    the source of truth for what Bazel actually resolved.
-    """
-    content = module_dot_bazel.read_text()
-    match = re.search(
-        r'module\(\s*name\s*=\s*"' + re.escape(package_name) + r'"\s*,\s*version\s*=\s*"([^"]+)"',
-        content,
-    )
-    if not match:
-        raise RuntimeError(
-            f"Could not find module(name={package_name!r}, ...) in {module_dot_bazel}"
-        )
-    return match.group(1)
+from tools.ci.bzlmod_lib import read_module_version
 
 
 def load_existing_patches_and_overlays(module_dir: Path) -> Tuple[Dict[str, str], Dict[str, str]]:
@@ -188,6 +168,7 @@ class ModuleRollup:
     new_overlays: Dict[str, str]
     old_patches: Dict[str, str]
     old_overlays: Dict[str, str]
+    overwrite_in_place: bool
 
     @property
     def changed(self) -> bool:
@@ -199,14 +180,66 @@ class ModuleRollup:
         return self.new_patches != self.old_patches or self.new_overlays != self.old_overlays
 
 
+def _check_package_dir_not_stale(
+    target_workspace: Path, modules_dir: Path, module: str, version: str
+) -> None:
+    """
+    Guards the overwrite-in-place path: raises RuntimeError if
+    modules/<module>/<version>/ has changed on disk since this workspace
+    vendored it (e.g. a concurrent git pull/checkout/rebase brought in
+    someone else's edit to this not-yet-published version) -- blindly
+    overwriting in that case would silently discard their change. A
+    missing or version-mismatched manifest is treated the same way (can't
+    verify), not conservatively skipped, since the failure mode of
+    proceeding wrongly here is destructive rather than merely redundant.
+    """
+    manifest_path = target_workspace / vendor_modules.PACKAGE_MANIFEST_DIR_NAME / f"{module}.json"
+    if not manifest_path.exists():
+        raise RuntimeError(
+            f"No package-directory snapshot found for {module} in this "
+            f"workspace ({manifest_path} is missing) -- can't verify "
+            f"modules/{module}/{version}/ hasn't changed since vendoring. "
+            f"Re-run 'bazel run //tools/ci:vendor_modules -- {module}' "
+            "before creating a patch."
+        )
+    with open(manifest_path, "r") as f:
+        manifest = json.load(f)
+    if manifest.get("version") != version:
+        raise RuntimeError(
+            f"This workspace vendored {module} at version "
+            f"{manifest.get('version')!r}, but is now trying to amend "
+            f"{version!r} -- re-run 'bazel run //tools/ci:vendor_modules -- "
+            f"{module}' before creating a patch."
+        )
+    current_hashes = bzlmod_lib.hash_directory_tree(
+        modules_dir / module / version, exclude_names=()
+    )
+    if current_hashes != manifest.get("hashes"):
+        raise RuntimeError(
+            f"modules/{module}/{version}/ has changed on disk since this "
+            "workspace vendored it (likely a concurrent git pull/checkout/"
+            "rebase) -- refusing to overwrite it blind. Re-run 'bazel run "
+            f"//tools/ci:vendor_modules -- {module}' (if you have no local "
+            "edits worth keeping), or 'bazel run //tools/ci:rebase_module "
+            f"-- {module}' (to preserve your edits) before creating a "
+            "patch."
+        )
+
+
 def compute_rollup(
-    module: str, modules_dir: Path, target_workspace: Path
+    module: str, modules_dir: Path, target_workspace: Path,
+    repo_root: Path, base_ref: str = "main",
 ) -> ModuleRollup:
     """
     Fetches raw upstream and diffs it against a vendored module's tree,
     returning everything needed to print a summary and (optionally) write
     a new patch version. Raises RuntimeError for user-facing error
     conditions (missing vendor dir, stale workspace).
+
+    If the module's current_version doesn't yet exist at git ref
+    base_ref (i.e. it only exists on the current branch, never merged),
+    the rollup overwrites that version in place instead of incrementing
+    to a new one -- see bzlmod_lib.is_version_published.
     """
     vendor_module_dir = target_workspace / "vendor" / f"{module}+"
     if not vendor_module_dir.exists():
@@ -234,6 +267,15 @@ def compute_rollup(
 
     current_module_dir = modules_dir / module / current_version
 
+    # A version that only exists on the current branch (never reached
+    # base_ref) can be safely amended in place instead of incremented --
+    # see is_version_published's docstring for the exact invariant.
+    overwrite_in_place = not bzlmod_lib.is_version_published(
+        repo_root, base_ref, current_module_dir
+    )
+    if overwrite_in_place:
+        _check_package_dir_not_stale(target_workspace, modules_dir, module, current_version)
+
     # Obtain the raw (unpatched) upstream source for diffing -- NOT the
     # currently-published version's vendored tree, since that already has
     # existing patches/overlay applied (see fetch_raw_upstream's docstring
@@ -257,8 +299,12 @@ def compute_rollup(
         shutil.rmtree(pristine_root, ignore_errors=True)
 
     old_patches, old_overlays = load_existing_patches_and_overlays(current_module_dir)
-    new_version = bzlmod_lib.increment_version(current_version)
-    new_module_dir = modules_dir / module / new_version
+    if overwrite_in_place:
+        new_version = current_version
+        new_module_dir = current_module_dir
+    else:
+        new_version = bzlmod_lib.increment_version(current_version)
+        new_module_dir = modules_dir / module / new_version
 
     return ModuleRollup(
         module=module,
@@ -271,17 +317,25 @@ def compute_rollup(
         new_overlays=new_overlays,
         old_patches=old_patches,
         old_overlays=old_overlays,
+        overwrite_in_place=overwrite_in_place,
     )
 
 
 def print_rollup_summary(rollup: ModuleRollup) -> None:
-    print(f"Creating {rollup.module}@{rollup.new_version} (from {rollup.current_version}):")
+    if rollup.overwrite_in_place:
+        print(
+            f"Amending {rollup.module}@{rollup.new_version} in place "
+            "(branch-only, not yet published):"
+        )
+    else:
+        print(f"Creating {rollup.module}@{rollup.new_version} (from {rollup.current_version}):")
     print(f"  patches: {len(rollup.new_patches)} (was {len(rollup.old_patches)})")
     print(f"  overlay: {len(rollup.new_overlays)} (was {len(rollup.old_overlays)})")
 
 
 def apply_rollup(rollup: ModuleRollup, metadata_path: Path) -> None:
-    shutil.copytree(rollup.current_module_dir, rollup.new_module_dir, dirs_exist_ok=True)
+    if rollup.new_module_dir != rollup.current_module_dir:
+        shutil.copytree(rollup.current_module_dir, rollup.new_module_dir, dirs_exist_ok=True)
     shutil.rmtree(rollup.new_module_dir / "patches", ignore_errors=True)
     shutil.rmtree(rollup.new_module_dir / "overlay", ignore_errors=True)
     for patch_name, content in rollup.new_patches.items():
@@ -371,6 +425,15 @@ def main():
         action="store_true",
         help="In auto-detect mode, skip the confirmation prompt.",
     )
+    parser.add_argument(
+        "--base-ref",
+        default="main",
+        help="Local git ref a version must already exist at to be treated "
+        "as published/immutable; versions that only exist on the current "
+        "branch relative to this ref are amended in place instead of "
+        "incremented. Checked locally only (not origin/<ref>) -- keep it "
+        "up to date yourself. Defaults to 'main'.",
+    )
     args = parser.parse_args()
 
     workspace_root = Path(os.environ.get("BUILD_WORKSPACE_DIRECTORY", ".")).resolve()
@@ -388,7 +451,9 @@ def main():
 
     if args.module:
         try:
-            rollup = compute_rollup(args.module, modules_dir, target_workspace)
+            rollup = compute_rollup(
+                args.module, modules_dir, target_workspace, workspace_root, args.base_ref
+            )
         except RuntimeError as e:
             print(f"Error: {e}", file=sys.stderr)
             sys.exit(1)
@@ -420,7 +485,9 @@ def main():
     rollups = []
     for module in candidates:
         try:
-            rollup = compute_rollup(module, modules_dir, target_workspace)
+            rollup = compute_rollup(
+                module, modules_dir, target_workspace, workspace_root, args.base_ref
+            )
         except RuntimeError as e:
             print(f"Warning: skipping {module}: {e}", file=sys.stderr)
             continue

@@ -1,7 +1,7 @@
 # AGENTS.md
 
 Guidance for coding agents working in this repository. Read this before making
-changes under `modules/`, `tools/ci/`, or `.github/workflows/`.
+changes under `bcr_staging/`, `modules/`, `tools/ci/`, or `.github/workflows/`.
 
 ## What this project is
 
@@ -59,7 +59,13 @@ patch pipeline — see the skills in `.agent/skills/`:
   `bazel build`/`bazel test`.
 - `.agent/skills/create-patch/` — roll your edits up into new module
   version(s), either for one named package or auto-detected across
-  everything you touched.
+  everything you touched. A version that only exists on your current
+  branch (not yet on `main`) is amended in place rather than incremented,
+  so iterating on the same not-yet-merged patch no longer mints a new
+  `.rcr.N` directory per run.
+- `.agent/skills/rebase-module/` — recover from a stale workspace (e.g. a
+  `git pull`/rebase brought in a concurrent change to a not-yet-published
+  version) without losing your own uncommitted edits.
 - `.agent/skills/release-automation/` — what's automated (bootstrap, rollup)
   and what you should never try to do by hand.
 
@@ -71,10 +77,10 @@ yet. This bites hardest when you're iterating on a dependency (e.g.
 `rosdistro`) and a downstream package in the *same* workspace, since
 re-running `setup-workspace`/`vendor-module` to pick up the dependency's new
 patch version silently wipes out any not-yet-patched work on the downstream
-package too. `create-patch` your current work (even as a throwaway
-intermediate version to be cleaned up later) before touching
-`setup-workspace`/`vendor-module` again for a package you still have
-uncommitted edits in.
+package too. If you have uncommitted edits worth keeping, use
+`.agent/skills/rebase-module/` instead of re-running `setup-workspace`/
+`vendor-module` directly — it preserves your edits, re-baselines against the
+current `modules/` state, and reapplies them on top.
 
 ## Adding a new third-party (BCR) dependency
 
@@ -119,15 +125,16 @@ exist in the graph and any target referencing it fails with "no repository
 visible as '@<dep>'". The working sequence is: vendor `rosdistro` and make
 your edits (`MODULE.bazel` + `overlay/cc/BUILD.bazel`) as usual, then run the
 `create-patch` skill on `rosdistro` *before* trying to build against the new
-dep — this materializes a new (uncommitted) `modules/rosdistro/<new-version>/`
+dep — this materializes an (uncommitted) `modules/rosdistro/<version>/`
 that `setup-workspace`'s override mechanism picks up automatically on its
 next run (same mechanism that lets two people patch the same package in one
 week without colliding). Re-run `setup-workspace`, re-vendor, and only then
 does the new dependency actually resolve. If you need further edits after
 that, repeat the loop — re-run `create-patch -- rosdistro` again rather than
-hand-editing the version directory it already produced, and delete any
-now-stale intermediate `rosdistro` version directories before opening the PR
-so only the final one ships.
+hand-editing the version directory it already produced. As long as that
+version hasn't reached `main` yet, `create-patch` amends it in place each
+time (see the `create-patch` skill), so there's no stale intermediate
+directory to clean up before opening the PR.
 
 A package that needs a dependency you just added to `rosdistro` won't
 actually build with its own `bazel_dep(name = "rosdistro", ...)` pin
