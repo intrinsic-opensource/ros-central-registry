@@ -408,6 +408,10 @@ alias(
 # mapping, so cross-repo labels like "@boringssl//:crypto" can't be listed
 # directly (see the "unknown repo 'boringssl'" analysis error) -- wrap them
 # in same-repo aliases first, same as the orocos-kdl/bullet pattern below.
+# Only "crypto"/"ssl" are exported: boringssl's own bssl_cc_library macro
+# gives "crypto_internal"/"ssl_internal" no visibility declaration (private
+# by default), so aliasing them here fails with a visibility error -- they
+# aren't meant to be used outside boringssl's own package.
 
 alias(
     name = "boringssl_crypto_library",
@@ -415,18 +419,8 @@ alias(
 )
 
 alias(
-    name = "boringssl_crypto_internal_library",
-    actual = "@boringssl//:crypto_internal",
-)
-
-alias(
     name = "boringssl_ssl_library",
     actual = "@boringssl//:ssl",
-)
-
-alias(
-    name = "boringssl_ssl_internal_library",
-    actual = "@boringssl//:ssl_internal",
 )
 
 cc_shared_library(
@@ -436,8 +430,6 @@ cc_shared_library(
         ":curl_shared_lib_headers",
         ":boringssl_crypto_library",
         ":boringssl_ssl_library",
-        ":boringssl_crypto_internal_library",
-        ":boringssl_ssl_internal_library",
     ],
     deps = [":curl_shared_lib_headers"],
 )
