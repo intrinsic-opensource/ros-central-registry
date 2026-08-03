@@ -73,13 +73,22 @@ jobs:
 
           // workflow_run's own `pull_requests` field is empty for
           // fork-originated PRs, so resolve the PR from the run's head
-          // commit instead, which works regardless of fork status.
-          const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+          // repo/branch instead (both always populated, fork or not).
+          // An earlier version of this used
+          // repos.listPullRequestsAssociatedWithCommit(commit_sha) --
+          // that endpoint is backed by a search index that's frequently
+          // stale for a commit just force-pushed to a fork branch (seen
+          // in practice: still empty several minutes later), silently
+          // dropping the comment via the `if (!pr) return` below.
+          // Querying by head branch instead hits the PR list directly,
+          // not a search index, so it's immediately consistent.
+          const { data: prs } = await github.rest.pulls.list({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            commit_sha: context.payload.workflow_run.head_sha,
+            head: `${context.payload.workflow_run.head_repository.owner.login}:${context.payload.workflow_run.head_branch}`,
+            state: 'open',
           });
-          const pr = prs.find((p) => p.state === 'open');
+          const pr = prs[0];
           if (!pr) return;
 
           const { data: comments } = await github.rest.issues.listComments({
