@@ -13,9 +13,14 @@
 # limitations under the License.
 
 # Posts/updates the module-diff PR comment produced by
-# _check_bazel_modules.yml (part of the `ci` workflow). This is a
-# separate, workflow_run-triggered workflow rather than a step inside
-# `ci` itself because `ci` can run against a fork PR, where GitHub forces
+# _check_bazel_modules.yml, called from the standalone check_bazel_modules
+# workflow (not ci.yaml -- see check_bazel_modules.yml's own comment for
+# why: ci.yaml's version of this same check is just one of its early,
+# fast jobs, but workflow_run only fires once a whole top-level workflow
+# completes, and ci.yaml as a whole also includes the much slower
+# distribution build/test matrix). This is a separate, workflow_run-
+# triggered workflow rather than a step inside check_bazel_modules itself
+# because both workflows can run against a fork PR, where GitHub forces
 # GITHUB_TOKEN to read-only and a direct comment attempt from within that
 # run fails with "Resource not accessible by integration".
 #
@@ -30,7 +35,7 @@ name: post_module_diff_comment
 
 on:
   workflow_run:
-    workflows: ["ci"]
+    workflows: ["check_bazel_modules"]
     types: [completed]
 
 permissions:

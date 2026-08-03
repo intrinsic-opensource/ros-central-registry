@@ -1,0 +1,50 @@
+# Copyright 2026 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Standalone trigger for _check_bazel_modules.yml, existing solely so
+# post_module_diff_comment.yml's workflow_run listener can react to it
+# directly. workflow_run only fires on a whole top-level workflow's
+# completion -- _check_bazel_modules.yml is workflow_call-only, so it can
+# never trigger workflow_run itself, and ci.yaml (which also calls it, as
+# the "bazel_modules" job) only completes once every other job in that much
+# bigger pipeline finishes too (full distribution builds, RMW test matrix,
+# ...). That means the module-diff PR comment previously couldn't post
+# until all of that finished, even though the modules check itself is one
+# of the very first, fastest things ci.yaml runs.
+#
+# This duplicates that one (cheap: no distribution build, just a few
+# `bazel run` calls over the Python tooling) check per PR -- once here for
+# a fast comment, once inside ci.yaml to keep gating distribution_compiles
+# -- since GitHub Actions has no cross-workflow job dependency mechanism
+# that would let ci.yaml's gate depend on this workflow instead.
+
+name: check_bazel_modules
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-bazel-modules-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bazel_modules:
+    name: Check modules
+    uses: ./.github/workflows/_check_bazel_modules.yml
+    secrets: inherit
