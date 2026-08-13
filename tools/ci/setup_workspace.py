@@ -399,6 +399,7 @@ bazel_dep(name = "protobuf", version = "35.1")
 bazel_dep(name = "rules_cc", version = "0.2.22")
 bazel_dep(name = "rules_go", version = "0.60.0")
 bazel_dep(name = "rules_python", version = "2.2.0")
+bazel_dep(name = "rules_qt", version = "0.0.7")  # force aarch64 support.
 bazel_dep(name = "rules_rs", version = "0.0.93")
 bazel_dep(name = "rules_shell", version = "0.8.0")
 
@@ -496,6 +497,43 @@ use_repo(rs_toolchains, "default_rust_toolchains")
 register_toolchains(
     "@default_rust_toolchains//:all",
 )
+
+# Qt6
+
+qt = use_extension("@rules_qt//extension:qt.bzl", "fetch")
+qt.install(
+    name = "qt_linux_x86_64",
+    build_file = "@rules_qt//extension:qt/6.8.3/linux_x86_64.BUILD",
+    os = "linux_x86_64",
+    version = "6.8.3",
+)
+qt.install(
+    name = "qt_linux_aarch64",
+    build_file = "@rules_qt//extension:qt/6.8.3/linux_aarch64.BUILD",
+    os = "linux_aarch64",
+    version = "6.8.3",
+)
+qt.install(
+    name = "qt_mac_aarch64",
+    build_file = "@rules_qt//extension:qt/6.8.3/mac_aarch64.BUILD",
+    os = "macos",
+    version = "6.8.3",
+)
+qt.install(
+    name = "qt_mac_x86_64",
+    build_file = "@rules_qt//extension:qt/6.8.3/mac_aarch64.BUILD",
+    os = "macos",
+    version = "6.8.3",
+)
+qt.install(
+    name = "qt_windows_x86_64",
+    build_file = "@rules_qt//extension:qt/6.8.3/windows_x86_64.BUILD",
+    os = "windows",
+    version = "6.8.3",
+    windows_architecture = "win64_msvc2022",
+)
+use_repo(qt, "qt_linux_aarch64", "qt_linux_x86_64", "qt_mac_aarch64", "qt_mac_x86_64", "qt_windows_x86_64")
+
 """)
 
     # Write .bazelrc
