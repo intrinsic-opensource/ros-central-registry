@@ -74,6 +74,9 @@ bazel_dep(name = "std_msgs", version = "0.0.0")
 # Nevertheless, we can bring the package in if we know its version.
 bazel_dep(name = "rclc", version = "6.3.0-3.rcr.1")
 
+# Bring in turtlesim to demo the role of Qt6 in the project.
+# bazel_dep(name = "turtlesim", version = "1.10.9-1.rcr.2")
+
 ## BOOTSTRAP
 
 # Register our hermetic compiler (clang)

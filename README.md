@@ -292,29 +292,26 @@ If you run `bazel run //:example_ros_publisher_cc --dynamic_mode=off --@rosdistr
 For a simple rmw_zenoh_cpp publisher this will result in a 170M binary. With the following compiler optimizations, you can drop this to around 47M:
 
 ```
-$ bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_zenoh_cpp -c opt \
-    --copt=-Os --copt=-fdata-sections  --copt=-ffunction-sections --copt=-fno-asynchronous-unwind-tables \
-        --linkopt=-Wl,--gc-sections --linkopt=-s  --strip=always
+$ bazel build //:example_ros_publisher_cc --@rosdistro//:rmw=rmw_zenoh_cpp \
+    -c opt --copt=-Os --dynamic_mode=off  --strip=always
 $ du -hs bazel-bin/example_ros_publisher_cc
-47M     bazel-bin/example_ros_publisher_cc
+47M      bazel-bin/example_ros_publisher_cc
 ```
 
 For a simple rmw_fastrtps_cpp publisher this drops even further to 30M:
 
 ```
-$ bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_fastrtps_cpp -c opt \
-    --copt=-Os --copt=-fdata-sections  --copt=-ffunction-sections --copt=-fno-asynchronous-unwind-tables \
-        --linkopt=-Wl,--gc-sections --linkopt=-s  --strip=always
+$ bazel build //:example_ros_publisher_cc --@rosdistro//:rmw=rmw_fastrtps_cpp \
+    -c opt --copt=-Os --dynamic_mode=off  --strip=always
 $ du -hs bazel-bin/example_ros_publisher_cc
-30M     bazel-bin/example_ros_publisher_cc
+30M      bazel-bin/example_ros_publisher_cc
 ```
 
 For a simple rmw_cyclonedds_cpp publisher this drops even further to 8.8M:
 
 ```
-$ bazel build //:example_ros_publisher_cc --dynamic_mode=off --@rosdistro//:rmw=rmw_cyclonedds_cpp -c opt \
-    --copt=-Os --copt=-fdata-sections  --copt=-ffunction-sections --copt=-fno-asynchronous-unwind-tables \
-        --linkopt=-Wl,--gc-sections --linkopt=-s  --strip=always
+$ bazel build //:example_ros_publisher_cc --@rosdistro//:rmw=rmw_cyclonedds_cpp \
+    -c opt --copt=-Os --dynamic_mode=off  --strip=always
 $ du -hs bazel-bin/example_ros_publisher_cc
 8.8M     bazel-bin/example_ros_publisher_cc
 ```
