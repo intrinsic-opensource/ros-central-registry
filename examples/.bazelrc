@@ -96,9 +96,9 @@ common --noexperimental_collect_system_network_usage
 
 ## BUILD OPTIONS
 
-# Assume a build for a developer machine and only download the toplevel
-# artifacts. Let the runfiles and intermediate artifacts build on demand.
-build --remote_download_toplevel
+# Ensure that we always download all outputs, including the shared libraries
+# that are required at runtime for dlopen() calls.
+build --remote_download_outputs=all
 
 # Some packages bake a scratch-directory path into compiled test binaries via
 # local_defines (e.g. rcutils' BUILD_DIR), which --test_env/--run_env can't

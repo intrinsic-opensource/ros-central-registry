@@ -66,6 +66,7 @@ bazel_dep(name = "rclpy", version = "0.0.0")
 bazel_dep(name = "rosdistro", version = "0.0.0")
 bazel_dep(name = "rosidl_core_generators", version = "0.0.0")
 bazel_dep(name = "rmw_implementation", version = "0.0.0")
+bazel_dep(name = "rmw_zenoh_cpp", version = "0.0.0")
 bazel_dep(name = "sensor_msgs", version = "0.0.0")
 bazel_dep(name = "std_msgs", version = "0.0.0")
 
