@@ -20,8 +20,6 @@ run-name: Lint, test tooling, build and test the distribution, and deploy.
 
 on:
   pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
