@@ -353,16 +353,11 @@ def is_version_published(repo_root: Path, base_ref: str, module_dir: Path) -> bo
     """
     True if module_dir (a modules/<package>/<version>/ directory, relative
     to repo_root) already exists at git ref base_ref -- i.e. this version
-    has reached base_ref (typically the local "main" branch) and must be
+    has reached base_ref (typically "origin/main") and must be
     treated as immutable, rather than existing only on the current branch
     where it can still be safely amended in place. Checks module_dir's
     MODULE.bazel specifically, since git doesn't track empty directories
     and every version directory always has one.
-
-    This intentionally checks the LOCAL base_ref, not origin/<base_ref> --
-    simplicity over robustness. A stale local base_ref (not recently
-    pulled) can cause this to wrongly report a since-published version as
-    branch-only; keeping it up to date is the caller's responsibility.
     """
     rel_path = module_dir.relative_to(repo_root) / "MODULE.bazel"
     return path_exists_at_git_ref(repo_root, base_ref, rel_path)
