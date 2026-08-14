@@ -170,7 +170,14 @@ jobs:
             TARGETS="$TARGETS @${pkg}//..."
           done
           bazel build --config ci --build_tests_only $TARGETS
-          bazel test --config ci --test_env=RMW_IMPLEMENTATION=${{ inputs.rmw }} $TARGETS 2>&1 | tee ${{ inputs.rmw }}.changed_packages.test.log || test_status=$?
+          bazel test --config ci --test_env=RMW_IMPLEMENTATION=${{ inputs.rmw }} $TARGETS 2>&1 | tee ${{ inputs.rmw }}.changed_packages.test.log || {
+            rc=$?
+            # Bazel exits with 4 when no test targets match the pattern,
+            # which is expected for packages that don't declare any tests.
+            if [ "$rc" -ne 4 ]; then
+              test_status=$rc
+            fi
+          }
         fi
 
         if [ -d bazel-testlogs ]; then
