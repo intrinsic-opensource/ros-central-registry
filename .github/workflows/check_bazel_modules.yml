@@ -33,8 +33,6 @@ name: check_bazel_modules
 
 on:
   pull_request:
-    branches:
-      - main
 
 permissions:
   contents: read
