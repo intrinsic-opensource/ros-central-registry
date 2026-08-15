@@ -13,7 +13,7 @@
 # limitations under the License.
 
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
-load("@bazel_skylib//rules:native_binary.bzl", "native_test")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 load("@rosdistro//ament:defs.bzl", "ament_package")
 load("@rules_python//python/uv:lock.bzl", "lock")
 
@@ -45,9 +45,10 @@ lock(
 )
 
 # Fails CI if requirements.txt is stale relative to pyproject.toml.
-native_test(
+diff_test(
     name = "requirements_test",
-    src = ":requirements.update",
+    file1 = ":requirements.txt",
+    file2 = ":requirements",
 )
 
 ### PACKAGING

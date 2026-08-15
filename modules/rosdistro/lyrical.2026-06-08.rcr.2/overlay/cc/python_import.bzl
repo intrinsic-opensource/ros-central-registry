@@ -32,10 +32,15 @@ load("@rules_cc//cc:defs.bzl", "CcInfo")
 def _py_import_lib_file_impl(ctx):
     for linker_input in ctx.attr.src[CcInfo].linking_context.linker_inputs.to_list():
         for lib in linker_input.libraries:
-            static = lib.static_library or lib.pic_static_library
-            if static and static.basename == ctx.attr.lib_name:
+            static = lib.static_library or lib.pic_static_library or lib.interface_library
+            if static and (static.basename.endswith(".lib") or (ctx.attr.lib_name and static.basename == ctx.attr.lib_name)):
                 return [DefaultInfo(files = depset(direct = [static]))]
-    fail("import library %s not found in %s" % (ctx.attr.lib_name, ctx.attr.src.label))
+
+    # When not targeting Windows, the import library is not present in current_py_cc_libs.
+    # Return a dummy empty file so that analysis of this target doesn't fail on non-Windows platforms.
+    out = ctx.actions.declare_file(ctx.label.name + ".empty.lib")
+    ctx.actions.write(out, "")
+    return [DefaultInfo(files = depset(direct = [out]))]
 
 py_import_lib_file = rule(
     implementation = _py_import_lib_file_impl,
@@ -46,8 +51,9 @@ py_import_lib_file = rule(
             doc = "Typically @rules_python//python/cc:current_py_cc_libs.",
         ),
         "lib_name": attr.string(
-            mandatory = True,
-            doc = "Basename of the import library to re-export, e.g. python312.lib.",
+            mandatory = False,
+            default = "",
+            doc = "Optional basename of the import library to re-export, e.g. python312.lib.",
         ),
     },
     doc = "Re-exports a single static import library File from a py_cc libs target.",

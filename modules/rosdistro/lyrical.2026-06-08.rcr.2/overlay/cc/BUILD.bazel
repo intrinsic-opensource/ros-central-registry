@@ -202,7 +202,6 @@ alias(
 py_import_lib_file(
     name = "python_import_lib_file",
     src = "@rules_python//python/cc:current_py_cc_libs",
-    lib_name = "python312.lib",
 )
 
 cc_import(
