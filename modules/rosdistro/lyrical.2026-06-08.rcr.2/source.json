@@ -19,10 +19,10 @@
         "cc/python_import.bzl": "sha256-i/V4ZSXGd3SODCgfLYlhTyCpyCAdgNkj801sf27urwI=",
         "cc/rules.bzl": "sha256-QQqwkKTjrTt/Qep1FXo9d1g2fIjm6yoUhhIP3bVtVzY=",
         "cc/types.bzl": "sha256-rdlVPpnZM5fBfMRUrqSa+9GASlfn/i+mpMv4pul5+BI=",
-        "pyproject.toml": "sha256-bmG34xPM7N1wA/SrJNOTyvz1UuSp6dvJU++SCAPcDQ0=",
+        "pyproject.toml": "sha256-p2REt0h7ET/dFvCvD3zImyqDpNJIRALPsuCJWBims7g=",
         "python/BUILD.bazel": "sha256-sP0ROcpNAotSp6EXjdHOsl43n2pyM6JfMNZtThCLGDY=",
         "python/defs.bzl": "sha256-FlOqKavTbRjkQxuIa0TJmE4rUw5cup9zs6A5cb+OrHk=",
         "python/pytest_main.py": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
-        "requirements.txt": "sha256-CiaRl2d9zH7iJ6+b59ZNDEs2tzRmsLRYwhE45ksx2xk="
+        "requirements.txt": "sha256-wOxjJpo+aLTNKUXL95DlHd2hQh/ve+nqJcRw+1LANSs="
     }
 }

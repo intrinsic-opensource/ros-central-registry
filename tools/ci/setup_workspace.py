@@ -484,11 +484,17 @@ osx.frameworks(
 
 # Python configuration
 
+PYTHON_VERSIONS = ["3.11", "3.12", "3.13", "3.14"]
+DEFAULT_PYTHON_VERSION = "3.12"
+
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
-python.toolchain(
-    is_default = True,
-    python_version = "3.12",
-)
+[
+    python.toolchain(
+        is_default = v == DEFAULT_PYTHON_VERSION,
+        python_version = v,
+    )
+    for v in PYTHON_VERSIONS
+]
 
 uv = use_extension("@rules_python//python/uv:uv.bzl", "uv")
 uv.configure(version = "0.9.7")
