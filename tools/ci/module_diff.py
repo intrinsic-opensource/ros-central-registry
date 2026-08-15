@@ -78,6 +78,9 @@ def find_previous_version(
     return versions[index - 1] if index > 0 else None
 
 
+MAX_DIFF_LINES = 300
+
+
 def diff_module_versions(
     modules_dir: Path, package: str, old_version: str, new_version: str
 ) -> str:
@@ -95,6 +98,11 @@ def diff_module_versions(
         capture_output=True,
         text=True,
     )
+    lines = result.stdout.splitlines(keepends=True)
+    if len(lines) > MAX_DIFF_LINES:
+        truncated = "".join(lines[:MAX_DIFF_LINES])
+        truncated += f"\n... (truncated {len(lines) - MAX_DIFF_LINES} lines)\n"
+        return truncated
     return result.stdout
 
 
