@@ -537,17 +537,17 @@ cc_shared_library(
 
 # opencv
 
-cc_library(
-    name = "sdl2_library",
-    copts = ["-std=c11"],
-    deps = ["@sdl2"],
-)
+# cc_library(
+#     name = "sdl2_library",
+#     copts = ["-std=c11"],
+#     deps = ["@sdl2"],
+# )
 
-cc_shared_library(
-    name = "sdl2",
-    exports_filter = [":sdl2_library"],
-    deps = [":sdl2_library"],
-)
+# cc_shared_library(
+#     name = "sdl2",
+#     exports_filter = [":sdl2_library"],
+#     deps = [":sdl2_library"],
+# )
 
 # mimick
 
