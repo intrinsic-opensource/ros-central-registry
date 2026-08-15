@@ -393,7 +393,7 @@ def main():
 # BCR deps
 
 bazel_dep(name = "aspect_rules_py", version = "1.11.7")
-bazel_dep(name = "llvm", version = "0.8.11")
+bazel_dep(name = "llvm", version = "0.8.17")
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "protobuf", version = "35.1")
 bazel_dep(name = "rules_cc", version = "0.2.22")
