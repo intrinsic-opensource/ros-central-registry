@@ -487,7 +487,7 @@ osx.frameworks(
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
     is_default = True,
-    python_version = "3.14",
+    python_version = "3.12",
 )
 
 uv = use_extension("@rules_python//python/uv:uv.bzl", "uv")
