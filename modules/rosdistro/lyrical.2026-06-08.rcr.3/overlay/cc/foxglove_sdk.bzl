@@ -25,14 +25,16 @@ never see the Rust static lib on their own link line.
 
 _VERSION = "0.25.1"
 
-# repository_ctx.os.arch is JVM-derived (System.getProperty("os.arch")), so
-# it reports "amd64" on x86_64 hosts, not "x86_64". Mirrors the two platforms
-# upstream's CMakeLists.txt itself supports (it hard errors on anything else).
+_ARCH_MAP = {
+    "amd64": "x86_64",
+    "x86_64": "x86_64",
+    "arm64": "aarch64",
+    "aarch64": "aarch64",
+}
+
+# Mirrors the two platforms upstream's CMakeLists.txt itself supports (it hard
+# errors on anything else).
 _PLATFORMS = {
-    ("linux", "amd64"): struct(
-        triple = "x86_64-unknown-linux-gnu",
-        sha256 = "0b9d348df3a8e98d2c2cee2360cc9f52e83bb3445044debd771d1b46dc358be4",
-    ),
     ("linux", "x86_64"): struct(
         triple = "x86_64-unknown-linux-gnu",
         sha256 = "0b9d348df3a8e98d2c2cee2360cc9f52e83bb3445044debd771d1b46dc358be4",
@@ -41,23 +43,11 @@ _PLATFORMS = {
         triple = "aarch64-unknown-linux-gnu",
         sha256 = "c70e35c78f0e37f3ba8d0251cd31f353bb10b1fd106200dc6c5f409ed4df1918",
     ),
-    ("linux", "arm64"): struct(
-        triple = "aarch64-unknown-linux-gnu",
-        sha256 = "c70e35c78f0e37f3ba8d0251cd31f353bb10b1fd106200dc6c5f409ed4df1918",
-    ),
-    ("darwin", "amd64"): struct(
-        triple = "x86_64-apple-darwin",
-        sha256 = "3531502efd958be3f9dca06a099c167512dd3006b98ac3eecf8250d376eaa16b",
-    ),
     ("darwin", "x86_64"): struct(
         triple = "x86_64-apple-darwin",
         sha256 = "3531502efd958be3f9dca06a099c167512dd3006b98ac3eecf8250d376eaa16b",
     ),
     ("darwin", "aarch64"): struct(
-        triple = "aarch64-apple-darwin",
-        sha256 = "c9dfa5061d72795af2620c2840a85e695b9dacce19475eaec8caf0102c4940ef",
-    ),
-    ("darwin", "arm64"): struct(
         triple = "aarch64-apple-darwin",
         sha256 = "c9dfa5061d72795af2620c2840a85e695b9dacce19475eaec8caf0102c4940ef",
     ),
@@ -120,8 +110,10 @@ cc_library(
             "-lm",
         ],
         "@platforms//os:macos": [
-            "-framework CoreFoundation",
-            "-framework Security",
+            "-framework",
+            "CoreFoundation",
+            "-framework",
+            "Security",
         ],
         "//conditions:default": [],
     }}),
@@ -141,7 +133,7 @@ def _foxglove_sdk_repository_impl(repository_ctx):
             "(x86_64/aarch64); host OS is '{}'."
         ).format(_VERSION, os_name))
 
-    arch = repository_ctx.os.arch
+    arch = _ARCH_MAP.get(repository_ctx.os.arch, repository_ctx.os.arch)
     platform_key = (os_key, arch)
     if platform_key not in _PLATFORMS:
         fail((
