@@ -1,0 +1,12 @@
+{
+    "integrity": "sha256-Jz1GweyVz9hO8oI02I4TJ40gW+xWm8vW0SwinP3HpwI=",
+    "url": "https://github.com/ros2-gbp/foxglove_bridge-release/archive/refs/tags/release/lyrical/foxglove_bridge/3.4.1-1.tar.gz",
+    "strip_prefix": "foxglove_bridge-release-release-lyrical-foxglove_bridge-3.4.1-1",
+    "overlay": {
+        "BUILD.bazel": "sha256-cw36PDhBsm9bU9VmBK4SDaRZz0DMWcwCzQ5ikh3xpkM="
+    },
+    "patches": {
+        "src__message_definition_cache__cpp.patch": "sha256-UJt+0Ft46bW1xO0J3ldenwcnPYxeVb9FG3frBE9pKwY="
+    },
+    "patch_strip": 1
+}
