@@ -393,15 +393,23 @@ def main():
 # BCR deps
 
 bazel_dep(name = "aspect_rules_py", version = "1.11.7")
-bazel_dep(name = "llvm", version = "0.8.11")
+bazel_dep(name = "llvm", version = "0.8.17")
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "protobuf", version = "35.1")
 bazel_dep(name = "rules_cc", version = "0.2.22")
 bazel_dep(name = "rules_go", version = "0.60.0")
-bazel_dep(name = "rules_python", version = "2.2.0")
-bazel_dep(name = "rules_qt", version = "0.0.7")  # force aarch64 support.
+bazel_dep(name = "rules_python", version = "1.9.2")
+bazel_dep(name = "rules_qt", version = "0.0.7")
 bazel_dep(name = "rules_rs", version = "0.0.93")
 bazel_dep(name = "rules_shell", version = "0.8.0")
+
+# There is a large design change in rules_python 2.x, and some versions don't
+# support 3.14. So let's stick with the older version for now. This forces
+# the 1.9.2 version even if other packages in ROS specify a newer version.
+single_version_override(
+    module_name = "rules_python",
+    version = "1.9.2"
+)
 
 ## RCR deps
 
@@ -438,6 +446,7 @@ osx.frameworks(
         "ApplicationServices",
         "AudioToolbox",
         "CFNetwork",
+        "Carbon",
         "CloudKit",
         "Cocoa",
         "ColorSync",
@@ -446,6 +455,7 @@ osx.frameworks(
         "CoreData",
         "CoreFoundation",
         "CoreGraphics",
+        "CoreHaptics",
         "CoreImage",
         "CoreLocation",
         "CoreMIDI",
@@ -455,13 +465,16 @@ osx.frameworks(
         "CoreVideo",
         "DiskArbitration",
         "FontServices",
+        "ForceFeedback",
         "Foundation",
+        "GameController",
         "IOKit",
         "IOSurface",
         "ImageIO",
         "Kernel",
         "MediaToolbox",
         "Metal",
+        "MetalKit",
         "OSLog",
         "OpenGL",
         "PrintCore",
@@ -474,31 +487,27 @@ osx.frameworks(
     ],
 )
 
-# Python / pip
+# Python configuration
+
+PYTHON_VERSIONS = ["3.11", "3.12", "3.13", "3.14"]
+DEFAULT_PYTHON_VERSION = "3.12"
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
-python.toolchain(
-    is_default = True,
-    python_version = "3.12",
-)
+[
+    python.toolchain(
+        is_default = v == DEFAULT_PYTHON_VERSION,
+        python_version = v,
+    )
+    for v in PYTHON_VERSIONS
+]
 
-pip_ros = use_extension("@rosdistro//python:defs.bzl", "pip_ros")
-use_repo(pip_ros, "pip_ros")
+uv = use_extension("@rules_python//python/uv:uv.bzl", "uv")
+uv.configure(version = "0.9.7")
 
-# Rust / crates
+# C++ configuration
 
-rs_toolchains = use_extension("@rules_rs//rs/toolchains:module_extension.bzl", "toolchains")
-rs_toolchains.toolchain(
-    edition = "2021",
-    version = "1.93.0",
-)
-use_repo(rs_toolchains, "default_rust_toolchains")
-
-register_toolchains(
-    "@default_rust_toolchains//:all",
-)
-
-# Qt6
+llvm = use_extension("@llvm//extensions:llvm.bzl", "llvm")
+use_repo(llvm, "llvm-project")
 
 qt = use_extension("@rules_qt//extension:qt.bzl", "fetch")
 qt.install(
@@ -534,6 +543,20 @@ qt.install(
 )
 use_repo(qt, "qt_linux_aarch64", "qt_linux_x86_64", "qt_mac_aarch64", "qt_mac_x86_64", "qt_windows_x86_64")
 
+register_toolchains("@rules_qt//tools:all")
+
+# Rust configuration
+
+rs_toolchains = use_extension("@rules_rs//rs/toolchains:module_extension.bzl", "toolchains")
+rs_toolchains.toolchain(
+    edition = "2021",
+    version = "1.93.0",
+)
+use_repo(rs_toolchains, "default_rust_toolchains")
+
+register_toolchains(
+    "@default_rust_toolchains//:all",
+)
 """)
 
     # Write .bazelrc

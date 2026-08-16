@@ -228,7 +228,7 @@ def _check_package_dir_not_stale(
 
 def compute_rollup(
     module: str, modules_dir: Path, target_workspace: Path,
-    repo_root: Path, base_ref: str = "main",
+    repo_root: Path, base_ref: str = "origin/main",
 ) -> ModuleRollup:
     """
     Fetches raw upstream and diffs it against a vendored module's tree,
@@ -267,11 +267,15 @@ def compute_rollup(
 
     current_module_dir = modules_dir / module / current_version
 
+    resolved_base_ref = base_ref
+    if base_ref == "origin/main" and not bzlmod_lib.git_ref_exists(repo_root, "origin/main") and bzlmod_lib.git_ref_exists(repo_root, "main"):
+        resolved_base_ref = "main"
+
     # A version that only exists on the current branch (never reached
     # base_ref) can be safely amended in place instead of incremented --
     # see is_version_published's docstring for the exact invariant.
     overwrite_in_place = not bzlmod_lib.is_version_published(
-        repo_root, base_ref, current_module_dir
+        repo_root, resolved_base_ref, current_module_dir
     )
     if overwrite_in_place:
         _check_package_dir_not_stale(target_workspace, modules_dir, module, current_version)
@@ -427,12 +431,11 @@ def main():
     )
     parser.add_argument(
         "--base-ref",
-        default="main",
-        help="Local git ref a version must already exist at to be treated "
+        default="origin/main",
+        help="Git ref a version must already exist at to be treated "
         "as published/immutable; versions that only exist on the current "
         "branch relative to this ref are amended in place instead of "
-        "incremented. Checked locally only (not origin/<ref>) -- keep it "
-        "up to date yourself. Defaults to 'main'.",
+        "incremented. Defaults to 'origin/main'.",
     )
     args = parser.parse_args()
 
