@@ -13,7 +13,7 @@
         "cc/aspects.bzl": "sha256-3ZYy2k+bwCogeto/A7ipoOE+GD7br4BDrv54sfwJwjY=",
         "cc/bazel_test_helper.cpp": "sha256-94oB+nXrVk8l1nWJJ6o0g1w80KMWsrfDWKPcHg8REmk=",
         "cc/defs.bzl": "sha256-CjrpSPeKNH5pafkHqlXGz+AYRso+FtJ8L1nZ8azsNBE=",
-        "cc/foxglove_sdk.bzl": "sha256-gvd4FdZsAJAlFt+5VP/k4UhWTDaRqI2wzz78tnw0GRo=",
+        "cc/foxglove_sdk.bzl": "sha256-PkrkXrrCbhH70PEnZ5ejqLaw2AoCLFRXxk8Y+7RhULQ=",
         "cc/gtest_dds_cleanup.cpp": "sha256-aKyM27/8G48N7sP39M2pyB+qmt2iv7+75bSrZ5BmI1E=",
         "cc/macros.bzl": "sha256-KzKT/+tSKdzHf4GhbWzv6VL8NUpg+yft7t6ftkvE3KI=",
         "cc/mcap_impl.cpp": "sha256-/qFEIYCpqc9IB5xJpJUL6SXUnyVrTjFXc1dpyScZwKQ=",

@@ -110,10 +110,8 @@ cc_library(
             "-lm",
         ],
         "@platforms//os:macos": [
-            "-framework",
-            "CoreFoundation",
-            "-framework",
-            "Security",
+            "-Wl,-framework,CoreFoundation",
+            "-Wl,-framework,Security",
         ],
         "//conditions:default": [],
     }}),
