@@ -625,16 +625,34 @@ cc_shared_library(
     deps = [":libyaml_library"],
 )
 
+# bzip2
+
+alias(
+    name = "bzip2_library",
+    actual = "@bzip2//:bz2",
+)
+
+cc_shared_library(
+    name = "bzip2",
+    exports_filter = [":bzip2_library"],
+    deps = [":bzip2_library"],
+)
+
 # libzip
 
 alias(
     name = "libzip_library",
-    actual = "@libzip//:libzip",
+    actual = "@libzip//:zip",
 )
 
 cc_shared_library(
     name = "libzip",
-    dynamic_deps = [":zlib"],
+    dynamic_deps = [
+        ":boringssl",
+        ":bzip2",
+        ":zlib",
+        ":zstd",
+    ],
     exports_filter = [":libzip_library"],
     deps = [":libzip_library"],
 )

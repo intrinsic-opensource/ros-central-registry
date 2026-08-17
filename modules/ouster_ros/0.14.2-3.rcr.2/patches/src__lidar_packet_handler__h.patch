@@ -9,3 +9,8 @@
  
  #include "lock_free_ring_buffer.h"
  #include <optional>
+@@ -388,4 +386,4 @@
+     float min_scan_valid_columns_ratio_ = 0.0f;
+ };
+ 
+-}  // namespace ouster_ros+}  // namespace ouster_ros

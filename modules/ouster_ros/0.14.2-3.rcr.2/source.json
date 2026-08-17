@@ -2,24 +2,24 @@
     "integrity": "sha256-MNJcR0qFEUCTIlp51sbNW/+EKYQ0JeWuehG7PJnZGaY=",
     "url": "https://github.com/ros2-gbp/ouster-ros-release/archive/refs/tags/release/lyrical/ouster_ros/0.14.2-3.tar.gz",
     "strip_prefix": "ouster-ros-release-release-lyrical-ouster_ros-0.14.2-3",
+    "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-P//akCw0MWFSo2FNwE9ZUhxmQRPejfcmTW4KLGTf2Zk=",
+        "BUILD.bazel": "sha256-DFhJNG2eNjwoyQc/++mMqtzwXpK+bkkOxOfZj9mYLI8=",
         "ouster-sdk/cmake/BUILD.bazel": "sha256-NrDOCzTiYOVsaPcTfnWtMizo1joJ5OG9g4EtHrjRZoo=",
-        "ouster-sdk/ouster_client/BUILD.bazel": "sha256-NF87XaackG0DlDIu9by03ClEK3L4Kv71YsnCPPAGxvo=",
-        "ouster-sdk/ouster_sensor/BUILD.bazel": "sha256-6zSUYfHxl3G9pAo0HqKA2d/HgwKzjOY+thOThAEDjmY=",
+        "ouster-sdk/ouster_client/BUILD.bazel": "sha256-deagCtVjkXgI3woK6yKiXr0Vkb4iPgsdEo9UTtnAefY=",
+        "ouster-sdk/ouster_sensor/BUILD.bazel": "sha256-MA6lZ+ZbAAkusWDBmmwHmOdD1hQ5O7gL7AB34FEuems=",
         "ouster-sdk/thirdparty/BUILD.bazel": "sha256-v3fmvw0H8NvzfscRQFvq+46J141Q+5TxUSKigl8Hs30=",
-        "ouster-sdk/thirdparty/nmea/BUILD.bazel": "sha256-emWa/XRwRRf7RmleGOb05H+d2wwDrEuFLXwaV/2RYI0="
+        "ouster-sdk/thirdparty/nmea/BUILD.bazel": "sha256-3XbxGFCHhZ/6oW+Ai+edfSUhGWH9VwopB/tKKxpAUKI="
     },
     "patches": {
         "include__ouster_ros__os_ros__h.patch": "sha256-uRd2crfsYAlUtZGgOFI2CO9wmUVoWJTsXDB1jKVvOuQ=",
         "ouster-sdk__ouster_client__src__metadata__cpp.patch": "sha256-4lvvH4UOc5cGMhN50pwos+a8GR84SdmtG46Qt73YACM=",
-        "src__image_processor__h.patch": "sha256-CIPX1oBWxjlaePY0dUiRQcK27Ug431H62XSJxq9RkEw=",
-        "src__lidar_packet_handler__h.patch": "sha256-d/tXj0BPNHf/Ejyo6i8AEiw2YT7xkZfn5ciBKrved74=",
+        "src__image_processor__h.patch": "sha256-He74Miwqp905Q3VGeXS3xDlNneX2mBWTfINZIemoO6k=",
+        "src__lidar_packet_handler__h.patch": "sha256-F+W2TmJCqj+9DXi/fUNxC4ffIXQAUesXNEMTY25rUto=",
         "src__os_ros__cpp.patch": "sha256-MhmUPRr1swlDGjCbyVCYeoLTrX3Y3FdvlzkChrY8wGE=",
-        "src__point_cloud_compose__h.patch": "sha256-LWYkKIPAy5M/Y2rDvNCSRYoTFS7qdBrMwCR34dfUPe4=",
+        "src__point_cloud_compose__h.patch": "sha256-qQR8ezvALAncwGLJKLYRpRskFeAYOV+RmXQoVdrcQ/s=",
         "src__point_cloud_processor__h.patch": "sha256-/uJSbGTcNz/z+N1xiMV8fT9O4G/tB2i0U+evRX9oSBg=",
-        "src__point_meta_helpers__h.patch": "sha256-9F2qyncmzEfENafpbqHQDwGFssmACVJXsTjxWCGMbMQ=",
+        "src__point_meta_helpers__h.patch": "sha256-NC5FDimNlbFbYWVtHAaxYeXuC8LwfrbGQZ32C4X9qpA=",
         "test__point_cloud_compose_test__cpp.patch": "sha256-QHLIpTUt+WRo4eHRQEHtJZ2WE3BBj69kns9cJqXtFg0="
-    },
-    "patch_strip": 1
+    }
 }
