@@ -49,6 +49,12 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Notify issue of progress
+      run: |
+        gh issue comment "${{ github.event.issue.number }}" --body "An agent has started implementing this issue. Progress can be monitored [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.19.0
       with:
