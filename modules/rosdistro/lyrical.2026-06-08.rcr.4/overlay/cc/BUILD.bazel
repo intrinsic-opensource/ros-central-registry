@@ -642,7 +642,7 @@ cc_shared_library(
 
 alias(
     name = "libzip_library",
-    actual = "@libzip//:zip",
+    actual = "@libzip//:libzip",
 )
 
 cc_shared_library(
