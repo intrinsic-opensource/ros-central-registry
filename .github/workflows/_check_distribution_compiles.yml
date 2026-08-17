@@ -115,12 +115,6 @@ jobs:
         bazel run //tools/ci:setup_workspace -- --release=${{ matrix.ros }} --tmpdir "$RUNNER_TEMP" \
             ${{ (github.event.pull_request.head.repo.full_name || github.repository) == 'intrinsic-opensource/ros-central-registry' && '--remote-cache-write' || '' }}
 
-    # Build the ros 2 distribution
-    - name: Build
-      id: build
-      run: |
-        bazel build --config ci --config=${{ matrix.variant }} 2>&1 | tee build.log
-
     # Build whatever package(s) this PR actually touches, in case they
     # aren't part of the variant above -- see changed_packages' input docs.
     - name: Build changed packages
@@ -132,6 +126,12 @@ jobs:
           TARGETS="$TARGETS @${pkg}//..."
         done
         bazel build --config ci $TARGETS 2>&1 | tee build_changed_packages.log
+
+    # Build the ros 2 distribution
+    - name: Build
+      id: build
+      run: |
+        bazel build --config ci --config=${{ matrix.variant }} 2>&1 | tee build.log
     - name: Update status badge (build)
       uses: Schneegans/dynamic-badges-action@v1.8.0
       with:
