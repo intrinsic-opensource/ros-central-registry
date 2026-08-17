@@ -1,7 +1,22 @@
+# bazel build products and lock fils
 bazel-*
 MODULE.bazel.lock
-.vscode
-.cache
-.claude
-workspace/**
+
+# python intermediary products
 **/__pycache__/**
+
+# editor settings
+.vscode/
+
+# download cache
+.cache/
+
+# workspace
+workspace/**
+
+# agents
+.gemini/
+.claude/
+
+# security
+gha-creds-*.json
