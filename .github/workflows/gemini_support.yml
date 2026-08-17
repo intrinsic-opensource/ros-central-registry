@@ -72,7 +72,7 @@ jobs:
 
     - name: Setup git identity
       run: |
-        git config --global user.email "gemini[bot]@users.noreply.github.com"
+        git config --global user.email "gemini-bot@users.noreply.github.com"
         git config --global user.name "gemini[bot]"
 
     - name: Run Gemini CLI
@@ -115,3 +115,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GEMINI_CLI_TRUST_WORKSPACE: "true"
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
