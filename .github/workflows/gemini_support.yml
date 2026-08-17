@@ -77,9 +77,11 @@ jobs:
 
     - name: Run Gemini CLI
       id: gemini
-      uses: google-github-actions/run-gemini-cli@v1
+      uses: google-github-actions/run-gemini-cli@v0
       with:
         gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+        gemini_model: gemini-3.7-flash
+        gemini_cli_version: latest
         prompt: |
           EVENT: ${{ github.event_name }}
           ACTOR: ${{ github.actor }}
