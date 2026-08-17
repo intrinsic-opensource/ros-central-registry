@@ -329,7 +329,19 @@ Bazel can be configured to use a remote cache. What this does is allow multiple 
 
 The RCR continuous integration workflow uses a remote cache offered by Intrinsic at https://storage.googleapis.com/intrinsic-opensource-buildcache. Every commit to the main branch is built by our continuous integration system for both x86_64 and aarch64 and the outputs are pushed to this shared cache. As a result, ROS modules will build very quickly after a fresh checkout.
 
-Note that test results are also affected by this cache. If you run a test whose inputs have not changed since the last test results were pushed to the remote cache, the cached test result will be used.
+# Agentic workflows
+
+Repository maintainers can use two automated GitHub Actions workflows powered by the Gemini CLI:
+
+1. **Issue implementation (`gemini-implement` label)**
+   - Add the `gemini-implement` label to an issue.
+   - The workflow creates an implementation branch, applies changes following the repository skills in `.agent/skills/`, and opens a pull request for review.
+
+2. **Interactive assistance (`@gemini` mention)**
+   - Mention `@gemini` in an issue, pull request comment, or pull request review.
+   - The workflow responds to questions, investigates build/test failures, or pushes follow-up commits to address review feedback.
+
+*Note: Execution is restricted to repository maintainers (`OWNER`, `MEMBER`, or `COLLABORATOR`) and requires the `GEMINI_API_KEY` repository secret.*
 
 # Contributing
 
