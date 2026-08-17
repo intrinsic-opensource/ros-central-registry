@@ -168,6 +168,13 @@ class TestDiffModuleSource(unittest.TestCase):
         self.assertEqual(patches, {})
         self.assertEqual(overlays, {})
 
+    def test_module_bazel_lock_is_never_diffed(self):
+        (self.pristine_dir / "MODULE.bazel.lock").write_text("old\n")
+        (self.edited_dir / "MODULE.bazel.lock").write_text("new\n")
+        patches, overlays = create_patch.diff_module_source(self.pristine_dir, self.edited_dir)
+        self.assertEqual(patches, {})
+        self.assertEqual(overlays, {})
+
 
 class TestLoadExistingPatchesAndOverlays(unittest.TestCase):
 

@@ -4,7 +4,6 @@
     "strip_prefix": "rosdistro-lyrical-2026-06-08",
     "overlay": {
         "BUILD.bazel": "sha256-sCR6B12VR8Mi6cdwVs2Qn8Ptwcpedsd4u3c4GAQlo2Q=",
-        "MODULE.bazel.lock": "sha256-pIS+xOgOf4OGmg+x1jgwGNfw8WfQSnMdItisYEntt5c=",
         "ament/BUILD.bazel": "sha256-ECvrn7FbsuaQMxarEQVcwHnxQ0i5Lm4u9jxWQQuzHyE=",
         "ament/ament_index.bzl": "sha256-TkC7h23zqpNTdcK+Q7T9q3+qc5kVUhi4U36rmi3Hk6M=",
         "ament/ament_package.bzl": "sha256-87QO2602ZPY8S7fyW8bx099idEZSMwEdLYLIScOgOv8=",
