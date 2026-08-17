@@ -98,11 +98,13 @@ jobs:
           Sign off every commit with git commit -s per the DCO requirement in
           CONTRIBUTING.md, using the gemini[bot] identity. If you open or update a pull
           request, use .github/PULL_REQUEST_TEMPLATE.md and fill out every section
-          honestly, including a truthful Generative AI disclosure per the OSRF policy
+          honestly. Keep the PR description concise and respectful of reviewers'
+          time: avoid over-the-top enthusiasm, em dashes, emojis, or excessive background
+          information. Include a truthful Generative AI disclosure per the OSRF policy
           it links (identifying as Gemini). Never merge, approve, or request review on
           a pull request yourself. If a request turns out to be too large for one PR
           (e.g. porting a bundled third-party SDK, or a dependency missing from the
-          Bazel Central Registry entirely), don't brute-force it to completion -- say so,
+          Bazel Central Registry entirely), don't brute-force it to completion - say so,
           explain the real scope, and propose splitting it into smaller pieces instead
           of running out of turns mid-attempt. Respond to the user's feedback or request
           helpfully and push any necessary commits.
