@@ -14,12 +14,12 @@
     "patches": {
         "include__ouster_ros__os_ros__h.patch": "sha256-uRd2crfsYAlUtZGgOFI2CO9wmUVoWJTsXDB1jKVvOuQ=",
         "ouster-sdk__ouster_client__src__metadata__cpp.patch": "sha256-4lvvH4UOc5cGMhN50pwos+a8GR84SdmtG46Qt73YACM=",
-        "src__image_processor__h.patch": "sha256-He74Miwqp905Q3VGeXS3xDlNneX2mBWTfINZIemoO6k=",
-        "src__lidar_packet_handler__h.patch": "sha256-F+W2TmJCqj+9DXi/fUNxC4ffIXQAUesXNEMTY25rUto=",
+        "src__image_processor__h.patch": "sha256-CIPX1oBWxjlaePY0dUiRQcK27Ug431H62XSJxq9RkEw=",
+        "src__lidar_packet_handler__h.patch": "sha256-d/tXj0BPNHf/Ejyo6i8AEiw2YT7xkZfn5ciBKrved74=",
         "src__os_ros__cpp.patch": "sha256-MhmUPRr1swlDGjCbyVCYeoLTrX3Y3FdvlzkChrY8wGE=",
-        "src__point_cloud_compose__h.patch": "sha256-qQR8ezvALAncwGLJKLYRpRskFeAYOV+RmXQoVdrcQ/s=",
+        "src__point_cloud_compose__h.patch": "sha256-LWYkKIPAy5M/Y2rDvNCSRYoTFS7qdBrMwCR34dfUPe4=",
         "src__point_cloud_processor__h.patch": "sha256-/uJSbGTcNz/z+N1xiMV8fT9O4G/tB2i0U+evRX9oSBg=",
-        "src__point_meta_helpers__h.patch": "sha256-NC5FDimNlbFbYWVtHAaxYeXuC8LwfrbGQZ32C4X9qpA=",
+        "src__point_meta_helpers__h.patch": "sha256-9F2qyncmzEfENafpbqHQDwGFssmACVJXsTjxWCGMbMQ=",
         "test__point_cloud_compose_test__cpp.patch": "sha256-QHLIpTUt+WRo4eHRQEHtJZ2WE3BBj69kns9cJqXtFg0="
     }
 }

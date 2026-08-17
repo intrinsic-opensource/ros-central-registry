@@ -8,8 +8,3 @@
  
  #include "ouster/image_processing.h"
  
-@@ -194,4 +195,4 @@
-     ouster::sdk::core::img_t<pixel_type> mask;
- };
- 
--}  // namespace ouster_ros+}  // namespace ouster_ros

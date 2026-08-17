@@ -150,11 +150,14 @@ def diff_module_source(pristine_dir: Path, edited_dir: Path) -> Tuple[Dict[str, 
             if filecmp.cmp(pristine_file, edited_file, shallow=False):
                 continue
             with open(pristine_file, "r") as f_ref, open(edited_file, "r") as f_new:
-                diff_lines = difflib.unified_diff(
-                    f_ref.readlines(), f_new.readlines(),
+                ref_lines = [line if line.endswith("\n") else line + "\n" for line in f_ref.readlines()]
+                new_lines = [line if line.endswith("\n") else line + "\n" for line in f_new.readlines()]
+                diff_lines = list(difflib.unified_diff(
+                    ref_lines, new_lines,
                     fromfile=f"a/{rel_path}", tofile=f"b/{rel_path}",
-                )
-                patches[bzlmod_lib.patch_file_name_from_rel_path(rel_path)] = "".join(diff_lines)
+                ))
+                if diff_lines:
+                    patches[bzlmod_lib.patch_file_name_from_rel_path(rel_path)] = "".join(diff_lines)
         else:
             with open(edited_file, "r") as f:
                 overlays[str(rel_path)] = f.read()
@@ -165,11 +168,13 @@ def diff_module_source(pristine_dir: Path, edited_dir: Path) -> Tuple[Dict[str, 
         rel_path = pristine_file.relative_to(pristine_dir)
         if not (edited_dir / rel_path).exists():
             with open(pristine_file, "r") as f_ref:
-                diff_lines = difflib.unified_diff(
-                    f_ref.readlines(), [],
+                ref_lines = [line if line.endswith("\n") else line + "\n" for line in f_ref.readlines()]
+                diff_lines = list(difflib.unified_diff(
+                    ref_lines, [],
                     fromfile=f"a/{rel_path}", tofile="/dev/null",
-                )
-                patches[bzlmod_lib.patch_file_name_from_rel_path(rel_path)] = "".join(diff_lines)
+                ))
+                if diff_lines:
+                    patches[bzlmod_lib.patch_file_name_from_rel_path(rel_path)] = "".join(diff_lines)
 
     return patches, overlays
 

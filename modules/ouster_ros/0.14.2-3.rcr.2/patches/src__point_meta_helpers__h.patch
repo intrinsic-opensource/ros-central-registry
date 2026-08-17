@@ -9,8 +9,3 @@
  
  namespace ouster_ros {
  
-@@ -148,4 +148,4 @@
- }
- 
- }   // point
--}   // ouster_ros+}   // ouster_ros
