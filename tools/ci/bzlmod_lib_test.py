@@ -179,6 +179,13 @@ class TestHashDirectoryTree(unittest.TestCase):
         result = bzlmod_lib.hash_directory_tree(self.tmp_dir)
         self.assertEqual(list(result.keys()), ["src.c"])
 
+    def test_excludes_module_bazel_lock_by_default(self):
+        (self.tmp_dir / "MODULE.bazel").write_text("module(...)\n")
+        (self.tmp_dir / "MODULE.bazel.lock").write_text("{}\n")
+        (self.tmp_dir / "src.c").write_text("hello\n")
+        result = bzlmod_lib.hash_directory_tree(self.tmp_dir)
+        self.assertEqual(list(result.keys()), ["src.c"])
+
     def test_changing_file_content_changes_hash(self):
         target = self.tmp_dir / "src.c"
         target.write_text("hello\n")

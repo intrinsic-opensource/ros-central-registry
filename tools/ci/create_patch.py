@@ -31,6 +31,7 @@ import hashlib
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tarfile
 import tempfile
@@ -79,18 +80,36 @@ def fetch_raw_upstream(source_json_path: Path, dest_dir: Path) -> None:
     strip_prefix = source.get("strip_prefix", "")
     expected_integrity = source["integrity"]
 
-    with urllib.request.urlopen(url) as response:
-        data = response.read()
-
     algorithm, expected_digest = expected_integrity.split("-", 1)
     if algorithm != "sha256":
         raise RuntimeError(f"Unsupported integrity algorithm in {source_json_path}: {algorithm}")
-    actual_digest = base64.b64encode(hashlib.sha256(data).digest()).decode()
-    if actual_digest != expected_digest:
-        raise RuntimeError(
-            f"Integrity check failed fetching {url}: expected {expected_integrity}, "
-            f"got sha256-{actual_digest}"
-        )
+
+    hex_digest = base64.b64decode(expected_digest).hex()
+    data = None
+    cache_base = Path.home() / ".cache" / "bazel"
+    if cache_base.exists():
+        for candidate in cache_base.glob(f"*/cache/repos/v1/content_addressable/sha256/{hex_digest}/file"):
+            if candidate.is_file():
+                candidate_data = candidate.read_bytes()
+                if hashlib.sha256(candidate_data).hexdigest() == hex_digest:
+                    data = candidate_data
+                    break
+
+    if data is None:
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req) as response:
+                data = response.read()
+        except Exception:
+            res = subprocess.run(["curl", "-sL", "-f", "-A", "Mozilla/5.0", url], capture_output=True, check=True)
+            data = res.stdout
+
+        actual_digest = base64.b64encode(hashlib.sha256(data).digest()).decode()
+        if actual_digest != expected_digest:
+            raise RuntimeError(
+                f"Integrity check failed fetching {url}: expected {expected_integrity}, "
+                f"got sha256-{actual_digest}"
+            )
 
     dest_dir.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as raw_extract_dir_str:
@@ -115,12 +134,15 @@ def diff_module_source(pristine_dir: Path, edited_dir: Path) -> Tuple[Dict[str, 
     edited copy. Changed files become unified-diff patches; brand-new
     files become overlays; files deleted by the developer become deletion
     patches. MODULE.bazel is never diffed -- it's authored separately.
+    MODULE.bazel.lock is never diffed or added as an overlay -- lockfiles
+    belong to the consumer workspace, not individual module packages.
     """
     patches: Dict[str, str] = {}
     overlays: Dict[str, str] = {}
+    ignored_names = {"MODULE.bazel", "MODULE.bazel.lock"}
 
     for edited_file in sorted(edited_dir.rglob("*")):
-        if not edited_file.is_file() or edited_file.name == "MODULE.bazel":
+        if not edited_file.is_file() or edited_file.name in ignored_names:
             continue
         rel_path = edited_file.relative_to(edited_dir)
         pristine_file = pristine_dir / rel_path
@@ -128,26 +150,31 @@ def diff_module_source(pristine_dir: Path, edited_dir: Path) -> Tuple[Dict[str, 
             if filecmp.cmp(pristine_file, edited_file, shallow=False):
                 continue
             with open(pristine_file, "r") as f_ref, open(edited_file, "r") as f_new:
-                diff_lines = difflib.unified_diff(
-                    f_ref.readlines(), f_new.readlines(),
+                ref_lines = [line if line.endswith("\n") else line + "\n" for line in f_ref.readlines()]
+                new_lines = [line if line.endswith("\n") else line + "\n" for line in f_new.readlines()]
+                diff_lines = list(difflib.unified_diff(
+                    ref_lines, new_lines,
                     fromfile=f"a/{rel_path}", tofile=f"b/{rel_path}",
-                )
-                patches[bzlmod_lib.patch_file_name_from_rel_path(rel_path)] = "".join(diff_lines)
+                ))
+                if diff_lines:
+                    patches[bzlmod_lib.patch_file_name_from_rel_path(rel_path)] = "".join(diff_lines)
         else:
             with open(edited_file, "r") as f:
                 overlays[str(rel_path)] = f.read()
 
     for pristine_file in sorted(pristine_dir.rglob("*")):
-        if not pristine_file.is_file() or pristine_file.name == "MODULE.bazel":
+        if not pristine_file.is_file() or pristine_file.name in ignored_names:
             continue
         rel_path = pristine_file.relative_to(pristine_dir)
         if not (edited_dir / rel_path).exists():
             with open(pristine_file, "r") as f_ref:
-                diff_lines = difflib.unified_diff(
-                    f_ref.readlines(), [],
+                ref_lines = [line if line.endswith("\n") else line + "\n" for line in f_ref.readlines()]
+                diff_lines = list(difflib.unified_diff(
+                    ref_lines, [],
                     fromfile=f"a/{rel_path}", tofile="/dev/null",
-                )
-                patches[bzlmod_lib.patch_file_name_from_rel_path(rel_path)] = "".join(diff_lines)
+                ))
+                if diff_lines:
+                    patches[bzlmod_lib.patch_file_name_from_rel_path(rel_path)] = "".join(diff_lines)
 
     return patches, overlays
 

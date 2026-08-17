@@ -85,6 +85,8 @@ other edits are forbidden). Edits to `rosdistro`'s `MODULE.bazel` are exempt
 from the version-bump-only rule, on `main`-published versions too.
 `tools/ci/check_pr_modules.py` enforces this in CI and will fail the PR otherwise (see the immutability rule in `AGENTS.md`).
 
+**Never include `MODULE.bazel.lock`**: A module's patch/overlay must never include a `MODULE.bazel.lock` file (neither under `overlay/` nor referenced in `source.json`). Lockfiles belong only to consumer or root workspaces and must never be published with a module.
+
 When you open the PR, fill out every section of
 `.github/PULL_REQUEST_TEMPLATE.md` (GitHub applies it to the description
 automatically) — in particular:
@@ -98,6 +100,10 @@ automatically) — in particular:
 
 ## Gotchas
 
+- **`MODULE.bazel.lock` generated in vendored source** — Bazel invocations in
+  `workspace/` or `workspace/vendor/<module>+/` may generate `MODULE.bazel.lock`.
+  `create_patch` ignores `MODULE.bazel.lock` automatically so it is never added
+  as an overlay or diffed, and it should never be manually committed to `modules/`.
 - "This workspace resolved X to A, but the latest published version is B" —
   the workspace is stale (someone else's patch to that package merged since
   you set up the workspace). Re-run the `setup-workspace` skill, then

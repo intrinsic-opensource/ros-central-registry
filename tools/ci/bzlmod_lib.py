@@ -168,7 +168,9 @@ def calculate_integrity_hash_for_file(file_path: Path) -> str:
     return "sha256-" + base64.b64encode(sha256_hash.digest()).decode()
 
 
-def hash_directory_tree(dir_path: Path, exclude_names: Tuple[str, ...] = ("MODULE.bazel",)) -> Dict[str, str]:
+def hash_directory_tree(
+    dir_path: Path, exclude_names: Tuple[str, ...] = ("MODULE.bazel", "MODULE.bazel.lock")
+) -> Dict[str, str]:
     """
     Hashes every file under dir_path (recursively), keyed by its POSIX
     path relative to dir_path, skipping any file whose basename is in
@@ -205,7 +207,7 @@ def regenerate_integrity_hashes(module_dir: Path) -> None:
         if targ_dir.exists():
             source[name] = {}
             for targ_file in sorted(targ_dir.rglob("*")):
-                if targ_file.is_file():
+                if targ_file.is_file() and targ_file.name != "MODULE.bazel.lock":
                     rel_path = targ_file.relative_to(targ_dir)
                     source[name][str(rel_path)] = calculate_integrity_hash_for_file(targ_file)
                     if name == "patches":

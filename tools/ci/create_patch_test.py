@@ -168,6 +168,21 @@ class TestDiffModuleSource(unittest.TestCase):
         self.assertEqual(patches, {})
         self.assertEqual(overlays, {})
 
+    def test_module_bazel_lock_is_never_diffed(self):
+        (self.pristine_dir / "MODULE.bazel.lock").write_text("old\n")
+        (self.edited_dir / "MODULE.bazel.lock").write_text("new\n")
+        patches, overlays = create_patch.diff_module_source(self.pristine_dir, self.edited_dir)
+        self.assertEqual(patches, {})
+        self.assertEqual(overlays, {})
+
+    def test_diff_files_without_trailing_newline(self):
+        (self.pristine_dir / "file.h").write_text("#include <a.h>\n}")
+        (self.edited_dir / "file.h").write_text("#include <a.h>\n#include <b.h>\n}")
+        patches, overlays = create_patch.diff_module_source(self.pristine_dir, self.edited_dir)
+        self.assertIn("file__h.patch", patches)
+        self.assertNotIn("-}+}", patches["file__h.patch"])
+        self.assertIn("+#include <b.h>\n", patches["file__h.patch"])
+
 
 class TestLoadExistingPatchesAndOverlays(unittest.TestCase):
 
