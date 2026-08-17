@@ -153,3 +153,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GEMINI_CLI_TRUST_WORKSPACE: "true"
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
