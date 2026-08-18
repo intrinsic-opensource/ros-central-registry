@@ -105,7 +105,8 @@ jobs:
           - Never yield or stop to give conversational progress updates or announce your
             next steps (e.g. do NOT say "Let's do that now" or "My next step is...").
           - Execute all required steps yourself via tool calls continuously until the
-            task is 100% complete (edits -> build -> test -> lint -> git commit -> git push -> gh pr create).
+            task is 100% complete (create workspace -> vendor modules -> edit -> build
+            -> test -> lint -> create_patch -> git commit -> git push -> gh pr create).
           - Do not ask for user confirmation or wait for interactive input.
           - Output text ONLY at the very end as your final summary of work completed,
             AFTER the pull request has been opened (or if clarification is needed, after
