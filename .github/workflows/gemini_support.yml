@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Interactive companion to gemini_implement_issue.yml. Mention "@gemini" in an
+# Interactive companion to gemini_implement_issue.yml. Mention "@gemini-bot" in an
 # issue, a PR comment, or a PR review (including on PRs Gemini itself opened)
 # and it responds or pushes follow-up commits addressing the feedback. Like
 # the auto-implement workflow, the action only acts for users with write
-# access to the repo, so only a maintainer's "@gemini" mention triggers it —
+# access to the repo, so only a maintainer's "@gemini-bot" mention triggers it —
 # but the surrounding comment/issue thread is still untrusted content from
 # whoever wrote it, so skim before relying on Gemini's response.
 
 name: gemini-interactive
 
-run-name: Respond to @gemini mention
+run-name: Respond to @gemini-bot mention
 
 on:
   issue_comment:
@@ -47,13 +47,13 @@ permissions:
 
 jobs:
   gemini:
-    name: Respond to @gemini
+    name: Respond to @gemini-bot
     if: |
       (
-        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@gemini') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
-        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@gemini') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
-        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@gemini') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.review.author_association)) ||
-        (github.event_name == 'issues' && (contains(github.event.issue.body, '@gemini') || contains(github.event.issue.title, '@gemini')) && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.issue.author_association))
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@gemini-bot') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@gemini-bot') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@gemini-bot') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.review.author_association)) ||
+        (github.event_name == 'issues' && (contains(github.event.issue.body, '@gemini-bot') || contains(github.event.issue.title, '@gemini-bot')) && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.issue.author_association))
       )
     runs-on: ubuntu-latest
 

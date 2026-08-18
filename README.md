@@ -337,8 +337,8 @@ Repository maintainers can use two automated GitHub Actions workflows powered by
    - Add the `gemini-implement` label to an issue.
    - The workflow creates an implementation branch, applies changes following the repository skills in `.agent/skills/`, and opens a pull request for review.
 
-2. **Interactive assistance (`@gemini` mention)**
-   - Mention `@gemini` in an issue, pull request comment, or pull request review.
+2. **Interactive assistance (`@gemini-bot` mention)**
+   - Mention `@gemini-bot` in an issue, pull request comment, or pull request review.
    - The workflow responds to questions, investigates build/test failures, or pushes follow-up commits to address review feedback.
 
 *Note: Execution is restricted to repository maintainers (`OWNER`, `MEMBER`, or `COLLABORATOR`) and requires the `GEMINI_API_KEY` repository secret.*
