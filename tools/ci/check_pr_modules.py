@@ -20,7 +20,90 @@ import re
 import sys
 from pathlib import Path
 
-from tools.ci.bzlmod_lib import increment_version, parse_diff_status_file
+from tools.ci.bzlmod_lib import calculate_integrity_hash_for_file, increment_version, parse_diff_status_file
+
+def check_source_json_integrity(version_dir: Path, rel_version_path: str) -> list[str]:
+    violations = []
+    source_json_path = version_dir / "source.json"
+    if not source_json_path.exists():
+        if (version_dir / "overlay").exists() or (version_dir / "patches").exists():
+            violations.append(f"Missing source.json in {rel_version_path}")
+        return violations
+
+    try:
+        with open(source_json_path, "r") as f:
+            source = json.load(f)
+    except Exception as e:
+        violations.append(f"Failed to parse JSON in {rel_version_path}/source.json: {e}")
+        return violations
+
+    if not isinstance(source, dict):
+        violations.append(f"{rel_version_path}/source.json must be a JSON object")
+        return violations
+
+    # Check overlay hashes
+    overlay_dir = version_dir / "overlay"
+    expected_overlays = source.get("overlay", {})
+    if not isinstance(expected_overlays, dict):
+        violations.append(f"{rel_version_path}/source.json 'overlay' field must be a dictionary")
+        expected_overlays = {}
+
+    actual_overlays = {}
+    if overlay_dir.exists():
+        for f in overlay_dir.rglob("*"):
+            if f.is_file() and f.name != "MODULE.bazel.lock":
+                rel = f.relative_to(overlay_dir).as_posix()
+                actual_overlays[rel] = calculate_integrity_hash_for_file(f)
+
+    for rel_path, actual_hash in actual_overlays.items():
+        if rel_path not in expected_overlays:
+            violations.append(
+                f"File '{rel_path}' exists in {rel_version_path}/overlay but is missing from source.json overlay list"
+            )
+        elif expected_overlays[rel_path] != actual_hash:
+            violations.append(
+                f"Integrity mismatch for overlay '{rel_path}' in {rel_version_path}/source.json: "
+                f"expected {expected_overlays[rel_path]}, but actual file hash is {actual_hash}"
+            )
+
+    for rel_path in expected_overlays:
+        if rel_path not in actual_overlays:
+            violations.append(
+                f"Overlay file '{rel_path}' declared in {rel_version_path}/source.json does not exist on disk"
+            )
+
+    # Check patches hashes
+    patches_dir = version_dir / "patches"
+    expected_patches = source.get("patches", {})
+    if not isinstance(expected_patches, dict):
+        violations.append(f"{rel_version_path}/source.json 'patches' field must be a dictionary")
+        expected_patches = {}
+
+    actual_patches = {}
+    if patches_dir.exists():
+        for f in patches_dir.rglob("*"):
+            if f.is_file():
+                rel = f.relative_to(patches_dir).as_posix()
+                actual_patches[rel] = calculate_integrity_hash_for_file(f)
+
+    for rel_path, actual_hash in actual_patches.items():
+        if rel_path not in expected_patches:
+            violations.append(
+                f"File '{rel_path}' exists in {rel_version_path}/patches but is missing from source.json patches list"
+            )
+        elif expected_patches[rel_path] != actual_hash:
+            violations.append(
+                f"Integrity mismatch for patch '{rel_path}' in {rel_version_path}/source.json: "
+                f"expected {expected_patches[rel_path]}, but actual file hash is {actual_hash}"
+            )
+
+    for rel_path in expected_patches:
+        if rel_path not in actual_patches:
+            violations.append(
+                f"Patch file '{rel_path}' declared in {rel_version_path}/source.json does not exist on disk"
+            )
+
+    return violations
 
 def check_metadata_json(file_path: str, old_metadata_dir: Path, working_dir: Path) -> list[str]:
     violations = []
@@ -159,11 +242,19 @@ def check_violations(diffs: list[tuple[str, str]], old_metadata_dir: Path, worki
     # Ensure target_dir has a trailing slash for prefix matching (e.g. "modules/" or "bcr_staging/modules/")
     prefix = target_dir.strip("/") + "/"
     target_parts = Path(prefix).parts
+    affected_versions = set()
 
     for status, file_path in diffs:
         # We only care about files under target_dir
         if not file_path.startswith(prefix):
             continue
+
+        path_parts = Path(file_path).parts
+        if len(path_parts) >= len(target_parts) + 2:
+            pkg = path_parts[len(target_parts)]
+            ver = path_parts[len(target_parts) + 1]
+            if ver != "metadata.json":
+                affected_versions.add((pkg, ver))
 
         # Rule 1: A PR cannot delete any files under target_dir
         if status.startswith("D"):
@@ -200,6 +291,12 @@ def check_violations(diffs: list[tuple[str, str]], old_metadata_dir: Path, worki
             else:
                 violations.append(f"Modified existing file (only metadata.json and MODULE.bazel files can be modified): {file_path}")
                 continue
+
+    for pkg, ver in sorted(affected_versions):
+        rel_ver_path = f"{target_dir.rstrip('/')}/{pkg}/{ver}"
+        version_dir = working_dir / target_dir.rstrip("/") / pkg / ver
+        if version_dir.exists():
+            violations.extend(check_source_json_integrity(version_dir, rel_ver_path))
 
     return violations
 

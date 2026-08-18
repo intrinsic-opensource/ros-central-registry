@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Interactive companion to gemini_implement_issue.yml. Mention "@gemini" in an
+# Interactive companion to gemini_implement_issue.yml. Mention "@gemini-bot" in an
 # issue, a PR comment, or a PR review (including on PRs Gemini itself opened)
 # and it responds or pushes follow-up commits addressing the feedback. Like
 # the auto-implement workflow, the action only acts for users with write
-# access to the repo, so only a maintainer's "@gemini" mention triggers it —
+# access to the repo, so only a maintainer's "@gemini-bot" mention triggers it —
 # but the surrounding comment/issue thread is still untrusted content from
 # whoever wrote it, so skim before relying on Gemini's response.
 
 name: gemini-interactive
 
-run-name: Respond to @gemini mention
+run-name: Respond to @gemini-bot mention
 
 on:
   issue_comment:
@@ -47,13 +47,13 @@ permissions:
 
 jobs:
   gemini:
-    name: Respond to @gemini
+    name: Respond to @gemini-bot
     if: |
       (
-        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@gemini') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
-        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@gemini') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
-        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@gemini') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.review.author_association)) ||
-        (github.event_name == 'issues' && (contains(github.event.issue.body, '@gemini') || contains(github.event.issue.title, '@gemini')) && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.issue.author_association))
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@gemini-bot') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@gemini-bot') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@gemini-bot') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.review.author_association)) ||
+        (github.event_name == 'issues' && (contains(github.event.issue.body, '@gemini-bot') || contains(github.event.issue.title, '@gemini-bot')) && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.issue.author_association))
       )
     runs-on: ubuntu-latest
 
@@ -61,7 +61,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v7
       with:
-        fetch-depth: 1
+        fetch-depth: 0
 
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.19.0
@@ -69,6 +69,12 @@ jobs:
         bazelisk-cache: true
         disk-cache: false
         repository-cache: true
+
+    - name: Setup buildifier
+      run: |
+        curl -L https://github.com/bazelbuild/buildtools/releases/download/v8.5.1/buildifier-linux-amd64 -o buildifier
+        chmod +x buildifier
+        sudo mv buildifier /usr/local/bin/buildifier
 
     - name: Setup git identity
       run: |
@@ -87,31 +93,79 @@ jobs:
           ACTOR: ${{ github.actor }}
           COMMENT BODY: ${{ github.event.comment.body || github.event.review.body || github.event.issue.body }}
           PR NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+          
+          First, read AGENTS.md at the repo root in full — it's the mandatory
+          guidance for coding agents in this repository, including the
+          setup-workspace / vendor-module / create-patch skill pipeline in
+          .agent/skills/ for patching packages under modules/, plus linting,
+          licensing, and testing conventions. Follow it exactly, and use
+          those skills rather than hand-editing anything under modules/ or
+          hand-rolling `bazel run //tools/ci:...` invocations yourself.
 
-          Read AGENTS.md at the repo root and follow it exactly, including using the
-          setup-workspace/vendor-module/create-patch skills in .agent/skills/ to patch
-          anything under modules/ (never hand-edit files under modules/<pkg>/<version>/,
-          never modify or delete an existing version directory). Work efficiently: before
-          writing new Bazel content, find an existing, already-implemented package with
-          a similar shape and mirror its structure rather than inventing one from scratch,
-          and don't spend turns hand-exploring the runner environment or hand-rolling
-          registry checks (e.g. curl against bcr.bazel.build) -- attempt the real bazel
-          command and read its own error messages instead. Checkpoint real progress via
-          create-patch at natural milestones as you go, not only at the end, since
-          re-vendoring a package with uncommitted edits discards them (see AGENTS.md).
-          Sign off every commit with git commit -s per the DCO requirement in
-          CONTRIBUTING.md, using the gemini[bot] identity. If you open or update a pull
-          request, use .github/PULL_REQUEST_TEMPLATE.md and fill out every section
-          honestly. Keep the PR description concise and respectful of reviewers'
-          time: avoid over-the-top enthusiasm, em dashes, emojis, or excessive background
-          information. Include a truthful Generative AI disclosure per the OSRF policy
-          it links (identifying as Gemini). Never merge, approve, or request review on
-          a pull request yourself. If a request turns out to be too large for one PR
-          (e.g. porting a bundled third-party SDK, or a dependency missing from the
-          Bazel Central Registry entirely), don't brute-force it to completion - say so,
-          explain the real scope, and propose splitting it into smaller pieces instead
-          of running out of turns mid-attempt. Respond to the user's feedback or request
-          helpfully and push any necessary commits.
+          Then taken any action that is required to discuss the issue or update a
+          pull request, and then respond with a comment. Be careful to follow
+          these specific instructions as you carry out your work:
+
+          - Work efficiently: before writing any new Bazel content, find an
+            existing, already-implemented package in modules/ with a similar
+            shape (e.g. another message-only package, another driver with
+            ROS2 components) and mirror its exact structure rather than
+            inventing one from scratch — this is far faster and more likely
+            to be correct than guessing. Don't spend turns hand-exploring the
+            runner environment (system paths, global config files) or
+            hand-rolling registry checks (e.g. curl against bcr.bazel.build)
+            to verify a dependency exists — just attempt the real
+            bazel build/create-patch command and read Bazel's own error
+            messages, which are authoritative and faster than guessing.
+          - Checkpoint real progress via the create-patch skill at natural
+            milestones as you go, not only at the very end — this protects
+            against losing work (re-vendoring a package with uncommitted
+            edits discards them, see AGENTS.md) and means a partial,
+            genuinely useful PR exists even if you run out of turns before
+            finishing everything.
+          - Do not attempt a full distribution build; The github workflow 
+            .github/workflows/ci.yaml already does that comprehensively
+            on any commit made to a PR that changes behavior.
+          - It is critical that before calling create_patch you first run the
+            relevant fast local checks (buildifier, ruff, and any targeted test
+            for what you touched — see the Linting section of AGENTS.md) on the
+            vendored bazel module. After runnign create_patch do not edit any
+            Bazel modules in ./modules or ./bcr_staging. If you want to fix
+            anything, you must do this in the vendored folder and then re-run
+            the linting, and testing before calling create_patch again.
+          - Sign off every commit (`git commit -s`) per the DCO requirement in
+            CONTRIBUTING.md, using the gemini[bot] identity already configured
+            in this job.
+          - Push the branch, then open the PR against main with `gh pr create`.
+            Use .github/PULL_REQUEST_TEMPLATE.md as the PR body verbatim,
+            filling out every section honestly. Keep the PR description concise
+            and respectful of reviewers' time: avoid over-the-top enthusiasm,
+            em dashes, emojis, or excessive background information. In
+            particular, answer the Generative AI disclosure truthfully (you are
+            Gemini; say so and describe what you did) per the OSRF Generative AI
+            policy it links, and put "Fixes #${{ github.event.issue.number }}"
+            under Related issue(s). Title the PR clearly, and leave it open for
+            @${{ github.repository_owner }} to review - do not merge it,
+            approve it, or request review from anyone yourself.
+          - If the issue is too vague or under-specified to implement safely,
+            do not guess or implement something speculative: instead run
+            `gh issue comment` explaining what clarification you need, and do
+            not open a PR.
+          - If the issue is well-specified but genuinely too large for one PR
+            (e.g. it would require porting a bundled third-party SDK spanning
+            tens of thousands of lines, or authoring a brand-new Bazel module
+            from scratch for a dependency that doesn't exist in the Bazel
+            Central Registry at all), don't try to brute-force a complete
+            implementation — you will run out of turns before finishing and
+            waste the run. Instead, do enough investigation to describe the
+            real scope (what's actually needed vs. what looked scary at
+            first glance — see AGENTS.md's guidance on checking the
+            consuming package's build options before assuming a bundled
+            dependency is required), then `gh issue comment` proposing how to
+            split it into smaller, independently-mergeable issues, and open
+            a PR only for whatever well-scoped first slice you did manage to
+            finish (if any) rather than an incomplete attempt at the whole
+            thing.
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GEMINI_CLI_TRUST_WORKSPACE: "true"

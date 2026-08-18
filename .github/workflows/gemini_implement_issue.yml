@@ -62,6 +62,12 @@ jobs:
         disk-cache: false
         repository-cache: true
 
+    - name: Setup buildifier
+      run: |
+        curl -L https://github.com/bazelbuild/buildtools/releases/download/v8.5.1/buildifier-linux-amd64 -o buildifier
+        chmod +x buildifier
+        sudo mv buildifier /usr/local/bin/buildifier
+
     - name: Setup git identity
       run: |
         git config --global user.email "gemini-bot@users.noreply.github.com"
@@ -119,11 +125,16 @@ jobs:
             edits discards them, see AGENTS.md) and means a partial,
             genuinely useful PR exists even if you run out of turns before
             finishing everything.
-          - Run the relevant fast local checks (buildifier, ruff, and any
-            targeted test for what you touched — see the Linting section of
-            AGENTS.md) before committing. Do not attempt a full distribution
-            build; .github/workflows/ci.yaml already does that comprehensively
-            on the PR.
+          - Do not attempt a full distribution build; The github workflow 
+            .github/workflows/ci.yaml already does that comprehensively
+            on any commit made to a PR that changes behavior.
+          - It is critical that before calling create_patch you first run the
+            relevant fast local checks (buildifier, ruff, and any targeted test
+            for what you touched — see the Linting section of AGENTS.md) on the
+            vendored bazel module. After runnign create_patch do not edit any
+            Bazel modules in ./modules or ./bcr_staging. If you want to fix
+            anything, you must do this in the vendored folder and then re-run
+            the linting, and testing before calling create_patch again.
           - Sign off every commit (`git commit -s`) per the DCO requirement in
             CONTRIBUTING.md, using the gemini[bot] identity already configured
             in this job.
