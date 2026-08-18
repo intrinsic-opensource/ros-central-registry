@@ -116,3 +116,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GEMINI_CLI_TRUST_WORKSPACE: "true"
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Post response to issue/PR
+      if: steps.gemini.outputs.summary != ''
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RESPONSE: ${{ steps.gemini.outputs.summary }}
+        TARGET: ${{ github.event.issue.number || github.event.pull_request.number }}
+      run: |
+        printf "%s\n" "$RESPONSE" > /tmp/response.md
+        gh issue comment "$TARGET" --body-file /tmp/response.md
