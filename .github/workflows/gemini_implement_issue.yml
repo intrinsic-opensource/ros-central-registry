@@ -125,15 +125,16 @@ jobs:
             edits discards them, see AGENTS.md) and means a partial,
             genuinely useful PR exists even if you run out of turns before
             finishing everything.
-          - Run the relevant fast local checks (buildifier, ruff, and any
-            targeted test for what you touched — see the Linting section of
-            AGENTS.md) before committing. Do not attempt a full distribution
-            build; .github/workflows/ci.yaml already does that comprehensively
-            on the PR.
-          - Never manually calculate sha256 or hand-edit source.json. If you
-            modify any files in overlay/ or run buildifier, always recompute
-            source.json integrity hashes using create_patch or
-            tools.ci.bzlmod_lib.regenerate_integrity_hashes.
+          - Do not attempt a full distribution build; The github workflow 
+            .github/workflows/ci.yaml already does that comprehensively
+            on any commit made to a PR that changes behavior.
+          - It is critical that before calling create_patch you first run the
+            relevant fast local checks (buildifier, ruff, and any targeted test
+            for what you touched — see the Linting section of AGENTS.md) on the
+            vendored bazel module. After runnign create_patch do not edit any
+            Bazel modules in ./modules or ./bcr_staging. If you want to fix
+            anything, you must do this in the vendored folder and then re-run
+            the linting, and testing before calling create_patch again.
           - Sign off every commit (`git commit -s`) per the DCO requirement in
             CONTRIBUTING.md, using the gemini[bot] identity already configured
             in this job.
@@ -171,61 +172,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GEMINI_CLI_TRUST_WORKSPACE: "true"
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Ensure format and regenerate source.json integrity hashes
-      if: always()
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH_NAME: ${{ steps.branch.outputs.branch_name }}
-      run: |
-        # 1. Compute diff status for modified/added files
-        {
-          git diff --name-status origin/main 2>/dev/null || true
-          git status --porcelain | grep '^??' | awk '{print "A\t" $2}' || true
-        } > /tmp/diff_status.txt
-
-        # 2. Format and regenerate hashes only for changed module versions and Bazel files
-        python3 -c "
-        import subprocess
-        from pathlib import Path
-        from tools.ci import bzlmod_lib
-
-        diff_file = Path('/tmp/diff_status.txt')
-        if diff_file.exists():
-            diffs = bzlmod_lib.parse_diff_status_file(diff_file)
-            version_dirs = set()
-            bazel_files = set()
-            for status, file_path in diffs:
-                p = Path(file_path)
-                if p.suffix in ('.bazel', '.bzl') or p.name in ('BUILD', 'BUILD.bazel', 'MODULE.bazel', 'WORKSPACE', 'WORKSPACE.bazel'):
-                    if p.is_file():
-                        bazel_files.add(p)
-                for prefix in ('modules/', 'bcr_staging/modules/'):
-                    if file_path.startswith(prefix):
-                        parts = file_path[len(prefix):].split('/')
-                        if len(parts) >= 2 and parts[1] != 'metadata.json':
-                            vdir = Path(prefix) / parts[0] / parts[1]
-                            if vdir.is_dir() and (vdir / 'source.json').exists() and parts[1] != '0.0.0':
-                                version_dirs.add(vdir)
-
-            for vdir in version_dirs:
-                bazel_files.update(f for f in vdir.rglob('*') if f.is_file() and (f.suffix in ('.bazel', '.bzl') or f.name in ('BUILD.bazel', 'MODULE.bazel')))
-
-            if bazel_files:
-                subprocess.run(['buildifier', '-mode', 'fix'] + [str(f) for f in sorted(bazel_files)])
-
-            for vdir in sorted(version_dirs):
-                bzlmod_lib.regenerate_integrity_hashes(vdir)
-        "
-
-        # 3. Commit and push any formatting / hash updates
-        if [ -n "$(git status --porcelain)" ]; then
-          git config --global user.email "gemini-bot@users.noreply.github.com"
-          git config --global user.name "gemini[bot]"
-          git add -A
-          git commit -s -m "chore: format bazel files and regenerate source.json hashes" || true
-          git push origin "$BRANCH_NAME" || true
-        fi
 
     - name: Post response to issue
       if: steps.gemini.outputs.summary != ''
