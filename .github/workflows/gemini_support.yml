@@ -61,7 +61,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v7
       with:
-        fetch-depth: 1
+        fetch-depth: 0
 
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.19.0
@@ -131,18 +131,44 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # 1. Format Bazel files
-        buildifier -mode fix -r . || true
+        # 1. Compute diff status for modified/added files
+        {
+          git diff --name-status origin/main 2>/dev/null || git diff --name-status HEAD~1 2>/dev/null || true
+          git status --porcelain | grep '^??' | awk '{print "A\t" $2}' || true
+        } > /tmp/diff_status.txt
 
-        # 2. Recompute source.json integrity hashes for all module versions
+        # 2. Format and regenerate hashes only for changed module versions and Bazel files
         python3 -c "
+        import subprocess
         from pathlib import Path
         from tools.ci import bzlmod_lib
-        for base in [Path('modules'), Path('bcr_staging/modules')]:
-            if base.exists():
-                for p in base.glob('*/*'):
-                    if p.is_dir() and (p / 'source.json').exists() and p.name != '0.0.0':
-                        bzlmod_lib.regenerate_integrity_hashes(p)
+
+        diff_file = Path('/tmp/diff_status.txt')
+        if diff_file.exists():
+            diffs = bzlmod_lib.parse_diff_status_file(diff_file)
+            version_dirs = set()
+            bazel_files = set()
+            for status, file_path in diffs:
+                p = Path(file_path)
+                if p.suffix in ('.bazel', '.bzl') or p.name in ('BUILD', 'BUILD.bazel', 'MODULE.bazel', 'WORKSPACE', 'WORKSPACE.bazel'):
+                    if p.is_file():
+                        bazel_files.add(p)
+                for prefix in ('modules/', 'bcr_staging/modules/'):
+                    if file_path.startswith(prefix):
+                        parts = file_path[len(prefix):].split('/')
+                        if len(parts) >= 2 and parts[1] != 'metadata.json':
+                            vdir = Path(prefix) / parts[0] / parts[1]
+                            if vdir.is_dir() and (vdir / 'source.json').exists() and parts[1] != '0.0.0':
+                                version_dirs.add(vdir)
+
+            for vdir in version_dirs:
+                bazel_files.update(f for f in vdir.rglob('*') if f.is_file() and (f.suffix in ('.bazel', '.bzl') or f.name in ('BUILD.bazel', 'MODULE.bazel')))
+
+            if bazel_files:
+                subprocess.run(['buildifier', '-mode', 'fix'] + [str(f) for f in sorted(bazel_files)])
+
+            for vdir in sorted(version_dirs):
+                bzlmod_lib.regenerate_integrity_hashes(vdir)
         "
 
         # 3. Commit and push any formatting / hash updates if changes are present
