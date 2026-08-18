@@ -7,7 +7,7 @@
         "BUILD.bazel": "sha256-HZ45w925y5RE3GAaP51UB+DoO/NHzIoch0dpn1YJ0CU=",
         "aspects.bzl": "sha256-ozb/PFN1PaKeUAm7+4tOaUzhP5jCgdWotoADurZI/Vw=",
         "defs.bzl": "sha256-bCp+DxO4EcP039GajXOji0K+hc9tgvOPiQcY7+AR/TE=",
-        "tools.bzl": "sha256-oYfl3V3F+kFQzJq3XtRdwXGegetHtM0z8GZzobRPMy0=",
+        "tools.bzl": "sha256-61Hus0fTxVdwUJcPD3Mk+pSH+l4bEVGWiPVtUBpRv6A=",
         "types.bzl": "sha256-hYdBy/e1sxc21WO0vTVph6+xstAncnY+Sf5fnFn9Y38="
     },
     "patches": {
