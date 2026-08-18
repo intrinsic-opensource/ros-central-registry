@@ -62,6 +62,12 @@ jobs:
         disk-cache: false
         repository-cache: true
 
+    - name: Setup buildifier
+      run: |
+        curl -L https://github.com/bazelbuild/buildtools/releases/download/v8.5.1/buildifier-linux-amd64 -o buildifier
+        chmod +x buildifier
+        sudo mv buildifier /usr/local/bin/buildifier
+
     - name: Setup git identity
       run: |
         git config --global user.email "gemini-bot@users.noreply.github.com"
@@ -124,6 +130,10 @@ jobs:
             AGENTS.md) before committing. Do not attempt a full distribution
             build; .github/workflows/ci.yaml already does that comprehensively
             on the PR.
+          - Never manually calculate sha256 or hand-edit source.json. If you
+            modify any files in overlay/ or run buildifier, always recompute
+            source.json integrity hashes using create_patch or
+            tools.ci.bzlmod_lib.regenerate_integrity_hashes.
           - Sign off every commit (`git commit -s`) per the DCO requirement in
             CONTRIBUTING.md, using the gemini[bot] identity already configured
             in this job.
@@ -161,6 +171,51 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GEMINI_CLI_TRUST_WORKSPACE: "true"
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Ensure format and regenerate source.json integrity hashes
+      if: always()
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH_NAME: ${{ steps.branch.outputs.branch_name }}
+      run: |
+        # 1. Format Bazel files
+        buildifier -mode fix -r . || true
+
+        # 2. Recompute source.json integrity hashes for all module versions
+        python3 -c "
+        from pathlib import Path
+        from tools.ci import bzlmod_lib
+        for base in [Path('modules'), Path('bcr_staging/modules')]:
+            if base.exists():
+                for p in base.glob('*/*'):
+                    if p.is_dir() and (p / 'source.json').exists() and p.name != '0.0.0':
+                        bzlmod_lib.regenerate_integrity_hashes(p)
+        "
+
+        # 3. Commit and push any formatting / hash updates
+        if [ -n "$(git status --porcelain)" ]; then
+          git config --global user.email "gemini-bot@users.noreply.github.com"
+          git config --global user.name "gemini[bot]"
+          git add -A
+          git commit -s -m "chore: format bazel files and regenerate source.json hashes" || true
+          git push origin "$BRANCH_NAME" || true
+        fi
+
+        # 4. If branch has commits relative to origin/main, ensure a PR exists
+        if git rev-parse --verify "$BRANCH_NAME" >/dev/null 2>&1; then
+          COMMITS=$(git log origin/main.."$BRANCH_NAME" --oneline || true)
+          if [ -n "$COMMITS" ]; then
+            git push origin "$BRANCH_NAME" || true
+            PR_EXISTS=$(gh pr list --head "$BRANCH_NAME" --json number -q '.[0].number' || true)
+            if [ -z "$PR_EXISTS" ]; then
+              gh pr create \
+                --head "$BRANCH_NAME" \
+                --base main \
+                --title "feat: implement issue #${{ github.event.issue.number }} (${{ github.event.issue.title }})" \
+                --body "Fixes #${{ github.event.issue.number }}" || true
+            fi
+          fi
+        fi
 
     - name: Post response to issue
       if: steps.gemini.outputs.summary != ''

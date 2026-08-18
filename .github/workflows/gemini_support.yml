@@ -70,6 +70,12 @@ jobs:
         disk-cache: false
         repository-cache: true
 
+    - name: Setup buildifier
+      run: |
+        curl -L https://github.com/bazelbuild/buildtools/releases/download/v8.5.1/buildifier-linux-amd64 -o buildifier
+        chmod +x buildifier
+        sudo mv buildifier /usr/local/bin/buildifier
+
     - name: Setup git identity
       run: |
         git config --global user.email "gemini-bot@users.noreply.github.com"
@@ -99,6 +105,9 @@ jobs:
           command and read its own error messages instead. Checkpoint real progress via
           create-patch at natural milestones as you go, not only at the end, since
           re-vendoring a package with uncommitted edits discards them (see AGENTS.md).
+          Never manually calculate sha256 or hand-edit source.json. If you modify any
+          files in overlay/ or run buildifier, always recompute source.json integrity
+          hashes using create_patch or tools.ci.bzlmod_lib.regenerate_integrity_hashes.
           Sign off every commit with git commit -s per the DCO requirement in
           CONTRIBUTING.md, using the gemini[bot] identity. If you open or update a pull
           request, use .github/PULL_REQUEST_TEMPLATE.md and fill out every section
@@ -116,6 +125,34 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GEMINI_CLI_TRUST_WORKSPACE: "true"
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Ensure format and regenerate source.json integrity hashes
+      if: always()
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # 1. Format Bazel files
+        buildifier -mode fix -r . || true
+
+        # 2. Recompute source.json integrity hashes for all module versions
+        python3 -c "
+        from pathlib import Path
+        from tools.ci import bzlmod_lib
+        for base in [Path('modules'), Path('bcr_staging/modules')]:
+            if base.exists():
+                for p in base.glob('*/*'):
+                    if p.is_dir() and (p / 'source.json').exists() and p.name != '0.0.0':
+                        bzlmod_lib.regenerate_integrity_hashes(p)
+        "
+
+        # 3. Commit and push any formatting / hash updates if changes are present
+        if [ -n "$(git status --porcelain)" ]; then
+          git config --global user.email "gemini-bot@users.noreply.github.com"
+          git config --global user.name "gemini[bot]"
+          git add -A
+          git commit -s -m "chore: format bazel files and regenerate source.json hashes" || true
+          git push origin HEAD || true
+        fi
 
     - name: Post response to issue/PR
       if: steps.gemini.outputs.summary != ''

@@ -226,6 +226,109 @@ bazel_dep(name = "new_dep", version = "2.0.0")
         violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
         self.assertEqual(violations, [])
 
+    def test_source_json_integrity_valid(self):
+        # Valid source.json matching overlay and patches files passes
+        overlay_file = self.work_dir / "modules/my_module/1.0.0/overlay/BUILD.bazel"
+        overlay_file.parent.mkdir(parents=True, exist_ok=True)
+        overlay_file.write_text("# BUILD.bazel content\n")
+
+        patch_file = self.work_dir / "modules/my_module/1.0.0/patches/fix.patch"
+        patch_file.parent.mkdir(parents=True, exist_ok=True)
+        patch_file.write_text("--- a/foo\n+++ b/foo\n")
+
+        from tools.ci.bzlmod_lib import calculate_integrity_hash_for_file
+        source_data = {
+            "url": "https://example.com/archive.tar.gz",
+            "integrity": "sha256-dummy",
+            "overlay": {
+                "BUILD.bazel": calculate_integrity_hash_for_file(overlay_file),
+            },
+            "patches": {
+                "fix.patch": calculate_integrity_hash_for_file(patch_file),
+            },
+        }
+        self.write_json(self.work_dir, "modules/my_module/1.0.0/source.json", source_data)
+
+        diffs = [
+            ("A", "modules/my_module/1.0.0/MODULE.bazel"),
+            ("A", "modules/my_module/1.0.0/source.json"),
+            ("A", "modules/my_module/1.0.0/overlay/BUILD.bazel"),
+            ("A", "modules/my_module/1.0.0/patches/fix.patch"),
+        ]
+        violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
+        self.assertEqual(violations, [])
+
+    def test_source_json_missing_when_overlay_exists(self):
+        # Missing source.json when overlay exists fails
+        overlay_file = self.work_dir / "modules/my_module/1.0.0/overlay/BUILD.bazel"
+        overlay_file.parent.mkdir(parents=True, exist_ok=True)
+        overlay_file.write_text("# BUILD.bazel\n")
+
+        diffs = [
+            ("A", "modules/my_module/1.0.0/overlay/BUILD.bazel"),
+        ]
+        violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
+        self.assertIn("Missing source.json in modules/my_module/1.0.0", violations)
+
+    def test_source_json_overlay_hash_mismatch(self):
+        # Mismatch in overlay file hash fails with clear violation
+        overlay_file = self.work_dir / "modules/my_module/1.0.0/overlay/BUILD.bazel"
+        overlay_file.parent.mkdir(parents=True, exist_ok=True)
+        overlay_file.write_text("# Updated BUILD.bazel content\n")
+
+        source_data = {
+            "url": "https://example.com/archive.tar.gz",
+            "integrity": "sha256-dummy",
+            "overlay": {
+                "BUILD.bazel": "sha256-stalehash1234567890=",
+            },
+        }
+        self.write_json(self.work_dir, "modules/my_module/1.0.0/source.json", source_data)
+
+        diffs = [
+            ("A", "modules/my_module/1.0.0/overlay/BUILD.bazel"),
+            ("A", "modules/my_module/1.0.0/source.json"),
+        ]
+        violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
+        self.assertTrue(any("Integrity mismatch for overlay 'BUILD.bazel'" in v for v in violations))
+
+    def test_source_json_undeclared_overlay_file(self):
+        # Overlay file exists on disk but is not declared in source.json
+        overlay_file = self.work_dir / "modules/my_module/1.0.0/overlay/BUILD.bazel"
+        overlay_file.parent.mkdir(parents=True, exist_ok=True)
+        overlay_file.write_text("# BUILD.bazel\n")
+
+        source_data = {
+            "url": "https://example.com/archive.tar.gz",
+            "integrity": "sha256-dummy",
+            "overlay": {},
+        }
+        self.write_json(self.work_dir, "modules/my_module/1.0.0/source.json", source_data)
+
+        diffs = [
+            ("A", "modules/my_module/1.0.0/overlay/BUILD.bazel"),
+            ("A", "modules/my_module/1.0.0/source.json"),
+        ]
+        violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
+        self.assertIn("File 'BUILD.bazel' exists in modules/my_module/1.0.0/overlay but is missing from source.json overlay list", violations)
+
+    def test_source_json_missing_overlay_file_on_disk(self):
+        # source.json declares an overlay file that does not exist on disk
+        source_data = {
+            "url": "https://example.com/archive.tar.gz",
+            "integrity": "sha256-dummy",
+            "overlay": {
+                "nonexistent.bazel": "sha256-dummyhash=",
+            },
+        }
+        self.write_json(self.work_dir, "modules/my_module/1.0.0/source.json", source_data)
+
+        diffs = [
+            ("A", "modules/my_module/1.0.0/source.json"),
+        ]
+        violations = check_violations(diffs, self.old_dir, self.work_dir, "modules")
+        self.assertIn("Overlay file 'nonexistent.bazel' declared in modules/my_module/1.0.0/source.json does not exist on disk", violations)
+
 
 class TestMain(unittest.TestCase):
     """
