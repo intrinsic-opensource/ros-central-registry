@@ -121,7 +121,7 @@ def fetch_raw_upstream(source_json_path: Path, dest_dir: Path) -> None:
                 zf.extractall(raw_extract_dir)
         else:
             with tarfile.open(archive_path, mode="r:*") as tf:
-                tf.extractall(raw_extract_dir, filter="data")
+                tf.extractall(raw_extract_dir, filter="fully_trusted")
         archive_path.unlink()
         extracted_root = raw_extract_dir / strip_prefix if strip_prefix else raw_extract_dir
         for item in extracted_root.iterdir():
