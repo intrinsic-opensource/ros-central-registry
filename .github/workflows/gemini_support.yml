@@ -63,6 +63,13 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Checkout PR branch (if applicable)
+      if: github.event.issue.pull_request || github.event.pull_request
+      run: |
+        gh pr checkout "${{ github.event.pull_request.number || github.event.issue.number }}"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Setup Bazel
       uses: bazel-contrib/setup-bazel@0.19.0
       with:
@@ -92,80 +99,53 @@ jobs:
           EVENT: ${{ github.event_name }}
           ACTOR: ${{ github.actor }}
           COMMENT BODY: ${{ github.event.comment.body || github.event.review.body || github.event.issue.body }}
-          PR NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+          TARGET NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+          IS_PR: ${{ github.event.issue.pull_request != null || github.event.pull_request != null }}
+
+          You are running in an autonomous, non-interactive CI execution environment.
+          You have only THIS SINGLE RUN to complete the entire task from start to finish.
+          There are NO subsequent user turns or interactive follow-ups.
+
+          CRITICAL EXECUTION RULES:
+          - Never yield or stop to give conversational progress updates or announce your
+            next steps (e.g. do NOT say "Let's do that now" or "My next step is...").
+          - Execute all required steps yourself via tool calls continuously until the
+            task is 100% complete (create workspace -> vendor modules -> edit -> build
+            -> test -> lint -> create_patch -> git commit -> git push -> gh pr create).
+          - Do not ask for user confirmation or wait for interactive input.
+          - Output text ONLY at the very end as your final summary of work completed,
+            AFTER all code changes, builds, tests, commits, and pushes are done.
+          - Read AGENTS.md at the repo root in full — it's the mandatory
+            guidance for coding agents in this repository, including the
+            setup-workspace / vendor-module / create-patch skill pipeline in
+            .agent/skills/ for patching packages under modules/, plus linting,
+            licensing, and testing conventions. Follow it exactly, and use
+            those skills rather than hand-editing anything under modules/ or
+            hand-rolling `bazel run //tools/ci:...` invocations yourself.
+
+          Then take any action required to address the comment/review feedback or discuss the issue:
+
+          - If operating on an existing PR (IS_PR is true):
+            - The PR branch is already checked out in this workspace.
+            - Make the requested changes using the vendor-module / create-patch skills.
+            - Run the relevant fast local checks (buildifier, ruff, and targeted tests — always via `bazel test ...`, never `pytest` on the host) on the vendored module before create_patch.
+            - Sign off every commit (`git commit -s`) per CONTRIBUTING.md.
+            - Push your commits directly to the PR branch (`git push`).
+            - Do NOT run `gh pr create` since the PR already exists.
+          - If answering a question or providing feedback without code changes:
+            - Provide a thorough, accurate, and concise response in your final text output.
+          - If implementing a new issue from scratch (IS_PR is false):
+            - Create a new branch `gemini/issue-${{ github.event.issue.number }}` (`git checkout -b gemini/issue-${{ github.event.issue.number }}`).
+            - Implement the changes, test and lint them, commit with sign-off (`git commit -s`), and push (`git push -u origin gemini/issue-${{ github.event.issue.number }}`).
+            - Open a PR against main with `gh pr create` using .github/PULL_REQUEST_TEMPLATE.md.
           
-          First, read AGENTS.md at the repo root in full — it's the mandatory
-          guidance for coding agents in this repository, including the
-          setup-workspace / vendor-module / create-patch skill pipeline in
-          .agent/skills/ for patching packages under modules/, plus linting,
-          licensing, and testing conventions. Follow it exactly, and use
-          those skills rather than hand-editing anything under modules/ or
-          hand-rolling `bazel run //tools/ci:...` invocations yourself.
-
-          Then taken any action that is required to discuss the issue or update a
-          pull request, and then respond with a comment. Be careful to follow
-          these specific instructions as you carry out your work:
-
+          General guidelines:
           - Work efficiently: before writing any new Bazel content, find an
             existing, already-implemented package in modules/ with a similar
-            shape (e.g. another message-only package, another driver with
-            ROS2 components) and mirror its exact structure rather than
-            inventing one from scratch — this is far faster and more likely
-            to be correct than guessing. Don't spend turns hand-exploring the
-            runner environment (system paths, global config files) or
-            hand-rolling registry checks (e.g. curl against bcr.bazel.build)
-            to verify a dependency exists — just attempt the real
-            bazel build/create-patch command and read Bazel's own error
-            messages, which are authoritative and faster than guessing.
-          - Checkpoint real progress via the create-patch skill at natural
-            milestones as you go, not only at the very end — this protects
-            against losing work (re-vendoring a package with uncommitted
-            edits discards them, see AGENTS.md) and means a partial,
-            genuinely useful PR exists even if you run out of turns before
-            finishing everything.
-          - Do not attempt a full distribution build; The github workflow 
-            .github/workflows/ci.yaml already does that comprehensively
-            on any commit made to a PR that changes behavior.
-          - It is critical that before calling create_patch you first run the
-            relevant fast local checks (buildifier, ruff, and any targeted test
-            for what you touched — see the Linting section of AGENTS.md) on the
-            vendored bazel module. After runnign create_patch do not edit any
-            Bazel modules in ./modules or ./bcr_staging. If you want to fix
-            anything, you must do this in the vendored folder and then re-run
-            the linting, and testing before calling create_patch again.
-          - Sign off every commit (`git commit -s`) per the DCO requirement in
-            CONTRIBUTING.md, using the gemini[bot] identity already configured
-            in this job.
-          - Push the branch, then open the PR against main with `gh pr create`.
-            Use .github/PULL_REQUEST_TEMPLATE.md as the PR body verbatim,
-            filling out every section honestly. Keep the PR description concise
-            and respectful of reviewers' time: avoid over-the-top enthusiasm,
-            em dashes, emojis, or excessive background information. In
-            particular, answer the Generative AI disclosure truthfully (you are
-            Gemini; say so and describe what you did) per the OSRF Generative AI
-            policy it links, and put "Fixes #${{ github.event.issue.number }}"
-            under Related issue(s). Title the PR clearly, and leave it open for
-            @${{ github.repository_owner }} to review - do not merge it,
-            approve it, or request review from anyone yourself.
-          - If the issue is too vague or under-specified to implement safely,
-            do not guess or implement something speculative: instead run
-            `gh issue comment` explaining what clarification you need, and do
-            not open a PR.
-          - If the issue is well-specified but genuinely too large for one PR
-            (e.g. it would require porting a bundled third-party SDK spanning
-            tens of thousands of lines, or authoring a brand-new Bazel module
-            from scratch for a dependency that doesn't exist in the Bazel
-            Central Registry at all), don't try to brute-force a complete
-            implementation — you will run out of turns before finishing and
-            waste the run. Instead, do enough investigation to describe the
-            real scope (what's actually needed vs. what looked scary at
-            first glance — see AGENTS.md's guidance on checking the
-            consuming package's build options before assuming a bundled
-            dependency is required), then `gh issue comment` proposing how to
-            split it into smaller, independently-mergeable issues, and open
-            a PR only for whatever well-scoped first slice you did manage to
-            finish (if any) rather than an incomplete attempt at the whole
-            thing.
+            shape and mirror its structure.
+          - Checkpoint progress via the create-patch skill as you go to avoid losing work.
+          - Do not attempt a full distribution build; CI does that comprehensively.
+          - After running create_patch do not edit any Bazel modules in ./modules or ./bcr_staging directly. Edit in the vendored folder and re-run create_patch.
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GEMINI_CLI_TRUST_WORKSPACE: "true"

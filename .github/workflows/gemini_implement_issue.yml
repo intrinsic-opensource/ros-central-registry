@@ -97,15 +97,29 @@ jobs:
           ISSUE BODY:
           ${{ github.event.issue.body }}
 
-          First, read AGENTS.md at the repo root in full — it's the mandatory
-          guidance for coding agents in this repository, including the
-          setup-workspace / vendor-module / create-patch skill pipeline in
-          .agent/skills/ for patching packages under modules/, plus linting,
-          licensing, and testing conventions. Follow it exactly, and use
-          those skills rather than hand-editing anything under modules/ or
-          hand-rolling `bazel run //tools/ci:...` invocations yourself.
+          You are running in an autonomous, non-interactive CI execution environment.
+          You have only THIS SINGLE RUN to complete the entire task from start to finish.
+          There are NO subsequent user turns or interactive follow-ups.
 
-          Then implement this issue on the current branch and open a pull
+          CRITICAL EXECUTION RULES:
+          - Never yield or stop to give conversational progress updates or announce your
+            next steps (e.g. do NOT say "Let's do that now" or "My next step is...").
+          - Execute all required steps yourself via tool calls continuously until the
+            task is 100% complete (create workspace -> vendor modules -> edit -> build
+            -> test -> lint -> create_patch -> git commit -> git push -> gh pr create).
+          - Do not ask for user confirmation or wait for interactive input.
+          - Output text ONLY at the very end as your final summary of work completed,
+            AFTER the pull request has been opened (or if clarification is needed, after
+            explaining why no PR could be created).
+          - Read AGENTS.md at the repo root in full — it's the mandatory
+            guidance for coding agents in this repository, including the
+            setup-workspace / vendor-module / create-patch skill pipeline in
+            .agent/skills/ for patching packages under modules/, plus linting,
+            licensing, and testing conventions. Follow it exactly, and use
+            those skills rather than hand-editing anything under modules/ or
+            hand-rolling `bazel run //tools/ci:...` invocations yourself.
+
+          Then, implement this issue on the current branch and open a pull
           request for human review:
 
           - Work efficiently: before writing any new Bazel content, find an
@@ -122,23 +136,23 @@ jobs:
           - Checkpoint real progress via the create-patch skill at natural
             milestones as you go, not only at the very end — this protects
             against losing work (re-vendoring a package with uncommitted
-            edits discards them, see AGENTS.md) and means a partial,
-            genuinely useful PR exists even if you run out of turns before
-            finishing everything.
+            edits discards them, see AGENTS.md).
           - Do not attempt a full distribution build; The github workflow 
             .github/workflows/ci.yaml already does that comprehensively
             on any commit made to a PR that changes behavior.
           - It is critical that before calling create_patch you first run the
             relevant fast local checks (buildifier, ruff, and any targeted test
-            for what you touched — see the Linting section of AGENTS.md) on the
-            vendored bazel module. After runnign create_patch do not edit any
+            for what you touched — see the Linting and Testing sections of AGENTS.md;
+            always run tests via `bazel test ...` and never run `pytest` directly on the host)
+            on the vendored bazel module. After running create_patch do not edit any
             Bazel modules in ./modules or ./bcr_staging. If you want to fix
             anything, you must do this in the vendored folder and then re-run
             the linting, and testing before calling create_patch again.
           - Sign off every commit (`git commit -s`) per the DCO requirement in
             CONTRIBUTING.md, using the gemini[bot] identity already configured
             in this job.
-          - Push the branch, then open the PR against main with `gh pr create`.
+          - Push the branch (`git push -u origin ${{ steps.branch.outputs.branch_name }}`),
+            then open the PR against main with `gh pr create`.
             Use .github/PULL_REQUEST_TEMPLATE.md as the PR body verbatim,
             filling out every section honestly. Keep the PR description concise
             and respectful of reviewers' time: avoid over-the-top enthusiasm,
@@ -150,9 +164,9 @@ jobs:
             @${{ github.repository_owner }} to review - do not merge it,
             approve it, or request review from anyone yourself.
           - If the issue is too vague or under-specified to implement safely,
-            do not guess or implement something speculative: instead run
-            `gh issue comment` explaining what clarification you need, and do
-            not open a PR.
+            do not guess or implement something speculative: instead explain
+            what clarification you need in your final response (which will be posted
+            as an issue comment), and do not open a PR.
           - If the issue is well-specified but genuinely too large for one PR
             (e.g. it would require porting a bundled third-party SDK spanning
             tens of thousands of lines, or authoring a brand-new Bazel module
@@ -163,7 +177,7 @@ jobs:
             real scope (what's actually needed vs. what looked scary at
             first glance — see AGENTS.md's guidance on checking the
             consuming package's build options before assuming a bundled
-            dependency is required), then `gh issue comment` proposing how to
+            dependency is required), describe in your final response how to
             split it into smaller, independently-mergeable issues, and open
             a PR only for whatever well-scoped first slice you did manage to
             finish (if any) rather than an incomplete attempt at the whole
