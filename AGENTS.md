@@ -197,11 +197,21 @@ than hand-editing them — `bazel run //:requirements.update` for
   `<name>_test.py` (unit tests against the pure helper functions) +
   `BUILD.bazel` `py_library`/`py_binary`/`py_test` triple. Follow that split
   for new tooling rather than putting logic only reachable through `main()`.
-- Run tests with `python3 -m pytest tools/ci/` for a fast local loop, or
-  `bazel test //tools/ci/...` to match CI exactly.
+- Run tests with `bazel test //tools/ci/...` (or `bazel test //...` across the workspace).
+  Never run `pytest` directly on the host system — test targets (including `py_test`
+  targets that invoke pytest under the hood) are hermetically managed and executed by Bazel.
 - `sys.exit`/`parser.error` belong in `main()` only; helper functions should
   raise exceptions so they stay unit-testable without subprocess/`SystemExit`
   gymnastics.
+
+## Testing
+
+Always run tests using Bazel:
+- **CI tooling unit tests**: `bazel test //tools/ci/...`
+- **Full workspace tests**: `bazel test //...`
+- **Vendored module tests**: `bazel test @<module-name>//...` (inside `workspace/`)
+
+Never invoke `pytest`, `unittest`, or `ctest` directly on the host system. Bazel handles all test runners, dependencies, and environment setup hermetically.
 
 ## Linting
 
