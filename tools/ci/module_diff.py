@@ -82,7 +82,7 @@ MAX_DIFF_LINES = 300
 
 
 def diff_module_versions(
-    modules_dir: Path, package: str, old_version: str, new_version: str
+    modules_dir: Path, package: str, old_version: Optional[str], new_version: str
 ) -> str:
     """
     Unified diff (diff -ruN) between two version directories of the same
@@ -90,20 +90,47 @@ def diff_module_versions(
     fair game to review, since they're everything a new version adds. Runs
     with cwd set to the package directory so the diff headers show clean
     version-relative paths (e.g. "1.0.0/source.json") instead of a noisy,
-    non-portable absolute host path.
+    non-portable absolute host path. If old_version is None (first-ever
+    version of a package), diffs against an empty directory so every
+    newly-added file is shown.
     """
-    result = subprocess.run(
-        ["diff", "-ruN", old_version, new_version],
-        cwd=modules_dir / package,
-        capture_output=True,
-        text=True,
-    )
-    lines = result.stdout.splitlines(keepends=True)
+    if old_version is None:
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as empty_dir:
+            result = subprocess.run(
+                ["diff", "-ruN", empty_dir, new_version],
+                cwd=modules_dir / package,
+                capture_output=True,
+                text=True,
+            )
+        lines = []
+        for line in result.stdout.splitlines(keepends=True):
+            if line.startswith("diff -ruN "):
+                parts = line.strip().split()
+                if len(parts) == 4:
+                    lines.append(f"diff -ruN /dev/null {parts[3]}\n")
+                    continue
+            elif line.startswith("--- "):
+                lines.append("--- /dev/null\n")
+                continue
+            lines.append(line)
+        stdout = "".join(lines)
+    else:
+        result = subprocess.run(
+            ["diff", "-ruN", old_version, new_version],
+            cwd=modules_dir / package,
+            capture_output=True,
+            text=True,
+        )
+        stdout = result.stdout
+
+    lines = stdout.splitlines(keepends=True)
     if len(lines) > MAX_DIFF_LINES:
         truncated = "".join(lines[:MAX_DIFF_LINES])
         truncated += f"\n... (truncated {len(lines) - MAX_DIFF_LINES} lines)\n"
         return truncated
-    return result.stdout
+    return stdout
 
 
 def render_module_diff_markdown(
@@ -119,25 +146,30 @@ def render_module_diff_markdown(
     sections = []
     for package, version in new_versions:
         previous = find_previous_version(modules_dir, package, version)
-        if previous is None:
-            sections.append(
-                f"<details>\n<summary><code>{package}@{version}</code> "
-                "(first-ever version -- nothing to diff against)</summary>\n"
-                "</details>"
-            )
-            continue
-
         diff_text = diff_module_versions(modules_dir, package, previous, version)
         if not diff_text.strip():
-            sections.append(
-                f"<details>\n<summary><code>{package}@{version}</code> "
-                f"(identical to <code>{previous}</code>)</summary>\n</details>"
-            )
+            if previous is None:
+                sections.append(
+                    f"<details>\n<summary><code>{package}@{version}</code> "
+                    "(first-ever version -- empty)</summary>\n</details>"
+                )
+            else:
+                sections.append(
+                    f"<details>\n<summary><code>{package}@{version}</code> "
+                    f"(identical to <code>{previous}</code>)</summary>\n</details>"
+                )
             continue
 
+        if previous is None:
+            summary = f"<code>{package}@{version}</code> (new module)"
+        else:
+            summary = (
+                f"<code>{package}</code>: "
+                f"<code>{previous}</code> &rarr; <code>{version}</code>"
+            )
+
         sections.append(
-            f"<details>\n<summary><code>{package}</code>: "
-            f"<code>{previous}</code> &rarr; <code>{version}</code></summary>\n\n"
+            f"<details>\n<summary>{summary}</summary>\n\n"
             f"```diff\n{diff_text}```\n\n</details>"
         )
 

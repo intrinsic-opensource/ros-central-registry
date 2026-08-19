@@ -40,6 +40,7 @@ env:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   check_bazel_modules:
@@ -99,6 +100,51 @@ jobs:
           echo "### Module diff (${{ matrix.directory }})" >> "$GITHUB_STEP_SUMMARY"
           cat /tmp/module_diff.md >> "$GITHUB_STEP_SUMMARY"
         fi
+    - name: Post or update module diff PR comment
+      # Posts or updates the PR comment directly for non-fork PRs where
+      # pull-requests: write is granted. On fork PRs (where GITHUB_TOKEN
+      # is read-only), continue-on-error skips failure and lets the
+      # workflow_run listener (post_module_diff_comment.yml) handle it.
+      if: always() && github.event_name == 'pull_request'
+      uses: actions/github-script@v9
+      continue-on-error: true
+      with:
+        script: |
+          const fs = require('fs');
+          const diffPath = '/tmp/module_diff.md';
+          if (!fs.existsSync(diffPath)) return;
+          const diff = fs.readFileSync(diffPath, 'utf8').trim();
+          if (!diff) return;
+
+          const directory = '${{ matrix.directory }}';
+          const marker = `<!-- module-diff: ${directory} -->`;
+          const body = `${marker}\n${diff}`;
+
+          const issueNumber = context.payload.pull_request ? context.payload.pull_request.number : context.issue.number;
+          if (!issueNumber) return;
+
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issueNumber,
+          });
+
+          const existing = comments.find((c) => c.body.includes(marker));
+          if (existing) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: existing.id,
+              body,
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body,
+            });
+          }
     - name: Compute artifact name
       # Artifact names can't contain '/', so sanitize the matrix directory
       # (e.g. "bcr_staging/modules" -> "bcr_staging-modules"). The
