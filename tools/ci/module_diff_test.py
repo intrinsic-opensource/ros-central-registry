@@ -129,6 +129,18 @@ class TestDiffModuleVersions(unittest.TestCase):
         self.assertEqual(diff_text.strip(), "")
 
 
+    def test_diff_module_versions_none_old_version(self):
+        new_dir = self.modules_dir / "new_pkg" / "1.0.0"
+        (new_dir / "patches").mkdir(parents=True)
+        (new_dir / "MODULE.bazel").write_text('version = "1.0.0"\n')
+        (new_dir / "patches" / "0001.patch").write_text("patch\n")
+
+        diff_text = module_diff.diff_module_versions(self.modules_dir, "new_pkg", None, "1.0.0")
+        self.assertIn("+version = \"1.0.0\"", diff_text)
+        self.assertIn("0001.patch", diff_text)
+        self.assertIn("/dev/null", diff_text)
+
+
 class TestRenderModuleDiffMarkdown(unittest.TestCase):
 
     def setUp(self):
@@ -140,11 +152,14 @@ class TestRenderModuleDiffMarkdown(unittest.TestCase):
     def test_no_new_versions_renders_nothing(self):
         self.assertEqual(module_diff.render_module_diff_markdown(self.modules_dir, []), "")
 
-    def test_first_ever_version_notes_nothing_to_diff(self):
-        (self.modules_dir / "new_pkg" / "0.0.0").mkdir(parents=True)
+    def test_first_ever_version_renders_new_module_diff(self):
+        new_dir = self.modules_dir / "new_pkg" / "0.0.0"
+        new_dir.mkdir(parents=True)
+        (new_dir / "MODULE.bazel").write_text('module(name = "new_pkg", version = "0.0.0")\n')
         result = module_diff.render_module_diff_markdown(self.modules_dir, [("new_pkg", "0.0.0")])
         self.assertIn("new_pkg@0.0.0", result)
-        self.assertIn("nothing to diff against", result)
+        self.assertIn("new module", result)
+        self.assertIn("```diff", result)
 
     def test_real_change_renders_diff_fence(self):
         old_dir = self.modules_dir / "rclcpp" / "1.0.0"
