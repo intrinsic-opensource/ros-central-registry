@@ -102,6 +102,268 @@ cc_test(
     ],
 )
 
+cc_test(
+    name = "test_dashboard_client",
+    srcs = ["tests/test_dashboard_client.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_primary_parser",
+    srcs = ["tests/test_primary_parser.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_rtde_data_package",
+    srcs = ["tests/test_rtde_data_package.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_rtde_parser",
+    srcs = ["tests/test_rtde_parser.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_tcp_server",
+    srcs = [
+        "tests/test_tcp_server.cpp",
+        "tests/test_utils.h",
+    ],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_script_sender",
+    srcs = ["tests/test_script_sender.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_script_reader",
+    srcs = ["tests/test_script_reader.cpp"],
+    data = glob([
+        "resources/**",
+        "tests/resources/**",
+    ]),
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_reverse_interface",
+    srcs = ["tests/test_reverse_interface.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_trajectory_point_interface",
+    srcs = ["tests/test_trajectory_point_interface.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_rtde_control_package_pause",
+    srcs = ["tests/test_rtde_control_package_pause.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_rtde_control_package_start",
+    srcs = ["tests/test_rtde_control_package_start.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_rtde_control_package_setup_outputs",
+    srcs = ["tests/test_rtde_control_package_setup_outputs.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_rtde_control_package_setup_inputs",
+    srcs = ["tests/test_rtde_control_package_setup_inputs.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_rtde_get_urcontrol_version",
+    srcs = ["tests/test_rtde_get_urcontrol_version.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_rtde_request_protocol_version",
+    srcs = ["tests/test_rtde_request_protocol_version.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_rtde_writer",
+    srcs = ["tests/test_rtde_writer.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_bin_parser",
+    srcs = ["tests/test_bin_parser.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_package_serializer",
+    srcs = ["tests/test_package_serializer.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_tcp_socket",
+    srcs = [
+        "tests/test_tcp_socket.cpp",
+        "tests/test_utils.h",
+    ],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_stream",
+    srcs = [
+        "tests/test_stream.cpp",
+        "tests/test_utils.h",
+    ],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_producer",
+    srcs = [
+        "tests/test_producer.cpp",
+        "tests/test_utils.h",
+    ],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_pipeline",
+    srcs = [
+        "tests/test_pipeline.cpp",
+        "tests/test_utils.h",
+    ],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_script_command_interface",
+    srcs = ["tests/test_script_command_interface.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_robot_receive_timeout",
+    srcs = ["tests/test_robot_receive_timeout.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_control_mode",
+    srcs = ["tests/test_control_mode.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_helpers",
+    srcs = ["tests/test_helpers.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
+cc_test(
+    name = "test_motion_primitives",
+    srcs = ["tests/test_motion_primitives.cpp"],
+    deps = [
+        ":urcl_library",
+        "@rosdistro//cc:googletest",
+    ],
+)
+
 ### PACKAGING
 
 # Define all headers for the package, which includes both original globbed headers
