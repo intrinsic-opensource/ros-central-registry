@@ -166,7 +166,7 @@ def write_vendor_snapshot(target_workspace: Path, module: str) -> None:
     vendor_module_dir = target_workspace / "vendor" / f"{module}+"
     snapshot_dir = target_workspace / VENDOR_SNAPSHOT_DIR_NAME / f"{module}+"
     shutil.rmtree(snapshot_dir, ignore_errors=True)
-    shutil.copytree(vendor_module_dir, snapshot_dir)
+    shutil.copytree(vendor_module_dir, snapshot_dir, symlinks=True)
 
 
 def ensure_vendor_dir_flag(bazelrc: Path) -> None:
