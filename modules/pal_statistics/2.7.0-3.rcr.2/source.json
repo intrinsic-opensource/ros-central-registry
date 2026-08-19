@@ -1,0 +1,8 @@
+{
+    "integrity": "sha256-RMsuUIOw5BA5N2JxM7lZOI+hmJ4XjcAJesKxz6EsaX4=",
+    "url": "https://github.com/ros2-gbp/pal_statistics-release/archive/refs/tags/release/lyrical/pal_statistics/2.7.0-3.tar.gz",
+    "strip_prefix": "pal_statistics-release-release-lyrical-pal_statistics-2.7.0-3",
+    "overlay": {
+        "BUILD.bazel": "sha256-u/KwDYu00N39X6vFdhymMKf99W8mGTdMVTwEtDPtY9s="
+    }
+}
