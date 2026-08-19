@@ -74,10 +74,6 @@ cc_test(
         "@urdf//:ament_index_urdf",
     ],
     dynamic_deps = [":transitive_dynamic_deps"],
-    env = {
-        "AMENT_PREFIX_PATH": ".",
-        "LD_LIBRARY_PATH": "./lib",
-    },
     deps = DEPENDENCIES.values() + [
         ":kdl_parser_library",
         "@rosdistro//cc:googletest",
@@ -92,10 +88,6 @@ cc_test(
         "@urdf//:ament_index_urdf",
     ],
     dynamic_deps = [":transitive_dynamic_deps"],
-    env = {
-        "AMENT_PREFIX_PATH": ".",
-        "LD_LIBRARY_PATH": "./lib",
-    },
     deps = DEPENDENCIES.values() + [
         ":kdl_parser_library",
         "@rosdistro//cc:googletest",
