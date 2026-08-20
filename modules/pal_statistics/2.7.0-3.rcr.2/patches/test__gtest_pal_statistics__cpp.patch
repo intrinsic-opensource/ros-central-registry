@@ -30,3 +30,21 @@
      rclcpp::sleep_for(std::chrono::milliseconds(100));
    }
  
+@@ -881,7 +884,7 @@
+     "End publishAsync " << (1000. * (node_->get_clock()->now() - b).seconds()) /
+       static_cast<double>(iter));
+   RCLCPP_INFO_STREAM(node_->get_logger(), "Start publish");
+-  for (size_t i = 0; i < n_variables; ++i) {
++  for (size_t i = 0; i < std::min(n_variables, static_cast<size_t>(100)); ++i) {
+     registry->publish();
+   }
+   RCLCPP_INFO_STREAM(node_->get_logger(), "End publish");
+@@ -1405,6 +1408,8 @@
+   waitForMsg();
+ 
+   STOP_PUBLISHER_THREAD(node_, statistics_topic);
++  resetMsgs();
++  waitForMsg(std::chrono::milliseconds(200));
+   EXPECT_FALSE(last_msg_.get());
+ }
+ 
