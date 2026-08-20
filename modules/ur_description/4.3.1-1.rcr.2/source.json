@@ -4,7 +4,7 @@
     "strip_prefix": "ur_description-release-release-lyrical-ur_description-4.3.1-1",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-Ko4pZq3OTxO8om7fLyBZyoBcpDSlupE1ZZ7Ce75HjJU="
+        "BUILD.bazel": "sha256-SipuqFHr42LeUsT/29k3/qNTyYIcOXS32Yf/oSV+Z+U="
     },
     "patches": {
         "test__test_ur_urdf_xacro__py.patch": "sha256-BTKMkUR689mFdVUj172lzJpzTSqZ1eTrH7+fU9ALS6w=",
