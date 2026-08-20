@@ -4,7 +4,7 @@
     "strip_prefix": "rsl-release-release-lyrical-rsl-1.3.0-3",
     "patch_strip": 1,
     "overlay": {
-        "BUILD.bazel": "sha256-O9RQWNEwIHEevn+xQ/7zU6stcwYE5RA2eMTKRxR4n0U="
+        "BUILD.bazel": "sha256-6GrmazawmyAnZcaKDLySYTSRjgjL2S/wS/HLVsYCG9A="
     },
     "patches": {
         "include__rsl__algorithm__hpp.patch": "sha256-6JAa7ymlXV5l8I+X5qeqQFJrbynksASuou42aQsfHrY=",

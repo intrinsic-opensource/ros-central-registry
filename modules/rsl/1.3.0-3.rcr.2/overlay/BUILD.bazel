@@ -78,8 +78,8 @@ cc_library(
         "@rclcpp//:rclcpp_library",
         "@rosdistro//cc:eigen",
         "@rosdistro//cc:fmt",
-        "@tcb_span",
         "@rosdistro//cc:tl_expected",
+        "@tcb_span",
     ],
 )
 
