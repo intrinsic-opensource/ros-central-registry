@@ -378,6 +378,21 @@ def main():
     with open(target_workspace / "BUILD.bazel", "w") as f:
         f.write(get_copyright_header())
 
+    # Write fmt.patch
+    with open(target_workspace / "fmt.patch", "w") as f:
+        f.write("""diff -urN a/BUILD.bazel b/BUILD.bazel
+--- a/BUILD.bazel	2026-08-20 00:00:00.000000000 +0000
++++ b/BUILD.bazel	2026-08-20 00:00:00.000000000 +0000
+@@ -19,6 +19,7 @@
+         "src/format.cc",
+         "src/os.cc",
+     ],
++    tags = ["LINKABLE_MORE_THAN_ONCE"],
+     hdrs = glob([
+         "include/fmt/*.h",
+     ]),
+""")
+
     # Write ros-<variant>.txt files
     for variant_name, variant_packages in variants.items():
         with open(target_workspace / f"ros-{variant_name}.txt", "w") as f:
@@ -556,6 +571,13 @@ use_repo(rs_toolchains, "default_rust_toolchains")
 
 register_toolchains(
     "@default_rust_toolchains//:all",
+)
+
+# Patch fmt to bypass duplicate linking check
+single_version_override(
+    module_name = "fmt",
+    patch_strip = 1,
+    patches = ["//:fmt.patch"],
 )
 """)
 
