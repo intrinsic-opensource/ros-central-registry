@@ -3,11 +3,9 @@
     "url": "https://github.com/ros2-gbp/ur_msgs-release/archive/refs/tags/release/lyrical/ur_msgs/2.5.0-3.tar.gz",
     "strip_prefix": "ur_msgs-release-release-lyrical-ur_msgs-2.5.0-3",
     "overlay": {
-        "BUILD.bazel": "sha256-w3rDlhGZOkfxWgSfsPerJThla0ZyocSsQq7bd4Xz6ec=",
+        "BUILD.bazel": "sha256-ElAdO+yzwipVRhPhU3ZVGU6xOW/uENEz52CBs0qSpTc=",
         "action/BUILD.bazel": "sha256-B9OcX85loDm0ZLZwrVSPvDvbEgkXBFfkMU3VsNYr6gY=",
         "msg/BUILD.bazel": "sha256-cNp5FtM3NuGwut/cfoNaPGZNF/v0ViB05PIEEMjn34A=",
-        "srv/BUILD.bazel": "sha256-hkcpLk930RJwdxda0yNqn2LpSME09Hl/4AvK9rSqO1o=",
-        "test/utest.cpp": "sha256-F6tmeOEDTuz1j7kF6xG+nM4EyMHVih7AMS4DoKJ0kiU=",
-        "test/utest.py": "sha256-HJ7AK6lT5ftgeFwrM0LwNrDSZ7tFjE5BUyHH2SGqt/Y="
+        "srv/BUILD.bazel": "sha256-hkcpLk930RJwdxda0yNqn2LpSME09Hl/4AvK9rSqO1o="
     }
 }

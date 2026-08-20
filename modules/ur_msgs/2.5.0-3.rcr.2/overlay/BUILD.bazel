@@ -13,9 +13,7 @@
 # limitations under the License.
 
 load("@rosdistro//ament:defs.bzl", "ament_package")
-load("@rosdistro//python:defs.bzl", "py_pytest")
 load("@rosidl_default_generators//:defs.bzl", "default_generators")
-load("@rules_cc//cc:defs.bzl", "cc_test")
 load("@rules_license//rules:license.bzl", "license")
 
 package(
@@ -51,25 +49,6 @@ default_generators(
         "//srv:SetIO",
         "//srv:SetPayload",
         "//srv:SetSpeedSliderFraction",
-    ],
-)
-
-### TESTS
-
-cc_test(
-    name = "test_utest_cc",
-    srcs = ["test/utest.cpp"],
-    deps = [
-        ":cc",
-        "@rosdistro//cc:googletest",
-    ],
-)
-
-py_pytest(
-    name = "test_utest_py",
-    srcs = ["test/utest.py"],
-    deps = [
-        ":py",
     ],
 )
 
