@@ -7,6 +7,6 @@
         "BUILD.bazel": "sha256-u/KwDYu00N39X6vFdhymMKf99W8mGTdMVTwEtDPtY9s="
     },
     "patches": {
-        "test__gtest_pal_statistics__cpp.patch": "sha256-XDTem7DBig+aeBcBsXnNPakkXat4xgomNICuyqyS7Xc="
+        "test__gtest_pal_statistics__cpp.patch": "sha256-X2Y/sy26ZnearynrKkuiOIkUnrng/ZE6FmllfvhvgmU="
     }
 }
