@@ -133,10 +133,25 @@ jobs:
             to verify a dependency exists — just attempt the real
             bazel build/create-patch command and read Bazel's own error
             messages, which are authoritative and faster than guessing.
+          - Interface completeness: When implementing interface packages, check
+            all `.msg`, `.srv`, and `.action` files against the upstream source/tag
+            and declare every single one in `deps` of `default_generators` or `core_generators`.
+          - Upstream test parity: Port all non-integration unit tests defined
+            upstream. Never hallucinate or invent new test files not present
+            in upstream code. Do not hardcode `env = {"AMENT_PREFIX_PATH": ...}`
+            in test targets. When writing discovery loops in tests, always spin
+            the executor (`executor_->spin_some()`) for CycloneDDS compatibility.
+            Ensure static singletons holding publishers are cleaned up before
+            `rclcpp::shutdown()` for Zenoh compatibility.
+          - Packaging conventions: Use `ament_index` (passed via `data = [":ament_index"]`)
+            for data ingestion by targets in the package. Declare `ament_package`
+            exactly once at the bottom of `BUILD.bazel` for downstream export. Internal
+            targets must never depend on `:ament_package`.
           - Checkpoint real progress via the create-patch skill at natural
             milestones as you go, not only at the very end — this protects
             against losing work (re-vendoring a package with uncommitted
             edits discards them, see AGENTS.md).
+          - Clean up all `.rej`, `.orig`, or conflict files before calling create_patch.
           - Do not attempt a full distribution build; The github workflow 
             .github/workflows/ci.yaml already does that comprehensively
             on any commit made to a PR that changes behavior.
@@ -144,10 +159,11 @@ jobs:
             relevant fast local checks (buildifier, ruff, and any targeted test
             for what you touched — see the Linting and Testing sections of AGENTS.md;
             always run tests via `bazel test ...` and never run `pytest` directly on the host)
-            on the vendored bazel module. After running create_patch do not edit any
-            Bazel modules in ./modules or ./bcr_staging. If you want to fix
+            on the vendored bazel module. After running create_patch, run
+            `bazel run //tools/ci:check_pr_modules` to verify module integrity.
+            Do not edit any Bazel modules in ./modules or ./bcr_staging directly. If you want to fix
             anything, you must do this in the vendored folder and then re-run
-            the linting, and testing before calling create_patch again.
+            the linting, testing, and create_patch.
           - Sign off every commit (`git commit -s`) per the DCO requirement in
             CONTRIBUTING.md, using the gemini[bot] identity already configured
             in this job.

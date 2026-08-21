@@ -129,6 +129,8 @@ jobs:
             - The PR branch is already checked out in this workspace.
             - Make the requested changes using the vendor-module / create-patch skills.
             - Run the relevant fast local checks (buildifier, ruff, and targeted tests — always via `bazel test ...`, never `pytest` on the host) on the vendored module before create_patch.
+            - Clean up any `.rej`, `.orig`, or conflict files before calling create_patch.
+            - After create_patch, verify module integrity with `bazel run //tools/ci:check_pr_modules`.
             - Sign off every commit (`git commit -s`) per CONTRIBUTING.md.
             - Push your commits directly to the PR branch (`git push`).
             - Do NOT run `gh pr create` since the PR already exists.
@@ -143,6 +145,20 @@ jobs:
           - Work efficiently: before writing any new Bazel content, find an
             existing, already-implemented package in modules/ with a similar
             shape and mirror its structure.
+          - Interface completeness: When implementing interface packages, check
+            all `.msg`, `.srv`, and `.action` files against the upstream source/tag
+            and declare every single one in `deps` of `default_generators` or `core_generators`.
+          - Upstream test parity: Port all non-integration unit tests defined
+            upstream. Never hallucinate or invent new test files not present
+            in upstream code. Do not hardcode `env = {"AMENT_PREFIX_PATH": ...}`
+            in test targets. When writing discovery loops in tests, always spin
+            the executor (`executor_->spin_some()`) for CycloneDDS compatibility.
+            Ensure static singletons holding publishers are cleaned up before
+            `rclcpp::shutdown()` for Zenoh compatibility.
+          - Packaging conventions: Use `ament_index` (passed via `data = [":ament_index"]`)
+            for data ingestion by targets in the package. Declare `ament_package`
+            exactly once at the bottom of `BUILD.bazel` for downstream export. Internal
+            targets must never depend on `:ament_package`.
           - Checkpoint progress via the create-patch skill as you go to avoid losing work.
           - Do not attempt a full distribution build; CI does that comprehensively.
           - After running create_patch do not edit any Bazel modules in ./modules or ./bcr_staging directly. Edit in the vendored folder and re-run create_patch.
