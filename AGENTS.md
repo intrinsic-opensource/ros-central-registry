@@ -213,6 +213,29 @@ Always run tests using Bazel:
 
 Never invoke `pytest`, `unittest`, or `ctest` directly on the host system. Bazel handles all test runners, dependencies, and environment setup hermetically.
 
+### Upstream Test Parity and Test Scope
+- **Match upstream test coverage; do not hallucinate tests**: Never author, invent, or hallucinate new test files (e.g. creating synthetic `test_utest.cpp` or `test_utest.py`) if they do not exist in the upstream package. We preserve and package upstream code, we do not expand test suites arbitrarily.
+- **Port all real upstream unit tests**: Ensure all non-integration unit tests defined in upstream's `CMakeLists.txt` or test folders are ported to Bazel test targets (`cc_test`, `py_pytest`). Only omit integration tests that require external hardware, live robot simulators, or non-hermetic external network environments.
+- **Verify interface completeness**: When packaging message, service, or action packages, check all `.msg`, `.srv`, and `.action` files against the upstream tag/archive to ensure every single interface is declared in `deps` of `default_generators` or `core_generators`.
+- **No hardcoded environment variables in test targets**: Do NOT hardcode `env = {"AMENT_PREFIX_PATH": ".", "LD_LIBRARY_PATH": "./lib"}` in `cc_test` or `py_test` targets. `AMENT_PREFIX_PATH` and library paths are configured globally in `.bazelrc`.
+
+### Cross-Platform and Multi-RMW Compatibility
+- **Portable C++**: Write clean, standard C++ without GNU-specific headers (e.g. avoid `<error.h>`, use `<cstdio>`/`fprintf` and `<cstdlib>`/`exit`). Never hardcode host/target CPU architectures (e.g. x86_64 prebuilt packages) into module dependencies.
+- **CycloneDDS discovery wait loops**: When tests poll for publisher/subscriber discovery in a `while` loop (e.g. `while (sub_->get_publisher_count() == 0)`), always spin the node executor (e.g. `executor_->spin_some()`) on each iteration. Unlike FastDDS which performs discovery asynchronously in background threads, CycloneDDS requires the node executor to spin to process discovery events.
+- **Zenoh shutdown safety & static singletons**: Never allow active ROS 2 publishers, subscriptions, or nodes to remain in static/global variables that destruct during program exit after `rclcpp::shutdown()`. Under Zenoh (`rmw_zenoh_cpp`), destroying publishers after the Tokio runtime/Thread Local Storage is torn down triggers a process-abort panic. Provide explicit cleanup hooks (e.g. `clearAllRegistries()` in test `TearDownTestSuite()`) before `rclcpp::shutdown()`.
+- **Avoid unthrottled tight loops querying RMW graph state**: Avoid tight loops invoking dynamic graph queries like `get_subscription_count()` thousands of times in a row, which cause extreme test slowdowns and timeouts under non-dynamic RMWs.
+
+## Packaging Conventions: `ament_index` vs `ament_package`
+
+Understand the distinct roles of `ament_index` and `ament_package`:
+- **`ament_index` (Data dependency for internal targets)**: Aggregates package metadata, configuration files, URDF/Xacro models, launch files, plugins, and libraries for ingestion by test targets and binary targets in the *current* package (passed via `data = [":ament_index"]`).
+- **`ament_package` (Downstream export bundling)**: Declared *exactly once* at the bottom of the root `BUILD.bazel` to bundle all exported headers, libraries, executables, and dependencies for *downstream* consumers (mirroring CMake `install()`). Targets within the package must NOT depend on `:ament_package`.
+
+## Module Integrity and Cleanliness
+
+- **No reject or conflict artifacts**: Never leave `.rej`, `.orig`, or temporary conflict files in vendored module trees or commit them to `modules/`. Clean them up before creating patches.
+- **Authoritative integrity hashes**: Never hand-edit SHA-256 integrity hashes in `source.json`. Let `create_patch` generate them, and verify with `bazel run //tools/ci:check_pr_modules`.
+
 ## Linting
 
 CI (`.github/workflows/_check_for_linting_errors.yml`) fails a PR on either
@@ -262,3 +285,4 @@ Match `license_kinds` to the package's actual upstream license (its
 existing overlay file (many predate the convention), so don't feel obligated
 to add it to files you're not otherwise touching -- just include it in any
 new or edited one.
+

@@ -98,12 +98,20 @@ automatically) — in particular:
   its behalf.
 - **Related issue** — link the issue this patch fixes, if any.
 
+## Pre-patch Cleanliness and Validation
+
+Before running `create_patch` and committing:
+1. **Remove reject/conflict artifacts**: Ensure no `.rej`, `.orig`, or temporary conflict files exist under `workspace/vendor/<module>+/`. If left behind, `create_patch` will treat them as new overlay files and write them to `source.json`, causing `check_pr_modules.py` and CI builds to fail.
+2. **Format build files**: Run `buildifier -mode fix -r .` from the repo root so all new and modified `BUILD.bazel`/`.bzl` files adhere to formatting standards.
+3. **Validate modules**: Run `bazel run //tools/ci:check_pr_modules` locally. This verifies that all overlay and patch hashes in `source.json` match disk files exactly, immutability rules are respected, and no undeclared or missing files exist.
+
 ## Gotchas
 
 - **`MODULE.bazel.lock` generated in vendored source** — Bazel invocations in
   `workspace/` or `workspace/vendor/<module>+/` may generate `MODULE.bazel.lock`.
   `create_patch` ignores `MODULE.bazel.lock` automatically so it is never added
   as an overlay or diffed, and it should never be manually committed to `modules/`.
+- **Stray `.rej` or `.orig` files captured as overlays** — If patch rebase left `.rej` files in the vendor directory, delete them before running `create_patch`.
 - "This workspace resolved X to A, but the latest published version is B" —
   the workspace is stale (someone else's patch to that package merged since
   you set up the workspace). Re-run the `setup-workspace` skill, then
@@ -124,3 +132,4 @@ automatically) — in particular:
 - If auto-detect mode finds nothing, either nothing was actually edited, or
   the edits exactly match what's already published — both are reported and
   are not errors.
+

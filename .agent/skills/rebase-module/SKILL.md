@@ -65,6 +65,8 @@ Find the `.rej` file next to the target under `workspace/vendor/<module>+/`
 and resolve it by hand — same workflow as resolving a `git`/`patch` reject
 file anywhere else: look at what the fresh baseline has, what your edit was
 trying to do, and reconcile them manually in the actual source file.
+**Always delete the `.rej` file after resolving the conflict**, so `create_patch`
+does not capture it as a new overlay file.
 
 An overlay (brand-new file you added) that collides with a same-named file
 the fresh baseline itself introduced is reported too, but your content is
@@ -88,7 +90,7 @@ supposed to have real `MODULE.bazel` edits in the first place).
 
 ## Once you're happy with the rebased state
 
-Re-test (`bazel test @<module>//...`) and continue with the `create-patch`
+Ensure all `.rej` files are removed, re-test (`bazel test @<module>//...`), and continue with the `create-patch`
 skill as usual.
 
 ## Gotchas

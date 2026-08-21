@@ -177,23 +177,40 @@ To ensure binaries (e.g. `cc_binary`) and tests (e.g. `cc_test`) are linked corr
 
 For reference implementations, inspect the `rosbag2_cpp` or `filters` modules.
 
+### 4. Writing Test Targets and Upstream Parity
+
+When porting tests to Bazel (`cc_test`, `py_pytest`):
+- **Maintain Upstream Test Parity (Never Hallucinate Tests)**: Do not invent or hallucinate synthetic test files (e.g. writing custom `test_utest.cpp` or `test_utest.py`) if they are not in the upstream package. We preserve and package upstream code; we do not expand test suites arbitrarily.
+- **Port All Non-Integration Unit Tests**: Port all unit tests defined in upstream `CMakeLists.txt`. Only omit integration tests that require external hardware, running robot simulators, or non-hermetic external network connections.
+- **No Hardcoded Environment Overrides**: Do NOT set `env = {"AMENT_PREFIX_PATH": ".", "LD_LIBRARY_PATH": "./lib"}` in test targets. These are configured globally in `.bazelrc`.
+- **Multi-RMW & Platform Safety**:
+  - **CycloneDDS discovery loops**: When tests poll for publisher/subscriber matching (e.g. `while (sub_->get_publisher_count() == 0)`), always call `executor_->spin_some()` inside the loop so CycloneDDS processes discovery events.
+  - **Zenoh shutdown safety**: Never leave active ROS 2 publishers/subscriptions inside static or global singletons that destruct during program exit after `rclcpp::shutdown()`. Provide an explicit cleanup hook (e.g. `clearAllRegistries()`) in `TearDownTestSuite()` before `rclcpp::shutdown()` to avoid Zenoh Tokio runtime teardown panics.
+  - **Standard C++ Portability**: Use portable C++ headers (e.g. `<cstdio>` and `<cstdlib>` instead of GNU-specific `<error.h>`).
+
 ---
 
 ## ROS Package Packaging with Ament (Ament Index & Ament Package)
 
-Many ROS packages rely on the `ament_index` to locate plugins, resources, or configurations at runtime. In Bazel, we simulate the `AMENT_PREFIX_PATH` structure in the Bazel runfiles directory.
+Understand the distinct separation of responsibilities between `ament_index` and `ament_package`:
+- `ament_index` prepares datasets and metadata for targets **inside** this package.
+- `ament_package` bundles exported artifacts for **downstream** consumers (mirroring `cmake install`).
 
-To support this, we follow a specific layout in `BUILD.bazel` using rules loaded from `@rosdistro//ament:defs.bzl`:
 ```python
 load("@rosdistro//ament:defs.bzl", "ament_index", "ament_package")
 ```
 
 ### 1. The `ament_index` Rule
-The `ament_index` target aggregates the package XML, libraries, plugins, and transitively links the `ament_index` of all dependencies:
+The `ament_index` target aggregates the package XML, libraries, plugins, URDF/Xacro models, configs, meshes, and transitively links the `ament_index` of all dependencies:
 ```python
 ament_index(
     name = "ament_index",
     export_name = "package_name",
+    data = glob([
+        "config/**",
+        "launch/**",
+        "urdf/**",
+    ]),
     libraries = [":package_name"], # libraries/plugins exported by this package
     package_xml = "package.xml",
     # Optional list of plugin XML configurations:
@@ -218,7 +235,7 @@ cc_test(
 ```
 
 ### 3. The `ament_package` Rule
-At the end of the `BUILD.bazel` file, declare the `ament_package` rule. It acts as the final bundling rule for downstream consumers, depending on `:ament_index` and the `:ament_package` target of all dependencies:
+At the end of the `BUILD.bazel` file, declare the `ament_package` rule **exactly once**. It acts as the final bundling rule for downstream consumers, depending on `:ament_index` and the `:ament_package` target of all dependencies:
 ```python
 ament_package(
     name = "ament_package",
@@ -226,10 +243,13 @@ ament_package(
     libraries = [":package_name"],
     package_xml = "package.xml",
     deps = [
-        ":ament_index", # transitely pulls in all upstream dependencies' ament_package targets
+        ":ament_index", # transitively pulls in all upstream dependencies' ament_package targets
     ],
 )
 ```
+> [!IMPORTANT]
+> Internal targets within the package (such as tests or helper binaries) must **never** depend on `:ament_package`. They should depend on `:ament_index` (via `data`) or on direct library targets.
+
 
 ---
 
