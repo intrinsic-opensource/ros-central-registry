@@ -18,12 +18,17 @@
         "cc/macros.bzl": "sha256-KzKT/+tSKdzHf4GhbWzv6VL8NUpg+yft7t6ftkvE3KI=",
         "cc/mcap_impl.cpp": "sha256-/qFEIYCpqc9IB5xJpJUL6SXUnyVrTjFXc1dpyScZwKQ=",
         "cc/python_import.bzl": "sha256-LzyKqlJpSs/JaOJ66/Yqx3ZFcbiMlmuwP7Oqp12ibQA=",
+        "cc/qt/linux_x86_64.BUILD": "sha256-FxqiRGr0aApfETsxbyY9qUvJE81mpOGDWVF8bGyd3Tk=",
+        "cc/qt/qt_libraries.bzl": "sha256-3jxy72aXRltmeEeVC3p+hKodlbhRiq+UazXOJLM5svk=",
+        "cc/qt_libraries.bzl": "sha256-3jxy72aXRltmeEeVC3p+hKodlbhRiq+UazXOJLM5svk=",
         "cc/rules.bzl": "sha256-QQqwkKTjrTt/Qep1FXo9d1g2fIjm6yoUhhIP3bVtVzY=",
         "cc/types.bzl": "sha256-rdlVPpnZM5fBfMRUrqSa+9GASlfn/i+mpMv4pul5+BI=",
         "pyproject.toml": "sha256-8YX5KUGGyhc46tqfOiJqS5AjUWmnB4UwCjDgmq48ykE=",
         "python/BUILD.bazel": "sha256-sP0ROcpNAotSp6EXjdHOsl43n2pyM6JfMNZtThCLGDY=",
         "python/defs.bzl": "sha256-FlOqKavTbRjkQxuIa0TJmE4rUw5cup9zs6A5cb+OrHk=",
         "python/pytest_main.py": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+        "qt_libraries.bzl": "sha256-3jxy72aXRltmeEeVC3p+hKodlbhRiq+UazXOJLM5svk=",
+        "qt_linux_x86_64.BUILD": "sha256-FxqiRGr0aApfETsxbyY9qUvJE81mpOGDWVF8bGyd3Tk=",
         "requirements.txt": "sha256-ObrgZ6eIanzGOdY48yiGGNBXUGYxMABSOqRl/gJHL+4="
     }
 }
