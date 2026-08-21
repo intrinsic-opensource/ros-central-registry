@@ -394,6 +394,7 @@ alias(
 cc_shared_library(
     name = "libcap",
     exports_filter = [":libcap_library"],
+    target_compatible_with = ["@platforms//os:linux"],
     deps = [":libcap_library"],
 )
 
