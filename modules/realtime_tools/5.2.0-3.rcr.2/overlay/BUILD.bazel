@@ -56,33 +56,33 @@ DEPENDENCIES = {
 cc_library(
     name = "realtime_tools_library",
     srcs = ["src/realtime_helpers.cpp"],
-    hdrs = glob([
-        "include/**/*.hpp",
-        "include/**/*.h",
-    ]),
+    hdrs = glob(
+        [
+            "include/**/*.hpp",
+            "include/**/*.h",
+        ],
+        allow_empty = True,
+    ),
     includes = ["include"],
     linkopts = select({
-        ":linux_x86_64": [
-            "-L/usr/lib/x86_64-linux-gnu",
-            "-l:libcap.so.2",
-            "-lpthread",
-        ],
-        ":linux_aarch64": [
-            "-L/usr/lib/aarch64-linux-gnu",
-            "-l:libcap.so.2",
-            "-lpthread",
-        ],
+        "@platforms//os:linux": ["-lpthread"],
         "//conditions:default": [],
     }),
     local_defines = ros_local_defines(),
     deps = DEPENDENCIES.values() + [
         "@rosdistro//cc:boost.lockfree",
-    ],
+    ] + select({
+        "@platforms//os:linux": ["@rosdistro//cc:libcap_library"],
+        "//conditions:default": [],
+    }),
 )
 
 cc_shared_library(
     name = "realtime_tools",
-    dynamic_deps = DEPENDENCIES.keys(),
+    dynamic_deps = DEPENDENCIES.keys() + select({
+        "@platforms//os:linux": ["@rosdistro//cc:libcap"],
+        "//conditions:default": [],
+    }),
     exports_filter = [":realtime_tools_library"],
     deps = [":realtime_tools_library"],
 )
@@ -90,31 +90,31 @@ cc_shared_library(
 cc_library(
     name = "thread_priority_library",
     srcs = ["src/realtime_helpers.cpp"],
-    hdrs = glob([
-        "include/**/*.hpp",
-        "include/**/*.h",
-    ]),
+    hdrs = glob(
+        [
+            "include/**/*.hpp",
+            "include/**/*.h",
+        ],
+        allow_empty = True,
+    ),
     includes = ["include"],
     linkopts = select({
-        ":linux_x86_64": [
-            "-L/usr/lib/x86_64-linux-gnu",
-            "-l:libcap.so.2",
-            "-lpthread",
-        ],
-        ":linux_aarch64": [
-            "-L/usr/lib/aarch64-linux-gnu",
-            "-l:libcap.so.2",
-            "-lpthread",
-        ],
+        "@platforms//os:linux": ["-lpthread"],
         "//conditions:default": [],
     }),
     local_defines = ros_local_defines(),
-    deps = DEPENDENCIES.values(),
+    deps = DEPENDENCIES.values() + select({
+        "@platforms//os:linux": ["@rosdistro//cc:libcap_library"],
+        "//conditions:default": [],
+    }),
 )
 
 cc_shared_library(
     name = "thread_priority",
-    dynamic_deps = DEPENDENCIES.keys(),
+    dynamic_deps = DEPENDENCIES.keys() + select({
+        "@platforms//os:linux": ["@rosdistro//cc:libcap"],
+        "//conditions:default": [],
+    }),
     exports_filter = [":thread_priority_library"],
     deps = [":thread_priority_library"],
 )

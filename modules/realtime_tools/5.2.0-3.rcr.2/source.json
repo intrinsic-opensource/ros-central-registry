@@ -3,7 +3,6 @@
     "url": "https://github.com/ros2-gbp/realtime_tools-release/archive/refs/tags/release/lyrical/realtime_tools/5.2.0-3.tar.gz",
     "strip_prefix": "realtime_tools-release-release-lyrical-realtime_tools-5.2.0-3",
     "overlay": {
-        "BUILD.bazel": "sha256-3HAnRxPXt++rcmWSYiooL3+qqt/krt4QjXyUbWZSMec=",
-        "include/sys/capability.h": "sha256-Go+e5DoqAwP6ANF92+n9XIynEDzRrRj7WboQL33+75k="
+        "BUILD.bazel": "sha256-HNRDY2z4GDst2/oETNUydYtS3X7VOI8o3u9XPE2lWqA="
     }
 }
