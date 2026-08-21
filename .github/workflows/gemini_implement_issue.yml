@@ -168,16 +168,18 @@ jobs:
             CONTRIBUTING.md, using the gemini[bot] identity already configured
             in this job.
           - Push the branch (`git push -u origin ${{ steps.branch.outputs.branch_name }}`),
-            then open the PR against main with `gh pr create`.
-            Use .github/PULL_REQUEST_TEMPLATE.md as the PR body verbatim,
+            then open the PR against main non-interactively using:
+            `gh pr create --title "<title>" --body "<body>"` (or `gh pr create --title "<title>" --body-file <file>`).
+            Never run bare `gh pr create` without `--title` and `--body` flags because GitHub Actions runners do not have an interactive terminal (TTY) and bare `gh pr create` will fail.
+            Use .github/PULL_REQUEST_TEMPLATE.md as the PR body structure,
             filling out every section honestly. Keep the PR description concise
             and respectful of reviewers' time: avoid over-the-top enthusiasm,
             em dashes, emojis, or excessive background information. In
             particular, answer the Generative AI disclosure truthfully (you are
             Gemini; say so and describe what you did) per the OSRF Generative AI
             policy it links, and put "Fixes #${{ github.event.issue.number }}"
-            under Related issue(s). Title the PR clearly, and leave it open for
-            @${{ github.repository_owner }} to review - do not merge it,
+            under Related issue(s). Title the PR clearly (e.g. "feat: implement <package> (#${{ github.event.issue.number }})"),
+            and leave it open for @${{ github.repository_owner }} to review - do not merge it,
             approve it, or request review from anyone yourself.
           - If the issue is too vague or under-specified to implement safely,
             do not guess or implement something speculative: instead explain
