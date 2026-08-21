@@ -139,7 +139,7 @@ jobs:
           - If implementing a new issue from scratch (IS_PR is false):
             - Create a new branch `gemini/issue-${{ github.event.issue.number }}` (`git checkout -b gemini/issue-${{ github.event.issue.number }}`).
             - Implement the changes, test and lint them, commit with sign-off (`git commit -s`), and push (`git push -u origin gemini/issue-${{ github.event.issue.number }}`).
-            - Open a PR against main with `gh pr create` using .github/PULL_REQUEST_TEMPLATE.md.
+            - Open a PR against main non-interactively using `gh pr create --title "<title>" --body "<body>"` (or `gh pr create --title "<title>" --body-file <file>`). Never run bare `gh pr create` without `--title` and `--body` flags because non-interactive environments do not have a TTY. Fill out .github/PULL_REQUEST_TEMPLATE.md cleanly.
           
           General guidelines:
           - Work efficiently: before writing any new Bazel content, find an
