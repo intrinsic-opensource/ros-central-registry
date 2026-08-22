@@ -5,9 +5,8 @@
     "patch_strip": 1,
     "overlay": {
         "BUILD.bazel": "sha256-+A/A+Nw263jB3VtTdRXxjM3w4cxR6A+K954IvJWZT84=",
-        "qt_linux_x86_64.BUILD": "sha256-FxqiRGr0aApfETsxbyY9qUvJE81mpOGDWVF8bGyd3Tk=",
         "src/qt_gui_cpp_shiboken/shiboken6_wrapper.py": "sha256-wQEGorje8XenwGMXM9A9C+bUgFs5Ym/L/JQWsep6LS0=",
-        "src/qt_gui_cpp_sip/BUILD.bazel": "sha256-ZGIGKjMXTNuQi038+ovSlciEwGeohzDZselE5a8s7cw="
+        "src/qt_gui_cpp_sip/BUILD.bazel": "sha256-crXT1IYb8ibuih4LwNuzzC6XLyf+eA7yoPqy+9zZF78="
     },
     "patches": {
         "test__test_imports_shiboken__py.patch": "sha256-KXdsAQoUXc2ToWiwh/aMYqOKDtSxG/L3ztVU8IHAQQE=",

@@ -76,7 +76,7 @@ use_repo(pip_ros, "pip_ros")
 qt = use_extension("@rules_qt//extension:qt.bzl", "fetch")
 qt.install(
     name = "qt_linux_x86_64",
-    build_file = "@rosdistro//cc:qt/linux_x86_64.BUILD",
+    build_file = "@rules_qt//extension:qt/6.8.3/linux_x86_64.BUILD",
     os = "linux",
     version = "6.8.3",
 )
@@ -155,7 +155,7 @@ use_repo(llvm, "llvm-project")
 qt = use_extension("@rules_qt//extension:qt.bzl", "fetch")
 qt.install(
     name = "qt_linux_x86_64",
-    build_file = "@rosdistro//cc:qt/linux_x86_64.BUILD",
+    build_file = "@rules_qt//extension:qt/6.8.3/linux_x86_64.BUILD",
     os = "linux",
     version = "6.8.3",
 )
