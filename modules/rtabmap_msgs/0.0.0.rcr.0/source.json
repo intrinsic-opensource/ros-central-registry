@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-dReisPU3Trl6HZ7D1PcP02RRn3gJZxnccc0HCCofiJQ=",
+    "url": "https://github.com/introlab/rtabmap_ros-release/archive/refs/tags/upstream/0.22.1.tar.gz",
+    "strip_prefix": "rtabmap_ros-release-upstream-0.22.1/rtabmap_msgs",
+    "overlay": {
+        "BUILD.bazel": "sha256-dP+xrSs7Tgx3ED9E+IJ57QQz/wFYYMnz6bLL+M4R/nw=",
+        "msg/BUILD.bazel": "sha256-i33JgpxQlH7MQtKeuxnDYWca3N52PN7Jy06xkoZ2Qvk=",
+        "srv/BUILD.bazel": "sha256-1c4WdGDY0LswR1/EWTQ0eJ7IZCNEqZR2jkSJIVN5hIk="
+    }
+}
