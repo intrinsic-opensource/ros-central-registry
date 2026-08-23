@@ -1,0 +1,5 @@
+{
+    "integrity": "sha256-LtdRIKcsPUkrLUFh9M9Nu39At5ZSoEF5rIvm6tYOHgo=",
+    "url": "https://github.com/ros2-gbp/hpp_fcl-release/archive/refs/tags/upstream/2.4.5.tar.gz",
+    "strip_prefix": "hpp_fcl-release-upstream-2.4.5"
+}
