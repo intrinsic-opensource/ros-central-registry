@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-ufobVaXsb57XhvsCptajB5kTZXRJKnPHrQb0uMdiE4M=",
+    "url": "https://github.com/ros2-gbp/mapviz-release/archive/refs/tags/upstream/2.6.2.tar.gz",
+    "strip_prefix": "mapviz-release-upstream-2.6.2/mapviz_interfaces",
+    "overlay": {
+        "BUILD.bazel": "sha256-uWHYCEMWcCV5UICLYsJmAc1Eod6w1Ry13IRS5pzQJYU=",
+        "srv/BUILD.bazel": "sha256-ZBopc7NVwfQEvDoKVcRKkT182eV4+IwhDc55uxEip0E="
+    }
+}
