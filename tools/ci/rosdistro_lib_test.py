@@ -36,6 +36,32 @@ def _package_xml(name: str) -> str:
     return f'<?xml version="1.0"?><package format="2"><name>{name}</name></package>'
 
 
+def _fake_get_with_bcr(tarball: bytes, bcr_hits=()):
+    """
+    A requests.get stand-in that answers both kinds of call
+    resolve_unreleased_repo_packages makes: the archive download (any URL
+    not under bcr.bazel.build) and the per-package BCR collision check
+    (bcr_module_exists) -- returning 200 only for names in `bcr_hits`.
+    """
+    class _TarballResponse:
+        content = tarball
+
+        def raise_for_status(self):
+            pass
+
+    class _BcrResponse:
+        def __init__(self, status_code):
+            self.status_code = status_code
+
+    def _get(url, *a, **k):
+        if url.startswith("https://bcr.bazel.build/modules/"):
+            name = url.split("/modules/", 1)[1].split("/", 1)[0]
+            return _BcrResponse(200 if name in bcr_hits else 404)
+        return _TarballResponse()
+
+    return _get
+
+
 class TestListNewTags(unittest.TestCase):
 
     def _fake_run(self, tag_names):
@@ -202,14 +228,8 @@ class TestResolvePackages(unittest.TestCase):
                 _package_xml("aruco_markers_msgs"),
         })
 
-        class _FakeResponse:
-            content = tarball
-
-            def raise_for_status(self):
-                pass
-
         rosdistro_lib.subprocess.run = _fake_run
-        rosdistro_lib.requests.get = lambda *a, **k: _FakeResponse()
+        rosdistro_lib.requests.get = _fake_get_with_bcr(tarball)
         try:
             packages = rosdistro_lib.resolve_packages(distribution, "lyrical", "2026-06-08")
         finally:
@@ -273,16 +293,10 @@ class TestResolvePackages(unittest.TestCase):
             "cob_common-release-upstream-2.8.12/cob_decoy/package.xml": _package_xml("cob_decoy"),
         })
 
-        class _FakeResponse:
-            content = tarball
-
-            def raise_for_status(self):
-                pass
-
         original_run = subprocess.run
         original_get = rosdistro_lib.requests.get
         rosdistro_lib.subprocess.run = _fake_run
-        rosdistro_lib.requests.get = lambda *a, **k: _FakeResponse()
+        rosdistro_lib.requests.get = _fake_get_with_bcr(tarball)
         try:
             packages = rosdistro_lib.resolve_packages(distribution, "lyrical", "2026-06-08")
         finally:
@@ -292,6 +306,47 @@ class TestResolvePackages(unittest.TestCase):
         self.assertIn("cob_actions", packages)
         self.assertIn("cob_msgs", packages)
         self.assertNotIn("cob_decoy", packages)
+
+    def test_package_colliding_with_bcr_module_is_not_recovered(self):
+        # Mirrors the real ecal bug: its upstream archive bundles a vendored
+        # third-party package.xml declaring <name>protobuf</name>, one
+        # directory below the wrapper root -- shallow enough to pass the
+        # depth filter, so only the BCR-collision guard catches it.
+        distribution = {
+            "repositories": {
+                "ecal": {
+                    "source": {
+                        "type": "git",
+                        "url": "https://github.com/eclipse-ecal/ecal.git",
+                        "version": "master",
+                    },
+                },
+            }
+        }
+
+        def _fake_run(args, **kwargs):
+            class _Result:
+                returncode = 0
+                stdout = "upstream/5.12.0\n"
+            return _Result()
+
+        tarball = _make_tarball({
+            "ecal-release-upstream-5.12.0/package.xml": _package_xml("ecal"),
+            "ecal-release-upstream-5.12.0/thirdparty/protobuf/package.xml": _package_xml("protobuf"),
+        })
+
+        original_run = subprocess.run
+        original_get = rosdistro_lib.requests.get
+        rosdistro_lib.subprocess.run = _fake_run
+        rosdistro_lib.requests.get = _fake_get_with_bcr(tarball, bcr_hits={"protobuf"})
+        try:
+            packages = rosdistro_lib.resolve_packages(distribution, "lyrical", "2026-06-08")
+        finally:
+            rosdistro_lib.subprocess.run = original_run
+            rosdistro_lib.requests.get = original_get
+
+        self.assertIn("ecal", packages)
+        self.assertNotIn("protobuf", packages)
 
     def test_package_dropped_from_complete_release_list_is_not_recovered(self):
         # Mirrors ros2_controllers: a fully valid release (url + version +
@@ -388,11 +443,10 @@ class TestFindBestUpstreamTag(unittest.TestCase):
 
 class TestDiscoverPackagesInArchive(unittest.TestCase):
 
-    def test_finds_root_and_nested_packages(self):
+    def test_finds_root_and_one_level_nested_packages(self):
         tarball = _make_tarball({
             "repo-tag/package.xml": _package_xml("repo"),
             "repo-tag/sub/package.xml": _package_xml("sub_pkg"),
-            "repo-tag/sub/nested/package.xml": _package_xml("nested_pkg"),
             "repo-tag/README.md": "not a package.xml",
         })
 
@@ -414,9 +468,71 @@ class TestDiscoverPackagesInArchive(unittest.TestCase):
             {
                 "repo": "repo-tag",
                 "sub_pkg": "repo-tag/sub",
-                "nested_pkg": "repo-tag/sub/nested",
             },
         )
+
+    def test_ignores_package_xml_nested_two_or_more_levels_deep(self):
+        # Mirrors the real eCAL bug: a vendored third-party dependency's
+        # own package.xml, buried well below the wrapper root, must not be
+        # treated as a real top-level package of the repo being scanned.
+        tarball = _make_tarball({
+            "repo-tag/package.xml": _package_xml("repo"),
+            "repo-tag/thirdparty/protobuf/php/ext/google/protobuf/package.xml":
+                _package_xml("protobuf"),
+        })
+
+        class _FakeResponse:
+            content = tarball
+
+            def raise_for_status(self):
+                pass
+
+        original_get = rosdistro_lib.requests.get
+        rosdistro_lib.requests.get = lambda *a, **k: _FakeResponse()
+        try:
+            discovered = rosdistro_lib.discover_packages_in_archive("unused")
+        finally:
+            rosdistro_lib.requests.get = original_get
+
+        self.assertEqual(discovered, {"repo": "repo-tag"})
+
+
+class TestBcrModuleExists(unittest.TestCase):
+
+    def test_true_on_200(self):
+        class _Response:
+            status_code = 200
+
+        original_get = rosdistro_lib.requests.get
+        rosdistro_lib.requests.get = lambda *a, **k: _Response()
+        try:
+            self.assertTrue(rosdistro_lib.bcr_module_exists("protobuf"))
+        finally:
+            rosdistro_lib.requests.get = original_get
+
+    def test_false_on_404(self):
+        class _Response:
+            status_code = 404
+
+        original_get = rosdistro_lib.requests.get
+        rosdistro_lib.requests.get = lambda *a, **k: _Response()
+        try:
+            self.assertFalse(rosdistro_lib.bcr_module_exists("some_ros_only_package"))
+        finally:
+            rosdistro_lib.requests.get = original_get
+
+    def test_false_on_network_error(self):
+        import requests as requests_module
+
+        def _raise(*a, **k):
+            raise requests_module.exceptions.ConnectionError("boom")
+
+        original_get = rosdistro_lib.requests.get
+        rosdistro_lib.requests.get = _raise
+        try:
+            self.assertFalse(rosdistro_lib.bcr_module_exists("anything"))
+        finally:
+            rosdistro_lib.requests.get = original_get
 
 
 class TestFetchPackageXmlDependencies(unittest.TestCase):

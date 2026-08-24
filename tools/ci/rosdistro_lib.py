@@ -24,6 +24,7 @@ sidesteps it entirely (see docs/source/design_choices.rst).
 import io
 import re
 import subprocess
+import sys
 import tarfile
 from dataclasses import dataclass
 from pathlib import Path
@@ -268,6 +269,15 @@ def discover_packages_in_archive(url: str) -> Dict[str, str]:
     unlike the normal release path, there's no 'packages:' list telling us
     what's inside a multi-package repo's archive -- the archive itself is
     the only source of truth.
+
+    Only considers package.xml at the wrapper root or exactly one
+    directory below it -- every real ROS package in this registry lives
+    there. Anything deeper is almost always a vendored/third-party
+    dependency bundled inside the repo's own source tree, which can carry
+    its own unrelated package.xml: eCAL's upstream archive, for instance,
+    has one at thirdparty/protobuf/php/ext/google/protobuf/package.xml
+    declaring <name>protobuf</name>, which has nothing to do with the
+    actual eCAL packages and would otherwise get "discovered" as one.
     """
     response = requests.get(url, timeout=120)
     response.raise_for_status()
@@ -275,6 +285,12 @@ def discover_packages_in_archive(url: str) -> Dict[str, str]:
     with tarfile.open(fileobj=io.BytesIO(response.content), mode="r:*") as tar:
         for member in tar.getmembers():
             if not member.name.endswith("package.xml"):
+                continue
+            parts = Path(member.name).parts
+            # parts[0] is the wrapper directory, parts[-1] is "package.xml"
+            # itself -- len(parts) 2 means the wrapper root, 3 means one
+            # directory below it.
+            if len(parts) > 3:
                 continue
             fileobj = tar.extractfile(member)
             if fileobj is None:
@@ -288,6 +304,27 @@ def discover_packages_in_archive(url: str) -> Dict[str, str]:
     return discovered
 
 
+def bcr_module_exists(name: str) -> bool:
+    """
+    True if `name` is a published Bazel Central Registry module (queries
+    the live registry Bazel itself resolves against). Used to keep
+    resolve_unreleased_repo_packages's archive scan from minting a package
+    that shadows an unrelated BCR module of the same name -- see
+    discover_packages_in_archive's docstring for the motivating example
+    (a vendored third-party dependency's own package.xml, not a real
+    package belonging to the repo being resolved). A network failure is
+    treated as "not found" rather than raised -- this is a best-effort
+    safety net, not something that should take down a whole bootstrap run
+    over a transient error.
+    """
+    url = f"https://bcr.bazel.build/modules/{name}/metadata.json"
+    try:
+        response = requests.get(url, timeout=30)
+    except requests.RequestException:
+        return False
+    return response.status_code == 200
+
+
 def resolve_unreleased_repo_packages(repo_name: str, repo_info: dict) -> Dict[str, PackageSource]:
     """
     Fallback for a repo whose distribution.yaml entry can't produce a real
@@ -298,7 +335,13 @@ def resolve_unreleased_repo_packages(repo_name: str, repo_info: dict) -> Dict[st
     Recovers real version + dependency info straight from the package's
     GitHub '-release' companion repo's 'upstream/X.Y.Z' tag -- see
     _find_best_upstream_tag's docstring for why that's the right tag to
-    look for here specifically.
+    look for here specifically. Every discovered name is checked against
+    bcr_module_exists and silently dropped (with a warning) on a hit --
+    unlike the primary path in resolve_packages, which only ever produces
+    package names an upstream distribution.yaml maintainer chose, this
+    fallback trusts an unreviewed archive scan (see
+    discover_packages_in_archive), so it needs its own guard against
+    minting a package that collides with an unrelated BCR module.
 
     Deliberately does NOT handle a package that's simply missing from an
     otherwise-complete 'release.packages' list (e.g. ros2_controllers no
@@ -345,6 +388,13 @@ def resolve_unreleased_repo_packages(repo_name: str, repo_info: dict) -> Dict[st
         if pkg_name in IGNORED_PACKAGES:
             continue
         if allowed is not None and pkg_name not in allowed:
+            continue
+        if bcr_module_exists(pkg_name):
+            print(
+                f"Warning: discovered package {pkg_name!r} in {found_owner}/{found_repo}@{tag} "
+                "collides with an existing BCR module name -- skipping it.",
+                file=sys.stderr,
+            )
             continue
         # discover_packages_in_archive's strip_prefix is tarball-relative
         # (includes wrapper_dir); fetch_package_xml_dependencies needs a
